@@ -1,34 +1,65 @@
 <template>
-    <div>
-        AUTH OR ORGANIZATIONS
+    <div v-if="this.getUser">
     </div>
+    <auth-form v-else/>
 </template>
 
 <script>
     import { mapGetters, mapActions } from 'vuex'
+    import authForm from '../components/auth/v-auth.vue'
 
     export default {
         name: 'Home',
         data () {
-            return { }
+            return {
+                organizations: []
+            }
         },
-        components: { },
+        components: { authForm },
         computed: {
             ...mapGetters({
-                getUser: 'user/getUser'
+                getUser: 'user/getUser',
+                orgs: 'orgs'
             })
         },
         mounted () {
             this.setUser(JSON.parse(localStorage.getItem('user')))
-            if (this.getUser) {
-            this.$router.push({ name: 'organizations' })
+            if(this.getUser){
+                //TODO: ПЕРЕБРОС НА ПЕРВУЮ ПОПАВШУЮСЯ ОРГАНИЗАЦИЮ
+                const data = {
+                    action: 'get/orgs'
+                }
+                this.org_get_from_api(data).then((res) => {
+                    if(res.data.data){
+                        this.$router.push({ name: 'org', params: { id: res.data.data[0].id } })
+                    }
+                })
+            }
+        },
+        updated () {
+            if(this.getUser){
+                //TODO: ПЕРЕБРОС НА ПЕРВУЮ ПОПАВШУЮСЯ ОРГАНИЗАЦИЮ
+                const data = {
+                    action: 'get/orgs'
+                }
+                this.org_get_from_api(data).then((res) => {
+                    if(res.data.data){
+                        this.$router.push({ name: 'org', params: { id: res.data.data[0].id } })
+                    }
+                })
             }
         },
         methods: {
             ...mapActions({
                 setUser: 'user/setUser',
-                deleteUser: 'user/deleteUser'
+                deleteUser: 'user/deleteUser',
+                org_get_from_api: 'org_get_from_api'
             })
+        },
+        watch: {
+            orgs: function (newVal, oldVal) {
+                this.organizations = newVal
+            }
         }
     }
 </script>

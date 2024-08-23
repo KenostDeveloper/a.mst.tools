@@ -3,7 +3,7 @@
 */
 
 import Axios from 'axios'
-import router from '@/router'
+import router from '../router'
 
 export default {
   state: {

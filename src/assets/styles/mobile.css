@@ -1,5 +1,74 @@
-@container (max-width: 1650px) {
-    .card {
-        background: #ff0000;
+
+@media (max-width: 1900px){
+    .content{
+        background: #ffacac;
+    }
+}
+
+@media (max-width: 1600px){
+    .content{
+        background: #ffcf99;
+    }
+}
+
+@media (max-width: 1200px){
+    .content{
+        background: #c3ffa0;
+    }
+
+    .sitebar + .content{
+        width: calc(100% - 54px);
+        margin-left: 54px;
+        transition: all 0.4s ease-in-out;
+    }
+}
+
+
+@media (max-width: 991px){
+    .content{
+        background: #a6fffb;
+    }
+
+    .nav{
+        display: flex;
+    }
+
+    .sitebar.hide{
+        width: 327px;
+        left: -327px;
+    }
+
+    .sitebar + .content{
+        width: 100%;
+        margin-left: 0px;
+        transition: all 0.4s ease-in-out;
+    }
+
+    .sitebar.hide + .content{
+        width: 100%;
+        margin-left: 0px;
+        transition: all 0.4s ease-in-out;
+    }
+
+    .sitebar .sitebar-logo{
+        display: none;
+    }
+
+    .sitebar .sitebar-toggler{
+        display: none;
+    }
+}
+
+@media (max-width: 768px){
+
+}
+
+@media (max-width: 600px){
+
+}
+
+@media (max-width: 430px){
+    .sitebar{
+        width: 100%;
     }
 }
