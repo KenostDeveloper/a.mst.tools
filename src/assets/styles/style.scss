@@ -2203,3 +2203,171 @@ img {
 .w-full {
   width: 100%;
 }
+
+
+
+// Steiden
+.std-shipping {
+  display: flex;
+  flex-direction: column;
+  gap: 50px !important;
+
+  margin-top: 100px;
+
+  &__table {
+    width: 100% !important;
+  }
+
+  &__title-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+
+    .std-shipping__title {
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1.17;
+      margin: 0;
+    }
+
+    .std-shipping__button {
+      height: 44px;
+      padding-inline: 30px;
+    }
+  }
+
+  &__filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    // Временное решение
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    // --------------------
+
+    .profile-content__title {
+      width: auto !important;
+
+      .title {
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 1.17;
+      }
+    }
+
+    .d-col-md-3 {
+      width: 244px;
+
+      .dart-form-group {
+        margin: 0;
+
+        .p-calendar {
+          input {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+            border-right: none;
+          }
+          button {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+          }
+        }
+      }
+    }
+  }
+
+  .std-calendar {
+    position: fixed;
+    bottom: 2rem;
+    right: 40px;
+  
+    max-height: 82px;
+    overflow: hidden;
+
+    transition-duration: .5s;
+  
+    &--active {
+      max-height: 100dvh;
+
+      .std-calendar__head {
+        padding-block: 24px 10px;
+        max-height: 100%;
+      }
+
+      .std-calendar__expand-button {
+        rotate: 180deg;
+      }
+    }
+  
+    &__head {
+      padding-block: 0;
+      height: 82px;
+
+      transition-duration: .3s;
+    }
+
+    &__actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    &__expand-button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      transition-duration: .3s;
+    }
+  }
+}
+
+.std-table {
+  table-layout: fixed;
+  width: 100%;
+
+  &__wrapper {
+    border-radius: 5px 5px 5px 0px;
+    overflow: hidden;
+  }
+
+  &__head {
+    background-color: #282828;
+    color: white;
+  }
+
+  &__body {
+
+  }
+
+  &__row {
+    border-top: none !important;
+    border-bottom: 1px solid #e2e2e2;
+  }
+
+  &__hcol,
+  &__col {
+    text-align: center;
+  }
+
+  &__hcol {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: 0.25px;
+
+    padding-block: 9px;
+  }
+
+  &__col {
+    padding-block: 28px;
+
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.17;
+    letter-spacing: 0.15px;
+  }
+}
+// ----------------

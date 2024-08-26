@@ -9,6 +9,7 @@ import ReportCopoDetails from '../pages/store/report_copo_details.vue'
 import Home from "../pages/Home.vue";
 import notFound from "../pages/notFound.vue";
 import { createRouter, createWebHistory } from "vue-router";
+import ProfileShipping from "../pages/ProfileShipping.vue";
 
 const routes = [
   {
@@ -85,6 +86,10 @@ const routes = [
                       label: 'Отчет по бренду',
                       component: ReportCopoDetails
                     }]
+                  },
+                  {
+                    path: 'shipping_test',
+                    component: ProfileShipping
                   }
                 ]
               },
