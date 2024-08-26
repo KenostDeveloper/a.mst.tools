@@ -1,11 +1,11 @@
 import MainLoyout from "../loyouts/MainLoyout.vue";
 import ProfileOrganization from "../pages/ProfileOrganization.vue";
-import ProfileProducts from '../pages/ProfileProducts.vue'
-import ProfileStoreProducts from '../pages/ProfileStoreProducts.vue'
+import ProfileProducts from "../pages/ProfileProducts.vue";
+import ProfileStoreProducts from "../pages/ProfileStoreProducts.vue";
 // import ReportCopoAll from '../pages/store/report_copo_all'
 // import ReportCopoAllDetails from '../pages/store/report_copo_all_details'
-import ReportCopo from '../pages/store/report_copo.vue'
-import ReportCopoDetails from '../pages/store/report_copo_details.vue'
+import ReportCopo from "../pages/store/report_copo.vue";
+import ReportCopoDetails from "../pages/store/report_copo_details.vue";
 import Home from "../pages/Home.vue";
 import notFound from "../pages/notFound.vue";
 import { createRouter, createWebHistory } from "vue-router";
@@ -35,10 +35,10 @@ const routes = [
           {
             path: "",
             beforeEnter: (to, from, next) => {
-              if (localStorage.getItem('user')) {
-                next()
+              if (localStorage.getItem("user")) {
+                next();
               } else {
-                next({ name: 'main' })
+                next({ name: "main" });
               }
             },
             children: [
@@ -63,11 +63,16 @@ const routes = [
                         component: ProfileProducts,
                       },
                       {
-                        path: ":store_id",
-                        name: "store",
-                        props: true,
-                        label: "Товары на складе",
-                        component: ProfileStoreProducts,
+                        path: "",
+                        children: [
+                          {
+                            path: ":store_id",
+                            name: "store",
+                            props: true,
+                            label: "Товары на складе",
+                            component: ProfileStoreProducts,
+                          },
+                        ],
                       },
                     ],
                   },
@@ -86,7 +91,7 @@ const routes = [
                       component: ReportCopoDetails
                     }]
                   }
-                ]
+                ],
               },
             ],
           },
@@ -95,15 +100,15 @@ const routes = [
     ],
   },
   {
-    path: '/:pathMatch(.*)*',
-    name: '404',
-    component: notFound
-  }
+    path: "/:pathMatch(.*)*",
+    name: "404",
+    component: notFound,
+  },
 ];
 
 const router = createRouter({
-	history: createWebHistory(),
-	routes,
+  history: createWebHistory(),
+  routes,
 });
 
 export default router;

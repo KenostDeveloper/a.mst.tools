@@ -1,7 +1,7 @@
 <template>
   <div class="copo">
     <div class="to__up">
-      <router-link :to="{ name: 'store', params: { id: $route.params.id } }">
+      <router-link class="link-back" :to="{ name: 'stores', params: { id: $route.params.id } }">
         <mdicon name="arrow-left" />
         <span>Назад к товарам</span>
       </router-link>
