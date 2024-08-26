@@ -40,8 +40,8 @@
     <div class="sitebar-info">
       <span class="sitebar-text">Выбор роли:</span>
       <div class="sitebar-roles">
-        <div class="sitebar-role">Закупщик</div>
-        <div class="sitebar-role">Поставщик</div>
+        <div class="sitebar-role" @click="changeRole()">Закупщик</div>
+        <div class="sitebar-role" @click="changeRole()">Поставщик</div>
       </div>
     </div>
     <hr class="sitebar-hr">

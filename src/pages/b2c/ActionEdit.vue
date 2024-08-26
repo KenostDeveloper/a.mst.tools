@@ -4,7 +4,7 @@
       <div class="profile-content__title sticky-element">
           <span class="maintitle">Редактирование акции</span>
           <div class="buttons_container">
-            <RouterLink :to="{ name: 'org_actions', params: { id: $route.params.id }}" class="dart-btn dart-btn-secondary btn-padding">Отменить</RouterLink>
+            <RouterLink :to="{ name: 'b2c', params: { id: $route.params.id }}" class="dart-btn dart-btn-secondary btn-padding">Отменить</RouterLink>
             <button type="submit" class="dart-btn dart-btn-primary btn-padding" :class="{ 'dart-btn-loading': loading }" :disabled="loading">Сохранить</button>
           </div>
       </div>
@@ -38,7 +38,7 @@
         <div v-if="this.form.store_id">
           <div class="dart-form-group mb-0">
             <span class="ktitle">Страница акции</span>
-            <div class="flex align-items-center">
+            <div class="flex align-items-center gap-1">
                 <Checkbox v-model="this.create_page_action" inputId="create-page-action" name="create_page_action" value="true" />
                 <label for="create-page-action" class="ml-2 mb-0"> Создавать страницу акции </label>
             </div>
@@ -175,7 +175,7 @@
 
           <div class="dart-form-group mb-4">
             <span class="ktitle">Регион</span>
-            <div class="flex align-items-center mb-3">
+            <div class="flex align-items-center mb-3 gap-1">
                 <Checkbox v-model="this.region_all" inputId="region_all" name="region_all" value="1" />
                 <label for="region_all" class="ml-2 mb-0"> Доступна для всех регионов </label>
             </div>
@@ -186,11 +186,11 @@
 
           <div class="dart-form-group picker-wrap">
             <span class="ktitle">Добавление товаров</span>
-            <div class="flex align-items-center mt-2">
+            <div class="flex align-items-center mt-2 gap-1">
               <RadioButton v-model="this.form.addProductType" inputId="addProductType-1" name="addProductType" value="1"/>
               <label for="addProductType-1" class="ml-2 radioLabel">Добавить товары</label>
             </div>
-            <div class="flex align-items-center mt-3">
+            <div class="flex align-items-center mt-3 gap-1">
                 <RadioButton v-model="this.form.addProductType" inputId="addProductType-2" name="addProductType" value="2"/>
                 <label for="addProductType-2" class="ml-2 radioLabel">Загрузить товары файлом</label>
             </div>
@@ -389,7 +389,7 @@
             </paginate>
             <div class="table-kenost-help">
               <div class="table-kenost-help__select"><span>Отмечено:</span> {{ this.kenost_table.length }} / {{ Object.keys(this.selected).length }}</div>
-              <div class="flex align-items-center">
+              <div class="flex align-items-center gap-1">
                 <Checkbox @change="globalTable" v-model="this.form.global_kenost_table" inputId="global_kenost_table-1" name="global_kenost_table-1" value="true" />
                 <label for="global_kenost_table-1" class="ml-2 mb-0">Все</label>
               </div>
@@ -462,15 +462,15 @@
               </div>
             </div>
             <div class="kenost-method-edit-flex" v-if="this.modals.price_step == 0">
-              <div class="flex align-items-center mt-3">
+              <div class="flex align-items-center mt-3 gap-1">
                 <RadioButton v-model="this.modals.type_price" inputId="type_price-1" name="type_price" value="1"/>
                 <label for="type_price-1" class="ml-2 radioLabel">Скидка по формуле</label>
               </div>
-              <div class="flex align-items-center mt-3">
+              <div class="flex align-items-center mt-3 gap-1">
                 <RadioButton v-model="this.modals.type_price" inputId="type_price-2" name="type_price" value="2"/>
                 <label for="type_price-2" class="ml-2 radioLabel">Тип цен</label>
               </div>
-              <div class="flex align-items-center mt-3">
+              <div class="flex align-items-center mt-3 gap-1">
                 <RadioButton v-model="this.modals.type_price" inputId="type_price-3" name="type_price" value="3"/>
                 <label for="type_price-3" class="ml-2 radioLabel">Задать вручную</label>
               </div>
@@ -1210,7 +1210,7 @@ export default {
             })
               .then((result) => {
                 this.loading = false
-                router.push({ name: 'org_actions', params: { id: router.currentRoute._value.params.id } })
+                router.push({ name: 'b2b', params: { id: router.currentRoute._value.params.id } })
               })
               .catch((result) => {
                 console.log(result)
@@ -1237,7 +1237,7 @@ export default {
             })
               .then((result) => {
                 this.loading = false
-                router.push({ name: 'org_actions', params: { id: router.currentRoute._value.params.id } })
+                router.push({ name: 'b2b', params: { id: router.currentRoute._value.params.id } })
               })
               .catch((result) => {
                 console.log(result)
