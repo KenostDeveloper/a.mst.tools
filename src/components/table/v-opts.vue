@@ -112,14 +112,14 @@
 <script>
 import { toRaw } from 'vue'
 import { mapActions, mapGetters } from 'vuex'
-import router from '@/router'
+import router from '../../router'
 import Paginate from 'vuejs-paginate-next'
 import TreeSelect from 'primevue/treeselect'
 import Dropdown from 'primevue/dropdown'
 import Checkbox from 'primevue/checkbox'
 import Skeleton from 'primevue/skeleton'
 
-export default ({
+export default {
   name: 'v-opts',
   emits: ['update'],
   components: {
@@ -261,11 +261,11 @@ export default ({
     this.get_vendors_from_api(data).then(() => {
     })
   }
-})
+}
 </script>
 
 <style lang="scss">
-  .profile-opts__item-wrap{
+.profile-opts__item-wrap{
     margin-bottom: 24px;
   }
   .profile-opts__item{

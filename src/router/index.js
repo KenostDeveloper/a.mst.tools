@@ -14,6 +14,10 @@ import { createRouter, createWebHistory } from "vue-router";
 import ProfileShipping from "../pages/ProfileShipping.vue";
 import Actions from '../pages/b2c/Actions.vue'
 import ActionEdit from '../pages/b2c/ActionEdit.vue'
+import Sales from '../pages/b2b/Sales.vue'
+import SalesEdit from '../pages/b2b/SalesEdit.vue'
+import ComplectAdd from '../pages/b2b/complects/ComplectAdd.vue'
+import ComplectEdit from '../pages/b2b/complects/ComplectEdit.vue'
 
 const routes = [
   {
@@ -146,12 +150,52 @@ const routes = [
                     }]
                   },
                   {
+                    path: 'b2b',
+                    children: [{
+                      path: '',
+                      name: 'b2b',
+                      props: true,
+                      label: 'Акции',
+                      component: Sales
+                    }, {
+                      path: 'add',
+                      name: 'org_sales_add',
+                      props: true,
+                      label: 'Добавление акции',
+                      component: SalesEdit
+                    }, {
+                      path: ':sales_id',
+                      name: 'org_sales_edit',
+                      props: true,
+                      label: 'Редактирование акции',
+                      component: SalesEdit
+                    }]
+                  },
+                  {
+                    path: 'complects',
+                    children: [{
+                      path: 'add',
+                      name: 'complect_add',
+                      props: true,
+                      label: 'Добавление комлекта',
+                      component: ComplectAdd
+                    },
+                    {
+                      path: ':complect_id',
+                      name: 'complect_edit',
+                      props: true,
+                      label: 'Редактирование комлекта',
+                      component: ComplectEdit
+                    }]
+                  },
+                  {
                     path: 'settings',
                     name: 'org_settings',
                     component: OrgProfile
                   },
                   {
-                    path: 'shipping_test',
+                    path: 'shipments',
+                    name: 'shipments',
                     component: ProfileShipping
                   }
                 ],
