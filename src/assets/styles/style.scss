@@ -2288,69 +2288,179 @@ p {
 }
 
 
-// Steiden
 
-// Mixins
+// Steiden
+$desktop-l: 1920px;
+$desktop: 1440px;
+$desktop-s: 1280px;
+
+$tablet-l: 1024px;
+$tablet: 768px;
+$tablet-s: 640px;
+
+$mobile-l: 480px;
+$mobile: 320px;
+$mobile-s: 240px;
+
+// mixins
+@mixin desktop-l-above {
+	@media (width > $desktop-l) {
+		@content;
+	}
+}
+@mixin desktop-l {
+	@media (width <= $desktop-l) {
+		@content;
+	}
+}
+@mixin desktop-above {
+	@media (width > $desktop) {
+		@content;
+	}
+}
+@mixin desktop {
+	@media (width <= $desktop) {
+		@content;
+	}
+}
+@mixin desktop-s-above {
+	@media (width > $desktop-s) {
+		@content;
+	}
+}
 @mixin desktop-s {
-  @media (width <= 990px) {
-    @content;
-  }
+	@media (width <= $desktop-s) {
+		@content;
+	}
+}
+@mixin tablet-l-above {
+	@media (width > $tablet-l) {
+		@content;
+	}
+}
+@mixin tablet-l {
+	@media (width <= $tablet-l) {
+		@content;
+	}
+}
+@mixin tablet-above {
+	@media (width > $tablet) {
+		@content;
+	}
 }
 @mixin tablet {
-  @media (width <= 768px) {
-    @content;
-  }
+	@media (width <= $tablet) {
+		@content;
+	}
+}
+@mixin tablet-s-above {
+	@media (width > $tablet-s) {
+		@content;
+	}
+}
+@mixin tablet-s {
+	@media (width <= $tablet-s) {
+		@content;
+	}
+}
+@mixin mobile-l-above {
+	@media (width > $mobile-l) {
+		@content;
+	}
+}
+@mixin mobile-l {
+	@media (width <= $mobile-l) {
+		@content;
+	}
+}
+@mixin mobile-above {
+	@media (width > $mobile) {
+		@content;
+	}
 }
 @mixin mobile {
-  @media (width <= 480px) {
-    @content;
-  }
+	@media (width <= $mobile) {
+		@content;
+	}
 }
-@mixin hidden-desktop-s {
-  @media (width <= 990px) {
-    display: none !important;
-  }
+@mixin mobile-s-above {
+	@media (width > $mobile-s) {
+		@content;
+	}
 }
-@mixin hidden-desktop-s-above {
-  @media (width > 990px) {
-    display: none !important;
-  }
+@mixin mobile-s {
+	@media (width <= $mobile-s) {
+		@content;
+	}
 }
-@mixin visible-desktop-s {
-  @media (width <= 990px) {
-    display: block !important;
-  }
+
+// utils
+.hidden-desktop {
+	@include desktop {
+		display: none !important;
+	}
 }
-@mixin hidden-tablet {
-  @media (width <= 768px) {
-    display: none !important;
-  }
+.visible-desktop {
+	@include desktop-above {
+		display: none !important;
+	}
 }
-@mixin hidden-tablet-above {
-  @media (width > 768px) {
-    display: none !important;
-  }
+.hidden-desktop-s {
+	@include desktop-s {
+		display: none !important;
+	}
 }
-@mixin visible-tablet {
-  @media (width <= 768px) {
-    display: block !important;
-  }
+.visible-desktop-s {
+	@include desktop-s-above {
+		display: none !important;
+	}
 }
-@mixin hidden-mobile {
-  @media (width <= 480px) {
-    display: none !important;
-  }
+.hidden-tablet-l {
+	@include tablet-l {
+		display: none !important;
+	}
 }
-@mixin hidden-mobile-above {
-  @media (width > 480px) {
-    display: none !important;
-  }
+.visible-tablet-l {
+	@include tablet-l-above {
+		display: none !important;
+	}
 }
-@mixin visible-mobile {
-  @media (width <= 480px) {
-    display: block !important;
-  }
+.hidden-tablet {
+	@include tablet {
+		display: none !important;
+	}
 }
+.visible-tablet {
+	@include tablet-above {
+		display: none !important;
+	}
+}
+.hidden-tablet-s {
+	@include tablet-s {
+		display: none !important;
+	}
+}
+.visible-tablet-s {
+	@include tablet-s-above {
+		display: none !important;
+	}
+}
+.hidden-mobile-l {
+	@include mobile-l {
+		display: none !important;
+	}
+}
+.visible-mobile-l {
+	@include mobile-l-above {
+		display: none !important;
+	}
+}
+
+
+.std-display-content {
+  display: contents;
+}
+
 
 .std-shipping {
   display: flex;
@@ -2359,8 +2469,12 @@ p {
 
   margin-top: clamp(25px, 3vmax, 100px);
 
-  @include desktop-s {
+  @include tablet-l {
     margin-top: 20px;
+
+    &__title-container {
+      margin-bottom: 20px;
+    }
   }
 
   &__table {
@@ -2368,8 +2482,6 @@ p {
   }
 
   &__title-container {
-    @include hidden-desktop-s;
-    
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -2399,8 +2511,16 @@ p {
     gap: 20px;
     // --------------------
 
+    @include tablet-l {
+      gap: 16px;
+    }
+
     .profile-content__title {
       width: auto !important;
+
+      @include tablet-l {
+        margin: 0;
+      }
 
       .title {
         font-size: 24px;
@@ -2409,11 +2529,39 @@ p {
       }
     }
 
+    .dart-row {
+      display: flex;
+      gap: 12px;
+
+      @include tablet-l {
+        gap: 16px;
+      }
+    }
+
     .d-col-md-3 {
-      width: 244px;
+      width: 220px;
+      padding: 0; 
+
+      @include mobile-l {
+        width: 100%;
+      }
 
       .dart-form-group {
         margin: 0;
+
+        .p-component {
+          height: 34px;
+
+          @include mobile {
+            height: 44px;
+          }
+
+          .p-treeselect-label {
+            @include mobile-above {
+              padding: 0.5rem 0.75rem;
+            }
+          }
+        }
 
         .p-calendar {
           input {
@@ -2443,6 +2591,32 @@ p {
     overflow: hidden;
 
     transition-duration: .5s;
+
+    @include tablet-l {
+      position: static;
+      border: none;
+      box-shadow: none;
+      
+      max-height: 100dvh;
+      width: 100%;
+      margin-bottom: 32px;
+
+      &__head {
+        padding: 0;
+        height: auto !important;
+
+        p {
+          font-size: 21px;
+          font-weight: 500;
+          line-height: 1.14;
+        }
+      }
+
+      &,
+      &__content {
+        background-color: transparent !important;
+      }
+    }
   
     &--active {
       max-height: 100dvh;
@@ -2488,8 +2662,14 @@ p {
     }
 
     .calendar-associations {
+      @include tablet-l {
+        padding: 0;
+      }
+
       &__blue::before {
-        background-color: white;
+        @include tablet-l-above {
+          background-color: white;
+        }
       }
     }
   }
@@ -2538,6 +2718,106 @@ p {
     font-weight: 400;
     line-height: 1.17;
     letter-spacing: 0.15px;
+  }
+}
+
+.std-dialog {
+  @include tablet-l {
+    border-radius: 0 !important;
+
+    width: 100% !important;
+    height: 100dvh;
+    max-height: none;
+  }
+}
+
+.std-shipping-create {
+  @include tablet-l {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .dart-alert {
+    @include tablet-l {
+      font-size: 15px;
+      line-height: 1.2;
+      color: #ADADAD;
+      padding: 0;
+      background-color: transparent;
+      border: none;
+      margin-bottom: 0;
+    }
+  }
+
+  .shopping-kenost__dates {
+    @include tablet-l {
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+  }
+
+  .dart-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .shopping-kenost__button {
+    @include tablet-l {
+      margin-top: 0;
+    }
+
+    @include mobile-l {
+      flex-wrap: wrap;
+    }
+  }
+}
+
+.std-dropdown {
+
+  &[open] {
+    .std-dropdown__button {
+      rotate: 180deg;
+    }
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &::marker {
+      display: none;
+    }
+
+    .std-dropdown__title {
+      margin-bottom: 0;
+
+      @include tablet-l {
+        font-size: 21px;
+        font-weight: 500;
+        line-height: 1.14;
+      }
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  &__button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border: none;
+    background-color: transparent;
+
+    transition-duration: .3s;
   }
 }
 // ----------------
