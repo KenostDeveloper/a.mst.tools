@@ -109,7 +109,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import vTable from '../../components/table/v-table'
+import vTable from '../../components/table/v-table.vue'
 import { RouterLink } from 'vue-router'
 import TabView from 'primevue/tabview'
 import TabPanel from 'primevue/tabpanel'
@@ -117,8 +117,8 @@ import Dialog from 'primevue/dialog'
 import InputNumber from 'primevue/inputnumber'
 import ConfirmDialog from 'primevue/confirmdialog'
 import Toast from 'primevue/toast'
-import vOpts from '@/components/table/v-opts'
-import router from '@/router'
+import vOpts from '../../components/table/v-opts.vue'
+import router from '../../router'
 
 export default {
   name: 'ProfileSales',
@@ -205,10 +205,11 @@ export default {
         name: {
           label: 'Наименование',
           type: 'link',
-          link_to: 'org_diler',
-          link_params: {
-            diler_id: 'id'
-          }
+          //TODO
+          // link_to: 'org_diler',
+          // link_params: {
+          //   diler_id: 'id'
+          // }
         },
         warehouse: {
           label: 'Склад',
@@ -253,11 +254,12 @@ export default {
         name: {
           label: 'Наименование',
           type: 'link',
-          link_to: 'promotion',
-          link_params: {
-            id: this.$route.params.id,
-            action: 'id'
-          },
+          // TODO
+          // link_to: 'promotion',
+          // link_params: {
+          //   id: this.$route.params.id,
+          //   action: 'id'
+          // },
           sort: true
         },
         store_name: {

@@ -969,7 +969,7 @@ import DropZone from 'dropzone-vue'
 import Checkbox from 'primevue/checkbox'
 import Counter from '../../components/opt/Counter.vue'
 import MultiSelect from 'primevue/multiselect'
-import router from '@/router'
+import router from '../../router'
 import Paginate from 'vuejs-paginate-next'
 
 export default {

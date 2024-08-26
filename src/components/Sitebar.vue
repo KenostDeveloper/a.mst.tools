@@ -126,7 +126,7 @@ export default {
       {
         label: 'Отгрузки',
         icon: 'shipments.svg',
-        to: { name: 'home', params: { id: this.$route.params.id } }
+        to: { name: 'shipments', params: { id: this.$route.params.id } }
       },
       {
         label: 'Мои клиенты',
@@ -141,7 +141,7 @@ export default {
       {
         label: 'Оптовые акции',
         icon: 'adv.svg',
-        to: { name: 'home', params: { id: this.$route.params.id } }
+        to: { name: 'b2b', params: { id: this.$route.params.id } }
       },
       {
         label: 'Карточка компании',

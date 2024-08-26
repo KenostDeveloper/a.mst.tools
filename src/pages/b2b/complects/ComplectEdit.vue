@@ -338,7 +338,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import router from '@/router'
+import router from '../../../router'
 // import Calendar from 'primevue/calendar'
 import Dialog from 'primevue/dialog'
 import InputNumber from 'primevue/inputnumber'
