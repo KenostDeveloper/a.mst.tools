@@ -106,6 +106,7 @@ section {
 body {
   line-height: 1;
   font-family: "Roboto", sans-serif;
+  margin: 0;
 }
 ol,
 ul {
@@ -1434,8 +1435,13 @@ img {
 	.p-panelmenu-header-content{
 		width: 100%;
 		height: 100%;
-    background: transparent;
+    background: transparent !important;
+    border: none !important;
 	}
+
+  .p-panelmenu .p-panelmenu-panel{
+    margin: 0;
+  }
 
 	&__name{
 		display: flex;
@@ -1989,4 +1995,211 @@ img {
 .profile-table tbody tr td .mobile-label {
   color: #ADADAD;
   display: none;
+}
+
+// 
+
+.form_input_group {
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.form_input_group__icon {
+  display: inline-block;
+  padding: 10px 10px;
+  border: none;
+  background: transparent;
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  font-size: 18px;
+  line-height: 1;
+  -webkit-transform: translate(0, -50%);
+      -ms-transform: translate(0, -50%);
+          transform: translate(0, -50%);
+  color: #B5B5B5;
+}
+
+.form_input_group.error .base_input {
+  border-color: #f00;
+}
+
+.form_input_group.error .base_textarea {
+  border-color: #f00;
+}
+
+.form_input_group.error label {
+  color: #f00;
+}
+
+.form_input_group.error .error-desc {
+  border: 1px dashed #f00;
+  display: block;
+  margin-top: 5px;
+  padding: 0 5px;
+  font-size: 14px;
+}
+
+.form_input_group.input_pl {
+  position: relative;
+  margin-bottom: 15px;
+}
+
+.form_input_group.input_pl ~ .form_input_group:not(.input_pl) {
+  margin-top: 64px;
+}
+
+.form_input_group.input_pl .dart-form-control {
+  padding-top: 10px;
+}
+
+.form_input_group.input_pl .dart-form-control::-webkit-input-placeholder {
+  opacity: 0;
+}
+
+.form_input_group.input_pl .dart-form-control::-moz-placeholder {
+  opacity: 0;
+}
+
+.form_input_group.input_pl .dart-form-control:-moz-placeholder {
+  opacity: 0;
+}
+
+.form_input_group.input_pl .dart-form-control:-ms-input-placeholder {
+  opacity: 0;
+}
+
+.form_input_group.input_pl .dart-form-control:not(:-moz-placeholder-shown) {
+  padding-top: 15px;
+  padding-bottom: 5px;
+}
+
+.form_input_group.input_pl .dart-form-control:not(:-ms-input-placeholder) {
+  padding-top: 15px;
+  padding-bottom: 5px;
+}
+
+.form_input_group.input_pl .dart-form-control:not(:placeholder-shown) {
+  padding-top: 15px;
+  padding-bottom: 5px;
+}
+
+.form_input_group.input_pl .dart-form-control:not(:-moz-placeholder-shown) ~ .s-complex-input__label {
+  padding: 0;
+  top: 2px;
+  font-size: 12px;
+  pointer-events: none;
+}
+
+.form_input_group.input_pl .dart-form-control:not(:-ms-input-placeholder) ~ .s-complex-input__label {
+  padding: 0;
+  top: 2px;
+  font-size: 12px;
+  pointer-events: none;
+}
+
+.form_input_group.input_pl .dart-form-control:not(:placeholder-shown) ~ .s-complex-input__label {
+  padding: 0;
+  top: 2px;
+  font-size: 12px;
+  pointer-events: none;
+}
+
+.form_input_group.input_pl .s-complex-input__label {
+  pointer-events: none;
+  position: absolute;
+  overflow: hidden;
+  top: 3px;
+  left: 15px;
+  width: 100%;
+  display: block;
+  padding: 10px 0;
+  margin: 0;
+  -o-text-overflow: ellipsis;
+     text-overflow: ellipsis;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  -webkit-transition: all .1s ease-in-out;
+  -o-transition: all .1s ease-in-out;
+  transition: all .1s ease-in-out;
+}
+
+.form_input_group label {
+  display: block;
+  margin-bottom: 8px;
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 106%;
+  letter-spacing: 0.25px;
+  color: #ADADAD;
+}
+
+
+.dart-form-control {
+  background: #FFFFFF;
+  display: block;
+  width: 100%;
+  border: 1px solid #E2E2E2;
+  border-radius: 5px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 106%;
+  letter-spacing: 0.25px;
+  color: #282828;
+  padding: 10px 15px;
+}
+
+.dart-form-control:focus {
+  outline: none;
+}
+
+.dart-input-group {
+  position: relative;
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -ms-flex-align: stretch;
+  -webkit-box-align: stretch;
+          align-items: stretch;
+  width: 100%;
+}
+
+.dart-input-group > .custom-file,
+.dart-input-group > .custom-select,
+.dart-input-group > .base_input {
+  position: relative;
+  -ms-flex: 1 1 auto;
+  -webkit-box-flex: 1;
+          flex: 1 1 auto;
+  width: 1%;
+  margin-bottom: 0;
+}
+
+.dart-input-group > .dart-input-group-append > .dart-btn {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.dart-input-group-append {
+  margin-left: -1px;
+}
+
+.dart-input-group-append,
+.dart-input-group-prepend {
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: flex;
+  position: relative;
+  z-index: 1;
+}
+
+.w-full {
+  width: 100%;
 }

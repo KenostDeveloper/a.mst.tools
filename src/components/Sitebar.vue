@@ -121,32 +121,32 @@ export default {
       return [{
         label: 'Товары',
         icon: 'products.svg',
-        to: { name: 'home', params: { id: this.$route.params.id } }
+        to: { name: 'stores', params: { id: this.$route.params.id } }
       },
       {
         label: 'Отгрузки',
         icon: 'shipments.svg',
-        to: { name: '', params: { id: this.$route.params.id } }
+        to: { name: 'home', params: { id: this.$route.params.id } }
       },
       {
         label: 'Мои клиенты',
         icon: 'clients.svg',
-        to: { name: '', params: { id: this.$route.params.id } }
+        to: { name: 'home', params: { id: this.$route.params.id } }
       },
       {
         label: 'Индивидуальные скидки',
         icon: 'star.svg',
-        to: { name: '', params: { id: this.$route.params.id } }
+        to: { name: 'home', params: { id: this.$route.params.id } }
       },
       {
         label: 'Оптовые акции',
         icon: 'adv.svg',
-        to: { name: '', params: { id: this.$route.params.id } }
+        to: { name: 'home', params: { id: this.$route.params.id } }
       },
       {
         label: 'Карточка компании',
         icon: 'settings.svg',
-        to: { name: '', params: { id: this.$route.params.id } }
+        to: { name: 'home', params: { id: this.$route.params.id } }
       }]
     }
   },
