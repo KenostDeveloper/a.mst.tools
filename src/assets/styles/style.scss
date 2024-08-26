@@ -2370,6 +2370,7 @@ p {
     right: 40px;
   
     max-height: 60px;
+    max-width: 100%;
     overflow: hidden;
 
     transition-duration: .5s;
@@ -2440,7 +2441,6 @@ p {
   }
 
   &__body {
-
   }
 
   &__row {
@@ -2469,6 +2469,37 @@ p {
     font-weight: 400;
     line-height: 1.17;
     letter-spacing: 0.15px;
+  }
+}
+
+.hidden-tablet {
+  @media (width <= 768px) {
+    display: none !important;
+  }
+}
+.hidden-tablet-above {
+  @media (width > 768px) {
+    display: none !important;
+  }
+}
+.visible-tablet {
+  @media (width <= 768px) {
+    display: block !important;
+  }
+}
+.hidden-mobile {
+  @media (width <= 480px) {
+    display: none !important;
+  }
+}
+.hidden-mobile-above {
+  @media (width > 480px) {
+    display: none !important;
+  }
+}
+.visible-mobile {
+  @media (width <= 480px) {
+    display: block !important;
   }
 }
 // ----------------

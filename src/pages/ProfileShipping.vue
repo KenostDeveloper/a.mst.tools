@@ -1008,16 +1008,16 @@ export default {
 	  return { v$: useVuelidate() }
 	},
 	validations () {
-	//   return {
-	//     form: {
-	//       timeSelected: {
-	//         range: { required },
-	//         repeater: { required }
-	//       },
-	//       selectedStores: { required },
-	//       selectedCities: { required }
-	//     }
-	//   }
+	  return {
+	    // form: {
+	    //   timeSelected: {
+	    //     range: { required },
+	    //     repeater: { required }
+	    //   },
+	    //   selectedStores: { required },
+	    //   selectedCities: { required }
+	    // }
+	  }
 	},
 	watch: {
 	  getregions: function (newVal, oldVal) {
