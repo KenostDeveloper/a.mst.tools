@@ -5,6 +5,7 @@ import ProfileStoreProducts from "../pages/ProfileStoreProducts.vue";
 // import ReportCopoAll from '../pages/store/report_copo_all'
 // import ReportCopoAllDetails from '../pages/store/report_copo_all_details'
 import ReportCopo from "../pages/store/report_copo.vue";
+import ProfileProduct from '../pages/ProfileProduct.vue'
 import ReportCopoDetails from "../pages/store/report_copo_details.vue";
 import Home from "../pages/Home.vue";
 import notFound from "../pages/notFound.vue";
@@ -68,10 +69,37 @@ const routes = [
                         children: [
                           {
                             path: ":store_id",
-                            name: "store",
-                            props: true,
-                            label: "Товары на складе",
-                            component: ProfileStoreProducts,
+                            children: [
+                              {
+                                path: "",
+                                name: "store",
+                                props: true,
+                                label: "Товары на складе",
+                                component: ProfileStoreProducts,
+                              },
+                              {
+                                path: 'report',
+                                children: [{
+                                  path: '',
+                                  name: 'report_copo_store',
+                                  props: true,
+                                  label: 'Отчет по сопоставлению',
+                                  component: ReportCopo
+                                }, {
+                                  path: ':brand_id',
+                                  name: 'report_copo_details_store',
+                                  label: 'Отчет по бренду',
+                                  component: ReportCopoDetails
+                                }]
+                              },
+                              {
+                                path: ":product_id",
+                                name: "org_product",
+                                props: true,
+                                label: "Товар",
+                                component: ProfileProduct,
+                              },
+                            ],
                           },
                         ],
                       },

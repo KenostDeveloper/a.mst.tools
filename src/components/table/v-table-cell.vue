@@ -151,6 +151,7 @@ export default {
     linkParams () {
       const linkparams = {}
       if (this.cell_data.type === 'link') {
+        console.log(this.cell_data.link_params)
         for (const key in this.cell_data.link_params) {
           if (this.cell_data.link_params[key] !== 'id') {
             linkparams[key] = this.cell_data.link_params[key]
