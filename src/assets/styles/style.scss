@@ -2218,7 +2218,7 @@ img {
   flex-direction: column;
   gap: 50px !important;
 
-  margin-top: 100px;
+  margin-top: clamp(25px, 3vmax, 100px);
 
   &__table {
     width: 100% !important;
@@ -2286,6 +2286,8 @@ img {
   }
 
   .std-calendar {
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+
     position: fixed;
     bottom: 2rem;
     right: 40px;
@@ -2326,6 +2328,10 @@ img {
       align-items: center;
 
       transition-duration: .3s;
+
+      i::before {
+        font-size: 15px;
+      }
     }
   }
 }
