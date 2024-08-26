@@ -2210,6 +2210,56 @@ img {
   width: 100%;
 }
 
+.upload-banner__text span.ktitle {
+  display: block;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 1.3;
+  color: #282828;
+  margin-bottom: 8px;
+}
+
+.ktitle {
+  display: block;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 1.3;
+  color: #282828;
+  margin-bottom: 8px;
+}
+
+.dart-form-group {
+  max-width: 755px;
+}
+
+.upload-banner__text {
+  max-width: 450px;
+}
+
+p {
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 130%;
+  color: #00061A;
+  margin: 0;
+  margin-bottom: 15px;
+}
+
+.upload-banner {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.upload-banner__text span {
+  color: #adadad;
+  font-size: 14px;
+}
+
 .maintitle{
   font-size: 24px;
   font-weight: 400;
