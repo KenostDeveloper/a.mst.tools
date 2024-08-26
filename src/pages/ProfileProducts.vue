@@ -71,7 +71,6 @@
                       </div>
                     </div>
                     <div class="products_href">
-                      //TODO
                         <router-link :to="{ name: 'report_copo', params: { id: $route.params.id } }">
                           Отчет по сопоставлению
                           <mdicon name="arrow-right" />
