@@ -2571,18 +2571,6 @@ $mobile-s: 240px;
             }
           }
         }
-
-        .p-calendar {
-          input {
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 0;
-            border-right: none;
-          }
-          button {
-            border-top-left-radius: 0;
-            border-bottom-left-radius: 0;
-          }
-        }
       }
     }
   }
@@ -2681,6 +2669,18 @@ $mobile-s: 240px;
         }
       }
     }
+  }
+}
+
+.p-calendar {
+  input {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: none;
+  }
+  button {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
   }
 }
 
