@@ -78,6 +78,7 @@ export default {
             localStorage.setItem('user', JSON.stringify(data.data.data))
             this.$store.dispatch('user/setUser', data.data.data)
             this.$router.push({ name: 'main' })
+            // location.reload();
           }
         } else {
           this.$toast.add({ severity: 'info', summary: 'Вход запрещен', detail: 'Введен некорректный логин или пароль.', life: 3000 })

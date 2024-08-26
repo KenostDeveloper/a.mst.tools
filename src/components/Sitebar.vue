@@ -73,7 +73,7 @@
   </div>
 
   <Dialog v-model:visible="this.changeOrgModal" :header="'Выбор организации'" class="kenost-change-org">
-    <router-link @click="this.changeOrgModal = false" :to="{ name: 'org', params: { id: item.id }}" class="change-org-el" :class="{'active': $route.params.id == item.id}" v-for="item in this.organizations" v-bind:key="item.id">
+    <router-link @click="changeOrg" :to="{ name: 'org', params: { id: item.id }}" class="change-org-el" :class="{'active': $route.params.id == item.id}" v-for="item in this.organizations" v-bind:key="item.id">
       <div class="icon"><img :src="item.image" alt=""></div>
       <div class="change-org-el__text">
         <b>{{ item.name }}</b>
@@ -193,6 +193,18 @@ export default {
         console.log(localStorage.getItem("role"))
         this.role = localStorage.getItem("role")
       }
+    },
+    changeOrg () {
+      this.changeOrgModal = false
+
+      const data = {
+        action: 'get/orgs'
+      }
+      this.org_get_from_api(data)
+
+      // if(router?.currentRoute?._value.matched[0]?.name == 'home') {
+      //   this.get_organization_from_api()
+      // }
     }
   },
   mounted() {
@@ -201,7 +213,6 @@ export default {
     }
     this.org_get_from_api(data)
     this.getRole()
-
   },
   watch: {
     orgs: function (newVal, oldVal) {

@@ -38,11 +38,6 @@ const routes = [
             name: "main",
             props: true,
             label: "Главная",
-            meta: {
-              breadcrumb: {
-                label: "Главная",
-              },
-            },
             component: Home,
           },
           {

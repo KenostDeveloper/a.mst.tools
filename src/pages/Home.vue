@@ -23,8 +23,10 @@
             })
         },
         mounted () {
+            console.log("----------------", this.getUser)
             this.setUser(JSON.parse(localStorage.getItem('user')))
             if(this.getUser){
+                console.log("ПЕРЕБРОС НА ПЕРВУЮ ПОПАВШУЮСЯ ОРГАНИЗАЦИЮ")
                 //TODO: ПЕРЕБРОС НА ПЕРВУЮ ПОПАВШУЮСЯ ОРГАНИЗАЦИЮ
                 const data = {
                     action: 'get/orgs'
@@ -37,7 +39,9 @@
             }
         },
         updated () {
+            console.log("----------------", this.getUser)
             if(this.getUser){
+                console.log("ПЕРЕБРОС НА ПЕРВУЮ ПОПАВШУЮСЯ ОРГАНИЗАЦИЮ")
                 //TODO: ПЕРЕБРОС НА ПЕРВУЮ ПОПАВШУЮСЯ ОРГАНИЗАЦИЮ
                 const data = {
                     action: 'get/orgs'
@@ -52,8 +56,7 @@
         methods: {
             ...mapActions({
                 setUser: 'user/setUser',
-                deleteUser: 'user/deleteUser',
-                org_get_from_api: 'org_get_from_api'
+                deleteUser: 'user/deleteUser'
             })
         },
         watch: {
