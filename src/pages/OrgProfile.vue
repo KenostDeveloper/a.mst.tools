@@ -42,6 +42,7 @@
               </template>
             </DropZone>
             <div class="avatar-org" v-if="this.orgprofile.image">
+
               <img :src="orgprofile.upload_image? this.orgprofile.image.original_href : this.orgprofile.image" alt="">
             </div>
           </div>
@@ -206,6 +207,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import router from '../router'
+import FileUpload from 'primevue/fileupload'
 // import FloatLabel from 'primevue/floatlabel'
 // import Dropdown from 'primevue/dropdown'
 // import customModal from '@/components/popup/CustomModal.vue'
@@ -570,6 +572,7 @@ export default {
     Toast,
     TabView,
     TabPanel,
+    FileUpload,
     // Dropdown,
     // FloatLabel,
     // InputText,

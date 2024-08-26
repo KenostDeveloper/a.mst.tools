@@ -8,6 +8,7 @@ import ApiPlugin from './plugins/api'
 import LoadPlugin from './plugins/load'
 import mdiVue from 'mdi-vue/v3'
 import * as mdijs from '@mdi/js'
+import { i18n } from './i18n'
 import 'primevue/resources/themes/aura-light-green/theme.css'
 import 'v-calendar/style.css';
 import 'dropzone-vue/dist/dropzone-vue.common.css'
@@ -42,6 +43,7 @@ const vfm = createVfm()
 app.config.globalProperties.site_url_prefix = 'https://mst.tools/'
 
 app
+.use(i18n)
 .use(store)
 .use(router)
 .use(ApiPlugin)

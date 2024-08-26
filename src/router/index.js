@@ -12,6 +12,8 @@ import Home from "../pages/Home.vue";
 import notFound from "../pages/notFound.vue";
 import { createRouter, createWebHistory } from "vue-router";
 import ProfileShipping from "../pages/ProfileShipping.vue";
+import Actions from '../pages/b2c/Actions.vue'
+import ActionEdit from '../pages/b2c/ActionEdit.vue'
 
 const routes = [
   {
@@ -119,6 +121,28 @@ const routes = [
                       name: 'report_copo_details',
                       label: 'Отчет по бренду',
                       component: ReportCopoDetails
+                    }]
+                  },
+                  {
+                    path: 'b2c',
+                    children: [{
+                      path: '',
+                      name: 'org_actions',
+                      props: true,
+                      label: 'Акции',
+                      component: Actions
+                    }, {
+                      path: 'add',
+                      name: 'org_action_add',
+                      props: true,
+                      label: 'Добавление акции',
+                      component: ActionEdit
+                    }, {
+                      path: ':action_id',
+                      name: 'org_action_edit',
+                      props: true,
+                      label: 'Редактирование акции',
+                      component: ActionEdit
                     }]
                   },
                   {
