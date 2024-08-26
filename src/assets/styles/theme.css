@@ -6039,3 +6039,14 @@ a:hover{
   align-items: center;
   gap: 4px;
 }
+
+.products_href {
+  position: absolute;
+  right: 15px;
+  bottom: 15px;
+  font-size: 14px;
+}
+
+.products_href a {
+  text-decoration: none;
+}
