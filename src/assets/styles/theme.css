@@ -6050,3 +6050,7 @@ a:hover{
 .products_href a {
   text-decoration: none;
 }
+
+.p-dialog-mask{
+  background: rgba(0, 0, 0, 0.3)
+}
