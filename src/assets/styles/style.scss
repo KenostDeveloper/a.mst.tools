@@ -2312,6 +2312,7 @@ img {
   }
 
   .std-calendar {
+    background-color: #E2E2E2;
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
 
     position: fixed;
@@ -2359,6 +2360,16 @@ img {
 
       i::before {
         font-size: 15px;
+      }
+    }
+
+    &__content {
+      background-color: #E2E2E2;
+    }
+
+    .calendar-associations {
+      &__blue::before {
+        background-color: white;
       }
     }
   }

@@ -2,10 +2,12 @@
 	<div class="shipping std-shipping">
 		<div class="std-shipping__title-container">
 			<p class="table-kenost__title std-shipping__title">Мои отгрузки</p>
-			<button class="dart-btn dart-btn-primary std-shipping__button" type="submit">Добавить отгрузку</button>
+			<button class="dart-btn dart-btn-primary std-shipping__button" type="submit" @click="this.showShip = true">
+				Добавить отгрузку
+			</button>
 		</div>
 
-		<div class="shipping-table std-shipping__table ">
+		<div class="shipping-table std-shipping__table">
 			<v-table
 				class="std-shipping__filters"
 				:filters="this.filters"
@@ -30,122 +32,353 @@
 					</div>
 				</template>
 			</v-table>
-			
-        <div class="std-table__wrapper">
-			<table class="std-table">
-						<thead class="std-table__head">
-							<tr class="std-table__row">
-								<th class="std-table__hcol">Номер отгрузки</th>
-								<th class="std-table__hcol">Склад</th>
-								<th class="std-table__hcol">Дата</th>
-								<th class="std-table__hcol">Дата окончания<br/>приема заказов</th>
-								<th class="std-table__hcol">Город</th>
-								<th class="std-table__hcol">Объем товарво, кг</th>
-								<th class="std-table__hcol">Кол-во товаров, шт</th>
-								<th class="std-table__hcol">Статус</th>
-							</tr>
-						</thead>
-						<tbody class="std-table__body">
-							<tr class="std-table__row">
-								<td class="std-table__col">100618</td>
-								<td class="std-table__col">RSV-UFO-30W-6500K-E27</td>
-								<td class="std-table__col">22.02.2027</td>
-								<td class="std-table__col">0</td>
-								<td class="std-table__col">Арашинск</td>
-								<td class="std-table__col">0</td>
-								<td class="std-table__col">463</td>
-								<td class="std-table__col">Готов к выдаче</td>
-							</tr>
-							<tr class="std-table__row">
-								<td class="std-table__col">100618</td>
-								<td class="std-table__col">RSV-UFO-30W-6500K-E27</td>
-								<td class="std-table__col">22.02.2027</td>
-								<td class="std-table__col">0</td>
-								<td class="std-table__col">Арашинск</td>
-								<td class="std-table__col">0</td>
-								<td class="std-table__col">463</td>
-								<td class="std-table__col">Готов к выдаче</td>
-							</tr>
-							<tr class="std-table__row">
-								<td class="std-table__col">100618</td>
-								<td class="std-table__col">RSV-UFO-30W-6500K-E27</td>
-								<td class="std-table__col">22.02.2027</td>
-								<td class="std-table__col">0</td>
-								<td class="std-table__col">Арашинск</td>
-								<td class="std-table__col">0</td>
-								<td class="std-table__col">463</td>
-								<td class="std-table__col">Готов к выдаче</td>
-							</tr>
-							<tr class="std-table__row">
-								<td class="std-table__col">100618</td>
-								<td class="std-table__col">RSV-UFO-30W-6500K-E27</td>
-								<td class="std-table__col">22.02.2027</td>
-								<td class="std-table__col">0</td>
-								<td class="std-table__col">Арашинск</td>
-								<td class="std-table__col">0</td>
-								<td class="std-table__col">463</td>
-								<td class="std-table__col">Готов к выдаче</td>
-							</tr>
-							<tr class="std-table__row">
-								<td class="std-table__col">100618</td>
-								<td class="std-table__col">RSV-UFO-30W-6500K-E27</td>
-								<td class="std-table__col">22.02.2027</td>
-								<td class="std-table__col">0</td>
-								<td class="std-table__col">Арашинск</td>
-								<td class="std-table__col">0</td>
-								<td class="std-table__col">463</td>
-								<td class="std-table__col">Готов к выдаче</td>
-							</tr>
-							<tr class="std-table__row">
-								<td class="std-table__col">100618</td>
-								<td class="std-table__col">RSV-UFO-30W-6500K-E27</td>
-								<td class="std-table__col">22.02.2027</td>
-								<td class="std-table__col">0</td>
-								<td class="std-table__col">Арашинск</td>
-								<td class="std-table__col">0</td>
-								<td class="std-table__col">463</td>
-								<td class="std-table__col">Готов к выдаче</td>
-							</tr>
-							<tr class="std-table__row">
-								<td class="std-table__col">100618</td>
-								<td class="std-table__col">RSV-UFO-30W-6500K-E27</td>
-								<td class="std-table__col">22.02.2027</td>
-								<td class="std-table__col">0</td>
-								<td class="std-table__col">Арашинск</td>
-								<td class="std-table__col">0</td>
-								<td class="std-table__col">463</td>
-								<td class="std-table__col">Готов к выдаче</td>
-							</tr>
-							<tr class="std-table__row">
-								<td class="std-table__col">100618</td>
-								<td class="std-table__col">RSV-UFO-30W-6500K-E27</td>
-								<td class="std-table__col">22.02.2027</td>
-								<td class="std-table__col">0</td>
-								<td class="std-table__col">Арашинск</td>
-								<td class="std-table__col">0</td>
-								<td class="std-table__col">463</td>
-								<td class="std-table__col">Готов к выдаче</td>
-							</tr>
-							<tr class="std-table__row">
-								<td class="std-table__col">100618</td>
-								<td class="std-table__col">RSV-UFO-30W-6500K-E27</td>
-								<td class="std-table__col">22.02.2027</td>
-								<td class="std-table__col">0</td>
-								<td class="std-table__col">Арашинск</td>
-								<td class="std-table__col">0</td>
-								<td class="std-table__col">463</td>
-								<td class="std-table__col">Готов к выдаче</td>
-							</tr>
-						</tbody>
-					</table>
+
+			<div class="std-table__wrapper">
+				<table class="std-table">
+					<thead class="std-table__head">
+						<tr class="std-table__row">
+							<th class="std-table__hcol">Номер отгрузки</th>
+							<th class="std-table__hcol">Склад</th>
+							<th class="std-table__hcol">Дата</th>
+							<th class="std-table__hcol">Дата окончания<br />приема заказов</th>
+							<th class="std-table__hcol">Город</th>
+							<th class="std-table__hcol">Объем товарво, кг</th>
+							<th class="std-table__hcol">Кол-во товаров, шт</th>
+							<th class="std-table__hcol">Статус</th>
+						</tr>
+					</thead>
+					<tbody class="std-table__body">
+						<tr class="std-table__row">
+							<td class="std-table__col">100618</td>
+							<td class="std-table__col">RSV-UFO-30W-6500K-E27</td>
+							<td class="std-table__col">22.02.2027</td>
+							<td class="std-table__col">0</td>
+							<td class="std-table__col">Арашинск</td>
+							<td class="std-table__col">0</td>
+							<td class="std-table__col">463</td>
+							<td class="std-table__col">Готов к выдаче</td>
+						</tr>
+						<tr class="std-table__row">
+							<td class="std-table__col">100618</td>
+							<td class="std-table__col">RSV-UFO-30W-6500K-E27</td>
+							<td class="std-table__col">22.02.2027</td>
+							<td class="std-table__col">0</td>
+							<td class="std-table__col">Арашинск</td>
+							<td class="std-table__col">0</td>
+							<td class="std-table__col">463</td>
+							<td class="std-table__col">Готов к выдаче</td>
+						</tr>
+						<tr class="std-table__row">
+							<td class="std-table__col">100618</td>
+							<td class="std-table__col">RSV-UFO-30W-6500K-E27</td>
+							<td class="std-table__col">22.02.2027</td>
+							<td class="std-table__col">0</td>
+							<td class="std-table__col">Арашинск</td>
+							<td class="std-table__col">0</td>
+							<td class="std-table__col">463</td>
+							<td class="std-table__col">Готов к выдаче</td>
+						</tr>
+						<tr class="std-table__row">
+							<td class="std-table__col">100618</td>
+							<td class="std-table__col">RSV-UFO-30W-6500K-E27</td>
+							<td class="std-table__col">22.02.2027</td>
+							<td class="std-table__col">0</td>
+							<td class="std-table__col">Арашинск</td>
+							<td class="std-table__col">0</td>
+							<td class="std-table__col">463</td>
+							<td class="std-table__col">Готов к выдаче</td>
+						</tr>
+						<tr class="std-table__row">
+							<td class="std-table__col">100618</td>
+							<td class="std-table__col">RSV-UFO-30W-6500K-E27</td>
+							<td class="std-table__col">22.02.2027</td>
+							<td class="std-table__col">0</td>
+							<td class="std-table__col">Арашинск</td>
+							<td class="std-table__col">0</td>
+							<td class="std-table__col">463</td>
+							<td class="std-table__col">Готов к выдаче</td>
+						</tr>
+						<tr class="std-table__row">
+							<td class="std-table__col">100618</td>
+							<td class="std-table__col">RSV-UFO-30W-6500K-E27</td>
+							<td class="std-table__col">22.02.2027</td>
+							<td class="std-table__col">0</td>
+							<td class="std-table__col">Арашинск</td>
+							<td class="std-table__col">0</td>
+							<td class="std-table__col">463</td>
+							<td class="std-table__col">Готов к выдаче</td>
+						</tr>
+						<tr class="std-table__row">
+							<td class="std-table__col">100618</td>
+							<td class="std-table__col">RSV-UFO-30W-6500K-E27</td>
+							<td class="std-table__col">22.02.2027</td>
+							<td class="std-table__col">0</td>
+							<td class="std-table__col">Арашинск</td>
+							<td class="std-table__col">0</td>
+							<td class="std-table__col">463</td>
+							<td class="std-table__col">Готов к выдаче</td>
+						</tr>
+						<tr class="std-table__row">
+							<td class="std-table__col">100618</td>
+							<td class="std-table__col">RSV-UFO-30W-6500K-E27</td>
+							<td class="std-table__col">22.02.2027</td>
+							<td class="std-table__col">0</td>
+							<td class="std-table__col">Арашинск</td>
+							<td class="std-table__col">0</td>
+							<td class="std-table__col">463</td>
+							<td class="std-table__col">Готов к выдаче</td>
+						</tr>
+						<tr class="std-table__row">
+							<td class="std-table__col">100618</td>
+							<td class="std-table__col">RSV-UFO-30W-6500K-E27</td>
+							<td class="std-table__col">22.02.2027</td>
+							<td class="std-table__col">0</td>
+							<td class="std-table__col">Арашинск</td>
+							<td class="std-table__col">0</td>
+							<td class="std-table__col">463</td>
+							<td class="std-table__col">Готов к выдаче</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 		</div>
-       
-		</div>
-		<div :class="`shipping-calendar std-calendar ${this.calendarIsExpanded ? 'std-calendar--active' : ''}`">
+
+		<Dialog v-model:visible="this.showShip" header="Создание отгрузки" :style="{ width: '800px' }">
+			<form action="#" @submit.prevent="formSubmit">
+				<!-- <div class="shipping-form">
+        <div class="dart-form-group" :class="{ error: v$.form.selectedStores.$errors.length }">
+          <label for="">Выберите магазины</label>
+          <AutoComplete
+            v-model="form.selectedStores"
+            :suggestions="form.filteredStores"
+            :multiple="true"
+            :dropdown="true"
+            optionLabel="label"
+            dataKey="value"
+            placeholder='Начните вводить наименование магазина'
+            @complete="searchStore($event)"
+          />
+          <span class="error_desc" v-for="error of v$.form.selectedStores.$errors" :key="error.$uid">
+            {{ error.$message }}
+          </span>
+        </div>
+      </div> -->
+				<div class="shopping-kenost">
+					<p class="shopping-kenost__b">Дата и время</p>
+					<div class="dart-alert dart-alert-info">
+						Если Вы выберите повторение отгрузки, то смещение дат относительно самой отгрузки и
+						датой окончания приемки заказов будет выставлено аналогичное тому, что вы укажете ниже.
+					</div>
+					<div class="shopping-kenost__dates">
+						<div class="shopping-kenost__row">
+							<p class="k-mini-text">Дата и время отгрузки</p>
+							<CalendarVue
+								showIcon
+								id="calendar-24h"
+								v-model="form.dateStart"
+								showTime
+								hourFormat="24"
+							/>
+						</div>
+						<div class="shopping-kenost__row">
+							<p class="k-mini-text">Дата и время окончания приема заказов</p>
+							<CalendarVue
+								showIcon
+								id="calendar-24h"
+								v-model="form.dateEnd"
+								showTime
+								hourFormat="24"
+							/>
+						</div>
+					</div>
+					<div class="dart-row mt-2">
+						<div class="d-col-md-12">
+							<div
+								class="dart-form-group"
+								:class="{ error: v$.form.timeSelected.repeater.$errors.length }"
+							>
+								<label for="">Повторять</label>
+								<Dropdown
+									v-model="form.timeSelected.repeater"
+									:options="form.timeSelect.repeater"
+									optionLabel="label"
+									optionValue="value"
+									placeholder="Выберите период повторения"
+								/>
+								<span
+									class="error_desc"
+									v-for="error of v$.form.timeSelected.repeater.$errors"
+									:key="error.$uid"
+								>
+									{{ error.$message }}
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="dart-row">
+						<div class="d-col-md-12">
+							<div
+								class="dart-form-group"
+								:class="{ error: v$.form.timeSelected.repeater.$errors.length }"
+							>
+								<label for="">Склад</label>
+								<Dropdown
+									v-model="this.form.store_id"
+									:options="this.stores"
+									optionLabel="label"
+									optionValue="value"
+									placeholder="Выберите склад"
+								/>
+								<!-- <span class="error_desc" v-for="error of v$.form.timeSelected.repeater.$errors" :key="error.$uid">
+                {{ error.$message }}
+              </span> -->
+							</div>
+						</div>
+					</div>
+					<div class="dart-row" v-if="form.timeSelected.repeater != 0">
+						<div class="d-col-md-6" v-if="form.timeSelected.repeater == 'week'">
+							<div class="dart-form-group">
+								<label for="">В следующие дни</label>
+								<MultiSelect
+									v-model="form.timeSelected.days"
+									:options="form.timeSelect.days"
+									optionLabel="label"
+									optionValue="value"
+									placeholder="Выберите дни отгрузок"
+								/>
+							</div>
+						</div>
+						<div class="d-col-md-6" v-if="form.timeSelected.repeater == 'week'">
+							<div class="dart-form-group">
+								<label for="">Каждую ... неделю</label>
+								<Dropdown
+									v-model="form.timeSelected.weeks"
+									:options="form.timeSelect.weeks"
+									optionLabel="label"
+									optionValue="value"
+									placeholder="Выберите неделю"
+								/>
+							</div>
+						</div>
+					</div>
+					<div
+						class="dart-form-group-simple"
+						v-if="form.timeSelected.repeater == 'day' || form.timeSelected.repeater == 'week'"
+						:class="{ error: v$.form.timeSelected.range.$errors.length }"
+					>
+						<label for="">В период</label>
+						<DatePicker
+							v-model.range="form.timeSelected.range"
+							:masks="{ weekdays: 'WW' }"
+							mode="date"
+							range
+						>
+							<template v-slot="{ inputValue, inputEvents, isDragging }">
+								<div class="dart-row">
+									<div class="d-col-md-6">
+										<input
+											class="dart-form-control"
+											:class="isDragging ? 'text-gray-600' : 'text-gray-900'"
+											:value="inputValue.start"
+											v-on="inputEvents.start"
+										/>
+									</div>
+									<div class="d-col-md-6">
+										<input
+											class="dart-form-control"
+											:class="isDragging ? 'text-gray-600' : 'text-gray-900'"
+											:value="inputValue.end"
+											v-on="inputEvents.end"
+										/>
+									</div>
+								</div>
+							</template>
+						</DatePicker>
+						<span
+							class="error_desc"
+							v-for="error of v$.form.timeSelected.range.$errors"
+							:key="error.$uid"
+						>
+							{{ error.$message }}
+						</span>
+					</div>
+					<p class="shopping-kenost__b mt-2 mb-1">Маршрут</p>
+					<div class="dart-alert dart-alert-info">
+						Выберите города маршрута и проставьте даты, когда транспорт будет разгружен (по
+						умолчанию, дата будет совпадать с выбранной датой начала отгрузки). Если Вы выбрали
+						повторение, то при генерации дальнейших отгрузок будет выбрано аналогичное смещение дат.
+					</div>
+					<div
+						class="dart-form-group mt-1 mb-2"
+						:class="{ error: v$.form.selectedCities.$errors.length }"
+					>
+						<AutoComplete
+							v-model="form.selectedCities"
+							:suggestions="form.filteredCities"
+							:multiple="true"
+							:dropdown="true"
+							optionLabel="label"
+							dataKey="value"
+							placeholder="Начните вводить наименование города"
+							@complete="searchCity($event)"
+						/>
+						<span
+							class="error_desc"
+							v-for="error of v$.form.selectedCities.$errors"
+							:key="error.$uid"
+						>
+							{{ error.$message }}
+						</span>
+					</div>
+					<div class="shopping-kenost__citys" v-if="this.form.selectedCities">
+						<div
+							class="shopping-kenost__cityone"
+							v-for="(item, index) in this.form.selectedCities"
+							:key="index"
+						>
+							<div class="shopping-kenost__cityone-name" v-if="item">
+								<p>{{ item.label }}</p>
+								<div class="btn btn-close" @click="deletePunkt(index)">
+									<i class="d_icon d_icon-close"></i>
+								</div>
+							</div>
+							<div class="shopping-kenost__cityone-date mb-3" v-if="item">
+								<p class="k-mini-text">Дата и время окончания приема заказов</p>
+								<CalendarVue
+									showIcon
+									id="calendar-24h"
+									v-model="this.form.citiesDates[index]"
+									showTime
+									hourFormat="24"
+								/>
+							</div>
+						</div>
+					</div>
+					<div class="shopping-kenost__button">
+						<div
+							class="router-link-active dart-btn dart-btn-secondary btn-padding"
+							@click="this.showShip = false"
+						>
+							Отменить
+						</div>
+						<button type="submit" class="dart-btn dart-btn-primary btn-padding">Сохранить</button>
+					</div>
+				</div>
+			</form>
+		</Dialog>
+
+		<div
+			:class="`shipping-calendar std-calendar ${
+				this.calendarIsExpanded ? 'std-calendar--active' : ''
+			}`"
+		>
 			<div class="shipping-calendar__head std-calendar__head">
 				<p>Календарь отгрузок</p>
 				<div class="std-calendar__actions">
-					<div class="std-calendar__expand-button" @click="this.calendarIsExpanded = !this.calendarIsExpanded">
+					<div
+						class="std-calendar__expand-button"
+						@click="this.calendarIsExpanded = !this.calendarIsExpanded"
+					>
 						<i class="pi pi-angle-up"></i>
 					</div>
 					<div class="dart-btn dart-btn-primary" @click="this.showShip = true">
@@ -154,12 +387,13 @@
 				</div>
 			</div>
 			<Calendar
-				class="shipping-calendar-css"
+				class="shipping-calendar-css std-calendar__content"
 				is-expanded
 				title-position="left"
 				:attributes="attributes"
 				:masks="{ weekdays: 'WW' }"
 				:modelValue="checkDate"
+				content="red"
 				@dayclick="dayClicked"
 			/>
 			<div class="calendar-associations">
@@ -285,7 +519,7 @@
         </div>
       </div>
     </div> -->
-    <!-- <teleport to="body">
+	<!-- <teleport to="body">
       <custom-modal v-model="showShipModal" @close="closeShipModal" class="plan-modal">
         <template v-slot:title>Отгрузка товаров магазина {{ modal.store_name }} на {{ modal.store_date }}</template>
         <div>
@@ -306,7 +540,7 @@
 <script>
 import { ref } from "vue";
 import { mapActions, mapGetters, mapMutations } from "vuex";
-//   import { useVuelidate } from '@vuelidate/core'
+import { useVuelidate } from '@vuelidate/core'
 //   import { required } from '@/utils/i18n-validators'
 //   import router from '@/router'
 import AutoComplete from "primevue/autocomplete";
@@ -338,7 +572,7 @@ export default {
 	data() {
 		return {
 			calendarIsExpanded: false,
-			
+
 			editMode: false,
 			showShipModal: false,
 			showShip: false,
@@ -770,10 +1004,10 @@ export default {
 	computed: {
 		...mapGetters(["shipping", "getregions", "shipping_statuses", "getshipdata", "org_stores"]),
 	},
-	// setup () {
-	//   return { v$: useVuelidate() }
-	// },
-	// validations () {
+	setup () {
+	  return { v$: useVuelidate() }
+	},
+	validations () {
 	//   return {
 	//     form: {
 	//       timeSelected: {
@@ -784,28 +1018,28 @@ export default {
 	//       selectedCities: { required }
 	//     }
 	//   }
-	// },
-	// watch: {
-	//   getregions: function (newVal, oldVal) {
-	//     this.filters.region.values = newVal
-	//   },
-	//   shipping_statuses: function (newVal, oldVal) {
-	//     this.filters.status.values = newVal
-	//   },
-	//   shipping: function (newVal, oldVal) {
-	//     this.shipping_values = newVal
-	//   },
-	//   org_stores: function (newVal, oldVal) {
-	//     // this.stores = newVal
-	//     console.log(newVal)
-	//     this.stores = []
-	//     for (let i = 0; i < newVal.items.length; i++) {
-	//       this.stores.push({ label: newVal.items[i].name, value: newVal.items[i].store_id })
-	//     }
-	//     console.log(this.stores)
-	//     // { name: 'New York', code: 'NY' },
-	//   }
-	// }
+	},
+	watch: {
+	  getregions: function (newVal, oldVal) {
+	    this.filters.region.values = newVal
+	  },
+	  shipping_statuses: function (newVal, oldVal) {
+	    this.filters.status.values = newVal
+	  },
+	  shipping: function (newVal, oldVal) {
+	    this.shipping_values = newVal
+	  },
+	  org_stores: function (newVal, oldVal) {
+	    // this.stores = newVal
+	    console.log(newVal)
+	    this.stores = []
+	    for (let i = 0; i < newVal.items.length; i++) {
+	      this.stores.push({ label: newVal.items[i].name, value: newVal.items[i].store_id })
+	    }
+	    console.log(this.stores)
+	    // { name: 'New York', code: 'NY' },
+	  }
+	}
 };
 </script>
 
