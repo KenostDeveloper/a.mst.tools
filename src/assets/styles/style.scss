@@ -1762,6 +1762,10 @@ img {
   text-align: center;
   letter-spacing: 1.25px;
   position: relative;
+
+  span{
+    line-height: 1;
+  }
 }
 
 .dart-btn.dart-btn-small {
