@@ -136,7 +136,7 @@ export default {
       {
         label: 'Индивидуальные скидки',
         icon: 'star.svg',
-        to: { name: 'home', params: { id: this.$route.params.id } }
+        to: { name: 'b2c', params: { id: this.$route.params.id } }
       },
       {
         label: 'Оптовые акции',

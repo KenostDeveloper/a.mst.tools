@@ -127,7 +127,7 @@ const routes = [
                     path: 'b2c',
                     children: [{
                       path: '',
-                      name: 'org_actions',
+                      name: 'b2c',
                       props: true,
                       label: 'Акции',
                       component: Actions
