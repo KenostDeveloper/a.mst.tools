@@ -41,7 +41,7 @@ export default {
         this.namePathIsNav = router?.currentRoute?._value.matched[4]?.name
     },
     updated () {
-        this.setUser(JSON.parse(localStorage.getItem('user')))
+        // this.setUser(JSON.parse(localStorage.getItem('user')))
         this.namePathIsNav = router?.currentRoute?._value.matched[4]?.name
     },
     methods: {

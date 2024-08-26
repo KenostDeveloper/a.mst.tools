@@ -50,7 +50,7 @@
 				</div>
 			</div>
 
-			<v-table
+			<!-- <v-table
 				class="std-shipping__filters"
 				:filters="this.filters"
 				:items_data="shipping.shipment"
@@ -70,10 +70,10 @@
 			>
 				<template v-slot:button>
 					<div>
-						<!-- <button class="dart-btn dart-btn-primary" type="submit">Добавить</button> -->
+						
 					</div>
 				</template>
-			</v-table>
+			</v-table> -->
 
 			<div class="std-table__wrapper">
 				<table class="std-table">

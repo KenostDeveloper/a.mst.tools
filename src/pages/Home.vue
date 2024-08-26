@@ -56,7 +56,8 @@
         methods: {
             ...mapActions({
                 setUser: 'user/setUser',
-                deleteUser: 'user/deleteUser'
+                deleteUser: 'user/deleteUser',
+                org_get_from_api: 'org_get_from_api'
             })
         },
         watch: {
