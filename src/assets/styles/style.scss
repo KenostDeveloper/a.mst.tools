@@ -2210,6 +2210,32 @@ img {
   width: 100%;
 }
 
+.maintitle{
+  font-size: 24px;
+  font-weight: 400;
+}
+
+.PickList, .buttons_container, .profile-content__title {
+  display: flex;
+  align-items: center;
+}
+
+.profile-content__title {
+  justify-content: space-between;
+}
+
+.sticky-element {
+  position: sticky;
+  top: 0;
+  padding: 10px 0;
+  z-index: 1;
+  background: #fff;
+}
+
+.btn-padding {
+  padding-left: 55px;
+  padding-right: 55px;
+}
 
 
 // Steiden

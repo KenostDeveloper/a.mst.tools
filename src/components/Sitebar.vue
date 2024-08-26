@@ -146,7 +146,7 @@ export default {
       {
         label: 'Карточка компании',
         icon: 'settings.svg',
-        to: { name: 'home', params: { id: this.$route.params.id } }
+        to: { name: 'org_settings', params: { id: this.$route.params.id } }
       }]
     }
   },

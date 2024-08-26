@@ -10,6 +10,7 @@ import mdiVue from 'mdi-vue/v3'
 import * as mdijs from '@mdi/js'
 import 'primevue/resources/themes/aura-light-green/theme.css'
 import 'v-calendar/style.css';
+import 'dropzone-vue/dist/dropzone-vue.common.css'
 
 //Тут все общие вещи
 import './assets/styles/style.scss'

@@ -5,6 +5,7 @@ import ProfileStoreProducts from "../pages/ProfileStoreProducts.vue";
 // import ReportCopoAll from '../pages/store/report_copo_all'
 // import ReportCopoAllDetails from '../pages/store/report_copo_all_details'
 import ReportCopo from "../pages/store/report_copo.vue";
+import OrgProfile from '../pages/OrgProfile.vue'
 import ProfileProduct from '../pages/ProfileProduct.vue'
 import ReportCopoDetails from "../pages/store/report_copo_details.vue";
 import Home from "../pages/Home.vue";
@@ -119,6 +120,11 @@ const routes = [
                       label: 'Отчет по бренду',
                       component: ReportCopoDetails
                     }]
+                  },
+                  {
+                    path: 'settings',
+                    name: 'org_settings',
+                    component: OrgProfile
                   },
                   {
                     path: 'shipping_test',

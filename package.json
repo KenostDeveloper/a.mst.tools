@@ -13,6 +13,7 @@
     "@popperjs/core": "^2.11.8",
     "axios": "^1.7.4",
     "chart.js": "^4.4.4",
+    "dropzone-vue": "^0.1.11",
     "mdi-vue": "^3.0.13",
     "primeicons": "^7.0.0",
     "primevue": "^3.49.1",
