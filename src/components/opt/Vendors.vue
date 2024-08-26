@@ -126,7 +126,7 @@
 <script>
 import { shallowRef } from 'vue'
 import { mapActions, mapGetters } from 'vuex'
-import router from '@/router'
+import router from '../../router'
 import Toast from 'primevue/toast'
 import { YandexMap, YandexMapDefaultSchemeLayer, YandexMapDefaultFeaturesLayer, YandexMapMarker, YandexMapClusterer } from 'vue-yandex-maps'
 import Checkbox from 'primevue/checkbox'

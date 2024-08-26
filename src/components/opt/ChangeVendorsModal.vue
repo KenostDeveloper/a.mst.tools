@@ -17,7 +17,7 @@
                         <span class="d-col-shop__span">Выбранные поставщики</span>
 
                         <div class="changeshop__vendors">
-                            <div class="d-col-shop__info">
+                            <!-- <div class="d-col-shop__info">
                                 <div class="d-col-shop__left">
                                     <span class="h3">МСТ</span>
                                     <p class="mt-1">г. Химки, ул. Ленинградская, д.29</p>
@@ -79,7 +79,7 @@
                                     <p class="mt-1">г. Химки, ул. Ленинградская, д.29</p>
                                 </div>
                                 <img src="/assets/content/images/shops_logo/mstoldlogo.png" alt="ООО «МСТ», г. Химки, ул. Ленинградская, д.29">
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>

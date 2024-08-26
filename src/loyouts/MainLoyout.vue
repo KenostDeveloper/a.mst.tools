@@ -1,6 +1,7 @@
 <template>
     <Sitebar v-if="this.getUser" :active="this.sitebar"/>
-    <div class="content dart_container">
+    <div class="content dart_container" :class='{"white": this.namePathIsNav == "purchases"}'>
+        <Nav v-if="namePathIsNav == 'purchases'" />
         <div class="dart_wrapper">
             <router-view>
 
@@ -12,16 +13,19 @@
 <script>
 import Sitebar from '../components/Sitebar.vue';
 import { mapGetters, mapActions } from 'vuex'
+import Nav from '../components/opt/Nav.vue'
+import router from '../router'
 
 export default {
     name: 'MainLoyout',
     data () {
         return {
             isUser: false,
-            sitebar: false
+            sitebar: false,
+            namePathIsNav: null
         }
     },
-    components: { Sitebar },
+    components: { Sitebar, Nav },
     computed: {
         ...mapGetters({
             getUser: 'user/getUser'
@@ -33,8 +37,11 @@ export default {
         if(sidebarCookie === 1){
             this.sitebar = true
         }
+
+        this.namePathIsNav = router?.currentRoute?._value.matched[4]?.name
     },
-    updated() {
+    updated () {
+        this.namePathIsNav = router?.currentRoute?._value.matched[4]?.name
     },
     methods: {
         ...mapActions({
