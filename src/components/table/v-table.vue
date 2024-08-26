@@ -68,7 +68,7 @@
             <TreeSelect v-model="filtersdata[i]" :options="ffilter.values" selectionMode="checkbox" :placeholder="ffilter.placeholder" class="w-full" @change="setFilter"/>
           </div>
           <div class="dart-form-group" v-if="ffilter.type == 'checkbox'">
-            <div class="flex align-items-center">
+            <div class="flex align-items-center gap-1">
               <Checkbox v-model="filtersdata[i]" :inputId="'input' + i" :name="i" value="1" @change="setFilter"/>
               <label :for="'input' + i" class="ml-2"> {{ ffilter.placeholder }} </label>
             </div>

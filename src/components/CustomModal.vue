@@ -28,6 +28,7 @@ export default {
   components: {
     VueFinalModal
   },
+  options: { styleIsolation: 'shared' },
   methods: {
     closed () {
       this.$emit('close')
@@ -36,13 +37,13 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-::v-deep(.modal-container) {
+<style lang="scss">
+.modal-container {
   display: flex;
   justify-content: center;
   align-items: center;
 }
-::v-deep(.modal-content) {
+.modal-content {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -54,6 +55,9 @@ export default {
   border: 1px solid #e2e8f0;
   border-radius: 0.25rem;
   background: #fff;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 .modal__title {
   margin: 0 2rem 0 0;

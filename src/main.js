@@ -2,12 +2,13 @@ import { createApp } from 'vue'
 import VueCookies from 'vue-cookies'
 import PrimeVue from 'primevue/config';
 import ToastService from 'primevue/toastservice'
-
+import { createVfm } from 'vue-final-modal'
+import { setupCalendar } from 'v-calendar'
 import ApiPlugin from './plugins/api'
 import LoadPlugin from './plugins/load'
 
 import 'primevue/resources/themes/aura-light-green/theme.css'
-
+import 'v-calendar/style.css';
 
 //Тут все общие вещи
 import './assets/styles/style.scss'
@@ -21,12 +22,20 @@ import './assets/styles/mobile.css'
 //Иконки PrimeVue
 import 'primeicons/primeicons.css'
 
+//Старые стили
+import './assets/styles/theme.css'
+
+import 'vue-final-modal/style.css'
+
+
+
 
 import router from './router'
 import store from './store'
 import App from './App.vue'
 
 const app = createApp(App)
+const vfm = createVfm()
 
 app.config.globalProperties.site_url_prefix = 'https://mst.tools/'
 
@@ -35,6 +44,7 @@ app
 .use(router)
 .use(ApiPlugin)
 .use(LoadPlugin)
+.use(setupCalendar, {})
 .use(PrimeVue)
 .use(PrimeVue, {
     ripple: true,
@@ -158,6 +168,7 @@ app
     }
   })
 .use(ToastService)
+.use(vfm)
 .use(VueCookies, { expires: '7d' })
 .mount('#app')
 
