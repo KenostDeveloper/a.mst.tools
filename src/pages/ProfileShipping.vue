@@ -542,6 +542,7 @@ import { ref } from "vue";
 import { mapActions, mapGetters, mapMutations } from "vuex";
 import { useVuelidate } from '@vuelidate/core'
 //   import { required } from '@/utils/i18n-validators'
+  import { required } from '../utils/i18n-validators'
 //   import router from '@/router'
 import AutoComplete from "primevue/autocomplete";
 import Dropdown from "primevue/dropdown";
@@ -1009,14 +1010,14 @@ export default {
 	},
 	validations () {
 	  return {
-	    // form: {
-	    //   timeSelected: {
-	    //     range: { required },
-	    //     repeater: { required }
-	    //   },
-	    //   selectedStores: { required },
-	    //   selectedCities: { required }
-	    // }
+	    form: {
+	      timeSelected: {
+	        range: { required },
+	        repeater: { required }
+	      },
+	      selectedStores: { required },
+	      selectedCities: { required }
+	    }
 	  }
 	},
 	watch: {

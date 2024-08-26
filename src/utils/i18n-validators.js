@@ -1,6 +1,6 @@
 // @/utils/i18n-validators.js
 import * as validators from '@vuelidate/validators'
-import { i18n } from '@/i18n'
+import { i18n } from '../i18n'
 
 // or import { createI18nMessage } from '@vuelidate/validators'
 const { createI18nMessage } = validators
