@@ -43,11 +43,10 @@
                          </div>
                        </div>
                        <div class="products_href">
-                        //TODO
-                         <!-- <router-link :to="{ name: 'report_copo', params: { id: $route.params.id, store_id: $route.params.store_id } }">
+                         <router-link :to="{ name: 'report_copo_store', params: { id: $route.params.id, store_id: $route.params.store_id } }">
                            Отчет по сопоставлению
                            <mdicon name="arrow-right" />
-                         </router-link> -->
+                         </router-link>
                        </div>
                    </div>
                  </div>
@@ -79,11 +78,10 @@
                        </div>
                      </div>
                      <div class="products_href">
-                        //TODO
-                         <!-- <router-link :to="{ name: 'report_copo', params: { id: $route.params.id, store_id: $route.params.store_id } }">
+                         <router-link :to="{ name: 'report_copo_store', params: { id: $route.params.id, store_id: $route.params.store_id } }">
                            Отчет по сопоставлению
                            <mdicon name="arrow-right" />
-                         </router-link> -->
+                         </router-link>
                        </div>
                    </div>
                  </div>
@@ -802,12 +800,13 @@ export default {
       table_data_brand: {
         name: {
           label: 'Наименование',
-          type: 'text',
-          // link_to: 'report_copo_details',
-          // link_params: {
-          //   id: this.$route.params.id,
-          //   brand_id: 'id'
-          // },
+          type: 'link',
+          link_to: 'report_copo_details_store',
+          link_params: {
+            id: this.$route.params.id,
+            store_id: this.$route.params.store_id,
+            brand_id: 'id'
+          },
           sort: true
         },
         find: {
@@ -874,13 +873,13 @@ export default {
         },
         name: {
           label: 'Наименование',
-          type: 'text',
-          // link_to: 'org_product',
-          // link_params: {
-          //   id: this.$route.params.id,
-          //   store_id: this.$route.params.store_id,
-          //   product_id: 'id'
-          // },
+          type: 'link',
+          link_to: 'org_product',
+          link_params: {
+            id: this.$route.params.id,
+            store_id: this.$route.params.store_id,
+            product_id: 'id'
+          },
           description: {
             type: 'field',
             key: 'catalog'
