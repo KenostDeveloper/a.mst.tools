@@ -22,6 +22,7 @@ import ProfilePurchases from '../pages/opt/ProfilePurchases.vue'
 import PurchasesCatalog from '../pages/opt/PurchasesCatalog.vue'
 import PurchasesSearch from '../pages/opt/Search.vue'
 import Promotion from '../pages/opt/Promotion/Promotion.vue'
+import ProfileClients from "../pages/ProfileClients.vue";
 
 const routes = [
   {
@@ -249,6 +250,11 @@ const routes = [
                     path: 'shipments',
                     name: 'shipments',
                     component: ProfileShipping
+                  },
+                  {
+                    path: 'clients',
+                    name: 'clients',
+                    component: ProfileClients
                   }
                 ],
               },

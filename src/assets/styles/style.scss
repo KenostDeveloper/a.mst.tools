@@ -2332,6 +2332,11 @@ $mobile-s: 240px;
 		@content;
 	}
 }
+@mixin desktop-s-plus {
+  @media (width <= 1075px) {
+    @content;
+  }
+}
 @mixin desktop-s-above {
 	@media (width > $desktop-s) {
 		@content;
@@ -2341,6 +2346,11 @@ $mobile-s: 240px;
 	@media (width <= $desktop-s) {
 		@content;
 	}
+}
+@mixin desktop-s-minus {
+  @media (width <= 990px) {
+    @content;
+  }
 }
 @mixin tablet-l-above {
 	@media (width > $tablet-l) {
@@ -2361,6 +2371,11 @@ $mobile-s: 240px;
 	@media (width <= $tablet) {
 		@content;
 	}
+}
+@mixin tablet-minus {
+  @media (width <= 700px) {
+    @content;
+  }
 }
 @mixin tablet-s-above {
 	@media (width > $tablet-s) {
@@ -2470,6 +2485,32 @@ $mobile-s: 240px;
   display: contents;
 }
 
+.std-title {
+  font-size: 24px;
+  font-weight: 700;
+
+  &,
+  &__description {
+    line-height: 1.17;
+    margin: 0;
+  }
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  &__description {
+    font-size: 16px;
+    font-weight: 400;
+    color: #B4B4B4;
+
+    @include mobile-l {
+      font-size: 15px;
+    }
+  }
+}
 
 .std-shipping {
   display: flex;
@@ -2829,4 +2870,103 @@ $mobile-s: 240px;
     transition-duration: .3s;
   }
 }
+
+
+// ProfileClients
+.clients {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+
+  @include desktop-s-minus {
+    margin-top: calc(54px + 20px - 30px);
+  }
+
+  &__card-container {
+    // display: flex;
+    display: grid;
+    flex-wrap: wrap;
+    gap: 24px;
+
+    @include desktop-l-above { grid-template-columns: repeat(5, 1fr); }
+    @include desktop-l { grid-template-columns: repeat(4, 1fr); }
+    @include desktop { grid-template-columns: repeat(3, 1fr); }
+    @include desktop-s-plus { grid-template-columns: repeat(2, 1fr); }
+    @include tablet-minus { grid-template-columns: repeat(1, 1fr); }
+  }
+
+  .clients__card,
+  .client-card {
+    display: flex;
+    flex-direction: column;
+    gap: 45px;
+
+    flex-grow: 1;
+    flex-basis: 0;
+
+    background-color: white;
+    border: 1px solid #E0E0E0;
+    border-radius: 4px;
+
+    padding: 24px 22px;
+    // max-width: 360px;
+
+    @include mobile-l {
+      gap: 24px;
+      padding: 15px;
+    }
+
+    &__content {
+      display: flex;
+      gap: 22px;
+
+      @include mobile-l {
+        gap: 6px;
+      }
+
+      .client-card__img {
+        width: 70px;
+        height: 70px !important;
+        aspect-ratio: 1;
+        // background-color: #D9D9D9;
+        border-radius: 4px;
+        object-fit: cover;
+      }
+
+      .client-card__info {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+
+        @include mobile-l {
+          gap: 4px;
+        }
+
+        :is(.client-card__title, .client-card__address) {
+          line-height: 1.17;
+          margin: 0;
+        }
+
+        .client-card__title {
+          font-size: 16px;
+          font-weight: 500;
+        }
+
+        .client-card__address {
+          color: #B4B4B4;
+          font-size: 14px;
+          font-weight: 400;
+        }
+      }
+    }
+
+    &__button {
+      width: max-content;
+      height: 34px;
+      padding-inline: 54px;
+      margin: 0 auto;
+    }
+  }
+}
+
 // ----------------
