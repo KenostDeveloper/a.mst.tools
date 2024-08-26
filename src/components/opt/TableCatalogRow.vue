@@ -99,7 +99,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import Counter from './Counter.vue'
-import router from '@/router'
+import router from '../../router'
 import Dialog from 'primevue/dialog'
 
 export default {

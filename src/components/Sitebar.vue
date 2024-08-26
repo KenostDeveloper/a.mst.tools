@@ -33,15 +33,18 @@
       <p class="sitebar-profile__name">{{this.organozation?.name}}<span @click="this.changeOrgModal = true">Сменить <i class="pi pi-angle-right"></i></span></p>
       </div>
       <div class="sitebar-profile__tags">
-        <div class="sitebar-profile__tag">Маркетплейс</div>
+        <div class="sitebar-profile__tag" v-if="this.role == 0">Закупщик</div>
+        <div class="sitebar-profile__tag" v-if="this.role == 1">Маркетплейс</div>
+        <div class="sitebar-profile__tag" v-if="this.role == 2">Поставщик</div>
         <div class="sitebar-profile__on"><img src="/src/assets/images/icons/on.svg" alt=""><span>Включен</span></div>
       </div>
     </div>
     <div class="sitebar-info">
       <span class="sitebar-text">Выбор роли:</span>
       <div class="sitebar-roles">
-        <div class="sitebar-role">Закупщик</div>
-        <div class="sitebar-role">Поставщик</div>
+        <div class="sitebar-role" @click="changeRole(0)" v-if="this.role != 0">Закупщик</div>
+        <div class="sitebar-role" @click="changeRole(1)" v-if="this.role != 1">Маркетплейс</div>
+        <div class="sitebar-role" @click="changeRole(2)" v-if="this.role != 2">Поставщик</div>
       </div>
     </div>
     <hr class="sitebar-hr">
@@ -103,6 +106,11 @@ export default {
       organizations: [],
       organozation: [],
       changeOrgModal: false,
+      role: 0
+      //РОЛИ
+      // 0 - Закупки
+      // 1 - Маркетплейс
+      // 2 - Поставщик
     }
   },
   components: {
@@ -170,6 +178,21 @@ export default {
       } else {
         this.$router.push({ name: 'main' })
       }
+    },
+    changeRole (role) {
+      //РОЛИ
+      // 0 - Закупки
+      // 1 - Маркетплейс
+      // 2 - Поставщик
+
+      localStorage.setItem('role', role)
+      this.role = role
+    },
+    getRole () {
+      if(localStorage.getItem("role")){
+        console.log(localStorage.getItem("role"))
+        this.role = localStorage.getItem("role")
+      }
     }
   },
   mounted() {
@@ -177,6 +200,8 @@ export default {
       action: 'get/orgs'
     }
     this.org_get_from_api(data)
+    this.getRole()
+
   },
   watch: {
     orgs: function (newVal, oldVal) {

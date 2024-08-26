@@ -9,12 +9,16 @@ import LoadPlugin from './plugins/load'
 import mdiVue from 'mdi-vue/v3'
 import * as mdijs from '@mdi/js'
 import { i18n } from './i18n'
+import { createYmaps } from 'vue-yandex-maps'
 import 'primevue/resources/themes/aura-light-green/theme.css'
 import 'v-calendar/style.css';
 import 'dropzone-vue/dist/dropzone-vue.common.css'
 
 //Тут все общие вещи
 import './assets/styles/style.scss'
+
+//Времнно тут
+import './assets/styles/temp.scss'
 
 //Тут шрифты
 import './assets/styles/fonts.css'
@@ -175,6 +179,9 @@ app
 .use(ToastService)
 .use(vfm)
 .use(VueCookies, { expires: '7d' })
+.use(createYmaps({
+  apikey: '7270e707-f1a7-4397-a1d7-0c545cf0b735'
+}))
 .mount('#app')
 
 app.config.globalProperties.$filters = {

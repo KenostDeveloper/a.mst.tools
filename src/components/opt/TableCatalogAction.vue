@@ -74,7 +74,7 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 // import Dialog from 'primevue/dialog'
 // import InputSwitch from 'primevue/inputswitch'
 import Counter from './Counter.vue'
-import router from '@/router'
+import router from '../../router'
 
 export default {
   name: 'TableCatalogAction',

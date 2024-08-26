@@ -18,6 +18,10 @@ import Sales from '../pages/b2b/Sales.vue'
 import SalesEdit from '../pages/b2b/SalesEdit.vue'
 import ComplectAdd from '../pages/b2b/complects/ComplectAdd.vue'
 import ComplectEdit from '../pages/b2b/complects/ComplectEdit.vue'
+import ProfilePurchases from '../pages/opt/ProfilePurchases.vue'
+import PurchasesCatalog from '../pages/opt/PurchasesCatalog.vue'
+import PurchasesSearch from '../pages/opt/Search.vue'
+import Promotion from '../pages/opt/Promotion/Promotion.vue'
 
 const routes = [
   {
@@ -186,6 +190,59 @@ const routes = [
                       props: true,
                       label: 'Редактирование комлекта',
                       component: ComplectEdit
+                    }]
+                  },
+                  {
+                    path: 'opt',
+                    name: 'purchases',
+                    children: [{
+                      path: '',
+                      name: 'purchases_home',
+                      component: ProfilePurchases,
+                      meta: {
+                        breadcrumb: {
+                          label: 'Закупки'
+                        }
+                      }
+                    }, {
+                      path: ':category_id',
+                      name: 'purchases_catalog',
+                      component: PurchasesCatalog,
+                      meta: {
+                        breadcrumb: {
+                          label: 'Каталог'
+                        }
+                      }
+                    }, {
+                      path: 'action/:action',
+                      name: 'promotion',
+                      component: Promotion
+                    }, {
+                      path: 'warehouses/:warehouse_id',
+                      children: [{
+                        path: '',
+                        name: 'purchases_catalog_warehouse',
+                        component: PurchasesCatalog,
+                        meta: {
+                          breadcrumb: {
+                            label: 'Каталог оптовика',
+                            link: 'warehouse_id'
+                          }
+                        }
+                      },
+                      {
+                        path: ':warehouse_cat_id',
+                        children: [{
+                          path: '',
+                          name: 'org_opt_waregouse_category',
+                          label: 'Мой оптовик',
+                          component: PurchasesCatalog
+                        }]
+                      }]
+                    }, {
+                      path: 'search/:search',
+                      name: 'opt_search',
+                      component: PurchasesSearch
                     }]
                   },
                   {

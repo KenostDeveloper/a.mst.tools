@@ -3,7 +3,7 @@
         <ul class="dart-catalog-menu" v-if="$route.params.warehouse_id">
             <li class="dart-catalog-menu__category">
                 <div @click="$router.push({ name: 'purchases_home', params: { id: $route.params.id }})" class="dart-catalog-menu__el">
-                    <img src="@/assets/img/icons/arrow.svg" style="padding: 15px 15px;" alt="">
+                    <img src="../../assets/images/icons/arrow.svg" style="padding: 15px 15px;" alt="">
                     <span><b>Поставщик «{{ optwarehouse.name_short }}»</b></span>
                 </div>
             </li>
@@ -12,7 +12,7 @@
         <ul class="dart-catalog-menu" v-else>
             <li class="dart-catalog-menu__category">
                 <div @click="setActive($event)" class="dart-catalog-menu__el">
-                    <img src="@/assets/img/icons/catalog.svg" style="padding: 5px 5px;" alt="">
+                    <img src="../../assets/images/icons/arrow.svg" style="padding: 5px 5px;" alt="">
                     <span>Каталоги поставщиков</span>
                 </div>
                 <ul class="dart-catalog-menu__list">

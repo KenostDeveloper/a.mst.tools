@@ -91,7 +91,7 @@ import TableCatalogRow from './TableCatalogRow.vue'
 import Dialog from 'primevue/dialog'
 import InputSwitch from 'primevue/inputswitch'
 // import { isNullOrUndef } from 'chart.js/dist/helpers/helpers.core'
-import router from '@/router'
+import router from '../../router'
 
 export default {
   name: 'TableCatalog',

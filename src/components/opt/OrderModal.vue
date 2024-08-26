@@ -171,7 +171,7 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import router from '@/router'
+import router from '../../router'
 import Counter from './Counter.vue'
 
 export default {
