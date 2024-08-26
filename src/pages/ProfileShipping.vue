@@ -146,7 +146,7 @@
 				<p>Календарь отгрузок</p>
 				<div class="std-calendar__actions">
 					<div class="std-calendar__expand-button" @click="this.calendarIsExpanded = !this.calendarIsExpanded">
-						<i class="d_icon d_icon-arrow"></i>
+						<i class="pi pi-angle-up"></i>
 					</div>
 					<div class="dart-btn dart-btn-primary" @click="this.showShip = true">
 						<i class="pi pi-plus"></i>

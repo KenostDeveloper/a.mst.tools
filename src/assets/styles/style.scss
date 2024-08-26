@@ -2292,7 +2292,7 @@ img {
     bottom: 2rem;
     right: 40px;
   
-    max-height: 82px;
+    max-height: 60px;
     overflow: hidden;
 
     transition-duration: .5s;
@@ -2312,7 +2312,7 @@ img {
   
     &__head {
       padding-block: 0;
-      height: 82px;
+      height: 60px;
 
       transition-duration: .3s;
     }
@@ -2326,6 +2326,8 @@ img {
       display: flex;
       justify-content: center;
       align-items: center;
+      width: 28px;
+      cursor: pointer;
 
       transition-duration: .3s;
 
