@@ -13,3 +13,42 @@
 .dart-alert-info{
   line-height: 1.2;
 }
+
+.std-table__hcol{
+  height: 48px;
+}
+
+.kenost-table-line{
+  width: 100%;
+  background: #282828;
+  border-radius: 4px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  padding-left: 55px;
+
+  span{
+    font-size: 14px;
+    color: #FFF;
+    font-weight: 500;
+    margin-left: 10px;
+  }
+}
+
+.kenost-table-elem{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin: 16px 0;
+  span{
+    text-align: center;
+    color: #B4B4B4;
+    font-size: 16px;
+    padding: 10px 0;
+  }
+
+  &__content{
+    padding: 10px 0;
+    font-size: 14px;
+  }
+}
