@@ -42,7 +42,11 @@
 						:key="level1"
 						class="std-catalog__tab-item std-tab-item std-tab-item--alt"
 						:href="'https://dev.mst.tools/' + level1.uri"
-						@mouseenter="this.actualNav.secondLevel = level1.children"
+						@mouseenter="() => {
+							this.actualNav.secondLevel = level1.children
+							this.actualNav.thirdLevel = []
+							this.actualImageSrc = ''
+						}"
 					>
 						<div class="std-tab-item__img-container">
 							<img :src="level1.image || level1.menu_image" :alt="level1.name || level1.pagetitle" />
@@ -64,7 +68,7 @@
 									@mouseenter="
 										() => {
 											this.actualNav.thirdLevel = level2.children;
-											this.actualImageSrc = level2.menu_image;
+											this.actualImageSrc = level2.menu_image || '';
 										}
 									"
 								>
@@ -78,7 +82,7 @@
 								<a
 									v-for="level3 in this.actualNav.thirdLevel"
 									class="std-catalog__tab-item std-tab-item std-tab-item--none"
-									@mouseenter="this.actualImageSrc = level3.menu_image"
+									@mouseenter="this.actualImageSrc = level3.menu_image || ''"
 									:href="'https://dev.mst.tools/' + level3.uri"
 								>
 									<span class="std-tab-item__text">{{ level3.pagetitle }}</span>
