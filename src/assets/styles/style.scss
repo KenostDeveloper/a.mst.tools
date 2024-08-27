@@ -3030,9 +3030,10 @@ top: 0;
   overflow: hidden;
 
   transition-duration: .5s;
-
+  
   &--active {
-    max-height: 100dvh !important;
+    max-height: 70dvh !important;
+    overflow: auto;
 
     .std-basket__header {
       min-height: 0;
