@@ -213,8 +213,8 @@ $mobile-s: 240px;
     .promotion {
         &__main,
         .promotion-main {
-            :is(.promotion__title-container, .promotion-main__card-container) {
-                width: 50%;
+            &__content {
+                gap: 150px;
             }
         }
     }
@@ -232,6 +232,7 @@ $mobile-s: 240px;
 
             &__content {
                 flex-direction: column;
+                gap: 50px;
             }
 
             :is(.promotion__title-container, .promotion-main__card-container) {

@@ -29,45 +29,56 @@
 									</p>
 								</div>
 								<div class="promotion-main__card-container">
-									<PromotionCard
-										title="Даты проведения"
-										:text="
-											new Date(actions.date_from).toLocaleString('ru', this.options) +
-											' - ' +
-											new Date(actions.date_to).toLocaleString('ru', this.options)
-										"
-									/>
-                  <PromotionCard
-										title="Вознаграждение"
-										text="Скидка 6%"
-									/>
-									<PromotionCard
-										v-if="actions.award != ''"
-										title="Вознаграждение"
-										:text="actions.award"
-									/>
-									<PromotionCard
-										title="Совместимость скидок"
-										:text="
-											actions.compatibility_discount === 1
-												? 'Совместим со всеми акциями'
-												: actions.compatibility_discount === 2
-												? 'Не совместим со всеми акциями'
-												: actions.compatibility_discount === 3
-												? 'Применяется большая скидка'
-												: 'Складывается с выбранными акциями'
-										"
-									/>
-									<PromotionCard
-										title="Совместимость отсрочек"
-										:text="
-											actions.compatibility_postponement === 1
-												? 'Совместим со всеми отсрочками'
-												: actions.compatibility_postponement === 2
-												? 'Не совместим со всеми отсрочками'
-												: 'Применяется большая отсрочка'
-										"
-									/>
+									<div class="promotion-main__card-container promotion-main__card-container--horizontal">
+                    <PromotionCard
+                      class="w-max"
+                      title="Даты проведения"
+                      :text="
+                        new Date(actions.date_from).toLocaleString('ru', this.options) +
+                        ' - ' +
+                        new Date(actions.date_to).toLocaleString('ru', this.options)
+                      "
+                    />
+
+                    <!-- For testing -->
+                    <PromotionCard
+                      class="w-fit"
+                      title="Вознаграждение"
+                      text="6%"
+                    />
+                    <!-- -->
+                    
+                    <PromotionCard
+                      v-if="actions.award != ''"
+                      class="w-fit"
+                      title="Вознаграждение"
+                      :text="actions.award"
+                    />
+                  </div>
+									<div class="promotion-main__card-container promotion-main__card-container--horizontal">
+                    <PromotionCard
+                      title="Совместимость скидок"
+                      :text="
+                        actions.compatibility_discount === 1
+                          ? 'Совместим со всеми акциями'
+                          : actions.compatibility_discount === 2
+                          ? 'Не совместим со всеми акциями'
+                          : actions.compatibility_discount === 3
+                          ? 'Применяется большая скидка'
+                          : 'Складывается с выбранными акциями'
+                      "
+                    />
+                    <PromotionCard
+                      title="Совместимость отсрочек"
+                      :text="
+                        actions.compatibility_postponement === 1
+                          ? 'Совместим со всеми отсрочками'
+                          : actions.compatibility_postponement === 2
+                          ? 'Не совместим со всеми отсрочками'
+                          : 'Применяется большая отсрочка'
+                      "
+                    />
+                  </div>
 								</div>
 							</div>
 

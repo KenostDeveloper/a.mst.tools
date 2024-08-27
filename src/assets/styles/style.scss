@@ -2396,6 +2396,9 @@ p {
 .w-max {
   width: max-content !important;
 }
+.w-fit {
+  width: fit-content !important;
+}
 .std-display-content {
   display: contents;
 }
@@ -2896,11 +2899,11 @@ top: 0;
     gap: 110px !important;
     
     &__content {
-      @include flex(space-between, flex-start, row, 50px);
+      @include flex(space-between, flex-start, row, 250px);
     }
 
     :is(.promotion__title-container, .promotion-main__card-container) {
-      width: 40%;
+      // width: 40%;
     }
 
     .promotion__title-container {
@@ -2932,7 +2935,14 @@ top: 0;
     }
 
     &__card-container {
-      @include grid(auto, repeat(2, 1fr), 14px);
+      // @include grid(auto, repeat(2, 1fr), 14px);
+      @include flex-direction($gap: 14px);
+      flex-direction: column;
+
+      &--horizontal {
+        flex-direction: row;
+        width: auto !important;
+      }
     }
   }
 }
@@ -2943,7 +2953,7 @@ top: 0;
 
   background-color: #fcfcfc;
   min-height: 0 !important;
-  min-width: 100%;
+  // min-width: 100%;
   padding: 14px 24px 12px !important;
 
   &__title {
