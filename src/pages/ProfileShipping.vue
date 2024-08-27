@@ -411,9 +411,7 @@
 					<details class="std-dropdown visible-tablet-l">
 						<summary class="std-dropdown__header">
 							<p class="shopping-kenost__b std-dropdown__title">Дата и время</p>
-							<button class="std-dropdown__button">
-								<i class="d_icon d_icon-arrow"></i>
-							</button>
+							<i class="d_icon d_icon-arrow std-dropdown__button"></i>
 						</summary>
 						<div class="std-dropdown__content">
 							<div class="dart-alert dart-alert-info">
@@ -559,9 +557,7 @@
 					<details class="std-dropdown visible-tablet-l">
 						<summary class="std-dropdown__header">
 							<p class="shopping-kenost__b mt-2 mb-1 std-dropdown__title">Маршрут</p>
-							<button class="std-dropdown__button">
-								<i class="d_icon d_icon-arrow"></i>
-							</button>
+							<i class="d_icon d_icon-arrow std-dropdown__button"></i>
 						</summary>
 						<div class="std-dropdown__content">
 							<div class="dart-alert dart-alert-info">
