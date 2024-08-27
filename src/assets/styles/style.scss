@@ -2785,6 +2785,7 @@ top: 0;
   .client-card {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     gap: 45px;
 
     flex-grow: 1;
@@ -2970,4 +2971,47 @@ top: 0;
     }
   }
 }
+
+
+// v-opts
+.providers {
+
+  &__card-container {
+    margin-inline: 0;
+  }
+
+  .provider-card {
+    &__button {
+      padding-block: 0;
+
+      &--remove {
+        @include flex-center($gap: 10px);
+        display: flex !important;
+
+        background-color: transparent;
+        border: 1px solid #ADADAD;
+        box-shadow: none;
+        color: #7B7B7B;
+      }
+
+      &--soon {
+        background-color: transparent;
+        border: none;
+        box-shadow: none;
+        color: #7B7B7B;
+        cursor: auto;
+
+        span {
+          font-weight: 500;
+        }
+      }
+
+      &--select {
+        background-color: #FF0000;
+        color: white;
+      }
+    }
+  }
+}
+
 // ----------------
