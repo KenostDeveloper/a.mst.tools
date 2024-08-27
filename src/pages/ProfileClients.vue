@@ -8,72 +8,12 @@
 		</div>
 
 		<div class="clients__card-container">
-			<article class="clients__card client-card">
+			<article class="clients__card client-card" v-for="item in this.stores.items" v-bind:key="item.id">
 				<div class="client-card__content">
-					<img src="https://www.logolynx.com/images/logolynx/4a/4a35fc33e3ffacdfef804cb78e645311.png" alt="" class="client-card__img" />
+					<img :src="item.image" alt="" class="client-card__img" />
 					<div class="client-card__info">
-						<h2 class="client-card__title">«RSV»</h2>
-						<p class="client-card__address">Адрес: г. Подольск, ул. Вишневая, 11</p>
-					</div>
-				</div>
-				<button class="dart-btn dart-btn-primary client-card__button">Посмотреть остатки</button>
-			</article>
-            <article class="clients__card client-card">
-				<div class="client-card__content">
-					<img src="https://logistika.1c-umi.ru/images/cms/data/foto_gruzov/ih6k57ik7.jpg" alt="" class="client-card__img" />
-					<div class="client-card__info">
-						<h2 class="client-card__title">«RSV»</h2>
-						<p class="client-card__address">Адрес: г. Подольск, ул. Вишневая, 11</p>
-					</div>
-				</div>
-				<button class="dart-btn dart-btn-primary client-card__button">Посмотреть остатки</button>
-			</article>
-            <article class="clients__card client-card">
-				<div class="client-card__content">
-					<img src="https://avatars.mds.yandex.net/i?id=6a836f7871675d440a1c028c7d9bcd205aef98d0-7762005-images-thumbs&n=13" alt="" class="client-card__img" />
-					<div class="client-card__info">
-						<h2 class="client-card__title">«RSV»</h2>
-						<p class="client-card__address">Адрес: г. Подольск, ул. Вишневая, 11</p>
-					</div>
-				</div>
-				<button class="dart-btn dart-btn-primary client-card__button">Посмотреть остатки</button>
-			</article>
-            <article class="clients__card client-card">
-				<div class="client-card__content">
-					<img src="" alt="" class="client-card__img" />
-					<div class="client-card__info">
-						<h2 class="client-card__title">«RSV»</h2>
-						<p class="client-card__address">Адрес: г. Подольск, ул. Вишневая, 11</p>
-					</div>
-				</div>
-				<button class="dart-btn dart-btn-primary client-card__button">Посмотреть остатки</button>
-			</article>
-            <article class="clients__card client-card">
-				<div class="client-card__content">
-					<img src="" alt="" class="client-card__img" />
-					<div class="client-card__info">
-						<h2 class="client-card__title">«RSV»</h2>
-						<p class="client-card__address">Адрес: г. Подольск, ул. Вишневая, 11</p>
-					</div>
-				</div>
-				<button class="dart-btn dart-btn-primary client-card__button">Посмотреть остатки</button>
-			</article>
-            <article class="clients__card client-card">
-				<div class="client-card__content">
-					<img src="" alt="" class="client-card__img" />
-					<div class="client-card__info">
-						<h2 class="client-card__title">«RSV»</h2>
-						<p class="client-card__address">Адрес: г. Подольск, ул. Вишневая, 11</p>
-					</div>
-				</div>
-				<button class="dart-btn dart-btn-primary client-card__button">Посмотреть остатки</button>
-			</article>
-            <article class="clients__card client-card">
-				<div class="client-card__content">
-					<img src="" alt="" class="client-card__img" />
-					<div class="client-card__info">
-						<h2 class="client-card__title">«RSV»</h2>
-						<p class="client-card__address">Адрес: г. Подольск, ул. Вишневая, 11</p>
+						<h2 class="client-card__title">«{{ item.name }}»</h2>
+						<p class="client-card__address">Базовая скидка: {{ item.base_sale }}%</p>
 					</div>
 				</div>
 				<button class="dart-btn dart-btn-primary client-card__button">Посмотреть остатки</button>
@@ -83,10 +23,68 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
+
 export default {
-	setup() {
-		return {};
+	data() {
+		return {
+			stores: {
+				items: [],
+				total: -1
+			},
+		};
 	},
+	methods: {
+		...mapActions([
+			'get_dilers_from_api',
+			'set_diler_to_api'
+		]),
+	},
+	mounted() {
+		this.get_dilers_from_api({
+			type: 1,
+			page: this.page_dilers,
+			perpage: this.pagination_items_per_page_dilers
+		}).then(() => {
+			if (this.dilers) {
+				if (Object.prototype.hasOwnProperty.call(this.dilers, 'items')) {
+				this.stores.items = this.dilers.items
+				} else {
+				this.stores.items = []
+				}
+				if (Object.prototype.hasOwnProperty.call(this.dilers, 'total')) {
+				this.stores.total = this.dilers.total
+				} else {
+				this.stores.total = 0
+				}
+			}
+		})
+	},
+	computed: {
+		...mapGetters([
+			'dilers'
+		])
+  	},
+	watch: {
+		dilers: function (newVal, oldVal) {
+			console.log('dilers', newVal)
+			if (typeof newVal === 'object') {
+				if (Object.prototype.hasOwnProperty.call(newVal, 'items')) {
+				this.stores.items = newVal.items
+				} else {
+				this.stores.items = []
+				}
+				if (Object.prototype.hasOwnProperty.call(newVal, 'total')) {
+				this.stores.total = newVal.total
+				} else {
+				this.stores.total = 0
+				}
+			} else {
+				this.stores.items = []
+				this.stores.total = 0
+			}
+		},
+	}
 };
 </script>
 

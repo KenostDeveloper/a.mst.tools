@@ -90,98 +90,20 @@
 						</tr>
 					</thead>
 					<tbody class="std-table__body">
-						<tr class="std-table__row">
-							<td class="std-table__col">100618</td>
-							<td class="std-table__col">RSV-UFO-30W-6500K-E27</td>
-							<td class="std-table__col">22.02.2027</td>
-							<td class="std-table__col">0</td>
-							<td class="std-table__col">Арашинск</td>
-							<td class="std-table__col">0</td>
-							<td class="std-table__col">463</td>
-							<td class="std-table__col">Готов к выдаче</td>
-						</tr>
-						<tr class="std-table__row">
-							<td class="std-table__col">100618</td>
-							<td class="std-table__col">RSV-UFO-30W-6500K-E27</td>
-							<td class="std-table__col">22.02.2027</td>
-							<td class="std-table__col">0</td>
-							<td class="std-table__col">Арашинск</td>
-							<td class="std-table__col">0</td>
-							<td class="std-table__col">463</td>
-							<td class="std-table__col">Готов к выдаче</td>
-						</tr>
-						<tr class="std-table__row">
-							<td class="std-table__col">100618</td>
-							<td class="std-table__col">RSV-UFO-30W-6500K-E27</td>
-							<td class="std-table__col">22.02.2027</td>
-							<td class="std-table__col">0</td>
-							<td class="std-table__col">Арашинск</td>
-							<td class="std-table__col">0</td>
-							<td class="std-table__col">463</td>
-							<td class="std-table__col">Готов к выдаче</td>
-						</tr>
-						<tr class="std-table__row">
-							<td class="std-table__col">100618</td>
-							<td class="std-table__col">RSV-UFO-30W-6500K-E27</td>
-							<td class="std-table__col">22.02.2027</td>
-							<td class="std-table__col">0</td>
-							<td class="std-table__col">Арашинск</td>
-							<td class="std-table__col">0</td>
-							<td class="std-table__col">463</td>
-							<td class="std-table__col">Готов к выдаче</td>
-						</tr>
-						<tr class="std-table__row">
-							<td class="std-table__col">100618</td>
-							<td class="std-table__col">RSV-UFO-30W-6500K-E27</td>
-							<td class="std-table__col">22.02.2027</td>
-							<td class="std-table__col">0</td>
-							<td class="std-table__col">Арашинск</td>
-							<td class="std-table__col">0</td>
-							<td class="std-table__col">463</td>
-							<td class="std-table__col">Готов к выдаче</td>
-						</tr>
-						<tr class="std-table__row">
-							<td class="std-table__col">100618</td>
-							<td class="std-table__col">RSV-UFO-30W-6500K-E27</td>
-							<td class="std-table__col">22.02.2027</td>
-							<td class="std-table__col">0</td>
-							<td class="std-table__col">Арашинск</td>
-							<td class="std-table__col">0</td>
-							<td class="std-table__col">463</td>
-							<td class="std-table__col">Готов к выдаче</td>
-						</tr>
-						<tr class="std-table__row">
-							<td class="std-table__col">100618</td>
-							<td class="std-table__col">RSV-UFO-30W-6500K-E27</td>
-							<td class="std-table__col">22.02.2027</td>
-							<td class="std-table__col">0</td>
-							<td class="std-table__col">Арашинск</td>
-							<td class="std-table__col">0</td>
-							<td class="std-table__col">463</td>
-							<td class="std-table__col">Готов к выдаче</td>
-						</tr>
-						<tr class="std-table__row">
-							<td class="std-table__col">100618</td>
-							<td class="std-table__col">RSV-UFO-30W-6500K-E27</td>
-							<td class="std-table__col">22.02.2027</td>
-							<td class="std-table__col">0</td>
-							<td class="std-table__col">Арашинск</td>
-							<td class="std-table__col">0</td>
-							<td class="std-table__col">463</td>
-							<td class="std-table__col">Готов к выдаче</td>
-						</tr>
-						<tr class="std-table__row">
-							<td class="std-table__col">100618</td>
-							<td class="std-table__col">RSV-UFO-30W-6500K-E27</td>
-							<td class="std-table__col">22.02.2027</td>
-							<td class="std-table__col">0</td>
-							<td class="std-table__col">Арашинск</td>
-							<td class="std-table__col">0</td>
-							<td class="std-table__col">463</td>
-							<td class="std-table__col">Готов к выдаче</td>
+						<tr class="std-table__row" v-for="item in this.shipping.shipment" v-bind:key="item.id">
+							<td class="std-table__col">{{ item.id }}</td>
+							<td class="std-table__col">{{ item.name_short }}</td>
+							<td class="std-table__col">{{ item.date }}</td>
+							<td class="std-table__col">{{ new Date(item.date_to).toLocaleString('ru', {year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}) }}</td>
+							<td class="std-table__col">{{ item.city_name }}</td>
+							<td class="std-table__col">{{ item.weight }}</td>
+							<td class="std-table__col">{{ item.count }}</td>
+							<td class="std-table__col">{{ item.status_name }}</td>
 						</tr>
 					</tbody>
 				</table>
+				<!-- {{ shipping.shipment }} -->
+
 			</div>
 		</div>
 
@@ -804,7 +726,7 @@ import { mapActions, mapGetters, mapMutations } from "vuex";
 import { useVuelidate } from "@vuelidate/core";
 //   import { required } from '@/utils/i18n-validators'
 import { required } from "../utils/i18n-validators";
-//   import router from '@/router'
+  import router from '../router'
 import AutoComplete from "primevue/autocomplete";
 import Dropdown from "primevue/dropdown";
 import MultiSelect from "primevue/multiselect";
@@ -1116,10 +1038,16 @@ export default {
 				console.log(result);
 			} else {
 				this.$load(async () => {
+					let data = this.form;
+					data.dateStart = data.dateStart.toDateString()
+					data.dateEnd = data.dateEnd.toDateString()
+					for(let i = 0; i < data.citiesDates.length; i++){
+						data.citiesDates[i] = data.citiesDates[i].toDateString()
+					}
 					await this.set_shipping_to_api({
 						action: "set",
 						id: router.currentRoute._value.params.id,
-						data: this.form,
+						data: data,
 					});
 					await this.get_shipping_from_api({ filter: [] });
 					this.attributes.push(this.shipping.dates);
@@ -1296,7 +1224,7 @@ export default {
 			console.log(newVal);
 			this.stores = [];
 			for (let i = 0; i < newVal.items.length; i++) {
-				this.stores.push({ label: newVal.items[i].name, value: newVal.items[i].store_id });
+				this.stores.push({ label: newVal.items[i].name, value: newVal.items[i].id });
 			}
 			console.log(this.stores);
 			// { name: 'New York', code: 'NY' },
