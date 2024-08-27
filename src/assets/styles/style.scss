@@ -2786,7 +2786,7 @@ top: 0;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: 45px;
+    gap: 30px;
 
     flex-grow: 1;
     flex-basis: 0;
@@ -2814,7 +2814,7 @@ top: 0;
       .client-card__info {
         display: flex;
         flex-direction: column;
-        gap: 20px;
+        gap: 6px;
 
         :is(.client-card__title, .client-card__address) {
           line-height: 1.17;
@@ -2883,7 +2883,7 @@ top: 0;
 
     &__content {
       width: 100% !important;
-      height: 250px;
+      // height: 250px;
     }
 
     &__img {

@@ -3,7 +3,7 @@
         <div class="profile-content__title sticky-element">
             <span class="maintitle">Настройка программы</span>
             <div class="buttons_container">
-            <RouterLink :to="{ name: 'org_sales', params: { id: $route.params.id }}" class="dart-btn dart-btn-secondary btn-padding">Отменить</RouterLink>
+            <RouterLink :to="{ name: 'b2b', params: { id: $route.params.id }}" class="dart-btn dart-btn-secondary btn-padding">Отменить</RouterLink>
             <button type="submit" class="dart-btn dart-btn-primary btn-padding" :class="{ 'dart-btn-loading': loading }" :disabled="loading">Сохранить изменения</button>
             </div>
         </div>
@@ -31,7 +31,7 @@
             <div v-if="this.form.store_id">
               <div class="dart-form-group mb-0">
                 <span class="ktitle">Реклама</span>
-                <div class="flex align-items-center">
+                <div class="flex align-items-center gap-1">
                     <Checkbox v-model="this.create_page_action" inputId="create-page-action" name="create_page_action" value="true" />
                     <label for="create-page-action" class="ml-2 mb-0"> Разместить рекламные баннеры </label>
                 </div>
@@ -115,19 +115,19 @@
               <div class="dart-form-group mb-3">
                   <span class="ktitle">Совместимость скидок</span>
                   <span class="field-desc">Выберите совместимость скидок. При выборе совместимости, Вам будет предложено выбрать режим совместимости.</span>
-                  <div class="flex align-items-center mt-3">
+                  <div class="flex align-items-center gap-1 mt-3">
                     <RadioButton v-model="this.form.compatibilityDiscount" inputId="compatibilityDiscount-1" name="compatibilityDiscount" value="1"/>
                     <label for="compatibilityDiscount-1" class="ml-2 radioLabel">Совместима со всеми акциями</label>
                   </div>
-                  <div class="flex align-items-center mt-3">
+                  <div class="flex align-items-center gap-1 mt-3">
                     <RadioButton v-model="this.form.compatibilityDiscount" inputId="compatibilityDiscount-2" name="compatibilityDiscount" value="2"/>
                     <label for="compatibilityDiscount-2" class="ml-2 radioLabel">Не совместима со всеми акциями</label>
                   </div>
-                  <div class="flex align-items-center mt-3">
+                  <div class="flex align-items-center gap-1 mt-3">
                     <RadioButton v-model="this.form.compatibilityDiscount" inputId="compatibilityDiscount-3" name="compatibilityDiscount" value="3"/>
                     <label for="compatibilityDiscount-3" class="ml-2 radioLabel">Не совместима с выбранными акциями</label>
                     </div>
-                  <div class="flex align-items-center mt-3">
+                  <div class="flex align-items-center gap-1 mt-3">
                     <RadioButton v-model="this.form.compatibilityDiscount" inputId="compatibilityDiscount-4" name="compatibilityDiscount" value="4"/>
                     <label for="compatibilityDiscount-4" class="ml-2 radioLabel">Совместима с выбранными акциями</label>
                   </div>
@@ -150,19 +150,19 @@
               <div class="dart-form-group mb-4">
                   <span class="ktitle">Совместимость отсрочек</span>
                   <span class="field-desc">Выберите совместимость отсрочек. При выборе совместимости, Вам будет предложено выбрать режим совместимости.</span>
-                  <div class="flex align-items-center mt-3">
+                  <div class="flex align-items-center gap-1 mt-3">
                     <RadioButton v-model="this.form.compatibilityPost" inputId="compatibilityPost-1" name="compatibilityPost" value="1"/>
                     <label for="compatibilityPost-1" class="ml-2 radioLabel">Совместима со всеми акциями</label>
                   </div>
-                  <div class="flex align-items-center mt-3">
+                  <div class="flex align-items-center gap-1 mt-3">
                     <RadioButton v-model="this.form.compatibilityPost" inputId="compatibilityPost-2" name="compatibilityPost" value="2"/>
                     <label for="compatibilityPost-2" class="ml-2 radioLabel">Не совместима со всеми акциями</label>
                   </div>
-                  <div class="flex align-items-center mt-3">
+                  <div class="flex align-items-center gap-1 mt-3">
                     <RadioButton v-model="this.form.compatibilityPost" inputId="compatibilityPost-3" name="compatibilityPost" value="3"/>
                     <label for="compatibilityPost-3" class="ml-2 radioLabel">Не совместима с выбранными акциями</label>
                   </div>
-                  <div class="flex align-items-center mt-3">
+                  <div class="flex align-items-center gap-1 mt-3">
                     <RadioButton v-model="this.form.compatibilityPost" inputId="compatibilityPost-4" name="compatibilityPost" value="4"/>
                     <label for="compatibilityPost-4" class="ml-2 radioLabel">Совместима с выбранными акциями</label>
                   </div>
@@ -185,15 +185,15 @@
 
               <div class="dart-form-group mb-4">
                   <span class="ktitle">Срок отгрузки товаров</span>
-                  <div class="flex align-items-center mt-3">
+                  <div class="flex align-items-center gap-1 mt-3">
                   <RadioButton v-model="this.form.typeShipment" inputId="typeShipment-1" name="typeShipment" value="1"/>
                   <label for="typeShipment-1" class="ml-2 radioLabel">Определяется данными из отгрузок</label>
                   </div>
-                  <div class="flex align-items-center mt-3">
+                  <div class="flex align-items-center gap-1 mt-3">
                     <RadioButton v-model="this.form.typeShipment" inputId="typeShipment-2" name="typeShipment" value="2"/>
                     <label for="typeShipment-2" class="ml-2 radioLabel">Определяется по расчету доставки ТК</label>
                   </div>
-                  <div class="flex align-items-center mt-3">
+                  <div class="flex align-items-center gap-1 mt-3">
                   <RadioButton v-model="this.form.typeShipment" inputId="typeShipment-3" name="typeShipment" value="3"/>
                   <label for="typeShipment-3" class="ml-2 radioLabel">Рассчитывается ТК от выбранной даты отгрузки</label>
                   </div>
@@ -348,7 +348,7 @@
                   </div>
 
               <div class="dart-form-group mb-4">
-                <div class="flex align-items-center">
+                <div class="flex align-items-center gap-1">
                   <Checkbox v-model="this.form.not_sale_client" inputId="not_sale_client-1" name="not_sale_client-1" value="true" />
                   <label for="not_sale_client-1" class="ml-2 mb-0">Не действует скидка клиента</label>
                 </div>
@@ -356,15 +356,15 @@
 
               <div class="dart-form-group picker-wrap">
                   <span class="ktitle">Добавление товаров</span>
-                  <div class="flex align-items-center mt-2">
+                  <div class="flex align-items-center gap-1 mt-2">
                     <RadioButton v-model="this.form.addProductType" inputId="addProductType-1" name="addProductType" value="1"/>
                     <label for="addProductType-1" class="ml-2 radioLabel">Добавить товары</label>
                   </div>
-                  <div class="flex align-items-center mt-3">
+                  <div class="flex align-items-center gap-1 mt-3">
                       <RadioButton v-model="this.form.addProductType" inputId="addProductType-2" name="addProductType" value="2"/>
                       <label for="addProductType-2" class="ml-2 radioLabel">Загрузить товары файлом</label>
                   </div>
-                  <div class="flex align-items-center mt-3">
+                  <div class="flex align-items-center gap-1 mt-3">
                       <RadioButton v-model="this.form.addProductType" inputId="addProductType-3" name="addProductType" value="3"/>
                       <label for="addProductType-3" class="ml-2 radioLabel">Добавить комплекты</label>
                   </div>
@@ -630,7 +630,7 @@
                     </paginate>
                     <div class="table-kenost-help">
                       <div class="table-kenost-help__select"><span>Отмечено:</span> {{ this.kenost_table.length }} / {{ Object.keys(this.selected).length }}</div>
-                      <div class="flex align-items-center">
+                      <div class="flex align-items-center gap-1">
                         <Checkbox @change="globalTable" v-model="this.form.global_kenost_table" inputId="global_kenost_table-1" name="global_kenost_table-1" value="true" />
                         <label for="global_kenost_table-1" class="ml-2 mb-0">Все</label>
                       </div>
@@ -677,15 +677,15 @@
 
                   <div class="dart-form-group mt-4">
                     <span class="ktitle">Участники</span>
-                    <div class="flex align-items-center mt-2">
+                    <div class="flex align-items-center gap-1 mt-2">
                       <RadioButton v-model="this.form.participantsType" inputId="participantsType-1" name="participantsType" value="1"/>
                       <label for="participantsType-1" class="ml-2 radioLabel">Выбрать регион</label>
                     </div>
-                    <div class="flex align-items-center mt-3">
+                    <div class="flex align-items-center gap-1 mt-3">
                       <RadioButton v-model="this.form.participantsType" inputId="participantsType-2" name="participantsType" value="2"/>
                       <label for="participantsType-2" class="ml-2 radioLabel">Выбрать отдельные компании</label>
                     </div>
-                    <div class="flex align-items-center mt-3">
+                    <div class="flex align-items-center gap-1 mt-3">
                       <RadioButton v-model="this.form.participantsType" inputId="participantsType-3" name="participantsType" value="3"/>
                       <label for="participantsType-3" class="ml-2 radioLabel">Неограниченный круг участников</label>
                     </div>
@@ -696,15 +696,15 @@
                       <p class="kenost-select-reginos__title">Выбор участников по регионам</p>
                       <p class="kenost-select-reginos__gray">Акция будет доступна в том числе для новых компаний из выбранного региона</p>
                       <div class="kenost-select-reginos__checkboxs">
-                        <div class="flex align-items-center">
+                        <div class="flex align-items-center gap-1">
                           <Checkbox v-model="this.form.available_stores" inputId="access-1" name="access-1" value="true" />
                           <label for="access-1" class="ml-2"> Доступно для магазинов </label>
                         </div>
-                        <div class="flex align-items-center">
+                        <div class="flex align-items-center gap-1">
                           <Checkbox v-model="this.form.available_opt" inputId="access-2" name="access-1" value="true" />
                           <label for="access-2" class="ml-2"> Доступно для оптовых компаний </label>
                         </div>
-                        <div class="flex align-items-center">
+                        <div class="flex align-items-center gap-1">
                           <Checkbox v-model="this.form.available_vendors" inputId="access-3" name="access-1" value="true" />
                           <label for="access-3" class="ml-2"> Доступно для производителей </label>
                         </div>
@@ -764,11 +764,11 @@
 
                   <div class="dart-form-group mt-4">
                     <span class="ktitle">Ограничения</span>
-                    <div class="flex align-items-center mt-2">
+                    <div class="flex align-items-center gap-1 mt-2">
                       <RadioButton v-model="this.form.limitations" inputId="limitations-1" name="limitations" value="1"/>
                       <label for="limitations-1" class="ml-2 radioLabel">Без ограничений</label>
                     </div>
-                    <div class="flex align-items-center mt-3">
+                    <div class="flex align-items-center gap-1 mt-3">
                       <RadioButton v-model="this.form.limitations" inputId="limitations-2" name="limitations" value="2"/>
                       <label for="limitations-2" class="ml-2 radioLabel">Ограничить по сумме</label>
                     </div>
@@ -850,15 +850,15 @@
               </div>
             </div>
             <div class="kenost-method-edit-flex" v-if="this.modals.price_step == 0">
-              <div class="flex align-items-center mt-3">
+              <div class="flex align-items-center gap-1 mt-3">
                 <RadioButton v-model="this.modals.type_price" inputId="type_price-1" name="type_price" value="1"/>
                 <label for="type_price-1" class="ml-2 radioLabel">Скидка по формуле</label>
               </div>
-              <div class="flex align-items-center mt-3">
+              <div class="flex align-items-center gap-1 mt-3">
                 <RadioButton v-model="this.modals.type_price" inputId="type_price-2" name="type_price" value="2"/>
                 <label for="type_price-2" class="ml-2 radioLabel">Тип цен</label>
               </div>
-              <div class="flex align-items-center mt-3">
+              <div class="flex align-items-center gap-1 mt-3">
                 <RadioButton v-model="this.modals.type_price" inputId="type_price-3" name="type_price" value="3"/>
                 <label for="type_price-3" class="ml-2 radioLabel">Задать вручную</label>
               </div>
@@ -1486,7 +1486,7 @@ export default {
           })
             .then((result) => {
               this.loading = false
-              router.push({ name: 'org_sales', params: { id: router.currentRoute._value.params.id } })
+              router.push({ name: 'b2b', params: { id: router.currentRoute._value.params.id } })
             })
             .catch((result) => {
               // console.log(result)
@@ -1542,7 +1542,7 @@ export default {
           })
             .then((result) => {
               this.loading = false
-              router.push({ name: 'org_sales', params: { id: router.currentRoute._value.params.id } })
+              router.push({ name: 'b2b', params: { id: router.currentRoute._value.params.id } })
             })
             .catch((result) => {
               // console.log(result)
