@@ -18,6 +18,7 @@
 			</div>
 
 			<hr class="std-catalog__line" />
+			{{ this.catalog }}
 
 			<div class="std-catalog__content">
 				<div
@@ -241,7 +242,7 @@ export default {
 	data() {
 		return {
             catalogIsOpened: false,
-
+			catalog: [],
 			loading: true,
 			search: "",
 			opt_vendors: [],
@@ -249,7 +250,11 @@ export default {
 		};
 	},
 	methods: {
-		...mapActions(["get_opt_vendors_from_api", "get_salses_banners_to_api"]),
+		...mapActions([
+			"get_opt_vendors_from_api",
+			"get_salses_banners_to_api",
+			"get_opt_catalog_from_api"
+		]),
 		toSearch() {
 			router.push({ name: "opt_search", params: { search: this.search } });
 		},
@@ -269,11 +274,14 @@ export default {
 	},
 	components: { Vendors },
 	computed: {
-		...mapGetters(["optvendors", "salesbanners"]),
+		...mapGetters(["optvendors", "salesbanners", "optcatalog"]),
 	},
 	watch: {
 		optvendors: function (newVal, oldVal) {
 			this.opt_vendors = newVal;
+		},
+		optcatalog: function (newVal, oldVal) {
+			this.catalog = newVal;
 		},
 	},
 };
