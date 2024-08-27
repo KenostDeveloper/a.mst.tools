@@ -1,24 +1,144 @@
 <template>
 	<div class="navmain std-nav">
+		<!-- Каталог -->
+        <div :class="`std-catalog ${catalogIsOpened ? 'std-catalog--active' : ''}`" @mouseenter="this.catalogIsOpened = true" @mouseleave="this.catalogIsOpened = false">
+			<div class="std-catalog__tabs">
+				<button class="std-catalog__tab-item std-tab-item">
+					<div class="std-tab-item__img-container">
+						<!--  -->
+					</div>
+					<span class="std-tab-item__text">Каталоги поставщиков</span>
+				</button>
+				<button class="std-catalog__tab-item std-tab-item">
+					<div class="std-tab-item__img-container">
+						<!--  -->
+					</div>
+					<span class="std-tab-item__text">Категории</span>
+				</button>
+			</div>
+
+			<hr class="std-catalog__line" />
+
+			<div class="std-catalog__content">
+				<div
+					class="std-catalog__nav std-catalog__nav--primary std-catalog__tabs std-catalog__tabs--vertical"
+				>
+					<button class="std-catalog__tab-item std-tab-item std-tab-item--alt">
+						<div class="std-tab-item__img-container">
+							<!--  -->
+						</div>
+						<span class="std-tab-item__text">Измерительный инструмент</span>
+						<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
+					</button>
+					<button class="std-catalog__tab-item std-tab-item std-tab-item--alt">
+						<div class="std-tab-item__img-container">
+							<!--  -->
+						</div>
+						<span class="std-tab-item__text">Расходные материалы</span>
+						<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
+					</button>
+					<button class="std-catalog__tab-item std-tab-item std-tab-item--alt">
+						<div class="std-tab-item__img-container">
+							<!--  -->
+						</div>
+						<span class="std-tab-item__text">Насосы</span>
+						<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
+					</button>
+					<button class="std-catalog__tab-item std-tab-item std-tab-item--alt">
+						<div class="std-tab-item__img-container">
+							<!--  -->
+						</div>
+						<span class="std-tab-item__text">Пневматический инструмент</span>
+						<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
+					</button>
+					<button class="std-catalog__tab-item std-tab-item std-tab-item--alt">
+						<div class="std-tab-item__img-container">
+							<!--  -->
+						</div>
+						<span class="std-tab-item__text">Садовая техника</span>
+						<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
+					</button>
+					<button class="std-catalog__tab-item std-tab-item std-tab-item--alt">
+						<div class="std-tab-item__img-container">
+							<!--  -->
+						</div>
+						<span class="std-tab-item__text">Автосервисное оборудование</span>
+						<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
+					</button>
+				</div>
+				<div class="std-catalog__nav-wrapper">
+					<div class="std-catalog__nav-container">
+						<div
+							class="std-catalog__nav std-catalog__nav--secondary std-catalog__tabs std-catalog__tabs--vertical"
+						>
+							<button class="std-catalog__tab-item std-tab-item std-tab-item--alt2">
+								<span class="std-tab-item__text">Автомобильные масла и смазки</span>
+								<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
+							</button>
+							<button class="std-catalog__tab-item std-tab-item std-tab-item--alt2">
+								<span class="std-tab-item__text">Инверторы</span>
+								<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
+							</button>
+							<button class="std-catalog__tab-item std-tab-item std-tab-item--alt2">
+								<span class="std-tab-item__text">Пусковые устройства</span>
+								<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
+							</button>
+							<button class="std-catalog__tab-item std-tab-item std-tab-item--alt2">
+								<span class="std-tab-item__text">Автомобильные аксессуары</span>
+								<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
+							</button>
+							<button class="std-catalog__tab-item std-tab-item std-tab-item--alt2">
+								<span class="std-tab-item__text">Домкраты</span>
+								<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
+							</button>
+							<button class="std-catalog__tab-item std-tab-item std-tab-item--alt2">
+								<span class="std-tab-item__text">Лебедки</span>
+								<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
+							</button>
+							<button class="std-catalog__tab-item std-tab-item std-tab-item--alt2">
+								<span class="std-tab-item__text">Наборы инструментов</span>
+								<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
+							</button>
+							<button class="std-catalog__tab-item std-tab-item std-tab-item--alt2">
+								<span class="std-tab-item__text">Пуско-зарядные и зарядные устройства</span>
+								<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
+							</button>
+							<button class="std-catalog__tab-item std-tab-item std-tab-item--alt2">
+								<span class="std-tab-item__text">Домкраты</span>
+								<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
+							</button>
+							<button class="std-catalog__tab-item std-tab-item std-tab-item--alt2">
+								<span class="std-tab-item__text">Шины</span>
+								<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
+							</button>
+						</div>
+						<div
+							class="std-catalog__nav std-catalog__nav--thirdy std-catalog__tabs std-catalog__tabs--vertical"
+						>
+							<button class="std-catalog__tab-item std-tab-item std-tab-item--none">
+								<span class="std-tab-item__text">Снегоуборочные машины</span>
+								<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
+							</button>
+						</div>
+					</div>
+
+					<img
+						src="https://cdn.poryadok.ru/upload/iblock/9b3/9b35ee53985063a353b6765e5950436d.jpg"
+						alt=""
+						class="std-catalog__img"
+					/>
+				</div>
+			</div>
+		</div>
+
 		<!-- <div class="navmain__hand"> -->
 		<!-- <Link class="navmain__logo" href="#">
                 <img src="../../assets/images/logo_alt.svg" alt="Логотип" />
                 <span>для бизнеса</span>
             </Link> -->
-		<button class="std-nav__button std-catalog-button">
+		<button class="std-nav__button std-catalog-button" @mouseenter="this.catalogIsOpened = true" @mouseleave="this.catalogIsOpened = false">
 			Каталог
 			<i class="pi pi-bars std-catalog-button__icon"></i>
-
-            <!-- Каталог -->
-            <div class="std-catalog">
-                <div class="std-catalog__tabs">
-                    <button class="std-catalog__tab-item std-tab-item">
-                        <div class="std-tab-item__img-container">
-                            
-                        </div>
-                    </button>
-                </div>
-            </div>
 		</button>
 
 		<div
@@ -27,11 +147,19 @@
 		>
 			<form action="#" method="post" @submit.prevent="toSearch()">
 				<div class="navmain__search_btn std-search-field">
-                    <div class="std-search-field__block">
-                        <i class="pi pi-search std-search-field__icon"></i>
-                        <input class="std-search-field__input" type="text" placeholder="Найти у выбранных поставщиков" v-model="search" />
-                    </div>
-					<button type="submit" class="navmain__dart_btn a-dart-btn a-dart-btn-primary std-search-field__button">
+					<div class="std-search-field__block">
+						<i class="pi pi-search std-search-field__icon"></i>
+						<input
+							class="std-search-field__input"
+							type="text"
+							placeholder="Найти у выбранных поставщиков"
+							v-model="search"
+						/>
+					</div>
+					<button
+						type="submit"
+						class="navmain__dart_btn a-dart-btn a-dart-btn-primary std-search-field__button"
+					>
 						Найти
 					</button>
 				</div>
@@ -112,6 +240,8 @@ export default {
 	},
 	data() {
 		return {
+            catalogIsOpened: false,
+
 			loading: true,
 			search: "",
 			opt_vendors: [],
