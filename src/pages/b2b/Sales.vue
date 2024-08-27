@@ -46,20 +46,6 @@
           </template>
         </v-table>
       </TabPanel>
-      <!-- <TabPanel header="Мои клиенты" v-if="organization.type == 3">
-        <v-table
-          :items_data="stores.items"
-          :total="stores.total"
-          :pagination_items_per_page="this.pagination_items_per_page_dilers"
-          :pagination_offset="this.pagination_offset_dilers"
-          :page="this.page_dilers"
-          :table_data="this.table_data_dilers"
-          title="Мои клиенты"
-          @filter="filterDilers"
-          @paginate="paginateDilers"
-          @editElem="editDiler"
-        />
-      </TabPanel> -->
   </TabView>
   <Dialog v-model:visible="this.modals.diler" header="Редактирование дилера" :style="{ width: '400px' }">
     <div class="kenost-modal-price">
