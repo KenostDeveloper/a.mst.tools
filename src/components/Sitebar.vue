@@ -139,7 +139,7 @@ export default {
       {
         label: 'Мои клиенты',
         icon: 'clients.svg',
-        to: { name: 'home', params: { id: this.$route.params.id } }
+        to: { name: 'clients', params: { id: this.$route.params.id } }
       },
       {
         label: 'Индивидуальные скидки',

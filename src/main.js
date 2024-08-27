@@ -24,7 +24,7 @@ import './assets/styles/temp.scss'
 import './assets/styles/fonts.css'
 
 //Тут адаптив
-import './assets/styles/mobile.css'
+import './assets/styles/mobile.scss'
 
 //Иконки PrimeVue
 import 'primeicons/primeicons.css'
