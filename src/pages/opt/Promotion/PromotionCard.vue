@@ -1,15 +1,15 @@
 <template>
-  <div class="card">
-    <h6 class="card__title">{{ title }}</h6>
-    <div class="card__content">
-      <p class="card__text">{{ text }}</p>
-      <div class="card__img-container">
+  <div class="card promotion-card">
+    <h6 class="card__title promotion-card__title">{{ title }}</h6>
+    <div class="card__content promotion-card__content">
+      <p class="card__text promotion-card__text">{{ text }}</p>
+      <div class="card__img-container promotion-card__img-container">
         <img
           v-for="image in getImages"
           :key="image"
           src="../../../assets/img/gallery/1.jpg"
           alt=""
-          class="card__img"
+          class="card__img promotion-card__img"
         />
         <div v-if="images?.length > 4" class="card__img card__img--empty">+{{ images?.length - 4 }}</div>
       </div>

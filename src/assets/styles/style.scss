@@ -2300,6 +2300,37 @@ p {
 // Steiden
 @import "./mobile.scss";
 
+// mixins
+@mixin flex-center($direction: row, $gap: 0) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: $direction;
+  gap: $gap;
+}
+@mixin flex-direction($direction: row, $gap: 0) {
+  display: flex;
+  flex-direction: $direction;
+  gap: $gap;
+}
+@mixin flex($justify: flex-start, $align: flex-start, $direction: row, $gap: 0) {
+  display: flex;
+  justify-content: $justify;
+  align-items: $align;
+  flex-direction: $direction;
+  gap: $gap;
+}
+@mixin grid($rows: auto, $columns: auto, $gap: 0) {
+  display: grid;
+  grid-template-rows: $rows;
+  grid-template-columns: $columns;
+  gap: $gap;
+}
+@mixin border {
+  border: 1px solid #E2E2E2;
+  border-radius: 5px;
+}
+
 // utils
 .hidden-desktop {
 	@include desktop {
@@ -2362,7 +2393,9 @@ p {
 	}
 }
 
-
+.w-max {
+  width: max-content !important;
+}
 .std-display-content {
   display: contents;
 }
@@ -2806,4 +2839,125 @@ top: 0;
   }
 }
 
+
+// Promotion
+.promotion {
+
+  &__wrapper {
+    width: 100%;
+    max-width: none !important;
+    min-width: 0 !important;
+  }
+
+  &__header,
+  .promotion-header {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+
+    .promotion__back-button {
+      @include flex-center($gap: 10px);
+
+      background-color: transparent;
+      border: none;
+      outline: none;
+      color: #B4B4B4;
+      font-size: 12px;
+      line-height: 1.17;
+
+      width: fit-content;
+
+      i {
+        @include flex-center;
+
+        &::before {
+          font-size: 1rem;
+          color: inherit;
+        }
+      }
+    }
+
+    &__content {
+      width: 100% !important;
+      height: 250px;
+    }
+
+    &__img {
+      width: auto !important;
+      height: 100% !important;
+      object-fit: contain !important;
+      border-radius: 5px;
+      background-color: #D9D9D9;
+    }
+  }
+
+  &__main,
+  .promotion-main {
+    gap: 110px !important;
+    
+    &__content {
+      @include flex(space-between, flex-start, row, 50px);
+    }
+
+    :is(.promotion__title-container, .promotion-main__card-container) {
+      width: 40%;
+    }
+
+    .promotion__title-container {
+      @include flex-direction(column);
+  
+      :is(.promotion__title, .promotion__span) {
+        line-height: 1.17;
+        margin: 0;
+      }
+  
+      .promotion__title {
+        font-size: 40px;
+        font-weight: 700;
+      }
+  
+      .promotion__span {
+        font-size: 23px;
+        text-decoration: underline;
+        margin-top: 8px;
+      }
+  
+      .promotion__description {
+        font-size: 22px;
+        font-weight: 300;
+        line-height: 1.17;
+        margin-top: 32px;
+        margin-bottom: 0;
+      }
+    }
+
+    &__card-container {
+      @include grid(auto, repeat(2, 1fr), 14px);
+    }
+  }
+}
+
+.promotion-card {
+  @include flex-direction(column, 12px);
+  @include border;
+
+  background-color: #fcfcfc;
+  min-height: 0 !important;
+  min-width: 100%;
+  padding: 14px 24px 12px !important;
+
+  &__title {
+    font-size: 16px !important;
+    color: #282828CF !important;
+  }
+
+  &__content {
+    gap: 0 !important;
+
+    .promotion-card__text {
+      font-size: 20px !important;
+      font-weight: 500 !important;
+    }
+  }
+}
 // ----------------

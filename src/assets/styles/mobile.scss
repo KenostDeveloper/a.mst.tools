@@ -209,11 +209,34 @@ $mobile-s: 240px;
             grid-template-columns: repeat(4, 1fr);
         }
     }
+
+    .promotion {
+        &__main,
+        .promotion-main {
+            :is(.promotion__title-container, .promotion-main__card-container) {
+                width: 50%;
+            }
+        }
+    }
 }
 @include desktop {
     .clients {
         &__card-container {
             grid-template-columns: repeat(3, 1fr);
+        }
+    }
+    
+    .promotion {
+        &__main,
+        .promotion-main {
+
+            &__content {
+                flex-direction: column;
+            }
+
+            :is(.promotion__title-container, .promotion-main__card-container) {
+                width: auto;
+            }
         }
     }
 }
@@ -335,6 +358,17 @@ $mobile-s: 240px;
                 font-size: 21px;
                 font-weight: 500;
                 line-height: 1.14;
+            }
+        }
+    }
+}
+@include tablet {
+    .promotion {
+        &__main,
+        .promotion-main {
+
+            &__card-container {
+                grid-template-columns: 1fr;
             }
         }
     }
