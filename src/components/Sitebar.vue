@@ -128,18 +128,44 @@ export default {
       if(this.role == 0){
         return [{
           label: 'Закупки',
-          icon: 'products.svg',
+          icon: 'orders.svg',
           to: { name: 'purchases', params: { id: this.$route.params.id } }
         },
         {
           label: 'Мои заказы',
-          icon: 'shipments.svg',
-          to: { name: 'shipments', params: { id: this.$route.params.id } }
+          icon: 'bag.svg',
+          to: { name: 'my_orders', params: { id: this.$route.params.id } }
         },
         {
           label: 'Мои поставщики',
           icon: 'star.svg',
           to: { name: 'vendors', params: { id: this.$route.params.id } }
+        },
+        {
+          label: 'Товары',
+          icon: 'products.svg',
+          to: { name: 'stores', params: { id: this.$route.params.id } }
+        },
+        {
+          label: 'Карточка компании',
+          icon: 'settings.svg',
+          to: { name: 'org_settings', params: { id: this.$route.params.id } }
+        }]
+      }else if(this.role == 1){
+        return [{
+          label: 'Розничные заказы',
+          icon: 'orders.svg',
+          to: { name: 'purchases', params: { id: this.$route.params.id } }
+        },
+        {
+          label: 'Баланс',
+          icon: 'bag.svg',
+          to: { name: 'shipments', params: { id: this.$route.params.id } }
+        },
+        {
+          label: 'Розничные акции',
+          icon: 'star.svg',
+          to: { name: 'b2c', params: { id: this.$route.params.id } }
         },
         {
           label: 'Товары',
@@ -201,7 +227,7 @@ export default {
         this.$api.auth.logout()
         localStorage.removeItem('user')
         this.deleteUser()
-        console.log(this.$router)
+        // console.log(this.$router)
         this.$router.push({ name: 'main' })
       } else {
         this.$router.push({ name: 'main' })
@@ -218,7 +244,7 @@ export default {
     },
     getRole () {
       if(localStorage.getItem("role")){
-        console.log(localStorage.getItem("role"))
+        // console.log(localStorage.getItem("role"))
         this.role = localStorage.getItem("role")
       }
     },
@@ -245,10 +271,10 @@ export default {
   watch: {
     orgs: function (newVal, oldVal) {
       this.organizations = newVal
-      console.log(newVal)
+      // console.log(newVal)
       if(newVal){
         const org = newVal.find(el => el.id === this.$route.params.id)
-        console.log(org)
+        // console.log(org)
         if(org){
           this.organozation = org
         }

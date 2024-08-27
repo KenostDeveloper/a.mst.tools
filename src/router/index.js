@@ -24,6 +24,8 @@ import PurchasesSearch from '../pages/opt/Search.vue'
 import Promotion from '../pages/opt/Promotion/Promotion.vue'
 import ProfileClients from "../pages/ProfileClients.vue";
 import ProfileVendors from '../pages/ProfileVendors.vue'
+import MyOrders from '../pages/MyOrders.vue'
+import MyOrder from '../pages/MyOrder.vue'
 
 const routes = [
   {
@@ -251,6 +253,23 @@ const routes = [
                     path: 'shipments',
                     name: 'shipments',
                     component: ProfileShipping
+                  },
+                  {
+                    path: 'orders',
+                    children: [{
+                      path: 'my',
+                      children: [{
+                        path: '',
+                        name: 'my_orders',
+                        component: MyOrders
+                      },
+                      {
+                        path: ':order_id',
+                        name: 'my_orders_id',
+                        component: MyOrder
+                      }]
+                    }]
+                    
                   },
                   {
                     path: 'vendors',
