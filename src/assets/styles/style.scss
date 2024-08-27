@@ -2992,6 +2992,8 @@ top: 0;
         border: 1px solid #ADADAD;
         box-shadow: none;
         color: #7B7B7B;
+
+        padding-inline: 30px;
       }
 
       &--soon {
@@ -3009,6 +3011,7 @@ top: 0;
       &--select {
         background-color: #FF0000;
         color: white;
+        padding-inline: 50px;
       }
     }
   }
