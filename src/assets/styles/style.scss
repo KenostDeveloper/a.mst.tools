@@ -3027,17 +3027,20 @@ top: 0;
   height: auto !important;
   width: 350px;
   max-height: 64px !important;
-  overflow: hidden;
+  overflow: hidden !important;
 
   transition-duration: .5s;
   
   &--active {
     max-height: 70dvh !important;
-    overflow: auto;
 
     .std-basket__header {
       min-height: 0;
     }
+  }
+
+  &__inner {
+    position: relative;
   }
 
   &__header {
@@ -3320,6 +3323,15 @@ top: 0;
     width: 25% !important;
     object-fit: contain;
   }
+}
+
+
+// ProfilePurchases
+.purchases {
+  padding: 0 40px !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  width: 100%;
 }
 
 // ----------------

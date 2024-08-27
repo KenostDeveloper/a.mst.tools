@@ -1,9 +1,10 @@
 <template>
+  <Basket ref="childComponent" @toOrder="toOrder"/>
   <ChangeVendorsModal :items="this.opt_vendors"/>
   <Vendors @changeActive="changeActive" @vendorCheck="vendorCheck" :vendorModal="this.vendorModal" :items="this.opt_vendors" />
   <div v-if="opt_vendors.selected_count > 0" class="dart-custom-grid">
-    <CatalogMenu :items="opt_catalog" />
-    <div class="d-col-content">
+    <!-- <CatalogMenu :items="opt_catalog" /> -->
+    <div class="d-col-content purchases">
       <div class="dart-home dart-window">
         <span class="h2">Акции</span>
         <Banners :items="salesbanners"/>
@@ -17,10 +18,9 @@
         -->
       </div>
     </div>
-    <div class="d-col-map">
-      <!-- <Vendors @vendorCheck="vendorCheck" :items="this.opt_vendors" /> -->
-      <Basket ref="childComponent" @toOrder="toOrder"/>
-    </div>
+    <!-- <div class="d-col-map">
+      <Vendors @vendorCheck="vendorCheck" :items="this.opt_vendors" />
+    </div> -->
   </div>
   <div class="not-vendors" v-else>
     <img src="../../assets/img/not-vendors.png" alt="">
