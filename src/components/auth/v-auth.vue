@@ -39,6 +39,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import customModal from '../CustomModal.vue'
 import vForgot from './v-forgot.vue'
 import Toast from 'primevue/toast'
@@ -62,6 +63,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+      'org_get_from_api',
+    ]),
     formSubmit () {
       this.signIn()
     },
@@ -77,8 +81,20 @@ export default {
           } else {
             localStorage.setItem('user', JSON.stringify(data.data.data))
             this.$store.dispatch('user/setUser', data.data.data)
-            this.$router.push({ name: 'main' })
-            // location.reload();
+            // this.$router.push({ name: 'home' })
+
+            // this.$router.push({ name: 'org', params: { id: '48' } })
+
+            const orgs = await this.org_get_from_api({
+              action: 'get/orgs'
+            })
+
+            if(orgs){
+              console.log(orgs.data.data)
+              const res = await this.$router.push({ name: 'org', params: { id: orgs.data.data[0].id } })
+              location.reload();
+            }
+            
           }
         } else {
           this.$toast.add({ severity: 'info', summary: 'Вход запрещен', detail: 'Введен некорректный логин или пароль.', life: 3000 })

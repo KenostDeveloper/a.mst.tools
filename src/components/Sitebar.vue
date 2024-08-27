@@ -5,7 +5,7 @@
       <i v-else class="pi pi-times" @click="sidebarToggle"></i>
     </div>
     <router-link
-      :to="{ name: 'home' }"
+      :to="{ name: 'main' }"
       class="sitebar-logo"
     >
       <img src="/src/assets/images/logo_small.svg" alt="МСТ Аналитика">
@@ -14,7 +14,7 @@
   </div>
   <div class="sitebar" :class="{'hide': this.sitebar}">
     <router-link
-      :to="{ name: 'home' }"
+      :to="{ name: 'main' }"
       class="sitebar-logo"
     >
       <img src="/src/assets/images/logo_small.svg" alt="МСТ Аналитика">
@@ -77,7 +77,6 @@
       <div class="icon"><img :src="item.image" alt=""></div>
       <div class="change-org-el__text">
         <b>{{ item.name }}</b>
-        <!-- <p>{{ item.active }}</p> -->
         <div v-if="item.active" class="dart-payment-status-org"><i class="d_icon d_icon-check"></i><span>Включен</span></div>
         <div v-else class="dart-payment-status-org off"><i class="d_icon d_icon-focus"></i><span>Выключен</span></div>
       </div>

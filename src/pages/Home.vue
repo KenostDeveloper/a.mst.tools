@@ -22,36 +22,22 @@
                 orgs: 'orgs'
             })
         },
-        mounted () {
-            console.log("----------------", this.getUser)
+        async mounted () {
             this.setUser(JSON.parse(localStorage.getItem('user')))
-            if(this.getUser){
-                console.log("ПЕРЕБРОС НА ПЕРВУЮ ПОПАВШУЮСЯ ОРГАНИЗАЦИЮ")
-                //TODO: ПЕРЕБРОС НА ПЕРВУЮ ПОПАВШУЮСЯ ОРГАНИЗАЦИЮ
-                const data = {
+            if (this.getUser) {
+                const orgs = await this.org_get_from_api({
                     action: 'get/orgs'
-                }
-                this.org_get_from_api(data).then((res) => {
-                    if(res.data.data){
-                        this.$router.push({ name: 'org', params: { id: res.data.data[0].id } })
-                    }
                 })
+
+                if(orgs){
+                    console.log(orgs.data.data)
+                    const res = await this.$router.push({ name: 'org', params: { id: orgs.data.data[0].id } })
+                    location.reload();
+                }
             }
         },
         updated () {
-            console.log("----------------", this.getUser)
-            if(this.getUser){
-                console.log("ПЕРЕБРОС НА ПЕРВУЮ ПОПАВШУЮСЯ ОРГАНИЗАЦИЮ")
-                //TODO: ПЕРЕБРОС НА ПЕРВУЮ ПОПАВШУЮСЯ ОРГАНИЗАЦИЮ
-                const data = {
-                    action: 'get/orgs'
-                }
-                this.org_get_from_api(data).then((res) => {
-                    if(res.data.data){
-                        this.$router.push({ name: 'org', params: { id: res.data.data[0].id } })
-                    }
-                })
-            }
+            this.setUser(JSON.parse(localStorage.getItem('user')))
         },
         methods: {
             ...mapActions({

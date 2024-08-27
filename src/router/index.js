@@ -43,13 +43,13 @@ const routes = [
           },
           {
             path: "",
-            beforeEnter: (to, from, next) => {
-              if (localStorage.getItem("user")) {
-                next();
-              } else {
-                next({ name: "main" });
-              }
-            },
+            // beforeEnter: (to, from, next) => {
+            //   if (localStorage.getItem("user")) {
+            //     next();
+            //   } else {
+            //     next({ name: "main" });
+            //   }
+            // },
             children: [
               {
                 path: ":id",
