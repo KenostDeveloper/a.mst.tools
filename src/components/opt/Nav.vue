@@ -1,15 +1,29 @@
 <template>
 	<div class="navmain std-nav">
 		<!-- Каталог -->
-        <div :class="`std-catalog ${catalogIsOpened ? 'std-catalog--active' : ''}`" @mouseenter="this.catalogIsOpened = true" @mouseleave="this.catalogIsOpened = false">
+		<div
+			:class="`std-catalog ${catalogIsOpened ? 'std-catalog--active' : ''}`"
+			@mouseenter="() => toggleCatalogVisibility(true)"
+			@mouseleave="() => toggleCatalogVisibility(false)"
+		>
 			<div class="std-catalog__tabs">
-				<button class="std-catalog__tab-item std-tab-item">
+				<button
+					:class="`std-catalog__tab-item std-tab-item ${
+						this.orgOrCatalog === 'org' ? 'std-tab-item--active' : ''
+					}`"
+					@click="setOrgOrCatalog('org')"
+				>
 					<div class="std-tab-item__img-container">
-						<!--  -->
+						<img src="../../assets/images/icons/org-catalog.svg" alt="">
 					</div>
 					<span class="std-tab-item__text">Каталоги поставщиков</span>
 				</button>
-				<button class="std-catalog__tab-item std-tab-item">
+				<button
+					:class="`std-catalog__tab-item std-tab-item ${
+						this.orgOrCatalog === 'catalog' ? 'std-tab-item--active' : ''
+					}`"
+					@click="setOrgOrCatalog('catalog')"
+				>
 					<div class="std-tab-item__img-container">
 						<!--  -->
 					</div>
@@ -18,116 +32,67 @@
 			</div>
 
 			<hr class="std-catalog__line" />
-			{{ this.catalog }}
 
 			<div class="std-catalog__content">
 				<div
 					class="std-catalog__nav std-catalog__nav--primary std-catalog__tabs std-catalog__tabs--vertical"
 				>
-					<button class="std-catalog__tab-item std-tab-item std-tab-item--alt">
+					<a
+						v-for="level1 in this.orgOrCatalog === 'org' ? this.organizations : this.catalog"
+						:key="level1"
+						class="std-catalog__tab-item std-tab-item std-tab-item--alt"
+						:href="'https://dev.mst.tools/' + level1.uri"
+						@mouseenter="this.actualNav.secondLevel = level1.children"
+					>
 						<div class="std-tab-item__img-container">
-							<!--  -->
+							<img :src="level1.image || level1.menu_image" :alt="level1.name || level1.pagetitle" />
 						</div>
-						<span class="std-tab-item__text">Измерительный инструмент</span>
+						<span class="std-tab-item__text">{{ level1.name || level1.pagetitle }}</span>
 						<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
-					</button>
-					<button class="std-catalog__tab-item std-tab-item std-tab-item--alt">
-						<div class="std-tab-item__img-container">
-							<!--  -->
-						</div>
-						<span class="std-tab-item__text">Расходные материалы</span>
-						<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
-					</button>
-					<button class="std-catalog__tab-item std-tab-item std-tab-item--alt">
-						<div class="std-tab-item__img-container">
-							<!--  -->
-						</div>
-						<span class="std-tab-item__text">Насосы</span>
-						<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
-					</button>
-					<button class="std-catalog__tab-item std-tab-item std-tab-item--alt">
-						<div class="std-tab-item__img-container">
-							<!--  -->
-						</div>
-						<span class="std-tab-item__text">Пневматический инструмент</span>
-						<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
-					</button>
-					<button class="std-catalog__tab-item std-tab-item std-tab-item--alt">
-						<div class="std-tab-item__img-container">
-							<!--  -->
-						</div>
-						<span class="std-tab-item__text">Садовая техника</span>
-						<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
-					</button>
-					<button class="std-catalog__tab-item std-tab-item std-tab-item--alt">
-						<div class="std-tab-item__img-container">
-							<!--  -->
-						</div>
-						<span class="std-tab-item__text">Автосервисное оборудование</span>
-						<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
-					</button>
+					</a>
 				</div>
 				<div class="std-catalog__nav-wrapper">
 					<div class="std-catalog__nav-container">
-						<div
-							class="std-catalog__nav std-catalog__nav--secondary std-catalog__tabs std-catalog__tabs--vertical"
-						>
-							<button class="std-catalog__tab-item std-tab-item std-tab-item--alt2">
-								<span class="std-tab-item__text">Автомобильные масла и смазки</span>
-								<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
-							</button>
-							<button class="std-catalog__tab-item std-tab-item std-tab-item--alt2">
-								<span class="std-tab-item__text">Инверторы</span>
-								<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
-							</button>
-							<button class="std-catalog__tab-item std-tab-item std-tab-item--alt2">
-								<span class="std-tab-item__text">Пусковые устройства</span>
-								<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
-							</button>
-							<button class="std-catalog__tab-item std-tab-item std-tab-item--alt2">
-								<span class="std-tab-item__text">Автомобильные аксессуары</span>
-								<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
-							</button>
-							<button class="std-catalog__tab-item std-tab-item std-tab-item--alt2">
-								<span class="std-tab-item__text">Домкраты</span>
-								<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
-							</button>
-							<button class="std-catalog__tab-item std-tab-item std-tab-item--alt2">
-								<span class="std-tab-item__text">Лебедки</span>
-								<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
-							</button>
-							<button class="std-catalog__tab-item std-tab-item std-tab-item--alt2">
-								<span class="std-tab-item__text">Наборы инструментов</span>
-								<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
-							</button>
-							<button class="std-catalog__tab-item std-tab-item std-tab-item--alt2">
-								<span class="std-tab-item__text">Пуско-зарядные и зарядные устройства</span>
-								<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
-							</button>
-							<button class="std-catalog__tab-item std-tab-item std-tab-item--alt2">
-								<span class="std-tab-item__text">Домкраты</span>
-								<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
-							</button>
-							<button class="std-catalog__tab-item std-tab-item std-tab-item--alt2">
-								<span class="std-tab-item__text">Шины</span>
-								<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
-							</button>
+						<div class="std-catalog__nav-inner">
+							<div
+								class="std-catalog__nav std-catalog__nav--secondary std-catalog__tabs std-catalog__tabs--vertical"
+							>
+								<a
+									v-for="level2 in this.actualNav.secondLevel"
+									class="std-catalog__tab-item std-tab-item std-tab-item--alt2"
+									:href="'https://dev.mst.tools/' + level2.uri"
+									@mouseenter="
+										() => {
+											this.actualNav.thirdLevel = level2.children;
+											this.actualImageSrc = level2.menu_image;
+										}
+									"
+								>
+									<span class="std-tab-item__text">{{ level2.pagetitle }}</span>
+									<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
+								</a>
+							</div>
+							<div
+								class="std-catalog__nav std-catalog__nav--thirdy std-catalog__tabs std-catalog__tabs--vertical"
+							>
+								<a
+									v-for="level3 in this.actualNav.thirdLevel"
+									class="std-catalog__tab-item std-tab-item std-tab-item--none"
+									@mouseenter="this.actualImageSrc = level3.menu_image"
+									:href="'https://dev.mst.tools/' + level3.uri"
+								>
+									<span class="std-tab-item__text">{{ level3.pagetitle }}</span>
+									<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
+								</a>
+							</div>
 						</div>
-						<div
-							class="std-catalog__nav std-catalog__nav--thirdy std-catalog__tabs std-catalog__tabs--vertical"
-						>
-							<button class="std-catalog__tab-item std-tab-item std-tab-item--none">
-								<span class="std-tab-item__text">Снегоуборочные машины</span>
-								<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
-							</button>
-						</div>
-					</div>
 
-					<img
-						src="https://cdn.poryadok.ru/upload/iblock/9b3/9b35ee53985063a353b6765e5950436d.jpg"
-						alt=""
-						class="std-catalog__img"
-					/>
+						<img
+							:src="'https://dev.mst.tools/' + this.actualImageSrc"
+							alt=""
+							class="std-catalog__img"
+						/>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -137,7 +102,11 @@
                 <img src="../../assets/images/logo_alt.svg" alt="Логотип" />
                 <span>для бизнеса</span>
             </Link> -->
-		<button class="std-nav__button std-catalog-button" @mouseenter="this.catalogIsOpened = true" @mouseleave="this.catalogIsOpened = false">
+		<button
+			class="std-nav__button std-catalog-button"
+			@mouseenter="() => toggleCatalogVisibility(true)"
+			@mouseleave="() => toggleCatalogVisibility(false)"
+		>
 			Каталог
 			<i class="pi pi-bars std-catalog-button__icon"></i>
 		</button>
@@ -241,19 +210,28 @@ export default {
 	},
 	data() {
 		return {
-            catalogIsOpened: false,
 			catalog: [],
 			loading: true,
 			search: "",
 			opt_vendors: [],
 			vendorModal: false,
+
+			organizations: [],
+			orgOrCatalog: "catalog",
+			catalogIsOpened: false,
+			actualNav: {
+				secondLevel: [],
+				thirdLevel: [],
+			},
+			actualImageSrc: "",
 		};
 	},
 	methods: {
 		...mapActions([
 			"get_opt_vendors_from_api",
 			"get_salses_banners_to_api",
-			"get_opt_catalog_from_api"
+			"get_opt_catalog_from_api",
+			"org_get_from_api",
 		]),
 		toSearch() {
 			router.push({ name: "opt_search", params: { search: this.search } });
@@ -268,9 +246,25 @@ export default {
 			};
 			this.get_salses_banners_to_api(data);
 		},
+
+		toggleCatalogVisibility(state) {
+			this.catalogIsOpened = state;
+			document.body.style.overflow = this.catalogIsOpened ? "hidden" : "auto";
+		},
+		setOrgOrCatalog(state) {
+			this.actualImageSrc = "";
+			this.orgOrCatalog = state;
+			this.actualNav.secondLevel = [];
+			this.actualNav.thirdLevel = [];
+		}
 	},
 	mounted() {
 		this.get_opt_vendors_from_api().then((this.opt_vendors = this.optvendors));
+
+		const getOrganizationss = async () => {
+			this.organizations = (await this.org_get_from_api({ action: "get/orgs" })).data.data;
+		};
+		getOrganizationss();
 	},
 	components: { Vendors },
 	computed: {

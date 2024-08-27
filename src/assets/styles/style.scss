@@ -2330,6 +2330,27 @@ p {
   border: 1px solid #E2E2E2;
   border-radius: 5px;
 }
+@mixin scrollbar(
+	$width: 10px,
+	$height: 10px,
+	$border-radius: 5px,
+	$bg-thumb-color: #edf2fa,
+	$bg-track-color: transparent
+) {
+	&::-webkit-scrollbar {
+		width: $width;
+		height: $height;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		background: $bg-thumb-color;
+		border-radius: $border-radius;
+	}
+
+	&::-webkit-scrollbar-track {
+		background-color: $bg-track-color;
+	}
+}
 
 // utils
 .hidden-desktop {
@@ -3129,6 +3150,7 @@ top: 0;
 
 .std-catalog {
   @include flex-direction(column, 24px);
+  @include scrollbar(5px, auto, 5px, #282828, transparent);
 
   background-color: white;
 
@@ -3143,6 +3165,10 @@ top: 0;
   visibility: hidden;
   opacity: 0;
   transition-duration: .3s;
+
+  max-height: 85dvh;
+  overflow-x: hidden;
+  overflow-y: auto;
 
   &--active {
     visibility: visible;
@@ -3168,7 +3194,9 @@ top: 0;
 
     background-color: transparent;
     border: none;
+    color: #282828;
     outline: none;
+    text-decoration: none;
 
     padding: 5px;
     // height: 50px;
@@ -3193,6 +3221,7 @@ top: 0;
       width: 280px;
     }
     
+    &--active,
     &:hover {
       &::before {
         visibility: visible;
@@ -3203,12 +3232,19 @@ top: 0;
         background-color: white;
       }
 
+      .std-tab-item__text {
+        color: #282828;
+      }
+
       .std-tab-item__icon::before {
         color: #FF0000;
       }
+
     }
 
     &__img-container {
+      @include flex-center;
+
       width: 40px;
       aspect-ratio: 1;
       border-radius: 5px;
@@ -3260,6 +3296,8 @@ top: 0;
     }
 
     &--none {
+      justify-content: space-between;
+
       &:hover {
         .std-tab-item__icon::before {
           color: #ADADAD;
@@ -3298,6 +3336,12 @@ top: 0;
   }
 
   &__nav-container {
+    @include flex(space-between, $gap: 25px);
+    width: 100%;
+    height: fit-content;
+  }
+
+  &__nav-inner {
     @include flex-direction($gap: 32px);
   }
 
@@ -3312,6 +3356,7 @@ top: 0;
     &--secondary,
     &--thirdy {
       gap: 13px;
+      width: 260px;
     }
 
     &--thirdy {
@@ -3320,8 +3365,9 @@ top: 0;
   }
 
   &__img {
-    width: 25% !important;
+    width: 40% !important;
     object-fit: contain;
+    align-self: flex-end;
   }
 }
 
