@@ -35,21 +35,21 @@ export default {
             pagination_offset_dilers_opts: 0,
             optfilters: {
                 filter: {
-                name: 'Наименование, адрес',
-                placeholder: 'Введите наименование или адрес',
-                type: 'text'
+                    name: 'Наименование, адрес',
+                    placeholder: 'Введите наименование или адрес',
+                    type: 'text'
                 },
-                region: {
-                name: 'Регион',
-                placeholder: 'Выберите регион',
-                type: 'tree',
-                values: this.getregions
-                },
+                // region: {
+                // name: 'Регион',
+                // placeholder: 'Выберите регион',
+                // type: 'tree',
+                // values: this.getregions
+                // },
                 our: {
-                name: 'Мои поставщики',
-                placeholder: 'Мои поставщики',
-                type: 'checkbox',
-                values: 1
+                    name: 'Мои поставщики',
+                    placeholder: 'Мои поставщики',
+                    type: 'checkbox',
+                    values: 1
                 }
             },
 		};

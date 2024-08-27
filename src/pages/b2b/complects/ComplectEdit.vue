@@ -3,7 +3,7 @@
       <div class="profile-content__title sticky-element">
           <span class="maintitle">Настройка комплекта</span>
           <div class="buttons_container">
-          <RouterLink :to="{ name: 'org_sales', params: { id: $route.params.id }}" class="dart-btn dart-btn-secondary btn-padding">Отменить</RouterLink>
+          <RouterLink :to="{ name: 'b2b', params: { id: $route.params.id }}" class="dart-btn dart-btn-secondary btn-padding">Отменить</RouterLink>
           <button type="submit" class="dart-btn dart-btn-primary btn-padding" :class="{ 'dart-btn-loading': loading }" :disabled="loading">Сохранить</button>
           </div>
       </div>
@@ -484,7 +484,7 @@ export default {
         })
           .then((result) => {
             this.loading = false
-            router.push({ name: 'org_sales', params: { id: router.currentRoute._value.params.id } })
+            router.push({ name: 'b2b', params: { id: router.currentRoute._value.params.id } })
           })
           .catch((result) => {
             console.log(result)
