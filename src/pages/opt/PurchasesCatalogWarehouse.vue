@@ -1,7 +1,7 @@
 <template>
-    <div class="dart-custom-grid" :class="{ loading: loading }">
-      <CatalogMenu :items="opt_catalog" />
-      <div v-if="opt_vendors.selected_count > 0" class="d-col-content">
+    <div class="dart-custom-grid purchases__wrapper" :class="{ loading: loading }">
+      <!-- <CatalogMenu :items="opt_catalog" /> -->
+      <div v-if="opt_vendors.selected_count > 0" class="d-col-content purchases">
         <div class="dart-home dart-window">
             <!-- <Breadcrumbs :items="this.$breadcrumbs"/> -->
             <div v-if="$route.params.warehouse_id && !$route.params.warehouse_cat_id">
