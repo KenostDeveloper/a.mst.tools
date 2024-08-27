@@ -1,6 +1,8 @@
 <template>
-    <div className="d-col-basket">
-        <p class="d-col-basket__title"><span>Корзина</span> <span v-if="this.basket" @click="clearBasket" class="basketClear">Очистить</span></p>
+    <div :class="`d-col-basket std-basket ${this.isOpened ? 'std-basket--active' : ''}`">
+        <div class="std-basket__header" @click="this.isOpened = !this.isOpened">
+            <p class="d-col-basket__title"><span>Корзина</span> <span v-if="this.basket" @click="clearBasket" class="basketClear">Очистить</span></p>
+        </div>
         <div className="basket-empty" v-if="!this.basket">
             <div className="basket-empty__content">
             <img src="../../../public/img/opt/basket.svg" alt="" />
@@ -151,6 +153,8 @@ export default {
   },
   data () {
     return {
+        isOpened: false,
+
       loading: true,
       basket: {},
       modal_remain: false

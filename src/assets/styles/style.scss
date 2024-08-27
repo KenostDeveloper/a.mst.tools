@@ -3017,4 +3017,32 @@ top: 0;
   }
 }
 
+
+// Basket
+.std-basket {
+  position: fixed;
+  bottom: 15px;
+  right: 40px;
+
+  height: auto !important;
+  width: 350px;
+  max-height: 64px !important;
+  overflow: hidden;
+
+  transition-duration: .5s;
+
+  &--active {
+    max-height: 100dvh !important;
+
+    .std-basket__header {
+      min-height: 0;
+    }
+  }
+
+  &__header {
+    min-height: 64px;
+    transition-duration: .3s;
+  }
+}
+
 // ----------------
