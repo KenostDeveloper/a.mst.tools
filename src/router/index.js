@@ -23,6 +23,7 @@ import PurchasesCatalog from '../pages/opt/PurchasesCatalog.vue'
 import PurchasesSearch from '../pages/opt/Search.vue'
 import Promotion from '../pages/opt/Promotion/Promotion.vue'
 import ProfileClients from "../pages/ProfileClients.vue";
+import ProfileVendors from '../pages/ProfileVendors.vue'
 
 const routes = [
   {
@@ -43,13 +44,13 @@ const routes = [
           },
           {
             path: "",
-            // beforeEnter: (to, from, next) => {
-            //   if (localStorage.getItem("user")) {
-            //     next();
-            //   } else {
-            //     next({ name: "main" });
-            //   }
-            // },
+            beforeEnter: (to, from, next) => {
+              if (localStorage.getItem("user")) {
+                next();
+              } else {
+                next({ name: "main" });
+              }
+            },
             children: [
               {
                 path: ":id",
@@ -250,6 +251,11 @@ const routes = [
                     path: 'shipments',
                     name: 'shipments',
                     component: ProfileShipping
+                  },
+                  {
+                    path: 'vendors',
+                    name: 'vendors',
+                    component: ProfileVendors
                   },
                   {
                     path: 'clients',

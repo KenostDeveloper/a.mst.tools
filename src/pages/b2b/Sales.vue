@@ -46,7 +46,7 @@
           </template>
         </v-table>
       </TabPanel>
-      <TabPanel header="Мои клиенты" v-if="organization.type == 3">
+      <!-- <TabPanel header="Мои клиенты" v-if="organization.type == 3">
         <v-table
           :items_data="stores.items"
           :total="stores.total"
@@ -59,26 +59,7 @@
           @paginate="paginateDilers"
           @editElem="editDiler"
         />
-      </TabPanel>
-      <TabPanel header="Мои поставщики">
-        <v-opts
-            :items_data="warehouses.items"
-            :total="warehouses.total"
-            :pagination_items_per_page="this.pagination_items_per_page_dilers_opts"
-            :pagination_offset="this.pagination_offset_dilers_opts"
-            :page="this.optpage"
-            :filters="this.optfilters"
-            title="Доступные поставщики"
-            @update="optUpdate"
-            @filter="optfilter"
-            @sort="optfilter"
-            @paginate="optpaginate"
-          >
-            <template v-slot:desc>
-              <span class="desc">Отметьте организации, которые являются вашими поставщиками.</span>
-            </template>
-          </v-opts>
-      </TabPanel>
+      </TabPanel> -->
   </TabView>
   <Dialog v-model:visible="this.modals.diler" header="Редактирование дилера" :style="{ width: '400px' }">
     <div class="kenost-modal-price">
@@ -117,7 +98,6 @@ import Dialog from 'primevue/dialog'
 import InputNumber from 'primevue/inputnumber'
 import ConfirmDialog from 'primevue/confirmdialog'
 import Toast from 'primevue/toast'
-import vOpts from '../../components/table/v-opts.vue'
 import router from '../../router'
 
 export default {
@@ -542,7 +522,7 @@ export default {
       }
     })
   },
-  components: { vTable, vOpts, Toast, ConfirmDialog, RouterLink, TabView, TabPanel, Dialog, InputNumber },
+  components: { vTable, Toast, ConfirmDialog, RouterLink, TabView, TabPanel, Dialog, InputNumber },
   computed: {
     ...mapGetters([
       'actions',

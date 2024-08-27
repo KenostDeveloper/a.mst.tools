@@ -125,36 +125,65 @@ export default {
       orgs: 'orgs'
     }),
     getMenu () {
-      return [{
-        label: 'Товары',
-        icon: 'products.svg',
-        to: { name: 'stores', params: { id: this.$route.params.id } }
-      },
-      {
-        label: 'Отгрузки',
-        icon: 'shipments.svg',
-        to: { name: 'shipments', params: { id: this.$route.params.id } }
-      },
-      {
-        label: 'Мои клиенты',
-        icon: 'clients.svg',
-        to: { name: 'clients', params: { id: this.$route.params.id } }
-      },
-      {
-        label: 'Индивидуальные скидки',
-        icon: 'star.svg',
-        to: { name: 'b2c', params: { id: this.$route.params.id } }
-      },
-      {
-        label: 'Оптовые акции',
-        icon: 'adv.svg',
-        to: { name: 'b2b', params: { id: this.$route.params.id } }
-      },
-      {
-        label: 'Карточка компании',
-        icon: 'settings.svg',
-        to: { name: 'org_settings', params: { id: this.$route.params.id } }
-      }]
+      if(this.role == 0){
+        return [{
+          label: 'Закупки',
+          icon: 'products.svg',
+          to: { name: 'purchases', params: { id: this.$route.params.id } }
+        },
+        {
+          label: 'Мои заказы',
+          icon: 'shipments.svg',
+          to: { name: 'shipments', params: { id: this.$route.params.id } }
+        },
+        {
+          label: 'Мои поставщики',
+          icon: 'star.svg',
+          to: { name: 'vendors', params: { id: this.$route.params.id } }
+        },
+        {
+          label: 'Товары',
+          icon: 'products.svg',
+          to: { name: 'stores', params: { id: this.$route.params.id } }
+        },
+        {
+          label: 'Карточка компании',
+          icon: 'settings.svg',
+          to: { name: 'org_settings', params: { id: this.$route.params.id } }
+        }]
+      }else if(this.role == 2){
+        return [{
+          label: 'Товары',
+          icon: 'products.svg',
+          to: { name: 'stores', params: { id: this.$route.params.id } }
+        },
+        {
+          label: 'Отгрузки',
+          icon: 'shipments.svg',
+          to: { name: 'shipments', params: { id: this.$route.params.id } }
+        },
+        {
+          label: 'Мои клиенты',
+          icon: 'clients.svg',
+          to: { name: 'clients', params: { id: this.$route.params.id } }
+        },
+        {
+          label: 'Индивидуальные скидки',
+          icon: 'star.svg',
+          to: { name: 'b2c', params: { id: this.$route.params.id } }
+        },
+        {
+          label: 'Оптовые акции',
+          icon: 'adv.svg',
+          to: { name: 'b2b', params: { id: this.$route.params.id } }
+        },
+        {
+          label: 'Карточка компании',
+          icon: 'settings.svg',
+          to: { name: 'org_settings', params: { id: this.$route.params.id } }
+        }]
+      }
+      
     }
   },
   methods: {
