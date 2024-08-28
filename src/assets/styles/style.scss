@@ -2302,33 +2302,43 @@ p {
 
 // mixins
 @mixin flex-center($direction: row, $gap: 0) {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: $direction;
-  gap: $gap;
+  & {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: $direction;
+    gap: $gap;
+  }
 }
 @mixin flex-direction($direction: row, $gap: 0) {
-  display: flex;
-  flex-direction: $direction;
-  gap: $gap;
+  & {
+    display: flex;
+    flex-direction: $direction;
+    gap: $gap;
+  }
 }
 @mixin flex($justify: flex-start, $align: flex-start, $direction: row, $gap: 0) {
-  display: flex;
-  justify-content: $justify;
-  align-items: $align;
-  flex-direction: $direction;
-  gap: $gap;
+  & {
+    display: flex;
+    justify-content: $justify;
+    align-items: $align;
+    flex-direction: $direction;
+    gap: $gap;
+  }
 }
 @mixin grid($rows: auto, $columns: auto, $gap: 0) {
-  display: grid;
-  grid-template-rows: $rows;
-  grid-template-columns: $columns;
-  gap: $gap;
+  & {
+    display: grid;
+    grid-template-rows: $rows;
+    grid-template-columns: $columns;
+    gap: $gap;
+  }
 }
 @mixin border {
-  border: 1px solid #E2E2E2;
-  border-radius: 5px;
+  & {
+    border: 1px solid #E2E2E2;
+    border-radius: 5px;
+  }
 }
 @mixin scrollbar(
 	$width: 10px,
@@ -2337,19 +2347,19 @@ p {
 	$bg-thumb-color: #edf2fa,
 	$bg-track-color: transparent
 ) {
-	&::-webkit-scrollbar {
-		width: $width;
-		height: $height;
-	}
+  &::-webkit-scrollbar {
+      width: $width;
+      height: $height;
+  }
 
-	&::-webkit-scrollbar-thumb {
-		background: $bg-thumb-color;
-		border-radius: $border-radius;
-	}
+  &::-webkit-scrollbar-thumb {
+      background: $bg-thumb-color;
+      border-radius: $border-radius;
+  }
 
-	&::-webkit-scrollbar-track {
-		background-color: $bg-track-color;
-	}
+  &::-webkit-scrollbar-track {
+      background-color: $bg-track-color;
+  }
 }
 
 // utils
@@ -2772,6 +2782,19 @@ p {
       transition: all .2s ease;
     }
   }
+  &__close {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: #7878784A;
+    border-radius: 50%;
+    text-decoration: none;
+
+    height: 24px;
+    width: 24px;
+    padding: 7px;
+  }
 }
 
 .content.white {
@@ -2883,14 +2906,15 @@ top: 0;
     .promotion__back-button {
       @include flex-center($gap: 10px);
 
-      background-color: transparent;
-      border: none;
-      outline: none;
-      color: #B4B4B4;
-      font-size: 12px;
-      line-height: 1.17;
-
-      width: fit-content;
+      & {
+        background-color: transparent;
+        border: none;
+        outline: none;
+        color: #B4B4B4;
+        font-size: 12px;
+        line-height: 1.17;
+        width: fit-content;
+      }
 
       i {
         @include flex-center;
@@ -2957,9 +2981,11 @@ top: 0;
     }
 
     &__card-container {
-      // @include grid(auto, repeat(2, 1fr), 14px);
       @include flex-direction($gap: 14px);
-      flex-direction: column;
+
+      & {
+        flex-direction: column;
+      }
 
       &--horizontal {
         flex-direction: row;
@@ -2973,10 +2999,12 @@ top: 0;
   @include flex-direction(column, 12px);
   @include border;
 
-  background-color: #fcfcfc;
-  min-height: 0 !important;
-  // min-width: 100%;
-  padding: 14px 24px 12px !important;
+  & {
+    background-color: #fcfcfc;
+    min-height: 0 !important;
+    // min-width: 100%;
+    padding: 14px 24px 12px !important;
+  }
 
   &__title {
     font-size: 16px !important;
@@ -3007,14 +3035,16 @@ top: 0;
 
       &--remove {
         @include flex-center($gap: 10px);
-        display: flex !important;
+        
+        & {
+          display: flex !important;
+          background-color: transparent;
+          border: 1px solid #ADADAD;
+          box-shadow: none;
+          color: #7B7B7B;
 
-        background-color: transparent;
-        border: 1px solid #ADADAD;
-        box-shadow: none;
-        color: #7B7B7B;
-
-        padding-inline: 30px;
+          padding-inline: 30px;
+        }
       }
 
       &--soon {
@@ -3086,21 +3116,23 @@ top: 0;
 
 .std-catalog-button {
   @include flex-direction($gap: 18px);
-  align-items: center;
-
-  background-color: #FF0000;
-  color: white;
-  font-size: 20px;
-  font-weight: 700;
-  line-height: 1;
-
-  border: none;
-  border-radius: 5px;
-
-  height: 48px;
-  padding-inline: 24px;
   
-  cursor: pointer;
+  & {
+    align-items: center;
+    background-color: #FF0000;
+    color: white;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1;
+
+    border: none;
+    border-radius: 5px;
+
+    height: 48px;
+    padding-inline: 24px;
+    
+    cursor: pointer;
+  }
 
   &__icon {
     rotate: 180deg;
@@ -3110,9 +3142,12 @@ top: 0;
 .std-search-field {
   @include flex;
 
-  background-color: #F8F7F5 !important;
-  border-radius: 5px;
-  width: clamp(400px, 30%, 600px) !important;
+  & {
+    background-color: #F8F7F5 !important;
+    border-radius: 5px;
+    height: 48px;
+    width: clamp(400px, 30vw, 600px) !important;
+  }
 
   &__wrapper {
     &::before {
@@ -3122,7 +3157,10 @@ top: 0;
 
   &__block {
     @include flex-direction($gap: 8px);
-    width: 100%;
+
+    & {
+      width: 100%;
+    }
   }
 
   &__icon,
@@ -3141,31 +3179,38 @@ top: 0;
   
   &__input {
     padding-left: 0 !important;
+
+    &::placeholder {
+      color: #8A8A8A;
+    }
   }
 
   &__button {
     left: 0 !important;
+    height: 100%;
   }
 }
 
 .std-catalog {
   @include flex-direction(column, 24px);
 
-  background-color: white;
+  & {
+    background-color: white;
 
-  position: absolute;
-  top: 100%;
+    position: absolute;
+    top: 100%;
 
-  padding: 30px 40px;
-  margin-left: -45px;
-  width: 100%;
-  z-index: 10;
+    padding: 30px 40px;
+    margin-left: -45px;
+    width: 100%;
+    z-index: 10;
 
-  visibility: hidden;
-  opacity: 0;
-  transition-duration: .3s;
+    visibility: hidden;
+    opacity: 0;
+    transition-duration: .3s;
 
-  max-height: 80dvh;
+    max-height: 80dvh;
+  }
 
   &--active {
     visibility: visible;
@@ -3187,19 +3232,22 @@ top: 0;
   &__item,
   .std-tab-item {
     @include flex-direction($gap: 14px);
-    align-items: center;
 
-    background-color: transparent;
-    border: none;
-    color: #282828;
-    outline: none;
-    text-decoration: none;
+    & {
+      align-items: center;
 
-    padding: 5px;
-    // height: 50px;
-    position: relative;
+      background-color: transparent;
+      border: none;
+      color: #282828;
+      outline: none;
+      text-decoration: none;
 
-    cursor: pointer;
+      padding: 5px;
+      // height: 50px;
+      position: relative;
+
+      cursor: pointer;
+    }
 
     &::before {
       content: "";
@@ -3242,10 +3290,12 @@ top: 0;
     &__img-container {
       @include flex-center;
 
-      width: 40px;
-      aspect-ratio: 1;
-      border-radius: 5px;
-      background-color: #F8F7F5;
+      & {
+        width: 40px;
+        aspect-ratio: 1;
+        border-radius: 5px;
+        background-color: #F8F7F5;
+      }
     }
 
     &__text {
@@ -3324,22 +3374,27 @@ top: 0;
     @include flex-direction($gap: 25px);
     @include border;
 
-    justify-content: space-between;
+    & {
+      justify-content: space-between;
 
-    border-radius: 7px;
-    padding: 35px 45px;
+      border-radius: 7px;
+      padding: 35px 45px;
 
-    flex-basis: 0;
-    flex-grow: 1;
+      flex-basis: 0;
+      flex-grow: 1;
 
-    max-height: 60dvh;
-    overflow-y: auto;
+      max-height: 60dvh;
+      overflow-y: auto;
+    }
   }
 
   &__nav-container {
     @include flex(space-between, $gap: 25px);
-    width: 100%;
-    height: fit-content;
+
+    & {
+      width: 100%;
+      height: fit-content;
+    }
   }
 
   &__nav-inner {
@@ -3351,13 +3406,16 @@ top: 0;
 
     &--primary {
       @include scrollbar(5px, auto, 5px, #2828287e, transparent);
-      padding-right: 15px;
 
-      flex-basis: 0;
-      flex-grow: 1;
+      & {
+        padding-right: 15px;
 
-      max-height: 60dvh;
-      overflow-y: auto;
+        flex-basis: 0;
+        flex-grow: 1;
+
+        max-height: 60dvh;
+        overflow-y: auto;
+      }
     }
 
     &--secondary,

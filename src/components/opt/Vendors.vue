@@ -47,7 +47,8 @@
               <div class="modalright__header">
                 <span class="title">Выбор поставщиков</span>
                 <a href="#" class="btn-close modalright__close" @click.prevent="toggleVendorModal">
-                  <i class="d_icon d_icon-close"></i>
+                  <!-- <i class="d_icon d_icon-close"></i> -->
+                  <img src="../../assets/images/icons/close.svg" alt="">
                 </a>
               </div>
               <div class="vendors_selected">

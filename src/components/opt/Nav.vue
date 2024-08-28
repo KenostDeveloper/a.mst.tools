@@ -37,23 +37,25 @@
 				<div
 					class="std-catalog__nav std-catalog__nav--primary std-catalog__tabs std-catalog__tabs--vertical"
 				>
-					<a
-						v-for="level1 in this.orgOrCatalog === 'org' ? this.organizations : this.catalog"
-						:key="level1"
-						class="std-catalog__tab-item std-tab-item std-tab-item--alt"
-						:href="'https://dev.mst.tools/' + level1.uri"
-						@mouseenter="() => {
-							this.actualNav.secondLevel = level1.children
-							this.actualNav.thirdLevel = []
-							this.actualImageSrc = ''
-						}"
-					>
-						<div class="std-tab-item__img-container">
-							<img :src="level1.image || level1.menu_image" :alt="level1.name || level1.pagetitle" />
-						</div>
-						<span class="std-tab-item__text">{{ level1.name || level1.pagetitle }}</span>
-						<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
-					</a>
+					<div class="std-catalog__nav-scroll">
+						<a
+							v-for="level1 in this.orgOrCatalog === 'org' ? this.organizations : this.catalog"
+							:key="level1"
+							class="std-catalog__tab-item std-tab-item std-tab-item--alt"
+							:href="'https://dev.mst.tools/' + level1.uri"
+							@mouseenter="() => {
+								this.actualNav.secondLevel = level1.children
+								this.actualNav.thirdLevel = []
+								this.actualImageSrc = ''
+							}"
+						>
+							<div class="std-tab-item__img-container">
+								<img :src="level1.image || level1.menu_image" :alt="level1.name || level1.pagetitle" />
+							</div>
+							<span class="std-tab-item__text">{{ level1.name || level1.pagetitle }}</span>
+							<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
+						</a>
+					</div>
 				</div>
 				<div class="std-catalog__nav-wrapper">
 					<div class="std-catalog__nav-container">
@@ -122,7 +124,8 @@
 			<form action="#" method="post" @submit.prevent="toSearch()">
 				<div class="navmain__search_btn std-search-field">
 					<div class="std-search-field__block">
-						<i class="pi pi-search std-search-field__icon"></i>
+						<!-- <i class="pi pi-search std-search-field__icon"></i> -->
+						<img src="../../assets/images/icons/search.svg" alt="" class="std-search-field__icon">
 						<input
 							class="std-search-field__input"
 							type="text"
@@ -142,7 +145,8 @@
 		<!-- </div> -->
 
 		<div class="a-dart-btn a-dart-btn-secondary kenost-vendors" @click="changeActive">
-			<i class="mst-icon mst-icon-my_vendors kenost-vendors__icon"></i>
+			<!-- <i class="mst-icon mst-icon-my_vendors kenost-vendors__icon"></i> -->
+			<img src="../../assets/images/icons/cart.svg" alt="">
 			<span>{{ this.opt_vendors.selected_count }} из {{ this.opt_vendors.available_count }}</span>
 			<i class="pi pi-angle-down"></i>
 			<div class="kenost-vendors__list">
