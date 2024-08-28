@@ -40,7 +40,7 @@
 					<div class="client-card__info">
 						<h2 class="client-card__title">«{{ item.name }}»</h2>
 						<p class="client-card__address">Склад: {{ item.warehouse}}</p>
-						<p class="client-card__address">Базовая скидка: {{ item.base_sale }}%</p>
+						<!-- <p class="client-card__address">Базовая скидка: {{ item.base_sale }}%</p> -->
 					</div>
 				</div>
 				<button class="dart-btn dart-btn-primary client-card__button">Посмотреть остатки</button>

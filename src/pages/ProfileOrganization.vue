@@ -846,35 +846,6 @@
         }
       }
     }
-    .panel-widget-summ{
-      position: relative;
-      span{
-        display: block;
-        color: #676767;
-        font-size: 14px;
-        font-style: normal;
-        font-weight: 400;
-        line-height: 1.3;
-        letter-spacing: 0.25px;
-        &.sum{
-          color: #282828;
-          font-size: 28px;
-          font-style: normal;
-          font-weight: 500;
-          line-height: 1.3;
-          letter-spacing: 0.496px;
-          margin: 31px 0 16px;
-        }
-        &.num{
-          color: #A0A0A0;
-          font-size: 12px;
-          font-style: normal;
-          font-weight: 400;
-          line-height: 1.3;
-          letter-spacing: 0.25px;
-        }
-      }
-    }
     .panel-widget-remains{
       display: flex;
       flex-wrap: wrap;
@@ -951,76 +922,7 @@
         }
       }
     }
-    .panel-widget{
-      padding: 16px 16px;
-      border-radius: 5px;
-      margin-bottom: 24px;
-      position: relative;
-      height: calc(100% - 24px);
-      border: 1px solid rgba(0, 0, 0, 0.12);
-      &.panel-widget-blue{
-        background: linear-gradient(90deg, #008FFF 0.12%, #00A3FF 99.85%);
-        &.panel-widget-summ span{
-          color: #fff;
-        }
-      }
-      &.panel-widget-red{
-        background: linear-gradient(90deg, #FF6221 0.12%, #FF3C21 99.85%);
-        &.panel-widget-summ span{
-          color: #fff;
-        }
-      }
-      &.panel-widget-green{
-        background: #0EB39A;
-        &.panel-widget-summ span{
-          color: #fff;
-        }
-      }
-      .title{
-        display: block;
-        color: #676767;
-        font-size: 14px;
-        font-style: normal;
-        font-weight: 400;
-        line-height: 1.3;
-        letter-spacing: 0.25px;
-        margin-bottom: 18px;
-      }
-      &.panel-widget-date{
-        .date{
-          display: block;
-          text-align: center;
-          color: #282828;
-          font-family: Roboto;
-          font-size: 55px;
-          font-style: normal;
-          font-weight: 500;
-          line-height: normal;
-        }
-        .month{
-          display: block;
-          color: #282828;
-          text-align: center;
-          font-size: 20px;
-          font-style: normal;
-          font-weight: 500;
-          line-height: 1.3;
-          letter-spacing: 0.25px;
-        }
-        .day{
-          display: block;
-          padding-top: 9px;
-          text-align: center;
-          color: #A0A0A0;
-          font-size: 12px;
-          font-style: normal;
-          font-weight: 400;
-          line-height: 1.3;
-          letter-spacing: 0.25px;
-          text-transform: uppercase;
-        }
-      }
-    }
+    
   
     .operating-mode-calend-modal{
       .vc-container{

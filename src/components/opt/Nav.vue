@@ -122,7 +122,8 @@
 			<form action="#" method="post" @submit.prevent="toSearch()">
 				<div class="navmain__search_btn std-search-field">
 					<div class="std-search-field__block">
-						<i class="pi pi-search std-search-field__icon"></i>
+						<!-- <i class="pi pi-search std-search-field__icon"></i> -->
+						<img src="../../assets/images/icons/search.svg" alt="" class="std-search-field__icon">
 						<input
 							class="std-search-field__input"
 							type="text"
@@ -142,7 +143,8 @@
 		<!-- </div> -->
 
 		<div class="a-dart-btn a-dart-btn-secondary kenost-vendors" @click="changeActive">
-			<i class="mst-icon mst-icon-my_vendors kenost-vendors__icon"></i>
+			<!-- <i class="mst-icon mst-icon-my_vendors kenost-vendors__icon"></i> -->
+			<img src="../../assets/images/icons/cart.svg" alt="">
 			<span>{{ this.opt_vendors.selected_count }} из {{ this.opt_vendors.available_count }}</span>
 			<i class="pi pi-angle-down"></i>
 			<div class="kenost-vendors__list">
