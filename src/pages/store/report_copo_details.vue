@@ -1,6 +1,12 @@
 <template>
   <div class="copo">
-    <div class="to__up">
+    <div class="to__up" v-if="$route.params.store_id">
+      <router-link class="link-back" :to="{ name: 'store', params: { id: $route.params.id, store_id: $route.params.store_id } }">
+        <mdicon name="arrow-left" />
+        <span>Назад к брендам</span>
+      </router-link>
+    </div>
+    <div class="to__up" v-else>
       <router-link class="link-back" :to="{ name: 'stores', params: { id: $route.params.id } }">
         <mdicon name="arrow-left" />
         <span>Назад к брендам</span>
@@ -143,6 +149,7 @@ export default {
   methods: {
     ...mapActions([
       'get_report_copo_details_from_api',
+      'unset_report_copo_details',
       'get_cardstatus_from_api'
     ]),
     filter (data) {
@@ -163,10 +170,13 @@ export default {
     })
     this.get_cardstatus_from_api()
   },
+  unmounted () {
+    this.unset_report_copo_details()
+  },
   components: { vTable },
   computed: {
     ...mapGetters([
-      'report_copo_details',
+      'report_copo_details',      
       'getcardstatus'
     ])
   },

@@ -805,7 +805,7 @@ export default {
           link_params: {
             id: this.$route.params.id,
             store_id: this.$route.params.store_id,
-            brand_id: 'id'
+            brand_id: 'vendor_id'
           },
           sort: true
         },
