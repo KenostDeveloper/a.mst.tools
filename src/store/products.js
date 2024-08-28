@@ -7,16 +7,20 @@ export default {
     diler_products: []
   },
   actions: {
-    get_data_from_api ({ commit }, { filter, filtersdata, page, sort, perpage }) {
+    get_data_from_api ({ commit }, { filter, filtersdata, page, sort, perpage, id }) {
       // console.log(filter)
       const data = {
-        id: router.currentRoute._value.params.id,
         store_id: router.currentRoute._value.params.store_id,
         filter: filter,
         filtersdata: filtersdata,
         sort: sort,
         page: page,
         perpage: perpage
+      }
+      if(id) {
+        data.id = id
+      } else{
+        data.id = router.currentRoute._value.params.id
       }
       if (router.currentRoute._value.params.store_id) {
         data.store_id = router.currentRoute._value.params.store_id

@@ -1,8 +1,8 @@
 <template>
 	<section class="clients retails">
-        <div class="std-breadcrumbs">
+        <!-- <div class="std-breadcrumbs">
             МАРКЕТСОВИЧ / Розничные заказы
-        </div>
+        </div> -->
 
 		<div class="std-title__container">
 			<h1 class="std-title">Розничные заказы</h1>
@@ -98,77 +98,18 @@
                     </tr>
                 </thead>
                 <tbody class="std-table__body">
-                    <tr class="std-table__row">
+                    <tr v-for="item in orders.orders" v-bind:key="item.id" class="std-table__row">
                         <td class="std-table__col">
-                            <div class="retails__number">
-                                123/45678
-                                <i class="pi pi-info-circle retails__number-icon"></i>
-                            </div>
-                        </td>
-                        <td class="std-table__col">04.03.2022</td>
-                        <td class="std-table__col retails__status--paid">Оплачен</td>
-                        <td class="std-table__col">04.03.2022</td>
-                        <td class="std-table__col">ООО “Уралспецмаш"</td>
-                    </tr>
-                    <tr class="std-table__row">
-                        <td class="std-table__col">
-                            <div class="retails__number">
-                                123/45678
+                            <router-link class="link-no-style" :to="{ name: 'retail_orders_id', params: { id: this.$route.params.id, order_id: item.id } }"><div class="retails__number">
+                                {{item.num}}
                                 <!-- <i class="pi pi-info-circle retails__number-icon"></i> -->
                             </div>
+							</router-link>
                         </td>
-                        <td class="std-table__col">04.03.2022</td>
-                        <td class="std-table__col retails__status--paid">Оплачен</td>
-                        <td class="std-table__col">04.03.2022</td>
-                        <td class="std-table__col">ООО “Уралспецмаш"</td>
-                    </tr>
-                    <tr class="std-table__row">
-                        <td class="std-table__col">
-                            <div class="retails__number">
-                                123/45678
-                                <!-- <i class="pi pi-info-circle retails__number-icon"></i> -->
-                            </div>
-                        </td>
-                        <td class="std-table__col">04.03.2022</td>
-                        <td class="std-table__col retails__status--paid">Оплачен</td>
-                        <td class="std-table__col">04.03.2022</td>
-                        <td class="std-table__col">ООО “Уралспецмаш"</td>
-                    </tr>
-                    <tr class="std-table__row">
-                        <td class="std-table__col">
-                            <div class="retails__number">
-                                123/45678
-                                <i class="pi pi-info-circle retails__number-icon"></i>
-                            </div>
-                        </td>
-                        <td class="std-table__col">04.03.2022</td>
-                        <td class="std-table__col retails__status--paid">Оплачен</td>
-                        <td class="std-table__col">04.03.2022</td>
-                        <td class="std-table__col">ООО “Уралспецмаш"</td>
-                    </tr>
-                    <tr class="std-table__row">
-                        <td class="std-table__col">
-                            <div class="retails__number">
-                                123/45678
-                                <!-- <i class="pi pi-info-circle retails__number-icon"></i> -->
-                            </div>
-                        </td>
-                        <td class="std-table__col">04.03.2022</td>
-                        <td class="std-table__col retails__status--paid">Оплачен</td>
-                        <td class="std-table__col">04.03.2022</td>
-                        <td class="std-table__col">ООО “Уралспецмаш"</td>
-                    </tr>
-                    <tr class="std-table__row">
-                        <td class="std-table__col">
-                            <div class="retails__number">
-                                123/45678
-                                <i class="pi pi-info-circle retails__number-icon"></i>
-                            </div>
-                        </td>
-                        <td class="std-table__col">04.03.2022</td>
-                        <td class="std-table__col retails__status--paid">Оплачен</td>
-                        <td class="std-table__col">04.03.2022</td>
-                        <td class="std-table__col">ООО “Уралспецмаш"</td>
+                        <td class="std-table__col"><router-link class="link-no-style" :to="{ name: 'retail_orders_id', params: { id: this.$route.params.id, order_id: item.id } }">{{item.createdon}}</router-link></td>
+                        <td class="std-table__col" :style="'color: #' + item.status_color"><router-link class="link-no-style" :to="{ name: 'retail_orders_id', params: { id: this.$route.params.id, order_id: item.id } }">{{item.status_name}}</router-link></td>
+                        <td class="std-table__col"><router-link class="link-no-style" :to="{ name: 'retail_orders_id', params: { id: this.$route.params.id, order_id: item.id } }">???</router-link></td>
+                        <td class="std-table__col"><router-link class="link-no-style" :to="{ name: 'retail_orders_id', params: { id: this.$route.params.id, order_id: item.id } }">{{ item.store }}</router-link></td>
                     </tr>
                 </tbody>
             </table>
@@ -185,82 +126,31 @@ import Dropdown from "primevue/dropdown";
 export default {
 	data() {
 		return {
-			stores: {
-				items: [],
-				total: -1,
-			},
-			store_id: null,
-			filter: {
-				name: "",
-				store: [],
-			},
-			stores_list: [],
+			
 		};
 	},
 	methods: {
-		...mapActions(["get_dilers_from_api", "set_diler_to_api", "org_get_stores_from_api"]),
-		setFilter() {
-			this.get_dilers_from_api({
-				type: 1,
-				page: this.page_dilers,
-				perpage: this.pagination_items_per_page_dilers,
-				filter: this.filter,
-			});
+		...mapActions(["get_orders_from_api"]),
+		filter (data) {
+			console.log(data)
+			this.get_orders_from_api(data)
+		},
+		paginate (data) {
+			console.log(data)
+			this.get_orders_from_api(data)
 		},
 	},
 	mounted() {
-		this.get_dilers_from_api({
-			type: 1,
-			page: this.page_dilers,
-			perpage: this.pagination_items_per_page_dilers,
-		}).then(() => {
-			if (this.dilers) {
-				if (Object.prototype.hasOwnProperty.call(this.dilers, "items")) {
-					this.stores.items = this.dilers.items;
-				} else {
-					this.stores.items = [];
-				}
-				if (Object.prototype.hasOwnProperty.call(this.dilers, "total")) {
-					this.stores.total = this.dilers.total;
-				} else {
-					this.stores.total = 0;
-				}
-			}
-		});
-
-		this.org_get_stores_from_api({
-			action: "get/stores",
-			id: this.$route.params.id,
-		});
+		this.get_orders_from_api({
+			page: this.page,
+			perpage: this.pagination_items_per_page
+		})
 	},
 	computed: {
-		...mapGetters(["dilers", "org_stores"]),
+		...mapGetters(['orders']),
 	},
 	components: { Dropdown },
 	watch: {
-		dilers: function (newVal, oldVal) {
-			if (typeof newVal === "object") {
-				if (Object.prototype.hasOwnProperty.call(newVal, "items")) {
-					this.stores.items = newVal.items;
-				} else {
-					this.stores.items = [];
-				}
-				if (Object.prototype.hasOwnProperty.call(newVal, "total")) {
-					this.stores.total = newVal.total;
-				} else {
-					this.stores.total = 0;
-				}
-			} else {
-				this.stores.items = [];
-				this.stores.total = 0;
-			}
-		},
-		org_stores: function (newVal, oldVal) {
-			this.stores_list = [];
-			for (let i = 0; i < newVal.items.length; i++) {
-				this.stores_list.push({ label: newVal.items[i].name, value: newVal.items[i].id });
-			}
-		},
 	},
 };
 </script>

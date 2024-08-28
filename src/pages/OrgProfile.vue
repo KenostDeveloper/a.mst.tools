@@ -42,21 +42,12 @@
               </template>
             </DropZone>
             <div class="avatar-org" v-if="this.orgprofile.image">
-              <FileUpload name="demo[]" url="/api/upload" @upload="onTemplatedUpload($event)" :multiple="true" accept="image/*" :maxFileSize="1000000" @select="onSelectedFiles">
+              <FileUpload name="avatar[]" url="/rest/file_upload.php?upload_org_avatar=avatar" @upload="onUpload" :auto="true"  :multiple="false" accept="image/*" :maxFileSize="1000000">
                 <template #header="{ chooseCallback, uploadCallback, clearCallback, files }">
-                    <div class="flex flex-wrap justify-content-between align-items-center flex-1 gap-2">
-                        <div class="flex gap-2">
-                            <Button @click="chooseCallback()" icon="pi pi-images" rounded outlined></Button>
-                            <Button @click="uploadEvent(uploadCallback)" icon="pi pi-cloud-upload" rounded outlined severity="success" :disabled="!files || files.length === 0"></Button>
-                            <Button @click="clearCallback()" icon="pi pi-times" rounded outlined severity="danger" :disabled="!files || files.length === 0"></Button>
-                        </div>
-                        <ProgressBar :value="totalSizePercent" :showValue="false" :class="['md:w-20rem h-1rem w-full md:ml-auto', { 'exceeded-progress-bar': totalSizePercent > 100 }]"
-                            ><span class="white-space-nowrap">{{ totalSize }}B / 1Mb</span></ProgressBar
-                        >
-                    </div>
+                  <img @click="chooseCallback()" :src="orgprofile.upload_image? this.orgprofile.image.original_href : this.orgprofile.image" alt="">
+                  <i class="pi pi-upload org-upload-i"></i>
                 </template>
-                </FileUpload>
-              <img :src="orgprofile.upload_image? this.orgprofile.image.original_href : this.orgprofile.image" alt="">
+              </FileUpload>
             </div>
           </div>
           <div class="dart-form-group mb-4">
@@ -152,12 +143,12 @@
           <input type="text" v-model="this.new_requisit[field.name]" class="dart-form-control" :name="field.name" :placeholder="field.placeholder"/>
         </div>
       </div>
-      <div class="flex align-items-center mb-3">
+      <div class="flex align-items-center mb-3 gap-1">
         <Checkbox v-model="this.new_requisit.marketplace" inputId="new-requisit-market" name="new-requisit-market" value="1" />
         <label for="new-requisit-market" class="ml-2 mb-0"> Реквизиты для маркетплейса </label>
       </div>
       <div v-for="(bank, index_req) in this.new_requisit.banks" :key="index_req">
-        <div class="flex align-items-center"><p class="text-s m-0">Банковские реквизиты ({{ index_req + 1 }})</p> <div class="name-requisit-delete" @click="deleteBankRequisit(index_req)" ><i class="pi pi-trash"></i></div></div>
+        <div class="flex align-items-center"><p class="text-s mb-0">Банковские реквизиты ({{ index_req + 1 }})</p> <div class="name-requisit-delete" @click="deleteBankRequisit(index_req)" ><i class="pi pi-trash"></i></div></div>
         <div class="kenost-form-grid mb-3">
           <div class="form_input_group w-50" v-for="(field, index_field) in this.form.bank" :key="index_req + '_' + index_field">
             <label for="">{{ field.label }}</label>
@@ -181,12 +172,12 @@
           <input type="text" v-model="this.orgprofile.requisites[this.modals.requisitedit_index][field.name]" class="dart-form-control" :name="field.name" :placeholder="field.placeholder"/>
         </div>
       </div>
-      <div class="flex align-items-center mb-3">
+      <div class="flex align-items-center mb-3 gap-1">
         <Checkbox v-model="this.orgprofile.requisites[this.modals.requisitedit_index].marketplace" inputId="requisit-market" name="requisit-market" value="1" />
         <label for="requisit-market" class="ml-2 mb-0"> Реквизиты для маркетплейса </label>
       </div>
       <div v-for="(bank, index_req) in this.orgprofile.requisites[this.modals.requisitedit_index].banks" :key="index_req">
-        <div class="flex align-items-center"><p class="text-s m-0">Банковские реквизиты ({{ index_req + 1 }})</p> <div class="name-requisit-delete" @click="deleteBankRequisitEdit(index_req)" ><i class="pi pi-trash"></i></div></div>
+        <div class="flex align-items-center"><p class="text-s mb-0">Банковские реквизиты ({{ index_req + 1 }})</p> <div class="name-requisit-delete" @click="deleteBankRequisitEdit(index_req)" ><i class="pi pi-trash"></i></div></div>
         <div class="kenost-form-grid mb-3">
           <div class="form_input_group w-50" v-for="(field, index_field) in this.form.bank" :key="index_req + '_' + index_field">
             <label for="">{{ field.label }}</label>
@@ -394,20 +385,13 @@ export default {
         if (Object.prototype.hasOwnProperty.call(response.data, 'files')) {
           // перечень загруженныйх файлов
 
-          if (response.data.files[0].type_banner === 'max') {
-            this.files.max = response.data.files[0]
-          } else if (response.data.files[0].type_banner === 'min') {
-            this.files.min = response.data.files[0]
-          } else if (response.data.files[0].type_banner === 'icon') {
-            this.files.icon = response.data.files[0]
-          } else if (response.data.files[0].type_banner === 'small') {
-            this.files.small = response.data.files[0]
-          } else if (response.data.files[0].type_banner === 'file') {
-            this.files.file = response.data.files[0]
+          if (response.data.files[0].type === 'avatar') {
+            this.orgprofile.image = response.data.files[0]
+            this.orgprofile.upload_image = true
           }
         }
       }
-      this.$toast.add({ severity: 'info', summary: 'Файлы загружены', detail: 'Файл был успешно загружен', life: 3000 })
+      this.$toast.add({ severity: 'info', summary: 'Логотип успешно загружен!', detail: 'Не забудте сохранить изменения', life: 3000 })
     },
     parseFile (files, xhr, formData) {
       const callback = (e) => {
