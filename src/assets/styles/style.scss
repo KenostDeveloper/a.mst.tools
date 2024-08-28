@@ -1289,6 +1289,7 @@ img {
     height: 100%;
     top: 0;
     padding-top: 150px;
+    z-index: 1;
 
     i {
       color: #fff;
@@ -2886,13 +2887,13 @@ top: 0;
         aspect-ratio: 1;
         // background-color: #D9D9D9;
         border-radius: 4px;
-        object-fit: cover;
+        object-fit: contain;
       }
 
       .client-card__info {
         display: flex;
         flex-direction: column;
-        gap: 6px;
+        gap: 19px;
 
         :is(.client-card__title, .client-card__address) {
           line-height: 1.17;
@@ -2919,6 +2920,22 @@ top: 0;
       margin: 0 auto;
     }
   }
+}
+
+.title-mini{
+  font-size: 24px;
+  font-weight: 700;
+  color: #000000;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.mst-image-org{
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: contain;
 }
 
 

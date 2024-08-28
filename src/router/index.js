@@ -26,6 +26,7 @@ import ProfileClients from "../pages/ProfileClients.vue";
 import ProfileVendors from '../pages/ProfileVendors.vue'
 import MyOrders from '../pages/MyOrders.vue'
 import MyOrder from '../pages/MyOrder.vue'
+import ProfileStatistics from '../pages/ProfileStatistics.vue'
 
 const routes = [
   {
@@ -253,6 +254,11 @@ const routes = [
                     path: 'shipments',
                     name: 'shipments',
                     component: ProfileShipping
+                  },
+                  {
+                    path: 'statistics',
+                    name: 'statistics',
+                    component: ProfileStatistics
                   },
                   {
                     path: 'orders',
