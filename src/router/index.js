@@ -27,7 +27,9 @@ import ProfileVendors from '../pages/ProfileVendors.vue'
 import MyOrders from '../pages/MyOrders.vue'
 import MyOrder from '../pages/MyOrder.vue'
 import ProfileStatistics from '../pages/ProfileStatistics.vue'
-import RetailOrders from "../pages/RetailOrders.vue";
+import ProfileStoreStatistics from '../pages/ProfileStoreStatistics.vue'
+import ProfileDiscounts from '../pages/ProfileDiscounts.vue'
+import RetailOrders from "../pages/RetailOrders.vue"
 import Order from "../pages/Order.vue";
 
 const routes = [
@@ -258,9 +260,23 @@ const routes = [
                     component: ProfileShipping
                   },
                   {
+                    path: 'discounts',
+                    name: 'discounts',
+                    component: ProfileDiscounts
+                  },
+                  {
                     path: 'statistics',
-                    name: 'statistics',
-                    component: ProfileStatistics
+                    children: [{
+                      path: '',
+                      name: 'statistics',
+                      component: ProfileStatistics
+                    },
+                    {
+                      path: ':store_id',
+                      name: 'statistics_id',
+                      component: ProfileStoreStatistics
+                    }  
+                    ]
                   },
                   {
                     path: 'orders',

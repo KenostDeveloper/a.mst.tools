@@ -70,7 +70,7 @@
           <div class="dart-form-group" v-if="ffilter.type == 'checkbox'">
             <div class="flex align-items-center gap-1">
               <Checkbox v-model="filtersdata[i]" :inputId="'input' + i" :name="i" value="1" @change="setFilter"/>
-              <label :for="'input' + i" class="ml-2"> {{ ffilter.placeholder }} </label>
+              <label :for="'input' + i" class="ml-2 mb-0"> {{ ffilter.placeholder }} </label>
             </div>
           </div>
         </div>

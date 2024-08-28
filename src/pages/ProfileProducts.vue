@@ -523,7 +523,7 @@ export default {
           link_to: 'report_copo_details',
           link_params: {
             id: this.$route.params.id,
-            brand_id: 'id'
+            brand_id: 'vendor_id'
           },
           sort: true
         },
@@ -598,8 +598,12 @@ export default {
           label: 'Активно',
           type: 'boolean'
         },
-        address_short: {
+        address: {
           label: 'Адрес',
+          type: 'text'
+        },
+        remains: {
+          label: 'Кол-во товаров, шт.',
           type: 'text'
         }
         // vendor_article: {
@@ -628,8 +632,8 @@ export default {
           type: 'text',
           sort: true
         },
-        store_id: {
-          label: 'store_id',
+        store_name: {
+          label: 'Склад',
           type: 'text',
           sort: true
         },
@@ -702,7 +706,8 @@ export default {
       'get_vendors_from_api',
       'get_msproducts_from_api',
       'get_catalog_from_api',
-      'org_get_stores_from_api'
+      'org_get_stores_from_api',
+      'unset_report_copo'
     ]),
     setChartData () {
       return {
@@ -821,6 +826,9 @@ export default {
       this.page_brand = data.page
       this.get_report_copo_from_api(data)
     }
+  },
+  unmounted () {
+    this.unset_report_copo()
   },
   mounted () {
     this.get_data_from_api({
