@@ -242,16 +242,6 @@ import Dialog from "primevue/dialog";
 export default {
 	data() {
 		return {
-			stores: {
-				items: [],
-				total: -1,
-			},
-			store_id: null,
-			filter: {
-				name: "",
-				store: [],
-			},
-			stores_list: [],
 
 			showShip: false,
             showShip2: false,
@@ -259,40 +249,10 @@ export default {
 		};
 	},
 	methods: {
-		...mapActions(["get_dilers_from_api", "set_diler_to_api", "org_get_stores_from_api"]),
-		setFilter() {
-			this.get_dilers_from_api({
-				type: 1,
-				page: this.page_dilers,
-				perpage: this.pagination_items_per_page_dilers,
-				filter: this.filter,
-			});
-		},
+		...mapActions(["get_order_from_api"])
 	},
 	mounted() {
-		this.get_dilers_from_api({
-			type: 1,
-			page: this.page_dilers,
-			perpage: this.pagination_items_per_page_dilers,
-		}).then(() => {
-			if (this.dilers) {
-				if (Object.prototype.hasOwnProperty.call(this.dilers, "items")) {
-					this.stores.items = this.dilers.items;
-				} else {
-					this.stores.items = [];
-				}
-				if (Object.prototype.hasOwnProperty.call(this.dilers, "total")) {
-					this.stores.total = this.dilers.total;
-				} else {
-					this.stores.total = 0;
-				}
-			}
-		});
-
-		this.org_get_stores_from_api({
-			action: "get/stores",
-			id: this.$route.params.id,
-		});
+		this.get_order_from_api()
 	},
 	computed: {
 		...mapGetters(["dilers", "org_stores"]),

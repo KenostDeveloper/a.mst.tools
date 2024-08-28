@@ -169,7 +169,7 @@ export default {
           {
             label: "Товары",
             icon: "products.svg",
-            to: { name: "stores", params: { id: this.$route.params.id } },
+            to: { name: "statistics", params: { id: this.$route.params.id } },
           },
           {
             label: "Карточка компании",
