@@ -1070,6 +1070,20 @@ img {
     width: 54px;
 
     .sitebar {
+
+      &-toggler {
+        position: relative;
+        height: auto;
+        width: auto;
+        margin-top: 54px;
+        padding-top: 0;
+        
+
+        i{
+          margin: auto;
+        }
+      }
+
       &-logo {
         gap: 0;
         span {
@@ -1102,11 +1116,16 @@ img {
         }
       }
 
+      &-hr{
+        margin: 8px 10px 24px 10px;
+      }
+
       &-profile {
         transition: all 0.4s ease-in-out;
         background: transparent;
         border-left: 0px;
         padding: 7px;
+        margin-top: 0;
         // display: flex;
         // flex-direction: column;
         // align-items: center;
@@ -1249,20 +1268,27 @@ img {
   }
 
   &-toggler {
-    width: 40px;
-    height: 40px;
-    background: var(--secondary-color);
-    border-radius: 6px;
-    border: 1px solid var(--border-color);
-    position: absolute;
-    right: -10px;
-    top: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
+    // width: 40px;
+    // height: 40px;
+    // background: var(--secondary-color);
+    // border-radius: 6px;
+    // border: 1px solid var(--border-color);
+    // position: absolute;
+    // right: -10px;
+    // top: 60px;
+    // display: flex;
+    // align-items: center;
+    // justify-content: center;
+    // box-sizing: border-box;
+    // cursor: pointer;
+	  // z-index: 1;
+
     cursor: pointer;
-	  z-index: 1;
+    position: absolute;
+    right: 0;
+    height: 100%;
+    top: 0;
+    padding-top: 150px;
 
     i {
       color: #fff;
@@ -1344,6 +1370,13 @@ img {
       }
     }
 
+    &__change{
+      margin: 0;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+
     &__name {
       transition: all 0.4s ease-in-out;
       color: var(--white-color);
@@ -1357,6 +1390,7 @@ img {
       overflow: hidden;
       max-width: 100%;
       margin-bottom: 0;
+      margin-top: 12px;
 
       span{
         font-weight: 400;
@@ -3150,7 +3184,6 @@ top: 0;
 
 .std-catalog {
   @include flex-direction(column, 24px);
-  @include scrollbar(5px, auto, 5px, #282828, transparent);
 
   background-color: white;
 
@@ -3166,9 +3199,7 @@ top: 0;
   opacity: 0;
   transition-duration: .3s;
 
-  max-height: 85dvh;
-  overflow-x: hidden;
-  overflow-y: auto;
+  max-height: 80dvh;
 
   &--active {
     visibility: visible;
@@ -3323,6 +3354,7 @@ top: 0;
   }
 
   &__nav-wrapper {
+    @include scrollbar(5px, auto, 5px, #2828287e, transparent);
     @include flex-direction($gap: 25px);
     @include border;
 
@@ -3333,6 +3365,9 @@ top: 0;
 
     flex-basis: 0;
     flex-grow: 1;
+
+    max-height: 60dvh;
+    overflow-y: auto;
   }
 
   &__nav-container {
@@ -3349,8 +3384,14 @@ top: 0;
     max-width: 260px;
 
     &--primary {
+      @include scrollbar(5px, auto, 5px, #2828287e, transparent);
+      padding-right: 15px;
+
       flex-basis: 0;
       flex-grow: 1;
+
+      max-height: 60dvh;
+      overflow-y: auto;
     }
 
     &--secondary,
@@ -3360,14 +3401,12 @@ top: 0;
     }
 
     &--thirdy {
-      justify-content: flex-end;
     }
   }
 
   &__img {
     width: 40% !important;
     object-fit: contain;
-    align-self: flex-end;
   }
 }
 
