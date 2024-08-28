@@ -56,7 +56,8 @@
                 <div class="vendors_selected__rows" v-if="items.selected_count">
                   <div class="vendors_selected__row" v-for="(item) in items.selected" :key="item.id">
                     <a href="#" class="btn btn-close" @click.prevent="changeOpts(item.id, 0)">
-                      <i class="d_icon d_icon-close"></i>
+                      <!-- <i class="d_icon d_icon-close"></i> -->
+                      <img src="../../assets/images/icons/close.svg" alt="">
                     </a>
                     <div class="vendors_selected__row-text">
                       <span class="name">{{ item.name_short }}</span>

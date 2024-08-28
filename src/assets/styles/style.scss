@@ -2817,18 +2817,21 @@ p {
     }
   }
   &__close {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    background-color: #7878784A;
-    border-radius: 50%;
-    text-decoration: none;
-
-    height: 24px;
-    width: 24px;
-    padding: 7px;
   }
+}
+
+.btn-close {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: #7878784A;
+  border-radius: 50%;
+  text-decoration: none;
+
+  height: 24px;
+  width: 24px;
+  padding: 7px;
 }
 
 .content.white {
