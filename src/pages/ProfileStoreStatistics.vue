@@ -1,22 +1,10 @@
 <template>
     <div class="copo">
-        <h1 class="title-mini"><img class="mst-image-org" :src="org_profile.image" alt="">{{org_profile.name}}</h1>
-        <!-- {{org_stores}} -->
-        <v-table
-            :items_data="org_stores.items"
-            :total="org_stores.total"
-            :pagination_items_per_page="this.pagination_items_per_page"
-            :pagination_offset="this.pagination_offset"
-            :page="this.page_modal"
-            :table_data="this.table_stores"
-            :filters="{}"
-            title="Склады"
-            class="mb-5"
-        >
-        </v-table>
+        <router-link :to="{ name: 'statistics', params: { id: $route.params.id } }" class="title-mini"><img class="mst-image-org" :src="org_profile.image" alt="">{{org_profile.name}}</router-link>
+        <div class="mst-statistic-title mt-3 mb-5">Склад {{ org_store.name_short }}</div>
 
         <!-- <div class="d-col-md-12" :class="{'loading': loading_products}"> -->
-            <div class="panel-widget panel-widget-top-nomoney">
+            <!-- <div class="panel-widget panel-widget-top-nomoney"> -->
             <v-table
                 :items_data="products.products"
                 :total="products.total"
@@ -32,11 +20,33 @@
                 class="widget_table"
             >
                 <template v-slot:desc>
-                    <div class="mst-alert mst-alert-info mb-2 mt-2">Параметр <b>«Дней с Out Of Stock»</b> расчитывается за последний календарный месяц.<br/>Фильтры <b>«Категория товара»</b> и <b>«Производитель»</b> работает только с теми остатками, с которыми произошло сопоставление с карточками товаров из нашего справочника.</div>
+                <div class="mst-alert mst-alert-info mb-2 mt-3">Параметр <b>«Дней с Out Of Stock»</b> расчитывается за последний календарный месяц.<br/>Фильтры <b>«Категория товара»</b> и <b>«Производитель»</b> работает только с теми остатками, с которыми произошло сопоставление с карточками товаров из нашего справочника.</div>
+                </template>
+                <template v-slot:widgets>
+                    <div class="dart-row mb-4">
+                      <div class="d-col-md-4" v-if="avg_info?.remains">
+                        <div class="panel-widget mst-panel-widget-summ mst-panel-widget-blue">
+                          <span>Остатков всего</span>
+                          <span class="sum">{{ avg_info?.remains }}<span class="num">шт</span></span>
+                        </div>
+                      </div>
+                      <div class="d-col-md-4" v-if="avg_info.no_money">
+                        <div class="panel-widget mst-panel-widget-summ mst-panel-widget-red">
+                          <span>Упущенная выручка</span>
+                          <span class="sum">{{ avg_info.no_money }}<span class="num">₽</span></span>
+                        </div>
+                      </div>
+                      <div class="d-col-md-4" v-if="avg_info.sales_speed">
+                        <div class="panel-widget mst-panel-widget-summ mst-panel-widget-green">
+                          <span>Средняя скорость продаж</span>
+                          <span class="sum">{{ avg_info.sales_speed }}<span class="num">шт/день</span></span>
+                        </div>
+                      </div>
+                    </div>
                 </template>
             </v-table>
             <!-- </div> -->
-        </div>
+        <!-- </div> -->
    </div>
  </template>
  
@@ -117,7 +127,7 @@
            link_to: 'statistics_id',
            link_params: {
              id: this.$route.params.id,
-             store_id: 'id'
+             statistics_id: 'id'
            }
          },
          active: {
@@ -204,7 +214,7 @@
    },
    methods: {
      ...mapActions([
-       'org_get_stores_from_api',
+       'get_org_store_from_api',
        'org_profile_from_api',
        'get_data_from_api'
      ]),
@@ -230,23 +240,20 @@
       }
    },
    mounted () {
-        this.org_get_stores_from_api({
-            action: 'get/stores',
-            id: this.$route.params.id
-        })
+        this.get_org_store_from_api()
         this.org_profile_from_api({
-            action: 'get/org/profile',
-            id: router.currentRoute._value.params.id
+          action: 'get/org/profile',
+          id: router.currentRoute._value.params.id
         })
         this.get_data_from_api({
-            page: this.page,
-            perpage: this.pagination_items_per_page
+          page: this.page,
+          perpage: this.pagination_items_per_page
         }).then(() => { })
    },
    components: { vTable, Chart, TabView, TabPanel, RadioButton },
    computed: {
      ...mapGetters([
-       'org_stores',
+       'org_store',
        'org_profile',
        'products'
      ])
