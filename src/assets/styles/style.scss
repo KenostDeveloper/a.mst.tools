@@ -3237,7 +3237,8 @@ top: 0;
     position: absolute;
     top: 100%;
 
-    padding: 30px 40px;
+    // padding: 30px 40px;
+    padding-block: 30px;
     margin-left: -45px;
     width: 100%;
     z-index: 10;
@@ -3252,6 +3253,14 @@ top: 0;
   &--active {
     visibility: visible;
     opacity: 1;
+  }
+
+  & > &__tabs {
+    padding-inline: 40px;
+  }
+
+  &__content {
+    padding-right: 40px;
   }
 
   &__tabs {
@@ -3398,12 +3407,19 @@ top: 0;
     background-color: #E2E2E2;
     border: none;
     height: 1px;
-    width: 100%;
+    // width: 100%;
+    width: calc(100% - 40px * 2);
+    align-self: center;
     margin: 0;
   }
 
   &__content {
-    @include flex-direction($gap: 24px);  
+    @include flex-direction($gap: 24px);
+
+    & {
+      height: 100%;
+      overflow: hidden;
+    }
   }
 
   &__nav-wrapper {
@@ -3420,8 +3436,9 @@ top: 0;
       flex-basis: 0;
       flex-grow: 1;
 
-      max-height: 60dvh;
+      // max-height: 60dvh;
       overflow-y: auto;
+      overflow-x: hidden;
     }
   }
 
@@ -3445,13 +3462,16 @@ top: 0;
       @include scrollbar(5px, auto, 5px, #2828287e, transparent);
 
       & {
+        padding-left: 40px;
         padding-right: 15px;
 
         flex-basis: 0;
         flex-grow: 1;
 
         max-height: 60dvh;
+        max-width: 300px;
         overflow-y: auto;
+        overflow-x: hidden;
       }
     }
 
