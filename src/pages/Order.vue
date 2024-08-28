@@ -191,26 +191,44 @@
 		<Dialog
 			v-model:visible="this.showShip"
 			header="Секретный ключ"
-			class="std-dialog"
+			class="order-dialog"
 			:style="{ width: '450px' }"
 		>
-			<div>
-				<form class="order-secret">
-					<input type="text" name="key" id="key" class="order-secret__input" />
-					<button class="dart-btn dart-btn-primary order-secret__button">Отправить</button>
-				</form>
+			<form class="order-secret">
+				<input type="text" name="key" id="key" class="order-secret__input" />
+				<button type="button" class="dart-btn dart-btn-primary order-secret__button" @click="() => {
+                    this.showShip = false;
+                    this.showShip2 = true;
+                }">Отправить</button>
+			</form>
+		</Dialog>
 
-				<div class="order-secret">
-					<h3 class="order-secret__title">Код принят</h3>
-					<img src="../assets/images/icons/check.svg" alt="" class="order-secret__img" />
-					<button class="dart-btn dart-btn-primary order-secret__button">Ок</button>
-				</div>
+		<Dialog
+			v-model:visible="this.showShip2"
+			header="Секретный ключ"
+			class="order-dialog order-dialog--no-close"
+			:style="{ width: '450px' }"
+		>
+			<div class="order-secret">
+				<h3 class="order-secret__title">Код принят</h3>
+				<img src="../assets/images/icons/check.svg" alt="" class="order-secret__img" />
+				<button class="dart-btn dart-btn-primary order-secret__button" @click="() => {
+                    this.showShip2 = false;
+                    this.showShip3 = true;
+                }">Ок</button>
+			</div>
+		</Dialog>
 
-				<div class="order-secret">
-					<h3 class="order-secret__title">Код не принят</h3>
-					<img src="../assets/images/icons/not-check.svg" alt="" class="order-secret__img" />
-					<button class="dart-btn dart-btn-primary order-secret__button">Ок</button>
-				</div>
+		<Dialog
+			v-model:visible="this.showShip3"
+			header="Секретный ключ"
+			class="order-dialog order-dialog--no-close"
+			:style="{ width: '450px' }"
+		>
+			<div class="order-secret">
+				<h3 class="order-secret__title">Код не принят</h3>
+				<img src="../assets/images/icons/not-check.svg" alt="" class="order-secret__img" />
+				<button class="dart-btn dart-btn-primary order-secret__button" @click="this.showShip3 = false">Ок</button>
 			</div>
 		</Dialog>
 	</section>
@@ -219,6 +237,7 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import Dropdown from "primevue/dropdown";
+import Dialog from "primevue/dialog";
 
 export default {
 	data() {
@@ -235,6 +254,8 @@ export default {
 			stores_list: [],
 
 			showShip: false,
+            showShip2: false,
+            showShip3: false,
 		};
 	},
 	methods: {
@@ -276,7 +297,7 @@ export default {
 	computed: {
 		...mapGetters(["dilers", "org_stores"]),
 	},
-	components: { Dropdown },
+	components: { Dropdown, Dialog },
 	watch: {
 		dilers: function (newVal, oldVal) {
 			if (typeof newVal === "object") {

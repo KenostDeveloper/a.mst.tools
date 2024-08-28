@@ -152,7 +152,7 @@ export default {
       const linkparams = {}
       if (this.cell_data.type === 'link') {
         for (const key in this.cell_data.link_params) {
-          if (this.cell_data.link_params[key] !== 'id' && this.cell_data.link_params[key] !== 'store_id') {
+          if (this.cell_data.link_params[key] !== 'id' && this.cell_data.link_params[key] !== 'store_id' && this.cell_data.link_params[key] !== 'vendor_id') {
             linkparams[key] = this.cell_data.link_params[key]
           }
           else {

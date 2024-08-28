@@ -1,9 +1,15 @@
 <template>
   <div class="copo">
-    <div class="to__up">
+    <div class="to__up" v-if="$route.params.store_id">
+      <router-link class="link-back" :to="{ name: 'store', params: { id: $route.params.id, store_id: $route.params.store_id } }">
+        <mdicon name="arrow-left" />
+        <span>Назад к брендам</span>
+      </router-link>
+    </div>
+    <div class="to__up" v-else>
       <router-link class="link-back" :to="{ name: 'stores', params: { id: $route.params.id } }">
         <mdicon name="arrow-left" />
-        <span>Назад к товарам</span>
+        <span>Назад к брендам</span>
       </router-link>
     </div>
     <div class="products">
@@ -81,7 +87,7 @@ export default {
           link_to: 'report_copo_details',
           link_params: {
             id: this.$route.params.id,
-            brand_id: 'id'
+            brand_id: 'vendor_id'
           },
           sort: true
         },
