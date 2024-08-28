@@ -3150,7 +3150,6 @@ top: 0;
 
 .std-catalog {
   @include flex-direction(column, 24px);
-  @include scrollbar(5px, auto, 5px, #282828, transparent);
 
   background-color: white;
 
@@ -3166,9 +3165,7 @@ top: 0;
   opacity: 0;
   transition-duration: .3s;
 
-  max-height: 85dvh;
-  overflow-x: hidden;
-  overflow-y: auto;
+  max-height: 80dvh;
 
   &--active {
     visibility: visible;
@@ -3323,6 +3320,7 @@ top: 0;
   }
 
   &__nav-wrapper {
+    @include scrollbar(5px, auto, 5px, #2828287e, transparent);
     @include flex-direction($gap: 25px);
     @include border;
 
@@ -3333,6 +3331,9 @@ top: 0;
 
     flex-basis: 0;
     flex-grow: 1;
+
+    max-height: 60dvh;
+    overflow-y: auto;
   }
 
   &__nav-container {
@@ -3349,8 +3350,14 @@ top: 0;
     max-width: 260px;
 
     &--primary {
+      @include scrollbar(5px, auto, 5px, #2828287e, transparent);
+      padding-right: 15px;
+
       flex-basis: 0;
       flex-grow: 1;
+
+      max-height: 60dvh;
+      overflow-y: auto;
     }
 
     &--secondary,
@@ -3360,14 +3367,12 @@ top: 0;
     }
 
     &--thirdy {
-      justify-content: flex-end;
     }
   }
 
   &__img {
     width: 40% !important;
     object-fit: contain;
-    align-self: flex-end;
   }
 }
 
