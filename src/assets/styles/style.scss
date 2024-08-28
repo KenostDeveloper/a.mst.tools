@@ -1504,6 +1504,7 @@ img {
 		position: relative;
 		display: block;
 		text-decoration: none;
+    border-left: 4px solid transparent;
 
 		&:hover,
         &.router-link-active{
@@ -3691,3 +3692,30 @@ top: 0;
 }
 
 // ----------------
+
+.p-fileupload-buttonbar{
+  padding: 0 !important;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+
+  &:hover{
+    opacity: 0.7;
+
+    .org-upload-i{
+      opacity: 1;
+    }
+  }
+}
+
+.org-upload-i{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 40px !important;
+  color: #FFF;
+  opacity: 0;
+  transition: all 0.2s;
+  pointer-events: none;
+}

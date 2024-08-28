@@ -42,21 +42,12 @@
               </template>
             </DropZone>
             <div class="avatar-org" v-if="this.orgprofile.image">
-              <FileUpload name="demo[]" url="/api/upload" @upload="onTemplatedUpload($event)" :multiple="true" accept="image/*" :maxFileSize="1000000" @select="onSelectedFiles">
+              <FileUpload name="demo[]" url="/rest/file_upload.php?upload_org_avatar=avatar" @upload="onTemplatedUpload($event)" :multiple="false" accept="image/*" :maxFileSize="1000000" @select="onSelectedFiles">
                 <template #header="{ chooseCallback, uploadCallback, clearCallback, files }">
-                    <div class="flex flex-wrap justify-content-between align-items-center flex-1 gap-2">
-                        <div class="flex gap-2">
-                            <Button @click="chooseCallback()" icon="pi pi-images" rounded outlined></Button>
-                            <Button @click="uploadEvent(uploadCallback)" icon="pi pi-cloud-upload" rounded outlined severity="success" :disabled="!files || files.length === 0"></Button>
-                            <Button @click="clearCallback()" icon="pi pi-times" rounded outlined severity="danger" :disabled="!files || files.length === 0"></Button>
-                        </div>
-                        <ProgressBar :value="totalSizePercent" :showValue="false" :class="['md:w-20rem h-1rem w-full md:ml-auto', { 'exceeded-progress-bar': totalSizePercent > 100 }]"
-                            ><span class="white-space-nowrap">{{ totalSize }}B / 1Mb</span></ProgressBar
-                        >
-                    </div>
+                  <img @click="chooseCallback()" :src="orgprofile.upload_image? this.orgprofile.image.original_href : this.orgprofile.image" alt="">
+                  <i class="pi pi-upload org-upload-i"></i>
                 </template>
                 </FileUpload>
-              <img :src="orgprofile.upload_image? this.orgprofile.image.original_href : this.orgprofile.image" alt="">
             </div>
           </div>
           <div class="dart-form-group mb-4">
