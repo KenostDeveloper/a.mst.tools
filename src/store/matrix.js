@@ -1088,6 +1088,7 @@ export default {
         method: 'POST',
         data: {
           id: router.currentRoute._value.params.id,
+          store_id: router.currentRoute._value.params.store_id,
           type: 'report_copo',
           filter: filter,
           filtersdata: filtersdata,
