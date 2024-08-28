@@ -27,6 +27,7 @@ import ProfileVendors from '../pages/ProfileVendors.vue'
 import MyOrders from '../pages/MyOrders.vue'
 import MyOrder from '../pages/MyOrder.vue'
 import ProfileStatistics from '../pages/ProfileStatistics.vue'
+import RetailOrders from "../pages/RetailOrders.vue";
 
 const routes = [
   {
@@ -286,6 +287,11 @@ const routes = [
                     path: 'clients',
                     name: 'clients',
                     component: ProfileClients
+                  },
+                  {
+                    path: 'retail_orders',
+                    name: 'retail_orders',
+                    component: RetailOrders
                   }
                 ],
               },
