@@ -31,6 +31,7 @@ import ProfileStoreStatistics from '../pages/ProfileStoreStatistics.vue'
 import ProfileDiscounts from '../pages/ProfileDiscounts.vue'
 import RetailOrders from "../pages/RetailOrders.vue"
 import Order from "../pages/Order.vue";
+import ProfileClientStatistics from '../pages/ProfileClientStatistics.vue'
 
 const routes = [
   {
@@ -302,8 +303,17 @@ const routes = [
                   },
                   {
                     path: 'clients',
-                    name: 'clients',
-                    component: ProfileClients
+                    children: [{
+                      path: '',
+                      name: 'clients',
+                      component: ProfileClients
+                    },
+                    {
+                      path: ':client_id',
+                      name: 'client_id',
+                      component: ProfileClientStatistics
+                    }
+                    ]
                   },
                   {
                     path: 'retail_orders',
