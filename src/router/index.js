@@ -31,6 +31,7 @@ import ProfileStoreStatistics from '../pages/ProfileStoreStatistics.vue'
 import ProfileDiscounts from '../pages/ProfileDiscounts.vue'
 import RetailOrders from "../pages/RetailOrders.vue"
 import Order from "../pages/Order.vue";
+import Balance from "../pages/store/balance.vue";
 
 const routes = [
   {
@@ -314,6 +315,11 @@ const routes = [
                     path: 'order',
                     name: 'order',
                     component: Order
+                  },
+                  {
+                    path: 'balance',
+                    name: 'org_balance',
+                    component: Balance
                   }
                 ],
               },
