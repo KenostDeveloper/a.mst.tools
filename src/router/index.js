@@ -333,16 +333,6 @@ const routes = [
                     ]
                   },
                   {
-                    path: 'retail_orders',
-                    name: 'retail_orders',
-                    component: RetailOrders
-                  },
-                  {
-                    path: 'order',
-                    name: 'order',
-                    component: Order
-                  },
-                  {
                     path: 'balance',
                     name: 'org_balance',
                     component: Balance
