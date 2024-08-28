@@ -2381,6 +2381,11 @@ p {
 	$bg-thumb-color: #edf2fa,
 	$bg-track-color: transparent
 ) {
+  & {
+    scrollbar-width: $width;
+    scrollbar-color: $bg-thumb-color $bg-track-color;
+  }
+
   &::-webkit-scrollbar {
       width: $width;
       height: $height;
