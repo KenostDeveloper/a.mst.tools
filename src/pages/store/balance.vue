@@ -285,7 +285,7 @@ export default {
 		},
 		async formSubmit(event) {
 			// const result = await this.v$.$validate();
-			const result = !isNaN(this.costEntered);
+			const result = !isNaN(this.costEntered) && this.costEntered > 0;
 
 			if (!result) {
 				console.log(result);
