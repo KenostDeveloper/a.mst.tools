@@ -3391,6 +3391,7 @@ top: 0;
     & {
       background: #6CA632 !important;
       margin: 0 !important;
+      width: 100% !important;
     }
   }
 
@@ -3423,7 +3424,15 @@ top: 0;
     }
   }
 
+  .basket-container {
+    & {
+      padding-block: 0 !important;
+    }
+  }
+
   &__footer {
+    margin-top: 18px;
+
     .basket-container__adres,
     .button-basket {
       margin-inline: 15px !important;

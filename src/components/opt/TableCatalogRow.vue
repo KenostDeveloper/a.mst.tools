@@ -261,7 +261,7 @@
   </tbody> -->
   <Dialog v-model:visible="this.modal_remain" header=" " :style="{ width: '340px' }">
       <div class="kenost-not-produc">
-          <img src="../../../public/img/opt/not-products.png" alt="">
+          <!-- <img src="../../../public/img/opt/not-products.png" alt=""> -->
           <b>У нас нет столько товаров :(</b>
           <p>Извините, но количество данного товара ограничено</p>
           <div class="a-dart-btn a-dart-btn-primary" @click="this.modal_remain = false">Понятно</div>

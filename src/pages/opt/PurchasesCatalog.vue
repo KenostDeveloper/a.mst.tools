@@ -42,7 +42,7 @@
       </div>
     </div>
     <div class="not-vendors" v-else>
-      <img src="../../assets/img/not-vendors.png" alt="">
+      <!-- <img src="../../assets/img/not-vendors.png" alt=""> -->
       <p>Пожалуйста, выберите хотя-бы 1 поставщика!</p>
       <div class="a-dart-btn a-dart-btn-primary" @click="changeActive" >Выбрать</div>
     </div>

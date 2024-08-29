@@ -15,20 +15,21 @@
 				<div class="std-basket__info-container">
 					<div class="basket-container__adres">
 						<!-- {{ store.name }} -->
+                        ООО «МСТ», г. Химки, ул. Ленинградская, д. 29
 					</div>
 					<button
 						v-if="this.basket"
 						@click="clearBasket"
 						class="basketClear std-basket__clear-button"
 					>
-						Очистить
+						Очистить корзину
 						<i class="pi pi-times"></i>
 					</button>
 				</div>
 			</div>
 			<div className="basket-empty" v-if="!this.basket">
 				<div className="basket-empty__content">
-					<img src="../../../public/img/opt/basket.svg" alt="" />
+					<!-- <img src="../../../public/img/opt/basket.svg" alt="" /> -->
 					<h3>В вашей корзине пока пусто</h3>
 				</div>
 			</div>
@@ -207,7 +208,7 @@
 	</div>
 	<Dialog v-model:visible="this.modal_remain" header=" " :style="{ width: '340px' }">
 		<div class="kenost-not-produc">
-			<img src="../../../public/img/opt/not-products.png" alt="" />
+			<!-- <img src="../../../public/img/opt/not-products.png" alt="" /> -->
 			<b>У нас нет столько товаров :(</b>
 			<p>Извините, но количество данного товара ограничено</p>
 			<div class="a-dart-btn a-dart-btn-primary" @click="this.modal_remain = false">Понятно</div>

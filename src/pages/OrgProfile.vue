@@ -81,7 +81,7 @@
                 </div>
                 <div class="flex justify-between align-items-center w-full">
                   <div class="flex align-items-center">
-                    <img src="../assets/img/icons/cheked.svg" alt="" v-if="requisit.marketplace == '1'">
+                    <!-- <img src="../assets/img/icons/cheked.svg" alt="" v-if="requisit.marketplace == '1'"> -->
                     <label :for="'create-page-action' + index" class="ml-2 mb-0" v-if="requisit.marketplace == '1'"> Реквизиты для маркетплейса </label>
                   </div>
                   <div>

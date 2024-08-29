@@ -16,13 +16,13 @@
             </div>
             <div class="k-order__orders" v-if="order">
                 <p>В ближайшее время с Вами свяжутся наши менеджеры.</p>
-                <img v-if="order" class="k-order-img" src="../../assets/img/order.png" alt="">
+                <!-- <img v-if="order" class="k-order-img" src="../../assets/img/order.png" alt=""> -->
             </div>
             <div class="k-order__orders" v-else>
                 <div class="k-order__order" v-for="store in this.basket?.stores" v-bind:key="store.id">
                     <h3>Заказ у поставщика «{{store.name}}»</h3>
                     <div class="k-order__shop">
-                        <img src="../../assets/img/ava.png" alt="">
+                        <!-- <img src="../../assets/img/ava.png" alt=""> -->
                         <p :style="{'background': store.color}">{{store.address}}</p>
                     </div>
                     <div class="k-order__product" v-for="product in store.products" v-bind:key="product.id">
