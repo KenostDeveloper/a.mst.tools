@@ -43,7 +43,10 @@
 						<!-- <p class="client-card__address">Базовая скидка: {{ item.base_sale }}%</p> -->
 					</div>
 				</div>
-				<button class="dart-btn dart-btn-primary client-card__button">Посмотреть остатки</button>
+				<router-link :to="{ name: 'client_id', params: { id: $route.params.id, client_id: item.id } }" class="link-no-style">
+                    <button class="dart-btn dart-btn-primary client-card__button">Посмотреть остатки</button>
+                </router-link>
+				
 			</article>
 		</div>
 	</section>

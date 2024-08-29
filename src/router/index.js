@@ -31,6 +31,8 @@ import ProfileStoreStatistics from '../pages/ProfileStoreStatistics.vue'
 import ProfileDiscounts from '../pages/ProfileDiscounts.vue'
 import RetailOrders from "../pages/RetailOrders.vue"
 import Order from "../pages/Order.vue";
+import Balance from "../pages/store/balance.vue";
+import ProfileClientStatistics from '../pages/ProfileClientStatistics.vue'
 
 const routes = [
   {
@@ -280,18 +282,34 @@ const routes = [
                   },
                   {
                     path: 'orders',
-                    children: [{
-                      path: 'my',
-                      children: [{
-                        path: '',
-                        name: 'my_orders',
-                        component: MyOrders
+                    children: [
+                      {
+                        path: "",
+                        children: [
+                          {
+                            path: "",
+                            name: 'retail_orders',
+                            component: RetailOrders
+                          },
+                          {
+                            path: ':order_id',
+                            name: 'retail_orders_id',
+                            component: Order
+                          }
+                        ]
                       },
                       {
-                        path: ':order_id',
-                        name: 'my_orders_id',
-                        component: MyOrder
-                      }]
+                        path: 'my',
+                        children: [{
+                          path: '',
+                          name: 'my_orders',
+                          component: MyOrders
+                        },
+                        {
+                          path: ':order_id',
+                          name: 'my_orders_id',
+                          component: MyOrder
+                        }]
                     }]
                     
                   },
@@ -302,18 +320,22 @@ const routes = [
                   },
                   {
                     path: 'clients',
-                    name: 'clients',
-                    component: ProfileClients
+                    children: [{
+                      path: '',
+                      name: 'clients',
+                      component: ProfileClients
+                    },
+                    {
+                      path: ':client_id',
+                      name: 'client_id',
+                      component: ProfileClientStatistics
+                    }
+                    ]
                   },
                   {
-                    path: 'retail_orders',
-                    name: 'retail_orders',
-                    component: RetailOrders
-                  },
-                  {
-                    path: 'order',
-                    name: 'order',
-                    component: Order
+                    path: 'balance',
+                    name: 'org_balance',
+                    component: Balance
                   }
                 ],
               },
