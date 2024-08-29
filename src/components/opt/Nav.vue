@@ -1,17 +1,16 @@
 <template>
-	<div class="navmain std-nav">
+	<div class="navmain std-nav" @mouseleave="() => toggleCatalogVisibility(false)">
 		<!-- Каталог -->
 		<div
 			:class="`std-catalog ${catalogIsOpened ? 'std-catalog--active' : ''}`"
 			@mouseenter="() => toggleCatalogVisibility(true)"
-			@mouseleave="() => toggleCatalogVisibility(false)"
 		>
 			<div class="std-catalog__tabs">
 				<button
 					:class="`std-catalog__tab-item std-tab-item ${
-						this.orgOrCatalog === 'org' ? 'std-tab-item--active' : ''
+						this.organizationsOrCategories === 'organizations' ? 'std-tab-item--active' : ''
 					}`"
-					@click="setOrgOrCatalog('org')"
+					@click="setOrganizationsOrCategories('organizations')"
 				>
 					<div class="std-tab-item__img-container">
 						<img src="../../assets/images/icons/org-catalog.svg" alt="" />
@@ -20,12 +19,12 @@
 				</button>
 				<button
 					:class="`std-catalog__tab-item std-tab-item ${
-						this.orgOrCatalog === 'catalog' ? 'std-tab-item--active' : ''
+						this.organizationsOrCategories === 'categories' ? 'std-tab-item--active' : ''
 					}`"
-					@click="setOrgOrCatalog('catalog')"
+					@click="setOrganizationsOrCategories('categories')"
 				>
 					<div class="std-tab-item__img-container">
-						<!--  -->
+						<img src="../../assets/images/icons/category.svg" alt="" />
 					</div>
 					<span class="std-tab-item__text">Категории</span>
 				</button>
@@ -147,7 +146,6 @@
 		<button
 			class="std-nav__button std-catalog-button"
 			@mouseenter="() => toggleCatalogVisibility(true)"
-			@mouseleave="() => toggleCatalogVisibility(false)"
 		>
 			Каталог
 			<i class="pi pi-bars std-catalog-button__icon"></i>
@@ -261,7 +259,7 @@ export default {
 			vendorModal: false,
 
 			organizations: [],
-			orgOrCatalog: "catalog",
+			organizationsOrCategories: "categories",
 			catalogIsOpened: false,
 			actualNav: {
 				secondLevel: [],
@@ -295,9 +293,9 @@ export default {
 			this.catalogIsOpened = state;
 			document.body.style.overflow = this.catalogIsOpened ? "hidden" : "auto";
 		},
-		setOrgOrCatalog(state) {
+		setOrganizationsOrCategories(state) {
 			this.actualImageSrc = "";
-			this.orgOrCatalog = state;
+			this.organizationsOrCategories = state;
 			this.actualNav.secondLevel = [];
 			this.actualNav.thirdLevel = [];
 		},

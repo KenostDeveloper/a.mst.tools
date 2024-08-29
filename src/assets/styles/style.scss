@@ -3295,6 +3295,9 @@ top: 0;
 
 // Basket
 .std-basket {
+  border: 1px solid #E2E2E2;
+  border-radius: 5px;
+  
   position: fixed;
   bottom: 15px;
   right: 40px;
@@ -3314,8 +3317,13 @@ top: 0;
     }
 
     .std-basket__expand-icon {
-      rotate: 180deg;
+      rotate: 0deg;
     }
+  }
+
+  button,
+  .btn-close {
+    cursor: pointer;
   }
 
   &:not(.std-basket--active) {
@@ -3330,6 +3338,7 @@ top: 0;
     & {
       position: relative;
       padding: 0 !important;
+      padding-bottom: 20px !important;
     }
   }
 
@@ -3340,6 +3349,7 @@ top: 0;
 
   &__header-wrapper {
     padding-bottom: 0 !important;
+    cursor: pointer;
   }
 
   &__header {
@@ -3384,6 +3394,7 @@ top: 0;
 
   &__expand-icon {
     transition-duration: .3s;
+    rotate: 180deg;
 
     &::before {
       font-size: 20px;
@@ -3437,6 +3448,11 @@ top: 0;
     margin-top: 18px;
 
     .basket-container__adres,
+    .std-basket__total-container {
+      display: none !important;
+    }
+
+    .basket-container__adres,
     .button-basket {
       margin-inline: 15px !important;
       width: calc(100% - 15px * 2) !important;
@@ -3485,6 +3501,10 @@ top: 0;
   width: auto !important;
 
   position: relative;
+
+  .kenost-vendors__list {
+    z-index: 15;
+  }
 }
 
 .std-catalog-button {
@@ -3641,7 +3661,7 @@ top: 0;
       translate: -24px 0;
       visibility: hidden;
       opacity: 0;
-      transition-duration: .3s;
+      // transition-duration: .3s;
       z-index: -1;
 
       height: 50px;
