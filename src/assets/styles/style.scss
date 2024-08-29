@@ -2347,6 +2347,18 @@ p {
 @import "./mobile.scss";
 
 // mixins
+@mixin visually-hidden {
+	position: absolute !important;
+	width: 1px !important;
+	height: 1px !important;
+	margin: -1px !important;
+	border: 0 !important;
+	padding: 0 !important;
+	white-space: nowrap !important;
+	clip-path: inset(100%) !important;
+	clip: rect(0 0 0 0) !important;
+	overflow: hidden !important;
+}
 @mixin flex-center($direction: row, $gap: 0) {
   & {
     display: flex;
@@ -3502,6 +3514,12 @@ top: 0;
 
   position: relative;
 
+  &--active {
+    box-shadow: 0 0 12px #00000040;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
   .kenost-vendors__list {
     z-index: 15;
   }
@@ -3607,8 +3625,13 @@ top: 0;
   }
 
   &--active {
+    box-shadow: 0 20px 18px #00000040;
     visibility: visible;
     opacity: 1;
+  }
+
+  &:not(.std-catalog--active) {
+    @include visually-hidden;
   }
 
   & > &__tabs {

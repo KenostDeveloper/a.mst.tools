@@ -1,5 +1,5 @@
 <template>
-	<div class="navmain std-nav" @mouseleave="() => toggleCatalogVisibility(false)">
+	<div :class="`navmain std-nav ${catalogIsOpened ? 'std-nav--active' : ''}`" @mouseleave="() => toggleCatalogVisibility(false)">
 		<!-- Каталог -->
 		<div
 			:class="`std-catalog ${catalogIsOpened ? 'std-catalog--active' : ''}`"
@@ -51,7 +51,7 @@
 						"
 						@click="toggleCatalogVisibility(false)"
 						class="std-catalog__tab-item std-tab-item std-tab-item--alt"
-						v-for="level1 in this.orgOrCatalog === 'org' ? this.organizations : this.catalog"
+						v-for="level1 in this.organizationsOrCategories === 'organizations' ? this.organizations : this.catalog"
 					>
 						<div class="std-tab-item__img-container">
 							<img

@@ -12,13 +12,12 @@
 					</button>
 				</div>
 
-				<div class="std-basket__info-container">
+				<div v-if="this.basket" class="std-basket__info-container">
 					<div class="basket-container__adres">
 						<!-- {{ store.name }} -->
                         ООО «МСТ», г. Химки, ул. Ленинградская, д. 29
 					</div>
 					<button
-						v-if="this.basket"
 						@click="clearBasket"
 						class="basketClear std-basket__clear-button"
 					>
@@ -29,11 +28,11 @@
 			</div>
 			<div className="basket-empty" v-if="!this.basket">
 				<div className="basket-empty__content">
-					<!-- <img src="../../../public/img/opt/basket.svg" alt="" /> -->
+					<img src="../../assets/images/icons/basket.svg" alt="" />
 					<h3>В вашей корзине пока пусто</h3>
 				</div>
 			</div>
-			<div class="basket-container">
+			<div v-if="this.basket" class="basket-container">
 				<div v-for="store in this.basket?.stores" v-bind:key="store.id">
 					<div class="kenost-basket" v-for="product in store.products" v-bind:key="product.id">
 						<div
@@ -192,7 +191,7 @@
                     </div> -->
 				</div>
 			</div>
-			<div class="std-basket__footer">
+			<div v-if="this.basket" class="std-basket__footer">
 				<div class="std-basket__total-container">
 					<span class="std-basket__total-label">Итого на поставщика</span>
 					<span class="std-basket__total-value">26 580 ₽</span>
