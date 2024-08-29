@@ -82,7 +82,7 @@
 							<div
 								class="std-catalog__nav std-catalog__nav--thirdy std-catalog__tabs std-catalog__tabs--vertical"
 							>
-								<router-link :to="{ name: 'purchases_catalog', params: { id: this.$route.params.id, category_id: level2.id } }" :key="level3" v-for="level3 in this.actualNav.thirdLevel" class="std-catalog__tab-item std-tab-item std-tab-item--none"
+								<router-link :to="{ name: 'purchases_catalog', params: { id: this.$route.params.id, category_id: level2?.id } }" :key="level3" v-for="level3 in this.actualNav.thirdLevel" class="std-catalog__tab-item std-tab-item std-tab-item--none"
 								@mouseenter="this.actualImageSrc = level3.menu_image || ''">
 								
 									<span class="std-tab-item__text">{{ level3.pagetitle }}</span>
