@@ -102,7 +102,7 @@
 			:style="{ width: '700px' }"
 		>
 			<v-table
-        class="order-table"
+				class="order-table"
 				:items_data="balance.items"
 				:total="balance.total"
 				:pagination_items_per_page="this.pagination_items_per_page"
@@ -160,12 +160,12 @@
 			<div class="d-col-md-6">
 				<div class="panel-widget">
 					<v-table
-						:items_data="balance.items"
-						:total="balance.total"
+						:items_data="balance_requests.items"
+						:total="balance_requests.total"
 						:pagination_items_per_page="this.pagination_items_per_page"
 						:pagination_offset="this.pagination_offset"
-						:page="this.page_balance"
-						:table_data="this.balance_table_data"
+						:page="this.page_balance_requests"
+						:table_data="this.balance_request_table_data"
 						title="История заявок"
 					>
 					</v-table>
@@ -174,12 +174,12 @@
 			<div class="d-col-md-6">
 				<div class="panel-widget">
 					<v-table
-						:items_data="balance_requests.items"
-						:total="balance_requests.total"
+						:items_data="balance.items"
+						:total="balance.total"
 						:pagination_items_per_page="this.pagination_items_per_page"
 						:pagination_offset="this.pagination_offset"
-						:page="this.page_balance_requests"
-						:table_data="this.balance_request_table_data"
+						:page="this.page_balance"
+						:table_data="this.balance_table_data"
 						title="История заказов"
 					>
 					</v-table>
@@ -290,7 +290,7 @@ export default {
 			if (!result) {
 				console.log(result);
 				return;
-			} 
+			}
 
 			this.$load(async () => {
 				this.loading = true;
@@ -298,7 +298,7 @@ export default {
 					action: "set",
 					type: "balance_request",
 					id: router.currentRoute._value.params.id,
-					value: this.costEntered
+					value: this.costEntered,
 				}).then((data) => {
 					console.log(data);
 					this.modalIsOpened = false;
@@ -343,7 +343,7 @@ export default {
 	},
 	computed: {
 		...mapGetters(["organization", "balance", "balance_requests"]),
-	}
+	},
 };
 </script>
 
