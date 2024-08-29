@@ -76,7 +76,7 @@
 				<div class="balance-form__data-container">
 					<div class="balance-form__input-container">
 						<span class="balance-form__label">Сумма для вывода</span>
-						<input type="text" class="balance-form__input" />
+						<input v-model="costEntered" type="text" class="balance-form__input" />
 					</div>
 					<div class="balance-form__input-container">
 						<span class="balance-form__label">Сумма для вывода</span>
@@ -102,7 +102,7 @@
 			:style="{ width: '700px' }"
 		>
 			<v-table
-        class="order-table"
+				class="order-table"
 				:items_data="balance.items"
 				:total="balance.total"
 				:pagination_items_per_page="this.pagination_items_per_page"
@@ -140,7 +140,7 @@
 				<div class="balance-info__button-wrapper">
 					<div class="balance-info__value-container">
 						<span class="balance-info__label">Баланс</span>
-						<span class="balance-info__value">1 000 000 ₽</span>
+						<span class="balance-info__value">{{ organization.balance }} ₽</span>
 					</div>
 
 					<hr class="balance-info__line" />
@@ -160,12 +160,12 @@
 			<div class="d-col-md-6">
 				<div class="panel-widget">
 					<v-table
-						:items_data="balance.items"
-						:total="balance.total"
+						:items_data="balance_requests.items"
+						:total="balance_requests.total"
 						:pagination_items_per_page="this.pagination_items_per_page"
 						:pagination_offset="this.pagination_offset"
-						:page="this.page_balance"
-						:table_data="this.balance_table_data"
+						:page="this.page_balance_requests"
+						:table_data="this.balance_request_table_data"
 						title="История заявок"
 					>
 					</v-table>
@@ -174,12 +174,12 @@
 			<div class="d-col-md-6">
 				<div class="panel-widget">
 					<v-table
-						:items_data="balance_requests.items"
-						:total="balance_requests.total"
+						:items_data="balance.items"
+						:total="balance.total"
 						:pagination_items_per_page="this.pagination_items_per_page"
 						:pagination_offset="this.pagination_offset"
-						:page="this.page_balance_requests"
-						:table_data="this.balance_request_table_data"
+						:page="this.page_balance"
+						:table_data="this.balance_table_data"
 						title="История заказов"
 					>
 					</v-table>
@@ -199,6 +199,7 @@ import { useVuelidate } from "@vuelidate/core";
 import { required } from "../../utils/i18n-validators";
 // import customModal from '../../components/popup/CustomModal'
 import Dialog from "primevue/dialog";
+import organization from "../../store/organization";
 
 export default {
 	name: "ProfileBalance",
@@ -223,12 +224,9 @@ export default {
 			modalIsOpened: false,
 			orderModalIsOpened: false,
 
+			costEntered: null,
+
 			loading: false,
-			form: {
-				name: "",
-				phone: "",
-				description: "",
-			},
 			show_request_modal: false,
 			page_balance: 1,
 			page_balance_requests: 1,
@@ -286,34 +284,35 @@ export default {
 			this.get_balance_requests_from_api(data);
 		},
 		async formSubmit(event) {
-			const result = await this.v$.$validate();
+			// const result = await this.v$.$validate();
+			const result = !isNaN(this.costEntered);
+
 			if (!result) {
 				console.log(result);
-			} else {
-				this.$load(async () => {
-					this.loading = true;
-					await this.set_balance_request_to_api({
-						action: "set",
-						type: "balance_request",
-						id: router.currentRoute._value.params.id,
-						form: this.form,
-					}).then((data) => {
-						console.log(data);
-						this.show_request_modal = false;
-						this.loading = false;
-						this.get_balance_requests_from_api({
-							page: 1,
-							perpage: this.pagination_items_per_page,
-						});
-						this.formReset();
-					});
-				});
+				return;
 			}
+
+			this.$load(async () => {
+				this.loading = true;
+				await this.set_balance_request_to_api({
+					action: "set",
+					type: "balance_request",
+					id: router.currentRoute._value.params.id,
+					value: this.costEntered,
+				}).then((data) => {
+					console.log(data);
+					this.modalIsOpened = false;
+					this.loading = false;
+					this.get_balance_requests_from_api({
+						page: 1,
+						perpage: this.pagination_items_per_page,
+					});
+					this.formReset();
+				});
+			});
 		},
 		formReset() {
-			this.form.name = "";
-			this.form.phone = "";
-			this.form.description = "";
+			this.costEntered = null;
 		},
 	},
 	mounted() {
@@ -339,10 +338,7 @@ export default {
 	},
 	validations() {
 		return {
-			form: {
-				name: { required },
-				phone: { required },
-			},
+			// costEntered: { required }
 		};
 	},
 	computed: {
