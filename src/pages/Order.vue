@@ -40,33 +40,33 @@
 				<div class="order-info__col">
 					<article class="order-info__row">
 						<span class="order-info__label">ФИО покупателя</span>
-						<span class="order-info__value">Иван Маркетсович Иванов</span>
+						<span class="order-info__value">{{ this.orderData.receiver }}</span>
 					</article>
 					<article class="order-info__row">
 						<span class="order-info__label">Адрес доставки</span>
 						<span class="order-info__value"
-							>г. Балашиха., Московская обл., ул. Кандебоберов д. 36., ЛИТ - 4, кв. 34.
+							>{{ this.orderData.address || '???' }}
 						</span>
 					</article>
 				</div>
 				<div class="order-info__col">
 					<article class="order-info__row">
 						<span class="order-info__label">Номер телефона</span>
-						<span class="order-info__value">+7(951) 467-43-29</span>
+						<span class="order-info__value">{{ this.orderData.customer_phone }}</span>
 					</article>
 					<article class="order-info__row">
 						<span class="order-info__label">Email</span>
-						<span class="order-info__value">Kandebober@gmail.com</span>
+						<span class="order-info__value">{{ this.orderData.customer_email }}</span>
 					</article>
 				</div>
 				<div class="order-info__col">
 					<article class="order-info__row">
 						<span class="order-info__label">Транспортная компания</span>
-						<span class="order-info__value">СДЕК</span>
+						<span class="order-info__value">{{ this.orderData.delivery_company || '???' }}</span>
 					</article>
 					<article class="order-info__row">
 						<span class="order-info__label">Тип доставки</span>
-						<span class="order-info__value">Курьер</span>
+						<span class="order-info__value">{{ this.orderData.delivery }}</span>
 					</article>
 				</div>
 			</div>
@@ -87,67 +87,27 @@
 					</tr>
 				</thead>
 				<tbody class="std-table__body">
-					<tr class="std-table__row">
+					<tr v-for="product in this.productsData" class="std-table__row">
 						<td class="std-table__col">
 							<img
-								src="https://avatars.mds.yandex.net/i?id=f483148e4bcd0673ba3af7080d8b79b6_l-9181195-images-thumbs&n=13"
-								alt=""
+								:src="'https://dev.mst.tools/' + product.image"
+								:alt="product.name"
 								class="order-structure__product-img"
 							/>
 						</td>
-						<td class="std-table__col">Измельчитель зерна 300 кг/час (ИЗЭ-14)</td>
-						<td class="std-table__col">123456787905</td>
-						<td class="std-table__col">1 шт</td>
-						<td class="std-table__col">4 060 ₽</td>
-						<td class="std-table__col">4 060 ₽</td>
-					</tr>
-					<tr class="std-table__row">
-						<td class="std-table__col">
-							<img
-								src="https://avatars.mds.yandex.net/i?id=f483148e4bcd0673ba3af7080d8b79b6_l-9181195-images-thumbs&n=13"
-								alt=""
-								class="order-structure__product-img"
-							/>
-						</td>
-						<td class="std-table__col">Измельчитель зерна 300 кг/час (ИЗЭ-14)</td>
-						<td class="std-table__col">123456787905</td>
-						<td class="std-table__col">1 шт</td>
-						<td class="std-table__col">4 060 ₽</td>
-						<td class="std-table__col">4 060 ₽</td>
-					</tr>
-					<tr class="std-table__row">
-						<td class="std-table__col">
-							<img
-								src="https://avatars.mds.yandex.net/i?id=f483148e4bcd0673ba3af7080d8b79b6_l-9181195-images-thumbs&n=13"
-								alt=""
-								class="order-structure__product-img"
-							/>
-						</td>
-						<td class="std-table__col">Измельчитель зерна 300 кг/час (ИЗЭ-14)</td>
-						<td class="std-table__col">123456787905</td>
-						<td class="std-table__col">1 шт</td>
-						<td class="std-table__col">4 060 ₽</td>
-						<td class="std-table__col">4 060 ₽</td>
-					</tr>
-					<tr class="std-table__row">
-						<td class="std-table__col">
-							<img
-								src="https://avatars.mds.yandex.net/i?id=f483148e4bcd0673ba3af7080d8b79b6_l-9181195-images-thumbs&n=13"
-								alt=""
-								class="order-structure__product-img"
-							/>
-						</td>
-						<td class="std-table__col">Измельчитель зерна 300 кг/час (ИЗЭ-14)</td>
-						<td class="std-table__col">123456787905</td>
-						<td class="std-table__col">1 шт</td>
-						<td class="std-table__col">4 060 ₽</td>
-						<td class="std-table__col">4 060 ₽</td>
+						<td class="std-table__col">{{ product.name }}</td>
+						<td class="std-table__col">{{ product.article }}</td>
+						<td class="std-table__col">{{ product.count }} шт</td>
+						<td class="std-table__col">{{ product.price }} ₽</td>
+						<td class="std-table__col">{{ product.cost }} ₽</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
 
-		<div class="order-structure order-history">
+
+		<!-- История событий -->
+		<!-- <div class="order-structure order-history">
 			<h2 class="order__title order-history__title">История событий</h2>
 
 			<table class="std-table">
@@ -186,7 +146,7 @@
 					</tr>
 				</tbody>
 			</table>
-		</div>
+		</div> -->
 
 		<Dialog
 			v-model:visible="this.showShip"
@@ -242,45 +202,34 @@ import Dialog from "primevue/dialog";
 export default {
 	data() {
 		return {
-
+			orderData: {},
+			storeData: {},
+			productsData: [],
+			
 			showShip: false,
             showShip2: false,
             showShip3: false,
 		};
 	},
 	methods: {
-		...mapActions(["get_order_from_api"])
+		...mapActions(["get_order_from_api"]),
 	},
 	mounted() {
-		this.get_order_from_api()
+		this.get_order_from_api();
 	},
 	computed: {
-		...mapGetters(["dilers", "org_stores"]),
+		...mapGetters(["order", "store", "order_products"]),
 	},
 	components: { Dropdown, Dialog },
 	watch: {
-		dilers: function (newVal, oldVal) {
-			if (typeof newVal === "object") {
-				if (Object.prototype.hasOwnProperty.call(newVal, "items")) {
-					this.stores.items = newVal.items;
-				} else {
-					this.stores.items = [];
-				}
-				if (Object.prototype.hasOwnProperty.call(newVal, "total")) {
-					this.stores.total = newVal.total;
-				} else {
-					this.stores.total = 0;
-				}
-			} else {
-				this.stores.items = [];
-				this.stores.total = 0;
-			}
+		order: function (newVal, oldVal) {
+			this.orderData = newVal;
 		},
-		org_stores: function (newVal, oldVal) {
-			this.stores_list = [];
-			for (let i = 0; i < newVal.items.length; i++) {
-				this.stores_list.push({ label: newVal.items[i].name, value: newVal.items[i].id });
-			}
+		store: function (newVal, oldVal) {
+			this.storeData = newVal;
+		},
+		order_products: function (newVal, oldVal) {
+			this.productsData = newVal;
 		},
 	},
 };
