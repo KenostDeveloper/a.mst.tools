@@ -57,141 +57,62 @@
     <td>{{Math.round(getMinPrice(items.stores)).toLocaleString('ru')}} ₽ <br> ??? дн</td>
     <td>
       <div class="table-actions">
-        <div class="table-actions__action">
-          <div class="table-actions__container">
-            <div class="table-actions__el">
-              <img src="../../assets/images/icons/action/box.svg" alt="">
-              <p>100 шт.</p>
+        <div class="table-actions__action" v-for="(action, index) in item.actions" v-bind:key="action.id">
+          <div v-if="action.tags.length > 0" class="table-actions__container">
+            <div class="table-actions__el" v-for="(tag, index) in action.tags" v-bind:key="tag.id">
+              <img v-if="tag.type == 'multiplicity'" src="../../assets/images/icons/action/box.svg" alt="">
+              <p  v-if="tag.type == 'multiplicity'">{{ tag.value }} шт.</p>
+
+              <img v-if="tag.type == 'gift'" src="../../assets/images/icons/action/gift.svg" alt="">
+
+              <img v-if="tag.type == 'delay'" src="../../assets/images/icons/action/time.svg" alt="">
+              <p  v-if="tag.type == 'delay'">От-ка {{ tag.value }} дня</p>
+
+              <img v-if="tag.type == 'sale'" src="../../assets/images/icons/action/sale.svg" alt="">
+              <p  v-if="tag.type == 'sale'">Скидка {{ Number(tag.value).toFixed(0) }}%</p>
+
+              <img v-if="tag.type == 'free_delivery'" src="../../assets/images/icons/action/delivery.svg" alt="">
+
+              <!-- TODO: Комплекты -->
             </div>
-            <div class="table-actions__el">
-              <img src="../../assets/images/icons/action/gift.svg" alt="">
-            </div>
-            <div class="table-actions__el">
-              <img src="../../assets/images/icons/action/time.svg" alt="">
-              <p>От-ка 24 дня</p>
-            </div>
-            <div class="table-actions__el">
-              <img src="../../assets/images/icons/action/delivery.svg" alt="">
-            </div>
-            <div class="table-actions__el">
+          
+            <!-- <div class="table-actions__el">
               <img src="../../assets/images/icons/action/complect.svg" alt="">
               <p>Компл-т</p>
-            </div>
-            <div class="table-actions__el">
-              <img src="../../assets/images/icons/action/sale.svg" alt="">
-            </div>
+            </div> -->
           </div>
-          <div class="table-actions__help">
+          <div v-if="action.tags.length > 0" class="table-actions__help">
             <p>?</p>
             <div class="table-actions__content">
               <div class="table-actions__modal">
                 <div class="table-actions__modal-elems">
-                  <div class="table-actions__modal-el">
-                    <img src="../../assets/images/icons/action/complect.svg" alt="">
-                    <p>Минимальна сумма покупки 100 000 ₽</p>
-                  </div>
-                  <div class="table-actions__modal-el">
-                    <img src="../../assets/images/icons/action/complect.svg" alt="">
-                    <p>Минимальна сумма покупки 100 000 ₽</p>
-                  </div>
-                  <div class="table-actions__modal-el">
-                    <img src="../../assets/images/icons/action/complect.svg" alt="">
-                    <p>Минимальна сумма покупки 100 000 ₽</p>
-                  </div>
-                  <div class="table-actions__modal-el">
-                    <img src="../../assets/images/icons/action/complect.svg" alt="">
-                    <p>Минимальна сумма покупки 100 000 ₽</p>
+                  <div class="table-actions__modal-el" v-for="(tag, index) in action.tags" v-bind:key="tag.id">
+                    <img v-if="tag.type == 'min_sum'" src="../../assets/images/icons/action/basket.svg" alt="">
+                    <p v-if="tag.type == 'min_sum'">Минимальна сумма покупки {{ Number(tag.value).toLocaleString('ru') }} ₽</p>
+
+                    <img v-if="tag.type == 'free_delivery'" src="../../assets/images/icons/action/delivery.svg" alt="">
+                    <p v-if="tag.type == 'free_delivery'"><span>Бесплатная доставка</span> <span v-if="tag.condition == '2'"> при покупке от {{ (tag.value).toLocaleString('ru') }} ₽</span> <span v-if="tag.condition == '3'"> при покупке от {{ (tag.value).toLocaleString('ru') }} шт.</span></p>
+
+                    <img v-if="tag.type == 'gift'" src="../../assets/images/icons/action/gift.svg" alt="">
+                    <p v-if="tag.type == 'gift'">Подарок</p>
+
+                    <img v-if="tag.type == 'delay'" src="../../assets/images/icons/action/gift.svg" alt="">
+                    <p v-if="tag.type == 'delay'">Отсрочка {{ tag.value }} дня</p>
+
+                    <img v-if="tag.type == 'multiplicity'" src="../../assets/images/icons/action/box.svg" alt="">
+                    <p v-if="tag.type == 'multiplicity'">Краткость упаковки {{ (tag.value).toLocaleString('ru') }} шт.</p>
+
+                    <img v-if="tag.type == 'sale'" src="../../assets/images/icons/action/sale.svg" alt="">
+                    <p v-if="tag.type == 'sale'">Скидка {{ (tag.value).toLocaleString('ru') }}%</p>
                   </div>
                 </div>
                 <div class="table-actions__modal-btn-container">
-                  <div class="table-actions__modal-btn">Подробнее об акциях</div>
+                  <div class="table-actions__modal-btn">Подробнее об акции</div>
                 </div>
               </div>
             </div>
           </div>
           
-        </div>
-        <div class="table-actions__action">
-          <div class="table-actions__container">
-            <div class="table-actions__el">
-              <img src="../../assets/images/icons/action/box.svg" alt="">
-              <p>100 шт.</p>
-            </div>
-            <div class="table-actions__el">
-              <img src="../../assets/images/icons/action/gift.svg" alt="">
-            </div>
-            <div class="table-actions__el">
-              <img src="../../assets/images/icons/action/time.svg" alt="">
-              <p>От-ка 24 дня</p>
-            </div>
-          </div>
-          <div class="table-actions__help">
-            <p>?</p>
-            <div class="table-actions__content">
-              <div class="table-actions__modal">
-                <div class="table-actions__modal-elems">
-                  <div class="table-actions__modal-el">
-                    <img src="../../assets/images/icons/action/complect.svg" alt="">
-                    <p>Минимальна сумма покупки 100 000 ₽</p>
-                  </div>
-                  <div class="table-actions__modal-el">
-                    <img src="../../assets/images/icons/action/complect.svg" alt="">
-                    <p>Минимальна сумма покупки 100 000 ₽</p>
-                  </div>
-                  <div class="table-actions__modal-el">
-                    <img src="../../assets/images/icons/action/complect.svg" alt="">
-                    <p>Минимальна сумма покупки 100 000 ₽</p>
-                  </div>
-                  <div class="table-actions__modal-el">
-                    <img src="../../assets/images/icons/action/complect.svg" alt="">
-                    <p>Минимальна сумма покупки 100 000 ₽</p>
-                  </div>
-                </div>
-                <div class="table-actions__modal-btn-container">
-                  <div class="table-actions__modal-btn">Подробнее об акциях</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="table-actions__action">
-          <div class="table-actions__container">
-            <div class="table-actions__el">
-              <img src="../../assets/images/icons/action/box.svg" alt="">
-              <p>100 шт.</p>
-            </div>
-            <div class="table-actions__el">
-              <img src="../../assets/images/icons/action/gift.svg" alt="">
-            </div>
-          </div>
-          <div class="table-actions__help">
-            <p>?</p>
-            <div class="table-actions__content">
-              <div class="table-actions__modal">
-                <div class="table-actions__modal-elems">
-                  <div class="table-actions__modal-el">
-                    <img src="../../assets/images/icons/action/complect.svg" alt="">
-                    <p>Минимальна сумма покупки 100 000 ₽</p>
-                  </div>
-                  <div class="table-actions__modal-el">
-                    <img src="../../assets/images/icons/action/complect.svg" alt="">
-                    <p>Минимальна сумма покупки 100 000 ₽</p>
-                  </div>
-                  <div class="table-actions__modal-el">
-                    <img src="../../assets/images/icons/action/complect.svg" alt="">
-                    <p>Минимальна сумма покупки 100 000 ₽</p>
-                  </div>
-                  <div class="table-actions__modal-el">
-                    <img src="../../assets/images/icons/action/complect.svg" alt="">
-                    <p>Минимальна сумма покупки 100 000 ₽</p>
-                  </div>
-                </div>
-                <div class="table-actions__modal-btn-container">
-                  <div class="table-actions__modal-btn">Подробнее об акциях</div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </td>

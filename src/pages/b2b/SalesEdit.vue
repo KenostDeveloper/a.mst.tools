@@ -250,7 +250,7 @@
                       <p>Минимальная общая сумма</p>
                       <InputNumber
                         v-model="this.form.conditionMinSum"
-                        inputId="horizontal-buttons"
+                        inputId="horizontal-buttons-sum"
                         :step="0.1"
                         min="0"
                         incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"
