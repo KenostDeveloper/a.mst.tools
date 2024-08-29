@@ -476,7 +476,10 @@
 
   &__button {
     @include flex-center;
-    font-size: 15px;
+
+    & {
+      font-size: 15px;
+    }
   }
 }
 
@@ -512,7 +515,10 @@
 
       &__item {
         @include flex-direction(column, 6px);
-        max-width: 285px;
+
+        & {
+          max-width: 285px;
+        }
 
         &:first-child {
           max-width: 150px;
@@ -541,9 +547,11 @@
         @include flex-direction(column, 4px);
         @include border;
 
-        border-color: #B7B7B7;
-        width: 290px;
-        padding: 24px 18px;
+        & {
+          border-color: #B7B7B7;
+          width: 290px;
+          padding: 24px 18px;
+        }
       }
 
       &__value-container {
