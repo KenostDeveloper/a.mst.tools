@@ -3309,12 +3309,18 @@ top: 0;
   &--active {
     max-height: 75dvh !important;
 
-    .std-basket__header {
-      min-height: 0;
+    .std-basket__header-wrapper {
+      height: auto;
     }
 
     .std-basket__expand-icon {
       rotate: 180deg;
+    }
+  }
+
+  &:not(.std-basket--active) {
+    .std-basket__header-wrapper {
+      height: 64px;
     }
   }
 
@@ -3341,10 +3347,7 @@ top: 0;
 
     & {
       border-bottom: 1px solid #ADADAD;
-
-      min-height: 64px;
       padding-bottom: 20px;
-
       transition-duration: .3s;
     }
   }
