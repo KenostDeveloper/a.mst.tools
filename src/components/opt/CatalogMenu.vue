@@ -254,7 +254,10 @@ export default {
                 li{
                     list-style: none;
                 }
-                padding-left: 50px;
+
+                & {
+                    padding-left: 50px;
+                }
             }
         }
 

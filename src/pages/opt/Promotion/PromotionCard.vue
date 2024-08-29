@@ -4,10 +4,16 @@
     <div class="card__content promotion-card__content">
       <p class="card__text promotion-card__text">{{ text }}</p>
       <div class="card__img-container promotion-card__img-container">
-        <img
+        <!-- <img
           v-for="image in getImages"
           :key="image"
           src="../../../assets/img/gallery/1.jpg"
+          alt=""
+          class="card__img promotion-card__img"
+        /> -->
+        <img
+          v-for="image in getImages"
+          :key="image"
           alt=""
           class="card__img promotion-card__img"
         />

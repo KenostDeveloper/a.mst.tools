@@ -286,15 +286,41 @@
     }
 
     &__text-container {
-      @include flex($justify: space-between, $gap: 25px);
+      // @include flex($justify: space-between, $gap: 25px);
+      display: grid;
+      grid-template: auto / repeat(3, 1fr);
+      gap: 24px;
     }
 
-    &__col {
-      @include flex-direction(column, 24px);
-    }
+    // &__col {
+    //   @include flex-direction(column, 24px);
+    // }
 
     &__row {
       @include flex-direction($gap: 24px);
+
+      &:nth-child(odd) {
+        grid-row-start: 1;
+      }
+
+      &:nth-child(even) {
+        grid-row-start: 2;
+      }
+
+      &:nth-child(1),
+      &:nth-child(2) {
+        grid-column-start: 1;
+      }
+
+      &:nth-child(3),
+      &:nth-child(4) {
+        grid-column-start: 2;
+      }
+
+      &:nth-child(5),
+      &:nth-child(6) {
+        grid-column-start: 3;
+      }
     }
 
     &__label,
@@ -586,13 +612,15 @@
       &__button {
         @include flex-center;
 
-        background-color: #FF0000;
-        color: white;
-        font-size: 14px;
-        font-weight: 500;
+        & {
+          background-color: #FF0000;
+          color: white;
+          font-size: 14px;
+          font-weight: 500;
 
-        height: 35px;
-        margin-top: 20px;
+          height: 35px;
+          margin-top: 20px;
+        }
       }
     }
   }
@@ -642,7 +670,10 @@
 
   &__modal {
     @include flex-direction(column, 25px);
-    padding: 40px;
+
+    & {
+      padding: 40px;
+    }
 
     .p-dialog-header,
     .p-dialog-content {
@@ -677,9 +708,11 @@
   &__input {
     @include border;
     
-    background-color: #F2F2F2;
-    border-color: #E2E2E2;
-    color: #ADADAD;
+    & { 
+      background-color: #F2F2F2;
+      border-color: #E2E2E2;
+      color: #ADADAD;
+    }
   }
 
   &__value {
@@ -693,7 +726,10 @@
 
   &__button {
     @include flex-center;
-    height: 44px;
+
+    & {
+      height: 44px;
+    }
   }
 }
 

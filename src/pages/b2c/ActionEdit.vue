@@ -90,7 +90,7 @@
                       <span class="ktitle">Правила акции</span>
                       <p class="kgraytext">Загрузите файл с подробными правилами акции</p>
                       <a target="_blank" :href="files?.file?.original_href" class="kenost-add-file" v-if="files?.file?.original_href">
-                          <img src="../../../public/img/files/pdf.png" alt="">
+                          <!-- <img src="../../../public/img/files/pdf.png" alt=""> -->
                           <p>{{files?.file?.name? files?.file?.name : "Файл загружен!"}}</p>
                       </a>
                   </div>
@@ -220,7 +220,7 @@
 
             <div class="kenost-upload-xlsx" v-if="this.upload_product">
               <div class="kenost-upload-xlsx__file">
-                <img src="../../../public/img/files/xls.png" alt="">
+                <!-- <img src="../../../public/img/files/xls.png" alt=""> -->
                 <a targer="_blank" :href="files?.xlsx?.original_href">{{ files?.xlsx?.name }}</a>
               </div>
               <div class="kenost-upload-xlsx__info">

@@ -14,7 +14,7 @@
 					@click="setOrgOrCatalog('org')"
 				>
 					<div class="std-tab-item__img-container">
-						<img src="../../assets/images/icons/org-catalog.svg" alt="">
+						<img src="../../assets/images/icons/org-catalog.svg" alt="" />
 					</div>
 					<span class="std-tab-item__text">Каталоги поставщиков</span>
 				</button>
@@ -37,14 +37,28 @@
 				<div
 					class="std-catalog__nav std-catalog__nav--primary std-catalog__tabs std-catalog__tabs--vertical"
 				>
-					<router-link :to="{ name: 'purchases_catalog', params: { id: this.$route.params.id, category_id: level1.id } }" :key="level1" @mouseenter="() => {
-							this.actualNav.secondLevel = level1.children
-							this.actualNav.thirdLevel = []
-							this.actualImageSrc = ''
-						}" class="std-catalog__tab-item std-tab-item std-tab-item--alt" v-for="level1 in this.orgOrCatalog === 'org' ? this.organizations : this.catalog">
-					
+					<router-link
+						:to="{
+							name: 'purchases_catalog',
+							params: { id: this.$route.params.id, category_id: level1.id },
+						}"
+						:key="level1"
+						@mouseenter="
+							() => {
+								this.actualNav.secondLevel = level1.children;
+								this.actualNav.thirdLevel = [];
+								this.actualImageSrc = '';
+							}
+						"
+						@click="toggleCatalogVisibility(false)"
+						class="std-catalog__tab-item std-tab-item std-tab-item--alt"
+						v-for="level1 in this.orgOrCatalog === 'org' ? this.organizations : this.catalog"
+					>
 						<div class="std-tab-item__img-container">
-							<img :src="level1.image || level1.menu_image" :alt="level1.name || level1.pagetitle" />
+							<img
+								:src="level1.image || level1.menu_image"
+								:alt="level1.name || level1.pagetitle"
+							/>
 						</div>
 						<span class="std-tab-item__text">{{ level1.name || level1.pagetitle }}</span>
 						<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
@@ -56,14 +70,25 @@
 							<div
 								class="std-catalog__nav std-catalog__nav--secondary std-catalog__tabs std-catalog__tabs--vertical"
 							>
-							<router-link :to="{ name: 'purchases_catalog', params: { id: this.$route.params.id, category_id: level2.id } }" :key="level2" @mouseenter="() => {
-									this.actualNav.thirdLevel = level2.children;
-									this.actualImageSrc = level2.menu_image || '';
-								}" class="std-catalog__tab-item std-tab-item std-tab-item--alt2" v-for="level2 in this.actualNav.secondLevel">
-							
-								<span class="std-tab-item__text">{{ level2.pagetitle }}</span>
-								<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
-							</router-link>
+								<router-link
+									:to="{
+										name: 'purchases_catalog',
+										params: { id: this.$route.params.id, category_id: level2.id },
+									}"
+									:key="level2"
+									@mouseenter="
+										() => {
+											this.actualNav.thirdLevel = level2.children;
+											this.actualImageSrc = level2.menu_image || '';
+										}
+									"
+									@click="toggleCatalogVisibility(false)"
+									class="std-catalog__tab-item std-tab-item std-tab-item--alt2"
+									v-for="level2 in this.actualNav.secondLevel"
+								>
+									<span class="std-tab-item__text">{{ level2.pagetitle }}</span>
+									<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
+								</router-link>
 								<!-- <a
 									v-for="level2 in this.actualNav.secondLevel"
 									class="std-catalog__tab-item std-tab-item std-tab-item--alt2"
@@ -82,9 +107,17 @@
 							<div
 								class="std-catalog__nav std-catalog__nav--thirdy std-catalog__tabs std-catalog__tabs--vertical"
 							>
-								<router-link :to="{ name: 'purchases_catalog', params: { id: this.$route.params.id, category_id: level2?.id } }" :key="level3" v-for="level3 in this.actualNav.thirdLevel" class="std-catalog__tab-item std-tab-item std-tab-item--none"
-								@mouseenter="this.actualImageSrc = level3.menu_image || ''">
-								
+								<router-link
+									:to="{
+										name: 'purchases_catalog',
+										params: { id: this.$route.params.id, category_id: level2?.id },
+									}"
+									:key="level3"
+									v-for="level3 in this.actualNav.thirdLevel"
+									class="std-catalog__tab-item std-tab-item std-tab-item--none"
+									@mouseenter="this.actualImageSrc = level3.menu_image || ''"
+									@click="toggleCatalogVisibility(false)"
+								>
 									<span class="std-tab-item__text">{{ level3.pagetitle }}</span>
 									<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
 								</router-link>
@@ -100,11 +133,7 @@
 							</div>
 						</div>
 
-						<img
-							:src="'https://dev.mst.tools/' + this.actualImageSrc"
-							alt=""
-							
-						/>
+						<img :src="'https://dev.mst.tools/' + this.actualImageSrc" alt="" />
 					</div>
 				</div>
 			</div>
@@ -132,7 +161,7 @@
 				<div class="navmain__search_btn std-search-field">
 					<div class="std-search-field__block">
 						<!-- <i class="pi pi-search std-search-field__icon"></i> -->
-						<img src="../../assets/images/icons/search.svg" alt="" class="std-search-field__icon">
+						<img src="../../assets/images/icons/search.svg" alt="" class="std-search-field__icon" />
 						<input
 							class="std-search-field__input"
 							type="text"
@@ -153,7 +182,7 @@
 
 		<div class="a-dart-btn a-dart-btn-secondary kenost-vendors" @click="changeActive">
 			<!-- <i class="mst-icon mst-icon-my_vendors kenost-vendors__icon"></i> -->
-			<img src="../../assets/images/icons/cart.svg" alt="">
+			<img src="../../assets/images/icons/cart.svg" alt="" />
 			<span>{{ this.opt_vendors.selected_count }} из {{ this.opt_vendors.available_count }}</span>
 			<i class="pi pi-angle-down"></i>
 			<div class="kenost-vendors__list">
@@ -271,7 +300,7 @@ export default {
 			this.orgOrCatalog = state;
 			this.actualNav.secondLevel = [];
 			this.actualNav.thirdLevel = [];
-		}
+		},
 	},
 	mounted() {
 		this.get_opt_vendors_from_api().then((this.opt_vendors = this.optvendors));

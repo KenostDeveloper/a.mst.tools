@@ -37,19 +37,19 @@
 			<h2 class="order__title order-info__title">Информация о заказе</h2>
 
 			<div class="order-info__text-container">
-				<div class="order-info__col">
+				<!-- <div class="order-info__col"> -->
 					<article class="order-info__row">
 						<span class="order-info__label">ФИО покупателя</span>
 						<span class="order-info__value">{{ this.orderData.receiver }}</span>
 					</article>
-					<article class="order-info__row">
+					<article v-if="this.orderData.delivery !== 'Самовывоз'" class="order-info__row">
 						<span class="order-info__label">Адрес доставки</span>
 						<span class="order-info__value"
 							>{{ this.orderData.address || '???' }}
 						</span>
 					</article>
-				</div>
-				<div class="order-info__col">
+				<!-- </div> -->
+				<!-- <div class="order-info__col"> -->
 					<article class="order-info__row">
 						<span class="order-info__label">Номер телефона</span>
 						<span class="order-info__value">{{ this.orderData.customer_phone }}</span>
@@ -58,9 +58,9 @@
 						<span class="order-info__label">Email</span>
 						<span class="order-info__value">{{ this.orderData.customer_email }}</span>
 					</article>
-				</div>
-				<div class="order-info__col">
-					<article class="order-info__row">
+				<!-- </div> -->
+				<!-- <div class="order-info__col"> -->
+					<article  v-if="this.orderData.delivery !== 'Самовывоз'" class="order-info__row">
 						<span class="order-info__label">Транспортная компания</span>
 						<span class="order-info__value">{{ this.orderData.delivery_company || '???' }}</span>
 					</article>
@@ -68,7 +68,7 @@
 						<span class="order-info__label">Тип доставки</span>
 						<span class="order-info__value">{{ this.orderData.delivery }}</span>
 					</article>
-				</div>
+				<!-- </div> -->
 			</div>
 		</div>
 

@@ -394,7 +394,7 @@
 
                     <div class="kenost-upload-xlsx" v-if="this.upload_product">
                       <div class="kenost-upload-xlsx__file">
-                        <img src="../../../public/img/files/xls.png" alt="">
+                        <!-- <img src="../../../public/img/files/xls.png" alt=""> -->
                         <a targer="_blank" :href="files?.xlsx?.original_href">{{ files?.xlsx?.name }}</a>
                       </div>
                       <div class="kenost-upload-xlsx__info">
