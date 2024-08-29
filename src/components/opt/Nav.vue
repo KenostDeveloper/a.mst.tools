@@ -37,23 +37,18 @@
 				<div
 					class="std-catalog__nav std-catalog__nav--primary std-catalog__tabs std-catalog__tabs--vertical"
 				>
-					<a
-						v-for="level1 in this.orgOrCatalog === 'org' ? this.organizations : this.catalog"
-						:key="level1"
-						class="std-catalog__tab-item std-tab-item std-tab-item--alt"
-						:href="'https://dev.mst.tools/' + level1.uri"
-						@mouseenter="() => {
+					<router-link :to="{ name: 'purchases_catalog', params: { id: this.$route.params.id, category_id: level1.id } }" :key="level1" @mouseenter="() => {
 							this.actualNav.secondLevel = level1.children
 							this.actualNav.thirdLevel = []
 							this.actualImageSrc = ''
-						}"
-					>
+						}" class="std-catalog__tab-item std-tab-item std-tab-item--alt" v-for="level1 in this.orgOrCatalog === 'org' ? this.organizations : this.catalog">
+					
 						<div class="std-tab-item__img-container">
 							<img :src="level1.image || level1.menu_image" :alt="level1.name || level1.pagetitle" />
 						</div>
 						<span class="std-tab-item__text">{{ level1.name || level1.pagetitle }}</span>
 						<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
-					</a>
+					</router-link>
 				</div>
 				<div class="std-catalog__nav-wrapper">
 					<div class="std-catalog__nav-container">
@@ -61,7 +56,15 @@
 							<div
 								class="std-catalog__nav std-catalog__nav--secondary std-catalog__tabs std-catalog__tabs--vertical"
 							>
-								<a
+							<router-link :to="{ name: 'purchases_catalog', params: { id: this.$route.params.id, category_id: level2.id } }" :key="level2" @mouseenter="() => {
+									this.actualNav.thirdLevel = level2.children;
+									this.actualImageSrc = level2.menu_image || '';
+								}" class="std-catalog__tab-item std-tab-item std-tab-item--alt2" v-for="level2 in this.actualNav.secondLevel">
+							
+								<span class="std-tab-item__text">{{ level2.pagetitle }}</span>
+								<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
+							</router-link>
+								<!-- <a
 									v-for="level2 in this.actualNav.secondLevel"
 									class="std-catalog__tab-item std-tab-item std-tab-item--alt2"
 									:href="'https://dev.mst.tools/' + level2.uri"
@@ -74,12 +77,18 @@
 								>
 									<span class="std-tab-item__text">{{ level2.pagetitle }}</span>
 									<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
-								</a>
+								</a> -->
 							</div>
 							<div
 								class="std-catalog__nav std-catalog__nav--thirdy std-catalog__tabs std-catalog__tabs--vertical"
 							>
-								<a
+								<router-link :to="{ name: 'purchases_catalog', params: { id: this.$route.params.id, category_id: level2.id } }" :key="level3" v-for="level3 in this.actualNav.thirdLevel" class="std-catalog__tab-item std-tab-item std-tab-item--none"
+								@mouseenter="this.actualImageSrc = level3.menu_image || ''">
+								
+									<span class="std-tab-item__text">{{ level3.pagetitle }}</span>
+									<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
+								</router-link>
+								<!-- <a
 									v-for="level3 in this.actualNav.thirdLevel"
 									class="std-catalog__tab-item std-tab-item std-tab-item--none"
 									@mouseenter="this.actualImageSrc = level3.menu_image || ''"
@@ -87,14 +96,14 @@
 								>
 									<span class="std-tab-item__text">{{ level3.pagetitle }}</span>
 									<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
-								</a>
+								</a> -->
 							</div>
 						</div>
 
 						<img
 							:src="'https://dev.mst.tools/' + this.actualImageSrc"
 							alt=""
-							class="std-catalog__img"
+							
 						/>
 					</div>
 				</div>
