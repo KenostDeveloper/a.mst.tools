@@ -57,9 +57,9 @@
     <td>{{Math.round(getMinPrice(items.stores)).toLocaleString('ru')}} ₽ <br> ??? дн</td>
     <td>
       <div class="table-actions">
-        <div class="table-actions__action" v-for="(action, index) in item.actions" v-bind:key="action.id">
+        <div class="table-actions__action" :class="{'active': action.enabled, 'red': action?.conflicts?.items[action.action_id]?.sales_conflicts}" v-for="(action, index) in item.actions" v-bind:key="action.id">
           <div v-if="action.tags.length > 0" class="table-actions__container">
-            <div class="table-actions__el" v-for="(tag, index) in action.tags" v-bind:key="tag.id">
+            <div class="table-actions__el" v-for="(tag, index) in action.tags" v-bind:key="tag.id" @click="updateAction(item.id == 0? this.actions_item.remain_id : item.remain_id, item.id == 0? this.actions_item.store_id : item.store_id, item.action_id, item.enabled)">
               <img v-if="tag.type == 'multiplicity'" src="../../assets/images/icons/action/box.svg" alt="">
               <p  v-if="tag.type == 'multiplicity'">{{ tag.value }} шт.</p>
 
@@ -190,7 +190,7 @@
   </Dialog>
 </template>
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import Counter from './Counter.vue'
 import router from '../../router'
 import Dialog from 'primevue/dialog'
@@ -226,6 +226,9 @@ export default {
     ...mapActions([
       'busket_from_api'
     ]),
+    ...mapMutations([
+      'SET_OPT_PRODUCT_TO_VUEX'
+    ]),
     getMinPrice (stores) {
       let minPrice
 
@@ -242,6 +245,81 @@ export default {
     },
     openActions (item) {
       this.$emit('ElemAction', item)
+    },
+    async updateAction (remainid, storeid, actionid, status) {
+      console.log("updateAction", remainid, storeid, actionid, status)
+      // Выключаем конфликтные акции
+
+      const conflicts = this.actions_item.actions.find((action) => action.action_id === actionid)
+      // console.log(conflicts)
+      if (conflicts.conflicts.items[conflicts.action_id]) {
+        if (conflicts.conflicts.items[conflicts.action_id].postponement_conflicts) {
+          for (let i = 0; i < conflicts.conflicts.items[conflicts.action_id].postponement_conflicts.length; i++) {
+            for (let j = 0; j < Object.keys(this.actions_item.actions).length; j++) {
+              if (conflicts.conflicts.items[conflicts.action_id].postponement_conflicts[i] === this.actions_item.actions[j].action_id) {
+                if (this.actions_item.actions[j].enabled) {
+                  this.actions_item.actions[j].enabled = false
+                  const data = {
+                    action: 'action/user/off/on',
+                    remain_id: this.actions_item.actions[j].remain_id ? this.actions_item.actions[j].remain_id : conflicts.remain_id,
+                    store_id: this.actions_item.actions[j].store_id ? this.actions_item.actions[j].store_id : conflicts.store_id,
+                    action_id: this.actions_item.actions[j].action_id,
+                    status: false,
+                    test: 'true2'
+                  }
+                  this.opt_api(data)
+                }
+              }
+            }
+          }
+        }
+
+        if (conflicts.conflicts.items[conflicts.action_id].sales_conflicts) {
+          for (let i = 0; i < conflicts.conflicts.items[conflicts.action_id].sales_conflicts.length; i++) {
+            for (let j = 0; j < Object.keys(this.actions_item.actions).length; j++) {
+              if (conflicts.conflicts.items[conflicts.action_id].sales_conflicts[i] === this.actions_item.actions[j].action_id) {
+                if (this.actions_item.actions[j].enabled) {
+                  this.actions_item.actions[j].enabled = false
+                  const data = {
+                    action: 'action/user/off/on',
+                    remain_id: this.actions_item.actions[j].remain_id ? this.actions_item.actions[j].remain_id : conflicts.remain_id,
+                    store_id: this.actions_item.actions[j].store_id ? this.actions_item.actions[j].store_id : conflicts.store_id,
+                    action_id: this.actions_item.actions[j].action_id,
+                    status: false,
+                    test: 'true2'
+                  }
+                  this.opt_api(data)
+                }
+              }
+            }
+          }
+        }
+      }
+      const data = {
+        action: 'action/user/off/on',
+        remain_id: remainid,
+        store_id: storeid,
+        action_id: actionid,
+        status: !status,
+        test: 'true3'
+      }
+      this.opt_api(data).then(() => {
+        const dataUpdate = {
+          action: 'get/info/product',
+          store_id: storeid,
+          remain_id: remainid,
+          id: router.currentRoute._value.params.id
+        }
+
+        this.opt_api(dataUpdate).then((response) => {
+          const data = {
+            remain_id: remainid,
+            store_id: storeid,
+            data: response.data.data
+          }
+          this.$store.commit('SET_OPT_PRODUCT_TO_VUEX', data)
+        })
+      })
     },
     getMinDelivery (stores) {
       let minDelivery
