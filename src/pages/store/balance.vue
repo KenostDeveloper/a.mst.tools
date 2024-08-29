@@ -301,7 +301,7 @@ export default {
 					value: this.costEntered
 				}).then((data) => {
 					console.log(data);
-					this.show_request_modal = false;
+					this.modalIsOpened = false;
 					this.loading = false;
 					this.get_balance_requests_from_api({
 						page: 1,
