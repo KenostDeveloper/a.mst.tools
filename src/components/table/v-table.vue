@@ -27,7 +27,8 @@
             />
             <label for="product_filter_name" class="s-complex-input__label">{{ ffilter.placeholder }}</label>
             <div class="form_input_group__icon">
-                <i class="d_icon d_icon-search"></i>
+                <!-- <i class="d_icon d_icon-search"></i> -->
+                <img src="../../assets/images/icons/input-search.svg" alt="">
             </div>
           </div>
           <div class="dart-form-group" v-if="ffilter.type == 'select'">

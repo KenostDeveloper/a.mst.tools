@@ -29,7 +29,7 @@
 								<div class="promotion-main__card-container">
 									<div class="promotion-main__card-container promotion-main__card-container--horizontal">
                     <PromotionCard
-                      class="w-max"
+                      class="w-max f-basis-auto"
                       title="Даты проведения"
                       :text="
                         new Date(actions.date_from).toLocaleString('ru', this.options) +
