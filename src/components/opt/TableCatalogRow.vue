@@ -19,9 +19,9 @@
         <button class="dart-btn dart-btn-primary"><i class="d_icon d_icon-busket"></i></button>
       </form>
     </td>
-    <td>от {{Math.round(getMinPrice(items.stores)).toLocaleString('ru')}} ₽ <br> от ??? дн</td>
+    <td>от {{Math.round(getMinPrice(items.stores)).toLocaleString('ru')}} ₽</td>
     <td></td>
-    <td><br> от {{getMinDelivery(items.stores).delivery}} дн ({{new Date(getMinDelivery(items.stores).delivery_day).toLocaleString("ru", {month: 'long', day: 'numeric'})}})</td>
+    <td>от {{getMinDelivery(items.stores).delivery}} дн ({{new Date(getMinDelivery(items.stores).delivery_day).toLocaleString("ru", {month: 'long', day: 'numeric'})}})</td>
     <td></td>
     <td></td>
     <td></td>
@@ -54,19 +54,20 @@
           <div @click="addBasket(item.remain_id, item.basket.count, item.store_id, index)" class="dart-btn dart-btn-primary"><i class="d_icon d_icon-busket"></i></div>
         </form>
     </td>
-    <td>{{Math.round(getMinPrice(items.stores)).toLocaleString('ru')}} ₽ <br> ??? дн</td>
+    <td>{{Math.round(item.price).toLocaleString('ru')}} ₽ <br> {{item.delay ? Number(item.delay).toFixed(1) + ' дн' : 'Нет'}}</td>
     <td>
       <div class="table-actions">
-        <div class="table-actions__action" :class="{'active': action.enabled, 'red': action?.conflicts?.items[action.action_id]?.sales_conflicts}" v-for="(action, index) in item.actions" v-bind:key="action.id">
-          <div v-if="action.tags.length > 0" class="table-actions__container">
-            <div class="table-actions__el" v-for="(tag, index) in action.tags" v-bind:key="tag.id" @click="updateAction(item.id == 0? this.actions_item.remain_id : item.remain_id, item.id == 0? this.actions_item.store_id : item.store_id, item.action_id, item.enabled)">
+        <!-- 'red': action?.conflicts?.items[action.action_id]?.sales_conflicts -->
+        <div class="table-actions__action" :class="{'active': action.enabled, 'red': action?.conflicts?.items[action.action_id]?.sales_conflicts}" v-for="(action, indexactions) in item.actions" v-bind:key="action.id">
+          <div v-if="action.tags.length > 0" class="table-actions__container" @click="updateAction(item.id == 0? this.action.remain_id : item.remain_id, item.id == 0? this.action.store_id : item.store_id, action, index, indexactions)">
+            <div class="table-actions__el" v-for="(tag, indextag) in action.tags" v-bind:key="tag.id">
               <img v-if="tag.type == 'multiplicity'" src="../../assets/images/icons/action/box.svg" alt="">
               <p  v-if="tag.type == 'multiplicity'">{{ tag.value }} шт.</p>
 
               <img v-if="tag.type == 'gift'" src="../../assets/images/icons/action/gift.svg" alt="">
 
               <img v-if="tag.type == 'delay'" src="../../assets/images/icons/action/time.svg" alt="">
-              <p  v-if="tag.type == 'delay'">От-ка {{ tag.value }} дня</p>
+              <p  v-if="tag.type == 'delay'">От-ка {{ tag.value }} дн.</p>
 
               <img v-if="tag.type == 'sale'" src="../../assets/images/icons/action/sale.svg" alt="">
               <p  v-if="tag.type == 'sale'">Скидка {{ Number(tag.value).toFixed(0) }}%</p>
@@ -97,7 +98,7 @@
                     <p v-if="tag.type == 'gift'">Подарок</p>
 
                     <img v-if="tag.type == 'delay'" src="../../assets/images/icons/action/gift.svg" alt="">
-                    <p v-if="tag.type == 'delay'">Отсрочка {{ tag.value }} дня</p>
+                    <p v-if="tag.type == 'delay'">Отсрочка {{ tag.value }} дн.</p>
 
                     <img v-if="tag.type == 'multiplicity'" src="../../assets/images/icons/action/box.svg" alt="">
                     <p v-if="tag.type == 'multiplicity'">Краткость упаковки {{ (tag.value).toLocaleString('ru') }} шт.</p>
@@ -107,7 +108,7 @@
                   </div>
                 </div>
                 <div class="table-actions__modal-btn-container">
-                  <div class="table-actions__modal-btn">Подробнее об акции</div>
+                  <router-link v-if="action.action_id > 0" :to="{name: 'promotion', params: { id: this.$route.params.id, action: action.action_id }}" class="table-actions__modal-btn">Подробнее об акции</router-link>
                 </div>
               </div>
             </div>
@@ -118,7 +119,7 @@
     </td>
     <td>{{item.payer === '1' ? 'Поставщик' : 'Покупатель'}} / <br> от {{getMinDelivery(items.stores).delivery}} дн ({{new Date(getMinDelivery(items.stores).delivery_day).toLocaleString("ru", {month: 'long', day: 'numeric'})}})</td>
     <td>{{item.remains}}</td>
-    <td>{{item.store_name}} <br> ???</td>
+    <td>{{item.org_name}} <br> <span class="flex align-items-center justify-content-center gap-1"><img :src="item.store_image" class="kenost-table-elem__logo" alt=""> {{ item.store_name }}</span></td>
     <td>{{item.old_price ? Math.round(item.old_price).toLocaleString('ru') : Math.round(item.price).toLocaleString('ru')}} ₽ <br> {{((item.old_price - item.price).toFixed(0)).toLocaleString('ru')}} ₽</td>
     <!-- <td></td>
       <td><span class="k-table__article">{{items.article}}</span></td>
@@ -219,12 +220,13 @@ export default {
       loading: true,
       active: false,
       value: 1,
-      modal_remain: false
+      modal_remain: false,
     }
   },
   methods: {
     ...mapActions([
-      'busket_from_api'
+      'busket_from_api',
+      'opt_api'
     ]),
     ...mapMutations([
       'SET_OPT_PRODUCT_TO_VUEX'
@@ -243,27 +245,37 @@ export default {
 
       return minPrice
     },
+    getMaxDelay(stores){
+      let maxDelay
+      
+    },
     openActions (item) {
       this.$emit('ElemAction', item)
     },
-    async updateAction (remainid, storeid, actionid, status) {
-      console.log("updateAction", remainid, storeid, actionid, status)
+    async updateAction (remainid, storeid, action, indexstore, indexaction) {
+      // console.log("updateAction", remainid, storeid, action, index)
+      // console.log(this.items.stores[index].actions)
+
+      this.items.stores[indexstore].actions[indexaction].enabled = true
+
       // Выключаем конфликтные акции
 
-      const conflicts = this.actions_item.actions.find((action) => action.action_id === actionid)
+      const conflicts = this.items.stores[indexstore].actions.find((act) => act.action_id === action.action_id)
       // console.log(conflicts)
       if (conflicts.conflicts.items[conflicts.action_id]) {
         if (conflicts.conflicts.items[conflicts.action_id].postponement_conflicts) {
           for (let i = 0; i < conflicts.conflicts.items[conflicts.action_id].postponement_conflicts.length; i++) {
-            for (let j = 0; j < Object.keys(this.actions_item.actions).length; j++) {
-              if (conflicts.conflicts.items[conflicts.action_id].postponement_conflicts[i] === this.actions_item.actions[j].action_id) {
-                if (this.actions_item.actions[j].enabled) {
-                  this.actions_item.actions[j].enabled = false
+            for (let j = 0; j < Object.keys(this.this.items.stores[indexstore].actions).length; j++) {
+              if (conflicts.conflicts.items[conflicts.action_id].postponement_conflicts[i] === this.items.stores[indexstore].actions[j].action_id) {
+                if (this.this.items.stores[indexstore].actions[j].enabled) {
+                  // console.log('this.items.stores[indexstore].actions', this.this.items.stores[indexstore].actions[j])
+                  this.items.stores[indexstore].actions[j].enabled = false
+                  //this.items.stores[indexstore].actions[indexaction].enabled = false
                   const data = {
                     action: 'action/user/off/on',
-                    remain_id: this.actions_item.actions[j].remain_id ? this.actions_item.actions[j].remain_id : conflicts.remain_id,
-                    store_id: this.actions_item.actions[j].store_id ? this.actions_item.actions[j].store_id : conflicts.store_id,
-                    action_id: this.actions_item.actions[j].action_id,
+                    remain_id: this.items.stores[indexstore].actions[j].remain_id ? this.items.stores[indexstore].actions[j].remain_id : conflicts.remain_id,
+                    store_id: this.items.stores[indexstore].actions[j].store_id ? this.items.stores[indexstore].actions[j].store_id : conflicts.store_id,
+                    action_id: this.items.stores[indexstore].actions[j].action_id,
                     status: false,
                     test: 'true2'
                   }
@@ -276,15 +288,18 @@ export default {
 
         if (conflicts.conflicts.items[conflicts.action_id].sales_conflicts) {
           for (let i = 0; i < conflicts.conflicts.items[conflicts.action_id].sales_conflicts.length; i++) {
-            for (let j = 0; j < Object.keys(this.actions_item.actions).length; j++) {
-              if (conflicts.conflicts.items[conflicts.action_id].sales_conflicts[i] === this.actions_item.actions[j].action_id) {
-                if (this.actions_item.actions[j].enabled) {
-                  this.actions_item.actions[j].enabled = false
+            for (let j = 0; j < Object.keys(this.items.stores[indexstore].actions).length; j++) {
+              if (conflicts.conflicts.items[conflicts.action_id].sales_conflicts[i] === this.items.stores[indexstore].actions[j].action_id) {
+                if (this.items.stores[indexstore].actions[j].enabled) {
+                  // console.log('this.items.stores[indexstore].actions', this.items.stores[indexstore].actions[j])
+                  this.items.stores[indexstore].actions[j].enabled = false
+                  //this.items.stores[indexstore].actions[indexaction].enabled = false
+                  //console.log(this.items.stores[indexstore].actions[indexaction])
                   const data = {
                     action: 'action/user/off/on',
-                    remain_id: this.actions_item.actions[j].remain_id ? this.actions_item.actions[j].remain_id : conflicts.remain_id,
-                    store_id: this.actions_item.actions[j].store_id ? this.actions_item.actions[j].store_id : conflicts.store_id,
-                    action_id: this.actions_item.actions[j].action_id,
+                    remain_id: this.items.stores[indexstore].actions[j].remain_id ? this.items.stores[indexstore].actions[j].remain_id : conflicts.remain_id,
+                    store_id: this.items.stores[indexstore].actions[j].store_id ? this.items.stores[indexstore].actions[j].store_id : conflicts.store_id,
+                    action_id: this.items.stores[indexstore].actions[j].action_id,
                     status: false,
                     test: 'true2'
                   }
@@ -299,8 +314,8 @@ export default {
         action: 'action/user/off/on',
         remain_id: remainid,
         store_id: storeid,
-        action_id: actionid,
-        status: !status,
+        action_id: action.action_id,
+        status: action.enabled,
         test: 'true3'
       }
       this.opt_api(data).then(() => {
@@ -308,10 +323,12 @@ export default {
           action: 'get/info/product',
           store_id: storeid,
           remain_id: remainid,
-          id: router.currentRoute._value.params.id
+          id: router.currentRoute._value.params.id,
+          count: this.items.stores[indexstore].basket.count
         }
 
         this.opt_api(dataUpdate).then((response) => {
+          // console.log("response", response)
           const data = {
             remain_id: remainid,
             store_id: storeid,
@@ -320,6 +337,7 @@ export default {
           this.$store.commit('SET_OPT_PRODUCT_TO_VUEX', data)
         })
       })
+
     },
     getMinDelivery (stores) {
       let minDelivery
@@ -358,7 +376,7 @@ export default {
     ElemCount (object) {
       if (object.value >= Number(object.max)) {
         this.modal_remain = true
-        console.log(this.modal_remain)
+        // console.log(this.modal_remain)
       } else {
       // eslint-disable-next-line vue/no-mutating-props
         this.items.stores[object.index].basket.count = object.value
@@ -370,7 +388,7 @@ export default {
     ElemCountComplect (object) {
       if (object.value >= Number(object.max)) {
         this.modal_remain = true
-        console.log(this.modal_remain)
+        // console.log(this.modal_remain)
       } else {
       // eslint-disable-next-line vue/no-mutating-props
         this.items.stores[object.index].basket.count = object.value

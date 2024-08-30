@@ -19,13 +19,11 @@
 							<div class="promotion-main__content">
 								<div class="promotion__title-container">
 									<h2 class="promotion__title">{{ actions.name }}</h2>
-									<p class="promotion__span">
+									<!-- <p class="promotion__span">
 										дополнительная скидка <b>6%</b> на всю линейку Интерскол! (test data)
-									</p>
+									</p> -->
 									<p class="promotion__description">
-										{{ actions.description }}Дополнительная скидка 6% на всю продукцию Интерскол
-										только при заказе в "Спец Проф Оборудование" через a.mst.tools "Закупки" (test
-										data)
+										{{ actions.description }}
 									</p>
 								</div>
 								<div class="promotion-main__card-container">

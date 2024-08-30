@@ -221,11 +221,11 @@ export default {
           label: 'Наименование',
           type: 'link',
           // TODO
-          // link_to: 'promotion',
-          // link_params: {
-          //   id: this.$route.params.id,
-          //   action: 'id'
-          // },
+          link_to: 'promotion',
+          link_params: {
+            id: this.$route.params.id,
+            action: 'id'
+          },
           sort: true
         },
         store_name: {
