@@ -182,12 +182,12 @@ export default {
           {
             label: "Розничные заказы",
             icon: "orders.svg",
-            to: { name: "purchases", params: { id: this.$route.params.id } },
+            to: { name: "retail_orders", params: { id: this.$route.params.id } },
           },
           {
             label: "Баланс",
             icon: "bag.svg",
-            to: { name: "shipments", params: { id: this.$route.params.id } },
+            to: { name: "org_balance", params: { id: this.$route.params.id } },
           },
           {
             label: "Розничные акции",

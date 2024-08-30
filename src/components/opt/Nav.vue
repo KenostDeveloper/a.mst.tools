@@ -301,6 +301,7 @@ export default {
 		},
 	},
 	mounted() {
+		this.get_opt_catalog_from_api()
 		this.get_opt_vendors_from_api().then((this.opt_vendors = this.optvendors));
 
 		const getOrganizationss = async () => {
