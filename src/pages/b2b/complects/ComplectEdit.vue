@@ -14,12 +14,26 @@
               <input v-model="this.form.name" type="text" name="name" placeholder="Укажите название комплекта" class="dart-form-control mt-2">
           </div>
 
+          <div class="dart-form-group mt-2 mb-4">
+            <span class="ktitle">Склад</span>
+            <!-- <label for="name">Введите наименование, которое будет отражать смысл вашей акции</label> -->
+            <!-- <input v-model="form.name" type="text" name="name" placeholder="Укажите склад акции" class="dart-form-control"> -->
+            <Dropdown
+              @change="updateProducts"
+              v-model="this.form.store_id"
+              :options="this.stores"
+              optionLabel="label"
+              optionValue="value"
+              placeholder="Выберите склад"
+            />
+          </div>
+
           <!-- <div class="dart-form-group mb-4">
               <span class="ktitle">Даты проведения</span>
               <Calendar v-model="this.form.dates" selectionMode="range" placeholder="Выберите даты" :manualInput="false" showIcon/>
           </div> -->
 
-          <div class="PickList mt-3">
+          <div v-if="this.form.store_id" class="PickList mt-3">
               <div class="PickList__product" :style="{ width: '40%' }">
                   <b class="PickList__title">Доступные товары</b>
                   <div class="PickList__filters">
@@ -34,7 +48,7 @@
                       />
                       <label for="product_filter_name" class="s-complex-input__label">Введите артикул или название</label>
                       <div class="form_input_group__icon">
-                          <i class="d_icon d_icon-search"></i>
+                          <i class="pi pi-search"></i>
                       </div>
                   </div>
                   <div class="dart-form-group">
@@ -68,7 +82,7 @@
                   <div class="PickList__title mb-4">
                   <b>Добавленные товары</b>
                   </div>
-                  <div class="PickList__products">
+                  <div class="PickList__products PickList__products-selected">
                   <div class="PickList__el" v-for="(item) in this.selected" :key="item.id">
                       <img :src="item.image" alt="">
                       <div class="PickList__info">
@@ -84,7 +98,7 @@
               </div>
           </div>
 
-          <div class="table-kenost mt-4">
+          <div v-if="this.form.store_id" class="table-kenost mt-4">
               <p class="table-kenost__title">Настройки комплекта</p>
               <table class="table-kenost__table">
               <thead>
@@ -230,15 +244,15 @@
             </div>
           </div>
           <div class="kenost-method-edit-flex" v-if="this.modals.price_step == 0">
-            <div class="flex align-items-center mt-3">
+            <div class="flex align-items-center mt-3 gap-1">
               <RadioButton v-model="this.modals.type_price" inputId="type_price-1" name="type_price" value="1"/>
               <label for="type_price-1" class="ml-2 radioLabel">Скидка по формуле</label>
             </div>
-            <div class="flex align-items-center mt-3">
+            <div class="flex align-items-center mt-3 gap-1">
               <RadioButton v-model="this.modals.type_price" inputId="type_price-2" name="type_price" value="2"/>
               <label for="type_price-2" class="ml-2 radioLabel">Тип цен</label>
             </div>
-            <div class="flex align-items-center mt-3">
+            <div class="flex align-items-center mt-3 gap-1">
               <RadioButton v-model="this.modals.type_price" inputId="type_price-3" name="type_price" value="3"/>
               <label for="type_price-3" class="ml-2 radioLabel">Задать вручную</label>
             </div>
@@ -353,6 +367,7 @@ export default {
   name: 'ComplectsAdd',
   data () {
     return {
+      stores: [],
       filter: {
         name: '',
         category: {}
@@ -360,7 +375,8 @@ export default {
       form: {
         name: '',
         dates: [],
-        participantsType: '3'
+        participantsType: '3',
+        store_id: null
       },
       filter_organizations: {
         name: '',
@@ -399,10 +415,11 @@ export default {
       'get_catalog_from_api',
       'get_regions_from_api',
       'opt_api',
-      'opt_get_complects'
+      'opt_get_complects',
+      'org_get_stores_from_api',
     ]),
     setFilter () {
-      const data = { filter: this.filter, filterselected: this.filter_table, selected: this.selected, pageselected: this.page_selected, page: this.page, perpage: this.per_page }
+      const data = { storeid: this.form.store_id, filter: this.filter, filterselected: this.filter_table, selected: Object.keys(this.selected), pageselected: this.page_selected, page: this.page, perpage: this.per_page }
       this.get_available_products_from_api(data)
     },
     ElemCount (obj) {
@@ -415,6 +432,24 @@ export default {
         this.modals.price_step = 0
         this.modals.price = false
       }
+    },
+    updateProducts () {
+      const data = {
+        storeid: this.form.store_id,
+        filter: this.filter,
+        filterselected: this.filter_table,
+        selected: Object.keys(this.selected),
+        pageselected: this.page_selected,
+        page: this.page,
+        perpage: this.per_page
+      }
+
+      this.selected = {}
+      this.selected_data = {}
+      this.selected_visible = {}
+      this.products = []
+
+      this.get_available_products_from_api(data).then()
     },
     setPrices (index, name, value) {
       switch (name) {
@@ -468,7 +503,7 @@ export default {
 
       this.selected[product.id] = product
       this.products = this.products.filter((r) => r.id !== id)
-      const data = { filter: this.filter, filterselected: this.filter_table, selected: this.selected, pageselected: this.page_selected, page: this.page, perpage: this.per_page }
+      const data = { storeid: this.form.store_id, filter: this.filter, filterselected: this.filter_table, selected: Object.keys(this.selected), pageselected: this.page_selected, page: this.page, perpage: this.per_page }
       this.get_available_products_from_api(data)
       this.total_selected++
     },
@@ -523,18 +558,18 @@ export default {
       this.selected = new_selected
 
       // this.selected = this.selected.filter((r) => r.id !== id)
-      const data = { filter: this.filter, filterselected: this.filter_table, selected: this.selected, pageselected: this.page_selected, page: this.page, perpage: this.per_page }
+      const data = { storeid: this.form.store_id, filter: this.filter, filterselected: this.filter_table, selected: Object.keys(this.selected), pageselected: this.page_selected, page: this.page, perpage: this.per_page }
       this.get_available_products_from_api(data)
       this.total_selected--
     },
     pagClickCallback (pageNum) {
       this.page = pageNum
-      const data = { filter: this.filter, filterselected: this.filter_table, selected: this.selected, pageselected: this.page_selected, page: this.page, perpage: this.per_page }
+      const data = { storeid: this.form.store_id, filter: this.filter, filterselected: this.filter_table, selected: Object.keys(this.selected), pageselected: this.page_selected, page: this.page, perpage: this.per_page }
       this.get_available_products_from_api(data)
     }
   },
   mounted () {
-    this.get_available_products_from_api({ filter: '', selected: [], page: this.page }).then(
+    this.get_available_products_from_api({ storeid: this.form.store_id, filter: '', selected: [], page: this.page }).then(
       this.products = this.available_products.products
     )
     this.get_catalog_from_api().then(
@@ -550,6 +585,10 @@ export default {
         return { name: el.label, code: el.key }
       })
     // console.log(this.regions_all)
+    })
+    this.org_get_stores_from_api({
+      action: 'get/stores',
+      id: this.$route.params.id
     })
     this.opt_get_complects({
       action: 'complects/get',
@@ -574,10 +613,17 @@ export default {
       'getcatalog',
       'allorganizations',
       'getregions',
-      'optcomplects'
+      'optcomplects',
+      'org_stores',
     ])
   },
   watch: {
+    org_stores: function (newVal, oldVal) {
+      this.stores = []
+      for (let i = 0; i < newVal.items.length; i++) {
+        this.stores.push({ label: newVal.items[i].name, value: newVal.items[i].id })
+      }
+    },
     available_products: function (newVal, oldVal) {
       this.products = newVal.products
       this.total_products = newVal.total
@@ -593,10 +639,23 @@ export default {
     },
     optcomplects: function (newVal, oldVal) {
       this.form.name = newVal.name
+      this.form.store_id = (newVal.store_id).toString()
       // const dateto = new Date(newVal.date_to)
       // const datefrom = new Date(newVal.date_from)
       // this.form.dates = [datefrom, dateto]
       this.selected = newVal.products
+
+      const data = {
+        storeid: this.form.store_id,
+        filter: this.filter,
+        filterselected: this.filter_table,
+        selected: Object.keys(newVal.products),
+        pageselected: this.page_selected,
+        page: this.page,
+        perpage: this.per_page
+      }
+
+      this.get_available_products_from_api(data).then()
     }
   }
 }

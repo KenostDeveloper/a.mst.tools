@@ -506,7 +506,7 @@
                               </div>
                             <div @click="selectComplect(item.id)" class="PickList__select"><i class="pi pi-angle-right"></i></div>
                           </div>
-                          <paginate
+                          <!-- <paginate
                               :page-count="pagesCount"
                               :click-handler="pagClickCallback"
                               :prev-text="'Пред'"
@@ -515,7 +515,7 @@
                               :initialPage="this.page"
                               :forcePage="this.page"
                           >
-                          </paginate>
+                          </paginate> -->
                           </div>
                       </div>
 
@@ -523,7 +523,7 @@
                         <div class="PickList__title mb-4">
                         <b>Добавленные комплекты</b>
                         </div>
-                        <div class="PickList__products">
+                        <div class="PickList__products PickList__products-selected">
                         <div class="PickList__el" v-for="(item) in this.selected_complects" :key="item.id">
                           <img :src="item.image" alt="">
                             <div class="PickList__info">

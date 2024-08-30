@@ -8,7 +8,7 @@
 			<h1 class="std-title">Розничные заказы</h1>
 		</div>
 
-		<div class="flex dart-row">
+		<!-- <div class="flex dart-row">
 			<div class="d-col-md-3 retails__input-wrapper">
 				<div class="form_input_group input_pl input-parent required">
 					<input
@@ -23,7 +23,6 @@
 						>Поиск по полям заказа</label
 					>
 					<div class="form_input_group__icon">
-						<!-- <i class="d_icon d_icon-search"></i> -->
 						<img src="../assets/images/icons/input-search.svg" alt="" />
 					</div>
 				</div>
@@ -84,7 +83,7 @@
 					/>
 				</div>
 			</div>
-		</div>
+		</div> -->
 
 		<div class="retails__table-container">
             <table class="std-table">

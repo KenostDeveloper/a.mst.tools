@@ -148,6 +148,48 @@
       </td>
       <td>{{item.remains}}</td> -->
   </tr>
+  <tbody class="complect-button kenost-table-background kenost-table-background-complect" v-for="complect in items.complects" v-bind:key="complect.id" :class="{'active' : this.active || this.is_warehouses, 'no-active' : !this.active && !this.is_warehouses}">
+    <tr v-for="(item, index) in complect" v-bind:key="item.id" :class="{'active' : this.active || this.is_warehouses, 'no-active' : !this.active && !this.is_warehouses}">
+      <td class="td-center" :class="{'pointer-none' : index !== 0}"><span :style="'top:' +  (complect.length * 70) / 2 + 'px'" v-if="index === 0"><i class="pi pi-minus"></i></span></td>
+      <td class="k-table__photo"><img class="k-table__image" :src="item.image" alt=""></td>
+      <td class="k-table__title"><p>{{item.pagetitle}}</p><b>{{item.article}}</b></td>
+      <td class="k-table__busket complect-button__td" :class="{'pointer-none' : index !== 0}">
+        <form class="k-table__form complect-button__form" :class="{'basket-true' : item.basket.availability}" action="" v-if="index === 0">
+          <Counter :key="new Date().getMilliseconds() + item.id" @ElemCount="ElemCountComplect" :min="1" :max="item.remain_complect" :id="item.complect_id" :store_id="item.store_id" :index="index" :value="item.basket.count"/>
+          <div @click="addBasketComplect(item.complect_id, item.basket.count, item.store_id, index)" class="dart-btn dart-btn-primary"><i class="d_icon d_icon-busket"></i></div>
+        </form>
+      </td>
+      <!-- <td></td>
+      <td><span class="k-table__article">{{item.article}}</span></td>
+      <td class="k-table__photo">
+        <img class="k-table__image" :src="item.image" alt="">
+        <div v-if="index < complect.length - 1" class="kenost-complect-icon">
+                  <i class="mst-icon mst-icon-link"></i>
+                </div>
+      </td>
+      <td class="k-table__title" @click="openActions(item)"><p>{{item.pagetitle}}</p></td>
+      <td class="k-table__busket complect-button__td" :class="{'pointer-none' : index !== 0}">
+        <form class="k-table__form complect-button__form" :class="{'basket-true' : item.basket.availability}" action="" v-if="index === 0">
+          <Counter :key="new Date().getMilliseconds() + item.id" @ElemCount="ElemCountComplect" :min="1" :max="item.remain_complect" :id="item.complect_id" :store_id="item.store_id" :index="index" :value="item.basket.count"/>
+          <div @click="addBasketComplect(item.complect_id, item.basket.count, item.store_id, index)" class="dart-btn dart-btn-primary"><i class="d_icon d_icon-busket"></i></div>
+        </form>
+      </td>
+      <td class="td-center" :class="{'pointer-none' : index !== 0}"><span :style="'top:' +  (complect.length * 70) / 2 + 'px'" v-if="index === 0">{{item.store_name}}</span></td>
+      <td>{{Math.round(Number(item.new_price)).toLocaleString('ru')}}₽ x {{ item.multiplicity }} шт.</td>
+      <td>{{Math.round(Number(item.price) * Number(item.multiplicity)).toLocaleString('ru')}} ₽ / {{Math.round(Number(item.price) * Number(item.multiplicity) - Number(item.new_price) * Number(item.multiplicity)).toLocaleString('ru')}} ₽</td>
+      <td class="td-center" :class="{'pointer-none' : index !== 0}"><span :style="'top:' +  (complect.length * 70) / 2 + 'px'" v-if="index === 0">{{item.action?.delay ? Number(item.action?.delay).toFixed(1) + ' дн' : 'Нет'}}</span></td>
+      <td class="td-center" :class="{'pointer-none' : index !== 0}"><span :style="'top:' +  (complect.length * 70) / 2 + 'px'" v-if="index === 0">{{item.action?.payer === '1' ? 'Поставщик' : 'Покупатель'}}</span></td>
+      <td class="td-center" :class="{'pointer-none' : index !== 0}"><span :style="'top:' +  (complect.length * 70) / 2 + 'px'" v-if="index === 0">от {{item.delivery}} дн ({{new Date(item.delivery_day).toLocaleString("ru", {month: 'long', day: 'numeric'})}})</span></td>
+      <td>
+        <div class="k-order__actions center">
+          <div @click="openActions(item)" class="k-actions" v-for="(action, index) in item.actions" v-bind:key="action.id">
+            <img :style="index > 2 ? { display: 'none' } : false" class="k-order__actions-el" :src="action.icon" >
+          </div>
+        </div>
+      </td>
+      <td class="td-center" :class="{'pointer-none' : index !== 0}"><span :style="'top:' +  (complect.length * 70) / 2 + 'px'" v-if="index === 0">{{item.remain_complect}} шт</span></td> -->
+    </tr>
+  </tbody>
   <!-- <tbody class="complect-button kenost-table-background kenost-table-background-complect" v-for="complect in items.complects" v-bind:key="complect.id" :class="{'active' : this.active || this.is_warehouses, 'no-active' : !this.active && !this.is_warehouses}">
     <tr v-for="(item, index) in complect" v-bind:key="item.id" :class="{'active' : this.active || this.is_warehouses, 'no-active' : !this.active && !this.is_warehouses}">
       <td></td>
