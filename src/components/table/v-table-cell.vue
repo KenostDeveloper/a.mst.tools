@@ -87,6 +87,58 @@
         @update:modelValue="editValue(numbers[cell_key], cell_key)"
       />
     </div>
+
+    <!-- <div class="std-statistics__product-info table-product">
+      <div class="table-product__header">
+        <div class="table-product__img">
+          <img src="" alt="" />
+        </div>
+        <div class="table-product__title-container">
+          <h2 class="table-product__title">Раскладная светодиодная лампа RSV UFO-30W-6500K-E27</h2>
+          <span class="table-product__article">Арт:100618</span>
+        </div>
+      </div>
+      <div class="table-product__content">
+        <div class="table-product__row">
+          <span class="table-product__label">Цена товара</span>
+          <span class="table-product__value">122 214</span>
+        </div>
+        <div class="table-product__row">
+          <span class="table-product__label">Остаток сейчас</span>
+          <span class="table-product__value">0</span>
+        </div>
+        <div class="table-product__row">
+          <span class="table-product__label">Продажа за 30 дней</span>
+          <span class="table-product__value">0</span>
+        </div>
+        <div class="table-product__row">
+          <span class="table-product__label">Скорость продаж шт/день</span>
+          <span class="table-product__value">0</span>
+        </div>
+        <div class="table-product__row">
+          <span class="table-product__label">Скорость продажи шт/день</span>
+          <span class="table-product__value">0</span>
+        </div>
+        <div class="table-product__row">
+          <span class="table-product__label">Дней с Out Of Stok</span>
+          <span class="table-product__value">0</span>
+        </div>
+        <div class="table-product__row">
+          <span class="table-product__label">Упущенная выручка</span>
+          <span class="table-product__value">0</span>
+        </div>
+        <div class="table-product__row">
+          <span class="table-product__label">Прогноз остатков на завтра / 7 дней</span>
+          <span class="table-product__value">344412.56</span>
+        </div>
+        <div class="table-product__row">
+          <span class="table-product__label">Изменение остатков</span>
+          <div class="table-product__value">
+            <Chart type="line" :data="value[cell_key]" :options="chart_options" class="w-full md:w-5rem" />
+          </div>
+        </div>
+      </div>
+    </div> -->
   </td>
 </template>
 

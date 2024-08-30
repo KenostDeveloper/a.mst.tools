@@ -43,12 +43,11 @@
 			</v-table>
 			<!-- </div> -->
 		</div>
-
-
-    <button class="std-statistics__up-button">
-      
-    </button>
 	</div>
+
+  <a href="#" class="std-statistics__up-button visible-mobile-l">
+    <img src="../assets/images/icons/arrow-up.svg" alt="">
+  </a>
 </template>
 
 <script>
@@ -244,6 +243,7 @@ export default {
 	},
   created() {
     this.setWindowWidth(window.innerWidth)
+    window.addEventListener('resize', () => this.setWindowWidth(window.innerWidth));
   },
 	mounted() {
 		this.org_get_stores_from_api({
