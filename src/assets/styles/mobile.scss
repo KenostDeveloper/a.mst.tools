@@ -376,6 +376,12 @@ $mobile-s: 240px;
             }
         }
     }
+
+    .std-profile {
+        .upload-banner {
+            flex-direction: column;
+        }
+    }
 }
 @include mobile-l {
     .dart_container {
