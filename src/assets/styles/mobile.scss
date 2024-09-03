@@ -57,13 +57,6 @@
     .sitebar .sitebar-toggler{
         display: none;
     }
-
-
-    .std-statistics {
-        .title-mini {
-            margin-top: 47px;
-        }
-    }
 }
 
 @media (max-width: 768px){
@@ -255,16 +248,19 @@ $mobile-s: 240px;
         }
     }
 }
+@include desktop-s-minus {
+    .dart_container {
+        padding-top: 54px !important;
+    }
+    .dart_wrapper {
+        padding: 20px 0 !important;
+    }
+}
 @include tablet-minus {
     .clients {
         &__card-container {
             grid-template-columns: repeat(1, 1fr);
         }
-    }
-}
-@include desktop-s-minus {
-    .clients {
-        margin-top: calc(54px + 20px - 30px);
     }
 }
 @include tablet-l-above {
@@ -417,6 +413,8 @@ $mobile-s: 240px;
     }
 
     .clients {
+        padding-inline: 15px;
+
         &__card-container {
             .client-card {
                 gap: 24px;
@@ -436,13 +434,15 @@ $mobile-s: 240px;
 
     // ProfileStatistics
     .std-statistics {
+        
         .title-mini,
         &__warehouse-table {
-            padding-inline: 15px;
+            padding-inline: 15px !important;
         }
         
         .title-mini {
             gap: 17px;
+            margin-top: 0;
             margin-bottom: 20px;
 
             .mst-image-org {
@@ -637,6 +637,188 @@ $mobile-s: 240px;
                     }
                 }
             }
+        }
+    }
+
+
+    // OrgProfile
+    .std-profile {
+        padding-inline: 15px;
+
+        .profile-content__title {
+            padding: 0;
+
+            .maintitle {
+                font-size: 24px;
+                font-weight: 500;
+                line-height: 1.2;
+            }
+
+            .buttons_container {
+                height: 48px;
+                
+                position: fixed;
+                bottom: 8px;
+                left: 15px;
+                right: 15px;
+
+                .dart-btn {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                    height: 100%;
+                    width: 100%;
+                }
+            }
+        }
+
+        .p-tabview {
+            .p-tabview-nav {
+                .p-tabview-nav-link {
+                    font-size: 14px;
+                    font-weight: 500;
+
+                    height: 38px;
+                    margin: 0;
+                    padding: 10px 16px;
+                }
+
+                .tab-custom .p-tabview-ink-bar {
+                    height: 2px;
+                }
+            }
+
+            .p-tabview-nav-container {
+                margin-bottom: 32px;
+            }
+
+            .p-tabview-panels {
+                padding: 0 !important;
+
+                form > .dart-form-group:nth-child(1) {
+                    margin-bottom: 32px !important;
+                }
+
+                .ktitle {
+                    font-family: 'Roboto', sans-serif;
+                    font-size: 21px;
+                    font-weight: 500;
+
+                    margin-bottom: 16px;
+                }
+
+                .kenost-form-grid {
+                    flex-direction: column;
+                    gap: 16px;
+
+                    .form_input_group {
+                        width: 100% !important;
+                        margin: 0 !important;
+
+                        label {
+                            color: #B4B4B4;
+                            font-size: 12px;
+                            line-height: 1;
+                            letter-spacing: 0.25px;
+
+                            margin-bottom: 4px;
+                        }
+
+                        .dart-form-control {
+                            font-size: 15px;
+
+                            height: 44px;
+                            padding: 13px 15px;
+                        }
+                    }
+                }
+
+                .requisites {
+                    border-bottom: 1px solid #E2E2E2;
+
+                    margin-bottom: 64px !important;
+                    padding-bottom: 24px;
+
+                    p {
+                        margin: 0;
+                    }
+                }
+
+                .upload-banner {
+                    flex-direction: column;
+                    gap: 16px;
+
+                    margin-bottom: 16px !important;
+
+                    &__text {
+                        display: flex;
+                        justify-content: space-between;
+                        gap: 10px;
+
+                        width: 100%;
+
+                        .ktitle {
+                            margin: 0;
+                        }
+                    }
+
+                    .dart-btn {
+                        background: none;
+                        border: none;
+                        box-shadow: none;
+
+                        overflow: visible;
+                        padding: 2.5px;
+
+                        height: 20px;
+                        width: 20px;
+
+                        img {
+                            height: 15px !important;
+                            width: 15px !important;
+                            max-width: none;
+                        }
+                    }
+
+                    span:not(.ktitle) {
+                        color: #ADADAD;
+                        font-size: 15px;
+                        font-weight: 400;
+                        line-height: 1.3;
+                    }
+                }
+            }
+        }
+        
+        &__accordion,
+        .std-accordion {
+            font-family: 'Roboto', sans-serif;
+
+            &--expanded {
+                .std-accordion__content {
+                    margin-top: 16px;
+                }
+            }
+
+            &__header {
+                font-size: 15px;
+                font-weight: 500;
+                line-height: 1.2;
+            }
+
+            &__button {
+                height: 20px;
+                width: 20px;
+            }
+
+            &__img {
+                width: 10px;
+            }
+        }
+
+        .dart-form-control:read-only {
+            color: #B4B4B4;
         }
     }
 }
