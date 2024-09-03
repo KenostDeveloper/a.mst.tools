@@ -1210,7 +1210,7 @@ export default {
             })
               .then((result) => {
                 this.loading = false
-                router.push({ name: 'b2b', params: { id: router.currentRoute._value.params.id } })
+                router.push({ name: 'b2c', params: { id: router.currentRoute._value.params.id } })
               })
               .catch((result) => {
                 console.log(result)
@@ -1237,7 +1237,7 @@ export default {
             })
               .then((result) => {
                 this.loading = false
-                router.push({ name: 'b2b', params: { id: router.currentRoute._value.params.id } })
+                router.push({ name: 'b2c', params: { id: router.currentRoute._value.params.id } })
               })
               .catch((result) => {
                 console.log(result)
