@@ -647,6 +647,80 @@ $mobile-s: 240px;
     }
 
 
+    // Nav
+    .nav {
+        .pi-times {
+            display: flex;
+            
+            &::before {
+                font-size: 14px;
+            }
+        }
+    }
+
+    
+    // Sitebar
+    .sitebar {
+        .sitebar-profile {
+            padding: 13px 0 13px 15px;
+            margin-top: 76px;
+
+            &__name {
+                margin-top: 8px;
+            }
+
+            &__tags {
+                gap: 22px;
+            }
+        }
+
+        .sitebar-org {
+            gap: 22px;
+        }
+
+        .sitebar-role {
+            box-shadow: 0px 4px 14.8px 0px #00000040;
+        }
+
+        .sitebar-info {
+            margin-top: 18px;
+            padding: 0px 15px 0px 15px;
+        }
+
+        .sitebar-hr {
+            margin: 22px 15px;
+        }
+
+        .sitebar-menu {
+            &__name {
+                padding: 0 0 0 15px;
+            }
+
+            .p-panelmenu {
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+
+                .p-panelmenu-panel {
+                    height: 32px;
+                }
+            }
+        }
+
+        .sitebar-logout {
+            flex-direction: row-reverse;
+            gap: 7px;
+
+            width: fit-content;
+            padding: 0 0 15px 15px;
+
+            span {
+                font-size: 15px;
+            }
+        }
+    }
+
+
     // OrgProfile
     .std-profile {
         padding-inline: 15px;
