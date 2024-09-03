@@ -442,23 +442,23 @@ width: 1400px;
   z-index: 2;
 }
 
-.k-container{
-  width: 100%;
-  overflow-x: auto;
-  position: relative;
+// .k-container{
+//   width: 100%;
+//   overflow-x: auto;
+//   position: relative;
 
-  &::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-    background-color: #e0e0e0; /* blue */
-    border-radius: 9em;
-  }
+//   &::-webkit-scrollbar {
+//     width: 8px;
+//     height: 8px;
+//     background-color: #e0e0e0; /* blue */
+//     border-radius: 9em;
+//   }
 
-  &::-webkit-scrollbar-thumb {
-      background-color: #b4b4b4; /* green */
-      border-radius: 9em;
-  }
-}
+//   &::-webkit-scrollbar-thumb {
+//       background-color: #b4b4b4; /* green */
+//       border-radius: 9em;
+//   }
+// }
 
 .event-none{
   pointer-events: none;

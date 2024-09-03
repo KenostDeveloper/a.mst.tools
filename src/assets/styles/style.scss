@@ -4236,7 +4236,7 @@ top: 0;
 
 .k-container{
     width: 100%;
-    overflow-x: auto;
+    // overflow-x: auto;
     position: relative;
 
     &::-webkit-scrollbar {
@@ -4254,6 +4254,12 @@ top: 0;
 
 .event-none{
     pointer-events: none;
+}
+
+.k-table thead{
+  position: sticky;
+  top: 0;
+  background: #FFF;
 }
 
 
@@ -4348,7 +4354,7 @@ top: 0;
       color: #282828;
       font-size: 14px;
       font-weight: 500px;
-      padding: 8px 0 24px 0;
+      padding: 12px 0 12px 0;
       border-bottom: 1px solid #0000001F;
   }
 
@@ -4504,7 +4510,7 @@ top: 0;
         color: #282828;
         font-size: 14px;
         font-weight: 500px;
-        padding: 8px 0 24px 0;
+        padding: 12px 0 12px 0;
         border-bottom: 1px solid #0000001F;
     }
 
