@@ -118,7 +118,7 @@
       </div>
     </td>
     <td>{{item.payer === '1' ? 'Поставщик' : 'Покупатель'}} / <br> от {{getMinDelivery(items.stores).delivery}} дн ({{new Date(getMinDelivery(items.stores).delivery_day).toLocaleString("ru", {month: 'long', day: 'numeric'})}})</td>
-    <td>{{item.remains}}</td>
+    <td>{{item.remains}} шт.</td>
     <td>{{item.org_name}} <br> <span class="flex align-items-center justify-content-center gap-1"><img :src="item.store_image" class="kenost-table-elem__logo" alt=""> {{ item.store_name }}</span></td>
     <td>{{item.old_price ? Math.round(item.old_price).toLocaleString('ru') : Math.round(item.price).toLocaleString('ru')}} ₽ <br> {{((item.old_price - item.price).toFixed(0)).toLocaleString('ru')}} ₽</td>
     <!-- <td></td>
@@ -159,6 +159,12 @@
           <div @click="addBasketComplect(item.complect_id, item.basket.count, item.store_id, index)" class="dart-btn dart-btn-primary"><i class="d_icon d_icon-busket"></i></div>
         </form>
       </td>
+      <td>{{Math.round(Number(item.new_price)).toLocaleString('ru')}}₽ x {{ item.multiplicity }} шт. <br> {{item.action?.delay ? Number(item.action?.delay).toFixed(1) + ' дн' : 'Нет'}}</td>
+      <td></td>
+      <td class="td-center" :class="{'pointer-none' : index !== 0}"><span :style="'top:' +  (complect.length * 70) / 2 + 'px'" v-if="index === 0">{{item.action?.payer === '1' ? 'Поставщик' : 'Покупатель'}} / <br>от {{item.delivery}} дн ({{new Date(item.delivery_day).toLocaleString("ru", {month: 'long', day: 'numeric'})}})</span> </td>
+      <td class="td-center" :class="{'pointer-none' : index !== 0}"><span :style="'top:' +  (complect.length * 70) / 2 + 'px'" v-if="index === 0">{{item.remain_complect}} шт.</span></td>
+      <td>{{item.org_name}} <br> <span class="flex align-items-center justify-content-center gap-1"><img :src="item.store_image" class="kenost-table-elem__logo" alt=""> {{ item.store_name }}</span></td>
+      <td>{{item.price ? Math.round(item.price).toLocaleString('ru') : Math.round(item.new_price).toLocaleString('ru')}} ₽ <br> {{((item.price - item.new_price).toFixed(0)).toLocaleString('ru')}} ₽</td>
       <!-- <td></td>
       <td><span class="k-table__article">{{item.article}}</span></td>
       <td class="k-table__photo">
@@ -493,16 +499,15 @@ span{
   }
 
   &__td{
-    position: absolute;
-    width: 100px;
-    top: 50%;
-    transform: translate(0, -50%);
+    position: relative;
+
   }
 
   &__form{
-    // position: absolute;
-    // top: 100%;
-    // transform: translate(0, -50%);
+    position: absolute;
+    width: 100%;
+    top: 100%;
+    transform: translate(0, -50%);
   }
 }
 
