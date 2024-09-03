@@ -645,6 +645,49 @@ $mobile-s: 240px;
     .std-profile {
         padding-inline: 15px;
 
+        .avatar-org {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            background-color: #838383;
+            border-radius: 0;
+
+            height: 120px;
+            width: 100% !important;
+
+            .p-fileupload {
+                height: 100%;
+                width: 100%;
+
+                .p-fileupload-buttonbar {
+                    border: none;
+                    height: 100%;
+                }
+
+                .org-upload-i {
+                    display: flex;
+
+                    top: initial;
+                    left: initial;
+                    right: 15px;
+                    bottom: 15px;
+
+                    opacity: 1 !important;
+                    transform: none;
+
+                    width: 21px !important;
+                    height: 21px !important;
+                }
+
+                .org-upload-img {
+                    object-fit: cover;
+                    // width: auto !important;
+                    height: 100% !important;
+                }
+            }
+        }
+
         .profile-content__title {
             padding: 0;
 
@@ -690,6 +733,7 @@ $mobile-s: 240px;
             }
 
             .p-tabview-nav-container {
+                font-family: 'Roboto', sans-serif;
                 margin-bottom: 32px;
             }
 
@@ -817,8 +861,23 @@ $mobile-s: 240px;
             }
         }
 
+        &__options {
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
         .dart-form-control:read-only {
             color: #B4B4B4;
+        }
+
+        &__bank-requisites {
+            margin-top: 0 !important;
+
+            .text-s {
+                margin-bottom: 16px !important;
+            }
         }
     }
 }

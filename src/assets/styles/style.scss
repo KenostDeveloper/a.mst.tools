@@ -2499,6 +2499,12 @@ p {
 .f-basis-auto {
   flex-basis: auto !important;
 }
+.f-direction-col {
+  flex-direction: column !important;
+}
+.f-align-center {
+  align-items: center !important;
+}
 
 .std-title {
   font-size: 24px;
@@ -4007,6 +4013,13 @@ top: 0;
       height: fit-content !important;
     }
   }
+}
+
+.kenost-dropzone__link {
+  color: #1874CF;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  margin-top: 8px;
 }
 
 // ----------------

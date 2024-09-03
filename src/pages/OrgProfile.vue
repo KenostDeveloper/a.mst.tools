@@ -38,10 +38,16 @@
 							v-bind="args"
 						>
 							<template v-slot:message>
-								<div class="kenost-dropzone__custom">
+								<div class="kenost-dropzone__custom hidden-mobile-l">
 									<i class="pi pi-cloud-upload"></i>
 									<b>Перетащите файл в эту область</b>
 									<p>Вы также можете загрузить файл, <span>нажав сюда</span></p>
+								</div>
+
+								<div class="kenost-dropzone__custom visible-mobile-l">
+									<i class="pi pi-cloud-upload"></i>
+									<b>Загрузите файл сюда</b>
+									<span class="kenost-dropzone__link">Открыть</span>
 								</div>
 							</template>
 						</DropZone>
@@ -65,6 +71,7 @@
 								>
 									<img
 										@click="chooseCallback()"
+										class="org-upload-img"
 										:src="
 											orgprofile.upload_image
 												? this.orgprofile.image.original_href
@@ -72,7 +79,7 @@
 										"
 										alt=""
 									/>
-									<i class="pi pi-upload org-upload-i"></i>
+									<img class="org-upload-i" src="../assets/images/icons/upload.svg" />
 								</template>
 							</FileUpload>
 						</div>
@@ -247,9 +254,9 @@
 											:placeholder="field.placeholder"
 										/>
 									</div>
-									<div class="flex justify-start align-items-center w-full">
-										<div class="flex align-items-center">
-											<!-- <img src="../assets/img/icons/cheked.svg" alt="" v-if="requisit.marketplace == '1'"> -->
+									<div class="std-profile__options flex w-full">
+										<div v-if="requisit.marketplace == '1'" class="flex align-items-center">
+											<img src="../assets/img/icons/cheked.svg" alt="">
 											<label
 												:for="'create-page-action' + index"
 												class="ml-2 mb-0"
@@ -275,7 +282,7 @@
 										</div>
 									</div>
 									<!-- dart-form-group mt-4 mb-0 -->
-									<div class="dart-form-group mt-4 mb-0" v-if="requisit.hide">
+									<div class="std-profile__bank-requisites dart-form-group mt-4 mb-0" v-if="requisit.hide">
 										<div v-for="(bank, index) in requisit.banks" :key="index">
 											<p class="text-s">Банковские реквизиты ({{ index + 1 }})</p>
 											<div class="kenost-form-grid mb-3">

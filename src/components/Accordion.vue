@@ -49,7 +49,7 @@ export default {
         }
         
         .std-accordion__content {
-            max-height: 100dvh;
+            height: auto;
         }
     }    
 
@@ -82,9 +82,9 @@ export default {
         display: flex;
         flex-direction: column;
 
-        max-height: 0;
+        height: 0px;
         overflow: hidden;
-        transition-duration: .3s;
+        transition: height .3s  ease-in-out;
     }
 }
 </style>
