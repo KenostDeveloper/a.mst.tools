@@ -160,7 +160,67 @@
         </form>
       </td>
       <td>{{Math.round(Number(item.new_price)).toLocaleString('ru')}}₽ x {{ item.multiplicity }} шт. <br> {{item.action?.delay ? Number(item.action?.delay).toFixed(1) + ' дн' : 'Нет'}}</td>
-      <td></td>
+      <td>
+        <div class="table-actions">
+          <!-- 'red': action?.conflicts?.items[action.action_id]?.sales_conflicts -->
+          <div class="table-actions__action" :class="{'active': action.enabled, 'red': action?.conflicts?.items[action.action_id]?.sales_conflicts}" v-for="(action, indexactions) in item.actions" v-bind:key="action.id">
+            <div v-if="action.tags.length > 0" class="table-actions__container" @click="updateAction(item.id == 0? this.action.remain_id : item.remain_id, item.id == 0? this.action.store_id : item.store_id, action, index, indexactions)">
+              <div class="table-actions__el" v-for="(tag, indextag) in action.tags" v-bind:key="tag.id">
+                <img v-if="tag.type == 'multiplicity'" src="../../assets/images/icons/action/box.svg" alt="">
+                <p  v-if="tag.type == 'multiplicity'">{{ tag.value }} шт.</p>
+
+                <img v-if="tag.type == 'gift'" src="../../assets/images/icons/action/gift.svg" alt="">
+
+                <img v-if="tag.type == 'delay'" src="../../assets/images/icons/action/time.svg" alt="">
+                <p  v-if="tag.type == 'delay'">От-ка {{ tag.value }} дн.</p>
+
+                <img v-if="tag.type == 'sale'" src="../../assets/images/icons/action/sale.svg" alt="">
+                <p  v-if="tag.type == 'sale'">Скидка {{ Number(tag.value).toFixed(0) }}%</p>
+
+                <img v-if="tag.type == 'free_delivery'" src="../../assets/images/icons/action/delivery.svg" alt="">
+
+                <!-- TODO: Комплекты -->
+              </div>
+            
+              <!-- <div class="table-actions__el">
+                <img src="../../assets/images/icons/action/complect.svg" alt="">
+                <p>Компл-т</p>
+              </div> -->
+            </div>
+            <div v-if="action.tags.length > 0" class="table-actions__help">
+              <p>?</p>
+              <div class="table-actions__content">
+                <div class="table-actions__modal">
+                  <div class="table-actions__modal-elems">
+                    <div class="table-actions__modal-el" v-for="(tag, index) in action.tags" v-bind:key="tag.id">
+                      <img v-if="tag.type == 'min_sum'" src="../../assets/images/icons/action/basket.svg" alt="">
+                      <p v-if="tag.type == 'min_sum'">Минимальна сумма покупки {{ Number(tag.value).toLocaleString('ru') }} ₽</p>
+
+                      <img v-if="tag.type == 'free_delivery'" src="../../assets/images/icons/action/delivery.svg" alt="">
+                      <p v-if="tag.type == 'free_delivery'"><span>Бесплатная доставка</span> <span v-if="tag.condition == '2'"> при покупке от {{ (tag.value).toLocaleString('ru') }} ₽</span> <span v-if="tag.condition == '3'"> при покупке от {{ (tag.value).toLocaleString('ru') }} шт.</span></p>
+
+                      <img v-if="tag.type == 'gift'" src="../../assets/images/icons/action/gift.svg" alt="">
+                      <p v-if="tag.type == 'gift'">Подарок</p>
+
+                      <img v-if="tag.type == 'delay'" src="../../assets/images/icons/action/gift.svg" alt="">
+                      <p v-if="tag.type == 'delay'">Отсрочка {{ tag.value }} дн.</p>
+
+                      <img v-if="tag.type == 'multiplicity'" src="../../assets/images/icons/action/box.svg" alt="">
+                      <p v-if="tag.type == 'multiplicity'">Краткость упаковки {{ (tag.value).toLocaleString('ru') }} шт.</p>
+
+                      <img v-if="tag.type == 'sale'" src="../../assets/images/icons/action/sale.svg" alt="">
+                      <p v-if="tag.type == 'sale'">Скидка {{ (tag.value).toLocaleString('ru') }}%</p>
+                    </div>
+                  </div>
+                  <div class="table-actions__modal-btn-container">
+                    <router-link v-if="action.action_id > 0" :to="{name: 'promotion', params: { id: this.$route.params.id, action: action.action_id }}" class="table-actions__modal-btn">Подробнее об акции</router-link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
       <td class="td-center" :class="{'pointer-none' : index !== 0}"><span :style="'top:' +  (complect.length * 70) / 2 + 'px'" v-if="index === 0">{{item.action?.payer === '1' ? 'Поставщик' : 'Покупатель'}} / <br>от {{item.delivery}} дн ({{new Date(item.delivery_day).toLocaleString("ru", {month: 'long', day: 'numeric'})}})</span> </td>
       <td class="td-center" :class="{'pointer-none' : index !== 0}"><span :style="'top:' +  (complect.length * 70) / 2 + 'px'" v-if="index === 0">{{item.remain_complect}} шт.</span></td>
       <td>{{item.org_name}} <br> <span class="flex align-items-center justify-content-center gap-1"><img :src="item.store_image" class="kenost-table-elem__logo" alt=""> {{ item.store_name }}</span></td>
