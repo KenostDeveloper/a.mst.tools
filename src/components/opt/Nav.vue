@@ -1,9 +1,8 @@
 <template>
-	<div :class="`navmain std-nav ${catalogIsOpened ? 'std-nav--active' : ''}`" @mouseleave="() => toggleCatalogVisibility(false)">
+	<div :class="`navmain std-nav ${catalogIsOpened ? 'std-nav--active' : ''}`">
 		<!-- Каталог -->
 		<div
 			:class="`std-catalog ${catalogIsOpened ? 'std-catalog--active' : ''}`"
-			@mouseenter="() => toggleCatalogVisibility(true)"
 		>
 			<div class="std-catalog__tabs">
 				<button
@@ -50,7 +49,7 @@
 								this.actualImageSrc = '';
 							}
 						"
-						@click="toggleCatalogVisibility(false)"
+						@click="toggleCatalogVisibilityAd()"
 						class="std-catalog__tab-item std-tab-item std-tab-item--alt"
 						v-for="level1 in this.organizationsOrCategories === 'organizations' ? this.catalog_warehouse : this.catalog"
 					>
@@ -71,7 +70,6 @@
 								class="std-catalog__nav std-catalog__nav--secondary std-catalog__tabs std-catalog__tabs--vertical"
 							>
 								<router-link
-									v-if="this.organizationsOrCategories === 'organizations'"
 									:to="{
 										name: 'purchases_catalog_warehouse',
 										params: { id: this.$route.params.id, category_id: level2.id, warehouse_id: level2.id },
@@ -83,7 +81,7 @@
 											this.actualImageSrc = level2.menu_image || '';
 										}
 									"
-									@click="toggleCatalogVisibility(false)"
+									@click="toggleCatalogVisibilityAd()"
 									class="std-catalog__tab-item std-tab-item std-tab-item--alt2"
 									v-for="level2 in this.actualNav.secondLevel"
 								>
@@ -103,7 +101,7 @@
 											this.actualImageSrc = level2.menu_image || '';
 										}
 									"
-									@click="toggleCatalogVisibility(false)"
+									@click="toggleCatalogVisibilityAd()"
 									class="std-catalog__tab-item std-tab-item std-tab-item--alt2"
 									v-for="level2 in this.actualNav.secondLevel"
 								>
@@ -114,23 +112,7 @@
 							<div
 								class="std-catalog__nav std-catalog__nav--thirdy std-catalog__tabs std-catalog__tabs--vertical"
 							>
-								<!-- <router-link
-									v-if="this.organizationsOrCategories === 'organizations'"
-									:to="{
-										name: 'purchases_catalog_warehouse',
-										params: { id: this.$route.params.id, category_id: level3.id, warehouse_id: level3.id },
-									}"
-									:key="level3"
-									v-for="level3 in this.actualNav.thirdLevel"
-									class="std-catalog__tab-item std-tab-item std-tab-item--none"
-									@mouseenter="this.actualImageSrc = level3.menu_image || ''"
-									@click="toggleCatalogVisibility(false)"
-								>
-									<span class="std-tab-item__text">{{ level2.pagetitle }}</span>
-									<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
-								</router-link> -->
 								<router-link
-									v-if="this.organizationsOrCategories === 'organizations'"
 									:to="{
 										name: 'purchases_catalog_warehouse',
 										params: { id: this.$route.params.id, category_id: level3?.id, warehouse_id: level3.id  },
@@ -139,7 +121,7 @@
 									v-for="level3 in this.actualNav.thirdLevel"
 									class="std-catalog__tab-item std-tab-item std-tab-item--none"
 									@mouseenter="this.actualImageSrc = level3.menu_image || ''"
-									@click="toggleCatalogVisibility(false)"
+									@click="toggleCatalogVisibilityAd()"
 								>
 									<span class="std-tab-item__text">{{ level3.pagetitle }}</span>
 									<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
@@ -154,7 +136,7 @@
 									v-for="level3 in this.actualNav.thirdLevel"
 									class="std-catalog__tab-item std-tab-item std-tab-item--none"
 									@mouseenter="this.actualImageSrc = level3.menu_image || ''"
-									@click="toggleCatalogVisibility(false)"
+									@click="toggleCatalogVisibilityAd()"
 								>
 									<span class="std-tab-item__text">{{ level3.pagetitle }}</span>
 									<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
@@ -162,14 +144,14 @@
 							</div>
 						</div>
 
-						<img :src="'https://dev.mst.tools/' + this.actualImageSrc" alt="" />
+						<img :src="'https://mst.tools/' + this.actualImageSrc" alt="" />
 					</div>
 				</div>
 			</div>
 		</div>
 		<button
 			class="std-nav__button std-catalog-button"
-			@mouseenter="() => toggleCatalogVisibility(true)"
+			@click="() => toggleCatalogVisibilityAd(true)"
 		>
 			Каталог
 			<i class="pi pi-bars std-catalog-button__icon hidden-mobile-l"></i>
@@ -326,7 +308,10 @@ export default {
 			};
 			this.get_salses_banners_to_api(data);
 		},
-
+		toggleCatalogVisibilityAd() {
+			this.catalogIsOpened = !this.catalogIsOpened;
+			document.body.style.overflow = this.catalogIsOpened ? "hidden" : "auto";
+		},
 		toggleCatalogVisibility(state) {
 			this.catalogIsOpened = state;
 			document.body.style.overflow = this.catalogIsOpened ? "hidden" : "auto";
@@ -347,6 +332,13 @@ export default {
 			this.organizations = (await this.org_get_from_api({ action: "get/orgs" })).data.data;
 		};
 		getOrganizationss();
+		const elem = document.querySelector('.navmain')
+		
+		document.addEventListener('click', (e) => {
+			if (!elem.contains(e.target)) {
+					this.toggleCatalogVisibility(false)
+			}
+		});
 	},
 	components: { Vendors },
 	computed: {

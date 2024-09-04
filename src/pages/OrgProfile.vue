@@ -928,6 +928,12 @@ export default {
 </script>
 
 <style lang="scss">
+.m-0{
+  margin: 0;
+}
+.ml-2{
+  margin-left: 10px;
+}
 .flex-left {
 	display: flex;
 	justify-content: flex-start;
