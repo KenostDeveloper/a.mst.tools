@@ -78,7 +78,7 @@
 			<div class="std-table__wrapper">
 				<table class="std-table">
 					<thead class="std-table__head">
-						<tr class="std-table__row">
+						<tr v-if="this.windowWidth > 480" class="std-table__row">
 							<th class="std-table__hcol">Номер отгрузки</th>
 							<th class="std-table__hcol">Склад</th>
 							<th class="std-table__hcol">Дата</th>
@@ -88,9 +88,15 @@
 							<th class="std-table__hcol">Кол-во товаров, шт</th>
 							<th class="std-table__hcol">Статус</th>
 						</tr>
+						<tr v-if="this.windowWidth <= 480" class="std-table__row">
+							<th class="std-table__hcol">Отгрузка</th>
+							<th class="std-table__hcol">Город</th>
+							<th class="std-table__hcol">Конец приема</th>
+							<th class="std-table__hcol">Статус</th>
+						</tr>
 					</thead>
 					<tbody class="std-table__body">
-						<tr class="std-table__row" v-for="item in this.shipping.shipment" v-bind:key="item.id">
+						<tr v-if="this.windowWidth > 480" class="std-table__row" v-for="item in this.shipping.shipment" v-bind:key="item.id">
 							<td class="std-table__col">{{ item.id }}</td>
 							<td class="std-table__col">{{ item.name_short }}</td>
 							<td class="std-table__col">{{ item.date }}</td>
@@ -98,6 +104,12 @@
 							<td class="std-table__col">{{ item.city_name }}</td>
 							<td class="std-table__col">{{ item.weight }}</td>
 							<td class="std-table__col">{{ item.count }}</td>
+							<td class="std-table__col">{{ item.status_name }}</td>
+						</tr>
+						<tr v-if="this.windowWidth <= 480" class="std-table__row" v-for="item in this.shipping.shipment" v-bind:key="item.id">
+							<td class="std-table__col">{{ item.id }}</td>
+							<td class="std-table__col">{{ item.city_name }}</td>
+							<td class="std-table__col">{{ new Date(item.date_to).toLocaleString('ru', {year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}) }}</td>
 							<td class="std-table__col">{{ item.status_name }}</td>
 						</tr>
 					</tbody>
@@ -755,6 +767,7 @@ export default {
 	},
 	data() {
 		return {
+			windowWidth: 1920,
 			calendarIsExpanded: false,
 
 			editMode: false,
@@ -1149,6 +1162,11 @@ export default {
 		},
 	},
 	mounted() {
+		this.windowWidth = window.innerWidth;
+		window.addEventListener('resize', () => {
+			this.windowWidth = window.innerWidth;
+		})
+
 		this.$load(async () => {
 			await this.get_shipping_from_api({ filter: [] });
 			this.attributes.push(this.shipping.dates);
