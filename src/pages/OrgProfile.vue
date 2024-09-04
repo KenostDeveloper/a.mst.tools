@@ -151,7 +151,7 @@
 									<p class="text-m">Реквизиты {{ requisit.name }}</p>
 									<button
 										v-if="requisit.send_request == '0'"
-										class="name-requisit-edit std-pencil-icon__wrapper"
+										class="name-requisit-edit std-icon__wrapper"
 										@click="
 											(this.modals.requisitedit = true),
 												(this.modals.requisitedit_index = index)
