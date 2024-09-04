@@ -1,5 +1,5 @@
 <template>
-	<div :class="`navmain std-nav ${catalogIsOpened ? 'std-nav--active' : ''}`" @mouseleave="() => toggleCatalogVisibility(false)">
+	<div :class="`navmain std-nav ${catalogIsOpened ? 'std-nav--active' : ''}`" @mouseleave="() => toggleCatalogVisibility(true)">
 		<!-- Каталог -->
 		<div
 			:class="`std-catalog ${catalogIsOpened ? 'std-catalog--active' : ''}`"
@@ -148,7 +148,8 @@
 			@mouseenter="() => toggleCatalogVisibility(true)"
 		>
 			Каталог
-			<i class="pi pi-bars std-catalog-button__icon"></i>
+			<i class="pi pi-bars std-catalog-button__icon hidden-mobile-l"></i>
+			<i class="pi pi-angle-down std-catalog-button__icon visible-mobile-l"></i>
 		</button>
 
 		<div

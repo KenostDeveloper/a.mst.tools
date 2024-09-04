@@ -2538,6 +2538,17 @@ p {
 
   &__table {
     width: 100% !important;
+
+    .std-table__hcol {
+      padding-inline: 9px;
+
+      &:first-child {
+        padding-left: 15px;
+      }
+      &:last-child {
+        padding-right: 15px;
+      }
+    }
   }
 
   &__title-container {
