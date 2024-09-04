@@ -154,8 +154,9 @@
 			@click="() => toggleCatalogVisibilityAd(true)"
 		>
 			Каталог
-			<i class="pi pi-bars std-catalog-button__icon hidden-mobile-l"></i>
-			<i class="pi pi-angle-down std-catalog-button__icon visible-mobile-l"></i>
+			<!-- <i class="pi pi-bars std-catalog-button__icon hidden-mobile-l"></i> -->
+			<!-- <i class="pi pi-angle-down std-catalog-button__icon visible-mobile-l"></i> -->
+			 <img src="/images/icons/menu.svg" alt="">
 		</button>
 
 		<div
