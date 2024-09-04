@@ -71,6 +71,27 @@
 								class="std-catalog__nav std-catalog__nav--secondary std-catalog__tabs std-catalog__tabs--vertical"
 							>
 								<router-link
+									v-if="this.organizationsOrCategories === 'organizations'"
+									:to="{
+										name: 'purchases_catalog_warehouse',
+										params: { id: this.$route.params.id, category_id: level2.id, warehouse_id: level2.id },
+									}"
+									:key="level2"
+									@mouseenter="
+										() => {
+											this.actualNav.thirdLevel = level2.children;
+											this.actualImageSrc = level2.menu_image || '';
+										}
+									"
+									@click="toggleCatalogVisibility(false)"
+									class="std-catalog__tab-item std-tab-item std-tab-item--alt2"
+									v-for="level2 in this.actualNav.secondLevel"
+								>
+									<span class="std-tab-item__text">{{ level2.pagetitle }}</span>
+									<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
+								</router-link>
+								<router-link
+									v-if="this.organizationsOrCategories != 'organizations'"
 									:to="{
 										name: 'purchases_catalog',
 										params: { id: this.$route.params.id, category_id: level2.id },
@@ -93,7 +114,38 @@
 							<div
 								class="std-catalog__nav std-catalog__nav--thirdy std-catalog__tabs std-catalog__tabs--vertical"
 							>
+								<!-- <router-link
+									v-if="this.organizationsOrCategories === 'organizations'"
+									:to="{
+										name: 'purchases_catalog_warehouse',
+										params: { id: this.$route.params.id, category_id: level3.id, warehouse_id: level3.id },
+									}"
+									:key="level3"
+									v-for="level3 in this.actualNav.thirdLevel"
+									class="std-catalog__tab-item std-tab-item std-tab-item--none"
+									@mouseenter="this.actualImageSrc = level3.menu_image || ''"
+									@click="toggleCatalogVisibility(false)"
+								>
+									<span class="std-tab-item__text">{{ level2.pagetitle }}</span>
+									<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
+								</router-link> -->
 								<router-link
+									v-if="this.organizationsOrCategories === 'organizations'"
+									:to="{
+										name: 'purchases_catalog_warehouse',
+										params: { id: this.$route.params.id, category_id: level3?.id, warehouse_id: level3.id  },
+									}"
+									:key="level3"
+									v-for="level3 in this.actualNav.thirdLevel"
+									class="std-catalog__tab-item std-tab-item std-tab-item--none"
+									@mouseenter="this.actualImageSrc = level3.menu_image || ''"
+									@click="toggleCatalogVisibility(false)"
+								>
+									<span class="std-tab-item__text">{{ level3.pagetitle }}</span>
+									<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
+								</router-link>
+								<router-link
+									v-if="this.organizationsOrCategories != 'organizations'"
 									:to="{
 										name: 'purchases_catalog',
 										params: { id: this.$route.params.id, category_id: level3?.id },
