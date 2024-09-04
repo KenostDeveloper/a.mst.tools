@@ -16,23 +16,27 @@
 				<p class="table-kenost__title std-shipping__title">Отгрузки</p>
 			</div>
 
+			<!-- TODO Починить раскрытие календаря (для Steiden) -->
 			<div
 				:class="`shipping-calendar std-calendar ${
 					this.calendarIsExpanded ? 'std-calendar--active' : ''
 				} visible-desktop-s`"
 			>
-				<div class="shipping-calendar__head std-calendar__head">
+				<div
+					class="shipping-calendar__head std-calendar__head"
+					@click="this.calendarIsExpanded = !this.calendarIsExpanded"
+				>
 					<p>Календарь отгрузок</p>
 					<div class="std-calendar__actions">
-						<div
-							class="std-calendar__expand-button hidden-tablet-l"
-							@click="this.calendarIsExpanded = !this.calendarIsExpanded"
-						>
+						<div class="std-calendar__expand-button hidden-tablet-l">
 							<i class="pi pi-angle-up"></i>
 						</div>
-						<div class="dart-btn dart-btn-primary" @click="this.showShip = true">
+						<button
+							class="dart-btn dart-btn-primary std-plus-icon__wrapper"
+							@click="this.showShip = true"
+						>
 							<i class="pi pi-plus"></i>
-						</div>
+						</button>
 					</div>
 				</div>
 				<Calendar
@@ -96,26 +100,55 @@
 						</tr>
 					</thead>
 					<tbody class="std-table__body">
-						<tr v-if="this.windowWidth > 480" class="std-table__row" v-for="item in this.shipping.shipment" v-bind:key="item.id">
+						<tr
+							v-if="this.windowWidth > 480"
+							class="std-table__row"
+							v-for="item in this.shipping.shipment"
+							v-bind:key="item.id"
+						>
 							<td class="std-table__col">{{ item.id }}</td>
 							<td class="std-table__col">{{ item.name_short }}</td>
 							<td class="std-table__col">{{ item.date }}</td>
-							<td class="std-table__col">{{ new Date(item.date_to).toLocaleString('ru', {year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}) }}</td>
+							<td class="std-table__col">
+								{{
+									new Date(item.date_to).toLocaleString("ru", {
+										year: "numeric",
+										month: "long",
+										day: "numeric",
+										hour: "numeric",
+										minute: "numeric",
+									})
+								}}
+							</td>
 							<td class="std-table__col">{{ item.city_name }}</td>
 							<td class="std-table__col">{{ item.weight }}</td>
 							<td class="std-table__col">{{ item.count }}</td>
 							<td class="std-table__col">{{ item.status_name }}</td>
 						</tr>
-						<tr v-if="this.windowWidth <= 480" class="std-table__row" v-for="item in this.shipping.shipment" v-bind:key="item.id">
+						<tr
+							v-if="this.windowWidth <= 480"
+							class="std-table__row"
+							v-for="item in this.shipping.shipment"
+							v-bind:key="item.id"
+						>
 							<td class="std-table__col">{{ item.id }}</td>
 							<td class="std-table__col">{{ item.city_name }}</td>
-							<td class="std-table__col">{{ new Date(item.date_to).toLocaleString('ru', {year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}) }}</td>
+							<td class="std-table__col">
+								{{
+									new Date(item.date_to).toLocaleString("ru", {
+										year: "numeric",
+										month: "long",
+										day: "numeric",
+										hour: "numeric",
+										minute: "numeric",
+									})
+								}}
+							</td>
 							<td class="std-table__col">{{ item.status_name }}</td>
 						</tr>
 					</tbody>
 				</table>
 				<!-- {{ shipping.shipment }} -->
-
 			</div>
 		</div>
 
@@ -148,9 +181,9 @@
 					<div class="std-display-contents hidden-tablet-l">
 						<p class="shopping-kenost__b std-dropdown__title">Дата и время</p>
 						<div class="dart-alert dart-alert-info">
-							Если Вы выберите повторение отгрузки, то смещение дат относительно самой отгрузки и
-							датой окончания приемки заказов будет выставлено аналогичное тому, что вы укажете
-							ниже.
+							Если Вы выберите повторение отгрузки, то смещение дат относительно самой
+							отгрузки и датой окончания приемки заказов будет выставлено аналогичное
+							тому, что вы укажете ниже.
 						</div>
 						<div class="shopping-kenost__dates">
 							<div class="shopping-kenost__row">
@@ -246,7 +279,10 @@
 						</div>
 						<div
 							class="dart-form-group-simple"
-							v-if="form.timeSelected.repeater == 'day' || form.timeSelected.repeater == 'week'"
+							v-if="
+								form.timeSelected.repeater == 'day' ||
+								form.timeSelected.repeater == 'week'
+							"
 							:class="{ error: v$.form.timeSelected.range.$errors.length }"
 						>
 							<label for="">В период</label>
@@ -261,7 +297,9 @@
 										<div class="d-col-md-6">
 											<input
 												class="dart-form-control"
-												:class="isDragging ? 'text-gray-600' : 'text-gray-900'"
+												:class="
+													isDragging ? 'text-gray-600' : 'text-gray-900'
+												"
 												:value="inputValue.start"
 												v-on="inputEvents.start"
 											/>
@@ -269,7 +307,9 @@
 										<div class="d-col-md-6">
 											<input
 												class="dart-form-control"
-												:class="isDragging ? 'text-gray-600' : 'text-gray-900'"
+												:class="
+													isDragging ? 'text-gray-600' : 'text-gray-900'
+												"
 												:value="inputValue.end"
 												v-on="inputEvents.end"
 											/>
@@ -289,10 +329,10 @@
 					<div class="std-display-contents hidden-tablet-l">
 						<p class="shopping-kenost__b mt-2 mb-1 std-dropdown__title">Маршрут</p>
 						<div class="dart-alert dart-alert-info">
-							Выберите города маршрута и проставьте даты, когда транспорт будет разгружен (по
-							умолчанию, дата будет совпадать с выбранной датой начала отгрузки). Если Вы выбрали
-							повторение, то при генерации дальнейших отгрузок будет выбрано аналогичное смещение
-							дат.
+							Выберите города маршрута и проставьте даты, когда транспорт будет
+							разгружен (по умолчанию, дата будет совпадать с выбранной датой начала
+							отгрузки). Если Вы выбрали повторение, то при генерации дальнейших
+							отгрузок будет выбрано аналогичное смещение дат.
 						</div>
 						<div
 							class="dart-form-group mt-1 mb-2"
@@ -349,9 +389,9 @@
 						</summary>
 						<div class="std-dropdown__content">
 							<div class="dart-alert dart-alert-info">
-								Если Вы выберите повторение отгрузки, то смещение дат относительно самой отгрузки и
-								датой окончания приемки заказов будет выставлено аналогичное тому, что вы укажете
-								ниже.
+								Если Вы выберите повторение отгрузки, то смещение дат относительно
+								самой отгрузки и датой окончания приемки заказов будет выставлено
+								аналогичное тому, что вы укажете ниже.
 							</div>
 							<div class="shopping-kenost__dates">
 								<div class="shopping-kenost__row">
@@ -379,7 +419,9 @@
 								<div class="d-col-md-12">
 									<div
 										class="dart-form-group"
-										:class="{ error: v$.form.timeSelected.repeater.$errors.length }"
+										:class="{
+											error: v$.form.timeSelected.repeater.$errors.length,
+										}"
 									>
 										<label for="">Повторять</label>
 										<Dropdown
@@ -403,7 +445,9 @@
 								<div class="d-col-md-12">
 									<div
 										class="dart-form-group"
-										:class="{ error: v$.form.timeSelected.repeater.$errors.length }"
+										:class="{
+											error: v$.form.timeSelected.repeater.$errors.length,
+										}"
 									>
 										<label for="">Склад</label>
 										<Dropdown
@@ -447,7 +491,10 @@
 							</div>
 							<div
 								class="dart-form-group-simple"
-								v-if="form.timeSelected.repeater == 'day' || form.timeSelected.repeater == 'week'"
+								v-if="
+									form.timeSelected.repeater == 'day' ||
+									form.timeSelected.repeater == 'week'
+								"
 								:class="{ error: v$.form.timeSelected.range.$errors.length }"
 							>
 								<label for="">В период</label>
@@ -462,7 +509,11 @@
 											<div class="d-col-md-6">
 												<input
 													class="dart-form-control"
-													:class="isDragging ? 'text-gray-600' : 'text-gray-900'"
+													:class="
+														isDragging
+															? 'text-gray-600'
+															: 'text-gray-900'
+													"
 													:value="inputValue.start"
 													v-on="inputEvents.start"
 												/>
@@ -470,7 +521,11 @@
 											<div class="d-col-md-6">
 												<input
 													class="dart-form-control"
-													:class="isDragging ? 'text-gray-600' : 'text-gray-900'"
+													:class="
+														isDragging
+															? 'text-gray-600'
+															: 'text-gray-900'
+													"
 													:value="inputValue.end"
 													v-on="inputEvents.end"
 												/>
@@ -495,10 +550,10 @@
 						</summary>
 						<div class="std-dropdown__content">
 							<div class="dart-alert dart-alert-info">
-								Выберите города маршрута и проставьте даты, когда транспорт будет разгружен (по
-								умолчанию, дата будет совпадать с выбранной датой начала отгрузки). Если Вы выбрали
-								повторение, то при генерации дальнейших отгрузок будет выбрано аналогичное смещение
-								дат.
+								Выберите города маршрута и проставьте даты, когда транспорт будет
+								разгружен (по умолчанию, дата будет совпадать с выбранной датой
+								начала отгрузки). Если Вы выбрали повторение, то при генерации
+								дальнейших отгрузок будет выбрано аналогичное смещение дат.
 							</div>
 							<div
 								class="dart-form-group mt-1 mb-2"
@@ -535,7 +590,9 @@
 										</div>
 									</div>
 									<div class="shopping-kenost__cityone-date mb-3" v-if="item">
-										<p class="k-mini-text">Дата и время окончания приема заказов</p>
+										<p class="k-mini-text">
+											Дата и время окончания приема заказов
+										</p>
 										<CalendarVue
 											showIcon
 											id="calendar-24h"
@@ -556,7 +613,9 @@
 						>
 							Отменить
 						</div>
-						<button type="submit" class="dart-btn dart-btn-primary btn-padding">Сохранить</button>
+						<button type="submit" class="dart-btn dart-btn-primary btn-padding">
+							Сохранить
+						</button>
 					</div>
 				</div>
 			</form>
@@ -576,7 +635,10 @@
 					>
 						<i class="pi pi-angle-up"></i>
 					</div>
-					<div class="dart-btn dart-btn-primary" @click="this.showShip = true">
+					<div
+						class="dart-btn dart-btn-primary std-plus-icon__wrapper"
+						@click="this.showShip = true"
+					>
 						<i class="pi pi-plus"></i>
 					</div>
 				</div>
@@ -738,7 +800,7 @@ import { mapActions, mapGetters, mapMutations } from "vuex";
 import { useVuelidate } from "@vuelidate/core";
 //   import { required } from '@/utils/i18n-validators'
 import { required } from "../utils/i18n-validators";
-  import router from '../router'
+import router from "../router";
 import AutoComplete from "primevue/autocomplete";
 import Dropdown from "primevue/dropdown";
 import MultiSelect from "primevue/multiselect";
@@ -1052,10 +1114,10 @@ export default {
 			} else {
 				this.$load(async () => {
 					let data = this.form;
-					data.dateStart = data.dateStart.toDateString()
-					data.dateEnd = data.dateEnd.toDateString()
-					for(let i = 0; i < data.citiesDates.length; i++){
-						data.citiesDates[i] = data.citiesDates[i].toDateString()
+					data.dateStart = data.dateStart.toDateString();
+					data.dateEnd = data.dateEnd.toDateString();
+					for (let i = 0; i < data.citiesDates.length; i++) {
+						data.citiesDates[i] = data.citiesDates[i].toDateString();
 					}
 					await this.set_shipping_to_api({
 						action: "set",
@@ -1107,7 +1169,10 @@ export default {
 		filter(data) {
 			// console.log(data)
 			if (typeof data.filtersdata !== "undefined") {
-				if (typeof data.filtersdata.range !== "undefined" && data.filtersdata.range !== null) {
+				if (
+					typeof data.filtersdata.range !== "undefined" &&
+					data.filtersdata.range !== null
+				) {
 					data.filtersdata.dates = [];
 					if (data.filtersdata.range[0]) {
 						const d = data.filtersdata.range[0];
@@ -1118,7 +1183,10 @@ export default {
 						data.filtersdata.dates.push(d.toDateString());
 					}
 				}
-				if (typeof data.filtersdata.status === "undefined" && data.filtersdata.status === null) {
+				if (
+					typeof data.filtersdata.status === "undefined" &&
+					data.filtersdata.status === null
+				) {
 					data.filtersdata.status = 0;
 				}
 			}
@@ -1163,9 +1231,9 @@ export default {
 	},
 	mounted() {
 		this.windowWidth = window.innerWidth;
-		window.addEventListener('resize', () => {
+		window.addEventListener("resize", () => {
 			this.windowWidth = window.innerWidth;
-		})
+		});
 
 		this.$load(async () => {
 			await this.get_shipping_from_api({ filter: [] });

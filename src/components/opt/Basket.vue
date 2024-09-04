@@ -5,7 +5,7 @@
 				<div class="std-basket__header" @click="this.isOpened = !this.isOpened">
 					<div class="std-basket__title-container">
 						<p class="d-col-basket__title std-basket__title"><span>Корзина</span></p>
-						<img src="../../assets/images/icons/cart-icon.svg" alt="" class="std-basket__icon" />
+						<div class="std-cart-icon__wrapper"></div>
 					</div>
 					<button class="std-basket__expand-button">
 						<i class="pi pi-angle-down std-basket__expand-icon"></i>

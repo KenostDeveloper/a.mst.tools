@@ -35,9 +35,10 @@
 			>
 				<template v-slot:desc>
 					<div class="mst-alert mst-alert-info mb-2 mt-2">
-						Параметр <b>«Дней с Out Of Stock»</b> расчитывается за последний календарный месяц.<br />Фильтры
-						<b>«Категория товара»</b> и <b>«Производитель»</b> работает только с теми остатками, с
-						которыми произошло сопоставление с карточками товаров из нашего справочника.
+						Параметр <b>«Дней с Out Of Stock»</b> расчитывается за последний календарный
+						месяц.<br />Фильтры <b>«Категория товара»</b> и
+						<b>«Производитель»</b> работает только с теми остатками, с которыми
+						произошло сопоставление с карточками товаров из нашего справочника.
 					</div>
 				</template>
 			</v-table>
@@ -45,9 +46,11 @@
 		</div>
 	</div>
 
-  <a href="#" class="std-statistics__up-button visible-mobile-l">
-    <img src="../assets/images/icons/arrow-up.svg" alt="">
-  </a>
+	<button
+		class="std-statistics__up-button visible-mobile-l"
+		@click="scrollToTop"
+	>
+	</button>
 </template>
 
 <script>
@@ -73,7 +76,7 @@ export default {
 	},
 	data() {
 		return {
-      windowWidth: 1920,
+			windowWidth: 1920,
 
 			page: 1,
 			pagination_items_per_page: 25,
@@ -237,14 +240,20 @@ export default {
 			});
 		},
 
-    setWindowWidth(value) {
-      this.windowWidth = value;
-    }
+		setWindowWidth(value) {
+			this.windowWidth = value;
+		},
+		scrollToTop() {
+			window.scrollTo({
+				top: 0,
+				behavior: 'smooth'
+			})
+		}
 	},
-  created() {
-    this.setWindowWidth(window.innerWidth)
-    window.addEventListener('resize', () => this.setWindowWidth(window.innerWidth));
-  },
+	created() {
+		this.setWindowWidth(window.innerWidth);
+		window.addEventListener("resize", () => this.setWindowWidth(window.innerWidth));
+	},
 	mounted() {
 		this.org_get_stores_from_api({
 			action: "get/stores",
@@ -262,16 +271,16 @@ export default {
 	components: { vTable, Chart, TabView, TabPanel, RadioButton },
 	computed: {
 		...mapGetters(["org_stores", "org_profile", "products"]),
-    tableData() {
-      if(this.windowWidth <= 480) {
-        return {
-          article: this.product_table_data.article,
-          name: this.product_table_data.name,
-          remains_history: this.product_table_data.remains_history,
-        }
-      }
-      return this.product_table_data;
-    }
+		tableData() {
+			if (this.windowWidth <= 480) {
+				return {
+					article: this.product_table_data.article,
+					name: this.product_table_data.name,
+					remains_history: this.product_table_data.remains_history,
+				};
+			}
+			return this.product_table_data;
+		},
 	},
 	watch: {
 		products(newVal, oldVal) {
