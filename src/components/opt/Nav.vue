@@ -96,7 +96,7 @@
 								<router-link
 									:to="{
 										name: 'purchases_catalog',
-										params: { id: this.$route.params.id, category_id: level2?.id },
+										params: { id: this.$route.params.id, category_id: level3?.id },
 									}"
 									:key="level3"
 									v-for="level3 in this.actualNav.thirdLevel"
@@ -286,7 +286,7 @@ export default {
 	},
 	components: { Vendors },
 	computed: {
-		...mapGetters(["optvendors", "salesbanners", "optcatalog"]),
+		...mapGetters(["optvendors", "salesbanners", "optcatalog", "optcatalogwarehouse"]),
 	},
 	watch: {
 		optvendors: function (newVal, oldVal) {
