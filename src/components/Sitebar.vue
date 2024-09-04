@@ -56,7 +56,7 @@
 				<template #item="{ item }">
 					<router-link class="sitebar-menu__item" :to="item.to" style="color: #fff">
 						<div class="sitebar-menu__name">
-							<img :src="'/src/assets/images/icons/' + item.icon" alt="" />
+							<img :src="'images/icons/' + item.icon" alt="" />
 							<span class="sitebar-menu__title">{{ item.label }}</span>
 						</div>
 						<div class="sitebar-menu__notification">
