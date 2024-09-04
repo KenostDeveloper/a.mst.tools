@@ -67,7 +67,7 @@
     <div class="cell_value" :class="cell_key == 'actions' ? 'actions' : ''" v-else-if="cell_data.type == 'actions'">
       <span class="p-buttonset">
         <Button
-          class="kenostButton"
+          class="kenostButton std-icon__wrapper"
           :title="row.label"
           :label="row.label" :icon="row.icon"
           v-for="(row, index) in blank.available"
