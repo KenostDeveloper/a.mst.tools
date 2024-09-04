@@ -65,7 +65,7 @@
 				<template #item="{ item }">
 					<router-link class="sitebar-menu__item" :to="item.to" style="color: #fff">
 						<div class="sitebar-menu__name">
-							<img :src="'/src/assets/images/icons/' + item.icon" alt="" />
+							<img :src="'/images/icons/' + item.icon" alt="" />
 							<span class="sitebar-menu__title">{{ item.label }}</span>
 						</div>
 						<div class="sitebar-menu__notification">
@@ -119,155 +119,155 @@ import Dialog from "primevue/dialog";
 import router from "../router";
 
 export default {
-	name: "Sitebar",
-	props: {
-		active: {
-			type: Boolean,
-			default: false,
-		},
-	},
-	data() {
-		return {
-			sitebar: this.active,
-			organizations: [],
-			organozation: [],
-			changeOrgModal: false,
-			role: 0,
-			//РОЛИ
-			// 0 - Закупки
-			// 1 - Маркетплейс
-			// 2 - Поставщик
-		};
-	},
-	components: {
-		PanelMenu,
-		Dialog,
-	},
-	mounted() {},
-	computed: {
-		...mapGetters({
-			getUser: "user/getUser",
-			orgs: "orgs",
-		}),
-		getMenu() {
-			if (this.role == 0) {
-				return [
-					{
-						label: "Закупки",
-						icon: "orders.svg",
-						to: { name: "purchases", params: { id: this.$route.params.id } },
-					},
-					{
-						label: "Мои заказы",
-						icon: "bag.svg",
-						to: { name: "my_orders", params: { id: this.$route.params.id } },
-					},
-					{
-						label: "Мои поставщики",
-						icon: "star.svg",
-						to: { name: "vendors", params: { id: this.$route.params.id } },
-					},
-					{
-						label: "Товары",
-						icon: "products.svg",
-						to: { name: "statistics", params: { id: this.$route.params.id } },
-					},
-					{
-						label: "Карточка компании",
-						icon: "settings.svg",
-						to: { name: "org_settings", params: { id: this.$route.params.id } },
-					},
-				];
-			} else if (this.role == 1) {
-				return [
-					{
-						label: "Розничные заказы",
-						icon: "orders.svg",
-						to: { name: "retail_orders", params: { id: this.$route.params.id } },
-					},
-					{
-						label: "Баланс",
-						icon: "bag.svg",
-						to: { name: "org_balance", params: { id: this.$route.params.id } },
-					},
-					{
-						label: "Розничные акции",
-						icon: "star.svg",
-						to: { name: "b2c", params: { id: this.$route.params.id } },
-					},
-					{
-						label: "Товары",
-						icon: "products.svg",
-						to: { name: "statistics", params: { id: this.$route.params.id } },
-					},
-					{
-						label: "Карточка компании",
-						icon: "settings.svg",
-						to: { name: "org_settings", params: { id: this.$route.params.id } },
-					},
-				];
-			} else if (this.role == 2) {
-				return [
-					{
-						label: "Товары",
-						icon: "products.svg",
-						to: { name: "statistics", params: { id: this.$route.params.id } },
-					},
-					{
-						label: "Отгрузки",
-						icon: "shipments.svg",
-						to: { name: "shipments", params: { id: this.$route.params.id } },
-					},
-					{
-						label: "Мои клиенты",
-						icon: "clients.svg",
-						to: { name: "clients", params: { id: this.$route.params.id } },
-					},
-					{
-						label: "Индивидуальные скидки",
-						icon: "star.svg",
-						to: { name: "discounts", params: { id: this.$route.params.id } },
-					},
-					{
-						label: "Оптовые акции",
-						icon: "adv.svg",
-						to: { name: "b2b", params: { id: this.$route.params.id } },
-					},
-					{
-						label: "Карточка компании",
-						icon: "settings.svg",
-						to: { name: "org_settings", params: { id: this.$route.params.id } },
-					},
-				];
-			}
-		},
-	},
-	methods: {
-		...mapActions({
-			setUser: "user/setUser",
-			deleteUser: "user/deleteUser",
-			org_get_from_api: "org_get_from_api",
-		}),
-		sidebarToggle() {
-			this.sitebar = !this.sitebar;
-			this.$cookies.set("sidebar_active", Number(this.sitebar));
-		},
-		onAuthBtnClick() {
-			if (this.getUser) {
-				this.$api.auth.logout();
-				localStorage.removeItem("user");
-				this.deleteUser();
-				// console.log(this.$router)
-				this.$router.push({ name: "main" });
-			} else {
-				this.$router.push({ name: "main" });
-			}
-		},
-		changeRole(role) {
-			//РОЛИ
-			// 0 - Закупки
-			// 1 - Маркетплейс
-			// 2 - Поставщик
+  name: "Sitebar",
+  props: {
+    active: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  data() {
+    return {
+      sitebar: this.active,
+      organizations: [],
+      organozation: [],
+      changeOrgModal: false,
+      role: 0,
+      //РОЛИ
+      // 0 - Закупки
+      // 1 - Маркетплейс
+      // 2 - Поставщик
+    };
+  },
+  components: {
+    PanelMenu,
+    Dialog,
+  },
+  mounted() {},
+  computed: {
+    ...mapGetters({
+      getUser: "user/getUser",
+      orgs: "orgs",
+    }),
+    getMenu() {
+      if (this.role == 0) {
+        return [
+          {
+            label: "Закупки",
+            icon: "orders.svg",
+            to: { name: "purchases", params: { id: this.$route.params.id } },
+          },
+          {
+            label: "Мои заказы",
+            icon: "bag.svg",
+            to: { name: "my_orders", params: { id: this.$route.params.id } },
+          },
+          {
+            label: "Мои поставщики",
+            icon: "star.svg",
+            to: { name: "vendors", params: { id: this.$route.params.id } },
+          },
+          {
+            label: "Товары",
+            icon: "products.svg",
+            to: { name: "statistics", params: { id: this.$route.params.id } },
+          },
+          {
+            label: "Карточка компании",
+            icon: "settings.svg",
+            to: { name: "org_settings", params: { id: this.$route.params.id } },
+          },
+        ];
+      } else if (this.role == 1) {
+        return [
+          {
+            label: "Розничные заказы",
+            icon: "orders.svg",
+            to: { name: "retail_orders", params: { id: this.$route.params.id } },
+          },
+          {
+            label: "Баланс",
+            icon: "bag.svg",
+            to: { name: "org_balance", params: { id: this.$route.params.id } },
+          },
+          {
+            label: "Розничные акции",
+            icon: "star.svg",
+            to: { name: "b2c", params: { id: this.$route.params.id } },
+          },
+          {
+            label: "Товары",
+            icon: "products.svg",
+            to: { name: "stores", params: { id: this.$route.params.id } },
+          },
+          {
+            label: "Карточка компании",
+            icon: "settings.svg",
+            to: { name: "org_settings", params: { id: this.$route.params.id } },
+          },
+        ];
+      } else if (this.role == 2) {
+        return [
+          {
+            label: "Товары",
+            icon: "products.svg",
+            to: { name: "statistics", params: { id: this.$route.params.id } },
+          },
+          {
+            label: "Отгрузки",
+            icon: "shipments.svg",
+            to: { name: "shipments", params: { id: this.$route.params.id } },
+          },
+          {
+            label: "Мои клиенты",
+            icon: "clients.svg",
+            to: { name: "clients", params: { id: this.$route.params.id } },
+          },
+          {
+            label: "Индивидуальные скидки",
+            icon: "star.svg",
+            to: { name: "discounts", params: { id: this.$route.params.id } },
+          },
+          {
+            label: "Оптовые акции",
+            icon: "adv.svg",
+            to: { name: "b2b", params: { id: this.$route.params.id } },
+          },
+          {
+            label: "Карточка компании",
+            icon: "settings.svg",
+            to: { name: "org_settings", params: { id: this.$route.params.id } },
+          },
+        ];
+      }
+    },
+  },
+  methods: {
+    ...mapActions({
+      setUser: "user/setUser",
+      deleteUser: "user/deleteUser",
+      org_get_from_api: "org_get_from_api",
+    }),
+    sidebarToggle() {
+      this.sitebar = !this.sitebar;
+      this.$cookies.set("sidebar_active", Number(this.sitebar));
+    },
+    onAuthBtnClick() {
+      if (this.getUser) {
+        this.$api.auth.logout();
+        localStorage.removeItem("user");
+        this.deleteUser();
+        // console.log(this.$router)
+        this.$router.push({ name: "main" });
+      } else {
+        this.$router.push({ name: "main" });
+      }
+    },
+    changeRole(role) {
+      //РОЛИ
+      // 0 - Закупки
+      // 1 - Маркетплейс
+      // 2 - Поставщик
 
 			localStorage.setItem("role", role);
 			this.role = role;

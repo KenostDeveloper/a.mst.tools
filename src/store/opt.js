@@ -17,7 +17,8 @@ export default {
     },
     oprprices: [],
     oprpricesremain: [],
-    my_orders: []
+    my_orders: [],
+    optcatalogwarehouse: []
   },
   actions: {
     set_vendors_to_api ({ commit }, data) {
@@ -35,7 +36,7 @@ export default {
         .catch(error => {
           if (error.response.status === 403) {
             localStorage.removeItem('user')
-            router.push({ name: 'home' })
+            router.push({ name: 'main' })
           }
         })
     },
@@ -55,7 +56,7 @@ export default {
         .catch(error => {
           if (error.response.status === 403) {
             localStorage.removeItem('user')
-            router.push({ name: 'home' })
+            router.push({ name: 'main' })
           }
         })
     },
@@ -75,7 +76,7 @@ export default {
         .catch(error => {
           if (error.response.status === 403) {
             localStorage.removeItem('user')
-            router.push({ name: 'home' })
+            router.push({ name: 'main' })
           }
         })
     },
@@ -95,7 +96,7 @@ export default {
         .catch(error => {
           if (error.response.status === 403) {
             localStorage.removeItem('user')
-            router.push({ name: 'home' })
+            router.push({ name: 'main' })
           }
         })
     },
@@ -115,7 +116,7 @@ export default {
         .catch(error => {
           if (error.response.status === 403) {
             localStorage.removeItem('user')
-            router.push({ name: 'home' })
+            router.push({ name: 'main' })
           }
         })
     },
@@ -135,7 +136,7 @@ export default {
         .catch(error => {
           if (error.response.status === 403) {
             localStorage.removeItem('user')
-            router.push({ name: 'home' })
+            router.push({ name: 'main' })
           }
         })
     },
@@ -157,7 +158,7 @@ export default {
         .catch(error => {
           if (error.response.status === 403) {
             localStorage.removeItem('user')
-            router.push({ name: 'home' })
+            router.push({ name: 'main' })
           }
         })
     },
@@ -166,7 +167,7 @@ export default {
         method: 'POST',
         data: {
           id: router.currentRoute._value.params.id,
-          warehouse_id: router.currentRoute._value.params.warehouse_id,
+          //warehouse_id: router.currentRoute._value.params.warehouse_id,
           action: 'get/catalog'
         },
         headers: {
@@ -179,7 +180,30 @@ export default {
         .catch(error => {
           if (error.response.status === 403) {
             localStorage.removeItem('user')
-            router.push({ name: 'home' })
+            router.push({ name: 'main' })
+          }
+        })
+    },
+    get_opt_warehouse_catalog_from_api ({ commit }) {
+      return Axios('/rest/front_opt', {
+        method: 'POST',
+        data: {
+          id: router.currentRoute._value.params.id,
+          //warehouse_id: router.currentRoute._value.params.warehouse_id,
+          warehouse: true,
+          action: 'get/catalog'
+        },
+        headers: {
+          'Access-Control-Allow-Origin': '*'
+        }
+      })
+        .then((response) => {
+          commit('SET_OPT_WAREHOUSE_CATALOG_TO_VUEX', response.data)
+        })
+        .catch(error => {
+          if (error.response.status === 403) {
+            localStorage.removeItem('user')
+            router.push({ name: 'main' })
           }
         })
     },
@@ -200,7 +224,7 @@ export default {
         .catch(error => {
           if (error.response.status === 403) {
             localStorage.removeItem('user')
-            router.push({ name: 'home' })
+            router.push({ name: 'main' })
           }
         })
     },
@@ -223,7 +247,7 @@ export default {
         .catch(error => {
           if (error.response.status === 403) {
             localStorage.removeItem('user')
-            router.push({ name: 'home' })
+            router.push({ name: 'main' })
           }
         })
     },
@@ -251,7 +275,7 @@ export default {
         .catch(error => {
           if (error.response.status === 403) {
             localStorage.removeItem('user')
-            router.push({ name: 'home' })
+            router.push({ name: 'main' })
           }
         })
     },
@@ -286,7 +310,7 @@ export default {
         .catch(error => {
           if (error.response.status === 403) {
             localStorage.removeItem('user')
-            router.push({ name: 'home' })
+            router.push({ name: 'main' })
           }
         })
     },
@@ -305,7 +329,7 @@ export default {
         .catch(error => {
           if (error.response.status === 403) {
             localStorage.removeItem('user')
-            router.push({ name: 'home' })
+            router.push({ name: 'main' })
           }
         })
     },
@@ -323,7 +347,7 @@ export default {
         .catch(error => {
           if (error.response.status === 403) {
             localStorage.removeItem('user')
-            router.push({ name: 'home' })
+            router.push({ name: 'main' })
           }
         })
     },
@@ -342,7 +366,7 @@ export default {
         .catch(error => {
           if (error.response.status === 403) {
             localStorage.removeItem('user')
-            router.push({ name: 'home' })
+            router.push({ name: 'main' })
           }
         })
     },
@@ -361,7 +385,7 @@ export default {
         .catch(error => {
           if (error.response.status === 403) {
             localStorage.removeItem('user')
-            router.push({ name: 'home' })
+            router.push({ name: 'main' })
           }
         })
     },
@@ -380,7 +404,7 @@ export default {
         .catch(error => {
           if (error.response.status === 403) {
             localStorage.removeItem('user')
-            router.push({ name: 'home' })
+            router.push({ name: 'main' })
           }
         })
     }
@@ -392,6 +416,10 @@ export default {
     SET_OPT_CATALOG_TO_VUEX: (state, data) => {
       state.optcatalog = data.data
     },
+    SET_OPT_WAREHOUSE_CATALOG_TO_VUEX: (state, data) => {
+      state.optcatalogwarehouse = data.data
+    },
+    
     SET_OPT_CATALOG_TREE_TO_VUEX: (state, data) => {
       state.optcatalogtree = data.data
     },
@@ -512,6 +540,9 @@ export default {
     },
     my_orders (state) {
       return state.my_orders
-    }
+    },
+    optcatalogwarehouse (state) {
+      return state.optcatalogwarehouse
+    },
   }
 }

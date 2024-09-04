@@ -1,7 +1,7 @@
 <template>
-    <span class="maintitle">Мой маркетинг</span>
-    <TabView class="tab-custom">
-        <TabPanel header="Акции">
+    <span class="title-h1 mb-4">Розничные акции</span>
+    <!-- <TabView class="tab-custom"> -->
+        <!-- <TabPanel header="Акции"> -->
           <v-table
             :items_data="actions.items"
             :total="actions.total"
@@ -10,7 +10,7 @@
             :page="this.page"
             :table_data="this.table_data"
             :filters="this.filters"
-            :title="'Акции'"
+            :title="''"
             @filter="filter"
             @sort="filter"
             @paginate="paginate"
@@ -22,8 +22,8 @@
               <RouterLink :to="{ name: 'org_action_add', params: { id: $route.params.id }}" class="dart-btn dart-btn-primary">Создать подборку</RouterLink>
             </template>
           </v-table>
-        </TabPanel>
-    </TabView>
+        <!-- </TabPanel> -->
+    <!-- </TabView> -->
 
     <!-- <v-table
       :items_data="matrixs.items"

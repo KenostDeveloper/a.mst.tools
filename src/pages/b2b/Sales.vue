@@ -3,6 +3,10 @@
   <ConfirmDialog></ConfirmDialog>
   <TabView class="tab-custom">
       <TabPanel header="Акции" v-if="organization.type != 1">
+        <div class="flex align-items-center justify-content-space-between mb-4">
+          <div class="title-h1">Оптовые акции</div>
+          <RouterLink :to="{ name: 'org_sales_add', params: { id: $route.params.id }}" class="dart-btn dart-btn-primary">Создать акцию</RouterLink>
+        </div>
         <v-table
           :items_data="actions.items"
           :total="actions.total"
@@ -11,7 +15,7 @@
           :page="this.page"
           :table_data="this.table_data"
           :filters="this.filters"
-          :title="'Мои акции'"
+          :title="''"
           @filter="filter"
           @sort="filter"
           @paginate="paginate"
@@ -19,12 +23,13 @@
           @approveElem="approveElem"
           @deleteElem="deleteElem"
         >
-          <template v-slot:button>
-            <RouterLink :to="{ name: 'org_sales_add', params: { id: $route.params.id }}" class="dart-btn dart-btn-primary">Создать акцию</RouterLink>
-          </template>
         </v-table>
       </TabPanel>
       <TabPanel header="Комплекты" v-if="organization.type != 1">
+        <div class="flex align-items-center justify-content-space-between mb-4">
+          <div class="title-h1">Мои комплекты</div>
+          <RouterLink :to="{ name: 'complect_add', params: { id: $route.params.id }}" class="dart-btn dart-btn-primary">Создать комлект</RouterLink>
+        </div>
         <v-table
           :items_data="optcomplects.complects"
           :total="optcomplects.total"
@@ -33,7 +38,7 @@
           :page="this.page_complects"
           :table_data="this.table_data_complects"
           :filters="this.filters_complects"
-          :title="'Мои комплекты'"
+          :title="''"
           @filter="filterComplects"
           @sort="filterComplects"
           @paginate="paginateComplects"
@@ -41,9 +46,6 @@
           @approveElem="approveComplects"
           @deleteElem="deleteComplects"
         >
-          <template v-slot:button>
-            <RouterLink :to="{ name: 'complect_add', params: { id: $route.params.id }}" class="dart-btn dart-btn-primary">Создать комлект</RouterLink>
-          </template>
         </v-table>
       </TabPanel>
   </TabView>

@@ -1,7 +1,7 @@
 <template>
 	<div class="shipping std-shipping">
 		<div class="std-shipping__title-container hidden-tablet-l">
-			<h1 class="table-kenost__title std-shipping__title">Мои отгрузки</h1>
+			<h1 class="table-kenost__title std-shipping__title title-h1">Мои отгрузки</h1>
 			<button
 				class="dart-btn dart-btn-primary std-shipping__button"
 				type="submit"
