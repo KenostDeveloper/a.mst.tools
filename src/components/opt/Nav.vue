@@ -36,6 +36,7 @@
 				<div
 					class="std-catalog__nav std-catalog__nav--primary std-catalog__tabs std-catalog__tabs--vertical"
 				>
+				<!-- {{ this.organizations }} -->
 					<router-link
 						:to="{
 							name: 'purchases_catalog',
@@ -51,7 +52,7 @@
 						"
 						@click="toggleCatalogVisibility(false)"
 						class="std-catalog__tab-item std-tab-item std-tab-item--alt"
-						v-for="level1 in this.organizationsOrCategories === 'organizations' ? this.organizations : this.catalog"
+						v-for="level1 in this.organizationsOrCategories === 'organizations' ? this.catalog_warehouse : this.catalog"
 					>
 						<div class="std-tab-item__img-container">
 							<img
@@ -88,20 +89,6 @@
 									<span class="std-tab-item__text">{{ level2.pagetitle }}</span>
 									<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
 								</router-link>
-								<!-- <a
-									v-for="level2 in this.actualNav.secondLevel"
-									class="std-catalog__tab-item std-tab-item std-tab-item--alt2"
-									:href="'https://dev.mst.tools/' + level2.uri"
-									@mouseenter="
-										() => {
-											this.actualNav.thirdLevel = level2.children;
-											this.actualImageSrc = level2.menu_image || '';
-										}
-									"
-								>
-									<span class="std-tab-item__text">{{ level2.pagetitle }}</span>
-									<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
-								</a> -->
 							</div>
 							<div
 								class="std-catalog__nav std-catalog__nav--thirdy std-catalog__tabs std-catalog__tabs--vertical"
@@ -120,15 +107,6 @@
 									<span class="std-tab-item__text">{{ level3.pagetitle }}</span>
 									<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
 								</router-link>
-								<!-- <a
-									v-for="level3 in this.actualNav.thirdLevel"
-									class="std-catalog__tab-item std-tab-item std-tab-item--none"
-									@mouseenter="this.actualImageSrc = level3.menu_image || ''"
-									:href="'https://dev.mst.tools/' + level3.uri"
-								>
-									<span class="std-tab-item__text">{{ level3.pagetitle }}</span>
-									<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
-								</a> -->
 							</div>
 						</div>
 
@@ -137,12 +115,6 @@
 				</div>
 			</div>
 		</div>
-
-		<!-- <div class="navmain__hand"> -->
-		<!-- <Link class="navmain__logo" href="#">
-                <img src="../../assets/images/logo_alt.svg" alt="Логотип" />
-                <span>для бизнеса</span>
-            </Link> -->
 		<button
 			class="std-nav__button std-catalog-button"
 			@mouseenter="() => toggleCatalogVisibility(true)"
@@ -258,7 +230,7 @@ export default {
 			search: "",
 			opt_vendors: [],
 			vendorModal: false,
-
+			catalog_warehouse: [],
 			organizations: [],
 			organizationsOrCategories: "categories",
 			catalogIsOpened: false,
@@ -275,6 +247,7 @@ export default {
 			"get_salses_banners_to_api",
 			"get_opt_catalog_from_api",
 			"org_get_from_api",
+			"get_opt_warehouse_catalog_from_api"
 		]),
 		toSearch() {
 			router.push({ name: "opt_search", params: { search: this.search } });
@@ -302,6 +275,7 @@ export default {
 		},
 	},
 	mounted() {
+		this.get_opt_warehouse_catalog_from_api()
 		this.get_opt_catalog_from_api()
 		this.get_opt_vendors_from_api().then((this.opt_vendors = this.optvendors));
 
@@ -320,6 +294,9 @@ export default {
 		},
 		optcatalog: function (newVal, oldVal) {
 			this.catalog = newVal;
+		},
+		optcatalogwarehouse: function (newVal, oldVal) {
+			this.catalog_warehouse = newVal;
 		},
 	},
 };
