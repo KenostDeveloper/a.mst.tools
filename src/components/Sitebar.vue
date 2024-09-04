@@ -22,9 +22,9 @@
 				<div class="sitebar-profile__icon">
 					<img :src="this.organozation?.image" alt="" />
 				</div>
-				<p class="sitebar-profile__change" @click="this.changeOrgModal = true">
-					<img src="../assets/images/icons/change.svg" />
-				</p>
+				<button class="sitebar-profile__change" @click="this.changeOrgModal = true">
+					<!-- <img src="../assets/images/icons/change.svg" /> -->
+				</button>
 			</div>
 			<div class="sitebar-profile__name">{{ this.organozation?.name }}</div>
 			<div class="sitebar-profile__tags">
@@ -50,6 +50,15 @@
 				</button>
 			</div>
 		</div>
+
+		<div class="std-money">
+			<div class="std-money__text-container">
+				<span class="std-money__label">Баланс</span>
+				<span class="std-money__balance">{{ this.organozation.balance }} ₽</span>
+			</div>
+			<button class="dart-btn dart-btn-secondary std-money__button">Вывести средства</button>
+		</div>
+
 		<hr class="sitebar-hr" />
 		<div class="sitebar-menu">
 			<PanelMenu v-model:expandedKeys="expandedKeys" :model="getMenu">

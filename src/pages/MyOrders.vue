@@ -22,7 +22,7 @@
 						>
 							<i class="pi pi-angle-up"></i>
 						</div>
-						<div class="dart-btn dart-btn-primary" @click="this.showShip = true">
+						<div class="dart-btn dart-btn-primary std-plus-icon__wrapper" @click="this.showShip = true">
 							<i class="pi pi-plus"></i>
 						</div>
 					</div>

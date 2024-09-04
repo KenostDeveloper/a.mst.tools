@@ -100,7 +100,7 @@ const routes = [
                                   path: '',
                                   name: 'report_copo_store',
                                   props: true,
-                                  label: 'Отчет по сопоставлению',
+                                  label: 'Отчет по со лению',
                                   component: ReportCopo
                                 }, {
                                   path: ':brand_id',

@@ -148,16 +148,16 @@
 							<div class="std-display-contents hidden-mobile-l">
 								<div class="name-requisit">
 									<p class="text-m">Реквизиты {{ requisit.name }}</p>
-									<div
+									<button
 										v-if="requisit.send_request == '0'"
-										class="name-requisit-edit"
+										class="name-requisit-edit std-pencil-icon__wrapper"
 										@click="
 											(this.modals.requisitedit = true),
 												(this.modals.requisitedit_index = index)
 										"
 									>
 										<i class="pi pi-pencil"></i>
-									</div>
+									</button>
 									<div
 										v-if="requisit.send_request == '1'"
 										class="flex align-items-center gap-2"

@@ -885,22 +885,37 @@ $mobile-s: 240px;
                 .p-fileupload-buttonbar {
                     border: none;
                     height: 100%;
+
+                    &::before {
+                        display: flex;
+    
+                        top: initial;
+                        left: initial;
+                        right: 15px;
+                        bottom: 15px;
+    
+                        opacity: 1 !important;
+                        transform: none;
+    
+                        width: 21px !important;
+                        height: 21px !important;
+                    }
                 }
 
-                .org-upload-i {
-                    display: flex;
+                // .org-upload-i {
+                //     display: flex;
 
-                    top: initial;
-                    left: initial;
-                    right: 15px;
-                    bottom: 15px;
+                //     top: initial;
+                //     left: initial;
+                //     right: 15px;
+                //     bottom: 15px;
 
-                    opacity: 1 !important;
-                    transform: none;
+                //     opacity: 1 !important;
+                //     transform: none;
 
-                    width: 21px !important;
-                    height: 21px !important;
-                }
+                //     width: 21px !important;
+                //     height: 21px !important;
+                // }
 
                 .org-upload-img {
                     object-fit: cover;
