@@ -1,9 +1,9 @@
 <template>
-   <TabView class="tab-custom">
-      <TabPanel header="Сопоставление товаров">
+   <!-- <TabView class="tab-custom"> -->
+      <!-- <TabPanel header="Сопоставление товаров"> -->
         <div class="copo">
-          <h1 class="h1-mini">Сопоставление товаров</h1>
-          <p class="info-text mb-3">Для работы вам необходимо достигнуть и поддерживать уровень сопоставления товаров по стоимости не менее 80%.</p>
+          <div class="title-h1 mb-3 mt-4">Сопоставление товаров</div>
+          <p class="info-text mb-4">Для работы вам необходимо достигнуть и поддерживать уровень сопоставления товаров по стоимости не менее 80%.</p>
           <div class="analitics-widget">
             <div class="organization" >
               <div class="dart-row">
@@ -322,10 +322,10 @@
               </div>
           </div>
         </div>
-      </TabPanel>
+      <!-- </TabPanel> -->
       <!-- <TabPanel header="Настройки">
       </TabPanel> -->
-  </TabView>
+  <!-- </TabView> -->
   <div class="search-for-catalog" v-bind:class="{ active: isModal }" @click="modalToggle">
       <div class="search-for-catalog__content" @click.stop="">
           <div class="search-for-catalog__title">

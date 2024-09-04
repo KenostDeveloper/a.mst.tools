@@ -2,7 +2,7 @@
 	<div class="v-table clients providers">
 		<div class="profile-content__title">
 			<div class="text std-title__container">
-				<h1 class="title std-title">
+				<h1 v-if="title" class="title std-title">
 					{{ title }} (<span v-if="total > -1">{{ total }}</span
 					><span v-else>0</span>)
 				</h1>

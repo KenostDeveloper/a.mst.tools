@@ -5958,12 +5958,12 @@
 }
 
 .dart-form-group label {
+  line-height: 1 !important;
   display: block;
   /* margin-bottom: 5px; */
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
-  line-height: 1.3;
   letter-spacing: 0.25px;
   color: #ADADAD;
 }

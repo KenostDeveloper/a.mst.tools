@@ -1,4 +1,7 @@
 <template>
+    <div>
+        <div class="title-h1 mb-3">Доступные поставщики</div>
+    </div>
 	<v-opts
         :items_data="warehouses.items"
         :total="warehouses.total"
@@ -6,7 +9,7 @@
         :pagination_offset="this.pagination_offset_dilers_opts"
         :page="this.optpage"
         :filters="this.optfilters"
-        title="Доступные поставщики"
+        :title="''"
         @update="optUpdate"
         @filter="optfilter"
         @sort="optfilter"

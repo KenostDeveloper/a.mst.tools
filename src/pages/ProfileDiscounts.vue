@@ -1,6 +1,7 @@
 <template>
     <Toast />
     <ConfirmDialog></ConfirmDialog>
+    <div class="title-h1 mb-4">Индивидуальные скидки</div>
     <v-table
         :items_data="stores.items"
         :total="stores.total"
@@ -8,7 +9,7 @@
         :pagination_offset="this.pagination_offset_dilers"
         :page="this.page_dilers"
         :table_data="this.table_data_dilers"
-        title="Мои клиенты"
+        title=""
         @filter="filterDilers"
         @paginate="paginateDilers"
         @editElem="editDiler"

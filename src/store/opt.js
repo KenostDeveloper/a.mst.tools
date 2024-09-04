@@ -35,7 +35,7 @@ export default {
         .catch(error => {
           if (error.response.status === 403) {
             localStorage.removeItem('user')
-            router.push({ name: 'home' })
+            router.push({ name: 'main' })
           }
         })
     },
@@ -55,7 +55,7 @@ export default {
         .catch(error => {
           if (error.response.status === 403) {
             localStorage.removeItem('user')
-            router.push({ name: 'home' })
+            router.push({ name: 'main' })
           }
         })
     },
@@ -75,7 +75,7 @@ export default {
         .catch(error => {
           if (error.response.status === 403) {
             localStorage.removeItem('user')
-            router.push({ name: 'home' })
+            router.push({ name: 'main' })
           }
         })
     },
@@ -95,7 +95,7 @@ export default {
         .catch(error => {
           if (error.response.status === 403) {
             localStorage.removeItem('user')
-            router.push({ name: 'home' })
+            router.push({ name: 'main' })
           }
         })
     },
@@ -115,7 +115,7 @@ export default {
         .catch(error => {
           if (error.response.status === 403) {
             localStorage.removeItem('user')
-            router.push({ name: 'home' })
+            router.push({ name: 'main' })
           }
         })
     },
@@ -135,7 +135,7 @@ export default {
         .catch(error => {
           if (error.response.status === 403) {
             localStorage.removeItem('user')
-            router.push({ name: 'home' })
+            router.push({ name: 'main' })
           }
         })
     },
@@ -157,7 +157,7 @@ export default {
         .catch(error => {
           if (error.response.status === 403) {
             localStorage.removeItem('user')
-            router.push({ name: 'home' })
+            router.push({ name: 'main' })
           }
         })
     },
@@ -179,7 +179,7 @@ export default {
         .catch(error => {
           if (error.response.status === 403) {
             localStorage.removeItem('user')
-            router.push({ name: 'home' })
+            router.push({ name: 'main' })
           }
         })
     },
@@ -200,7 +200,7 @@ export default {
         .catch(error => {
           if (error.response.status === 403) {
             localStorage.removeItem('user')
-            router.push({ name: 'home' })
+            router.push({ name: 'main' })
           }
         })
     },
@@ -223,7 +223,7 @@ export default {
         .catch(error => {
           if (error.response.status === 403) {
             localStorage.removeItem('user')
-            router.push({ name: 'home' })
+            router.push({ name: 'main' })
           }
         })
     },
@@ -251,7 +251,7 @@ export default {
         .catch(error => {
           if (error.response.status === 403) {
             localStorage.removeItem('user')
-            router.push({ name: 'home' })
+            router.push({ name: 'main' })
           }
         })
     },
@@ -286,7 +286,7 @@ export default {
         .catch(error => {
           if (error.response.status === 403) {
             localStorage.removeItem('user')
-            router.push({ name: 'home' })
+            router.push({ name: 'main' })
           }
         })
     },
@@ -305,7 +305,7 @@ export default {
         .catch(error => {
           if (error.response.status === 403) {
             localStorage.removeItem('user')
-            router.push({ name: 'home' })
+            router.push({ name: 'main' })
           }
         })
     },
@@ -323,7 +323,7 @@ export default {
         .catch(error => {
           if (error.response.status === 403) {
             localStorage.removeItem('user')
-            router.push({ name: 'home' })
+            router.push({ name: 'main' })
           }
         })
     },
@@ -342,7 +342,7 @@ export default {
         .catch(error => {
           if (error.response.status === 403) {
             localStorage.removeItem('user')
-            router.push({ name: 'home' })
+            router.push({ name: 'main' })
           }
         })
     },
@@ -361,7 +361,7 @@ export default {
         .catch(error => {
           if (error.response.status === 403) {
             localStorage.removeItem('user')
-            router.push({ name: 'home' })
+            router.push({ name: 'main' })
           }
         })
     },
@@ -380,7 +380,7 @@ export default {
         .catch(error => {
           if (error.response.status === 403) {
             localStorage.removeItem('user')
-            router.push({ name: 'home' })
+            router.push({ name: 'main' })
           }
         })
     }

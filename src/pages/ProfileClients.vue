@@ -1,7 +1,7 @@
 <template>
 	<section class="clients">
 		<div class="std-title__container">
-			<h1 class="std-title">Мои клиенты</h1>
+			<h1 class="std-title title-h1">Мои клиенты</h1>
 			<p class="std-title__description">
 				Доступные организации, которые являются вашими поставщиками
 			</p>

@@ -5,7 +5,7 @@
         </div> -->
 
 		<div class="std-title__container">
-			<h1 class="std-title">Розничные заказы</h1>
+			<h1 class="std-title title-h1">Розничные заказы</h1>
 		</div>
 
 		<!-- <div class="flex dart-row">

@@ -114,7 +114,7 @@
 		</Dialog>
 
 		<div class="balance__header">
-			<h1 class="std-title">Баланс</h1>
+			<h1 class="std-title title-h1 mt-3">Баланс</h1>
 
 			<div class="balance-info__container">
 				<ul class="balance-info">

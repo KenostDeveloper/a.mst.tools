@@ -3,7 +3,8 @@
 	<div class="std-profile">
 		<Toast />
 		<div class="profile-content__title sticky-element">
-			<span class="maintitle hidden-mobile-l">Организация {{ this.orgprofile?.name }}</span>
+			<!-- <span class="maintitle hidden-mobile-l">Организация {{ this.orgprofile?.name }}</span> -->
+			<div class="title-h1">О компании</div>
 			<span class="maintitle visible-mobile-l">Карточка компании</span>
 			<div class="buttons_container">
 				<div @click="saveProfile()" class="dart-btn dart-btn-primary btn-padding">
@@ -12,8 +13,8 @@
 			</div>
 		</div>
 		<!-- <div class="profile-content b-wrap" :class="{ loading: loading }"> -->
-		<TabView class="tab-custom">
-			<TabPanel header="О компании">
+		<!-- <TabView class="tab-custom">
+			<TabPanel header="О компании"> -->
 				<!-- <div class="profile-content__title">
             <span class="title">О компании</span>
             <div class="info info-default">
@@ -309,10 +310,10 @@
 						</div>
 					</div>
 				</form>
-			</TabPanel>
+			<!-- </TabPanel> -->
 			<!-- <TabPanel header="Настройки" v-if="organization.settings">
         </TabPanel> -->
-		</TabView>
+		<!-- </TabView> -->
 		<!-- </div> -->
 		<!-- <Dialog v-model:visible="this.modals.bank" header="Запрос на создание банковских реквизитов" :style="{ width: '740px' }">
         <div>
