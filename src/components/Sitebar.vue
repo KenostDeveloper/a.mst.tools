@@ -51,7 +51,7 @@
 			</div>
 		</div>
 
-		<div class="std-money">
+		<div class="std-money" v-if="this.role == 1">
 			<div class="std-money__text-container">
 				<span class="std-money__label">Баланс</span>
 				<span class="std-money__balance">{{ this.organozation.balance }} ₽</span>

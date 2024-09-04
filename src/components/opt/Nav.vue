@@ -71,8 +71,8 @@
 							>
 								<router-link
 									:to="{
-										name: 'purchases_catalog_warehouse',
-										params: { id: this.$route.params.id, category_id: level2.id, warehouse_id: level2.id },
+										name: 'purchases_catalog',
+										params: { id: this.$route.params.id, category_id: level2.id },
 									}"
 									:key="level2"
 									@mouseenter="
@@ -114,8 +114,8 @@
 							>
 								<router-link
 									:to="{
-										name: 'purchases_catalog_warehouse',
-										params: { id: this.$route.params.id, category_id: level3?.id, warehouse_id: level3.id  },
+										name: 'purchases_catalog',
+										params: { id: this.$route.params.id, category_id: level3?.id  },
 									}"
 									:key="level3"
 									v-for="level3 in this.actualNav.thirdLevel"
