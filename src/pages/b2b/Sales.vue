@@ -381,7 +381,7 @@ export default {
       this.$load(async () => {
         await this.set_sales_to_api({
           action: 'off/on',
-          store_id: router.currentRoute._value.params.id,
+          store_id: value.store_id,
           action_id: value.id
         })
           .then((result) => {
