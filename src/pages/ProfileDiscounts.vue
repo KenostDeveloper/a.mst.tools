@@ -1,19 +1,23 @@
 <template>
     <Toast />
     <ConfirmDialog></ConfirmDialog>
-    <div class="title-h1 mb-4">Индивидуальные скидки</div>
-    <v-table
-        :items_data="stores.items"
-        :total="stores.total"
-        :pagination_items_per_page="this.pagination_items_per_page_dilers"
-        :pagination_offset="this.pagination_offset_dilers"
-        :page="this.page_dilers"
-        :table_data="this.table_data_dilers"
-        title=""
-        @filter="filterDilers"
-        @paginate="paginateDilers"
-        @editElem="editDiler"
-    />
+
+    <div class="std-discounts">
+      <div class="title-h1 mb-4 std-discounts__title">Индивидуальные скидки</div>
+      <v-table
+          :items_data="stores.items"
+          :total="stores.total"
+          :pagination_items_per_page="this.pagination_items_per_page_dilers"
+          :pagination_offset="this.pagination_offset_dilers"
+          :page="this.page_dilers"
+          :table_data="this.table_data_dilers"
+          title=""
+          @filter="filterDilers"
+          @paginate="paginateDilers"
+          @editElem="editDiler"
+      />
+    </div>
+
     <Dialog v-model:visible="this.modals.diler" header="Редактирование дилера" :style="{ width: '400px' }">
       <div class="kenost-modal-price">
           <span class="title">{{ form.diler.name }}</span>

@@ -1,6 +1,6 @@
 <template>
 	<div class="nav">
-		<div>
+		<div class="nav__toggler">
 			<i v-if="this.sitebar" class="pi pi-bars" @click="sidebarToggle"></i>
 			<i v-else class="pi pi-times" @click="sidebarToggle"></i>
 		</div>

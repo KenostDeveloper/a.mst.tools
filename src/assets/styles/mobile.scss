@@ -1316,24 +1316,19 @@ $mobile-s: 240px;
             font-weight: 500;
             line-height: 1.2;
         }
+    }
+
+    // ProfileDiscounts
+    .std-discounts {
+        padding-inline: 15px;
+
+        &__title {
+            margin-bottom: 28px;
+        }
 
         .profile-table {
-            table-layout: fixed;
-
-            th,
             td {
-                font-size: 10px;
-            }
-
-            .p-buttonset {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                flex-direction: column;
-                gap: 6px;
-
-                .std-icon__wrapper {
-                    margin: 0;
+                &:first-child {
                 }
             }
         }
@@ -1354,6 +1349,49 @@ $mobile-s: 240px;
 
             &::before {
                 font-size: 11px;
+            }
+        }
+    }
+
+
+    .profile-table {
+        th,
+        td {
+            font-size: 10px !important;
+            padding-block: 10px 18px;
+
+            &:first-child {
+                padding-left: 0;
+            }
+        }
+
+        th {
+            &:first-child {
+                text-align: left;
+            }
+        }
+        td {
+            &,
+            .cell_value {
+                text-align: center;
+            }
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .p-buttonset {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 6px;
+
+            .std-icon__wrapper {
+                margin: 0;
             }
         }
     }
