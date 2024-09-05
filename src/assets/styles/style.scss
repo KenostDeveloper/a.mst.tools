@@ -2787,6 +2787,8 @@ p {
 	}
 
 	&__header {
+		cursor: pointer;
+
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
@@ -4565,6 +4567,10 @@ button.std-icon__wrapper {
 }
 
 .nav__toggler {
+	cursor: pointer;
+}
+
+.btn {
 	cursor: pointer;
 }
 

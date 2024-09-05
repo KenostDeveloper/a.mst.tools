@@ -364,7 +364,8 @@
 								<div class="shopping-kenost__cityone-name" v-if="item">
 									<p>{{ item.label }}</p>
 									<div class="btn btn-close" @click="deletePunkt(index)">
-										<i class="d_icon d_icon-close"></i>
+										<!-- <i class="d_icon d_icon-close"></i> -->
+										<img src="../assets/images/icons/close.svg" alt="">
 									</div>
 								</div>
 								<div class="shopping-kenost__cityone-date mb-3" v-if="item">
@@ -585,7 +586,8 @@
 									<div class="shopping-kenost__cityone-name" v-if="item">
 										<p>{{ item.label }}</p>
 										<div class="btn btn-close" @click="deletePunkt(index)">
-											<i class="d_icon d_icon-close"></i>
+											<!-- <i class="d_icon d_icon-close"></i> -->
+											<img src="../assets/images/icons/close.svg" alt="">
 										</div>
 									</div>
 									<div class="shopping-kenost__cityone-date mb-3" v-if="item">
