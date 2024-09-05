@@ -32,6 +32,7 @@
 		</router-link>
 		<div class="sitebar-toggler" @click="sidebarToggle">
 			<i class="pi pi-chevron-left"></i>
+      <!-- <img src="/images/icons/array.svg" alt=""> -->
 		</div>
 		<div class="sitebar-profile">
 			<div class="sitebar-org">

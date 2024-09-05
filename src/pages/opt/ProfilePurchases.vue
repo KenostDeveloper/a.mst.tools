@@ -11,7 +11,7 @@
 		<!-- <CatalogMenu :items="opt_catalog" /> -->
 		<div class="d-col-content purchases">
 			<div class="dart-home dart-window">
-				<span class="h2">Акции</span>
+				<span class="h2 mb-4">Акции</span>
 				<Banners :key="new Date().getMilliseconds() + this.sales_banners?.count" :items="this.sales_banners" />
 			</div>
 		</div>
