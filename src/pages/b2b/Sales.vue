@@ -382,7 +382,8 @@ export default {
         await this.set_sales_to_api({
           action: 'off/on',
           store_id: value.store_id,
-          action_id: value.id
+          action_id: value.id,
+          id: router.currentRoute._value.params.id
         })
           .then((result) => {
             this.get_sales_to_api({
