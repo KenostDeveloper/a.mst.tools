@@ -201,7 +201,7 @@
 						fill="#282828" />
 				</svg>
 			</span>
-			<span>{{ this.opt_vendors.selected_count }} из {{ this.opt_vendors.available_count }}</span>
+			<span class="kenost-vendors__span">{{ this.opt_vendors.selected_count }} из {{ this.opt_vendors.available_count }}</span>
 			<i class="pi pi-angle-down"></i>
 			<div class="kenost-vendors__list">
 				<span>Выбранные поставщики</span>

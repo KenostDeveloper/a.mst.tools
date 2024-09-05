@@ -397,6 +397,11 @@ $mobile-s: 240px;
 			font-weight: 400;
 
 			height: 25px;
+
+            &__span {
+                font-family: 'Roboto', sans-serif;
+                font-weight: 500;
+            }
 		}
 
 		.std-catalog-button,
@@ -1299,4 +1304,47 @@ $mobile-s: 240px;
 			height: 34px;
 		}
 	}
+
+    // Sales
+    .std-sales {
+        padding-inline: 15px;
+
+        &__title-container {
+            margin-bottom: 28px;
+        }
+        &__title {
+            font-weight: 500;
+            line-height: 1.2;
+        }
+
+        .profile-table {
+            table-layout: fixed;
+
+            th,
+            td {
+                font-size: 10px;
+            }
+
+            .p-buttonset {
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+            }
+        }
+    }
+
+
+    .std-icon__wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        width: 20px;
+        height: 20px;
+        padding: 4px;
+
+        i::before {
+            font-size: 11px;
+        }
+    }
 }
