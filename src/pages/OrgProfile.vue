@@ -4,7 +4,7 @@
 		<Toast />
 		<div class="profile-content__title sticky-element">
 			<!-- <span class="maintitle hidden-mobile-l">Организация {{ this.orgprofile?.name }}</span> -->
-			<div class="title-h1">О компании</div>
+			<div class="title-h1 hidden-mobile-l">О компании</div>
 			<span class="maintitle visible-mobile-l">Карточка компании</span>
 			<div class="buttons_container">
 				<div @click="saveProfile()" class="dart-btn dart-btn-primary btn-padding">

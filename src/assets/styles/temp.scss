@@ -147,6 +147,7 @@
 
     & {
       padding: 40px;
+      overflow: auto;
     }
 
     .std-table {
@@ -536,7 +537,6 @@
 
       &__container {
         @include flex-direction($gap: 24px);
-        // height: 130px;
       }
 
       &__item {

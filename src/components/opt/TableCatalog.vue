@@ -1,5 +1,5 @@
 <template>
-    <div class="k-container">
+    <div class="k-container std-catalog-table__wrapper">
         <!-- <div class="scrollLegt" @mouseenter="leftScroll('start')" @mouseleave="leftScroll('stop')"></div>
         <div class="scrollRight" @mouseenter="rigthScroll('start')" @mouseleave="rigthScroll('stop')"></div> -->
         <table class="k-table" :style="{ marginLeft: this.marginValue + 'px' }">

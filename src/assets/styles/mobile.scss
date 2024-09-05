@@ -248,6 +248,15 @@ $mobile-s: 240px;
         }
     }
 }
+@include desktop-s {
+
+    // Balance
+    .balance {
+        .balance-info {
+            gap: 75px;
+        }
+    }
+}
 @include desktop-s-minus {
     .dart_container {
         padding-top: 54px !important;
@@ -372,39 +381,8 @@ $mobile-s: 240px;
             }
         }
     }
-}
-@include tablet {
-    .promotion {
-        &__main,
-        .promotion-main {
 
-            &__card-container {
-                grid-template-columns: 1fr;
-            }
-        }
-    }
-
-    .std-profile {
-        .upload-banner {
-            flex-direction: column;
-        }
-    }
-}
-@include mobile-l {
-    .dart_container {
-        padding: 0;
-    }
-
-    .p-dialog {
-        min-width: auto;
-        width: 100%;
-        margin-inline: 15px;
-    }
-
-    .analitics-widget {
-        padding-inline: 15px;
-    }
-
+    // TODO адаптив шапки для <1024px
     .std-nav {
         background-color: #EDEDED !important;
 
@@ -511,6 +489,111 @@ $mobile-s: 240px;
         }
     }
 
+    .retails {
+        padding-inline: 15px;
+
+        &__table-container {
+            padding: 0;
+            border: none;
+            border-radius: 0;
+        }
+
+        .std-table {
+            table-layout: auto;
+
+            &__hcol {
+                padding-inline: 10px;
+
+                &:first-child {
+                    padding-left: 0;
+                }
+                &:last-child {
+                    padding-right: 0;
+                }
+            }
+        }
+    }
+
+    // Balance
+    .balance {
+        .balance-info {
+            &__container {
+                flex-direction: column-reverse;
+            }
+
+            &__button-wrapper {
+                align-self: flex-end;
+            }
+        }
+    }
+}
+@include tablet {
+    .promotion {
+        &__main,
+        .promotion-main {
+
+            &__card-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    }
+
+    .std-profile {
+        .upload-banner {
+            flex-direction: column;
+        }
+    }
+}
+@include tablet-s {
+    // Balance
+    .balance {
+        &__header {
+            gap: 24px;
+        }
+
+        .balance-info {
+            flex-direction: column;
+            gap: 16px;
+
+            background: none;
+            border: none;
+            padding: 0;
+
+            &__button-wrapper {
+                width: 100%;
+            }
+            &__button {
+                align-self: center;
+                width: 250px;
+            }
+
+            &__item {
+                flex-direction: column;
+                width: 100%;
+                max-width: none;
+
+                &:first-child {
+                    max-width: none;
+                }
+            }
+        }
+    }
+}
+@include mobile-l {
+    .dart_container {
+        padding: 0;
+    }
+
+    .p-dialog {
+        min-width: auto;
+        width: 100%;
+        margin-inline: 15px;
+    }
+
+    .analitics-widget {
+        padding-inline: 15px;
+    }
+
     .std-title {
         &__description {
             font-size: 15px;
@@ -578,7 +661,6 @@ $mobile-s: 240px;
             }
         }
     }
-
 
     // ProfileStatistics
     .std-statistics {
@@ -788,7 +870,6 @@ $mobile-s: 240px;
         }
     }
 
-
     // Nav
     .nav {
         .pi-times {
@@ -800,7 +881,6 @@ $mobile-s: 240px;
         }
     }
 
-    
     // Sitebar
     .sitebar {
         .sitebar-profile {
@@ -861,7 +941,6 @@ $mobile-s: 240px;
             }
         }
     }
-
 
     // OrgProfile
     .std-profile {
@@ -1115,6 +1194,126 @@ $mobile-s: 240px;
             .text-s {
                 margin-bottom: 16px !important;
             }
+        }
+    }
+
+    // Balance
+    .balance {
+        padding-inline: 15px;
+
+        &__main {
+            gap: 16px;
+            padding-inline: 15px;
+        }
+
+        &__table-accordion,
+        .std-accordion {
+            width: 100%;
+
+            &--expanded {
+                .std-accordion__header {
+                    border-bottom: none;
+                    border-bottom-left-radius: 0;
+                    border-bottom-right-radius: 0;
+                }
+
+                .std-accordion__content {
+                    border: 1px solid rgba(180, 180, 180, 1);
+                    border-top: none;
+                    border-bottom-left-radius: 5px;
+                    border-bottom-right-radius: 5px;
+                }
+            }
+
+            &__header {
+                border: 1px solid rgba(180, 180, 180, 1);
+                border-radius: 5px;
+
+                font-size: 14px;
+                font-weight: 400;
+                line-height: 1.3;
+
+                height: 33px;
+                padding: 7px 20px 6px 16px;
+            }
+            
+            &__button {
+                height: 24px;
+                width: 24px;
+            }
+
+            &__content {
+
+                .dart-alert {
+                    margin-bottom: 0;
+                }
+
+                .d-col-md-6 {
+                    padding: 0;
+                }
+
+                .panel-widget {
+                    border: none;
+                    border-radius: 0;
+
+                    padding: 0;
+                    padding-inline: 9px;
+                    margin-block: 0 22px;
+                }
+
+                .profile-table {
+                    thead tr th {
+                        padding: 12px 5px;
+                    }
+
+                    tr {
+                        border: none;
+                        border-top: 1px solid rgba(226, 226, 226, 1);
+                    }
+
+                    th,
+                    td {
+                        font-size: 10px;
+
+                        .cell_value.status span {
+                            font-size: 10px !important;
+                        }
+                    }
+                }
+            }
+        }
+
+        .balance-info {
+            &__label {
+                color: rgba(102, 102, 102, 1);
+            }
+
+            &__button-wrapper {
+                padding: 15px 20px;
+            }
+
+            &__line {
+                translate: 0;
+            }
+
+            &__button {
+                margin-top: 5px;
+                width: 100%;
+            }
+        }
+    }
+    .balance-form {
+        &__input,
+        &__value {
+            font-size: 16px !important;
+        }
+
+        &__data-container {
+            gap: 16px;
+        }
+
+        &__button {
+            height: 34px;
         }
     }
 }
