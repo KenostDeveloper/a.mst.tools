@@ -4,7 +4,7 @@
 			<i v-if="this.sitebar" class="pi pi-bars" @click="sidebarToggle"></i>
 			<i v-else class="pi pi-times" @click="sidebarToggle"></i>
 		</div>
-		<router-link v-if="role == 0" :to="{ name: 'purchases' }" class="sitebar-logo">
+		<router-link v-if="role == 0" :to="{ name: 'purchases_home' }" class="sitebar-logo">
 			<img src="/src/assets/images/logo_small.svg" alt="МСТ Аналитика" />
 			<span>МСТ Аналитика</span>
 		</router-link>
@@ -18,7 +18,7 @@
 		</router-link>
 	</div>
 	<div class="sitebar" :class="{ hide: this.sitebar }">
-		<router-link v-if="role == 0" :to="{ name: 'purchases' }" class="sitebar-logo">
+		<router-link v-if="role == 0" :to="{ name: 'purchases_home' }" class="sitebar-logo">
 			<img src="/src/assets/images/logo_small.svg" alt="МСТ Аналитика" />
 			<span>МСТ Аналитика</span>
 		</router-link>
@@ -171,7 +171,7 @@ export default {
           {
             label: "Закупки",
             icon: "orders.svg",
-            to: { name: "purchases", params: { id: this.$route.params.id } },
+            to: { name: "purchases_home", params: { id: this.$route.params.id } },
           },
           {
             label: "Мои заказы",
@@ -289,7 +289,7 @@ export default {
 			this.role = role;
 
       if(role == 0){
-        this.$router.push({ name: "purchases" });
+        this.$router.push({ name: "purchases_home" });
       }else if(role == 1){
         this.$router.push({ name: "retail_orders" });
       }else if(role == 2){
