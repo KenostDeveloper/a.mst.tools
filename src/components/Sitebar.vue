@@ -4,13 +4,29 @@
 			<i v-if="this.sitebar" class="pi pi-bars" @click="sidebarToggle"></i>
 			<i v-else class="pi pi-times" @click="sidebarToggle"></i>
 		</div>
-		<router-link :to="{ name: 'main' }" class="sitebar-logo">
+		<router-link v-if="role == 0" :to="{ name: 'purchases' }" class="sitebar-logo">
+			<img src="/src/assets/images/logo_small.svg" alt="МСТ Аналитика" />
+			<span>МСТ Аналитика</span>
+		</router-link>
+    <router-link v-if="role == 1" :to="{ name: 'retail_orders' }" class="sitebar-logo">
+			<img src="/src/assets/images/logo_small.svg" alt="МСТ Аналитика" />
+			<span>МСТ Аналитика</span>
+		</router-link>
+    <router-link v-if="role == 2" :to="{ name: 'statistics' }" class="sitebar-logo">
 			<img src="/src/assets/images/logo_small.svg" alt="МСТ Аналитика" />
 			<span>МСТ Аналитика</span>
 		</router-link>
 	</div>
 	<div class="sitebar" :class="{ hide: this.sitebar }">
-		<router-link :to="{ name: 'main' }" class="sitebar-logo">
+		<router-link v-if="role == 0" :to="{ name: 'purchases' }" class="sitebar-logo">
+			<img src="/src/assets/images/logo_small.svg" alt="МСТ Аналитика" />
+			<span>МСТ Аналитика</span>
+		</router-link>
+    <router-link v-if="role == 1" :to="{ name: 'retail_orders' }" class="sitebar-logo">
+			<img src="/src/assets/images/logo_small.svg" alt="МСТ Аналитика" />
+			<span>МСТ Аналитика</span>
+		</router-link>
+    <router-link v-if="role == 2" :to="{ name: 'statistics' }" class="sitebar-logo">
 			<img src="/src/assets/images/logo_small.svg" alt="МСТ Аналитика" />
 			<span>МСТ Аналитика</span>
 		</router-link>
@@ -271,6 +287,14 @@ export default {
 
 			localStorage.setItem("role", role);
 			this.role = role;
+
+      if(role == 0){
+        this.$router.push({ name: "purchases" });
+      }else if(role == 1){
+        this.$router.push({ name: "retail_orders" });
+      }else if(role == 2){
+        this.$router.push({ name: "statistics" });
+      }
 		},
 		getRole() {
 			if (localStorage.getItem("role")) {
