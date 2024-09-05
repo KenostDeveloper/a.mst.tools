@@ -39,7 +39,7 @@
                     }else if(role == 2){
                         const res = await this.$router.push({ name: 'statistics', params: { id: orgs.data.data[0].id } })
                     }else {
-                        const res = await this.$router.push({ name: 'purchases', params: { id: orgs.data.data[0].id } })
+                        const res = await this.$router.push({ name: 'purchases_home', params: { id: orgs.data.data[0].id } })
                     }
 
                     location.reload();

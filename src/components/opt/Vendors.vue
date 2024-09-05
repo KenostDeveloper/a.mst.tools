@@ -166,7 +166,7 @@ export default {
       vendorForm: {
         selected: []
       },
-      multisupplier: false
+      multisupplier: true //МУЛЬТИДОБАВЛЕНИЕ ПОСТАВЩИКОВ
     }
   },
   methods: {
