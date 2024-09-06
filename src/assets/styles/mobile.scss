@@ -406,6 +406,14 @@ $mobile-s: 240px;
 				font-family: "Roboto", sans-serif;
 				font-weight: 500;
 			}
+
+			.std-icon,
+			.std-icon > svg {
+				height: 15px;
+			}
+			i.pi {
+				font-size: 15px;
+			}
 		}
 
 		.std-catalog-button,
@@ -472,6 +480,34 @@ $mobile-s: 240px;
 		}
 
 		.std-catalog {
+			background-color: rgba(237, 237, 237, 1);
+			margin: 0;
+			padding-top: 6px;
+			left: 0;
+			max-height: 85dvh;
+
+			&__content {
+				flex-direction: column;
+				padding: 0;
+			}
+
+			&__nav--primary,
+			&__nav-wrapper {
+				flex-basis: auto;
+				flex-grow: 0;
+				max-height: none;
+				max-width: none;
+			}
+
+			&__nav-wrapper {
+				display: none;
+			}
+
+			&__tabs,
+			&__nav--primary {
+				padding-inline: 15px;
+			}
+
 			&__tabs {
 				flex-direction: column;
 				gap: 7px;
@@ -482,6 +518,40 @@ $mobile-s: 240px;
 
 				&__img-container {
 					width: 29px;
+				}
+			}
+
+			&__nav--primary {
+				gap: 12px;
+				padding-top: 7px;
+			}
+
+			.std-tab-item {
+				padding-inline: 0;
+
+				&::before {
+					top: 50%;
+					translate: -15px -50%;
+					height: 36px;
+					width: 100%;
+				}
+
+				&--alt {
+					height: 39px;
+
+					&::before {
+						height: 54px;
+						translate: -12px -50%;
+					}
+				}
+
+				&--alt2 {
+					min-height: 16px;
+					height: fit-content;
+
+					&::before {
+						height: 100%;
+					}
 				}
 			}
 		}

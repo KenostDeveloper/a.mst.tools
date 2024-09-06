@@ -156,7 +156,8 @@
 			Каталог
 			<!-- <i class="pi pi-bars std-catalog-button__icon hidden-mobile-l"></i> -->
 			<!-- <i class="pi pi-angle-down std-catalog-button__icon visible-mobile-l"></i> -->
-			 <img src="/images/icons/menu.svg" alt="">
+			 <img src="/images/icons/menu.svg" alt="" class="hidden-tablet-l">
+			 <img src="/images/icons/arrow-rounded.svg" alt="" class="visible-tablet-l">
 		</button>
 
 		<div
@@ -188,7 +189,7 @@
 
 		<button class="a-dart-btn a-dart-btn-secondary kenost-vendors" @click="changeActive">
 			<!-- <i class="mst-icon mst-icon-my_vendors kenost-vendors__icon"></i> -->
-			<span>
+			<span class="std-icon">
 				<svg width="24" height="21" viewBox="0 0 24 21" fill="none" xmlns="http://www.w3.org/2000/svg">
 					<path
 						d="M21.4605 9.09682L14.3999 13.1721C14.3061 13.2263 14.2025 13.2613 14.095 13.2753C13.9876 13.2892 13.8785 13.2818 13.7739 13.2535C13.6694 13.2251 13.5715 13.1764 13.4858 13.1101C13.4002 13.0438 13.3284 12.9612 13.2748 12.8671L9.19447 5.81155C9.08625 5.62097 9.05758 5.39539 9.11469 5.1838C9.1718 4.97221 9.31008 4.7917 9.49949 4.68146L16.5601 0.606125C16.7499 0.498226 16.9747 0.469741 17.1854 0.526878C17.3962 0.584014 17.5758 0.722141 17.6852 0.91115L21.7605 7.96672C21.8151 8.0606 21.8506 8.16433 21.8651 8.27196C21.8795 8.37959 21.8727 8.48901 21.8448 8.59397C21.8169 8.69894 21.7686 8.79737 21.7027 8.88366C21.6367 8.96994 21.5544 9.04237 21.4605 9.09682Z"
