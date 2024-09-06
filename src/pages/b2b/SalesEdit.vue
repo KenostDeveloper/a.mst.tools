@@ -77,10 +77,10 @@
                       <span>Загрузить изображение нужно размером не менее 472х52, соблюдая пропорции. Чтобы не потерялось качество, желательно загружать изображение в три раза больше указанного размера.</span>
                   </div>
                   <!-- <div class="dart-btn dart-btn-secondary btn-padding">Загрузить</div> -->
-                  <FileUpload class="kenost-upload-button" mode="basic" name="banner_small[]" :url="'/rest/file_upload.php?banner=min'" accept="image/*" :maxFileSize="2000000" @upload="onUpload" :auto="true" chooseLabel="Загрузить" />
+                  <FileUpload class="kenost-upload-button" mode="basic" name="small[]" :url="'/rest/file_upload.php?banner=small'" accept="image/*" :maxFileSize="2000000" @upload="onUpload" :auto="true" chooseLabel="Загрузить" />
                   </div>
                   <div class="upload-banner__image">
-                    <img :src="files?.min?.original_href" v-if="files?.min?.original_href">
+                    <img :src="files?.small?.original_href" v-if="files?.small?.original_href">
                   </div>
               </div>
 
@@ -538,7 +538,6 @@
                         </div>
                       </div>
                   </div>
-
                   <div v-if="this.form.addProductType != '3'" class="table-kenost mt-4">
                     <p class="table-kenost__title">Таблица добавленных товаров</p>
                     <div class="table-kenost__filters">
@@ -1100,7 +1099,10 @@ export default {
         },
         icon: {
           original_href: ''
-        }
+        },
+        small: {
+          original_href: ''
+        },
       },
       compabilityMode: [
         { name: 'Применяется бóльшая', key: 0 },
@@ -1181,6 +1183,8 @@ export default {
             this.files.min = response.data.files[0]
           } else if (response.data.files[0].type_banner === 'icon') {
             this.files.icon = response.data.files[0]
+          } else if (response.data.files[0].type_banner === 'small') {
+            this.files.small = response.data.files[0]
           }
         }
       }
@@ -1220,6 +1224,11 @@ export default {
       }
 
       this.get_available_products_from_api(dataGift).then()
+
+      this.opt_get_prices({
+        action: 'get/type/prices',
+        store_id: this.form.store_id
+      })
     },
     delayUpdate () {
       this.delayPercentSum = 0
@@ -1251,7 +1260,7 @@ export default {
 
         const data = {
           action: 'upload/products/file',
-          store_id: router.currentRoute._value.params.id,
+          store_id: this.form.store_id,
           file: res.data.files[0].original,
           type: 'b2b'
         }
@@ -1260,7 +1269,9 @@ export default {
           // Бежим по всем элементам и добавляем их в select
           this.selected = {}
           for (let i = 1; i < Object.keys(productsList).length; i++) {
+
             const tempProduct = productsList[Object.keys(productsList)[i]]
+
             if (!tempProduct.error) {
               const product = {}
               product.article = tempProduct.A
@@ -1274,6 +1285,7 @@ export default {
               product.name = tempProduct.remain.name
               product.typeFormul = {}
               product.typePrice = ''
+
               this.selected[tempProduct.remain.id] = product
               this.total_selected++
 
@@ -1815,7 +1827,7 @@ export default {
         }
       } else {
         for (let i = 0; i < Object.keys(this.selected_visible).length; i++) {
-          this.kenost_table.filter((el) => el !== this.selected_visible[Object.keys(this.selected_visible)[i]].id)
+          this.kenost_table = this.kenost_table.filter((el) => el !== this.selected_visible[Object.keys(this.selected_visible)[i]].id)
         }
       }
     },
@@ -1921,10 +1933,6 @@ export default {
     })
     this.get_sales_to_api({ id: router.currentRoute._value.params.sales_id, actionid: router.currentRoute._value.params.sales_id }).then(() => {
       this.loading = false
-    })
-    this.opt_get_prices({
-      action: 'get/type/prices',
-      store_id: router.currentRoute._value.params.id
     })
     this.get_opt_catalog_tree_from_api()
     this.org_get_stores_from_api({
@@ -2058,6 +2066,10 @@ export default {
         }
         if (newVal.image_inner) {
           this.files.min.original_href = this.site_url_prefix + newVal.image_inner
+        }
+
+        if (newVal.image_small) {
+          this.files.small.original_href = this.site_url_prefix + newVal.image_small
         }
 
         this.place_action = newVal.page_places

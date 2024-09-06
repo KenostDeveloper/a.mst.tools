@@ -900,7 +900,7 @@ export default {
         }
       } else {
         for (let i = 0; i < Object.keys(this.selected_visible).length; i++) {
-          this.kenost_table.filter((el) => el !== this.selected_visible[Object.keys(this.selected_visible)[i]].id)
+          this.kenost_table = this.kenost_table.filter((el) => el !== this.selected_visible[Object.keys(this.selected_visible)[i]].id)
         }
       }
     },
@@ -1042,6 +1042,10 @@ export default {
       this.get_available_products_from_api(data).then(
         this.kenostTableCheckedAllCheck()
       )
+      this.opt_get_prices({
+        action: 'get/type/prices',
+        store_id: this.form.store_id
+      })
     },
     select (id) {
       const product = this.products.find(r => r.id === id)
@@ -1280,10 +1284,6 @@ export default {
       this.get_sales_to_api({ id: router.currentRoute._value.params.sales_id, actionid: router.currentRoute._value.params.action_id })
     }
     this.get_opt_catalog_tree_from_api()
-    this.opt_get_prices({
-      action: 'get/type/prices',
-      store_id: router.currentRoute._value.params.id
-    })
     this.get_sales_adv_pages_to_api({
       action: 'get/adv/pages',
       store_id: router.currentRoute._value.params.id,

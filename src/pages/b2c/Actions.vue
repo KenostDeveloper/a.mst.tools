@@ -1,5 +1,13 @@
 <template>
-    <span class="title-h1 mb-4">Розничные акции</span>
+    <!-- <span class="title-h1 mb-4">Розничные акции</span> -->
+    <div class="flex align-items-center justify-content-space-between mb-4">
+				<div class="title-h1">Розничные акции</div>
+				<RouterLink
+					:to="{ name: 'org_action_add', params: { id: $route.params.id } }"
+					class="dart-btn dart-btn-primary"
+					>Создать акцию</RouterLink
+				>
+			</div>
     <!-- <TabView class="tab-custom"> -->
         <!-- <TabPanel header="Акции"> -->
           <v-table
@@ -19,7 +27,7 @@
             @deleteElem="deleteElem"
           >
             <template v-slot:button>
-              <RouterLink :to="{ name: 'org_action_add', params: { id: $route.params.id }}" class="dart-btn dart-btn-primary">Создать подборку</RouterLink>
+              <!-- <RouterLink :to="{ name: 'org_action_add', params: { id: $route.params.id }}" class="dart-btn dart-btn-primary">Создать подборку</RouterLink> -->
             </template>
           </v-table>
         <!-- </TabPanel> -->

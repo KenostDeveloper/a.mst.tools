@@ -471,7 +471,7 @@ export default {
 			this.$load(async () => {
 				await this.set_sales_to_api({
 					action: "delete",
-					store_id: router.currentRoute._value.params.id,
+					id: router.currentRoute._value.params.id,
 					action_id: value.id,
 				})
 					.then((result) => {
