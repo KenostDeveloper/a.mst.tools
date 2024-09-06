@@ -353,7 +353,7 @@ export default {
         margin-bottom: 16px;
         span{
           display: block;
-          font-family: var(--font-family);
+          font-family: "Roboto", sans-serif;
           font-weight: 500;
           font-size: 20px;
           line-height: 1.3;
@@ -421,14 +421,14 @@ export default {
               margin-top: 5px;
             }
             &.name{
-              font-family: var(--font-family);
+              font-family: "Roboto", sans-serif;
               font-weight: 500;
               font-size: 16px;
               line-height: 1.3;
               color: #282828;
             }
             &.desc{
-              font-family: var(--font-family);
+              font-family: "Roboto", sans-serif;
               font-weight: 400;
               font-size: 14px;
               line-height: 1.3;
@@ -456,7 +456,7 @@ export default {
       border-radius: 5px;
       padding: 16px 32px;
       &__label{
-        font-family: var(--font-family);
+        font-family: "Roboto", sans-serif;
         font-weight: 400;
         font-size: 12px;
         line-height: 1.3;
@@ -495,14 +495,14 @@ export default {
               margin-top: 5px;
             }
             &.name{
-              font-family: var(--font-family);
+              font-family: "Roboto", sans-serif;
               font-weight: 500;
               font-size: 16px;
               line-height: 1.3;
               color: #282828;
             }
             &.desc{
-              font-family: var(--font-family);
+              font-family: "Roboto", sans-serif;
               font-weight: 400;
               font-size: 14px;
               line-height: 1.3;
