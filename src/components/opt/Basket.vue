@@ -6,7 +6,7 @@
 					<div class="std-basket__title-container">
 						<p class="d-col-basket__title std-basket__title"><span>Корзина</span></p>
 						
-						<div class="std-cart-icon__wrapper"><span class="basket-count-all">{{this.basket?.count}}</span></div>
+						<div class="std-cart-icon__wrapper"><span class="basket-count-all" v-if="this.basket?.count">{{this.basket?.count}}</span><span class="basket-count-all" v-else>0</span></div>
 					</div>
 					<button class="std-basket__expand-button">
 						<i class="pi pi-angle-down std-basket__expand-icon"></i>
