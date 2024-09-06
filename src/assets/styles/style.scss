@@ -3490,7 +3490,8 @@ p {
 	.basket-container__adres {
 		& {
 			background: #6ca632 !important;
-			margin: 0 !important;
+			// margin: 0 !important;
+			margin: 12px 0 8px 0;
 			width: 100% !important;
 		}
 	}
@@ -4381,6 +4382,7 @@ button.std-icon__wrapper {
 }
 
 .std-cart-icon__wrapper {
+ position: relative;
   &:hover::before {
     background-color: #FF5C5C;
   }
@@ -5200,7 +5202,7 @@ button.std-icon__wrapper {
 	&__action {
 		background: #adadad;
 		border-radius: 34px;
-		height: 15px;
+		height: 20px;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
@@ -5229,7 +5231,7 @@ button.std-icon__wrapper {
 	&__container {
 		background: #fff;
 		border-radius: 34px;
-		height: 13px;
+		height: 18px;
 		width: calc(100% - 12px);
 		margin-left: 1px;
 		display: flex;
@@ -5242,7 +5244,7 @@ button.std-icon__wrapper {
 		position: relative;
 		p {
 			color: #ff0000;
-			font-size: 9px;
+			font-size: 12px;
 			padding-right: 4px;
 			cursor: pointer;
 			margin: 0;
@@ -5263,9 +5265,13 @@ button.std-icon__wrapper {
 		align-items: center;
 		p {
 			margin: 0;
-			font-size: 7px;
+			font-size: 10px;
 			text-wrap: nowrap;
 			line-height: 1;
+		}
+
+		img{
+			height: 10px !important;
 		}
 	}
 
@@ -5381,4 +5387,16 @@ button.std-icon__wrapper {
 
 .pt-5 {
 	padding-top: 3rem !important;
+}
+
+.basket-count-all{
+	font-size: 10px;
+	color: #FF0000;
+	background: #FFFFFF;
+	border-radius: 15px;
+	border: 1px solid #FF0000;
+	padding: 1px 5px;
+	position: absolute;
+	top: -6px;
+	right: -10px;
 }
