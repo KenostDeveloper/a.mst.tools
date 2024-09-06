@@ -101,7 +101,7 @@
 		</div>
 	</div>
 
-	<Dialog
+	<!-- <Dialog
 		v-model:visible="this.changeOrgModal"
 		:header="'Выбор организации'"
 		class="kenost-change-org"
@@ -125,7 +125,29 @@
 				</div>
 			</div>
 		</router-link>
-	</Dialog>
+	</Dialog> -->
+
+  <EmptyDialog :visible="this.changeOrgModal" @close="this.changeOrgModal = false">
+    <router-link
+			@click="changeOrg"
+			:to="{ name: 'org', params: { id: item.id } }"
+			class="change-org-el"
+			:class="{ active: $route.params.id == item.id }"
+			v-for="item in this.organizations"
+			v-bind:key="item.id"
+		>
+			<div class="icon"><img :src="item.image" alt="" /></div>
+			<div class="change-org-el__text">
+				<b>{{ item.name }}</b>
+				<div v-if="item.active" class="dart-payment-status-org">
+					<i class="d_icon d_icon-check"></i><span>Включен</span>
+				</div>
+				<div v-else class="dart-payment-status-org off">
+					<i class="d_icon d_icon-focus"></i><span>Выключен</span>
+				</div>
+			</div>
+		</router-link>
+  </EmptyDialog>
 </template>
 
 <script>
@@ -133,6 +155,7 @@ import { mapGetters, mapActions } from "vuex";
 import PanelMenu from "primevue/panelmenu";
 import OverlayPanel from "primevue/overlaypanel";
 import Dialog from "primevue/dialog";
+import EmptyDialog from "./EmptyDialog.vue";
 import router from "../router";
 
 export default {
@@ -159,6 +182,7 @@ export default {
   components: {
     PanelMenu,
     Dialog,
+    EmptyDialog
   },
   mounted() {},
   computed: {
