@@ -1,5 +1,5 @@
 <template>
-    <div class="kenost-banner" v-if="getCount > 0 || getRemainCount > 0">
+    <div class="kenost-banner" v-if="getCount > 0 || getRemainCount > 0" :data-count="getCount" :data-remain-count="getRemainCount">
         <div class="kenost-banner__section" v-for="n in getCount" :key="n">
             <div class="kenost-banner__container">
                 <router-link :to="{ name: 'promotion', params: { action: items.items[n * 1 - 1].action_id } }" class="kenost-banner__image">

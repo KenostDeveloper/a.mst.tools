@@ -4,7 +4,7 @@
 		<Toast />
 		<div class="profile-content__title sticky-element">
 			<!-- <span class="maintitle hidden-mobile-l">Организация {{ this.orgprofile?.name }}</span> -->
-			<div class="title-h1">О компании</div>
+			<div class="title-h1 hidden-mobile-l">О компании</div>
 			<span class="maintitle visible-mobile-l">Карточка компании</span>
 			<div class="buttons_container">
 				<div @click="saveProfile()" class="dart-btn dart-btn-primary btn-padding">
@@ -151,7 +151,7 @@
 									<p class="text-m">Реквизиты {{ requisit.name }}</p>
 									<button
 										v-if="requisit.send_request == '0'"
-										class="name-requisit-edit std-pencil-icon__wrapper"
+										class="name-requisit-edit std-icon__wrapper"
 										@click="
 											(this.modals.requisitedit = true),
 												(this.modals.requisitedit_index = index)
@@ -928,6 +928,12 @@ export default {
 </script>
 
 <style lang="scss">
+.m-0{
+  margin: 0;
+}
+.ml-2{
+  margin-left: 10px;
+}
 .flex-left {
 	display: flex;
 	justify-content: flex-start;

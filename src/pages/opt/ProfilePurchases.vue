@@ -6,20 +6,13 @@
 		:vendorModal="this.vendorModal"
 		:items="this.opt_vendors"
 	/>
-	<div v-if="opt_vendors.selected_count > 0" class="dart-custom-grid purchases__wrapper">
+	<!-- {{ this.sales_banners }} -->
+	<div v-if="this.opt_vendors.selected_count > 0" class="dart-custom-grid purchases__wrapper">
 		<!-- <CatalogMenu :items="opt_catalog" /> -->
 		<div class="d-col-content purchases">
 			<div class="dart-home dart-window">
-				<span class="h2">Акции</span>
-				<Banners :items="salesbanners" />
-				<!-- <HomeSwiper :items="this.mainpage.main_slider_big"/>
-        <HomeMinSwiper :items="this.mainpage.main_slider_small"/> -->
-				<!--
-        <span class="h2 mb-3 mt-5">Готовимся к сезону</span>
-        <SeasonSwiper :items="this.mainpage.season_slider"/>
-        <span class="h2 mb-3 mt-5">Новинки</span>
-        <NewSwiper :items="this.mainpage.new_slider"/>
-        -->
+				<span class="h2 mb-4">Акции</span>
+				<Banners :key="new Date().getMilliseconds() + this.sales_banners?.count" :items="this.sales_banners" />
 			</div>
 		</div>
 		<div class="d-col-map">
@@ -29,7 +22,7 @@
 	</div>
 	<div class="not-vendors" v-else>
 		<!-- <img src="../../assets/img/not-vendors.png" alt="" /> -->
-		<p>Пожалуйста, выберите хотя-бы 1 поставщика!</p>
+		<p>Для просмотра каталога необходимо выбрать поставщика!</p>
 		<div class="a-dart-btn a-dart-btn-primary" @click="changeActive">Выбрать</div>
 	</div>
 	<OrderModal :show="show_order" @fromOrder="fromOrder" />
@@ -76,17 +69,6 @@ export default {
 		OrderModal,
 		Vendors,
 	},
-	mounted() {
-		this.get_opt_mainpage_from_api().then((this.opt_mainpage = this.mainpage));
-		this.get_opt_catalog_from_api().then((this.opt_catalog = this.optcatalog));
-		this.get_opt_vendors_from_api().then((this.opt_vendors = this.optvendors));
-		const data = {
-			action: "get/banners",
-			id: router.currentRoute._value.params.id,
-		};
-		this.get_salses_banners_to_api(data);
-	},
-	unmounted() {},
 	methods: {
 		...mapActions([
 			"get_opt_mainpage_from_api",
@@ -101,18 +83,24 @@ export default {
 			this.show_order = false;
 		},
 		vendorCheck() {
-			const data = {
+			this.get_salses_banners_to_api({
 				action: "get/banners",
 				id: router.currentRoute._value.params.id,
-			};
-			this.get_salses_banners_to_api(data);
+			});
 		},
 		changeActive() {
 			this.vendorModal = !this.vendorModal;
 		},
 	},
+	mounted() {
+		this.get_opt_vendors_from_api().then((this.opt_vendors = this.optvendors));
+		this.get_salses_banners_to_api({
+			action: "get/banners",
+			id: router.currentRoute._value.params.id,
+		});
+	},
 	computed: {
-		...mapGetters(["mainpage", "optcatalog", "optvendors", "salesbanners"]),
+		...mapGetters(["optvendors", "salesbanners"]),
 	},
 	watch: {
 		mainpage: function (newVal, oldVal) {
@@ -125,8 +113,9 @@ export default {
 			this.opt_vendors = newVal;
 		},
 		salesbanners: function (newVal, oldVal) {
+			console.log(newVal)
 			this.sales_banners = newVal;
-		},
+		}
 	},
 };
 </script>

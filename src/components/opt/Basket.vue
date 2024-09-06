@@ -5,7 +5,8 @@
 				<div class="std-basket__header" @click="this.isOpened = !this.isOpened">
 					<div class="std-basket__title-container">
 						<p class="d-col-basket__title std-basket__title"><span>Корзина</span></p>
-						<div class="std-cart-icon__wrapper"></div>
+						
+						<div class="std-cart-icon__wrapper"><span class="basket-count-all" v-if="this.basket?.count">{{this.basket?.count}}</span><span class="basket-count-all" v-else>0</span></div>
 					</div>
 					<button class="std-basket__expand-button">
 						<i class="pi pi-angle-down std-basket__expand-icon"></i>
@@ -13,10 +14,9 @@
 				</div>
 
 				<div v-if="this.basket" class="std-basket__info-container">
-					<div class="basket-container__adres">
-						<!-- {{ store.name }} -->
+					<!-- <div class="basket-container__adres">
                         ООО «МСТ», г. Химки, ул. Ленинградская, д. 29
-					</div>
+					</div> -->
 					<button
 						@click="clearBasket"
 						class="basketClear std-basket__clear-button"
@@ -34,6 +34,9 @@
 			</div>
 			<div v-if="this.basket" class="basket-container">
 				<div v-for="store in this.basket?.stores" v-bind:key="store.id">
+					<div class="basket-container__adres" :style="{'background': store.color}">
+						{{store.name}}
+					</div>
 					<div class="kenost-basket" v-for="product in store.products" v-bind:key="product.id">
 						<div
 							@click="clearBasketProduct(store.id, product.id_remain)"

@@ -90,9 +90,19 @@ export default {
             })
 
             if(orgs){
-              console.log(orgs.data.data)
-              const res = await this.$router.push({ name: 'org', params: { id: orgs.data.data[0].id } })
-              location.reload();
+                // console.log(orgs.data.data)
+                let role = localStorage.getItem("role");
+                //const res = await this.$router.push({ name: 'org', params: { id: orgs.data.data[0].id } })
+
+                if(role == 1){
+                    const res = await this.$router.push({ name: 'retail_orders', params: { id: orgs.data.data[0].id } })
+                }else if(role == 2){
+                    const res = await this.$router.push({ name: 'statistics', params: { id: orgs.data.data[0].id } })
+                }else {
+                    const res = await this.$router.push({ name: 'purchases_home', params: { id: orgs.data.data[0].id } })
+                }
+
+                location.reload();
             }
             
           }

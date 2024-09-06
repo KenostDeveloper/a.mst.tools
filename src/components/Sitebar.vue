@@ -1,21 +1,38 @@
 <template>
 	<div class="nav">
-		<div>
+		<div class="nav__toggler">
 			<i v-if="this.sitebar" class="pi pi-bars" @click="sidebarToggle"></i>
 			<i v-else class="pi pi-times" @click="sidebarToggle"></i>
 		</div>
-		<router-link :to="{ name: 'main' }" class="sitebar-logo">
+		<router-link v-if="role == 0" :to="{ name: 'purchases_home' }" class="sitebar-logo">
+			<img src="/src/assets/images/logo_small.svg" alt="МСТ Аналитика" />
+			<span>МСТ Аналитика</span>
+		</router-link>
+    <router-link v-if="role == 1" :to="{ name: 'retail_orders' }" class="sitebar-logo">
+			<img src="/src/assets/images/logo_small.svg" alt="МСТ Аналитика" />
+			<span>МСТ Аналитика</span>
+		</router-link>
+    <router-link v-if="role == 2" :to="{ name: 'statistics' }" class="sitebar-logo">
 			<img src="/src/assets/images/logo_small.svg" alt="МСТ Аналитика" />
 			<span>МСТ Аналитика</span>
 		</router-link>
 	</div>
 	<div class="sitebar" :class="{ hide: this.sitebar }">
-		<router-link :to="{ name: 'main' }" class="sitebar-logo">
+		<router-link v-if="role == 0" :to="{ name: 'purchases_home' }" class="sitebar-logo">
+			<img src="/src/assets/images/logo_small.svg" alt="МСТ Аналитика" />
+			<span>МСТ Аналитика</span>
+		</router-link>
+    <router-link v-if="role == 1" :to="{ name: 'retail_orders' }" class="sitebar-logo">
+			<img src="/src/assets/images/logo_small.svg" alt="МСТ Аналитика" />
+			<span>МСТ Аналитика</span>
+		</router-link>
+    <router-link v-if="role == 2" :to="{ name: 'statistics' }" class="sitebar-logo">
 			<img src="/src/assets/images/logo_small.svg" alt="МСТ Аналитика" />
 			<span>МСТ Аналитика</span>
 		</router-link>
 		<div class="sitebar-toggler" @click="sidebarToggle">
 			<i class="pi pi-chevron-left"></i>
+      <!-- <img src="/images/icons/array.svg" alt=""> -->
 		</div>
 		<div class="sitebar-profile">
 			<div class="sitebar-org">
@@ -51,7 +68,7 @@
 			</div>
 		</div>
 
-		<div class="std-money">
+		<div class="std-money" v-if="this.role == 1">
 			<div class="std-money__text-container">
 				<span class="std-money__label">Баланс</span>
 				<span class="std-money__balance">{{ Number(this.organozation.balance).toFixed(0) }} ₽</span>
@@ -84,7 +101,7 @@
 		</div>
 	</div>
 
-	<Dialog
+	<!-- <Dialog
 		v-model:visible="this.changeOrgModal"
 		:header="'Выбор организации'"
 		class="kenost-change-org"
@@ -108,7 +125,29 @@
 				</div>
 			</div>
 		</router-link>
-	</Dialog>
+	</Dialog> -->
+
+  <EmptyDialog :visible="this.changeOrgModal" @close="this.changeOrgModal = false">
+    <router-link
+			@click="changeOrg"
+			:to="{ name: 'org', params: { id: item.id } }"
+			class="change-org-el"
+			:class="{ active: $route.params.id == item.id }"
+			v-for="item in this.organizations"
+			v-bind:key="item.id"
+		>
+			<div class="icon"><img :src="item.image" alt="" /></div>
+			<div class="change-org-el__text">
+				<b>{{ item.name }}</b>
+				<div v-if="item.active" class="dart-payment-status-org">
+					<i class="d_icon d_icon-check"></i><span>Включен</span>
+				</div>
+				<div v-else class="dart-payment-status-org off">
+					<i class="d_icon d_icon-focus"></i><span>Выключен</span>
+				</div>
+			</div>
+		</router-link>
+  </EmptyDialog>
 </template>
 
 <script>
@@ -116,6 +155,7 @@ import { mapGetters, mapActions } from "vuex";
 import PanelMenu from "primevue/panelmenu";
 import OverlayPanel from "primevue/overlaypanel";
 import Dialog from "primevue/dialog";
+import EmptyDialog from "./EmptyDialog.vue";
 import router from "../router";
 
 export default {
@@ -142,6 +182,7 @@ export default {
   components: {
     PanelMenu,
     Dialog,
+    EmptyDialog
   },
   mounted() {},
   computed: {
@@ -155,7 +196,7 @@ export default {
           {
             label: "Закупки",
             icon: "orders.svg",
-            to: { name: "purchases", params: { id: this.$route.params.id } },
+            to: { name: "purchases_home", params: { id: this.$route.params.id } },
           },
           {
             label: "Мои заказы",
@@ -271,6 +312,14 @@ export default {
 
 			localStorage.setItem("role", role);
 			this.role = role;
+
+      if(role == 0){
+        this.$router.push({ name: "purchases_home" });
+      }else if(role == 1){
+        this.$router.push({ name: "retail_orders" });
+      }else if(role == 2){
+        this.$router.push({ name: "statistics" });
+      }
 		},
 		getRole() {
 			if (localStorage.getItem("role")) {

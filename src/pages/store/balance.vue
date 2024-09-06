@@ -79,7 +79,7 @@
 						<input v-model="costEntered" type="text" class="balance-form__input" />
 					</div>
 					<div class="balance-form__input-container">
-						<span class="balance-form__label">Сумма для вывода</span>
+						<span class="balance-form__label">Доступная сумма для вывода</span>
 						<span class="balance-form__value">{{ organization.balance }} ₽</span>
 					</div>
 				</div>
@@ -114,6 +114,8 @@
 		</Dialog>
 
 		<div class="balance__header">
+			<!-- TODO Сделать хлебные крошки -->
+
 			<h1 class="std-title title-h1 mt-3">Баланс</h1>
 
 			<div class="balance-info__container">
@@ -125,14 +127,15 @@
 					<li class="balance-info__item">
 						<span class="balance-info__index">02.</span>
 						<p class="balance-info__text">
-							Получите и подпишите в ЭДО отчет комитенту и акт оказания услуг комиссионера.
+							Получите и подпишите в ЭДО отчет комитенту и акт оказания услуг
+							комиссионера.
 						</p>
 					</li>
 					<li class="balance-info__item">
 						<span class="balance-info__index">03.</span>
 						<p class="balance-info__text">
-							Получите в течение 3-х рабочих дней выплату средств за реализованные товары за вычетом
-							комиссии.
+							Получите в течение 3-х рабочих дней выплату средств за реализованные
+							товары за вычетом комиссии.
 						</p>
 					</li>
 				</ul>
@@ -157,7 +160,7 @@
 			</div>
 		</div>
 		<div class="dart-row balance__main">
-			<div class="d-col-md-6">
+			<div class="d-col-md-6 hidden-mobile-l">
 				<div class="panel-widget">
 					<v-table
 						:items_data="balance_requests.items"
@@ -171,7 +174,7 @@
 					</v-table>
 				</div>
 			</div>
-			<div class="d-col-md-6">
+			<div class="d-col-md-6 hidden-mobile-l">
 				<div class="panel-widget">
 					<v-table
 						:items_data="balance.items"
@@ -185,6 +188,37 @@
 					</v-table>
 				</div>
 			</div>
+
+			<Accordion title="История заявок" class="balance__table-accordion visible-mobile-l">
+				<div class="d-col-md-6">
+					<div class="panel-widget">
+						<v-table
+							:items_data="balance_requests.items"
+							:total="balance_requests.total"
+							:pagination_items_per_page="this.pagination_items_per_page"
+							:pagination_offset="this.pagination_offset"
+							:page="this.page_balance_requests"
+							:table_data="this.balance_request_table_data"
+						>
+						</v-table>
+					</div>
+				</div>
+			</Accordion>
+			<Accordion title="История заказов" class="balance__table-accordion visible-mobile-l">
+				<div class="d-col-md-6">
+					<div class="panel-widget">
+						<v-table
+							:items_data="balance.items"
+							:total="balance.total"
+							:pagination_items_per_page="this.pagination_items_per_page"
+							:pagination_offset="this.pagination_offset"
+							:page="this.page_balance"
+							:table_data="this.balance_table_data"
+						>
+						</v-table>
+					</div>
+				</div>
+			</Accordion>
 		</div>
 	</section>
 </template>
@@ -200,6 +234,7 @@ import { required } from "../../utils/i18n-validators";
 // import customModal from '../../components/popup/CustomModal'
 import Dialog from "primevue/dialog";
 import organization from "../../store/organization";
+import Accordion from "../../components/Accordion.vue";
 
 export default {
 	name: "ProfileBalance",
@@ -332,6 +367,7 @@ export default {
 		Textarea,
 		Dialog,
 		// customModal
+		Accordion,
 	},
 	setup() {
 		return { v$: useVuelidate() };

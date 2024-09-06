@@ -1,7 +1,7 @@
 <template>
 	<div class="shipping std-shipping">
 		<div class="std-shipping__title-container hidden-tablet-l">
-			<h1 class="table-kenost__title std-shipping__title title-h1">Мои отгрузки</h1>
+			<h1 class="table-kenost__title std-shipping__title">Мои отгрузки</h1>
 			<button
 				class="dart-btn dart-btn-primary std-shipping__button"
 				type="submit"
@@ -16,19 +16,18 @@
 				<p class="table-kenost__title std-shipping__title">Отгрузки</p>
 			</div>
 
-			<!-- TODO Починить раскрытие календаря (для Steiden) -->
 			<div
 				:class="`shipping-calendar std-calendar ${
 					this.calendarIsExpanded ? 'std-calendar--active' : ''
 				} visible-desktop-s`"
 			>
-				<div
-					class="shipping-calendar__head std-calendar__head"
-					@click="this.calendarIsExpanded = !this.calendarIsExpanded"
-				>
+				<div class="shipping-calendar__head std-calendar__head">
 					<p>Календарь отгрузок</p>
 					<div class="std-calendar__actions">
-						<div class="std-calendar__expand-button hidden-tablet-l">
+						<div
+							class="std-calendar__expand-button hidden-tablet-l"
+							@click="this.calendarIsExpanded = !this.calendarIsExpanded"
+						>
 							<i class="pi pi-angle-up"></i>
 						</div>
 						<button
@@ -365,7 +364,8 @@
 								<div class="shopping-kenost__cityone-name" v-if="item">
 									<p>{{ item.label }}</p>
 									<div class="btn btn-close" @click="deletePunkt(index)">
-										<i class="d_icon d_icon-close"></i>
+										<!-- <i class="d_icon d_icon-close"></i> -->
+										<img src="../assets/images/icons/close.svg" alt="">
 									</div>
 								</div>
 								<div class="shopping-kenost__cityone-date mb-3" v-if="item">
@@ -586,7 +586,8 @@
 									<div class="shopping-kenost__cityone-name" v-if="item">
 										<p>{{ item.label }}</p>
 										<div class="btn btn-close" @click="deletePunkt(index)">
-											<i class="d_icon d_icon-close"></i>
+											<!-- <i class="d_icon d_icon-close"></i> -->
+											<img src="../assets/images/icons/close.svg" alt="">
 										</div>
 									</div>
 									<div class="shopping-kenost__cityone-date mb-3" v-if="item">
@@ -626,13 +627,13 @@
 				this.calendarIsExpanded ? 'std-calendar--active' : ''
 			} hidden-desktop-s`"
 		>
-			<div class="shipping-calendar__head std-calendar__head">
+			<div
+				class="shipping-calendar__head std-calendar__head"
+				@click="this.calendarIsExpanded = !this.calendarIsExpanded"
+			>
 				<p>Календарь отгрузок</p>
 				<div class="std-calendar__actions">
-					<div
-						class="std-calendar__expand-button"
-						@click="this.calendarIsExpanded = !this.calendarIsExpanded"
-					>
+					<div class="std-calendar__expand-button">
 						<i class="pi pi-angle-up"></i>
 					</div>
 					<div

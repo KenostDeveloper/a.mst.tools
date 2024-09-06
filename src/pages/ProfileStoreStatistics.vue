@@ -22,7 +22,7 @@
                 <template v-slot:desc>
                 <div class="mst-alert mst-alert-info mb-2 mt-3">Параметр <b>«Дней с Out Of Stock»</b> расчитывается за последний календарный месяц.<br/>Фильтры <b>«Категория товара»</b> и <b>«Производитель»</b> работает только с теми остатками, с которыми произошло сопоставление с карточками товаров из нашего справочника.</div>
                 </template>
-                <template v-slot:widgets>
+                <!-- <template v-slot:widgets>
                     <div class="dart-row mb-4">
                       <div class="d-col-md-4" v-if="avg_info?.remains">
                         <div class="panel-widget mst-panel-widget-summ mst-panel-widget-blue">
@@ -43,7 +43,7 @@
                         </div>
                       </div>
                     </div>
-                </template>
+                </template> -->
             </v-table>
             <!-- </div> -->
         <!-- </div> -->
