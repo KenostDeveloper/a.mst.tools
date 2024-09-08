@@ -18,82 +18,82 @@
 		</router-link>
 	</div>
 	<div class="sitebar" :class="{ hide: this.sitebar }">
-		<router-link v-if="role == 0" :to="{ name: 'purchases_home' }" class="sitebar-logo">
-			<img src="/src/assets/images/logo_small.svg" alt="МСТ Аналитика" />
-			<span>МСТ Аналитика</span>
-		</router-link>
-		<router-link v-if="role == 1" :to="{ name: 'retail_orders' }" class="sitebar-logo">
-			<img src="/src/assets/images/logo_small.svg" alt="МСТ Аналитика" />
-			<span>МСТ Аналитика</span>
-		</router-link>
-		<router-link v-if="role == 2" :to="{ name: 'statistics' }" class="sitebar-logo">
-			<img src="/src/assets/images/logo_small.svg" alt="МСТ Аналитика" />
-			<span>МСТ Аналитика</span>
-		</router-link>
-		<div class="sitebar-toggler" @click="sidebarToggle">
-			<i class="pi pi-chevron-left"></i>
-			<!-- <img src="/images/icons/array.svg" alt=""> -->
-		</div>
-		<div class="sitebar-profile">
-			<div class="sitebar-org">
-				<div class="sitebar-profile__icon">
-					<img :src="this.organozation?.image" alt="" />
+		<div class="sitebar-content">
+			<router-link v-if="role == 0" :to="{ name: 'purchases_home' }" class="sitebar-logo">
+				<img src="/src/assets/images/logo_small.svg" alt="МСТ Аналитика" />
+				<span>МСТ Аналитика</span>
+			</router-link>
+			<router-link v-if="role == 1" :to="{ name: 'retail_orders' }" class="sitebar-logo">
+				<img src="/src/assets/images/logo_small.svg" alt="МСТ Аналитика" />
+				<span>МСТ Аналитика</span>
+			</router-link>
+			<router-link v-if="role == 2" :to="{ name: 'statistics' }" class="sitebar-logo">
+				<img src="/src/assets/images/logo_small.svg" alt="МСТ Аналитика" />
+				<span>МСТ Аналитика</span>
+			</router-link>
+			<div class="sitebar-toggler" @click="sidebarToggle">
+				<i class="pi pi-chevron-left"></i>
+				<!-- <img src="/images/icons/array.svg" alt=""> -->
+			</div>
+			<div class="sitebar-profile">
+				<div class="sitebar-org">
+					<div class="sitebar-profile__icon">
+						<img :src="this.organozation?.image" alt="" />
+					</div>
+					<button class="sitebar-profile__change" @click="this.changeOrgModal = true">
+						<!-- <img src="../assets/images/icons/change.svg" /> -->
+					</button>
 				</div>
-				<button class="sitebar-profile__change" @click="this.changeOrgModal = true">
-					<!-- <img src="../assets/images/icons/change.svg" /> -->
-				</button>
+				<div class="sitebar-profile__name">{{ this.organozation?.name }}</div>
+				<div class="sitebar-profile__tags">
+					<button class="sitebar-profile__tag" v-if="this.role == 0">Закупщик</button>
+					<button class="sitebar-profile__tag" v-if="this.role == 1">Маркетплейс</button>
+					<button class="sitebar-profile__tag" v-if="this.role == 2">Поставщик</button>
+					<button class="sitebar-profile__on">
+						<span>Включен</span>
+					</button>
+				</div>
 			</div>
-			<div class="sitebar-profile__name">{{ this.organozation?.name }}</div>
-			<div class="sitebar-profile__tags">
-				<button class="sitebar-profile__tag" v-if="this.role == 0">Закупщик</button>
-				<button class="sitebar-profile__tag" v-if="this.role == 1">Маркетплейс</button>
-				<button class="sitebar-profile__tag" v-if="this.role == 2">Поставщик</button>
-				<button class="sitebar-profile__on">
-					<span>Включен</span>
-				</button>
+			<div class="sitebar-info">
+				<span class="sitebar-text">Выбор роли:</span>
+				<div class="sitebar-roles">
+					<button class="sitebar-role" @click="changeRole(0)" v-if="this.role != 0">
+						Закупщик
+					</button>
+					<button class="sitebar-role" @click="changeRole(1)" v-if="this.role != 1">
+						Маркетплейс
+					</button>
+					<button class="sitebar-role" @click="changeRole(2)" v-if="this.role != 2">
+						Поставщик
+					</button>
+				</div>
 			</div>
-		</div>
-		<div class="sitebar-info">
-			<span class="sitebar-text">Выбор роли:</span>
-			<div class="sitebar-roles">
-				<button class="sitebar-role" @click="changeRole(0)" v-if="this.role != 0">
-					Закупщик
-				</button>
-				<button class="sitebar-role" @click="changeRole(1)" v-if="this.role != 1">
-					Маркетплейс
-				</button>
-				<button class="sitebar-role" @click="changeRole(2)" v-if="this.role != 2">
-					Поставщик
-				</button>
+			<div class="std-money" v-if="this.role == 1">
+				<div class="std-money__text-container">
+					<span class="std-money__label">Баланс</span>
+					<span class="std-money__balance">{{ this.organozation.balance }} ₽</span>
+				</div>
+				<button class="dart-btn dart-btn-secondary std-money__button">Вывести средства</button>
 			</div>
-		</div>
-
-		<div class="std-money" v-if="this.role == 1">
-			<div class="std-money__text-container">
-				<span class="std-money__label">Баланс</span>
-				<span class="std-money__balance">{{ this.organozation.balance }} ₽</span>
+			<hr class="sitebar-hr" />
+			<div class="sitebar-menu">
+				<PanelMenu v-model:expandedKeys="expandedKeys" :model="getMenu">
+					<template #item="{ item }">
+						<router-link class="sitebar-menu__item" :to="item.to" style="color: #fff">
+							<div class="sitebar-menu__name">
+								<img :src="'/images/icons/' + item.icon" alt="" />
+								<span class="sitebar-menu__title">{{ item.label }}</span>
+							</div>
+							<div class="sitebar-menu__notification">
+								<!-- Уведомления -->
+							</div>
+							<!-- <div class="sitebar-menu__hint">
+						  {{ item.label }}
+						</div> -->
+						</router-link>
+					</template>
+				</PanelMenu>
 			</div>
-			<button class="dart-btn dart-btn-secondary std-money__button">Вывести средства</button>
-		</div>
-
-		<hr class="sitebar-hr" />
-		<div class="sitebar-menu">
-			<PanelMenu v-model:expandedKeys="expandedKeys" :model="getMenu">
-				<template #item="{ item }">
-					<router-link class="sitebar-menu__item" :to="item.to" style="color: #fff">
-						<div class="sitebar-menu__name">
-							<img :src="'/images/icons/' + item.icon" alt="" />
-							<span class="sitebar-menu__title">{{ item.label }}</span>
-						</div>
-						<div class="sitebar-menu__notification">
-							<!-- Уведомления -->
-						</div>
-						<!-- <div class="sitebar-menu__hint">
-              {{ item.label }}
-            </div> -->
-					</router-link>
-				</template>
-			</PanelMenu>
 		</div>
 		<div class="sitebar-logout" @click="onAuthBtnClick">
 			<span>Выйти</span>

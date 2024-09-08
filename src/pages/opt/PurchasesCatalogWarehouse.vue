@@ -36,7 +36,7 @@
             </paginate>
         </div>
       </div>
-      <div v-if="opt_vendors.selected_count > 0" class="d-col-map">
+      <div v-if="opt_vendors.selected_count > 0" class="d-col-map purchases__basket-wrapper">
         <Vendors :items="this.opt_vendors" @vendorCheck="vendorCheck"/>
         <Basket ref="childComponent" @toOrder="toOrder" @catalogUpdate="catalogUpdate"/>
       </div>

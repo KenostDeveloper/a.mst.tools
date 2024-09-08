@@ -15,7 +15,7 @@
 				<Banners :key="new Date().getMilliseconds() + this.sales_banners?.count" :items="this.sales_banners" />
 			</div>
 		</div>
-		<div class="d-col-map">
+		<div class="d-col-map purchases__basket-wrapper">
 			<Vendors @vendorCheck="vendorCheck" :items="this.opt_vendors" />
 			<Basket ref="childComponent" @toOrder="toOrder" />
 		</div>

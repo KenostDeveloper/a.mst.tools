@@ -70,6 +70,8 @@
 }
 
 // Steiden
+@import "./mixins.scss";
+
 $desktop-l: 1920px;
 $desktop: 1440px;
 $desktop-s: 1280px;
@@ -115,6 +117,11 @@ $mobile-s: 240px;
 }
 @mixin desktop-s {
 	@media (width <= $desktop-s) {
+		@content;
+	}
+}
+@mixin desktop-s-minus-above {
+	@media (width > 990px) {
 		@content;
 	}
 }
@@ -253,131 +260,10 @@ $mobile-s: 240px;
 		padding-top: 54px !important;
 	}
 	.dart_wrapper {
-		padding: 20px 0 !important;
-	}
-}
-@include tablet-minus {
-	.clients {
-		&__card-container {
-			grid-template-columns: repeat(1, 1fr);
-		}
-	}
-}
-@include tablet-l-above {
-	.std-calendar {
-		.calendar-associations {
-			&__blue::before {
-				background-color: white;
-			}
-		}
-	}
-}
-@include tablet-l {
-	.std-shipping {
-		margin-top: 20px;
-
-		&__title-container {
-			margin-bottom: 20px;
-		}
-
-		&__filters {
-			gap: 16px;
-
-			.profile-content__title {
-				margin: 0;
-			}
-
-			.dart-row {
-				gap: 16px;
-			}
-		}
-
-		.std-calendar {
-			position: static;
-			border: none;
-			box-shadow: none;
-
-			max-height: 100dvh;
-			width: 100%;
-			margin-bottom: 32px;
-
-			&__head {
-				padding: 0;
-				height: auto !important;
-
-				p {
-					font-size: 21px;
-					font-weight: 500;
-					line-height: 1.14;
-				}
-			}
-
-			&,
-			&__content {
-				background-color: transparent !important;
-			}
-
-			.calendar-associations {
-				padding: 0;
-			}
-		}
-
-		.std-table__wrapper {
-			overflow: auto;
-		}
-		.std-table {
-			table-layout: auto;
-		}
+		padding: 0 !important;
+		padding-top: 20px !important;
 	}
 
-	.std-dialog {
-		border-radius: 0 !important;
-
-		width: 100% !important;
-		height: 100dvh;
-		max-height: none;
-	}
-
-	.std-shipping-create {
-		display: flex;
-		flex-direction: column;
-		gap: 32px;
-
-		.dart-alert {
-			font-size: 15px;
-			line-height: 1.2;
-			color: #adadad;
-			padding: 0;
-			background-color: transparent;
-			border: none;
-			margin-bottom: 0;
-		}
-
-		.shopping-kenost__dates {
-			flex-wrap: wrap;
-			gap: 16px;
-		}
-
-		.shopping-kenost__button {
-			margin-top: 0;
-		}
-
-		.shopping-kenost__cityone-date {
-			width: 90%;
-		}
-	}
-
-	.std-dropdown {
-		&__header {
-			.std-dropdown__title {
-				font-size: 21px;
-				font-weight: 500;
-				line-height: 1.14;
-			}
-		}
-	}
-
-	// TODO адаптив шапки для <1024px
 	.std-nav {
 		background-color: #ededed !important;
 
@@ -387,6 +273,10 @@ $mobile-s: 240px;
 		height: fit-content !important;
 		margin: 0;
 		padding: 20px 15px 12px 15px !important;
+
+		&:not(.std-nav--active) {
+			background-color: #fcfcfc !important;
+		}
 
 		.std-catalog-button,
 		.kenost-vendors {
@@ -553,6 +443,164 @@ $mobile-s: 240px;
 						height: 100%;
 					}
 				}
+			}
+		}
+
+		.std-tab-item {
+			width: 100%;
+
+			&__icon {
+				transition-duration: .3s;
+			}
+		}
+
+		.std-catalog__nav {
+			&--primary {
+				overflow: auto;
+				max-height: none;
+			}
+		}
+
+		.std-accordion {
+			&--expanded {
+				& >.std-accordion__header {
+					& > .std-tab-item {
+						@include std-tab-item-active;
+
+						& > .std-tab-item__icon {
+							rotate: 0deg;
+						}
+					}
+				}
+			}
+
+			&__content {
+				.std-catalog__nav {
+					margin-block: 13px;
+					overflow: visible;
+				}
+			}
+		}
+	}
+
+}
+@include tablet-minus {
+	.clients {
+		&__card-container {
+			grid-template-columns: repeat(1, 1fr);
+		}
+	}
+}
+@include tablet-l-above {
+	.std-calendar {
+		.calendar-associations {
+			&__blue::before {
+				background-color: white;
+			}
+		}
+	}
+}
+@include tablet-l {
+	.std-shipping {
+		margin-top: 20px;
+
+		&__title-container {
+			margin-bottom: 20px;
+		}
+
+		&__filters {
+			gap: 16px;
+
+			.profile-content__title {
+				margin: 0;
+			}
+
+			.dart-row {
+				gap: 16px;
+			}
+		}
+
+		.std-calendar {
+			position: static;
+			border: none;
+			box-shadow: none;
+
+			max-height: 100dvh;
+			width: 100%;
+			margin-bottom: 32px;
+
+			&__head {
+				padding: 0;
+				height: auto !important;
+
+				p {
+					font-size: 21px;
+					font-weight: 500;
+					line-height: 1.14;
+				}
+			}
+
+			&,
+			&__content {
+				background-color: transparent !important;
+			}
+
+			.calendar-associations {
+				padding: 0;
+			}
+		}
+
+		.std-table__wrapper {
+			overflow: auto;
+		}
+		.std-table {
+			table-layout: auto;
+		}
+	}
+
+	.std-dialog {
+		border-radius: 0 !important;
+
+		width: 100% !important;
+		height: 100dvh;
+		max-height: none;
+	}
+
+	.std-shipping-create {
+		display: flex;
+		flex-direction: column;
+		gap: 32px;
+
+		.dart-alert {
+			font-size: 15px;
+			line-height: 1.2;
+			color: #adadad;
+			padding: 0;
+			background-color: transparent;
+			border: none;
+			margin-bottom: 0;
+		}
+
+		.shopping-kenost__dates {
+			flex-wrap: wrap;
+			gap: 16px;
+		}
+
+		.shopping-kenost__button {
+			margin-top: 0;
+		}
+
+		.shopping-kenost__cityone-date {
+			width: 90%;
+		}
+	}
+
+	.std-dropdown {
+		&__header {
+			.std-dropdown__title {
+				font-size: 21px;
+				font-weight: 500;
+				line-height: 1.14;
 			}
 		}
 	}
@@ -1540,5 +1588,79 @@ $mobile-s: 240px;
 		.dart-payment-status-org {
 			display: none;
 		}
+	}
+
+	// Purchases
+	.purchases {
+		background-color: transparent;
+		margin-top: -20px;
+		padding: 0 !important;
+		padding-bottom: 60px !important; 
+
+		.dart-window {
+			background-color: #fcfcfc;
+		}
+
+		.h1-mini {
+			font-size: 24px;
+			font-weight: 500;
+			margin-bottom: 32px;
+		}
+	}
+
+	.std-basket {
+		border: none;
+		border-top: 1px solid #ADADAD;
+		border-radius: 0 !important;
+
+		translate: 0;
+		left: 0;
+		bottom: 0;
+
+		width: 100%;
+
+		&--active {
+			max-height: 50dvh !important;
+			height: 50dvh !important;
+		}
+
+		&:not(.std-basket--active) .std-basket__header {
+			padding: 15px !important;
+		}
+
+		&__inner {
+			background-color: #f0f0f0 !important;
+			border-radius: 0 !important;
+			height: 100% !important;
+		}
+
+		&__title-container {
+			.std-cart-icon__wrapper {
+				&::before {
+					content: url('../images/icons/cart-icon-s.svg');
+
+					box-sizing: border-box;
+					border-radius: 3px;
+
+					width: 18px;
+					padding: 2px;
+				}
+			}
+		}
+
+		&__title {
+			font-size: 16px !important;
+		}
+
+		.d-col-basket .basket-empty__content {
+			gap: 25px;
+
+			img {
+				width: 120px !important;
+				height: auto !important;
+				object-fit: contain !important;
+			}
+		}
+
 	}
 }

@@ -28,7 +28,8 @@
 			</div>
 			<div className="basket-empty" v-if="!this.basket">
 				<div className="basket-empty__content">
-					<img src="../../assets/images/icons/basket.svg" alt="" />
+					<img class="hidden-mobile-l" src="../../assets/images/icons/basket.svg" alt="" />
+					<img class="visible-mobile-l" src="../../assets/images/icons/basket-gray.svg" alt="" />
 					<h3>В вашей корзине пока пусто</h3>
 				</div>
 			</div>
