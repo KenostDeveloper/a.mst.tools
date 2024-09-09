@@ -952,7 +952,7 @@ export default {
         this.files.xlsx = res.data.files[0]
         const data = {
           action: 'upload/products/file',
-          store_id: router.currentRoute._value.params.id,
+          store_id: this.form.store_id,
           file: res.data.files[0].original,
           type: 'b2c'
         }

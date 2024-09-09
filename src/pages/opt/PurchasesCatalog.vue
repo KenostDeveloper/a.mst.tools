@@ -1,5 +1,7 @@
 <template>
-    <div v-if="opt_vendors.selected_count > 0" class="dart-custom-grid purchases__wrapper" :class="{ loading: loading }">
+    <Loading v-if="loading"/>
+    <div v-else>
+      <div v-if="opt_vendors.selected_count > 0" class="dart-custom-grid purchases__wrapper" :class="{ loading: loading }">
       <!-- <CatalogMenu :items="opt_catalog" /> -->
       <div class="d-col-content purchases">
         <div class="dart-home dart-window">
@@ -48,6 +50,7 @@
     </div>
     <OrderModal :show="show_order" @fromOrder="fromOrder" @orderSubmit="updatePage($route.params.category_id)"/>
     <Vendors @changeActive="changeActive" @vendorCheck="vendorCheck" :vendorModal="this.vendorModal" :items="this.opt_vendors" />
+    </div>
   </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
@@ -58,6 +61,7 @@ import Vendors from '../../components/opt/Vendors.vue'
 import Paginate from 'vuejs-paginate-next'
 import TableCatalog from '../../components/opt/TableCatalog.vue'
 import OrderModal from '../../components/opt/OrderModal.vue'
+import Loading from '../../components/Loading.vue'
 // import AmBreadcrumbs from 'vue-3-breadcrumbs'
 
 export default {
@@ -67,7 +71,8 @@ export default {
   data () {
     return {
       show_order: false,
-      loading: false,
+      loading: true,
+      loading_elems: [],
       reloading: false,
       opt_mainpage: {},
       opt_catalog: {},
@@ -86,25 +91,34 @@ export default {
     TableCatalog,
     Paginate,
     OrderModal,
+    Loading
     // Breadcrumbs
   },
   mounted () {
-    this.get_opt_catalog_from_api().then(
+    this.get_opt_catalog_from_api().then(() => {
       this.opt_catalog = this.optcatalog
-    )
-    this.get_opt_vendors_from_api().then(
+      this.loading_elems.push('load')
+      this.loadingCheack(3)
+    })
+    this.get_opt_vendors_from_api().then(() => {
       this.opt_vendors = this.optvendors
-    )
+      this.loading_elems.push('load')
+      this.loadingCheack(3)
+    })
     this.get_opt_products_from_api({
       page: this.page,
       perpage: this.perpage
-    }).then(
+    }).then(() => {
       this.opt_products = this.optproducts
-    )
+      this.loading_elems.push('load')
+      this.loadingCheack(3)
+    })
     if (this.$route.params.warehouse_id) {
-      this.get_opt_warehouse().then(
+      this.get_opt_warehouse().then(() => {
         this.opt_warehouse = this.optwarehouse
-      )
+        this.loading_elems.push('load')
+        this.loadingCheack(3)
+      })
     }
   },
   updated () { },
@@ -126,6 +140,11 @@ export default {
       }).then(
         this.opt_products = this.optproducts
       )
+    },
+    loadingCheack(num) {
+      if(this.loading_elems.length == num){
+        this.loading = false
+      }
     },
     updatePage (categoryId) {
       this.loading = true
