@@ -1,95 +1,97 @@
 <template>
-	<div
-		v-if="opt_vendors.selected_count > 0"
-		class="dart-custom-grid purchases__wrapper"
-		:class="{ loading: loading }"
-	>
-		<!-- <CatalogMenu :items="opt_catalog" /> -->
-		<div class="d-col-content purchases">
-			<hr class="purchases__line" />
-
-			<div class="dart-home dart-window">
-				<!-- <Breadcrumbs :items="this.$breadcrumbs"/> -->
-        <Breadcrumbs />
-				<div v-if="$route.params.warehouse_id && !$route.params.warehouse_cat_id">
-					<h1 class="h1-mini">Все товары</h1>
-					<div class="dart-alert dart-alert-info">
-						В данном разделе перечислены все товары поставщика, в том числе и не
-						сопоставленные со справочником системы.
+	<Loading v-if="loading" />
+	<div v-else class="std-display-contents">
+		<div
+			v-if="opt_vendors.selected_count > 0"
+			class="dart-custom-grid purchases__wrapper"
+			:class="{ loading: loading }"
+		>
+			<!-- <CatalogMenu :items="opt_catalog" /> -->
+			<div class="d-col-content purchases">
+				<hr class="purchases__line" />
+				<div class="dart-home dart-window">
+					<!-- <Breadcrumbs :items="this.$breadcrumbs"/> -->
+					<Breadcrumbs />
+					<div v-if="$route.params.warehouse_id && !$route.params.warehouse_cat_id">
+						<h1 class="h1-mini">Все товары</h1>
+						<div class="dart-alert dart-alert-info">
+							В данном разделе перечислены все товары поставщика, в том числе и не
+							сопоставленные со справочником системы.
+						</div>
 					</div>
-				</div>
-				<h1 class="h1-mini" v-else>{{ opt_products?.page?.pagetitle }}</h1>
-				<div v-if="opt_products.categories.length" class="categories">
-					<div class="category" :key="cat.id" v-for="cat in opt_products.categories">
-						<RouterLink
-							:to="{
-								name: 'org_opt_waregouse_category',
-								params: { warehouse_cat_id: cat.id },
-							}"
-							v-if="$route.params.warehouse_id"
-						>
-							<span class="title">{{ cat.pagetitle }}</span>
-							<img :src="cat.image" :alt="cat.pagetitle" v-if="cat.image" />
-						</RouterLink>
-						<RouterLink
-							:to="{ name: 'purchases_catalog', params: { category_id: cat.id } }"
-							v-else
-						>
-							<span class="title">{{ cat.pagetitle }}</span>
-							<img :src="cat.image" :alt="cat.pagetitle" v-if="cat.image" />
-						</RouterLink>
+					<h1 class="h1-mini" v-else>{{ opt_products?.page?.pagetitle }}</h1>
+					<div v-if="opt_products.categories.length" class="categories">
+						<div class="category" :key="cat.id" v-for="cat in opt_products.categories">
+							<RouterLink
+								:to="{
+									name: 'org_opt_waregouse_category',
+									params: { warehouse_cat_id: cat.id },
+								}"
+								v-if="$route.params.warehouse_id"
+							>
+								<span class="title">{{ cat.pagetitle }}</span>
+								<img :src="cat.image" :alt="cat.pagetitle" v-if="cat.image" />
+							</RouterLink>
+							<RouterLink
+								:to="{ name: 'purchases_catalog', params: { category_id: cat.id } }"
+								v-else
+							>
+								<span class="title">{{ cat.pagetitle }}</span>
+								<img :src="cat.image" :alt="cat.pagetitle" v-if="cat.image" />
+							</RouterLink>
+						</div>
 					</div>
+					<TableCatalog
+						:is_warehouses="true"
+						@updateBasket="updateBasket"
+						v-if="
+							opt_products.total !== 0 &&
+							$route.params.warehouse_id &&
+							!$route.params.warehouse_cat_id
+						"
+						:items="opt_products"
+					/>
+					<TableCatalog
+						:is_warehouses="this.$route.params.warehouse_id ? true : false"
+						@updateBasket="updateBasket"
+						v-else-if="opt_products.total !== 0"
+						:items="opt_products"
+					/>
+					<paginate
+						v-if="opt_products.total !== 0"
+						:page-count="pageCount"
+						:click-handler="pagClickCallback"
+						:prev-text="'Пред'"
+						:next-text="'След'"
+						:container-class="'pagination justify-content-center'"
+						:initialPage="this.page"
+						:forcePage="this.page"
+					>
+					</paginate>
 				</div>
-				<TableCatalog
-					:is_warehouses="true"
-					@updateBasket="updateBasket"
-					v-if="
-						opt_products.total !== 0 &&
-						$route.params.warehouse_id &&
-						!$route.params.warehouse_cat_id
-					"
-					:items="opt_products"
-				/>
-				<TableCatalog
-					:is_warehouses="this.$route.params.warehouse_id ? true : false"
-					@updateBasket="updateBasket"
-					v-else-if="opt_products.total !== 0"
-					:items="opt_products"
-				/>
-				<paginate
-					v-if="opt_products.total !== 0"
-					:page-count="pageCount"
-					:click-handler="pagClickCallback"
-					:prev-text="'Пред'"
-					:next-text="'След'"
-					:container-class="'pagination justify-content-center'"
-					:initialPage="this.page"
-					:forcePage="this.page"
-				>
-				</paginate>
+			</div>
+			<div class="d-col-map purchases__basket-wrapper">
+				<Vendors :items="this.opt_vendors" @vendorCheck="vendorCheck" />
+				<Basket ref="childComponent" @toOrder="toOrder" @catalogUpdate="catalogUpdate" />
 			</div>
 		</div>
-		<div class="d-col-map purchases__basket-wrapper">
-			<Vendors :items="this.opt_vendors" @vendorCheck="vendorCheck" />
-			<Basket ref="childComponent" @toOrder="toOrder" @catalogUpdate="catalogUpdate" />
+		<div class="not-vendors" v-else>
+			<!-- <img src="../../assets/img/not-vendors.png" alt=""> -->
+			<p>Для просмотра каталога необходимо выбрать поставщика!</p>
+			<div class="a-dart-btn a-dart-btn-primary" @click="changeActive">Выбрать</div>
 		</div>
+		<OrderModal
+			:show="show_order"
+			@fromOrder="fromOrder"
+			@orderSubmit="updatePage($route.params.category_id)"
+		/>
+		<Vendors
+			@changeActive="changeActive"
+			@vendorCheck="vendorCheck"
+			:vendorModal="this.vendorModal"
+			:items="this.opt_vendors"
+		/>
 	</div>
-	<div class="not-vendors" v-else>
-		<!-- <img src="../../assets/img/not-vendors.png" alt=""> -->
-		<p>Для просмотра каталога необходимо выбрать поставщика!</p>
-		<div class="a-dart-btn a-dart-btn-primary" @click="changeActive">Выбрать</div>
-	</div>
-	<OrderModal
-		:show="show_order"
-		@fromOrder="fromOrder"
-		@orderSubmit="updatePage($route.params.category_id)"
-	/>
-	<Vendors
-		@changeActive="changeActive"
-		@vendorCheck="vendorCheck"
-		:vendorModal="this.vendorModal"
-		:items="this.opt_vendors"
-	/>
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
@@ -100,6 +102,7 @@ import Vendors from "../../components/opt/Vendors.vue";
 import Paginate from "vuejs-paginate-next";
 import TableCatalog from "../../components/opt/TableCatalog.vue";
 import OrderModal from "../../components/opt/OrderModal.vue";
+import Loading from "../../components/Loading.vue";
 // import AmBreadcrumbs from 'vue-3-breadcrumbs'
 import Breadcrumbs from "../../components/Breadcrumbs.vue";
 
@@ -109,7 +112,8 @@ export default {
 	data() {
 		return {
 			show_order: false,
-			loading: false,
+			loading: true,
+			loading_elems: [],
 			reloading: false,
 			opt_mainpage: {},
 			opt_catalog: {},
@@ -124,20 +128,38 @@ export default {
 		CatalogMenu,
 		Basket,
 		Vendors,
+		// Breadcrumbs,
 		TableCatalog,
 		Paginate,
 		OrderModal,
-		Breadcrumbs
+		Loading,
+		// Breadcrumbs
 	},
 	mounted() {
-		this.get_opt_catalog_from_api().then((this.opt_catalog = this.optcatalog));
-		this.get_opt_vendors_from_api().then((this.opt_vendors = this.optvendors));
+		this.get_opt_catalog_from_api().then(() => {
+			this.opt_catalog = this.optcatalog;
+			this.loading_elems.push("load");
+			this.loadingCheack(3);
+		});
+		this.get_opt_vendors_from_api().then(() => {
+			this.opt_vendors = this.optvendors;
+			this.loading_elems.push("load");
+			this.loadingCheack(3);
+		});
 		this.get_opt_products_from_api({
 			page: this.page,
 			perpage: this.perpage,
-		}).then((this.opt_products = this.optproducts));
+		}).then(() => {
+			this.opt_products = this.optproducts;
+			this.loading_elems.push("load");
+			this.loadingCheack(3);
+		});
 		if (this.$route.params.warehouse_id) {
-			this.get_opt_warehouse().then((this.opt_warehouse = this.optwarehouse));
+			this.get_opt_warehouse().then(() => {
+				this.opt_warehouse = this.optwarehouse;
+				this.loading_elems.push("load");
+				this.loadingCheack(3);
+			});
 		}
 	},
 	updated() {},
@@ -156,6 +178,11 @@ export default {
 				page: this.page,
 				perpage: this.perpage,
 			}).then((this.opt_products = this.optproducts));
+		},
+		loadingCheack(num) {
+			if (this.loading_elems.length == num) {
+				this.loading = false;
+			}
 		},
 		updatePage(categoryId) {
 			this.loading = true;
