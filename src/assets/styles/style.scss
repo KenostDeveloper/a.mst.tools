@@ -5546,3 +5546,73 @@ button.std-icon__wrapper {
 	top: -6px;
 	right: -10px;
 }
+
+.v-table.widget_table {
+	.sort{
+		cursor: pointer;
+		position: relative;
+		display: inline-block !important;
+		padding-right: 15px;
+		&.active{
+		  color: #ff0000;
+		}
+		&::after{
+		  content: '🠕🠗';
+		  display: inline-block;
+			font-family: sans-serif;
+			color: #ffffff;
+		}
+		&_asc{
+		  position: relative;
+		  &::after{
+			content: '🠕';
+			display: inline-block;
+			font-family: sans-serif;
+			color: #ffffff;
+		  }
+		}
+		&_desc{
+		  position: relative;
+		  &::after{
+			content: '🠗';
+			display: inline-block;
+			font-family: sans-serif;
+			color: #ffffff;
+		  }
+		}
+	  }
+}
+
+.sort{
+    cursor: pointer;
+    position: relative;
+    display: inline-block !important;
+    padding-right: 15px;
+    &.active{
+      color: #ff0000;
+    }
+    &::after{
+		content: '🠕🠗';
+		display: inline-block;
+		  font-family: sans-serif;
+		  color: #282828;
+    }
+    &_asc{
+      position: relative;
+      &::after{
+        content: '🠕';
+        display: inline-block;
+        font-family: sans-serif;
+        color: #282828;
+      }
+    }
+    &_desc{
+      position: relative;
+      &::after{
+        content: '🠗';
+        display: inline-block;
+        font-family: sans-serif;
+        color: #282828;
+      }
+    }
+  }
