@@ -5,21 +5,22 @@
         <table class="k-table" :style="{ marginLeft: this.marginValue + 'px' }">
             <thead>
                 <tr>
-                    <th class="k-table__name k-tablr-th-icon"></th>
-                    <th class="k-table__name k-tablr-th-photo">Фото</th>
+                    <th class="k-table__name k-tablr-th-icon hidden-mobile-l"></th>
+                    <th class="k-table__name k-tablr-th-photo hidden-mobile-l">Фото</th>
                     <th class="k-table__name k-tablr-th-title">Наименование / Артикул</th>
-                    <th class="k-table__name k-tablr-th-buttons"></th>
+                    <th class="k-table__name k-tablr-th-buttons hidden-mobile-l"></th>
                     <th class="k-table__name k-tablr-th-price">Цена /<br> отсрочка</th>
-                    <th class="k-table__name k-tablr-th-action">Акции</th>
+                    <th class="k-table__name k-tablr-th-action hidden-mobile-l">Акции</th>
                     <th class="k-table__name k-tablr-th-delivery">Оплата доставки /<br> срок доставки</th>
-                    <th class="k-table__name k-tablr-th-remain">Остаток</th>
+                    <th class="k-table__name k-tablr-th-remain hidden-mobile-l">Остаток</th>
                     <th class="k-table__name k-tablr-th-vendor">Поставщик / Склад</th>
-                    <th class="k-table__name k-tablr-th-retail">РЦ / Наценка</th>
+                    <th class="k-table__name k-tablr-th-retail hidden-mobile-l">РЦ / Наценка</th>
                 </tr>
             </thead>
               <TableCatalogRow :is_warehouses="this.is_warehouses" @ElemAction="ElemAction" @updateBasket="updateBasket" v-for="item in items.items" v-bind:key="item.id" :items="item"/>
         </table>
     </div>
+
     <Dialog v-if="this.actions_item !== null" v-model:visible="this.modal_actions" :header="'Акции товара ' + this.actions_item.name" class="kenost-actions-modal">
         <table class="kenost-actions-modal__table">
             <thead>

@@ -119,9 +119,6 @@
 														<span class="std-tab-item__text">{{
 															level3.name || level3.pagetitle
 														}}</span>
-														<i
-															class="d_icon d_icon-arrow std-tab-item__icon"
-														></i>
 													</router-link>
 												</div>
 											</template>
@@ -149,7 +146,6 @@
 											<span class="std-tab-item__text">{{
 												level2.name || level2.pagetitle
 											}}</span>
-											<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
 										</router-link>
 									</template>
 								</div>
@@ -183,7 +179,6 @@
 							<span class="std-tab-item__text">{{
 								level1.name || level1.pagetitle
 							}}</span>
-							<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
 						</router-link>
 					</template>
 				</div>

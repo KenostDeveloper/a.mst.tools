@@ -3959,7 +3959,16 @@ p {
 	}
 
 	&__basket-wrapper {
-		z-index: 5;
+		z-index: 10;
+	}
+
+	&__line {
+		background-color: rgba(226, 226, 226, 1);
+		border: none;
+		outline: none;
+
+		height: 1px;
+		width: calc(100% - 30px);
 	}
 }
 
@@ -4569,7 +4578,11 @@ button.std-icon__wrapper {
 // /Hovers
 
 .std-catalog-table__wrapper {
-	overflow: auto;
+	@include std-table;
+
+	& {
+		overflow: auto;
+	}
 
 	.k-table__name {
 		padding-inline: 15px;

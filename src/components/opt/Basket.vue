@@ -2,7 +2,7 @@
 	<div :class="`std-basket ${this.isOpened ? 'std-basket--active' : ''}`">
 		<div class="d-col-basket std-basket__inner">
 			<div class="std-basket__header-wrapper">
-				<div class="std-basket__header" @click="this.isOpened = !this.isOpened">
+				<div class="std-basket__header" @click.stop="this.isOpened = !this.isOpened">
 					<div class="std-basket__title-container">
 						<p class="d-col-basket__title std-basket__title"><span>Корзина</span></p>
 						
