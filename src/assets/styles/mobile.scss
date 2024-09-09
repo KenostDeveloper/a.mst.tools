@@ -475,6 +475,7 @@ $mobile-s: 240px;
 			}
 
 			&__content {
+
 				.std-catalog__nav {
 					margin-block: 13px;
 					overflow: visible;
@@ -641,6 +642,10 @@ $mobile-s: 240px;
 				align-self: flex-end;
 			}
 		}
+	}
+
+	.sitebar {
+		position: fixed;
 	}
 }
 @include tablet {

@@ -1080,15 +1080,17 @@ img {
 
 .sitebar {
 	height: 100vh;
+	min-width: 327px;
 	width: 327px;
 	background: var(--secondary-color);
 	transition: all 0.4s ease-in-out;
-	position: fixed;
+	position: relative;
 	z-index: 10;
 	top: 0;
 	left: 0;
 
 	&.hide {
+		min-width: 54px;
 		width: 54px;
 
 		.sitebar {
