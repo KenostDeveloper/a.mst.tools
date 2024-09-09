@@ -73,7 +73,9 @@
 					<span class="std-money__label">Баланс</span>
 					<span class="std-money__balance">{{ this.organozation.balance }} ₽</span>
 				</div>
-				<button class="dart-btn dart-btn-secondary std-money__button">Вывести средства</button>
+				<button class="dart-btn dart-btn-secondary std-money__button">
+					Вывести средства
+				</button>
 			</div>
 			<hr class="sitebar-hr" />
 			<div class="sitebar-menu">

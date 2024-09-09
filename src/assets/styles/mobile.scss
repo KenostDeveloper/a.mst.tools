@@ -278,6 +278,16 @@ $mobile-s: 240px;
 			background-color: #fcfcfc !important;
 		}
 
+		&__line {
+			background-color: rgba(226, 226, 226, 1);
+			border: none;
+			outline: none;
+
+			height: 1px;
+			width: calc(100% - 30px);
+			margin: 0 auto;
+		}
+
 		.std-catalog-button,
 		.kenost-vendors {
 			display: flex;
@@ -380,13 +390,17 @@ $mobile-s: 240px;
 
 			&__line {
 				background-color: rgba(226, 226, 226, 1);
-				height: 3px;
+				height: 1px;
 				width: calc(100% - 30px);
 			}
 
 			&__content {
 				flex-direction: column;
 				padding: 0;
+
+				& > .std-catalog__nav {
+					padding-block: 0;
+				}
 			}
 
 			&__nav--primary,
@@ -1554,12 +1568,21 @@ $mobile-s: 240px;
 	// EmptyDialog
 	.std-empty-dialog {
 		border-radius: 4px !important;
-		padding: 20px !important;
+		// padding: 20px !important;
 	}
 
 	.change-org-container {
+		.change-org__wrapper {
+			padding: 20px 20px 0 20px;
+		}
+
 		.change-org__links {
+			padding: 5px 20px 20px 20px;
 			gap: 14px;
+		}
+
+		.change-org__line {
+			width: calc(100% - 40px);
 		}
 
 		.change-org-el {

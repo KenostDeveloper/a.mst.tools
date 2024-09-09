@@ -29,16 +29,18 @@ export default {
 	methods: {
 		toggleIsOpened(state = !this.isOpened) {
 			this.isOpened = state;
-
-			if(this.isOpened)
-				document.body.style.overflow = "hidden";
-			else
-				document.body.style.overflow = "auto";
 		},
 	},
 	watch: {
 		visible(state) {
 			this.toggleIsOpened(state);
+
+			if(state) {
+				document.body.style.overflow = "hidden";
+			}
+			else {
+				document.body.style.overflow = "auto";
+			}
 		}
 	}
 };
@@ -48,8 +50,9 @@ export default {
 .std-empty-dialog {
 	background-color: #fff;
 	border-radius: 7px;
-	padding: 48px 55px;
+	// padding: 48px 55px;
 
+	max-height: 80dvh;
 	max-width: 90%;
 
 	&__overlay {
