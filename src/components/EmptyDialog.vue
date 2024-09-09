@@ -50,8 +50,9 @@ export default {
 	border-radius: 7px;
 	padding: 48px 55px;
 
+	max-height: 80dvh;
 	max-width: 90%;
-
+	
 	&__overlay {
 		display: flex;
 		justify-content: center;

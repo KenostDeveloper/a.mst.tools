@@ -4607,6 +4607,12 @@ button.std-icon__wrapper {
 
 	.change-org__links {
 		@include flex-direction(column, 18px);
+		@include scrollbar;
+
+		& {
+			overflow-y: auto;
+			max-height: 100%;
+		}
 	}
 
 	.change-org__line {

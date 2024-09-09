@@ -1,7 +1,10 @@
 <template>
 	<div :class="`navmain std-nav ${catalogIsOpened ? 'std-nav--active' : ''}`">
+		
 		<!-- Каталог -->
 		<div :class="`std-catalog ${catalogIsOpened ? 'std-catalog--active' : ''}`">
+			<hr class="std-nav__line" />
+
 			<div class="std-catalog__tabs">
 				<button
 					:class="`std-catalog__tab-item std-tab-item ${

@@ -147,22 +147,24 @@
 
 			<hr class="change-org__line" />
 
-			<div class="change-org__links">
-				<router-link
-					v-for="item in this.organizations.filter(
-						(org) => org.id !== this.activeOrganization.id
-					)"
-					@click="changeOrg"
-					:to="{ name: 'org', params: { id: item.id } }"
-					class="change-org-el"
-					v-bind:key="item.id"
-				>
-					<div class="icon"><img :src="item.image" alt="" /></div>
-					<div class="change-org-el__text">
-						<b>{{ item.name }}</b>
-						<p>{{ item.description }}</p>
-					</div>
-				</router-link>
+			<div class="change-org__links-wrapper">
+				<div class="change-org__links">
+					<router-link
+						v-for="item in this.organizations.filter(
+							(org) => org.id !== this.activeOrganization.id
+						)"
+						@click="changeOrg"
+						:to="{ name: 'org', params: { id: item.id } }"
+						class="change-org-el"
+						v-bind:key="item.id"
+					>
+						<div class="icon"><img :src="item.image" alt="" /></div>
+						<div class="change-org-el__text">
+							<b>{{ item.name }}</b>
+							<p>{{ item.description }}</p>
+						</div>
+					</router-link>
+				</div>
 			</div>
 		</div>
 	</EmptyDialog>
