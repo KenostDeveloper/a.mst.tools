@@ -73,7 +73,9 @@
 					<span class="std-money__label">Баланс</span>
 					<span class="std-money__balance">{{ this.organozation.balance }} ₽</span>
 				</div>
-				<button class="dart-btn dart-btn-secondary std-money__button">Вывести средства</button>
+				<button class="dart-btn dart-btn-secondary std-money__button">
+					Вывести средства
+				</button>
 			</div>
 			<hr class="sitebar-hr" />
 			<div class="sitebar-menu">
@@ -147,24 +149,22 @@
 
 			<hr class="change-org__line" />
 
-			<div class="change-org__links-wrapper">
-				<div class="change-org__links">
-					<router-link
-						v-for="item in this.organizations.filter(
-							(org) => org.id !== this.activeOrganization.id
-						)"
-						@click="changeOrg"
-						:to="{ name: 'org', params: { id: item.id } }"
-						class="change-org-el"
-						v-bind:key="item.id"
-					>
-						<div class="icon"><img :src="item.image" alt="" /></div>
-						<div class="change-org-el__text">
-							<b>{{ item.name }}</b>
-							<p>{{ item.description }}</p>
-						</div>
-					</router-link>
-				</div>
+			<div class="change-org__links">
+				<router-link
+					v-for="item in this.organizations.filter(
+						(org) => org.id !== this.activeOrganization.id
+					)"
+					@click="changeOrg"
+					:to="{ name: 'org', params: { id: item.id } }"
+					class="change-org-el"
+					v-bind:key="item.id"
+				>
+					<div class="icon"><img :src="item.image" alt="" /></div>
+					<div class="change-org-el__text">
+						<b>{{ item.name }}</b>
+						<p>{{ item.description }}</p>
+					</div>
+				</router-link>
 			</div>
 		</div>
 	</EmptyDialog>

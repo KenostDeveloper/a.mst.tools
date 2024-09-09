@@ -519,8 +519,9 @@ export default {
 		},
 
 		getImageSrc(src) {
-			if (!src) return "";
-			return src.startsWith("https://dev.mst.tools") ? src : "https://dev.mst.tools/" + src;
+			// if (!src) return "";
+			// return src.startsWith("https://dev.mst.tools") ? src : "https://dev.mst.tools/" + src;
+			return src;
 		},
 	},
 	mounted() {

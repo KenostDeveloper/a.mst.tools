@@ -2419,16 +2419,16 @@ p {
 	}
 }
 @mixin scrollbar(
-	$width: 10px,
-	$height: 10px,
+	$width: 5px,
+	$height: auto,
 	$border-radius: 5px,
-	$bg-thumb-color: #edf2fa,
+	$bg-thumb-color: #2828287e,
 	$bg-track-color: transparent
 ) {
-	// & {
-	//   scrollbar-width: $width;
-	//   scrollbar-color: $bg-thumb-color $bg-track-color;
-	// }
+	&:-moz-any(&) {
+	  scrollbar-width: thin;
+	  scrollbar-color: $bg-thumb-color $bg-track-color;
+	}
 
 	&::-webkit-scrollbar {
 		width: $width;
@@ -4603,6 +4603,10 @@ button.std-icon__wrapper {
 
 	.change-org__wrapper {
 		@include flex($justify: space-between, $align: center, $gap: 80px);
+
+		& {
+			padding: 40px 40px 0 40px;
+		}
 	}
 
 	.change-org__links {
@@ -4611,7 +4615,8 @@ button.std-icon__wrapper {
 
 		& {
 			overflow-y: auto;
-			max-height: 100%;
+			max-height: 60dvh;
+			padding: 5px 40px 40px 40px;
 		}
 	}
 
@@ -4619,10 +4624,10 @@ button.std-icon__wrapper {
 		background-color: rgba(173, 173, 173, 1);
 		border: none;
 
-		width: 100%;
+		width: calc(100% - 80px);
 		height: 0.8px;
 
-		margin: 0;
+		margin: 0 auto;
 		padding: 0;
 	}
 
