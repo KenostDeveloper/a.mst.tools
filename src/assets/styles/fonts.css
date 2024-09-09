@@ -1,19 +1,18 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('/fonts/icomoon.eot?rtorg8');
-  src:  url('/fonts/icomoon.eot?rtorg8#iefix') format('embedded-opentype'),
-    url('/fonts/icomoon.ttf?rtorg8') format('truetype'),
-    url('/fonts/icomoon.woff?rtorg8') format('woff'),
-    url('/fonts/icomoon.svg?rtorg8#icomoon') format('svg');
+  src:  url('/fonts/icomoon.eot?kybss4');
+  src:  url('/fonts/icomoon.eot?kybss4#iefix') format('embedded-opentype'),
+    url('/fonts/icomoon.ttf?kybss4') format('truetype'),
+    url('/fonts/icomoon.woff?kybss4') format('woff'),
+    url('/fonts/icomoon.svg?kybss4#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
 }
 
-[class^="d_icon-"],
-[class*=" d_icon-"] {
+[class^="d_icon-"], [class*=" d_icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: "icomoon" !important;
+  font-family: 'icomoon' !important;
   speak: never;
   font-style: normal;
   font-weight: normal;
@@ -26,20 +25,20 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.d_icon-sort:before {
+  content: "\e912";
+}
 .d_icon-arrow-right:before {
   content: "\e911";
 }
 .d_icon-busket:before {
   content: "\e910";
-  color: #fff;
 }
 .d_icon-edit:before {
   content: "\e90f";
-  color: #a0a0a0;
 }
 .d_icon-search:before {
   content: "\e90e";
-  color: #fff;
 }
 .d_icon-database:before {
   content: "\e90d";
@@ -49,49 +48,37 @@
 }
 .d_icon-settings:before {
   content: "\e903";
-  color: #fff;
 }
 .d_icon-products:before {
   content: "\e904";
-  color: #fff;
 }
 .d_icon-document:before {
   content: "\e905";
-  color: #fff;
 }
 .d_icon-star:before {
   content: "\e906";
-  color: #fff;
 }
 .d_icon-marketing:before {
   content: "\e907";
-  color: #fff;
 }
 .d_icon-vendors:before {
   content: "\e908";
-  color: #fff;
 }
 .d_icon-clients:before {
   content: "\e909";
-  color: #fff;
 }
 .d_icon-graphdown:before {
   content: "\e90a";
-  color: #fff;
 }
 .d_icon-shipment:before {
   content: "\e90b";
-  color: #fff;
 }
 .d_icon-focus:before {
   content: "\e900";
-  color: #fb203a;
 }
 .d_icon-check:before {
   content: "\e901";
-  color: #00f619;
 }
 .d_icon-alerts:before {
   content: "\e902";
-  color: #a0a0a0;
 }
