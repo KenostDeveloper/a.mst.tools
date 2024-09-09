@@ -1084,7 +1084,7 @@ img {
 	width: 327px;
 	background: var(--secondary-color);
 	transition: all 0.4s ease-in-out;
-	position: relative;
+	position: sticky;
 	z-index: 10;
 	top: 0;
 	left: 0;
@@ -3959,7 +3959,7 @@ p {
 	}
 
 	&__basket-wrapper {
-		z-index: 5;
+		z-index: 10;
 	}
 }
 

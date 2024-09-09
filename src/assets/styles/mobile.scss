@@ -373,8 +373,16 @@ $mobile-s: 240px;
 			background-color: rgba(237, 237, 237, 1);
 			margin: 0;
 			padding-top: 6px;
+			padding-bottom: 80px;
 			left: 0;
 			max-height: 85dvh;
+			gap: 14px;
+
+			&__line {
+				background-color: rgba(226, 226, 226, 1);
+				height: 3px;
+				width: calc(100% - 30px);
+			}
 
 			&__content {
 				flex-direction: column;
@@ -475,10 +483,24 @@ $mobile-s: 240px;
 			}
 
 			&__content {
-
 				.std-catalog__nav {
 					margin-block: 13px;
 					overflow: visible;
+				}
+			}
+
+			.std-tab-item--alt2 {
+				padding-left: 40px !important;
+
+				&::before {
+					width: calc(100vw - 3px) !important;
+					translate: 30px -50% !important;
+				}
+			}
+
+			.std-tab-item--alt3 {
+				&::before {
+					translate: 45px -50% !important;
 				}
 			}
 		}

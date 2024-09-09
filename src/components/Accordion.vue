@@ -56,6 +56,12 @@ export default {
 		}
 	}
 
+	&:not(.std-accordion--expanded) {
+		.std-accordion__content {
+			overflow: hidden;
+		}
+	}
+
 	&__header {
 		cursor: pointer;
 
@@ -85,7 +91,6 @@ export default {
 		flex-direction: column;
 
 		height: 0px;
-		overflow: hidden;
 		transition: height 0.3s ease-in-out;
 	}
 }

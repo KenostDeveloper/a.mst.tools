@@ -53,7 +53,9 @@
 								>
 									<div class="std-tab-item__img-container">
 										<img
-											:src="this.getImageSrc(level1.image || level1.menu_image)"
+											:src="
+												this.getImageSrc(level1.image || level1.menu_image)
+											"
 										/>
 									</div>
 									<span class="std-tab-item__text">{{
@@ -73,13 +75,13 @@
 											<template v-slot:header>
 												<div
 													:key="level2.id"
-													class="std-catalog__tab-item std-tab-item std-tab-item--alt"
+													class="std-catalog__tab-item std-tab-item std-tab-item--alt2"
 												>
-													<div class="std-tab-item__img-container">
+													<!-- <div class="std-tab-item__img-container">
 														<img
 															:src="getImageSrc(level2.image || level2.menu_image)"
 														/>
-													</div>
+													</div> -->
 													<span class="std-tab-item__text">{{
 														level2.name || level2.pagetitle
 													}}</span>
@@ -104,16 +106,19 @@
 														}"
 														:key="level3"
 														@click="toggleCatalogVisibilityAd()"
-														class="std-catalog__tab-item std-tab-item std-tab-item--alt"
+														class="std-catalog__tab-item std-tab-item std-tab-item--alt2 std-tab-item--alt3"
 													>
-														<div class="std-tab-item__img-container">
+														<!-- <div class="std-tab-item__img-container">
 															<img
 																:src="getImageSrc(level3.image || level3.menu_image)"
 															/>
-														</div>
+														</div> -->
 														<span class="std-tab-item__text">{{
 															level3.name || level3.pagetitle
 														}}</span>
+														<i
+															class="d_icon d_icon-arrow std-tab-item__icon"
+														></i>
 													</router-link>
 												</div>
 											</template>
@@ -131,16 +136,17 @@
 											}"
 											:key="level2"
 											@click="toggleCatalogVisibilityAd()"
-											class="std-catalog__tab-item std-tab-item std-tab-item--alt"
+											class="std-catalog__tab-item std-tab-item std-tab-item--alt2"
 										>
-											<div class="std-tab-item__img-container">
+											<!-- <div class="std-tab-item__img-container">
 												<img
 													:src="getImageSrc(level2.image || level2.menu_image)"
 												/>
-											</div>
+											</div> -->
 											<span class="std-tab-item__text">{{
 												level2.name || level2.pagetitle
 											}}</span>
+											<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
 										</router-link>
 									</template>
 								</div>
@@ -169,9 +175,7 @@
 								: this.catalog"
 						>
 							<div class="std-tab-item__img-container">
-								<img
-									:src="getImageSrc(level1.image || level1.menu_image)"
-								/>
+								<img :src="getImageSrc(level1.image || level1.menu_image)" />
 							</div>
 							<span class="std-tab-item__text">{{
 								level1.name || level1.pagetitle
@@ -208,9 +212,7 @@
 							: this.catalog"
 					>
 						<div class="std-tab-item__img-container">
-							<img
-								:src="'https://dev.mst.tools/' + level1.image || level1.menu_image"
-							/>
+							<img :src="this.getImageSrc(level1.image || level1.menu_image)" />
 						</div>
 						<span class="std-tab-item__text">{{
 							level1.name || level1.pagetitle
@@ -514,9 +516,9 @@ export default {
 		},
 
 		getImageSrc(src) {
-			console.log(src, typeof str);
+			if (!src) return "";
 			return src.startsWith("https://dev.mst.tools") ? src : "https://dev.mst.tools/" + src;
-		}
+		},
 	},
 	mounted() {
 		this.get_opt_warehouse_catalog_from_api();
