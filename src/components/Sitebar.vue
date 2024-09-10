@@ -140,7 +140,8 @@
 					</div>
 				</div>
 				<div v-if="this.activeOrganization.active" class="dart-payment-status-org">
-					<i class="d_icon d_icon-check"></i><span>Включен</span>
+					<i class="d_icon d_icon-check"></i>
+					<span>Включен</span>
 				</div>
 				<div v-else class="dart-payment-status-org off">
 					<i class="d_icon d_icon-focus"></i><span>Выключен</span>
