@@ -189,34 +189,57 @@
 				<div
 					class="std-catalog__nav std-catalog__nav--primary std-catalog__tabs std-catalog__tabs--vertical"
 				>
-					<!-- {{ this.organizations }} -->
-					<router-link
-						:to="{
-							name: 'purchases_catalog',
-							params: { id: this.$route.params.id, category_id: level1.id },
-						}"
-						:key="level1"
-						@mouseenter="
-							() => {
-								this.actualNav.secondLevel = level1.children;
-								this.actualNav.thirdLevel = [];
-								this.actualImageSrc = '';
-							}
-						"
-						@click="toggleCatalogVisibilityAd()"
-						class="std-catalog__tab-item std-tab-item std-tab-item--alt"
-						v-for="level1 in this.organizationsOrCategories === 'organizations'
-							? this.catalog_warehouse
-							: this.catalog"
-					>
-						<div class="std-tab-item__img-container">
-							<img :src="this.getImageSrc(level1.image || level1.menu_image)" />
-						</div>
-						<span class="std-tab-item__text">{{
-							level1.name || level1.pagetitle
-						}}</span>
-						<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
-					</router-link>
+					<div v-if="this.organizationsOrCategories === 'organizations'">
+						<router-link
+							:to="{
+								name: 'purchases_catalog_warehouse',
+								params: { id: this.$route.params.id, warehouse_id: level1.id },
+							}"
+							:key="level1"
+							@mouseenter="
+								() => {
+									this.actualNav.secondLevel = level1.children;
+									this.actualNav.thirdLevel = [];
+									this.actualNav.warehouse_id = level1.id;
+									this.actualImageSrc = '';
+								}
+							"
+							@click="toggleCatalogVisibilityAd()"
+							class="std-catalog__tab-item std-tab-item std-tab-item--alt"
+							v-for="level1 in this.catalog_warehouse"
+						>
+							<div class="std-tab-item__img-container">
+								<img :src="this.getImageSrc(level1.image)" />
+							</div>
+							<span class="std-tab-item__text">{{ level1.pagetitle }}</span>
+							<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
+						</router-link>
+					</div>
+					<div v-else>
+						<router-link
+							:to="{
+								name: 'purchases_catalog',
+								params: { id: this.$route.params.id, category_id: level1.id },
+							}"
+							:key="level1"
+							@mouseenter="
+								() => {
+									this.actualNav.secondLevel = level1.children;
+									this.actualNav.thirdLevel = [];
+									this.actualImageSrc = '';
+								}
+							"
+							@click="toggleCatalogVisibilityAd()"
+							class="std-catalog__tab-item std-tab-item std-tab-item--alt"
+							v-for="level1 in this.catalog"
+						>
+							<div class="std-tab-item__img-container">
+								<img :src="this.getImageSrc(level1.menu_image)" />
+							</div>
+							<span class="std-tab-item__text">{{ level1.pagetitle }}</span>
+							<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
+						</router-link>
+					</div>
 				</div>
 				<div class="std-catalog__nav-wrapper">
 					<div class="std-catalog__nav-container">
@@ -224,6 +247,32 @@
 							<div
 								class="std-catalog__nav std-catalog__nav--secondary std-catalog__tabs std-catalog__tabs--vertical"
 							>
+							<div v-if="this.organizationsOrCategories === 'organizations'">
+								<router-link
+									:to="{
+										name: 'org_opt_waregouse_category',
+										params: {
+											id: this.$route.params.id,
+											warehouse_id: this.actualNav.warehouse_id,
+											warehouse_cat_id: level2.id,
+										},
+									}"
+									:key="level2"
+									@mouseenter="
+										() => {
+											this.actualNav.thirdLevel = level2.children;
+											this.actualImageSrc = level2.menu_image || '';
+										}
+									"
+									@click="toggleCatalogVisibilityAd()"
+									class="std-catalog__tab-item std-tab-item std-tab-item--alt2"
+									v-for="level2 in this.actualNav.secondLevel"
+								>
+									<span class="std-tab-item__text">{{ level2.pagetitle }}</span>
+									<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
+								</router-link>
+							</div>
+							<div v-else>
 								<router-link
 									:to="{
 										name: 'purchases_catalog',
@@ -246,71 +295,52 @@
 									<span class="std-tab-item__text">{{ level2.pagetitle }}</span>
 									<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
 								</router-link>
-								<router-link
-									v-if="this.organizationsOrCategories != 'organizations'"
-									:to="{
-										name: 'purchases_catalog',
-										params: {
-											id: this.$route.params.id,
-											category_id: level2.id,
-										},
-									}"
-									:key="level2"
-									@mouseenter="
-										() => {
-											this.actualNav.thirdLevel = level2.children;
-											this.actualImageSrc = level2.menu_image || '';
-										}
-									"
-									@click="toggleCatalogVisibilityAd()"
-									class="std-catalog__tab-item std-tab-item std-tab-item--alt2"
-									v-for="level2 in this.actualNav.secondLevel"
-								>
-									<span class="std-tab-item__text">{{ level2.pagetitle }}</span>
-									<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
-								</router-link>
+							</div>
 							</div>
 							<div
 								class="std-catalog__nav std-catalog__nav--thirdy std-catalog__tabs std-catalog__tabs--vertical"
 							>
-								<router-link
-									:to="{
-										name: 'purchases_catalog',
-										params: {
-											id: this.$route.params.id,
-											category_id: level3?.id,
-										},
-									}"
-									:key="level3"
-									v-for="level3 in this.actualNav.thirdLevel"
-									class="std-catalog__tab-item std-tab-item std-tab-item--none"
-									@mouseenter="this.actualImageSrc = level3.menu_image || ''"
-									@click="toggleCatalogVisibilityAd()"
-								>
-									<span class="std-tab-item__text">{{ level3.pagetitle }}</span>
-									<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
-								</router-link>
-								<router-link
-									v-if="this.organizationsOrCategories != 'organizations'"
-									:to="{
-										name: 'purchases_catalog',
-										params: {
-											id: this.$route.params.id,
-											category_id: level3?.id,
-										},
-									}"
-									:key="level3"
-									v-for="level3 in this.actualNav.thirdLevel"
-									class="std-catalog__tab-item std-tab-item std-tab-item--none"
-									@mouseenter="this.actualImageSrc = level3.menu_image || ''"
-									@click="toggleCatalogVisibilityAd()"
-								>
-									<span class="std-tab-item__text">{{ level3.pagetitle }}</span>
-									<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
-								</router-link>
+								<div v-if="this.organizationsOrCategories === 'organizations'">
+									<router-link
+										:to="{
+											name: 'org_opt_waregouse_category',
+											params: {
+												id: this.$route.params.id,
+												warehouse_id: this.actualNav.warehouse_id,
+												warehouse_cat_id: level3.id,
+											},
+										}"
+										:key="level3"
+										v-for="level3 in this.actualNav.thirdLevel"
+										class="std-catalog__tab-item std-tab-item std-tab-item--none"
+										@mouseenter="this.actualImageSrc = level3.menu_image || ''"
+										@click="toggleCatalogVisibilityAd()"
+									>
+										<span class="std-tab-item__text">{{ level3.pagetitle }}</span>
+										<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
+									</router-link>
+								</div>
+								<div v-else>
+									<router-link
+										:to="{
+											name: 'purchases_catalog',
+											params: {
+												id: this.$route.params.id,
+												category_id: level3?.id,
+											},
+										}"
+										:key="level3"
+										v-for="level3 in this.actualNav.thirdLevel"
+										class="std-catalog__tab-item std-tab-item std-tab-item--none"
+										@mouseenter="this.actualImageSrc = level3.menu_image || ''"
+										@click="toggleCatalogVisibilityAd()"
+									>
+										<span class="std-tab-item__text">{{ level3.pagetitle }}</span>
+										<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
+									</router-link>
+								</div>
 							</div>
 						</div>
-
 						<img :src="'https://mst.tools/' + this.actualImageSrc" alt="" />
 					</div>
 				</div>

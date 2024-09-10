@@ -2087,6 +2087,11 @@ export default {
         if (newVal.store_id) {
           this.form.store_id = newVal.store_id.toString()
 
+          this.opt_get_prices({
+            action: 'get/type/prices',
+            store_id: newVal.store_id
+          })
+
           const data = {
             storeid: newVal.store_id.toString(),
             filter: this.filterGift,

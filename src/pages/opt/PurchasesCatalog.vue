@@ -1,5 +1,5 @@
 <template>
-	<Loading v-if="loading" />
+	<Loading v-if="this.loading" />
 	<div v-else class="std-display-contents">
 		<div
 			v-if="opt_vendors.selected_count > 0"
@@ -8,7 +8,6 @@
 		>
 			<!-- <CatalogMenu :items="opt_catalog" /> -->
 			<div class="d-col-content purchases">
-				<hr class="purchases__line" />
 				<div class="dart-home dart-window">
 					<!-- <Breadcrumbs :items="this.$breadcrumbs"/> -->
 					<Breadcrumbs />
