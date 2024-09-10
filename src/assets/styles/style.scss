@@ -4368,6 +4368,20 @@ button.std-icon__wrapper {
   }
 }
 
+.not-warehouse{
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100dvh;
+
+	p{
+		max-width: 400px;
+		text-align: center;
+		margin-top: 16px;
+	}
+}
+
 .dart-btn-secondary,
 .a-dart-btn-secondary {
   & {

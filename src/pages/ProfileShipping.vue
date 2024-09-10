@@ -1,8 +1,8 @@
 <template>
 	<Loading v-if="this.loading_page" />
 	<div v-else>
-		<div class="not-vendors" v-if="this.organozation.warehouse == 0">
-			<!-- <img src="/images/logo_alt.svg" alt="" /> -->
+		<div class="not-warehouse" v-if="this.organozation.warehouse == 0 && this.organozation.vendor == 0">
+			<img class="mb-2" src="/images/icons_milen/warehouse.png" alt="" />
 			<p>Для создания отгрузок вам нужно иметь роль оптового поставщика!</p>
 			<!-- <div class="a-dart-btn a-dart-btn-primary" @click="changeActive">Выбрать</div> -->
 		</div>

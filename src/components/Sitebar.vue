@@ -55,15 +55,16 @@
 				</div>
 			</div>
 			<div class="sitebar-info">
-				<span class="sitebar-text">Выбор роли:</span>
+				<span class="sitebar-text" v-if="this.organozation.store == '1' || this.organozation.warehouse == '1'">Выбор роли:</span>
 				<div class="sitebar-roles">
+					<!-- {{ this.organozation }} -->
 					<button class="sitebar-role" @click="changeRole(0)" v-if="this.role != 0">
 						Закупщик
 					</button>
-					<button class="sitebar-role" @click="changeRole(1)" v-if="this.role != 1">
+					<button class="sitebar-role" @click="changeRole(1)" v-if="this.role != 1 && this.organozation.store == '1'">
 						Маркетплейс
 					</button>
-					<button class="sitebar-role" @click="changeRole(2)" v-if="this.role != 2">
+					<button class="sitebar-role" @click="changeRole(2)" v-if="this.role != 2 && this.organozation.warehouse == '1'">
 						Поставщик
 					</button>
 				</div>
