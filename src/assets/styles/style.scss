@@ -1,5 +1,8 @@
 /* RESET CSS */
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+@import "./mixins.scss";
 
 *:not(i, .pi, .d_icon, ::before, ::after) {
 	font-family: "Roboto", sans-serif !important;
@@ -1077,16 +1080,19 @@ img {
 
 .sitebar {
 	height: 100vh;
+	min-width: 327px;
 	width: 327px;
 	background: var(--secondary-color);
 	transition: all 0.4s ease-in-out;
-	position: fixed;
+	position: sticky;
 	z-index: 10;
 	top: 0;
 	left: 0;
 
 	&.hide {
+		min-width: 54px;
 		width: 54px;
+		overflow-x: hidden;
 
 		.sitebar {
 			&-toggler {
@@ -2414,16 +2420,16 @@ p {
 	}
 }
 @mixin scrollbar(
-	$width: 10px,
-	$height: 10px,
+	$width: 5px,
+	$height: auto,
 	$border-radius: 5px,
-	$bg-thumb-color: #edf2fa,
+	$bg-thumb-color: #2828287e,
 	$bg-track-color: transparent
 ) {
-	// & {
-	//   scrollbar-width: $width;
-	//   scrollbar-color: $bg-thumb-color $bg-track-color;
-	// }
+	&:-moz-any(&) {
+	  scrollbar-width: thin;
+	  scrollbar-color: $bg-thumb-color $bg-track-color;
+	}
 
 	&::-webkit-scrollbar {
 		width: $width;
@@ -2463,6 +2469,16 @@ p {
 }
 .visible-desktop-s {
 	@include desktop-s-above {
+		display: none !important;
+	}
+}
+.hidden-desktop-s-minus {
+	@include desktop-s-minus {
+		display: none !important;
+	}
+}
+.visible-desktop-s-minus {
+	@include desktop-s-minus-above {
 		display: none !important;
 	}
 }
@@ -3771,22 +3787,7 @@ p {
 
 		&--active,
 		&:hover {
-			&::before {
-				visibility: visible;
-				opacity: 1;
-			}
-
-			.std-tab-item__img-container {
-				background-color: white;
-			}
-
-			.std-tab-item__text {
-				color: #282828;
-			}
-
-			.std-tab-item__icon::before {
-				color: #ff0000;
-			}
+			@include std-tab-item-active;
 		}
 
 		&__img-container {
@@ -3956,6 +3957,19 @@ p {
 
 	&__wrapper {
 		flex-direction: column;
+	}
+
+	&__basket-wrapper {
+		z-index: 10;
+	}
+
+	&__line {
+		background-color: rgba(226, 226, 226, 1);
+		border: none;
+		outline: none;
+
+		height: 1px;
+		width: calc(100% - 30px);
 	}
 }
 
@@ -4565,7 +4579,11 @@ button.std-icon__wrapper {
 // /Hovers
 
 .std-catalog-table__wrapper {
-	overflow: auto;
+	@include std-table;
+
+	& {
+		overflow: auto;
+	}
 
 	.k-table__name {
 		padding-inline: 15px;
@@ -4575,9 +4593,205 @@ button.std-icon__wrapper {
 .nav__toggler {
 	cursor: pointer;
 }
-
 .btn {
 	cursor: pointer;
+}
+
+.sitebar {
+	display: flex;
+	justify-content: space-between;
+	flex-direction: column;
+}
+.sitebar-logout {
+	background-color: #282828;
+	position: static;
+}
+
+.change-org-container {
+	@include flex-direction(column, 24px);
+
+	& {
+		width: 1000px;
+		max-width: 100%;
+	}
+
+	.change-org__wrapper {
+		@include flex($justify: space-between, $align: center, $gap: 80px);
+
+		& {
+			padding: 40px 40px 0 40px;
+		}
+	}
+
+	.change-org__links {
+		@include flex-direction(column, 18px);
+		@include scrollbar;
+
+		& {
+			overflow-y: auto;
+			max-height: 60dvh;
+			padding: 5px 40px 40px 40px;
+		}
+	}
+
+	.change-org__line {
+		background-color: rgba(173, 173, 173, 1);
+		border: none;
+
+		width: calc(100% - 80px);
+		height: 0.8px;
+
+		margin: 0 auto;
+		padding: 0;
+	}
+
+	.change-org-el {
+		gap: 12px;
+		width: fit-content;
+		padding: 0;
+		z-index: 1;
+		position: relative;
+
+		&::before {
+			content: '';
+
+			background: linear-gradient(90deg, rgba(255, 0, 0, 0.15) 0.06%, rgba(255, 0, 0, 0) 99.95%);
+			border-left: 5px solid #ff0000;
+
+			position: absolute;
+			top: 50%;
+			left: 0;
+			translate: -20px -50%;
+			z-index: -1;
+			transition-duration: .3s;
+
+			height: calc(100% + 14px);
+			width: 100%;
+		}
+
+		&:not(:hover) {
+			&::before {
+				visibility: hidden;
+				opacity: 0;
+			}
+		}
+
+		&__text {
+			display: flex;
+			flex-direction: column;
+			gap: 6px;
+		}
+
+		.icon {
+			width: 45px;
+			height: 45px;
+			aspect-ratio: 1;
+		}
+
+		b {
+			color: #000;
+			font-size: 20px;
+			font-weight: 700;
+			line-height: 1.17;
+		}
+
+		p {
+			color: rgba(180, 180, 180, 1);
+			font-size: 14px;
+			font-weight: 400;
+			line-height: 1.17;
+			margin: 0;
+		}
+
+		&.active {
+			border: none;
+			background: none;
+			gap: 24px;
+			width: 100%;
+
+			&::before {
+				display: none;
+			}
+	
+			.change-org-el__text {
+				gap: 8px;
+			}
+	
+			.icon {
+				width: 70px;
+				height: 70px;
+			}
+	
+			b {
+				font-size: 32px;
+			}
+	
+			p {
+				font-size: 20px;
+			}
+		}
+	}
+
+	.dart-payment-status-org {
+		background-color: #00F61926;
+		border-color: #00F619;
+		gap: 5px;
+
+		color: #000;
+		font-size: 14px;
+
+		height: 28px;
+		width: fit-content;
+		min-width: fit-content;
+		margin: 0;
+		padding: 7px 9px;
+
+		i {
+			position: relative;
+
+			&::before {
+				color: #00F619;
+				position: relative;
+				z-index: 1;
+			}
+			&::after {
+				content: "";
+
+				background-color: #000;
+				border-radius: 50%;
+
+				width: 90%;
+				height: 90%;
+
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				translate: -50% -50%;
+			}
+		}
+
+		span {
+			color: inherit;
+		}
+	}
+}
+
+.sitebar {
+	@include scrollbar(5px, auto, 5px, #666666, transparent);
+	
+	& {
+		// min-width: 327px;
+		overflow-y: auto;
+	}
+
+	// &.hide {
+	// 	min-width: 54px;
+	// }
+}
+
+:-moz-any(.sitebar) {
+	scrollbar-width: thin;
+	scrollbar-color: #666666 transparent;
 }
 
 // ----------------
@@ -5399,4 +5613,152 @@ button.std-icon__wrapper {
 	position: absolute;
 	top: -6px;
 	right: -10px;
+}
+
+.v-table.widget_table {
+	.sort{
+		cursor: pointer;
+		position: relative;
+		display: inline-block !important;
+		padding-right: 15px;
+		&.active{
+		  color: #ff0000;
+		}
+		&::after{
+		  content: '\e912';
+		  display: inline-block;
+		  font-family: 'icomoon' !important;
+		  font-size: 14px;
+		  color: #ffffff;
+		  position: absolute;
+		  right: 0;
+		  top: 50%;
+		  width: 11px;
+		  text-align: center;
+		  transform: translate(0, -50%);
+		}
+		&_asc{
+		  position: relative;
+		  &::after{
+			content: '🠕';
+			display: inline-block;
+			font-family: sans-serif;
+			color: #ffffff;
+		  }
+		}
+		&_desc{
+		  position: relative;
+		  &::after{
+			content: '🠗';
+			display: inline-block;
+			font-family: sans-serif;
+			color: #ffffff;
+		  }
+		}
+	  }
+}
+
+.sort{
+    cursor: pointer;
+    position: relative;
+    display: inline-block !important;
+    padding-right: 15px;
+    &.active{
+      color: #ff0000;
+    }
+    &::after{
+      content: '\e912';
+      display: inline-block;
+      font-family: 'icomoon' !important;
+      font-size: 14px;
+      color: #282828;
+      position: absolute;
+      right: 0;
+      top: 50%;
+      width: 11px;
+      text-align: center;
+      transform: translate(0, -50%);
+    }
+    &_asc{
+      position: relative;
+      &::after{
+        content: '🠕';
+        display: inline-block;
+        font-family: sans-serif;
+        color: #282828;
+      }
+    }
+    &_desc{
+      position: relative;
+      &::after{
+        content: '🠗';
+        display: inline-block;
+        font-family: sans-serif;
+        color: #282828;
+      }
+    }
+  }
+
+.loading-page{
+	width: 100%;
+	height: 100%;
+	position: fixed !important;
+	top: 0;
+	// left: 0;
+	background: #FFF;
+	display: flex;
+    align-items: center;
+    justify-content: center;
+
+	&__content{
+		align-items: center;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+
+		p{
+			font-size: 18px;
+			font-weight: 400;
+		}
+	}
+
+	.loading{
+		width: 500px;
+	}
+}
+
+
+.loading{
+	position: relative;
+	color: transparent;
+	min-height: 100px;
+
+	&:hover{
+		color: transparent;
+	}
+
+	&::before{
+		content: "";
+		position: absolute;
+		height: 100%;
+		background-image: url(/images/loader.svg);
+		z-index: 2;
+		width: 20%;
+		max-width: 95px;
+		background-repeat: no-repeat;
+		background-position: center;
+		background-size: contain;
+		left: 50%;
+    	transform: translate(-50%, 0px);
+	}
+
+	&::after{
+		position: absolute;
+		left: 0;
+		top: 0;
+		content: "";
+		width: 100%;
+		height: 100%;
+		background: rgba(255, 255, 255, 0.6);
+	}
 }

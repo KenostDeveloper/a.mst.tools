@@ -1,90 +1,97 @@
 <template>
-    <div :class="{ 'std-accordion': true, 'std-accordion--expanded': this.isExpanded}">
-        <div class="std-accordion__header" @click="toggleExpanded">
-            {{ title }}
-            <button class="std-accordion__button">
-                <img src="../assets/images/icons/arrow.svg" class="std-accordion__img">
-            </button>
-        </div>
-        <div class="std-accordion__content">
-            <slot></slot>
-        </div>
-    </div>
+	<div :class="{ 'std-accordion': true, 'std-accordion--expanded': this.isExpanded }">
+		<div class="std-accordion__header" @click="toggleExpanded">
+			<slot name="header">
+				{{ title }}
+				<button class="std-accordion__button">
+					<img src="../assets/images/icons/arrow.svg" class="std-accordion__img" />
+				</button>
+			</slot>
+		</div>
+		<div class="std-accordion__content">
+			<slot></slot>
+		</div>
+	</div>
 </template>
 
-
 <script>
-import { ref } from 'vue';
+import { ref } from "vue";
 
 export default {
-    setup () {
-        let isExpanded = ref(false);
+	setup() {
+		let isExpanded = ref(false);
 
-        return {
-            isExpanded
-        }
-    },  
-    props: {
-        title: {
-            type: String,
-            required: true
-        }
-    },
-    methods: {
-        toggleExpanded() {
-            this.isExpanded = !this.isExpanded;
-        }
-    }
-}
+		return {
+			isExpanded,
+		};
+	},
+	props: {
+		title: {
+			type: String,
+			required: false,
+		},
+	},
+	methods: {
+		toggleExpanded() {
+			this.isExpanded = !this.isExpanded;
+		},
+	},
+};
 </script>
 
 <style lang="scss" scoped>
 .std-accordion {
-    display: flex;
-    flex-direction: column;
+	display: flex;
+	flex-direction: column;
 
-    &--expanded {
-        .std-accordion__img {
-            rotate: -90deg;
+	&--expanded {
+        & > .std-accordion__header {
+            .std-accordion__img {
+                rotate: -90deg;
+            }
         }
-        
-        .std-accordion__content {
-            height: auto;
-        }
-    }    
 
-    &__header {
-        cursor: pointer;
+		& > .std-accordion__content {
+			height: auto;
+		}
+	}
 
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 15px;
+	&:not(.std-accordion--expanded) {
+		.std-accordion__content {
+			overflow: hidden;
+		}
+	}
 
-        width: 100%;
+	&__header {
+		cursor: pointer;
 
-    }
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 15px;
 
-    &__button {
-        cursor: pointer;
+		width: 100%;
+	}
 
-        background: none;
-        border: none;
-        outline: none;
-    }
+	&__button {
+		cursor: pointer;
 
-    &__img {
-        transition-duration: .3s;
-        rotate: 90deg;
-    }
+		background: none;
+		border: none;
+		outline: none;
+	}
 
-    &__content {
-        display: flex;
-        flex-direction: column;
+	&__img {
+		transition-duration: 0.3s;
+		rotate: 90deg;
+	}
 
-        height: 0px;
-        overflow: hidden;
-        transition: height .3s  ease-in-out;
-    }
+	&__content {
+		display: flex;
+		flex-direction: column;
+
+		height: 0px;
+		transition: height 0.3s ease-in-out;
+	}
 }
 </style>

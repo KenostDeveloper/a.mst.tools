@@ -25,7 +25,7 @@
           </paginate>
       </div>
     </div>
-    <div class="d-col-map">
+    <div class="d-col-map purchases__basket-wrapper">
       <Vendors :items="this.opt_vendors"/>
       <Basket ref="childComponent" @toOrder="toOrder" @catalogUpdate="catalogUpdate"/>
     </div>

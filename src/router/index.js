@@ -39,6 +39,11 @@ const routes = [
     path: "/",
     name: "home",
     component: MainLoyout,
+    meta: {
+      breadcrumb: {
+        label: "Главная"
+      }
+    },
     props: true,
     children: [
       {
@@ -205,6 +210,7 @@ const routes = [
                       path: '',
                       name: 'purchases_home',
                       component: ProfilePurchases,
+                      label: "Закупки",
                       meta: {
                         breadcrumb: {
                           label: 'Закупки'
@@ -214,6 +220,7 @@ const routes = [
                       path: ':category_id',
                       name: 'purchases_catalog',
                       component: PurchasesCatalog,
+                      label: "Каталог",
                       meta: {
                         breadcrumb: {
                           label: 'Каталог'
@@ -229,6 +236,7 @@ const routes = [
                         path: '',
                         name: 'purchases_catalog_warehouse',
                         component: PurchasesCatalog,
+                        label: "Каталог оптовика",
                         meta: {
                           breadcrumb: {
                             label: 'Каталог оптовика',

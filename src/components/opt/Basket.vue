@@ -2,7 +2,7 @@
 	<div :class="`std-basket ${this.isOpened ? 'std-basket--active' : ''}`">
 		<div class="d-col-basket std-basket__inner">
 			<div class="std-basket__header-wrapper">
-				<div class="std-basket__header" @click="this.isOpened = !this.isOpened">
+				<div class="std-basket__header" @click.stop="this.isOpened = !this.isOpened">
 					<div class="std-basket__title-container">
 						<p class="d-col-basket__title std-basket__title"><span>Корзина</span></p>
 						
@@ -28,7 +28,8 @@
 			</div>
 			<div className="basket-empty" v-if="!this.basket">
 				<div className="basket-empty__content">
-					<img src="../../assets/images/icons/basket.svg" alt="" />
+					<img class="hidden-mobile-l" src="../../assets/images/icons/basket.svg" alt="" />
+					<img class="visible-mobile-l" src="../../assets/images/icons/basket-gray.svg" alt="" />
 					<h3>В вашей корзине пока пусто</h3>
 				</div>
 			</div>

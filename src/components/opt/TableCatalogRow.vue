@@ -10,21 +10,21 @@
   <th class="k-table__name">Поставщик / Склад</th>
   <th class="k-table__name">РЦ / Наценка</th> -->
   <tr v-if="!this.is_warehouses" @click="this.active = !this.active" :class="{'active-el' : this.active, 'no-active-el' : !this.active}">
-    <td><i class="pi pi-angle-up"></i></td>
-    <td class="k-table__photo"><img class="k-table__image" :src="items.image" alt=""></td>
+    <td class="hidden-mobile-l"><i class="pi pi-angle-up"></i></td>
+    <td class="k-table__photo hidden-mobile-l"><img class="k-table__image" :src="items.image" alt=""></td>
     <td class="k-table__title"><p>{{items.pagetitle}}</p><b>{{items.article}}</b></td>
-    <td class="k-table__busket">
+    <td class="k-table__busket hidden-mobile-l">
       <form class="k-table__form event-none" action="">
         <Counter :min="0" :max="100" :value="0"/>
         <button class="dart-btn dart-btn-primary"><i class="d_icon d_icon-busket"></i></button>
       </form>
     </td>
     <td>от {{Math.round(getMinPrice(items.stores)).toLocaleString('ru')}} ₽</td>
-    <td></td>
+    <td class="hidden-mobile-l"></td>
     <td>от {{getMinDelivery(items.stores).delivery}} дн ({{new Date(getMinDelivery(items.stores).delivery_day).toLocaleString("ru", {month: 'long', day: 'numeric'})}})</td>
+    <td class="hidden-mobile-l"></td>
     <td></td>
-    <td></td>
-    <td></td>
+    <td class="hidden-mobile-l"></td>
     
     <!-- <td><span class="k-table__article">{{items.article}}</span></td>
     <td class="k-table__photo"><img class="k-table__image" :src="items.image" alt=""></td>
@@ -45,8 +45,8 @@
     <td></td> -->
   </tr>
   <tr class="kenost-table-background" v-for="(item, index) in items.stores" v-bind:key="item.id" :class="{'active' : this.active || this.is_warehouses, 'no-active' : !this.active && !this.is_warehouses}">
-    <td><i class="pi pi-minus"></i></td>
-    <td class="k-table__photo"><img class="k-table__image" :src="items.image" alt=""></td>
+    <td class="hidden-mobile-l"><i class="pi pi-minus"></i></td>
+    <td class="k-table__photo hidden-mobile-l"><img class="k-table__image" :src="items.image" alt=""></td>
     <td class="k-table__title"><p>{{item.name}}</p><b>{{item.article}}</b></td>
     <td class="k-table__busket">
         <form class="k-table__form" action="" :class="{'basket-true' : item.basket.availability}">
