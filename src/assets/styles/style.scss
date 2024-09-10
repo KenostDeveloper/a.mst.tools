@@ -4368,6 +4368,56 @@ button.std-icon__wrapper {
   }
 }
 
+.kenost-action-opt{
+	border: 1px solid #ADADAD;
+	padding: 12px;
+	border-radius: 5px;
+	text-decoration: none;
+
+	&__image{
+		border-radius: 5px;
+	}
+
+	&__name{
+		margin-top: 13px;
+		color: #282828;
+		font-size: 16px;
+		font-weight: 500;
+	}
+
+	&__params{
+		margin-top: 13px;
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 12px;
+	}
+
+	&__param{
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		font-size: 16px;
+		color: #282828;
+		font-weight: 500;
+		line-height: 1;
+
+		span{
+			color: #ADADAD;
+			font-size: 14px;
+			font-weight: 400;
+			line-height: 1;
+		
+		}
+
+		img{
+			width: 17px;
+			height: 17px !important;
+			object-fit: cover;
+			border-radius: 50%;
+		}
+	}
+}
+
 .not-warehouse{
 	display: flex;
     flex-direction: column;

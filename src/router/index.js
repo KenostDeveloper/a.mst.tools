@@ -258,11 +258,12 @@ const routes = [
                       path: 'search/:search',
                       name: 'opt_search',
                       component: PurchasesSearch
-                    }, {
-                      path: 'actions',
-                      name: 'opt_actions',
-                      component: PurchasesActions
                     }]
+                  },
+                  {
+                    path: 'opt/actions',
+                    name: 'opt_actions',
+                    component: PurchasesActions
                   },
                   {
                     path: 'settings',

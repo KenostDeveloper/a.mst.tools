@@ -222,6 +222,11 @@ export default {
 						to: { name: "purchases_home", params: { id: this.$route.params.id } },
 					},
 					{
+						label: "Оптовые акции",
+						icon: "bag.svg",
+						to: { name: "opt_actions", params: { id: this.$route.params.id } },
+					},
+					{
 						label: "Мои заказы",
 						icon: "bag.svg",
 						to: { name: "my_orders", params: { id: this.$route.params.id } },
