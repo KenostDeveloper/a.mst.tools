@@ -5,24 +5,12 @@
         <div class="dart-home dart-window">
             <!-- <Breadcrumbs/> -->
             <div>
-              <h1 class="h1-mini">Поиск по запросу "{{ $route.params.search }}"</h1>
-              <div class="dart-alert dart-alert-info">В данном разделе перечислены все товары поставщиков, в том числе и не сопоставленные со справочником системы.</div>
+              <h1 class="h1-mini">Оптовые акции</h1>
+
+              <div>
+                
+              </div>
             </div>
-            <TableCatalog @updateBasket="updateBasket" v-if="opt_products.total !== 0" :items="opt_products"/>
-            <div v-else>
-              <div class="dart-alert dart-alert-warning">Ничего не найдено</div>
-            </div>
-            <paginate
-                :page-count="pageCount"
-                :click-handler="pagClickCallback"
-                :prev-text="'Пред'"
-                :next-text="'След'"
-                :container-class="'pagination justify-content-center'"
-                :initialPage="this.page"
-                :forcePage="this.page"
-                v-if="opt_products.total !== 0"
-              >
-            </paginate>
         </div>
       </div>
       <div class="d-col-map purchases__basket-wrapper">
@@ -110,34 +98,12 @@
       },
       updatePage (categoryId) {
         this.loading = true
-        this.get_opt_catalog_from_api().then(
-          this.opt_catalog = this.optcatalog
-        )
         this.get_opt_vendors_from_api().then(
           this.opt_vendors = this.optvendors
-        )
-        this.get_opt_products_from_api({
-          page: this.page,
-          perpage: this.perpage
-        }).then(() => {
-          this.opt_products = this.optproducts
-          this.loading = false
-        }
         )
       },
       updateBasket () {
         this.$refs.childComponent.updateBasket()
-      },
-      catalogUpdate () {
-        console.log('cart update')
-        this.get_opt_products_from_api({
-          page: this.page,
-          perpage: this.perpage
-        }).then(() => {
-          this.opt_products = this.optproducts
-          this.loading = false
-        }
-        )
       },
       toOrder () {
         this.show_order = true
@@ -151,28 +117,13 @@
     },
     computed: {
       ...mapGetters([
-        'mainpage',
-        'optcatalog',
         'optvendors',
-        'optproducts'
       ]),
-      pageCount () {
-        return Math.ceil(this.opt_products.total / this.perpage)
-      }
     },
     watch: {
-      optcatalog: function (newVal, oldVal) {
-        this.opt_catalog = newVal
-      },
       optvendors: function (newVal, oldVal) {
         this.opt_vendors = newVal
       },
-      optproducts: function (newVal, oldVal) {
-        this.opt_products = newVal
-      },
-      $route () {
-        this.updatePage(this.$route.params.category_id)
-      }
     }
   }
   </script>
