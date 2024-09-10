@@ -8,7 +8,6 @@
 		>
 			<!-- <CatalogMenu :items="opt_catalog" /> -->
 			<div class="d-col-content purchases">
-				<hr class="purchases__line" />
 				<div class="dart-home dart-window">
 					<!-- <Breadcrumbs :items="this.$breadcrumbs"/> -->
 					<Breadcrumbs />
