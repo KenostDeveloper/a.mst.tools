@@ -4731,6 +4731,49 @@ button.std-icon__wrapper {
 			}
 		}
 	}
+
+	.dart-payment-status-org {
+		background-color: #00F61926;
+		border-color: #00F619;
+		gap: 5px;
+
+		color: #000;
+		font-size: 14px;
+
+		height: 28px;
+		width: fit-content;
+		min-width: fit-content;
+		margin: 0;
+		padding: 7px 9px;
+
+		i {
+			position: relative;
+
+			&::before {
+				color: #00F619;
+				position: relative;
+				z-index: 1;
+			}
+			&::after {
+				content: "";
+
+				background-color: #000;
+				border-radius: 50%;
+
+				width: 90%;
+				height: 90%;
+
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				translate: -50% -50%;
+			}
+		}
+
+		span {
+			color: inherit;
+		}
+	}
 }
 
 .sitebar {
