@@ -347,7 +347,19 @@ export default {
 		getRole() {
 			if (localStorage.getItem("role")) {
 				// console.log(localStorage.getItem("role"))
-				this.role = localStorage.getItem("role");
+				let role = localStorage.getItem("role")
+				if(role == 1){
+					if(this.organozation.store == '0'){
+						role = 0
+						localStorage.setItem("role", role);
+					}
+				} else if(role == 2){
+					if(this.organozation.warehouse == '0'){
+						role = 0
+						localStorage.setItem("role", role);
+					}
+				}
+				this.role = role;
 			}
 		},
 		changeOrg() {
@@ -367,8 +379,7 @@ export default {
 		const data = {
 			action: "get/orgs",
 		};
-		this.org_get_from_api(data);
-		this.getRole();
+		this.org_get_from_api(data).then(() => this.getRole());
 	},
 	watch: {
 		orgs: function (newVal, oldVal) {
