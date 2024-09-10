@@ -4373,6 +4373,7 @@ button.std-icon__wrapper {
 	padding: 12px;
 	border-radius: 5px;
 	text-decoration: none;
+	height: 100%;
 
 	&__image{
 		border-radius: 5px;
@@ -4383,6 +4384,14 @@ button.std-icon__wrapper {
 		color: #282828;
 		font-size: 16px;
 		font-weight: 500;
+		line-height: 1.2;
+	}
+
+	&__name-store{
+		display: -webkit-box;
+		-webkit-line-clamp: 1;
+		-webkit-box-orient: vertical;  
+		overflow: hidden;
 	}
 
 	&__params{
