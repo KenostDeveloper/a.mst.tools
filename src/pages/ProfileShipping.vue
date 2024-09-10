@@ -337,7 +337,7 @@
 							class="dart-form-group mt-1 mb-2"
 							:class="{ error: v$.form.selectedCities.$errors.length }"
 						>
-							<AutoComplete
+							<!-- <AutoComplete
 								v-model="form.selectedCities"
 								:suggestions="form.filteredCities"
 								:multiple="true"
@@ -346,6 +346,11 @@
 								dataKey="value"
 								placeholder="Начните вводить наименование города"
 								@complete="searchCity($event)"
+							/> -->
+							<Autocomplete
+								@setSelections="(cities) => (form.selectedCities = cities)"
+								type="city"
+								placeholder="Начните вводить наименование города"
 							/>
 							<span
 								class="error_desc"
@@ -362,10 +367,10 @@
 								:key="index"
 							>
 								<div class="shopping-kenost__cityone-name" v-if="item">
-									<p>{{ item.label }}</p>
+									<p>{{ item }}</p>
 									<div class="btn btn-close" @click="deletePunkt(index)">
 										<!-- <i class="d_icon d_icon-close"></i> -->
-										<img src="../assets/images/icons/close.svg" alt="">
+										<img src="../assets/images/icons/close.svg" alt="" />
 									</div>
 								</div>
 								<div class="shopping-kenost__cityone-date mb-3" v-if="item">
@@ -559,7 +564,7 @@
 								class="dart-form-group mt-1 mb-2"
 								:class="{ error: v$.form.selectedCities.$errors.length }"
 							>
-								<AutoComplete
+								<!-- <AutoComplete
 									v-model="form.selectedCities"
 									:suggestions="form.filteredCities"
 									:multiple="true"
@@ -568,6 +573,11 @@
 									dataKey="value"
 									placeholder="Начните вводить наименование города"
 									@complete="searchCity($event)"
+								/> -->
+								<Autocomplete
+									@setSelections="(cities) => (form.selectedCities = cities)"
+									type="city"
+									placeholder="Начните вводить наименование города"
 								/>
 								<span
 									class="error_desc"
@@ -584,10 +594,10 @@
 									:key="index"
 								>
 									<div class="shopping-kenost__cityone-name" v-if="item">
-										<p>{{ item.label }}</p>
+										<p>{{ item }}</p>
 										<div class="btn btn-close" @click="deletePunkt(index)">
 											<!-- <i class="d_icon d_icon-close"></i> -->
-											<img src="../assets/images/icons/close.svg" alt="">
+											<img src="../assets/images/icons/close.svg" alt="" />
 										</div>
 									</div>
 									<div class="shopping-kenost__cityone-date mb-3" v-if="item">
@@ -802,7 +812,7 @@ import { useVuelidate } from "@vuelidate/core";
 //   import { required } from '@/utils/i18n-validators'
 import { required } from "../utils/i18n-validators";
 import router from "../router";
-import AutoComplete from "primevue/autocomplete";
+// import AutoComplete from "primevue/autocomplete";
 import Dropdown from "primevue/dropdown";
 import MultiSelect from "primevue/multiselect";
 import { Calendar, DatePicker } from "v-calendar";
@@ -811,6 +821,7 @@ import CalendarVue from "primevue/calendar";
 import vTable from "../components/table/v-table.vue";
 import "v-calendar/style.css";
 import Dialog from "primevue/dialog";
+import Autocomplete from "../components/Autocomplete.vue";
 // import { date } from 'yup'
 // import Checkbox from 'primevue/checkbox'
 // import { Swiper, SwiperSlide } from 'swiper/vue'
@@ -1267,7 +1278,7 @@ export default {
 	components: {
 		Dropdown,
 		MultiSelect,
-		AutoComplete,
+		// AutoComplete,
 		Calendar,
 		DatePicker,
 		// customModal,
@@ -1277,6 +1288,7 @@ export default {
 		// Checkbox,
 		// Swiper,
 		// SwiperSlide
+		Autocomplete,
 	},
 	computed: {
 		...mapGetters(["shipping", "getregions", "shipping_statuses", "getshipdata", "org_stores"]),
