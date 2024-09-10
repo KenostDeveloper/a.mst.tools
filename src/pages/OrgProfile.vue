@@ -80,7 +80,7 @@
 										"
 										alt=""
 									/>
-									<img class="org-upload-i" src="../assets/images/icons/upload.svg" />
+									<i class="pi pi-upload"></i>
 								</template>
 							</FileUpload>
 						</div>

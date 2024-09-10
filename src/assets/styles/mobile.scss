@@ -1001,63 +1001,63 @@
 	.std-profile {
 		padding-inline: 15px;
 
-		.avatar-org {
-			display: flex;
-			justify-content: center;
-			align-items: center;
+		// .avatar-org {
+		// 	display: flex;
+		// 	justify-content: center;
+		// 	align-items: center;
 
-			background-color: #838383;
-			border-radius: 0;
+		// 	background-color: #838383;
+		// 	border-radius: 0;
 
-			height: 120px;
-			width: 100% !important;
+		// 	height: 120px;
+		// 	width: 100% !important;
 
-			.p-fileupload {
-				height: 100%;
-				width: 100%;
+		// 	.p-fileupload {
+		// 		height: 100%;
+		// 		width: 100%;
 
-				.p-fileupload-buttonbar {
-					border: none;
-					height: 100%;
+		// 		.p-fileupload-buttonbar {
+		// 			border: none;
+		// 			height: 100%;
 
-					&::before {
-						display: flex;
+		// 			&::before {
+		// 				display: flex;
 
-						top: initial;
-						left: initial;
-						right: 15px;
-						bottom: 15px;
+		// 				top: initial;
+		// 				left: initial;
+		// 				right: 15px;
+		// 				bottom: 15px;
 
-						opacity: 1 !important;
-						transform: none;
+		// 				opacity: 1 !important;
+		// 				transform: none;
 
-						width: 21px !important;
-						height: 21px !important;
-					}
-				}
+		// 				width: 21px !important;
+		// 				height: 21px !important;
+		// 			}
+		// 		}
 
-				// .org-upload-i {
-				//     display: flex;
+		// 		.org-upload-i {
+		// 		    display: flex;
 
-				//     top: initial;
-				//     left: initial;
-				//     right: 15px;
-				//     bottom: 15px;
+		// 		    top: initial;
+		// 		    left: initial;
+		// 		    right: 15px;
+		// 		    bottom: 15px;
 
-				//     opacity: 1 !important;
-				//     transform: none;
+		// 		    opacity: 1 !important;
+		// 		    transform: none;
 
-				//     width: 21px !important;
-				//     height: 21px !important;
-				// }
+		// 		    width: 21px !important;
+		// 		    height: 21px !important;
+		// 		}
 
-				.org-upload-img {
-					object-fit: cover;
-					// width: auto !important;
-					height: 100% !important;
-				}
-			}
-		}
+		// 		// .org-upload-img {
+		// 		// 	object-fit: cover;
+		// 		// 	// width: auto !important;
+		// 		// 	height: 100% !important;
+		// 		// }
+		// 	}
+		// }
 
 		.profile-content__title {
 			padding: 0;
