@@ -1300,7 +1300,7 @@ export default {
 		vTable,
 		Dialog,
 		CalendarVue,
-		Loading
+		Loading,
 		// Checkbox,
 		// Swiper,
 		// SwiperSlide
