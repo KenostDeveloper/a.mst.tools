@@ -1,5 +1,5 @@
 <template>
-	<Loading v-if="loading" />
+	<Loading v-if="this.loading" />
 	<div v-else class="std-display-contents">
 		<div
 			v-if="opt_vendors.selected_count > 0"
