@@ -374,14 +374,14 @@
 									:key="index"
 								>
 									<div class="shopping-kenost__cityone-name" v-if="item">
-										<p>{{ item }}</p>
+										<p>{{ item.value }}</p>
 										<div class="btn btn-close" @click="deletePunkt(index)">
 											<!-- <i class="d_icon d_icon-close"></i> -->
 											<img src="../assets/images/icons/close.svg" alt="" />
 										</div>
 									</div>
 									<div class="shopping-kenost__cityone-date mb-3" v-if="item">
-										<p class="k-mini-text">Дата и время окончания приема заказов</p>
+										<p class="k-mini-text">Дата отгрузки</p>
 										<CalendarVue
 											showIcon
 											id="calendar-24h"

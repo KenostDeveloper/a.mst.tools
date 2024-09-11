@@ -1,8 +1,8 @@
 <template>
 	<div class="autocomplete">
-		<ul class="autocomplete__selections">
+		<ul class="autocomplete__selections" v-if="selections.length">
 			<li v-for="(selection, index) in selections" class="autocomplete__selection">
-				<span class="autocomplete__selection-name">{{ selection }}</span>
+				<span class="autocomplete__selection-name">{{ selection.value }}</span>
 				<svg
 					@click="removeSelection(index)"
 					width="14"
@@ -36,7 +36,7 @@
 
 		<ul class="autocomplete__suggestions" :class="{ active: this.isActive }">
 			<li v-for="suggestion in suggestions" @click="addSelection(suggestion)" class="autocomplete__suggestion">
-				{{ suggestion }}
+				{{ suggestion.value }}
 			</li>
 		</ul>
 	</div>
@@ -86,6 +86,8 @@ export default {
 				"https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address",
 				{
 					query: this.value,
+					from_bound: { value: "city" },
+    			to_bound: { value: "settlement" }
 				},
 				{
 					headers: {
@@ -94,7 +96,7 @@ export default {
 				}
 			);
 
-			this.suggestions = this.filterCities(citiesSuggestions.data?.suggestions);
+			this.suggestions =citiesSuggestions.data?.suggestions;
 
 			if(this.suggestions.length) {
 				this.isActive = true;
@@ -125,6 +127,7 @@ export default {
 			this.selections.splice(index, 1);
 		},
 		addSelection(selection) {
+			this.value = ''
 			this.selections.push(selection);
 
 			this.$emit('setSelections', this.selections);
@@ -159,11 +162,8 @@ export default {
 		font-weight: 400;
 		line-height: 1.06;
 		letter-spacing: 0.25px;
-
-		height: fit-content;
 		width: 100%;
-		min-height: 47px;
-		padding: 16px;
+		padding: 10px 15px;
 
 		position: relative;
 	}
