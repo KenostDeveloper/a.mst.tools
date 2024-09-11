@@ -298,8 +298,8 @@ export default {
 						to: { name: "discounts", params: { id: this.$route.params.id } },
 					},
 					{
-						label: "Оптовые акции",
-						icon: "adv.svg",
+						label: "Мои оптовые акции",
+						icon: "my_opt_action.svg",
 						to: { name: "b2b", params: { id: this.$route.params.id } },
 					},
 					{

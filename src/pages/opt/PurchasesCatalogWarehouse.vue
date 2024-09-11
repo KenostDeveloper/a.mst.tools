@@ -283,7 +283,7 @@ export default {
       }
     }
   }
-  .kenost-table-background{
-    background-color: #f4f4f4;
-  }
+  // .kenost-table-background{
+  //   background-color: #f4f4f4;
+  // }
 </style>
