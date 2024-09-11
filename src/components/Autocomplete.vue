@@ -1,5 +1,5 @@
 <template>
-	<div class="autocomplete">
+	<div ref="autocomplete" class="autocomplete">
 		<!-- <ul v-if="this.selections.length" class="autocomplete__selections">
 			<li v-for="(selection, index) in selections" class="autocomplete__selection">
 				<span class="autocomplete__selection-name">{{ selection.value }}</span>
@@ -34,13 +34,13 @@
 			:required="required"
 		/>
 
-		<!-- TODO Позиционирование списка относительно окна, а не элемента autocomplete -->
-		<ul class="autocomplete__suggestions" :class="{ active: this.isActive }">
+		<ul ref="suggestions" class="autocomplete__suggestions" :class="{ active: this.isActive }">
 			<li
 				v-for="suggestion in suggestions"
 				@click="addSelection(suggestion)"
 				class="autocomplete__suggestion"
 			>
+				<!-- {{ suggestion.value }} -->
 				{{ suggestion }}
 			</li>
 		</ul>
@@ -95,7 +95,7 @@ export default {
 				{
 					query: this.value,
 					from_bound: { value: "city" },
-    			to_bound: { value: "settlement" }
+					to_bound: { value: "settlement" },
 				},
 				{
 					headers: {
@@ -104,7 +104,7 @@ export default {
 				}
 			);
 
-			this.suggestions =citiesSuggestions.data?.suggestions;
+			this.suggestions = this.filterCities(citiesSuggestions.data?.suggestions);
 
 			if (this.suggestions.length) {
 				this.isActive = true;
@@ -132,11 +132,13 @@ export default {
 		getAvailableCity(filteredCities, city) {
 			let cityAbbr = city.split(" ")[0];
 
-			if(cityAbbr === "г" || cityAbbr === "село" || cityAbbr === "поселок" || cityAbbr === "деревня") {
-				if (
-					!filteredCities?.includes(city) &&
-					!this.selections?.includes(city)
-				) {
+			if (
+				cityAbbr === "г" ||
+				cityAbbr === "село" ||
+				cityAbbr === "поселок" ||
+				cityAbbr === "деревня"
+			) {
+				if (!filteredCities?.includes(city) && !this.selections?.includes(city)) {
 					return city;
 				}
 			}
@@ -165,7 +167,15 @@ export default {
 	},
 	mounted() {
 		this.getData();
-	},
+
+		const suggestions = this.$refs.suggestions;
+		const autocomplete = this.$refs.autocomplete;
+
+		// Позиционирование списка относительно инпута
+		suggestions.style.width = autocomplete.clientWidth + "px";
+		suggestions.style.top = autocomplete.offsetTop + autocomplete.clientHeight + 4 + "px";
+		suggestions.style.left = autocomplete.offsetLeft + "px";
+	}
 };
 </script>
 
@@ -191,7 +201,7 @@ export default {
 		width: 100%;
 		padding: 10px 15px;
 
-		position: relative;
+		// position: relative;
 	}
 
 	&__selections,
@@ -255,11 +265,11 @@ export default {
 
 			overflow-y: auto;
 
-			position: absolute;
-			top: calc(100% + 2px);
-			left: 0;
+			position: fixed;
+			// top: calc(100% + 2px);
+			// left: 0;
 			transition-duration: 0.5s;
-			z-index: 4;
+			z-index: 1110;
 		}
 
 		&.active {

@@ -865,7 +865,7 @@ export default {
 				selectedStores: null,
 				filteredStores: null,
 				selectedCities: [],
-				citiesDates: [],
+				citiesDates: {},
 				// filteredCities: null,
 				dateStart: new Date(),
 				dateEnd: new Date(),
@@ -1085,19 +1085,17 @@ export default {
 		},
 		removeSelectedCity(index) {
 			this.form.selectedCities.splice(index, 1);
-			this.form.citiesDates.splice(index, 1);
+			delete this.form.citiesDates[index];
 		},
 		sortSelectedCities() {
 			const citiesDates = this.form.citiesDates;
-			const selectedCities = this.form.selectedCities;
 
 			this.form.selectedCities.sort((city1, city2) => {
 				return (
-					citiesDates[selectedCities.indexOf(city1)] -
-					citiesDates[selectedCities.indexOf(city2)]
+					citiesDates[city1] -
+					citiesDates[city2]
 				);
 			});
-			this.form.citiesDates.sort((date1, date2) => date1 - date2);
 		},
 		// searchCity(event) {
 		// 	this.$load(async () => {
@@ -1329,7 +1327,7 @@ export default {
 			handler(newVal, oldVal) {
 				this.sortSelectedCities();
 			},
-			deep: true,
+			deep: true
 		},
 		orgs: function (newVal, oldVal) {
 			this.organizations = newVal;
