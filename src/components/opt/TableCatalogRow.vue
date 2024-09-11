@@ -100,11 +100,11 @@
   </tr>
   <tbody class="complect-button kenost-table-background kenost-table-background-complect" v-for="complect in items.complects" v-bind:key="complect.id" :class="{'active' : this.active || this.is_warehouses || items.total_stores == 1, 'no-active' : !this.active && !this.is_warehouses && items.total_stores > 1, 'bg-white': items.total_stores == 1}">
     <tr v-for="(item, index) in complect" v-bind:key="item.id" :class="{'active' : this.active || this.is_warehouses, 'no-active' : !this.active && !this.is_warehouses}">
-      <td class="td-center" :class="{'pointer-none' : index !== 0}"><span :style="'top:' +  (complect.length * 70) / 2 + 'px'" v-if="index === 0"><i class="pi pi-minus"></i></span></td>
+      <td class="td-center" :class="{'pointer-none' : index !== 0}"><span :style="'top:' +  (complect.length * 74) / 2 + 'px'" v-if="index === 0"><i class="pi pi-minus"></i></span></td>
       <td class="k-table__photo"><img class="k-table__image" :src="item.image" alt=""></td>
       <td class="k-table__title"><p>{{item.pagetitle}}</p><b>Арт: {{item.article}}</b></td>
       <td class="k-table__busket complect-button__td" :class="{'pointer-none' : index !== 0}">
-        <form class="k-table__form complect-button__form" :class="{'basket-true' : item.basket.availability}" action="" v-if="index === 0">
+        <form class="k-table__form complect-button__form" :class="{'basket-true' : item.basket.availability}" :style="'top:' +  (complect.length * 74) / 2 + 'px'" action="" v-if="index === 0">
           <Counter :key="new Date().getMilliseconds() + item.id" @ElemCount="ElemCountComplect" :min="1" :max="item.remain_complect" :id="item.complect_id" :store_id="item.store_id" :index="index" :value="item.basket.count"/>
           <div @click="addBasketComplect(item.complect_id, item.basket.count, item.store_id, index)" class="dart-btn dart-btn-primary"><i class="d_icon d_icon-busket"></i></div>
         </form>
@@ -171,8 +171,8 @@
           </div>
         </div>
       </td>
-      <td class="td-center" :class="{'pointer-none' : index !== 0}"><span :style="'top:' +  (complect.length * 70) / 2 + 'px'" v-if="index === 0">{{item.action?.payer === '1' ? 'Поставщик' : 'Покупатель'}} / <br>от {{item.delivery}} дн ({{new Date(item.delivery_day).toLocaleString("ru", {month: 'long', day: 'numeric'})}})</span> </td>
-      <td class="td-center" :class="{'pointer-none' : index !== 0}"><span :style="'top:' +  (complect.length * 70) / 2 + 'px'" v-if="index === 0">{{item.remain_complect}} шт.</span></td>
+      <td class="td-center" :class="{'pointer-none' : index !== 0}"><span :style="'top:' +  (complect.length * 74) / 2 + 'px'" v-if="index === 0">{{item.action?.payer === '1' ? 'Поставщик' : 'Покупатель'}} / <br>от {{item.delivery}} дн ({{new Date(item.delivery_day).toLocaleString("ru", {month: 'long', day: 'numeric'})}})</span> </td>
+      <td class="td-center" :class="{'pointer-none' : index !== 0}"><span :style="'top:' +  (complect.length * 74) / 2 + 'px'" v-if="index === 0">{{item.remain_complect}} шт.</span></td>
       <td>{{item.org_name}} <br> <span class="flex align-items-center justify-content-center gap-1"><img :src="item.store_image" class="kenost-table-elem__logo" alt=""> {{ item.store_city }}</span></td>
       <td v-if="item.price && item.price > item.new_price">{{item.price ? Math.round(item.price).toLocaleString('ru') : Math.round(item.new_price).toLocaleString('ru')}} ₽ <br> {{((item.price - item.new_price).toFixed(0)).toLocaleString('ru')}} ₽</td>
       <td v-else>{{Math.round(item.price).toLocaleString('ru')}} ₽</td>
