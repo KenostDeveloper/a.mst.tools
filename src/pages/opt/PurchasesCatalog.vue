@@ -81,8 +81,9 @@
 		</div>
 		<OrderModal
 			:show="show_order"
+			:order_id="order_id"
 			@fromOrder="fromOrder"
-			@orderSubmit="updatePage($route.params.category_id)"
+			@orderSubmit="updatePage($event, num)"
 		/>
 		<Vendors
 			@changeActive="changeActive"
@@ -118,6 +119,7 @@ export default {
 			opt_catalog: {},
 			opt_vendors: {},
 			opt_products: {},
+			order_id: 0,
 			page: 1,
 			perpage: 25,
 			vendorModal: false,
@@ -183,7 +185,8 @@ export default {
 				this.loading = false;
 			}
 		},
-		updatePage(categoryId) {
+		updatePage(order_id) {
+			this.order_id = order_id
 			this.loading = true;
 			this.get_opt_catalog_from_api().then((this.opt_catalog = this.optcatalog));
 			this.get_opt_vendors_from_api().then((this.opt_vendors = this.optvendors));
@@ -244,7 +247,7 @@ export default {
 			this.opt_products = newVal;
 		},
 		$route() {
-			this.updatePage(this.$route.params.category_id);
+			this.updatePage();
 			if (this.$route.params.warehouse_id) {
 				this.get_opt_warehouse().then((this.opt_warehouse = this.optwarehouse));
 			}

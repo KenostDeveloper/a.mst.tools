@@ -48,7 +48,7 @@
           <div class="a-dart-btn a-dart-btn-primary" @click="changeActive" >Выбрать</div>
         </div>
       </div>
-      <OrderModal :show="show_order" @fromOrder="fromOrder" @orderSubmit="updatePage($route.params.category_id)"/>
+      <OrderModal :order_id="order_id" :show="show_order" @fromOrder="fromOrder" @orderSubmit="updatePage($event, num)"/>
       <Vendors @changeActive="changeActive" @vendorCheck="vendorCheck" :vendorModal="this.vendorModal" :items="this.opt_vendors" />
     </div>
   </template>
@@ -78,6 +78,7 @@ export default {
       opt_catalog: {},
       opt_vendors: {},
       opt_products: {},
+      order_id: 0,
       page: 1,
       perpage: 25,
       vendorModal: false
@@ -146,7 +147,8 @@ export default {
         this.loading = false
       }
     },
-    updatePage (categoryId) {
+    updatePage (order_id) {
+			this.order_id = order_id
       this.loading = true
       this.get_opt_catalog_from_api().then(
         this.opt_catalog = this.optcatalog

@@ -3,7 +3,7 @@
         <div class="overlay" @click.prevent="fromOrder"></div>
         <div class="k-order__content" :class="{ loading: loading, order: order }">
             <div class="k-order__title" v-if="order">
-                <span class="title">Заказ #{{order.id}} оформлен!</span>
+                <span class="title">Заказ #{{order}} оформлен!</span>
                 <div class="k-order__close" @click.prevent="fromOrder">
                     <i class="pi pi-times"></i>
                 </div>
@@ -16,7 +16,7 @@
             </div>
             <div class="k-order__orders" v-if="order">
                 <p>В ближайшее время с Вами свяжутся наши менеджеры.</p>
-                <!-- <img v-if="order" class="k-order-img" src="../../assets/img/order.png" alt=""> -->
+                <img v-if="order" class="k-order-img" src="../../assets/images/order.png" alt="">
             </div>
             <div class="k-order__orders" v-else>
                 <div class="k-order__order" v-for="store in this.basket?.stores" v-bind:key="store.id">
@@ -171,15 +171,20 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import { toRaw } from 'vue'
 import router from '../../router'
 import Counter from './Counter.vue'
 
 export default {
-  name: 'Basket',
+  name: 'OrderForm',
   props: {
     show: {
       type: Boolean,
       default: false
+    },
+    order_id: {
+      type: Number,
+      default: 0
     },
     pagination_items_per_page: {
       type: Number,
@@ -194,7 +199,7 @@ export default {
     return {
       loading: false,
       basket: {},
-      order: false,
+      order: 0,
       value: 1
     }
   },
@@ -211,10 +216,8 @@ export default {
     },
     orderSubmit ($storeId) {
       const data = { action: 'order/opt/submit', id: router.currentRoute._value.params.id, store_id: $storeId }
-      this.opt_order_api(data).then((response) => {
-        // console.log(response)
-        this.order = response.data.data.data[0]
-        this.$emit('orderSubmit')
+      this.order = this.opt_order_api(data).then((response) => {
+        this.$emit('orderSubmit', response.data?.data?.data[0]?.id)
         const data = { action: 'basket/get', id: router.currentRoute._value.params.id }
         this.busket_from_api(data).then(
           this.basket = this.optbasket
@@ -259,6 +262,9 @@ export default {
     }
   },
   mounted () {
+    if(this.order_id){
+        this.order = this.order_id
+    }
     const data = { action: 'basket/get', id: router.currentRoute._value.params.id }
     this.busket_from_api(data).then(
       this.basket = this.optbasket
