@@ -2,6 +2,7 @@
 	<div class="shopping-kenost__citys" v-if="this.cities">
 		<div class="shopping-kenost__cityone" v-for="(item, index) in this.cities" :key="index">
 			<div class="shopping-kenost__cityone-name" v-if="item">
+				<!-- <p>{{ item.value }}</p> -->
 				<p>{{ item }}</p>
 				<div class="btn btn-close" @click="removeSelectedCity(index)">
 					<!-- <i class="d_icon d_icon-close"></i> -->
@@ -9,9 +10,9 @@
 				</div>
 			</div>
 			<div class="shopping-kenost__cityone-date mb-3" v-if="item">
-				<p class="k-mini-text">Дата и время окончания приема заказов</p>
+				<p class="k-mini-text">Дата отгрузки</p>
 				<CalendarVue
-					v-model="citiesDates[index]"
+					v-model="citiesDates[item]"
 					showIcon
 					id="calendar-24h"
 					showTime
@@ -33,13 +34,14 @@ export default {
 			default: [],
 		},
 		modelCitiesDates: {
-			type: Array,
-			default: [],
+			type: Object,
+			default: {},
 		},
 	},
+	emits: ["update:modelCitiesDates"],
 	data() {
 		return {
-			citiesDates: [],
+			citiesDates: {},
 		};
 	},
 	components: {
@@ -55,7 +57,7 @@ export default {
 			handler(newVal) {
 				this.$emit("update:modelCitiesDates", newVal);
 			},
-            deep: true,
+            deep: true
 		},
 	},
 };
