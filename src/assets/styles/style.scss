@@ -4636,6 +4636,10 @@ button.std-icon__wrapper {
 	border-radius: 5px
 }
 
+.change-org-el .icon{
+	box-shadow: unset;
+}
+
 .change-org-container {
 	@include flex-direction(column, 24px);
 
