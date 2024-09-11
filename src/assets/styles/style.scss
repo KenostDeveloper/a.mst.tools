@@ -2689,7 +2689,13 @@ p {
 	}
 }
 
-.std-dialog {
+.p-dialog.std-dialog {
+	.p-dialog-header {
+		padding: 40px 40px 24px 40px;
+	}
+	.p-dialog-content {
+		padding: 0 40px 40px 40px;
+	}
 }
 
 .std-shipping-create {

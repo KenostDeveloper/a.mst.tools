@@ -348,7 +348,8 @@
 								@complete="searchCity($event)"
 							/> -->
 							<Autocomplete
-								@setSelections="(cities) => (form.selectedCities = cities)"
+								@setSelections="(cities) => setSelectedCities(cities)"
+								:selections="form.selectedCities"
 								type="city"
 								placeholder="Начните вводить наименование города"
 							/>
@@ -360,31 +361,11 @@
 								{{ error.$message }}
 							</span>
 						</div>
-						<div class="shopping-kenost__citys" v-if="this.form.selectedCities">
-							<div
-								class="shopping-kenost__cityone"
-								v-for="(item, index) in this.form.selectedCities"
-								:key="index"
-							>
-								<div class="shopping-kenost__cityone-name" v-if="item">
-									<p>{{ item }}</p>
-									<div class="btn btn-close" @click="deletePunkt(index)">
-										<!-- <i class="d_icon d_icon-close"></i> -->
-										<img src="../assets/images/icons/close.svg" alt="" />
-									</div>
-								</div>
-								<div class="shopping-kenost__cityone-date mb-3" v-if="item">
-									<p class="k-mini-text">Дата и время окончания приема заказов</p>
-									<CalendarVue
-										showIcon
-										id="calendar-24h"
-										v-model="this.form.citiesDates[index]"
-										showTime
-										hourFormat="24"
-									/>
-								</div>
-							</div>
-						</div>
+						<ShoppingCities
+							:cities="this.form.selectedCities"
+							v-model:modelCitiesDates="this.form.citiesDates"
+							@removeSelectedCity="this.removeSelectedCity"
+						/>
 					</div>
 
 					<details class="std-dropdown visible-tablet-l">
@@ -575,7 +556,8 @@
 									@complete="searchCity($event)"
 								/> -->
 								<Autocomplete
-									@setSelections="(cities) => (form.selectedCities = cities)"
+									@setSelections="(cities) => setSelectedCities(cities)"
+									:selections="form.selectedCities"
 									type="city"
 									placeholder="Начните вводить наименование города"
 								/>
@@ -587,33 +569,11 @@
 									{{ error.$message }}
 								</span>
 							</div>
-							<div class="shopping-kenost__citys" v-if="this.form.selectedCities">
-								<div
-									class="shopping-kenost__cityone"
-									v-for="(item, index) in this.form.selectedCities"
-									:key="index"
-								>
-									<div class="shopping-kenost__cityone-name" v-if="item">
-										<p>{{ item }}</p>
-										<div class="btn btn-close" @click="deletePunkt(index)">
-											<!-- <i class="d_icon d_icon-close"></i> -->
-											<img src="../assets/images/icons/close.svg" alt="" />
-										</div>
-									</div>
-									<div class="shopping-kenost__cityone-date mb-3" v-if="item">
-										<p class="k-mini-text">
-											Дата и время окончания приема заказов
-										</p>
-										<CalendarVue
-											showIcon
-											id="calendar-24h"
-											v-model="this.form.citiesDates[index]"
-											showTime
-											hourFormat="24"
-										/>
-									</div>
-								</div>
-							</div>
+							<ShoppingCities
+								:cities="this.form.selectedCities"
+								v-model:modelCitiesDates="this.form.citiesDates"
+								@removeSelectedCity="this.removeSelectedCity"
+							/>
 						</div>
 					</details>
 
@@ -822,6 +782,7 @@ import vTable from "../components/table/v-table.vue";
 import "v-calendar/style.css";
 import Dialog from "primevue/dialog";
 import Autocomplete from "../components/Autocomplete.vue";
+import ShoppingCities from "../components/ProfileShipping/ShoppingCities.vue";
 // import { date } from 'yup'
 // import Checkbox from 'primevue/checkbox'
 // import { Swiper, SwiperSlide } from 'swiper/vue'
@@ -893,12 +854,12 @@ export default {
 				loading: false,
 				selectedStores: null,
 				filteredStores: null,
-				selectedCities: null,
-				filteredCities: null,
+				selectedCities: [],
+				citiesDates: [],
+				// filteredCities: null,
 				dateStart: new Date(),
 				dateEnd: new Date(),
 				store_id: "",
-				citiesDates: [],
 				filter: "",
 				timeSelect: {
 					repeater: [
@@ -1075,19 +1036,19 @@ export default {
 			"org_get_stores_from_api",
 		]),
 		...mapMutations(["SET_SHIPPING_CHECK", "SET_SHIPPING_CHECK_ONE"]),
-		deletePunkt(index) {
-			if (Object.prototype.hasOwnProperty.call(this.form.selectedCities, index)) {
-				// delete this.form.selectedCities[index]
-				const { [index]: _, ...newCities } = this.form.selectedCities;
-				this.form.selectedCities = newCities;
-			}
-			if (Object.prototype.hasOwnProperty.call(this.form.citiesDates, index)) {
-				// delete this.form.citiesDates[index]
-				const { [index]: _, ...newCitiesDates } = this.form.citiesDates;
-				this.form.citiesDates = newCitiesDates;
-			}
-			console.log(this.form);
-		},
+		// deletePunkt(index) {
+		// 	if (Object.prototype.hasOwnProperty.call(this.form.selectedCities, index)) {
+		// 		// delete this.form.selectedCities[index]
+		// 		const { [index]: _, ...newCities } = this.form.selectedCities;
+		// 		this.form.selectedCities = newCities;
+		// 	}
+		// 	if (Object.prototype.hasOwnProperty.call(this.form.citiesDates, index)) {
+		// 		// delete this.form.citiesDates[index]
+		// 		const { [index]: _, ...newCitiesDates } = this.form.citiesDates;
+		// 		this.form.citiesDates = newCitiesDates;
+		// 	}
+		// 	console.log(this.form);
+		// },
 		checkElem(data) {
 			this.SET_SHIPPING_CHECK_ONE(data, { root: true });
 		},
@@ -1108,16 +1069,35 @@ export default {
 				this.form.filteredStores = data.data.data.stores;
 			});
 		},
-		searchCity(event) {
-			this.$load(async () => {
-				const data = await this.$api.getCities.get({
-					filter: event.query,
-					cities: this.form.selectedCities,
-					id: router.currentRoute._value.params.id,
-				});
-				this.form.filteredCities = data.data.data.cities;
-			});
+		setSelectedCities(cities) {
+			this.form.selectedCities = Array.from(cities);
 		},
+		removeSelectedCity(index) {
+			this.form.selectedCities.splice(index, 1);
+			this.form.citiesDates.splice(index, 1);
+		},
+		sortSelectedCities() {
+			const citiesDates = this.form.citiesDates;
+			const selectedCities = this.form.selectedCities;
+
+			this.form.selectedCities.sort((city1, city2) => {
+				return (
+					citiesDates[selectedCities.indexOf(city1)] -
+					citiesDates[selectedCities.indexOf(city2)]
+				);
+			});
+			this.form.citiesDates.sort((date1, date2) => date1 - date2);
+		},
+		// searchCity(event) {
+		// 	this.$load(async () => {
+		// 		const data = await this.$api.getCities.get({
+		// 			filter: event.query,
+		// 			cities: this.form.selectedCities,
+		// 			id: router.currentRoute._value.params.id,
+		// 		});
+		// 		this.form.filteredCities = data.data.data.cities;
+		// 	});
+		// },
 		async formSubmit(event) {
 			// const result = await this.v$.$validate()
 			const result = true;
@@ -1289,6 +1269,7 @@ export default {
 		// Swiper,
 		// SwiperSlide
 		Autocomplete,
+		ShoppingCities,
 	},
 	computed: {
 		...mapGetters(["shipping", "getregions", "shipping_statuses", "getshipdata", "org_stores"]),
@@ -1327,6 +1308,12 @@ export default {
 			}
 			console.log(this.stores);
 			// { name: 'New York', code: 'NY' },
+		},
+		"form.citiesDates": {
+			handler(newVal, oldVal) {
+				this.sortSelectedCities();
+			},
+			deep: true,
 		},
 	},
 };

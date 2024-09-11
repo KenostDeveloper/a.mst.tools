@@ -1,6 +1,6 @@
 <template>
 	<div class="autocomplete">
-		<ul class="autocomplete__selections">
+		<!-- <ul v-if="this.selections.length" class="autocomplete__selections">
 			<li v-for="(selection, index) in selections" class="autocomplete__selection">
 				<span class="autocomplete__selection-name">{{ selection }}</span>
 				<svg
@@ -22,7 +22,7 @@
 					></path>
 				</svg>
 			</li>
-		</ul>
+		</ul> -->
 		<input
 			@focus="getData"
 			@blur="this.isActive = false"
@@ -34,8 +34,13 @@
 			:required="required"
 		/>
 
+		<!-- TODO Позиционирование списка относительно окна, а не элемента autocomplete -->
 		<ul class="autocomplete__suggestions" :class="{ active: this.isActive }">
-			<li v-for="suggestion in suggestions" @click="addSelection(suggestion)" class="autocomplete__suggestion">
+			<li
+				v-for="suggestion in suggestions"
+				@click="addSelection(suggestion)"
+				class="autocomplete__suggestion"
+			>
 				{{ suggestion }}
 			</li>
 		</ul>
@@ -59,13 +64,16 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		selections: {
+			type: Array,
+			default: [],
+		},
 	},
 	data() {
 		return {
 			inputTimer: null,
-            isActive: false,
+			isActive: false,
 			value: "",
-			selections: [],
 			suggestions: [],
 		};
 	},
@@ -96,7 +104,7 @@ export default {
 
 			this.suggestions = this.filterCities(citiesSuggestions.data?.suggestions);
 
-			if(this.suggestions.length) {
+			if (this.suggestions.length) {
 				this.isActive = true;
 			} else {
 				this.isActive = false;
@@ -107,32 +115,51 @@ export default {
 			return cities?.reduce((filteredCities, city) => {
 				const citySplitted = city.value.split(", ");
 
-				citySplitted.forEach(currentCity => {
-					if (currentCity.startsWith("г ")) {
-						const filteredCity = currentCity.split("г ")[1].trim();
-						
-						if(!filteredCities?.includes(filteredCity) && !this.selections?.includes(filteredCity)) {						
-							filteredCities.push(filteredCity);
-						}
+				citySplitted.forEach((currentCity) => {
+					const filteredCity = this.getAvailableCity(filteredCities, currentCity);
+
+					if (filteredCity) {
+						filteredCities.push(filteredCity);
 					}
-				})
+				});
 
 				return filteredCities;
 			}, []);
 		},
 
+		getAvailableCity(filteredCities, city) {
+			let cityAbbr = city.split(" ")[0];
+
+			if(cityAbbr === "г" || cityAbbr === "село" || cityAbbr === "поселок" || cityAbbr === "деревня") {
+				if (
+					!filteredCities?.includes(city) &&
+					!this.selections?.includes(city)
+				) {
+					return city;
+				}
+			}
+		},
+
 		removeSelection(index) {
-			this.selections.splice(index, 1);
+			const tempSelections = this.selections;
+			tempSelections.splice(index, 1);
+
+			this.$emit("setSelections", tempSelections);
 		},
 		addSelection(selection) {
-			this.selections.push(selection);
+			const tempSelections = this.selections;
 
-			this.$emit('setSelections', this.selections);
+			tempSelections.push(selection);
+
+			this.isActive = false;
+			this.value = "";
+
+			this.$emit("setSelections", tempSelections);
 		},
 		debounce(func, delay) {
 			clearTimeout(this.inputTimer);
 			this.inputTimer = setTimeout(func, delay);
-		}
+		},
 	},
 	mounted() {
 		this.getData();
@@ -201,7 +228,7 @@ export default {
 	&__input {
 		flex-basis: 0;
 		flex-grow: 1;
-		
+
 		border: none;
 		outline: none;
 		color: #495057;
@@ -237,9 +264,9 @@ export default {
 		}
 
 		&.active {
-            max-height: 200px;
+			max-height: 200px;
 			padding-top: 12px;
-        }
+		}
 	}
 
 	&__suggestion {
