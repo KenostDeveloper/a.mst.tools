@@ -35,7 +35,12 @@
     <p>Для просмотра каталога необходимо выбрать поставщика!</p>
     <div class="a-dart-btn a-dart-btn-primary" @click="changeActive" >Выбрать</div>
   </div>
-  <OrderModal :show="show_order" @fromOrder="fromOrder"/>
+  <OrderModal
+    :show="show_order"
+    :order_id="order_id"
+    @fromOrder="fromOrder"
+    @orderSubmit="updatePage($event, num)"
+  />
   <Vendors @changeActive="changeActive" @vendorCheck="vendorCheck" :vendorModal="this.vendorModal" :items="this.opt_vendors" />
 </template>
 <script>
@@ -61,6 +66,7 @@ export default {
       opt_catalog: {},
       opt_vendors: {},
       opt_products: {},
+      order_id: 0,
       page: 1,
       perpage: 25,
       vendorModal: false
@@ -108,7 +114,8 @@ export default {
         this.opt_products = this.optproducts
       )
     },
-    updatePage (categoryId) {
+    updatePage (order_id) {
+			this.order_id = order_id
       this.loading = true
       this.get_opt_catalog_from_api().then(
         this.opt_catalog = this.optcatalog

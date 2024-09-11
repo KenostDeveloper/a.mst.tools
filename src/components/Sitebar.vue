@@ -55,15 +55,16 @@
 				</div>
 			</div>
 			<div class="sitebar-info">
-				<span class="sitebar-text">Выбор роли:</span>
+				<span class="sitebar-text" v-if="this.organozation.store == '1' || this.organozation.warehouse == '1'">Выбор роли:</span>
 				<div class="sitebar-roles">
+					<!-- {{ this.organozation }} -->
 					<button class="sitebar-role" @click="changeRole(0)" v-if="this.role != 0">
 						Закупщик
 					</button>
-					<button class="sitebar-role" @click="changeRole(1)" v-if="this.role != 1">
+					<button class="sitebar-role" @click="changeRole(1)" v-if="this.role != 1 && this.organozation.store == '1'">
 						Маркетплейс
 					</button>
-					<button class="sitebar-role" @click="changeRole(2)" v-if="this.role != 2">
+					<button class="sitebar-role" @click="changeRole(2)" v-if="this.role != 2 && this.organozation.warehouse == '1'">
 						Поставщик
 					</button>
 				</div>
@@ -221,6 +222,11 @@ export default {
 						to: { name: "purchases_home", params: { id: this.$route.params.id } },
 					},
 					{
+						label: "Оптовые акции",
+						icon: "bag.svg",
+						to: { name: "opt_actions", params: { id: this.$route.params.id } },
+					},
+					{
 						label: "Мои заказы",
 						icon: "bag.svg",
 						to: { name: "my_orders", params: { id: this.$route.params.id } },
@@ -292,8 +298,8 @@ export default {
 						to: { name: "discounts", params: { id: this.$route.params.id } },
 					},
 					{
-						label: "Оптовые акции",
-						icon: "adv.svg",
+						label: "Мои оптовые акции",
+						icon: "my_opt_action.svg",
 						to: { name: "b2b", params: { id: this.$route.params.id } },
 					},
 					{
@@ -346,7 +352,19 @@ export default {
 		getRole() {
 			if (localStorage.getItem("role")) {
 				// console.log(localStorage.getItem("role"))
-				this.role = localStorage.getItem("role");
+				let role = localStorage.getItem("role")
+				if(role == 1){
+					if(this.organozation.store == '0'){
+						role = 0
+						localStorage.setItem("role", role);
+					}
+				} else if(role == 2){
+					if(this.organozation.warehouse == '0'){
+						role = 0
+						localStorage.setItem("role", role);
+					}
+				}
+				this.role = role;
 			}
 		},
 		changeOrg() {
@@ -366,8 +384,7 @@ export default {
 		const data = {
 			action: "get/orgs",
 		};
-		this.org_get_from_api(data);
-		this.getRole();
+		this.org_get_from_api(data).then(() => this.getRole());
 	},
 	watch: {
 		orgs: function (newVal, oldVal) {

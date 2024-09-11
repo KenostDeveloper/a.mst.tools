@@ -161,9 +161,10 @@ export default {
     approveElem (value) {
       this.$load(async () => {
         await this.set_sales_to_api({
-          action: 'off/on',
-          store_id: router.currentRoute._value.params.id,
-          action_id: value.id
+          action: "off/on",
+					store_id: value.store_id,
+					action_id: value.id,
+					id: router.currentRoute._value.params.id,
         })
           .then((result) => {
             this.get_sales_to_api({
@@ -180,9 +181,9 @@ export default {
     deleteElem (value) {
       this.$load(async () => {
         await this.set_sales_to_api({
-          action: 'delete',
-          store_id: router.currentRoute._value.params.id,
-          action_id: value.id
+          action: "delete",
+					id: router.currentRoute._value.params.id,
+					action_id: value.id,
         })
           .then((result) => {
             this.get_sales_to_api({

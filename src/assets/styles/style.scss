@@ -4248,27 +4248,48 @@ p {
   }
 }
 
-.p-fileupload-buttonbar {
-  &::before {
-    content: url('../images/icons/upload.svg');
-  }
+.p-fileupload-buttonbar{
+	i{
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		color: #FFF;
+		transform: translate(-50%, -50%);
+		opacity: 0;
+		pointer-events: none;
+		transition: all 0.3s;
+		font-size: 30px;
+	}
 
-  &:hover {
-    &::before {
-      content: url('../images/icons/upload-bold.svg');
-    }
-  }
-  &:active {
-    &::before {
-      content: url('../images/icons/upload-pressed.svg');
-    }
-  }
-  &:disabled {
-    &::before {
-      content: url('../images/icons/upload-disabled.svg');
-    }
-  }
+	&:hover{
+		i{
+			opacity: 1;
+			// pointer-events: all;
+		}
+	}
 }
+
+// .p-fileupload-buttonbar {
+//   &::before {
+//     content: url('../images/icons/upload.svg');
+//   }
+
+//   &:hover {
+//     &::before {
+//       content: url('../images/icons/upload-bold.svg');
+//     }
+//   }
+//   &:active {
+//     &::before {
+//       content: url('../images/icons/upload-pressed.svg');
+//     }
+//   }
+//   &:disabled {
+//     &::before {
+//       content: url('../images/icons/upload-disabled.svg');
+//     }
+//   }
+// }
 
 i.pi-pencil {
     &::before {
@@ -4351,6 +4372,79 @@ button.std-icon__wrapper {
       color: #D8D8D8;
     }
   }
+}
+
+.kenost-action-opt{
+	border: 1px solid #ADADAD;
+	padding: 12px;
+	border-radius: 5px;
+	text-decoration: none;
+	height: 100%;
+
+	&__image{
+		border-radius: 5px;
+	}
+
+	&__name{
+		margin-top: 13px;
+		color: #282828;
+		font-size: 16px;
+		font-weight: 500;
+		line-height: 1.2;
+	}
+
+	&__name-store{
+		display: -webkit-box;
+		-webkit-line-clamp: 1;
+		-webkit-box-orient: vertical;  
+		overflow: hidden;
+	}
+
+	&__params{
+		margin-top: 13px;
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 12px;
+	}
+
+	&__param{
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		font-size: 16px;
+		color: #282828;
+		font-weight: 500;
+		line-height: 1;
+
+		span{
+			color: #ADADAD;
+			font-size: 14px;
+			font-weight: 400;
+			line-height: 1;
+		
+		}
+
+		img{
+			width: 17px;
+			height: 17px !important;
+			object-fit: cover;
+			border-radius: 50%;
+		}
+	}
+}
+
+.not-warehouse{
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100dvh;
+
+	p{
+		max-width: 400px;
+		text-align: center;
+		margin-top: 16px;
+	}
 }
 
 .dart-btn-secondary,
@@ -4731,7 +4825,7 @@ button.std-icon__wrapper {
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 40px !important;
-    color: #fff;
+    color: #fff !important;
     opacity: 0;
     transition: all 0.2s;
     pointer-events: none;
@@ -4984,6 +5078,10 @@ button.std-icon__wrapper {
 	background: #fff;
 }
 
+.bg-white{
+	background: #FFF !important;
+}
+
 .k-table {
 	width: 100%;
 	transition: all 0.5s;
@@ -4993,6 +5091,7 @@ button.std-icon__wrapper {
 		padding: 16px 0;
 		color: #282828;
 		font-size: 14px;
+		line-height: 1.1;
 	}
 
 	tbody tr {
@@ -5005,12 +5104,25 @@ button.std-icon__wrapper {
 		cursor: pointer;
 	}
 
-	tbody tr.active-el {
-		box-shadow: 0px 4px 12.5px 0px #0000001f;
+	.active-el{
+		.k-table__title{
+			p{
+				font-weight: 700;
+			}
+		}
+
+		td{
+			font-weight: 700;
+			transition: all 0.3s;
+		}
 	}
 
 	tbody tr.active-el {
-		border-bottom: 1px solid #ff000073;
+		// box-shadow: 0px 4px 12.5px 0px #0000001f;
+	}
+
+	tbody tr.active-el {
+		// border-bottom: 1px solid #ff000073;
 	}
 
 	tr.no-active {
@@ -5024,14 +5136,14 @@ button.std-icon__wrapper {
 		}
 	}
 
-	.no-active-el,
-	.active-el {
-		border-bottom: 1px solid #0000001f;
-	}
+	// .no-active-el,
+	// .active-el {
+	// 	border-bottom: 1px solid #0000001f;
+	// }
 
-	.active-el {
-		box-shadow: 0px 4px 12.5px 0px #0000001f;
-	}
+	// .active-el {
+	// 	box-shadow: 0px 4px 12.5px 0px #0000001f;
+	// }
 
 	.active-el .k-table__form,
 	.no-active-el .k-table__form {
@@ -5166,12 +5278,20 @@ button.std-icon__wrapper {
 		cursor: pointer;
 	}
 
-	tbody tr.active-el {
-		box-shadow: 0px 4px 12.5px 0px #0000001f;
-	}
+	// tbody tr.active-el {
+	// 	box-shadow: 0px 4px 12.5px 0px #0000001f;
+	// }
 
 	tr.active-el td {
-		border-bottom: 1px solid #ff000073;
+		background: #E8E8E8;
+	}
+
+	.kenost-table-background {
+		background: #DBDBDB;
+	}
+
+	tr.kenost-table-background.active:not(.bg-white){
+		border-top: 20px solid #E8E8E8;
 	}
 
 	tr.no-active {
@@ -5185,19 +5305,20 @@ button.std-icon__wrapper {
 		}
 	}
 
-	.no-active-el,
-	.active-el {
-		border-top: 1px solid #0000001f;
-	}
+	// .no-active-el,
+	// .active-el {
+	// 	border-top: 1px solid #0000001f;
+	// }
 
-	.active-el {
-		box-shadow: 0px 4px 12.5px 0px #0000001f;
-	}
+	// .active-el {
+	// 	box-shadow: 0px 4px 12.5px 0px #0000001f;
+	// }
 
 	tr.active-el {
 		.pi-angle-up {
 			transform: rotate(0deg);
 			transition: all 0.4s;
+			color: #FF0000;
 		}
 	}
 
@@ -5301,33 +5422,57 @@ button.std-icon__wrapper {
 	//1440px - 14,4
 	&-icon {
 		width: 3%;
+		background: #282828;
+		color: #FFF !important;
 	}
 	&-photo {
 		width: 4.5%;
+		background: #282828;
+		color: #FFF !important;
 	}
 	&-title {
 		width: 19%;
+		background: #282828;
+		color: #FFF !important;
 	}
 	&-buttons {
 		width: 8%;
+		background: #282828;
+		color: #FFF !important;
+
+		i{
+			font-size: 18px;
+		}
 	}
 	&-price {
 		width: 7%;
+		background: #282828;
+		color: #FFF !important;
 	}
 	&-action {
 		width: 21%;
+		background: #282828;
+		color: #FFF !important;
 	}
 	&-delivery {
-		width: 10%;
+		width: 11%;
+		background: #282828;
+		color: #FFF !important;
 	}
 	&-remain {
-		width: 9.5%;
+		width: 8.5%;
+		background: #282828;
+		color: #FFF !important;
 	}
 	&-vendor {
 		width: 9.5%;
+		background: #282828;
+		color: #FFF !important;
 	}
 	&-retail {
 		width: 8.5%;
+		background: #282828;
+		color: #FFF !important;
 	}
 }
 
@@ -5380,8 +5525,8 @@ button.std-icon__wrapper {
 	&__help {
 		position: relative;
 		p {
-			color: #ff0000;
-			font-size: 12px;
+			color: #282828;
+			font-size: 13px;
 			padding-right: 4px;
 			cursor: pointer;
 			margin: 0;
@@ -5394,6 +5539,14 @@ button.std-icon__wrapper {
 				}
 			}
 		}
+
+		p.active{
+			color: #515151;
+		}
+
+		p.red{
+			color: #ff0000;
+		}
 	}
 
 	&__el {
@@ -5402,13 +5555,13 @@ button.std-icon__wrapper {
 		align-items: center;
 		p {
 			margin: 0;
-			font-size: 10px;
+			font-size: 13px;
 			text-wrap: nowrap;
 			line-height: 1;
 		}
 
 		img{
-			height: 10px !important;
+			height: 11px !important;
 		}
 	}
 

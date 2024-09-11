@@ -8,7 +8,7 @@
                     <th class="k-table__name k-tablr-th-icon hidden-mobile-l"></th>
                     <th class="k-table__name k-tablr-th-photo hidden-mobile-l">Фото</th>
                     <th class="k-table__name k-tablr-th-title">Наименование / Артикул</th>
-                    <th class="k-table__name k-tablr-th-buttons hidden-mobile-l"></th>
+                    <th class="k-table__name k-tablr-th-buttons hidden-mobile-l"><i class="d_icon d_icon-busket"></i></th>
                     <th class="k-table__name k-tablr-th-price">Цена /<br> отсрочка</th>
                     <th class="k-table__name k-tablr-th-action hidden-mobile-l">Акции</th>
                     <th class="k-table__name k-tablr-th-delivery">Оплата доставки /<br> срок доставки</th>
@@ -20,66 +20,6 @@
               <TableCatalogRow :is_warehouses="this.is_warehouses" @ElemAction="ElemAction" @updateBasket="updateBasket" v-for="item in items.items" v-bind:key="item.id" :items="item"/>
         </table>
     </div>
-
-    <Dialog v-if="this.actions_item !== null" v-model:visible="this.modal_actions" :header="'Акции товара ' + this.actions_item.name" class="kenost-actions-modal">
-        <table class="kenost-actions-modal__table">
-            <thead>
-                <tr>
-                    <th class="kenost-actions-modal__th-action">Акция</th>
-                    <th class="kenost-actions-modal__th-desc">Описание</th>
-                    <th class="kenost-actions-modal__th-info">Условие</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(item) in this.actions_item.actions" v-bind:key="item.id" @click="this.active = !this.active" :class="{'active-el' : this.active, 'no-active-el' : !this.active}">
-                <td class="kenost-actions-modal__action">
-                  <img :src="item.icon" alt="">
-                  <span v-if="item.id > 0">
-                    <RouterLink :to="{ name: 'promotion', params: { action: item.action_id }}" class="kenost-actions-modal__link"><p>{{item.name}}</p> <i class="mst-icon mst-icon-open"></i></RouterLink>
-                  </span>
-                  <span v-else>
-                    {{item.name}}
-                  </span>
-                </td>
-                <td class="kenost-actions-modal__center">{{item.description}}</td>
-                <td class="kenost-actions-modal__center">
-                  <div v-if="item.action_id == 0">
-                    Базовая скидка клиента в размере {{ item.base_sale }}%
-                  </div>
-                  <div v-else>
-                    Скидка <span v-if="item.old_price != 0">{{(100 - (Number(item.new_price) / (item.old_price / 100))).toFixed(2)}}</span><span v-else>100</span>%, оплата доставки {{item.payer === '1' ? 'поставщиком' : 'покупателем'}}
-                    <span v-if="item.delivery_payment_terms == '1'">при условии «Купи на {{ Number(item.delivery_payment_value).toLocaleString('ru') }} рублей»</span>
-                    <span v-if="item.delivery_payment_terms == '2'">при условии «Купи {{ Number(item.delivery_payment_value).toLocaleString('ru') }} шт. товара»</span><span v-if="item.delay != 0">, отсрочка {{Number(item.delay).toLocaleString('ru')}} дней</span>
-                    <span v-if="item.delay_condition == '1'">при покупке на {{ Number(item.delay_condition_value).toLocaleString('ru') }} рублей</span>
-                    <span v-if="item.delay_condition == '2'">при покупке {{ Number(item.delay_condition_value).toLocaleString('ru') }} шт. товара</span>
-                    <span v-if="item.delay != 0">(<span v-for="(delay, index) in item.delay_graph" v-bind:key="delay.id"><span v-if="index != 0">, </span>{{ Number(delay.day).toLocaleString('ru') }} дней – {{ delay.percent }}%</span>)</span>
-                  </div>
-                  </td>
-                  <td>
-                  <div class="kenost-conflict">
-                    <!-- v-if="item.conflicts?.items[item.action_id]" -->
-                    <div v-if="item.conflicts?.items[item.action_id] && !item.enabled" class="kenost-conflict__container">
-                      <div class="kenost-conflict__icon">
-                        <i class="pi pi-info"></i>
-                      </div>
-                      <div class="kenost-conflict__message">
-                        <div v-for="(conf) in item.conflicts?.items[item.action_id]?.postponement_conflicts" v-bind:key="conf">
-                          <p>Конфликт с акцией <span>{{ this.actions_item.actions.find(action => action.id === conf) ? this.actions_item.actions.find(action => action.id === conf).name : this.actions_item.actions.find(action => action.action_id === conf).name }}</span></p>
-                        </div>
-                        <!-- v-if="item.conflicts?.items[item.action_id]?.postponement_conflicts.indexOf(conf) == -1 && conf != item.action_id" -->
-                        <div v-for="(conf) in item.conflicts?.items[item.action_id]?.sales_conflicts" v-bind:key="conf">
-                          <p v-if="item.conflicts?.items[item.action_id]?.postponement_conflicts?.indexOf(conf) == -1 || !item.conflicts?.items[item.action_id]?.postponement_conflicts">Конфликт с акцией <span>{{ this.actions_item.actions.find(action => action.id === conf) ? this.actions_item.actions.find(action => action.id === conf).name : this.actions_item.actions.find(action => action.action_id === conf).name }}</span></p>
-                        </div>
-                      </div>
-                    </div>
-                    <InputSwitch @update:modelValue="updateAction(item.id == 0? this.actions_item.remain_id : item.remain_id, item.id == 0? this.actions_item.store_id : item.store_id, item.action_id, item.enabled)" class="kenost-input-switch" v-model="item.enabled" />
-                  </div>
-                </td>
-            </tr>
-            </tbody>
-          </table>
-    </Dialog>
 </template>
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'

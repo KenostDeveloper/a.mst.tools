@@ -21,7 +21,7 @@
         required=""
         v-model="form.password"
       />
-      <button class="dart-btn dart-btn-primary dart-btn-block" type="submit">Войти</button>
+      <button class="dart-btn dart-btn-primary dart-btn-block align-items-center flex justify-content-center" :disabled="this.loading" type="submit"> <i v-if="this.loading" class="pi pi-spin pi-spinner" style="font-size: 14px"></i> <span>Войти</span></button>
       <teleport to="body">
         <custom-modal v-model="showForgotModal" @cancel="cancel">
           <template v-slot:title>Восстановление пароля</template>
@@ -49,6 +49,7 @@ export default {
   data () {
     return {
       mode: 'signIn',
+      loading: false,
       showForgotModal: false,
       form: {
         email: '',
@@ -70,6 +71,7 @@ export default {
       this.signIn()
     },
     signIn () {
+      this.loading = true
       this.$load(async () => {
         const data = await this.$api.auth.signIn({
           username: this.form.email,
@@ -78,6 +80,7 @@ export default {
         if (data) {
           if (data === 'technical error') {
             this.$toast.add({ severity: 'info', summary: 'Техническая ошибка', detail: 'Попробуйте позже.', life: 3000 })
+            this.loading = false
           } else {
             localStorage.setItem('user', JSON.stringify(data.data.data))
             this.$store.dispatch('user/setUser', data.data.data)
@@ -108,6 +111,7 @@ export default {
           }
         } else {
           this.$toast.add({ severity: 'info', summary: 'Вход запрещен', detail: 'Введен некорректный логин или пароль.', life: 3000 })
+          this.loading = false
         }
       })
     },

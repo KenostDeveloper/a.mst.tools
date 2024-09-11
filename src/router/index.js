@@ -33,6 +33,7 @@ import RetailOrders from "../pages/RetailOrders.vue"
 import Order from "../pages/Order.vue";
 import Balance from "../pages/store/balance.vue";
 import ProfileClientStatistics from '../pages/ProfileClientStatistics.vue'
+import PurchasesActions from '../pages/opt/Actions.vue'
 
 const routes = [
   {
@@ -258,6 +259,11 @@ const routes = [
                       name: 'opt_search',
                       component: PurchasesSearch
                     }]
+                  },
+                  {
+                    path: 'opt/actions',
+                    name: 'opt_actions',
+                    component: PurchasesActions
                   },
                   {
                     path: 'settings',
