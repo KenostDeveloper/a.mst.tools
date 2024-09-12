@@ -1,8 +1,10 @@
 <template>
 	<section class="clients order">
+		<Breadcrumbs />
+
 		<div class="order__header">
 			<div class="std-title__container order__title-container">
-				<h1 class="std-title">Заказ № 12345678910</h1>
+				<h1 class="std-title">Заказ № {{ this.$route.params.order_id }}</h1>
 				<p class="std-title__description">Подготовка заказа к отправке покупателю</p>
 			</div>
 
@@ -198,6 +200,7 @@
 import { mapActions, mapGetters } from "vuex";
 import Dropdown from "primevue/dropdown";
 import Dialog from "primevue/dialog";
+import Breadcrumbs from "../components/Breadcrumbs.vue";
 
 export default {
 	data() {
@@ -220,7 +223,7 @@ export default {
 	computed: {
 		...mapGetters(["order", "store", "order_products"]),
 	},
-	components: { Dropdown, Dialog },
+	components: { Dropdown, Dialog, Breadcrumbs },
 	watch: {
 		order: function (newVal, oldVal) {
 			this.orderData = newVal;

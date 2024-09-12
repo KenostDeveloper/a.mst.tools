@@ -30,7 +30,7 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters(["optcatalog", "optvendors"]),
+		...mapGetters(["optcatalog", "orgs"]),
 
 		breadcrumbs() {
 			const currentRoute = router.currentRoute.value;
@@ -39,8 +39,6 @@ export default {
 			const pathRoutesWithId = currentRoute.fullPath.split("/");
 
 			const routeMatched = this.$route.matched;
-
-			console.log(currentRoute, pathRoutes);
 
 			const breadcrumbs = pathRoutes.map((route, index) => {
 				if (index == 0) {
@@ -69,14 +67,17 @@ export default {
 		},
 	},
 	methods: {
-		...mapActions(["get_opt_catalog_from_api", "get_opt_vendors_from_api"]),
+		...mapActions(["get_opt_catalog_from_api", "org_get_from_api"]),
 		getRouteName(currentRoute, param) {
 			switch (param) {
 				case ":id": {
-					return this.getVendorNameById(currentRoute.params[param.slice(1)]);
+					return this.getOrgNameById(currentRoute.params[param.slice(1)]);
 				}
 				case ":category_id": {
 					return this.getCatalogNameById(currentRoute.params[param.slice(1)]);
+				}
+				case ":order_id": {
+					return `Заказ № ${currentRoute.params[param.slice(1)]}`;
 				}
 			}
 		},
@@ -101,26 +102,26 @@ export default {
 
 			return categoryName;
 		},
-		getVendorNameById(id) {
-			let vendorName = "";
+		getOrgNameById(id) {
+			let orgName = "";
 
-			this.optvendors.selected.find((vendor) => {
-				if (vendor.id === id) vendorName = vendor.name_short;
+			this.orgs?.find((org) => {
+				if (org.id === id) orgName = org.name;
 			});
 
-			return vendorName;
+			return orgName;
 		},
 	},
 	mounted() {
 		this.get_opt_catalog_from_api();
-		this.get_opt_vendors_from_api();
+		this.org_get_from_api();
 	},
 };
 </script>
 
 <style lang="scss" scoped>
 .breadcrumbs {
-	padding-top: 30px;
+	// padding-top: 30px;
 }
 
 .breadcrumb-item {

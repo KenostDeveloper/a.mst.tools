@@ -35,8 +35,6 @@ import Balance from "../pages/store/balance.vue";
 import ProfileClientStatistics from '../pages/ProfileClientStatistics.vue'
 import PurchasesActions from '../pages/opt/Actions.vue'
 
-import store from "../store";
-
 const routes = [
   {
     path: "/",
@@ -86,6 +84,11 @@ const routes = [
                   },
                   {
                     path: "stores",
+                    meta: {
+                      breadcrumb: {
+                        label: "Товары"
+                      }
+                    },
                     children: [
                       {
                         path: "",
@@ -296,6 +299,11 @@ const routes = [
                   },
                   {
                     path: 'statistics',
+                    meta: {
+                      breadcrumb: {
+                        label: 'Статистика'
+                      }
+                    },
                     children: [{
                       path: '',
                       name: 'statistics',
@@ -310,6 +318,11 @@ const routes = [
                   },
                   {
                     path: 'orders',
+                    meta: {
+                      breadcrumb: {
+                        label: "Мои заказы"
+                      }
+                    },
                     children: [
                       {
                         path: "",

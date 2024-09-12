@@ -134,13 +134,13 @@
 		<div class="change-org-container">
 			<div class="change-org__wrapper">
 				<div class="change-org-el" :class="{ active: true }">
-					<div class="icon"><img :src="this.activeOrganization.image" alt="" /></div>
+					<div class="icon"><img :src="this.activeOrganization?.image" alt="" /></div>
 					<div class="change-org-el__text">
-						<b>{{ this.activeOrganization.name }}</b>
-						<p>{{ this.activeOrganization.description }}</p>
+						<b>{{ this.activeOrganization?.name }}</b>
+						<p>{{ this.activeOrganization?.description }}</p>
 					</div>
 				</div>
-				<div v-if="this.activeOrganization.active" class="dart-payment-status-org">
+				<div v-if="this.activeOrganization?.active" class="dart-payment-status-org">
 					<i class="d_icon d_icon-check"></i>
 					<span>Включен</span>
 				</div>
@@ -396,7 +396,7 @@ export default {
 				}
 			}
 
-			this.activeOrganization = this.organizations.find(
+			this.activeOrganization = this.organizations?.find(
 				(org) => org.id === this.$route.params.id
 			);
 		},
