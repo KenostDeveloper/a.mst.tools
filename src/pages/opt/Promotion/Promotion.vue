@@ -12,18 +12,18 @@
 								Назад
 							</button>
 							<div class="promotion-header__content">
-								<img :src="site_url_prefix + actions.image" class="promotion-header__img" />
+								<img :src="site_url_prefix + actions?.image" class="promotion-header__img" />
 							</div>
 						</header>
 						<main class="promotion__main promotion-main">
 							<div class="promotion-main__content">
 								<div class="promotion__title-container">
-									<h2 class="promotion__title">{{ actions.name }}</h2>
+									<h2 class="promotion__title">{{ actions?.name }}</h2>
 									<!-- <p class="promotion__span">
 										дополнительная скидка <b>6%</b> на всю линейку Интерскол! (test data)
 									</p> -->
 									<p class="promotion__description">
-										{{ actions.description }}
+										{{ actions?.description }}
 									</p>
 								</div>
 								<div class="promotion-main__card-container">
@@ -32,36 +32,29 @@
                       class="w-max f-basis-auto"
                       title="Даты проведения"
                       :text="
-                        new Date(actions.date_from).toLocaleString('ru', this.options) +
+                        new Date(actions?.date_from).toLocaleString('ru', this.options) +
                         ' - ' +
-                        new Date(actions.date_to).toLocaleString('ru', this.options)
+                        new Date(actions?.date_to).toLocaleString('ru', this.options)
                       "
                     />
 
-                    <!-- For testing -->
-                    <PromotionCard
-                      class="w-fit"
-                      title="Вознаграждение"
-                      text="6%"
-                    />
-                    <!-- -->
                     
                     <PromotionCard
-                      v-if="actions.award != ''"
+                      v-if="actions?.award != ''"
                       class="w-fit"
                       title="Вознаграждение"
-                      :text="actions.award"
+                      :text="actions?.award"
                     />
                   </div>
 									<div class="promotion-main__card-container promotion-main__card-container--horizontal">
                     <PromotionCard
                       title="Совместимость скидок"
                       :text="
-                        actions.compatibility_discount === 1
+                        actions?.compatibility_discount === 1
                           ? 'Совместим со всеми акциями'
-                          : actions.compatibility_discount === 2
+                          : actions?.compatibility_discount === 2
                           ? 'Не совместим со всеми акциями'
-                          : actions.compatibility_discount === 3
+                          : actions?.compatibility_discount === 3
                           ? 'Применяется большая скидка'
                           : 'Складывается с выбранными акциями'
                       "
@@ -69,9 +62,9 @@
                     <PromotionCard
                       title="Совместимость отсрочек"
                       :text="
-                        actions.compatibility_postponement === 1
+                        actions?.compatibility_postponement === 1
                           ? 'Совместим со всеми отсрочками'
-                          : actions.compatibility_postponement === 2
+                          : actions?.compatibility_postponement === 2
                           ? 'Не совместим со всеми отсрочками'
                           : 'Применяется большая отсрочка'
                       "
