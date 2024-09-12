@@ -223,7 +223,7 @@ export default {
 					},
 					{
 						label: "Оптовые акции",
-						icon: "bag.svg",
+						icon: "ticket-discount.svg",
 						to: { name: "opt_actions", params: { id: this.$route.params.id } },
 					},
 					{
