@@ -114,7 +114,7 @@ export default {
 	},
 	mounted() {
 		this.get_opt_catalog_from_api();
-		this.org_get_from_api();
+		this.org_get_from_api({ action: 'get/orgs' });
 	},
 };
 </script>
