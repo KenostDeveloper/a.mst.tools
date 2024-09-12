@@ -1,7 +1,10 @@
 <template>
 	<Loading v-if="this.loading_page" />
 	<div v-else>
-		<div class="not-warehouse" v-if="this.organozation.warehouse == 0 && this.organozation.vendor == 0">
+		<div
+			class="not-warehouse"
+			v-if="this.organozation.warehouse == 0 && this.organozation.vendor == 0"
+		>
 			<img class="mb-2" src="/images/icons_milen/warehouse.png" alt="" />
 			<p>Для создания отгрузок вам нужно иметь роль оптового поставщика!</p>
 			<!-- <div class="a-dart-btn a-dart-btn-primary" @click="changeActive">Выбрать</div> -->
@@ -187,9 +190,9 @@
 						<div class="std-display-contents hidden-tablet-l">
 							<p class="shopping-kenost__b std-dropdown__title">Дата и время</p>
 							<div class="dart-alert dart-alert-info">
-								Если Вы выберите повторение отгрузки, то смещение дат относительно самой
-								отгрузки и датой окончания приемки заказов будет выставлено аналогичное
-								тому, что вы укажете ниже.
+								Если Вы выберите повторение отгрузки, то смещение дат относительно
+								самой отгрузки и датой окончания приемки заказов будет выставлено
+								аналогичное тому, что вы укажете ниже.
 							</div>
 							<div class="shopping-kenost__dates">
 								<div class="shopping-kenost__row">
@@ -217,7 +220,9 @@
 								<div class="d-col-md-12">
 									<div
 										class="dart-form-group"
-										:class="{ error: v$.form.timeSelected.repeater.$errors.length }"
+										:class="{
+											error: v$.form.timeSelected.repeater.$errors.length,
+										}"
 									>
 										<label for="">Повторять</label>
 										<Dropdown
@@ -241,7 +246,9 @@
 								<div class="d-col-md-12">
 									<div
 										class="dart-form-group"
-										:class="{ error: v$.form.timeSelected.repeater.$errors.length }"
+										:class="{
+											error: v$.form.timeSelected.repeater.$errors.length,
+										}"
 									>
 										<label for="">Склад</label>
 										<Dropdown
@@ -304,7 +311,9 @@
 												<input
 													class="dart-form-control"
 													:class="
-														isDragging ? 'text-gray-600' : 'text-gray-900'
+														isDragging
+															? 'text-gray-600'
+															: 'text-gray-900'
 													"
 													:value="inputValue.start"
 													v-on="inputEvents.start"
@@ -314,7 +323,9 @@
 												<input
 													class="dart-form-control"
 													:class="
-														isDragging ? 'text-gray-600' : 'text-gray-900'
+														isDragging
+															? 'text-gray-600'
+															: 'text-gray-900'
 													"
 													:value="inputValue.end"
 													v-on="inputEvents.end"
@@ -336,9 +347,9 @@
 							<p class="shopping-kenost__b mt-2 mb-1 std-dropdown__title">Маршрут</p>
 							<div class="dart-alert dart-alert-info">
 								Выберите города маршрута и проставьте даты, когда транспорт будет
-								разгружен (по умолчанию, дата будет совпадать с выбранной датой начала
-								отгрузки). Если Вы выбрали повторение, то при генерации дальнейших
-								отгрузок будет выбрано аналогичное смещение дат.
+								разгружен (по умолчанию, дата будет совпадать с выбранной датой
+								начала отгрузки). Если Вы выбрали повторение, то при генерации
+								дальнейших отгрузок будет выбрано аналогичное смещение дат.
 							</div>
 							<div
 								class="dart-form-group mt-1 mb-2"
@@ -354,26 +365,26 @@
 									placeholder="Начните вводить наименование города"
 									@complete="searchCity($event)"
 							/> -->
-							<Autocomplete
-								@setSelections="(cities) => setSelectedCities(cities)"
-								:selections="form.selectedCities"
-								type="city"
-								placeholder="Начните вводить наименование города"
+								<Autocomplete
+									@setSelections="(cities) => setSelectedCities(cities)"
+									:selections="form.selectedCities"
+									type="city"
+									placeholder="Начните вводить наименование города"
+								/>
+								<span
+									class="error_desc"
+									v-for="error of v$.form.selectedCities.$errors"
+									:key="error.$uid"
+								>
+									{{ error.$message }}
+								</span>
+							</div>
+							<ShoppingCities
+								v-model:modelCities="this.form.selectedCities"
+								v-model:modelCitiesDates="this.form.citiesDates"
+								@removeSelectedCity="this.removeSelectedCity"
 							/>
-							<span
-								class="error_desc"
-								v-for="error of v$.form.selectedCities.$errors"
-								:key="error.$uid"
-							>
-								{{ error.$message }}
-							</span>
 						</div>
-						<ShoppingCities
-							:cities="this.form.selectedCities"
-							v-model:modelCitiesDates="this.form.citiesDates"
-							@removeSelectedCity="this.removeSelectedCity"
-						/>
-					</div>
 
 						<details class="std-dropdown visible-tablet-l">
 							<summary class="std-dropdown__header">
@@ -382,9 +393,9 @@
 							</summary>
 							<div class="std-dropdown__content">
 								<div class="dart-alert dart-alert-info">
-									Если Вы выберите повторение отгрузки, то смещение дат относительно
-									самой отгрузки и датой окончания приемки заказов будет выставлено
-									аналогичное тому, что вы укажете ниже.
+									Если Вы выберите повторение отгрузки, то смещение дат
+									относительно самой отгрузки и датой окончания приемки заказов
+									будет выставлено аналогичное тому, что вы укажете ниже.
 								</div>
 								<div class="shopping-kenost__dates">
 									<div class="shopping-kenost__row">
@@ -398,7 +409,9 @@
 										/>
 									</div>
 									<div class="shopping-kenost__row">
-										<p class="k-mini-text">Дата и время окончания приема заказов</p>
+										<p class="k-mini-text">
+											Дата и время окончания приема заказов
+										</p>
 										<CalendarVue
 											showIcon
 											id="calendar-24h"
@@ -426,7 +439,8 @@
 											/>
 											<span
 												class="error_desc"
-												v-for="error of v$.form.timeSelected.repeater.$errors"
+												v-for="error of v$.form.timeSelected.repeater
+													.$errors"
 												:key="error.$uid"
 											>
 												{{ error.$message }}
@@ -457,7 +471,10 @@
 									</div>
 								</div>
 								<div class="dart-row" v-if="form.timeSelected.repeater != 0">
-									<div class="d-col-md-6" v-if="form.timeSelected.repeater == 'week'">
+									<div
+										class="d-col-md-6"
+										v-if="form.timeSelected.repeater == 'week'"
+									>
 										<div class="dart-form-group">
 											<label for="">В следующие дни</label>
 											<MultiSelect
@@ -469,7 +486,10 @@
 											/>
 										</div>
 									</div>
-									<div class="d-col-md-6" v-if="form.timeSelected.repeater == 'week'">
+									<div
+										class="d-col-md-6"
+										v-if="form.timeSelected.repeater == 'week'"
+									>
 										<div class="dart-form-group">
 											<label for="">Каждую ... неделю</label>
 											<Dropdown
@@ -538,15 +558,18 @@
 						</details>
 						<details class="std-dropdown visible-tablet-l">
 							<summary class="std-dropdown__header">
-								<p class="shopping-kenost__b mt-2 mb-1 std-dropdown__title">Маршрут</p>
+								<p class="shopping-kenost__b mt-2 mb-1 std-dropdown__title">
+									Маршрут
+								</p>
 								<i class="d_icon d_icon-arrow std-dropdown__button"></i>
 							</summary>
 							<div class="std-dropdown__content">
 								<div class="dart-alert dart-alert-info">
-									Выберите города маршрута и проставьте даты, когда транспорт будет
-									разгружен (по умолчанию, дата будет совпадать с выбранной датой
-									начала отгрузки). Если Вы выбрали повторение, то при генерации
-									дальнейших отгрузок будет выбрано аналогичное смещение дат.
+									Выберите города маршрута и проставьте даты, когда транспорт
+									будет разгружен (по умолчанию, дата будет совпадать с выбранной
+									датой начала отгрузки). Если Вы выбрали повторение, то при
+									генерации дальнейших отгрузок будет выбрано аналогичное смещение
+									дат.
 								</div>
 								<div
 									class="dart-form-group mt-1 mb-2"
@@ -562,27 +585,27 @@
 										placeholder="Начните вводить наименование города"
 										@complete="searchCity($event)"
 								/> -->
-								<Autocomplete
-									@setSelections="(cities) => setSelectedCities(cities)"
-									:selections="form.selectedCities"
-									type="city"
-									placeholder="Начните вводить наименование города"
+									<Autocomplete
+										@setSelections="(cities) => setSelectedCities(cities)"
+										:selections="form.selectedCities"
+										type="city"
+										placeholder="Начните вводить наименование города"
+									/>
+									<span
+										class="error_desc"
+										v-for="error of v$.form.selectedCities.$errors"
+										:key="error.$uid"
+									>
+										{{ error.$message }}
+									</span>
+								</div>
+								<ShoppingCities
+									v-model:modelCities="this.form.selectedCities"
+									v-model:modelCitiesDates="this.form.citiesDates"
+									@removeSelectedCity="this.removeSelectedCity"
 								/>
-								<span
-									class="error_desc"
-									v-for="error of v$.form.selectedCities.$errors"
-									:key="error.$uid"
-								>
-									{{ error.$message }}
-								</span>
 							</div>
-							<ShoppingCities
-								:cities="this.form.selectedCities"
-								v-model:modelCitiesDates="this.form.citiesDates"
-								@removeSelectedCity="this.removeSelectedCity"
-							/>
-						</div>
-					</details>
+						</details>
 
 						<div class="shopping-kenost__button">
 							<div
@@ -1044,7 +1067,7 @@ export default {
 			"get_ship_data_api",
 			"unset_ship_data",
 			"org_get_stores_from_api",
-			'org_get_from_api'
+			"org_get_from_api",
 		]),
 		...mapMutations(["SET_SHIPPING_CHECK", "SET_SHIPPING_CHECK_ONE"]),
 		// deletePunkt(index) {
@@ -1091,10 +1114,7 @@ export default {
 			const citiesDates = this.form.citiesDates;
 
 			this.form.selectedCities.sort((city1, city2) => {
-				return (
-					citiesDates[city1] -
-					citiesDates[city2]
-				);
+				return citiesDates[city1] - citiesDates[city2];
 			});
 		},
 		// searchCity(event) {
@@ -1238,7 +1258,7 @@ export default {
 
 		this.org_get_from_api({
 			action: "get/orgs",
-		}).then(() => this.loading_page = false);
+		}).then(() => (this.loading_page = false));
 
 		this.$load(async () => {
 			await this.get_shipping_from_api({ filter: [] });
@@ -1286,7 +1306,14 @@ export default {
 		ShoppingCities,
 	},
 	computed: {
-		...mapGetters(["shipping", "getregions", "shipping_statuses", "getshipdata", "org_stores", "orgs"]),
+		...mapGetters([
+			"shipping",
+			"getregions",
+			"shipping_statuses",
+			"getshipdata",
+			"org_stores",
+			"orgs",
+		]),
 	},
 	setup() {
 		return { v$: useVuelidate() };
@@ -1327,7 +1354,7 @@ export default {
 			handler(newVal, oldVal) {
 				this.sortSelectedCities();
 			},
-			deep: true
+			deep: true,
 		},
 		orgs: function (newVal, oldVal) {
 			this.organizations = newVal;
