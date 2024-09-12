@@ -1,7 +1,7 @@
 <template>
 	<div class="copo std-statistics">
 		<h1 class="title-mini">
-			<img class="mst-image-org" :src="org_profile.image" alt="" />{{ org_profile.name }}
+			<img class="mst-image-org" :src="org_profile?.image" alt="" />{{ org_profile.name }}
 		</h1>
 		<!-- {{org_stores}} -->
 		<v-table
@@ -218,7 +218,13 @@ export default {
 		};
 	},
 	methods: {
-		...mapActions(["org_get_stores_from_api", "org_profile_from_api", "get_data_from_api"]),
+		...mapActions([
+			"org_get_stores_from_api",
+			"org_profile_from_api",
+			"get_data_from_api",
+			"get_vendors_from_api",
+			"get_catalog_from_api"
+		]),
 		filter(data) {
 			this.page = 1;
 			this.loading_products = true;
@@ -267,10 +273,18 @@ export default {
 			page: this.page,
 			perpage: this.pagination_items_per_page,
 		}).then(() => {});
+		this.get_vendors_from_api()
+		this.get_catalog_from_api()
 	},
 	components: { vTable, Chart, TabView, TabPanel, RadioButton },
 	computed: {
-		...mapGetters(["org_stores", "org_profile", "products"]),
+		...mapGetters([
+			"org_stores",
+			"org_profile",
+			"products",
+			'getvendors',
+			'getcatalog'
+		]),
 		tableData() {
 			if (this.windowWidth <= 480) {
 				return {
@@ -302,6 +316,12 @@ export default {
 				this.avg_info.sales_speed = 0;
 			}
 		},
+		getvendors(newVal, oldVal) {
+			this.products_filters.vendor.values = newVal
+		},
+		getcatalog(newVal, oldVal) {
+			this.products_filters.catalog.values = newVal
+		}
 	},
 };
 </script>

@@ -1,7 +1,7 @@
 <template>
     <form @submit.prevent="formSubmit" :class="{ loading: loading }">
         <div class="profile-content__title sticky-element">
-            <span class="maintitle">Настройка программы</span>
+            <span class="maintitle">Настройка акции</span>
             <div class="buttons_container">
             <RouterLink :to="{ name: 'b2b', params: { id: $route.params.id }}" class="dart-btn dart-btn-secondary btn-padding">Отменить</RouterLink>
             <button type="submit" class="dart-btn dart-btn-primary btn-padding" :class="{ 'dart-btn-loading': loading }" :disabled="loading">Сохранить изменения</button>
@@ -9,9 +9,9 @@
         </div>
         <div>
             <div class="dart-form-group mb-4">
-                <span class="ktitle">Наименование программы</span>
-                <label for="name">Введите наименование, которое будет отражать смысл вашей программы.</label>
-                <input v-model="this.form.name" type="text" name="name" placeholder="Укажите название программы" class="dart-form-control mt-2">
+                <span class="ktitle">Наименование акции</span>
+                <label for="name">Введите наименование, которое будет отражать смысл вашей акции.</label>
+                <input v-model="this.form.name" type="text" name="name" placeholder="Укажите название акции" class="dart-form-control mt-2">
             </div>
 
             <div class="dart-form-group mt-2 mb-4">
@@ -104,7 +104,7 @@
 
               <div class="dart-form-group mb-4">
                   <span class="ktitle">Описание</span>
-                  <input v-model="this.form.description" type="text" name="description" placeholder="Укажите описание программы" class="dart-form-control">
+                  <input v-model="this.form.description" type="text" name="description" placeholder="Укажите описание акции" class="dart-form-control">
               </div>
 
               <div class="dart-form-group mb-4">
@@ -1702,7 +1702,7 @@ export default {
       const new_selected = {}
 
       for (let i = 0; i < Object.keys(this.selected).length; i++) {
-        if (this.selected[Object.keys(this.selected)[i]].id !== id) {
+        if ((this.selected[Object.keys(this.selected)[i]].id).toString() !== id.toString()) {
           new_selected[Object.keys(this.selected)[i]] = this.selected[Object.keys(this.selected)[i]]
         }
       }
