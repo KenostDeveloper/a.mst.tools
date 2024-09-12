@@ -2,14 +2,16 @@
 	<draggable
 		v-if="this.cities"
 		v-model="this.cities"
+		tag="transition-group"
+		:component-data="{ tag: 'ul', type: 'transition-group', name: 'flip-list' }"
 		item-key="id"
 		class="shopping-kenost__citys"
 	>
 		<template #item="{ element: item, index }">
-			<div class="shopping-kenost__cityone">
+			<li class="shopping-kenost__cityone">
 				<div class="shopping-kenost__cityone-name" v-if="item">
-					<!-- <p>{{ item.value }}</p> -->
-					<p>{{ item }}</p>
+					<p>{{ item.value }}</p>
+					<!-- <p>{{ item }}</p> -->
 					<div class="btn btn-close" @click="removeSelectedCity(index)">
 						<!-- <i class="d_icon d_icon-close"></i> -->
 						<img src="../../assets/images/icons/close.svg" alt="" />
@@ -18,14 +20,14 @@
 				<div class="shopping-kenost__cityone-date mb-3" v-if="item">
 					<p class="k-mini-text">Дата отгрузки</p>
 					<CalendarVue
-						v-model="citiesDates[item]"
+						v-model="citiesDates[item.value]"
 						showIcon
 						id="calendar-24h"
 						showTime
 						hourFormat="24"
 					/>
 				</div>
-			</div>
+			</li>
 		</template>
 	</draggable>
 </template>

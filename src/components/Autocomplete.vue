@@ -40,8 +40,8 @@
 				@click="addSelection(suggestion)"
 				class="autocomplete__suggestion"
 			>
-				<!-- {{ suggestion.value }} -->
-				{{ suggestion }}
+				{{ suggestion.value }}
+				<!-- {{ suggestion }} -->
 			</li>
 		</ul>
 	</div>
@@ -121,7 +121,7 @@ export default {
 					const filteredCity = this.getAvailableCity(filteredCities, currentCity);
 
 					if (filteredCity) {
-						filteredCities.push(filteredCity);
+						filteredCities.push(city);
 					}
 				});
 
@@ -164,17 +164,26 @@ export default {
 			clearTimeout(this.inputTimer);
 			this.inputTimer = setTimeout(func, delay);
 		},
+		suggestionsListToInput() {
+			const suggestions = this.$refs.suggestions;
+			const autocomplete = this.$refs.autocomplete;
+
+			// Позиционирование списка относительно инпута
+			suggestions.style.width = autocomplete.clientWidth + "px";
+			suggestions.style.top = autocomplete.getBoundingClientRect().top + autocomplete.clientHeight - 30 + "px";
+			suggestions.style.left = autocomplete.offsetLeft + "px";
+		},
 	},
 	mounted() {
 		this.getData();
-
-		const suggestions = this.$refs.suggestions;
-		const autocomplete = this.$refs.autocomplete;
-
-		// Позиционирование списка относительно инпута
-		suggestions.style.width = autocomplete.clientWidth + "px";
-		suggestions.style.top = autocomplete.offsetTop + autocomplete.clientHeight + 4 + "px";
-		suggestions.style.left = autocomplete.offsetLeft + "px";
+		this.suggestionsListToInput();
+	},
+	watch: {
+		isActive(newVal) {
+			if(newVal) {
+				this.suggestionsListToInput();
+			}
+		}
 	}
 };
 </script>
@@ -258,14 +267,14 @@ export default {
 		& {
 			background-color: #fff;
 			border-radius: 5px;
-			box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+			box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.3);
 
 			width: 100%;
 			max-height: 0px;
 
 			overflow-y: auto;
 
-			position: fixed;
+			position: absolute;
 			// top: calc(100% + 2px);
 			// left: 0;
 			transition-duration: 0.5s;

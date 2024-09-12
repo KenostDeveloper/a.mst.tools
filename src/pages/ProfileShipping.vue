@@ -1114,7 +1114,7 @@ export default {
 			const citiesDates = this.form.citiesDates;
 
 			this.form.selectedCities.sort((city1, city2) => {
-				return citiesDates[city1] - citiesDates[city2];
+				return citiesDates[city1.value] - citiesDates[city2.value];
 			});
 		},
 		// searchCity(event) {
