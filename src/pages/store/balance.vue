@@ -122,7 +122,7 @@
 				<ul class="balance-info">
 					<li class="balance-info__item">
 						<span class="balance-info__index">01.</span>
-						<p class="balance-info__text">Создайте заявку на вывод средст.</p>
+						<p class="balance-info__text">Создайте заявку на вывод средств.</p>
 					</li>
 					<li class="balance-info__item">
 						<span class="balance-info__index">02.</span>
@@ -293,7 +293,7 @@ export default {
 					type: "text",
 				},
 				value: {
-					label: "Сумма у получению",
+					label: "Сумма к получению",
 					type: "text",
 				},
 				status: {
