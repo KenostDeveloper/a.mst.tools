@@ -1,6 +1,10 @@
 <template>
 	<div class="shopping-kenost__citys" v-if="this.cities">
-		<div class="shopping-kenost__cityone" v-for="(item, index) in this.cities" :key="index">
+		<div
+			class="shopping-kenost__cityone"
+			v-for="(item, index) in this.cities"
+			:key="index"
+		>
 			<div class="shopping-kenost__cityone-name" v-if="item">
 				<!-- <p>{{ item.value }}</p> -->
 				<p>{{ item }}</p>
@@ -57,7 +61,7 @@ export default {
 			handler(newVal) {
 				this.$emit("update:modelCitiesDates", newVal);
 			},
-            deep: true
+			deep: true,
 		},
 	},
 };
