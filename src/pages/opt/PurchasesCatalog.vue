@@ -10,7 +10,7 @@
 			<div class="d-col-content purchases">
 				<div class="dart-home dart-window">
 					<!-- <Breadcrumbs :items="this.$breadcrumbs"/> -->
-					<Breadcrumbs />
+					<!-- <Breadcrumbs /> -->
 					<div v-if="$route.params.warehouse_id && !$route.params.warehouse_cat_id">
 						<h1 class="h1-mini">Все товары</h1>
 						<div class="dart-alert dart-alert-info">
@@ -104,7 +104,7 @@ import TableCatalog from "../../components/opt/TableCatalog.vue";
 import OrderModal from "../../components/opt/OrderModal.vue";
 import Loading from "../../components/Loading.vue";
 // import AmBreadcrumbs from 'vue-3-breadcrumbs'
-import Breadcrumbs from "../../components/Breadcrumbs.vue";
+// import Breadcrumbs from "../../components/Breadcrumbs.vue";
 import router from "../../router";
 
 export default {
@@ -135,7 +135,7 @@ export default {
 		Paginate,
 		OrderModal,
 		Loading,
-		Breadcrumbs
+		// Breadcrumbs
 	},
 	mounted() {
 		this.get_opt_catalog_from_api().then(() => {
