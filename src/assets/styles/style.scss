@@ -5274,6 +5274,43 @@ button.std-icon__wrapper {
 	}
 }
 
+.k-table__busket{
+	.k-quantity__counter{
+		background: transparent;
+		font-size: 14px;
+	}
+
+	.k-quantity form{
+		background: transparent;
+	}
+
+	.pi{
+		font-size: 8px;
+	}
+
+	.k-quantity__btn{
+		width: 25%;
+	}
+
+	.k-quantity__counter{
+		width: 50%;
+	}
+}
+
+.kenost-basket{
+	.k-quantity__btn{
+		width: 25%;
+	}
+
+	.k-quantity__counter{
+		width: 50%;
+	}
+
+	.k-quantity.mini{
+		width: 80px;
+	}
+}
+
 .k-table {
 	transition: all 0.5s;
 
@@ -5508,7 +5545,7 @@ button.std-icon__wrapper {
 		cursor: pointer;
 
 		&.red {
-			background: #ffc9c9;
+			background: #FFC9C9;
 			border: #ff0000 1px solid;
 
 			.table-actions__container {
@@ -5517,8 +5554,8 @@ button.std-icon__wrapper {
 		}
 
 		&.active {
-			background: #cbffc9;
-			border: #00ff2a 1px solid;
+			background: #81D589;
+			border: #00F619 1px solid;
 
 			.table-actions__container {
 				background: #edffe8;

@@ -13,7 +13,7 @@
     <td class="hidden-mobile-l"></td>
     <td>от {{getMinDelivery(items.stores).delivery}} дн ({{new Date(getMinDelivery(items.stores).delivery_day).toLocaleString("ru", {month: 'long', day: 'numeric'})}})</td>
     <td class="hidden-mobile-l"></td>
-    <td></td>
+    <td>{{ items.total_stores }}</td>
     <td class="hidden-mobile-l"></td>
   </tr>
   <tr class="kenost-table-background" v-for="(item, index) in items.stores" v-bind:key="item.id" :class="{'active' : this.active || this.is_warehouses || items.total_stores == 1, 'no-active' : !this.active && !this.is_warehouses && items.total_stores > 1, 'bg-white': items.total_stores == 1}">
