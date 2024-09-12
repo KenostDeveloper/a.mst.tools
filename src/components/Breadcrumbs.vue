@@ -1,43 +1,127 @@
 <template>
-	<nav aria-label="breadcrumb">
-		<ol class="breadcrumb" itemscope="" itemtype="http://schema.org/BreadcrumbList">
-			<li
-				v-for="(crumb, index) in breadcrumbs"
-				class="breadcrumb-item"
-				:class="{ active: index === breadcrumbs.length - 1 }"
-				itemprop="itemListElement"
-				itemscope=""
-				itemtype="http://schema.org/ListItem"
-			>
-				<router-link itemprop="item" :href="crumb.path"
-					><span itemprop="name">{{
-						crumb.label || crumb.meta?.breadcrumb?.label
-					}}</span></router-link
-				><meta itemprop="position" :content="index" />
-			</li>
-		</ol>
+	<nav class="breadcrumbs" aria-label="breadcrumbs">
+		<ul class="breadcrumb">
+			<template v-for="(crumb, index) in breadcrumbs">
+				<li
+					v-if="crumb"
+					class="breadcrumb-item"
+					:class="{ active: index === breadcrumbs.length - 1 }"
+				>
+					<router-link itemprop="item" :to="crumb.path"
+						><span itemprop="name">{{ crumb.name }}</span></router-link
+					>
+				</li>
+				<li v-if="index !== breadcrumbs.length - 1 && crumb" class="breadcrumb-item">/</li>
+			</template>
+		</ul>
 	</nav>
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
+import router from "../router";
+
 export default {
 	name: "Breadcrumbs",
 	data() {
-		return {};
+		return {
+			opt_catalog: {},
+			opt_vendors: {},
+		};
 	},
 	computed: {
+		...mapGetters(["optcatalog", "orgs"]),
+
 		breadcrumbs() {
-			const routes = this.$route.matched;
-			console.log(routes);
-			return routes;
+			const currentRoute = router.currentRoute.value;
+			const fullPath = currentRoute.matched[currentRoute.matched.length - 1].path;
+			const pathRoutes = fullPath.split("/");
+			const pathRoutesWithId = currentRoute.fullPath.split("/");
+
+			const routeMatched = this.$route.matched;
+
+			const breadcrumbs = pathRoutes.map((route, index) => {
+				if (index == 0) {
+					return {
+						name: "Главная",
+						path: "/",
+					};
+				}
+				if (route.startsWith(":")) {
+					return {
+						name: this.getRouteName(currentRoute, route),
+						path: pathRoutesWithId.slice(0, index + 1).join("/"),
+					};
+				}
+
+				return {
+					name: routeMatched.find(
+						(matchedRoute) =>
+							matchedRoute.path === pathRoutes.slice(0, index + 1).join("/")
+					).meta.breadcrumb?.label,
+					path: pathRoutesWithId.slice(0, index + 1).join("/"),
+				};
+			});
+
+			return breadcrumbs;
 		},
+	},
+	methods: {
+		...mapActions(["get_opt_catalog_from_api", "org_get_from_api"]),
+		getRouteName(currentRoute, param) {
+			switch (param) {
+				case ":id": {
+					return this.getOrgNameById(currentRoute.params[param.slice(1)]);
+				}
+				case ":category_id": {
+					return this.getCatalogNameById(currentRoute.params[param.slice(1)]);
+				}
+				case ":order_id": {
+					return `Заказ № ${currentRoute.params[param.slice(1)]}`;
+				}
+			}
+		},
+		getCatalogNameById(id) {
+			let categoryName = "";
+
+			this.optcatalog.find((firstLevel) => {
+				if (firstLevel.id == id) categoryName = firstLevel.pagetitle;
+
+				if (firstLevel.children) {
+					Object.values(firstLevel?.children)?.find((secondLevel) => {
+						if (secondLevel.id == id) categoryName = secondLevel.pagetitle;
+
+						if (secondLevel.children) {
+							Object.values(secondLevel?.children)?.find((thirdLevel) => {
+								if (thirdLevel.id == id) categoryName = thirdLevel.pagetitle;
+							});
+						}
+					});
+				}
+			});
+
+			return categoryName;
+		},
+		getOrgNameById(id) {
+			let orgName = "";
+
+			this.orgs?.find((org) => {
+				if (org.id === id) orgName = org.name;
+			});
+
+			return orgName;
+		},
+	},
+	mounted() {
+		this.get_opt_catalog_from_api();
+		this.org_get_from_api({ action: 'get/orgs' });
 	},
 };
 </script>
 
 <style lang="scss" scoped>
 .breadcrumbs {
-	padding-top: 30px;
+	// padding-top: 30px;
 }
 
 .breadcrumb-item {
@@ -58,7 +142,8 @@ export default {
 	align-items: center;
 	overflow-x: auto;
 	width: 100%;
-	gap: 11px;
+	padding: 0;
+	gap: 4px;
 
 	&::-webkit-scrollbar {
 		width: 0px;
@@ -74,6 +159,25 @@ export default {
 		&:hover {
 			color: var(--secondary-color);
 		}
+	}
+}
+
+.breadcrumb-item {
+	color: rgba(180, 180, 180, 1) !important;
+	font-size: 12px;
+	font-weight: 400;
+	line-height: 1.17;
+
+	margin: 0 !important;
+	transition-duration: 0.3s;
+
+	&:hover {
+		color: rgb(129, 129, 129) !important;
+		text-decoration: underline;
+	}
+
+	&.active {
+		color: rgb(104, 104, 104) !important;
 	}
 }
 

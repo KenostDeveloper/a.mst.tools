@@ -74,11 +74,21 @@ const routes = [
                     path: "",
                     name: "org",
                     props: true,
+                    meta: {
+                      breadcrumb: {
+                        label: "Организация"
+                      }
+                    },
                     label: "Организация",
                     component: ProfileOrganization,
                   },
                   {
                     path: "stores",
+                    meta: {
+                      breadcrumb: {
+                        label: "Товары"
+                      }
+                    },
                     children: [
                       {
                         path: "",
@@ -207,6 +217,13 @@ const routes = [
                   {
                     path: 'opt',
                     name: 'purchases',
+                    props: true,
+                    label: "Закупки",
+                    meta: {
+                      breadcrumb: {
+                        label: 'Закупки'
+                      }
+                    },
                     children: [{
                       path: '',
                       name: 'purchases_home',
@@ -224,7 +241,7 @@ const routes = [
                       label: "Каталог",
                       meta: {
                         breadcrumb: {
-                          label: 'Каталог'
+                          label: ""
                         }
                       }
                     }, {
@@ -282,6 +299,11 @@ const routes = [
                   },
                   {
                     path: 'statistics',
+                    meta: {
+                      breadcrumb: {
+                        label: 'Статистика'
+                      }
+                    },
                     children: [{
                       path: '',
                       name: 'statistics',
@@ -296,6 +318,11 @@ const routes = [
                   },
                   {
                     path: 'orders',
+                    meta: {
+                      breadcrumb: {
+                        label: "Мои заказы"
+                      }
+                    },
                     children: [
                       {
                         path: "",

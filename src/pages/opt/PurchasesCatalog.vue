@@ -105,6 +105,7 @@ import OrderModal from "../../components/opt/OrderModal.vue";
 import Loading from "../../components/Loading.vue";
 // import AmBreadcrumbs from 'vue-3-breadcrumbs'
 import Breadcrumbs from "../../components/Breadcrumbs.vue";
+import router from "../../router";
 
 export default {
 	name: "OptsCatalog",
@@ -134,7 +135,7 @@ export default {
 		Paginate,
 		OrderModal,
 		Loading,
-		// Breadcrumbs
+		Breadcrumbs
 	},
 	mounted() {
 		this.get_opt_catalog_from_api().then(() => {
