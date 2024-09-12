@@ -97,13 +97,12 @@
                     </tr>
                 </thead>
                 <tbody class="std-table__body">
-                    <tr v-for="item in orders.orders" v-bind:key="item.id" class="std-table__row">
+                    <tr v-for="item in orders.orders" v-bind:key="item.id" class="std-table__row" style="cursor: pointer" @click.prevent="$router.push({ name: 'retail_orders_id', params: { id: this.$route.params.id, order_id: item.id } })">
                         <td class="std-table__col">
-                            <router-link class="link-no-style" :to="{ name: 'retail_orders_id', params: { id: this.$route.params.id, order_id: item.id } }"><div class="retails__number">
-                                {{item.num}}
-                                <!-- <i class="pi pi-info-circle retails__number-icon"></i> -->
-                            </div>
-							</router-link>
+							<div class="retails__number">
+								{{item.num}}
+								<!-- <i class="pi pi-info-circle retails__number-icon"></i> -->
+							</div>
                         </td>
                         <td class="std-table__col"><router-link class="link-no-style" :to="{ name: 'retail_orders_id', params: { id: this.$route.params.id, order_id: item.id } }">{{item.createdon}}</router-link></td>
                         <td class="std-table__col" :style="'color: #' + item.status_color"><router-link class="link-no-style" :to="{ name: 'retail_orders_id', params: { id: this.$route.params.id, order_id: item.id } }">{{item.status_name}}</router-link></td>

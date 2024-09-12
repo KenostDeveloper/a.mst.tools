@@ -82,8 +82,8 @@
 						</tr>
 					</thead>
 					<tbody class="std-table__body">
-						<tr class="std-table__row" v-for="item in my_orders.orders" v-bind:key="item.id">
-							<td class="std-table__col"><router-link :to="{ name: 'my_orders_id', params: { id: this.$route.params.id, order_id: item.id } }">{{ item.id }}</router-link></td>
+						<tr class="std-table__row" v-for="item in my_orders.orders" v-bind:key="item.id" style="cursor: pointer" @click.prevent="$router.push({ name: 'my_orders_id', params: { id: this.$route.params.id, order_id: item.id } })">
+							<td class="std-table__col">{{ item.id }}</td>
 							<td class="std-table__col">{{ new Date(item.date).toLocaleString('ru', {year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}) }}</td>
 							<td class="std-table__col">{{ Number(item.cost).toLocaleString('ru') }} ₽</td>
 							<td class="std-table__col">???</td>

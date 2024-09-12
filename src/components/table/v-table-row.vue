@@ -1,5 +1,5 @@
 <template>
-  <tr>
+  <tr v-if="Object.keys(link_row).length === 0">
     <v-table-cell
       v-for="(row, index) in keys"
       :key="index"
@@ -15,9 +15,27 @@
       @approveElem="approveElem"
       @disapproveElem="disapproveElem"
       @editNumber="editNumber"
-      @click="console.log({ name: link_row.link_to, params: linkParams(row), props: link_row.link_props})"
     />
-    <!--       @click.prevent="$router.push({ name: link_row.link_to, params: linkParams(row), props: link_row.link_props})" -->
+  </tr>
+  <tr v-else>
+    <v-table-cell
+      v-for="(row, index) in keys"
+      :key="index"
+      :cell_data="row"
+      :cell_key="index"
+      :value="row_data"
+      :editMode="editMode"
+      @deleteElem="deleteElem"
+      @updateElem="updateElem"
+      @editElem="editElem"
+      @clickElem="clickElem"
+      @checkElem="checkElem"
+      @approveElem="approveElem"
+      @disapproveElem="disapproveElem"
+      @editNumber="editNumber"
+      @click.prevent="$router.push({ name: link_row.link_to, params: linkParams(row), props: link_row.link_props})"
+      style="cursor: pointer;"
+    />
   </tr>
   <slot name="add_data"></slot>
 </template>
@@ -90,7 +108,7 @@ export default {
             linkparams[key] = this.link_row.link_params[key]
           }
           else {
-            linkparams[key] = this.value[this.link_row.link_params[key]]
+            linkparams[key] = this.row_data[this.link_row.link_params[key]]
           }
         }
         // console.log(linkparams)

@@ -232,6 +232,13 @@
                       @filter="filterbrand"
                       @sort="filterbrand"
                       @paginate="paginatebrand"
+                      :link_row="{
+                        link_to: 'report_copo_details',
+                        link_params: {
+                          id: this.$route.params.id,
+                          brand_id: 'vendor_id'
+                        },
+                      }"
                     >
                     </v-table>
                 </TabPanel>
@@ -248,6 +255,14 @@
                     @filter="filter"
                     @sort="filter"
                     @paginate="paginate"
+                    :link_row="{
+                      link_to: 'org_product',
+                      link_params: {
+                        id: this.$route.params.id,
+                        store_id: 'store_id',
+                        product_id: 'id'
+                      },
+                    }"
                   >
                     <template v-slot:button>
                       <button class="dart-btn dart-btn-primary" @click="modalToggle"><i class="d_icon d_icon-search"></i> Поиск по каталогу</button>
