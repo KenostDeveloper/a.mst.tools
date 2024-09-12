@@ -208,6 +208,13 @@
             :table_data="this.table_stores"
             :filters="{}"
             title="Склады"
+            :link_row="{
+              link_to: 'store',
+              link_params: {
+                id: this.$route.params.id,
+                store_id: 'id'
+              }
+            }"
           >
           </v-table>
 

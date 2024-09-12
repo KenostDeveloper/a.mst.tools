@@ -117,6 +117,7 @@
                     @approveElem="approveElem"
                     @disapproveElem="disapproveElem"
                     @editNumber="editNumber"
+                    :link_row="link_row"
                 />
             </tbody>
             <tbody v-else>
@@ -224,6 +225,10 @@ export default {
     show_filter: {
       type: Boolean,
       default: true
+    },
+    link_row: {
+      type: Object,
+      default: {}
     }
   },
   data () {
