@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import VueCookies from 'vue-cookies'
-import PrimeVue from 'primevue/config';
+import PrimeVue from 'primevue/config'
+import ConfirmationService from 'primevue/confirmationservice'
 import ToastService from 'primevue/toastservice'
 import { createVfm } from 'vue-final-modal'
 import { setupCalendar } from 'v-calendar'
@@ -177,6 +178,7 @@ app
   }
 })
 .use(ToastService)
+.use(ConfirmationService)
 .use(vfm)
 .use(VueCookies, { expires: '7d' })
 .use(createYmaps({
