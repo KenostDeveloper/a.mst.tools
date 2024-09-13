@@ -1052,7 +1052,6 @@ export default {
       product.discountInterest = 0
       product.discountInRubles = 0
       product.finalPrice = Number(product.price)
-      console.log(product)
       // console.log(this.selected)
       // this.selected[product.id] = product
       // console.log(this.selected)
@@ -1096,16 +1095,15 @@ export default {
       const new_selected = {}
 
       for (let i = 0; i < Object.keys(this.selected).length; i++) {
-        if (this.selected[Object.keys(this.selected)[i]].id !== id) {
+        if ((this.selected[Object.keys(this.selected)[i]].id).toString() !== id.toString()) {
           new_selected[Object.keys(this.selected)[i]] = this.selected[Object.keys(this.selected)[i]]
         }
       }
 
       // eslint-disable-next-line camelcase
       this.selected = new_selected
-
       // this.selected = this.selected.filter((r) => r.id !== id)
-      const data = { storeid: this.form.store_id, filter: this.filter, filterselected: this.filter_table, selected: Object.keys(this.selected), pageselected: this.page_selected, page: this.page, perpage: this.per_page }
+      const data = { storeid: this.form.store_id, filter: this.filter, filterselected: this.filter_table, selected: Object.keys(new_selected), pageselected: this.page_selected, page: this.page, perpage: this.per_page }
       this.get_available_products_from_api(data).then((res) => {
         this.kenostTableCheckedAllCheck()
       })
@@ -1354,6 +1352,8 @@ export default {
 
         if (newVal.visible) {
           this.selected_visible = newVal.visible
+        } else {
+          this.selected_visible = []
         }
         this.total_products = newVal.total
         this.total_selected = newVal.total_selected

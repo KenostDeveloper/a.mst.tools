@@ -1,20 +1,40 @@
 <template>
-  <tr>
+  <tr v-if="Object.keys(link_row).length === 0">
     <v-table-cell
-        v-for="(row, index) in keys"
-        :key="index"
-        :cell_data="row"
-        :cell_key="index"
-        :value="row_data"
-        :editMode="editMode"
-        @deleteElem="deleteElem"
-        @updateElem="updateElem"
-        @editElem="editElem"
-        @clickElem="clickElem"
-        @checkElem="checkElem"
-        @approveElem="approveElem"
-        @disapproveElem="disapproveElem"
-        @editNumber="editNumber"
+      v-for="(row, index) in keys"
+      :key="index"
+      :cell_data="row"
+      :cell_key="index"
+      :value="row_data"
+      :editMode="editMode"
+      @deleteElem="deleteElem"
+      @updateElem="updateElem"
+      @editElem="editElem"
+      @clickElem="clickElem"
+      @checkElem="checkElem"
+      @approveElem="approveElem"
+      @disapproveElem="disapproveElem"
+      @editNumber="editNumber"
+    />
+  </tr>
+  <tr v-else>
+    <v-table-cell
+      v-for="(row, index) in keys"
+      :key="index"
+      :cell_data="row"
+      :cell_key="index"
+      :value="row_data"
+      :editMode="editMode"
+      @deleteElem="deleteElem"
+      @updateElem="updateElem"
+      @editElem="editElem"
+      @clickElem="clickElem"
+      @checkElem="checkElem"
+      @approveElem="approveElem"
+      @disapproveElem="disapproveElem"
+      @editNumber="editNumber"
+      @click.prevent="$router.push({ name: link_row.link_to, params: linkParams(row), props: link_row.link_props})"
+      style="cursor: pointer;"
     />
   </tr>
   <slot name="add_data"></slot>
@@ -42,6 +62,10 @@ export default {
       default: () => {
         return {}
       }
+    },
+    link_row: {
+      type: Object,
+      default: {}
     }
   },
   data () {
@@ -50,7 +74,6 @@ export default {
     }
   },
   computed: {
-
   },
   methods: {
     deleteElem (data) {
@@ -76,6 +99,21 @@ export default {
     },
     editNumber (object) {
       this.$emit('editNumber', object)
+    },
+    linkParams (row) {
+      const linkparams = {}
+      if (this.link_row != {}) {
+        for (const key in this.link_row.link_params) {
+          if (this.link_row.link_params[key] !== 'id' && this.link_row.link_params[key] !== 'store_id' && this.link_row.link_params[key] !== 'vendor_id') {
+            linkparams[key] = this.link_row.link_params[key]
+          }
+          else {
+            linkparams[key] = this.row_data[this.link_row.link_params[key]]
+          }
+        }
+        // console.log(linkparams)
+      }
+      return linkparams
     }
   },
   components: {
