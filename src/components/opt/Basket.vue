@@ -5,7 +5,7 @@
 				<div class="std-basket__header" @click.stop="this.isOpened = !this.isOpened">
 					<div class="std-basket__title-container">
 						<p class="d-col-basket__title std-basket__title"><span>Корзина</span></p>
-						
+						<!-- {{ this.basket }} -->
 						<div class="std-cart-icon__wrapper"><span class="basket-count-all" v-if="this.basket?.count">{{this.basket?.count}}</span><span class="basket-count-all" v-else>0</span></div>
 					</div>
 					<button class="std-basket__expand-button">
@@ -14,9 +14,6 @@
 				</div>
 
 				<div v-if="this.basket" class="std-basket__info-container">
-					<!-- <div class="basket-container__adres">
-                        ООО «МСТ», г. Химки, ул. Ленинградская, д. 29
-					</div> -->
 					<button
 						@click="clearBasket"
 						class="basketClear std-basket__clear-button"
@@ -38,30 +35,33 @@
 					<div class="basket-container__adres" :style="{'background': store.color}">
 						{{store.name}}
 					</div>
-					<div class="kenost-basket" v-for="product in store.products" v-bind:key="product.id">
-						<div
-							@click="clearBasketProduct(store.id, product.id_remain)"
-							class="btn-close link-no-style"
-						>
-							<!-- <i class="d_icon d_icon-close"></i> -->
-							<img src="../../assets/images/icons/close.svg" alt="" />
-						</div>
-						<div class="kenost-basket__product">
-							<p class="kenost-basket__name" :title="product.name">{{ product.name }}</p>
-							<div class="kenost-basket__info">
-								<span>{{ product.article }}</span>
-								<div class="kenost-basket__info-left">
-									<Counter
-										:key="new Date().getMilliseconds() + product.id_remain"
-										@ElemCount="ElemCount"
-										:mini="true"
-										:min="1"
-										:max="product.remains"
-										:value="product.info.count"
-										:id="product.id_remain"
-										:store_id="store.id"
-									/>
-									<b>{{ (product.info.count * product.info.price).toLocaleString("ru") }} ₽</b>
+					<div class="kenost-product-basket" v-for="items in store.products" v-bind:key="items.id">
+						<div class="kenost-basket" v-for="product in items.basket" v-bind:key="product.id">
+							<div
+								@click="clearBasketProduct(store.id, product.id_remain)"
+								class="btn-close link-no-style"
+							>
+								<!-- <i class="d_icon d_icon-close"></i> -->
+								<img src="../../assets/images/icons/close.svg" alt="" />
+							</div>
+							<div class="kenost-basket__product">
+								<p class="kenost-basket__name" :title="items.name">{{ items.name }}</p>
+								<div class="kenost-basket__info">
+									<span>{{ items.article }}</span>
+									<div class="kenost-basket__info-left">
+										<Counter
+											:key="new Date().getMilliseconds() + items.id_remain"
+											@ElemCount="ElemCount"
+											:item="product"
+											:mini="true"
+											:min="1"
+											:max="items?.remains"
+											:value="product?.count"
+											:id="items?.id_remain"
+											:store_id="store.id"
+										/>
+										<b>{{ (product?.cost).toLocaleString("ru") }} ₽</b>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -255,10 +255,10 @@ export default {
 			//   )
 		},
 		ElemComplectCount(object) {
-			console.log(object);
 			if (object.value > Number(object.max)) {
 				this.modal_remain = true;
 			} else {
+				console.log(object);
 				this.$emit("catalogUpdate");
 				const data = {
 					action: "basket/update",
@@ -289,6 +289,7 @@ export default {
 					id_remain: object.id,
 					value: object.value,
 					store_id: object.store_id,
+					actions: object.item.actions_ids
 				};
 				this.busket_from_api(data).then((response) => {
 					const datainfo = {
@@ -348,7 +349,7 @@ export default {
 	},
 	mounted() {
 		const data = { action: "basket/get", id: router.currentRoute._value.params.id };
-		this.busket_from_api(data).then((this.basket = this.optbasket));
+		this.busket_from_api(data)
 	},
 	components: {
 		Counter,

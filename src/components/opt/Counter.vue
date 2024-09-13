@@ -48,6 +48,10 @@ export default {
     mini: {
       type: Boolean,
       default: false
+    },
+    item: {
+      type: Object,
+      default: {}
     }
   },
   data () {
@@ -70,7 +74,8 @@ export default {
         id: this.id,
         store_id: this.store_id,
         max: this.d_max,
-        index: this.index
+        index: this.index,
+        item: this.item
       }
       this.$emit('ElemCount', data)
     },
@@ -83,7 +88,8 @@ export default {
         id: this.id,
         store_id: this.store_id,
         max: this.d_max,
-        index: this.index
+        index: this.index,
+        item: this.item
       }
       this.$emit('ElemCount', data)
     },
@@ -93,7 +99,8 @@ export default {
         id: this.id,
         store_id: this.store_id,
         max: this.d_max,
-        index: this.index
+        index: this.index,
+        item: this.item
       }
       this.$emit('ElemCount', data)
     }

@@ -5098,6 +5098,12 @@ button.std-icon__wrapper {
 	}
 }
 
+.kenost-product-basket + .kenost-product-basket{
+	padding-top: 8px;
+    margin-top: 8px;
+    border-top: 1px solid #e2e2e2;
+}
+
 .event-none {
 	pointer-events: none;
 }
