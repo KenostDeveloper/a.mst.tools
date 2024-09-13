@@ -23,8 +23,6 @@
 						v-model="citiesDates[item.value]"
 						showIcon
 						id="calendar-24h"
-						showTime
-						hourFormat="24"
 					/>
 				</div>
 			</li>

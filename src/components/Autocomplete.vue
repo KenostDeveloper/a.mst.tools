@@ -283,7 +283,7 @@ export default {
 
 		&.active {
 			max-height: 200px;
-			padding-top: 12px;
+			padding-top: 0;
 		}
 	}
 

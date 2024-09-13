@@ -244,15 +244,15 @@ export default {
 			},
 			filters: {
 				name: {
-					name: "Название, бренд или артикул",
-					placeholder: "Название, бренд или артикул",
+					name: "Наименование",
+					placeholder: "Наименование",
 					type: "text",
 				},
 			},
 			filters_complects: {
 				name: {
-					name: "Название, бренд или артикул",
-					placeholder: "Название, бренд или артикул",
+					name: "Наименование",
+					placeholder: "Наименование",
 					type: "text",
 				},
 			},

@@ -70,18 +70,15 @@ export default {
     pagination_offset: {
       type: Number,
       default: 0
-    },
-    page: {
-      type: Number,
-      default: 1
     }
   },
   data () {
     return {
+      page: 1,
       filters: {
         name: {
-          name: 'Название, бренд или артикул',
-          placeholder: 'Название, бренд или артикул',
+          name: 'Наименование',
+          placeholder: 'Наименование',
           type: 'text'
         }
       },

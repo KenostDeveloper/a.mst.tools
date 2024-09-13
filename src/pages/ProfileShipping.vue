@@ -63,8 +63,8 @@
 					</div>
 				</div>
 
-				<!-- <v-table
-					class="std-shipping__filters"
+				<v-table
+					class="std-table__wrapper"
 					:filters="this.filters"
 					:items_data="shipping.shipment"
 					:total="shipping.total"
@@ -86,8 +86,8 @@
 							
 						</div>
 					</template>
-				</v-table> -->
-
+				</v-table>
+				<!--
 				<div class="std-table__wrapper">
 					<table class="std-table">
 						<thead class="std-table__head">
@@ -97,9 +97,8 @@
 								<th class="std-table__hcol">Дата</th>
 								<th class="std-table__hcol">Дата окончания<br />приема заказов</th>
 								<th class="std-table__hcol">Город</th>
-								<th class="std-table__hcol">Объем товарво, кг</th>
+								<th class="std-table__hcol">Объем товаров, кг</th>
 								<th class="std-table__hcol">Кол-во товаров, шт</th>
-								<th class="std-table__hcol">Статус</th>
 							</tr>
 							<tr v-if="this.windowWidth <= 480" class="std-table__row">
 								<th class="std-table__hcol">Отгрузка</th>
@@ -132,7 +131,6 @@
 								<td class="std-table__col">{{ item.city_name }}</td>
 								<td class="std-table__col">{{ item.weight }}</td>
 								<td class="std-table__col">{{ item.count }}</td>
-								<td class="std-table__col">{{ item.status_name }}</td>
 							</tr>
 							<tr
 								v-if="this.windowWidth <= 480"
@@ -153,12 +151,10 @@
 										})
 									}}
 								</td>
-								<td class="std-table__col">{{ item.status_name }}</td>
 							</tr>
 						</tbody>
 					</table>
-					<!-- {{ shipping.shipment }} -->
-				</div>
+				</div>-->
 			</div>
 
 			<Dialog
@@ -1020,10 +1016,21 @@ export default {
 					label: "Кол-во товаров, шт",
 					type: "text",
 				},
-				status: {
-					label: "Статус",
-					type: "status",
-				},
+        actions: {
+          label: 'Действия',
+          type: 'actions',
+          sort: false,
+          available: {
+            edit: {
+              icon: 'pi pi-pencil',
+              label: 'Редактировать'
+            },
+            delete: {
+              icon: 'pi pi-trash',
+              label: 'Удалить'
+            }
+          }
+        }
 			},
 			filters: {
 				region: {
@@ -1037,15 +1044,7 @@ export default {
 					placeholder: "Выберите даты",
 					range: "all",
 					type: "range",
-				},
-				status: {
-					name: "Статус",
-					type: "dropdown",
-					optionLabel: "name",
-					optionValue: "id",
-					placeholder: "Статус",
-					values: this.shipping_statuses,
-				},
+				}
 			},
 			attributes: [
 				{
