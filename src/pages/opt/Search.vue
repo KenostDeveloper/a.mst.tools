@@ -115,6 +115,7 @@ export default {
       )
     },
     updatePage (order_id) {
+      this.page = 1
 			this.order_id = order_id
       this.loading = true
       this.get_opt_catalog_from_api().then(

@@ -188,6 +188,7 @@ export default {
 		},
 		updatePage(order_id) {
 			this.order_id = order_id
+			this.page = 1
 			this.loading = true;
 			this.get_opt_catalog_from_api().then((this.opt_catalog = this.optcatalog));
 			this.get_opt_vendors_from_api().then((this.opt_vendors = this.optvendors));
@@ -203,7 +204,6 @@ export default {
 			}
 		},
 		catalogUpdate() {
-			console.log("cart update");
 			this.get_opt_products_from_api({
 				page: this.page,
 				perpage: this.perpage,
