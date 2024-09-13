@@ -1,6 +1,7 @@
 <template>
-	<Loading v-if="this.loading_page" />
-	<div v-else>
+	<div class="std-display-contents">
+		<ConfirmDialog/>
+		<Toast />
 		<div
 			class="not-warehouse"
 			v-if="this.organozation.warehouse == 0 && this.organozation.vendor == 0"
@@ -80,6 +81,8 @@
 					@paginate="paginate"
 					@clickElem="clickElem"
 					@checkElem="checkElem"
+					@editElem="editShipping"
+					@deleteElem="deleteShipping"
 				>
 					<template v-slot:button>
 						<div>
@@ -184,7 +187,7 @@
 		</div> -->
 					<div class="shopping-kenost std-shipping-create">
 						<div class="std-display-contents hidden-tablet-l">
-							<p class="shopping-kenost__b std-dropdown__title">Дата и время</p>
+							<p class="shopping-kenost__b std-dropdown__title">Дата</p>
 							<div class="dart-alert dart-alert-info">
 								Если Вы выберите повторение отгрузки, то смещение дат относительно
 								самой отгрузки и датой окончания приемки заказов будет выставлено
@@ -192,23 +195,19 @@
 							</div>
 							<div class="shopping-kenost__dates">
 								<div class="shopping-kenost__row">
-									<p class="k-mini-text">Дата и время отгрузки</p>
+									<p class="k-mini-text">Дата отгрузки</p>
 									<CalendarVue
 										showIcon
 										id="calendar-24h"
 										v-model="form.dateStart"
-										showTime
-										hourFormat="24"
 									/>
 								</div>
 								<div class="shopping-kenost__row">
-									<p class="k-mini-text">Дата и время окончания приема заказов</p>
+									<p class="k-mini-text">Дата окончания приема заказов</p>
 									<CalendarVue
 										showIcon
 										id="calendar-24h"
 										v-model="form.dateEnd"
-										showTime
-										hourFormat="24"
 									/>
 								</div>
 							</div>
@@ -606,12 +605,12 @@
 						<div class="shopping-kenost__button">
 							<div
 								class="router-link-active dart-btn dart-btn-secondary btn-padding"
-								@click="this.showShip = false"
+								@click="() => {this.formReset(); this.showShip = false}"
 							>
 								Отменить
 							</div>
-							<button type="submit" class="dart-btn dart-btn-primary btn-padding">
-								Сохранить
+							<button type="submit" class="dart-btn dart-btn-primary btn-padding" :disabled="this.form.loading">
+								<i v-if="this.form.loading" class="pi pi-spin pi-spinner" style="font-size: 14px"></i> Сохранить
 							</button>
 						</div>
 					</div>
@@ -802,6 +801,8 @@ import router from "../router";
 // import AutoComplete from "primevue/autocomplete";
 import Dropdown from "primevue/dropdown";
 import MultiSelect from "primevue/multiselect";
+import ConfirmDialog from 'primevue/confirmdialog'
+import Toast from 'primevue/toast'
 import { Calendar, DatePicker } from "v-calendar";
 import CalendarVue from "primevue/calendar";
 // import customModal from '@/components/popup/CustomModal'
@@ -988,7 +989,7 @@ export default {
 					checked: false,
 					type: "editmode",
 				},
-				ship_id: {
+				id: {
 					label: "Номер отгрузки",
 					type: "text",
 				},
@@ -1004,7 +1005,7 @@ export default {
 					label: "Дата окончания приема заказов",
 					type: "clickevent",
 				},
-				city_name: {
+				city: {
 					label: "Город",
 					type: "text",
 				},
@@ -1033,12 +1034,6 @@ export default {
         }
 			},
 			filters: {
-				region: {
-					name: "Регион",
-					placeholder: "Выберите регион",
-					type: "tree",
-					values: this.getregions,
-				},
 				range: {
 					name: "Временной промежуток",
 					placeholder: "Выберите даты",
@@ -1067,6 +1062,7 @@ export default {
 			"unset_ship_data",
 			"org_get_stores_from_api",
 			"org_get_from_api",
+			"unset_shipping"
 		]),
 		...mapMutations(["SET_SHIPPING_CHECK", "SET_SHIPPING_CHECK_ONE"]),
 		// deletePunkt(index) {
@@ -1116,16 +1112,6 @@ export default {
 				return citiesDates[city1.value] - citiesDates[city2.value];
 			});
 		},
-		// searchCity(event) {
-		// 	this.$load(async () => {
-		// 		const data = await this.$api.getCities.get({
-		// 			filter: event.query,
-		// 			cities: this.form.selectedCities,
-		// 			id: router.currentRoute._value.params.id,
-		// 		});
-		// 		this.form.filteredCities = data.data.data.cities;
-		// 	});
-		// },
 		async formSubmit(event) {
 			// const result = await this.v$.$validate()
 			const result = true;
@@ -1133,6 +1119,8 @@ export default {
 				console.log(result);
 			} else {
 				this.$load(async () => {
+					this.form.loading = true
+					this.unset_shipping()
 					let data = this.form;
 					data.dateStart = data.dateStart.toDateString();
 					data.dateEnd = data.dateEnd.toDateString();
@@ -1145,11 +1133,10 @@ export default {
 						data: data,
 					});
 					await this.get_shipping_from_api({ filter: [] });
-					this.attributes.push(this.shipping.dates);
-					// this.attributes.pop()
-					// this.attributes.push(this.shipping.dates)
-					this.showShip = false;
-					this.formReset();
+					this.attributes.push(this.shipping.dates)
+					this.form.loading = false
+					this.formReset()
+					this.showShip = false										
 				});
 			}
 		},
@@ -1164,6 +1151,59 @@ export default {
 			this.modal.store_date = data.date;
 			this.showShipModal = true;
 		},
+		editShipping(data){
+			console.log(data)
+			const timing = JSON.parse(data.timing)
+			this.form.timeSelected.repeater = timing.repeater;
+			this.form.timeSelected.weeks = timing.weeks;
+			this.form.timeSelected.days = timing.days;
+			this.form.timeSelected.range = timing.range;
+			this.form.selectedStores = null;
+			this.form.selectedCities = JSON.parse(data.properties);
+			for (let i = 0; i < this.form.selectedCities.length; i++) {
+				var sparts = this.form.selectedCities[i].date.date.split(' ')
+				var parts = sparts[0].split('-')
+				this.form.citiesDates[this.form.selectedCities[i].value] = new Date(parts[0], parts[1] - 1, parts[2])
+			}
+			this.form.store_id = data.warehouse_id;
+			this.form.dateStart = new Date(data.date_from);
+			var parts = data.date_order_end.split('.')			
+			this.form.dateEnd = new Date(parts[2], parts[1] - 1, parts[0])
+			this.showShip = true		
+		},
+		deleteShipping(data){
+			this.$confirm.require({
+        message: 'Вы уверены, что хотите удалить отгрузку ID ' + data.id + '?',
+        header: 'Подтверждение удаления',
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+          this.loading = true
+					this.unset_shipping()
+					this.$load(async () => {
+						await this.set_shipping_to_api({
+							action: "delete",
+							id: router.currentRoute._value.params.id,
+							shipping: data,
+						})
+							.then((result) => {
+								this.$toast.add({ severity: 'success', summary: 'Отгрузка удалена', detail: 'Удаление отгрузки ID ' + data.id + ' произошло успешно!', life: 3000 })
+								this.get_shipping_from_api(data).then(
+									(result) => {
+										
+									}
+								);
+							})
+							.catch((result) => {
+								console.log(result)
+							})					
+					})
+					this.loading = false
+        },
+        reject: () => {
+          this.$toast.add({ severity: 'error', summary: 'Удаление отгрузки', detail: 'Удаление отгрузки отклонено', life: 3000 })
+        }
+      })
+		},
 		closeShipModal() {
 			this.modal.store_name = "";
 			this.modal.store_date = "";
@@ -1175,7 +1215,9 @@ export default {
 			this.form.timeSelected.days = null;
 			this.form.timeSelected.range = null;
 			this.form.selectedStores = null;
-			this.form.selectedCities = null;
+			this.form.selectedCities = [];
+			this.form.citiesDates = {};
+			this.form.store_id = null;
 			this.form.dateStart = new Date();
 			this.form.dateEnd = new Date();
 		},
@@ -1264,11 +1306,6 @@ export default {
 			this.attributes.push(this.shipping.dates);
 		});
 		this.$load(async () => {
-			const data = await this.$api.getStores.get({
-				id: router.currentRoute._value.params.id,
-			});
-			this.form.filteredStores = data.data.data.stores;
-			this.filters.store.values = data.data.data.stores;
 			const cities = await this.$api.getCities.get({
 				id: router.currentRoute._value.params.id,
 			});
@@ -1278,14 +1315,8 @@ export default {
 			action: "get/stores",
 			id: this.$route.params.id,
 		});
-		this.get_regions_from_api()
-			.then
-			// this.filters.region.values = this.getregions
-			();
 		this.get_shipping_statuses()
-			.then
-			// this.filters.status.values = this.shipping_statuses
-			();
+			.then();
 	},
 	components: {
 		Dropdown,
@@ -1298,16 +1329,17 @@ export default {
 		Dialog,
 		CalendarVue,
 		Loading,
+		ConfirmDialog,
 		// Checkbox,
 		// Swiper,
 		// SwiperSlide
+		Toast,
 		Autocomplete,
 		ShoppingCities,
 	},
 	computed: {
 		...mapGetters([
 			"shipping",
-			"getregions",
 			"shipping_statuses",
 			"getshipdata",
 			"org_stores",
@@ -1324,30 +1356,19 @@ export default {
 					range: { required },
 					repeater: { required },
 				},
-				selectedStores: { required },
 				selectedCities: { required },
 			},
 		};
 	},
 	watch: {
-		getregions: function (newVal, oldVal) {
-			this.filters.region.values = newVal;
-		},
-		shipping_statuses: function (newVal, oldVal) {
-			this.filters.status.values = newVal;
-		},
 		shipping: function (newVal, oldVal) {
 			this.shipping_values = newVal;
 		},
 		org_stores: function (newVal, oldVal) {
-			// this.stores = newVal
-			console.log(newVal);
 			this.stores = [];
 			for (let i = 0; i < newVal.items.length; i++) {
 				this.stores.push({ label: newVal.items[i].name, value: newVal.items[i].id });
 			}
-			console.log(this.stores);
-			// { name: 'New York', code: 'NY' },
 		},
 		"form.citiesDates": {
 			handler(newVal, oldVal) {

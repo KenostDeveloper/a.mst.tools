@@ -28,6 +28,9 @@ export default {
           }
         })
     },
+    unset_shipping({ commit }){
+      commit('UNSET_SHIPPING')
+    },
     async set_shipping_to_api ({ commit }, data) {
       return Axios('/rest/front_getshipping', {
         method: 'POST',
@@ -48,6 +51,9 @@ export default {
     }
   },
   mutations: {
+    UNSET_SHIPPING: (state) => {
+      state.shipping = []
+    },
     SET_SHIPPING_TO_VUEX: (state, data) => {
       if (typeof data.data.dates !== 'undefined' && data.data.dates.dates !== null) {
         if (typeof data.data.dates.dates !== 'undefined' && data.data.dates.dates !== null) {
