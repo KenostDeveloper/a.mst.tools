@@ -1133,6 +1133,7 @@ export default {
 		return { v$: useVuelidate() };
 	},
 	validations() {
+		// TODO валидация формы
 		return {
 			form: {
 				timeSelected: {

@@ -136,6 +136,22 @@
 				</button>
 
 				<div class="std-catalog__nav std-catalog__nav--secondary">
+					<router-link
+						v-if="this.organizationsOrCategories === 'organizations'"
+						:to="{
+							name: 'org_opt_waregouse_category',
+							params: {
+								id: this.$route.params.id,
+								warehouse_id: this.catalogWarehouseParent,
+								warehouse_cat_id: 0,
+							},
+						}"
+						class="std-catalog__link"
+						@click="toggleCatalogVisibilityAd()"
+					>
+						<span class="std-tab-item__text">Все товары</span>
+					</router-link>
+
 					<template
 						v-if="this.organizationsOrCategories === 'organizations'"
 						v-for="catItem in this.actualCatalog.children"
@@ -396,7 +412,7 @@
 			<img src="/images/icons/menu.svg" alt="" class="hidden-tablet-l" />
 			<img src="/images/icons/arrow-rounded.svg" alt="" class="visible-tablet-l" />
 		</button>
-<!-- 
+		<!-- 
 		<button class="std-nav__address">
 			<img class="std-nav__address-icon" src="/images/icons/map_marker.svg" />
 			<span class="std-nav__address-text"
