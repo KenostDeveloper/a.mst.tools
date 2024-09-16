@@ -172,7 +172,7 @@
 								name: 'org_opt_waregouse_category',
 								params: {
 									id: this.$route.params.id,
-									warehouse_id: this.actualCatalog.id,
+									warehouse_id: this.catalogWarehouseParent,
 									warehouse_cat_id: catItem.id,
 								},
 							}"
