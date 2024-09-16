@@ -93,9 +93,10 @@
 						</router-link>
 					</div> -->
 
+					{{ console.log(this.catalog_warehouse, this.catalog) }}
 					<div
 						v-if="this.organizationsOrCategories === 'organizations'"
-						v-for="level1 in this.organizations"
+						v-for="level1 in this.catalog_warehouse"
 						:key="level1"
 						@mouseenter="setActualCatalog(level1)"
 						class="std-catalog__tab-item std-tab-item std-tab-item--alt"
@@ -103,7 +104,7 @@
 						<div class="std-tab-item__img-container">
 							<img :src="this.getImageSrc(level1.image)" />
 						</div>
-						<span class="std-tab-item__text">{{ level1.name }}</span>
+						<span class="std-tab-item__text">{{ level1.pagetitle }}</span>
 						<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
 					</div>
 					<div
@@ -593,10 +594,21 @@ export default {
 			this.actualCatalog = catalog;
 		},
 		setPrevCatalog() {
-			this.actualCatalog = find(
-				this.catalog,
-				(item) => item.id === this.actualCatalog.parent
-			);
+			if (this.organizationsOrCategories === "organizations") {
+				this.actualCatalog = find(
+					this.catalog_warehouse,
+					(item) => item.id === this.actualCatalog.parent
+				);
+				return;
+			}
+
+			if (this.organizationsOrCategories === "categories") {
+				this.actualCatalog = find(
+					this.catalog,
+					(item) => item.id === this.actualCatalog.parent
+				);
+				return;
+			}
 		},
 	},
 	mounted() {
