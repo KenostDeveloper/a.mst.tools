@@ -1136,7 +1136,9 @@ export default {
 		return {
 			form: {
 				timeSelected: {
-					range: { required },
+					range: {
+						required,
+					},
 					repeater: { required }
 				},
 				store_id: { required },

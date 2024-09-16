@@ -139,11 +139,10 @@
 					<router-link
 						v-if="this.organizationsOrCategories === 'organizations'"
 						:to="{
-							name: 'org_opt_waregouse_category',
+							name: 'purchases_catalog_warehouse',
 							params: {
 								id: this.$route.params.id,
 								warehouse_id: this.catalogWarehouseParent,
-								warehouse_cat_id: 0,
 							},
 						}"
 						class="std-catalog__link"
