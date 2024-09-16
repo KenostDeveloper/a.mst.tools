@@ -52,7 +52,7 @@
                   <td class="k-table__title" @click="openActions(item)"><p>{{item.name}}</p></td>
                   <td class="k-table__busket">
                     <form class="k-table__form" action="" :class="{'basket-true' : item.basket.availability}">
-                      <Counter :key="new Date().getMilliseconds() + item.id" @ElemCount="ElemCount" :min="1" :max="item.remains" :id="item.remain_id" :store_id="items.store_id" :index="index" :value="item.basket.count"/>
+                      <Counter :item="product" :key="new Date().getMilliseconds() + item.id" @ElemCount="ElemCount" :min="1" :max="item.remains" :id="item.remain_id" :store_id="items.store_id" :index="index" :value="item.basket.count"/>
                       <div @click="addBasket(item.remain_id, item.basket.count, items.store_id, index)" class="dart-btn dart-btn-primary"><i class="d_icon d_icon-busket"></i></div>
                     </form>
                   </td>
@@ -134,7 +134,14 @@ export default {
       } else {
       // eslint-disable-next-line vue/no-mutating-props
         this.items.products[object.id].basket.count = object.value
-        const data = { action: 'basket/update', id: router.currentRoute._value.params.id, id_remain: object.id, value: object.value, store_id: object.store_id }
+        const data = {
+          action: 'basket/update',
+          id: router.currentRoute._value.params.id,
+          id_remain: object.id,
+          value: object.value,
+          store_id: object.store_id,
+          actions: object.item.actions_ids
+        }
         this.busket_from_api(data).then()
         this.$emit('updateBasket')
       }
@@ -181,22 +188,31 @@ export default {
       // console.log(obj)
       this.modal_actions = true
     },
-    async updateAction (remainid, storeid, actionid, status) {
-      // Выключаем конфликтные акции
-      const conflicts = this.actions_item.actions.find((action) => action.action_id === actionid)
+    async updateAction (remainid, storeid, action, indexstore, indexaction, conflicts) {
+      // console.log("updateAction", remainid, storeid, action, index)
+      // console.log(this.items.stores[index].actions)
+
+      this.items.stores[indexstore].actions[indexaction].enabled = true
+
       // console.log(conflicts)
-      if (conflicts.conflicts.items[conflicts.action_id]) {
-        if (conflicts.conflicts.items[conflicts.action_id].postponement_conflicts) {
-          for (let i = 0; i < conflicts.conflicts.items[conflicts.action_id].postponement_conflicts.length; i++) {
-            for (let j = 0; j < Object.keys(this.actions_item.actions).length; j++) {
-              if (conflicts.conflicts.items[conflicts.action_id].postponement_conflicts[i] === this.actions_item.actions[j].action_id) {
-                if (this.actions_item.actions[j].enabled) {
-                  this.actions_item.actions[j].enabled = false
+      // Выключаем конфликтные акции
+
+      // const conflicts = this.items.stores[indexstore].actions.find((act) => act.action_id === action.action_id)
+      // console.log(conflicts)
+      if (conflicts.items[action.action_id]) {
+        if (conflicts.items[action.action_id]?.postponement_conflicts) {
+          for (let i = 0; i < conflicts.items[action.action_id].postponement_conflicts.length; i++) {
+            for (let j = 0; j < Object.keys(this.this.items.stores[indexstore].actions).length; j++) {
+              if (conflicts.items[action.action_id].postponement_conflicts[i] === this.items.stores[indexstore].actions[j].action_id) {
+                if (this.this.items.stores[indexstore].actions[j].enabled) {
+                  // console.log('this.items.stores[indexstore].actions', this.this.items.stores[indexstore].actions[j])
+                  this.items.stores[indexstore].actions[j].enabled = false
+                  //this.items.stores[indexstore].actions[indexaction].enabled = false
                   const data = {
                     action: 'action/user/off/on',
-                    remain_id: this.actions_item.actions[j].remain_id ? this.actions_item.actions[j].remain_id : conflicts.remain_id,
-                    store_id: this.actions_item.actions[j].store_id ? this.actions_item.actions[j].store_id : conflicts.store_id,
-                    action_id: this.actions_item.actions[j].action_id,
+                    remain_id: this.items.stores[indexstore].actions[j].remain_id ? this.items.stores[indexstore].actions[j].remain_id : conflicts.remain_id,
+                    store_id: this.items.stores[indexstore].actions[j].store_id ? this.items.stores[indexstore].actions[j].store_id : conflicts.store_id,
+                    action_id: this.items.stores[indexstore].actions[j].action_id,
                     status: false,
                     test: 'true2'
                   }
@@ -207,17 +223,20 @@ export default {
           }
         }
 
-        if (conflicts.conflicts.items[conflicts.action_id].sales_conflicts) {
-          for (let i = 0; i < conflicts.conflicts.items[conflicts.action_id].sales_conflicts.length; i++) {
-            for (let j = 0; j < Object.keys(this.actions_item.actions).length; j++) {
-              if (conflicts.conflicts.items[conflicts.action_id].sales_conflicts[i] === this.actions_item.actions[j].action_id) {
-                if (this.actions_item.actions[j].enabled) {
-                  this.actions_item.actions[j].enabled = false
+        if (conflicts.items[action.action_id].sales_conflicts) {
+          for (let i = 0; i < conflicts.items[action.action_id].sales_conflicts.length; i++) {
+            for (let j = 0; j < Object.keys(this.items.stores[indexstore].actions).length; j++) {
+              if (conflicts.items[action.action_id].sales_conflicts[i] === this.items.stores[indexstore].actions[j].action_id) {
+                if (this.items.stores[indexstore].actions[j].enabled) {
+                  // console.log('this.items.stores[indexstore].actions', this.items.stores[indexstore].actions[j])
+                  this.items.stores[indexstore].actions[j].enabled = false
+                  //this.items.stores[indexstore].actions[indexaction].enabled = false
+                  //console.log(this.items.stores[indexstore].actions[indexaction])
                   const data = {
                     action: 'action/user/off/on',
-                    remain_id: this.actions_item.actions[j].remain_id ? this.actions_item.actions[j].remain_id : conflicts.remain_id,
-                    store_id: this.actions_item.actions[j].store_id ? this.actions_item.actions[j].store_id : conflicts.store_id,
-                    action_id: this.actions_item.actions[j].action_id,
+                    remain_id: this.items.stores[indexstore].actions[j].remain_id ? this.items.stores[indexstore].actions[j].remain_id : conflicts.remain_id,
+                    store_id: this.items.stores[indexstore].actions[j].store_id ? this.items.stores[indexstore].actions[j].store_id : conflicts.store_id,
+                    action_id: this.items.stores[indexstore].actions[j].action_id,
                     status: false,
                     test: 'true2'
                   }
@@ -232,8 +251,8 @@ export default {
         action: 'action/user/off/on',
         remain_id: remainid,
         store_id: storeid,
-        action_id: actionid,
-        status: !status,
+        action_id: action.action_id,
+        status: action.enabled,
         test: 'true3'
       }
       this.opt_api(data).then(() => {
@@ -241,10 +260,12 @@ export default {
           action: 'get/info/product',
           store_id: storeid,
           remain_id: remainid,
-          id: router.currentRoute._value.params.id
+          id: router.currentRoute._value.params.id,
+          count: this.items.stores[indexstore].basket.count
         }
 
         this.opt_api(dataUpdate).then((response) => {
+          // console.log("response", response)
           const data = {
             remain_id: remainid,
             store_id: storeid,
@@ -253,7 +274,7 @@ export default {
           this.$store.commit('SET_OPT_PRODUCT_TO_VUEX', data)
         })
       })
-    }
+    },
   },
   mounted () {
   },

@@ -452,10 +452,10 @@ export default {
               if (state.optproducts.items[i].stores[j].store_id === data.store_id) {
                 for (let h = 0; h < Object.keys(state.optproducts.items[i].stores[j].actions).length; h++) {
                   //console.log(state.optproducts.items[i].stores[j])
+                  
                   state.optproducts.items[i].stores[j].price = data.data.price
                   state.optproducts.items[i].stores[j].delay = data.data.delay
-                  // state.optproducts.items[i].stores[j].actions[h].conflicts = data.data.conflicts
-                  // state.optproducts.items[i].stores[j].action = data.data.action
+                  state.optproducts.items[i].stores[j].basket = data.data.basket
                 }
               }
             }
