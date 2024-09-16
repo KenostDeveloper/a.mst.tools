@@ -1,9 +1,205 @@
 <template>
 	<div :class="`navmain std-nav ${catalogIsOpened ? 'std-nav--active' : ''}`">
-		
 		<!-- Каталог -->
-		<div :class="`std-catalog ${catalogIsOpened ? 'std-catalog--active' : ''}`">
-			<hr class="std-nav__line" />
+		<div
+			:class="`std-catalog ${
+				catalogIsOpened ? 'std-catalog--active' : ''
+			} hidden-desktop-s-minus`"
+		>
+			<!-- <hr class="std-nav__line" /> -->
+
+			<div class="std-catalog__primary-tabs-container">
+				<div class="std-catalog__tabs">
+					<button
+						:class="`std-catalog__tab-item std-tab-item ${
+							this.organizationsOrCategories === 'organizations'
+								? 'std-tab-item--active'
+								: ''
+						}`"
+						@click="setOrganizationsOrCategories('organizations')"
+					>
+						<div class="std-tab-item__img-container">
+							<img src="../../assets/images/icons/org-catalog.svg" alt="" />
+						</div>
+						<span class="std-tab-item__text">Каталоги поставщиков</span>
+					</button>
+					<button
+						:class="`std-catalog__tab-item std-tab-item ${
+							this.organizationsOrCategories === 'categories'
+								? 'std-tab-item--active'
+								: ''
+						}`"
+						@click="setOrganizationsOrCategories('categories')"
+					>
+						<div class="std-tab-item__img-container">
+							<img src="../../assets/images/icons/category.svg" alt="" />
+						</div>
+						<span class="std-tab-item__text">Категории</span>
+					</button>
+				</div>
+
+				<hr class="std-catalog__line" />
+
+				<div class="std-catalog__nav std-catalog__nav--primary">
+					<!-- <div v-if="this.organizationsOrCategories === 'organizations'">
+						<router-link
+							:to="{
+								name: 'purchases_catalog_warehouse',
+								params: { id: this.$route.params.id, warehouse_id: level1.id },
+							}"
+							:key="level1"
+							@mouseenter="
+								() => {
+									this.actualNav.secondLevel = level1.children;
+									this.actualNav.thirdLevel = [];
+									this.actualNav.warehouse_id = level1.id;
+									this.actualImageSrc = '';
+								}
+							"
+							@click="toggleCatalogVisibilityAd()"
+							class="std-catalog__tab-item std-tab-item std-tab-item--alt"
+							v-for="level1 in this.catalog_warehouse"
+						>
+							<div class="std-tab-item__img-container">
+								<img :src="this.getImageSrc(level1.image)" />
+							</div>
+							<span class="std-tab-item__text">{{ level1.pagetitle }}</span>
+							<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
+						</router-link>
+					</div>
+					<div v-else>
+						<router-link
+							:to="{
+								name: 'purchases_catalog',
+								params: { id: this.$route.params.id, category_id: level1.id },
+							}"
+							:key="level1"
+							@mouseenter="
+								() => {
+									this.actualNav.secondLevel = level1.children;
+									this.actualNav.thirdLevel = [];
+									this.actualImageSrc = '';
+								}
+							"
+							@click="toggleCatalogVisibilityAd()"
+							class="std-catalog__tab-item std-tab-item std-tab-item--alt"
+							v-for="level1 in this.catalog"
+						>
+							<div class="std-tab-item__img-container">
+								<img :src="this.getImageSrc(level1.menu_image)" />
+							</div>
+							<span class="std-tab-item__text">{{ level1.pagetitle }}</span>
+							<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
+						</router-link>
+					</div> -->
+
+					<div
+						v-if="this.organizationsOrCategories === 'organizations'"
+						v-for="level1 in this.organizations"
+						:key="level1"
+						@mouseenter="setActualCatalog(level1)"
+						class="std-catalog__tab-item std-tab-item std-tab-item--alt"
+					>
+						<div class="std-tab-item__img-container">
+							<img :src="this.getImageSrc(level1.image)" />
+						</div>
+						<span class="std-tab-item__text">{{ level1.name }}</span>
+						<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
+					</div>
+					<div
+						v-if="this.organizationsOrCategories === 'categories'"
+						v-for="level1 in this.catalog"
+						:key="level1"
+						@mouseenter="setActualCatalog(level1)"
+						class="std-catalog__tab-item std-tab-item std-tab-item--alt"
+					>
+						<div class="std-tab-item__img-container">
+							<img :src="this.getImageSrc(level1.menu_image)" />
+						</div>
+						<span class="std-tab-item__text">{{ level1.pagetitle }}</span>
+						<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
+					</div>
+				</div>
+			</div>
+
+			<!-- <hr class="std-catalog__line" /> -->
+
+			<div v-if="this.actualCatalog.children" class="std-catalog__secondary-tabs-container">
+				<button class="std-catalog__back-button" @click="setPrevCatalog">
+					<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
+					<span class="std-catalog__tab-title">{{ this.actualCatalog.pagetitle }}</span>
+				</button>
+
+				<div class="std-catalog__nav std-catalog__nav--secondary">
+					<template
+						v-if="this.organizationsOrCategories === 'organizations'"
+						v-for="catItem in this.actualCatalog.children"
+						:key="catItem"
+					>
+						<div
+							v-if="catItem.children"
+							class="std-catalog__tab-item std-tab-item std-tab-item--alt2"
+							@click.stop="setActualCatalog(catItem)"
+						>
+							<span class="std-tab-item__text">{{ catItem.pagetitle }}</span>
+							<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
+						</div>
+
+						<router-link
+							v-else
+							:to="{
+								name: 'org_opt_waregouse_category',
+								params: {
+									id: this.$route.params.id,
+									warehouse_id: this.actualCatalog.id,
+									warehouse_cat_id: catItem.id,
+								},
+							}"
+							class="std-catalog__tab-item std-tab-item std-tab-item--alt2"
+							@click="toggleCatalogVisibilityAd()"
+						>
+							<span class="std-tab-item__text">{{ catItem.pagetitle }}</span>
+						</router-link>
+					</template>
+					<template
+						v-if="this.organizationsOrCategories === 'categories'"
+						v-for="catItem in this.actualCatalog.children"
+						:key="catItem"
+					>
+						<div
+							v-if="catItem.children"
+							class="std-catalog__tab-item std-tab-item std-tab-item--alt2"
+							@click.stop="setActualCatalog(catItem)"
+						>
+							<span class="std-tab-item__text">{{ catItem.pagetitle }}</span>
+							<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
+						</div>
+						<router-link
+							v-else
+							:to="{
+								name: 'purchases_catalog',
+								params: {
+									id: this.$route.params.id,
+									category_id: catItem.id,
+								},
+							}"
+							class="std-catalog__tab-item std-tab-item std-tab-item--alt2"
+							@click="toggleCatalogVisibilityAd()"
+						>
+							<span class="std-tab-item__text">{{ catItem.pagetitle }}</span>
+						</router-link>
+					</template>
+				</div>
+			</div>
+		</div>
+
+		<!-- Каталог -->
+		<div
+			:class="`std-catalog ${
+				catalogIsOpened ? 'std-catalog--active' : ''
+			} visible-desktop-s-minus`"
+		>
+			<!-- <hr class="std-nav__line" /> -->
 
 			<div class="std-catalog__tabs">
 				<button
@@ -37,7 +233,7 @@
 			<hr class="std-catalog__line" />
 
 			<!-- Mobile catalog -->
-			<div class="std-catalog__content visible-desktop-s-minus">
+			<div class="std-catalog__content">
 				<div
 					class="std-catalog__nav std-catalog__nav--primary std-catalog__tabs std-catalo__tabs--vertical"
 				>
@@ -183,169 +379,8 @@
 					</template>
 				</div>
 			</div>
-
-			<!-- Desktop catalog -->
-			<div class="std-catalog__content hidden-desktop-s-minus">
-				<div
-					class="std-catalog__nav std-catalog__nav--primary std-catalog__tabs std-catalog__tabs--vertical"
-				>
-					<div v-if="this.organizationsOrCategories === 'organizations'">
-						<router-link
-							:to="{
-								name: 'purchases_catalog_warehouse',
-								params: { id: this.$route.params.id, warehouse_id: level1.id },
-							}"
-							:key="level1"
-							@mouseenter="
-								() => {
-									this.actualNav.secondLevel = level1.children;
-									this.actualNav.thirdLevel = [];
-									this.actualNav.warehouse_id = level1.id;
-									this.actualImageSrc = '';
-								}
-							"
-							@click="toggleCatalogVisibilityAd()"
-							class="std-catalog__tab-item std-tab-item std-tab-item--alt"
-							v-for="level1 in this.catalog_warehouse"
-						>
-							<div class="std-tab-item__img-container">
-								<img :src="this.getImageSrc(level1.image)" />
-							</div>
-							<span class="std-tab-item__text">{{ level1.pagetitle }}</span>
-							<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
-						</router-link>
-					</div>
-					<div v-else>
-						<router-link
-							:to="{
-								name: 'purchases_catalog',
-								params: { id: this.$route.params.id, category_id: level1.id },
-							}"
-							:key="level1"
-							@mouseenter="
-								() => {
-									this.actualNav.secondLevel = level1.children;
-									this.actualNav.thirdLevel = [];
-									this.actualImageSrc = '';
-								}
-							"
-							@click="toggleCatalogVisibilityAd()"
-							class="std-catalog__tab-item std-tab-item std-tab-item--alt"
-							v-for="level1 in this.catalog"
-						>
-							<div class="std-tab-item__img-container">
-								<img :src="this.getImageSrc(level1.menu_image)" />
-							</div>
-							<span class="std-tab-item__text">{{ level1.pagetitle }}</span>
-							<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
-						</router-link>
-					</div>
-				</div>
-				<div class="std-catalog__nav-wrapper">
-					<div class="std-catalog__nav-container">
-						<div class="std-catalog__nav-inner">
-							<div
-								class="std-catalog__nav std-catalog__nav--secondary std-catalog__tabs std-catalog__tabs--vertical"
-							>
-							<div v-if="this.organizationsOrCategories === 'organizations'">
-								<router-link
-									:to="{
-										name: 'org_opt_waregouse_category',
-										params: {
-											id: this.$route.params.id,
-											warehouse_id: this.actualNav.warehouse_id,
-											warehouse_cat_id: level2.id,
-										},
-									}"
-									:key="level2"
-									@mouseenter="
-										() => {
-											this.actualNav.thirdLevel = level2.children;
-											this.actualImageSrc = level2.menu_image || '';
-										}
-									"
-									@click="toggleCatalogVisibilityAd()"
-									class="std-catalog__tab-item std-tab-item std-tab-item--alt2"
-									v-for="level2 in this.actualNav.secondLevel"
-								>
-									<span class="std-tab-item__text">{{ level2.pagetitle }}</span>
-									<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
-								</router-link>
-							</div>
-							<div v-else>
-								<router-link
-									:to="{
-										name: 'purchases_catalog',
-										params: {
-											id: this.$route.params.id,
-											category_id: level2.id,
-										},
-									}"
-									:key="level2"
-									@mouseenter="
-										() => {
-											this.actualNav.thirdLevel = level2.children;
-											this.actualImageSrc = level2.menu_image || '';
-										}
-									"
-									@click="toggleCatalogVisibilityAd()"
-									class="std-catalog__tab-item std-tab-item std-tab-item--alt2"
-									v-for="level2 in this.actualNav.secondLevel"
-								>
-									<span class="std-tab-item__text">{{ level2.pagetitle }}</span>
-									<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
-								</router-link>
-							</div>
-							</div>
-							<div
-								class="std-catalog__nav std-catalog__nav--thirdy std-catalog__tabs std-catalog__tabs--vertical"
-							>
-								<div v-if="this.organizationsOrCategories === 'organizations'">
-									<router-link
-										:to="{
-											name: 'org_opt_waregouse_category',
-											params: {
-												id: this.$route.params.id,
-												warehouse_id: this.actualNav.warehouse_id,
-												warehouse_cat_id: level3.id,
-											},
-										}"
-										:key="level3"
-										v-for="level3 in this.actualNav.thirdLevel"
-										class="std-catalog__tab-item std-tab-item std-tab-item--none"
-										@mouseenter="this.actualImageSrc = level3.menu_image || ''"
-										@click="toggleCatalogVisibilityAd()"
-									>
-										<span class="std-tab-item__text">{{ level3.pagetitle }}</span>
-										<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
-									</router-link>
-								</div>
-								<div v-else>
-									<router-link
-										:to="{
-											name: 'purchases_catalog',
-											params: {
-												id: this.$route.params.id,
-												category_id: level3?.id,
-											},
-										}"
-										:key="level3"
-										v-for="level3 in this.actualNav.thirdLevel"
-										class="std-catalog__tab-item std-tab-item std-tab-item--none"
-										@mouseenter="this.actualImageSrc = level3.menu_image || ''"
-										@click="toggleCatalogVisibilityAd()"
-									>
-										<span class="std-tab-item__text">{{ level3.pagetitle }}</span>
-										<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
-									</router-link>
-								</div>
-							</div>
-						</div>
-						<img :src="'https://mst.tools/' + this.actualImageSrc" alt="" />
-					</div>
-				</div>
-			</div>
 		</div>
+
 		<button
 			class="std-nav__button std-catalog-button"
 			@click="() => toggleCatalogVisibilityAd(true)"
@@ -355,6 +390,13 @@
 			<!-- <i class="pi pi-angle-down std-catalog-button__icon visible-mobile-l"></i> -->
 			<img src="/images/icons/menu.svg" alt="" class="hidden-tablet-l" />
 			<img src="/images/icons/arrow-rounded.svg" alt="" class="visible-tablet-l" />
+		</button>
+
+		<button class="std-nav__address">
+			<img class="std-nav__address-icon" src="/images/icons/map_marker.svg" />
+			<span class="std-nav__address-text"
+				>Склад доставки: Ростов на Дону, ул. Микухина Каланахлоя, 11 / 7 к 32 ЛИТ 898</span
+			>
 		</button>
 
 		<div
@@ -476,6 +518,7 @@ import { mapActions, mapGetters } from "vuex";
 import router from "../../router";
 import Vendors from "./Vendors.vue";
 import Accordion from "../Accordion.vue";
+import { find } from "lodash";
 
 export default {
 	name: "Nav",
@@ -500,10 +543,7 @@ export default {
 			organizations: [],
 			organizationsOrCategories: "categories",
 			catalogIsOpened: false,
-			actualNav: {
-				secondLevel: [],
-				thirdLevel: [],
-			},
+			actualCatalog: {},
 			actualImageSrc: "",
 		};
 	},
@@ -537,16 +577,26 @@ export default {
 			document.body.style.overflow = this.catalogIsOpened ? "hidden" : "auto";
 		},
 		setOrganizationsOrCategories(state) {
-			this.actualImageSrc = "";
+			if (state !== this.organizationsOrCategories) {
+				this.actualCatalog = {};
+			}
+
 			this.organizationsOrCategories = state;
-			this.actualNav.secondLevel = [];
-			this.actualNav.thirdLevel = [];
 		},
 
 		getImageSrc(src) {
 			// if (!src) return "";
 			// return src.startsWith("https://dev.mst.tools") ? src : "https://dev.mst.tools/" + src;
 			return src;
+		},
+		setActualCatalog(catalog) {
+			this.actualCatalog = catalog;
+		},
+		setPrevCatalog() {
+			this.actualCatalog = find(
+				this.catalog,
+				(item) => item.id === this.actualCatalog.parent
+			);
 		},
 	},
 	mounted() {
