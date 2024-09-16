@@ -16,13 +16,13 @@
     <td>{{ items.total_stores }}</td>
     <td class="hidden-mobile-l"></td>
   </tr>
-  <tr class="kenost-table-background" v-for="(item, index) in items.stores" v-bind:key="item.id" :class="{'active' : this.active || this.is_warehouses || items.total_stores == 1, 'no-active' : !this.active && !this.is_warehouses && items.total_stores > 1, 'bg-white': items.total_stores == 1}">
+  <tr :data-product="item.remain_id" class="kenost-table-background" v-for="(item, index) in items.stores" v-bind:key="item.id" :class="{'active' : this.active || this.is_warehouses || items.total_stores == 1, 'no-active' : !this.active && !this.is_warehouses && items.total_stores > 1, 'bg-white': items.total_stores == 1}">
     <td class="hidden-mobile-l"><i v-if="items.total_stores > 1" class="pi pi-minus"></i></td>
     <td class="k-table__photo hidden-mobile-l"><img class="k-table__image" :src="items.image" alt=""></td>
     <td class="k-table__title"><p>{{item.name}}</p><b>Арт: {{item.article}}</b></td>
     <td class="k-table__busket">
-        <form class="k-table__form" action="" :class="{'basket-true' : item.basket.availability}">
-          <Counter :key="new Date().getMilliseconds() + item.id" @ElemCount="ElemCount" :min="1" :max="item.remains" :id="item.remain_id" :store_id="item.store_id" :index="index" :value="item.basket.count"/>
+        <form class="k-table__form" action="" :class="{'basket-true' : item?.basket?.availability}">
+          <Counter :item="item" :key="new Date().getMilliseconds() + item.id" @ElemCount="ElemCount" :min="1" :max="item.remains" :id="item.remain_id" :store_id="item.store_id" :index="index" :value="item?.basket?.count"/>
           <div @click="addBasket(item.remain_id, item.basket.count, item.store_id, index)" class="dart-btn dart-btn-primary"><i class="d_icon d_icon-busket"></i></div>
         </form>
     </td>
@@ -30,21 +30,21 @@
     <td>
       <div class="table-actions">
         <!-- 'red': action?.conflicts?.items[action.action_id]?.sales_conflicts -->
-        <div class="table-actions__action" :class="{'active': action.enabled, 'red': isConflict(action?.conflicts?.items, item.actions, action.action_id)}" v-for="(action, indexactions) in item.actions" v-bind:key="action.id">
-          <div v-if="action.tags.length > 0" class="table-actions__container" @click="updateAction(item.id == 0? this.action.remain_id : item.remain_id, item.id == 0? this.action.store_id : item.store_id, action, index, indexactions)">
+        <div class="table-actions__action" :class="{'active': action.enabled, 'red': isConflict(item.conflicts.items, item.actions, action.action_id)}" v-for="(action, indexactions) in item.actions" v-bind:key="action.id">
+          <div v-if="action?.tags?.length > 0" class="table-actions__container" @click="updateAction(item.id == 0? this.action.remain_id : item.remain_id, item.id == 0? this.action.store_id : item.store_id, action, index, indexactions, item.conflicts)">
             <div class="table-actions__el" v-for="(tag, indextag) in action.tags" v-bind:key="tag.id">
-              <img v-if="tag.type == 'multiplicity'" :src="action.enabled ? '/images/icons/action/gray/box.svg' : isConflict(action?.conflicts?.items, item.actions, action.action_id) ? '/images/icons/action/red/box.svg' : '/images/icons/action/black/box.svg'" alt="">
+              <img v-if="tag.type == 'multiplicity'" :src="action.enabled ? '/images/icons/action/gray/box.svg' : isConflict(item.conflicts.items, item.actions, action.action_id) ? '/images/icons/action/red/box.svg' : '/images/icons/action/black/box.svg'" alt="">
               <p  v-if="tag.type == 'multiplicity'">{{ tag.value }} шт.</p>
 
-              <img v-if="tag.type == 'gift'" :src="action.enabled ? '/images/icons/action/gray/gift.svg' : isConflict(action?.conflicts?.items, item.actions, action.action_id) ? '/images/icons/action/red/gift.svg' : '/images/icons/action/black/gift.svg'" alt="">
+              <img v-if="tag.type == 'gift'" :src="action.enabled ? '/images/icons/action/gray/gift.svg' : isConflict(item.conflicts.items, item.actions, action.action_id) ? '/images/icons/action/red/gift.svg' : '/images/icons/action/black/gift.svg'" alt="">
 
-              <img v-if="tag.type == 'delay'" :src="action.enabled ? '/images/icons/action/gray/time.svg' : isConflict(action?.conflicts?.items, item.actions, action.action_id) ? '/images/icons/action/red/time.svg' : '/images/icons/action/black/time.svg'" alt="">
+              <img v-if="tag.type == 'delay'" :src="action.enabled ? '/images/icons/action/gray/time.svg' : isConflict(item.conflicts.items, item.actions, action.action_id) ? '/images/icons/action/red/time.svg' : '/images/icons/action/black/time.svg'" alt="">
               <p  v-if="tag.type == 'delay'">От-ка {{ tag.value }} дн.</p>
 
-              <img v-if="tag.type == 'sale'" :src="action.enabled ? '/images/icons/action/gray/sale.svg' : isConflict(action?.conflicts?.items, item.actions, action.action_id) ? '/images/icons/action/red/sale.svg' : '/images/icons/action/black/sale.svg'" alt="">
+              <img v-if="tag.type == 'sale'" :src="action.enabled ? '/images/icons/action/gray/sale.svg' : isConflict(item.conflicts.items, item.actions, action.action_id) ? '/images/icons/action/red/sale.svg' : '/images/icons/action/black/sale.svg'" alt="">
               <p  v-if="tag.type == 'sale'">Скидка {{ Number(tag.value).toFixed(0) }}%</p>
 
-              <img v-if="tag.type == 'free_delivery'" :src="action.enabled ? '/images/icons/action/gray/delivery.svg' : isConflict(action?.conflicts?.items, item.actions, action.action_id) ? '/images/icons/action/red/delivery.svg' : '/images/icons/action/black/delivery.svg'" alt="">
+              <img v-if="tag.type == 'free_delivery'" :src="action.enabled ? '/images/icons/action/gray/delivery.svg' : isConflict(item.conflicts.items, item.actions, action.action_id) ? '/images/icons/action/red/delivery.svg' : '/images/icons/action/black/delivery.svg'" alt="">
 
               <!-- TODO: Комплекты -->
             </div>
@@ -54,8 +54,8 @@
               <p>Компл-т</p>
             </div> -->
           </div>
-          <div v-if="action.tags.length > 0" class="table-actions__help">
-            <p :class="{'active': action.enabled, 'red': isConflict(action?.conflicts?.items, item.actions, action.action_id)}">?</p>
+          <div v-if="action?.tags?.length > 0" class="table-actions__help">
+            <p :class="{'active': action.enabled, 'red': isConflict(item.conflicts.items, item.actions, action.action_id)}">?</p>
             <div class="table-actions__content">
               <div class="table-actions__modal">
                 <div class="table-actions__modal-elems">
@@ -98,15 +98,16 @@
     <td v-if="item.old_price > 0 && item.old_price != item.price">{{Math.round(item.old_price).toLocaleString('ru')}} ₽ <br> {{((item.old_price - item.price).toFixed(0)).toLocaleString('ru')}} ₽</td>
     <td v-else>{{Math.round(item.price).toLocaleString('ru')}} ₽</td>
   </tr>
+  <!-- {{items}} -->
   <tbody class="complect-button kenost-table-background kenost-table-background-complect" v-for="complect in items.complects" v-bind:key="complect.id" :class="{'active' : this.active || this.is_warehouses || items.total_stores == 1, 'no-active' : !this.active && !this.is_warehouses && items.total_stores > 1, 'bg-white': items.total_stores == 1}">
-    <tr v-for="(item, index) in complect" v-bind:key="item.id" :class="{'active' : this.active || this.is_warehouses, 'no-active' : !this.active && !this.is_warehouses}">
+    <tr v-for="(item, index) in complect" v-bind:key="item.id" :class="{'active' : this.active || this.is_warehouses || items.total_stores == 1, 'kenost-table-bg-complect': items.total_stores == 1, 'no-active' : !this.active && !this.is_warehouses && items.total_stores > 1}">
       <td class="td-center" :class="{'pointer-none' : index !== 0}"><span :style="'top:' +  (complect.length * 74) / 2 + 'px'" v-if="index === 0"><i class="pi pi-minus"></i></span></td>
       <td class="k-table__photo"><img class="k-table__image" :src="item.image" alt=""></td>
       <td class="k-table__title"><p>{{item.pagetitle}}</p><b>Арт: {{item.article}}</b></td>
       <td class="k-table__busket complect-button__td" :class="{'pointer-none' : index !== 0}">
-        <form class="k-table__form complect-button__form" :class="{'basket-true' : item.basket.availability}" :style="'top:' +  (complect.length * 74) / 2 + 'px'" action="" v-if="index === 0">
-          <Counter :key="new Date().getMilliseconds() + item.id" @ElemCount="ElemCountComplect" :min="1" :max="item.remain_complect" :id="item.complect_id" :store_id="item.store_id" :index="index" :value="item.basket.count"/>
-          <div @click="addBasketComplect(item.complect_id, item.basket.count, item.store_id, index)" class="dart-btn dart-btn-primary"><i class="d_icon d_icon-busket"></i></div>
+        <form class="k-table__form complect-button__form" :class="{'basket-true' : item?.basket?.availability}" :style="'top:' +  (complect.length * 74) / 2 + 'px'" action="" v-if="index === 0">
+          <Counter :key="new Date().getMilliseconds() + item.id" @ElemCount="ElemCountComplect" :min="1" :max="item.remain_complect" :id="item.complect_id" :store_id="item.store_id" :index="index" :value="item?.basket?.count"/>
+          <div @click="addBasketComplect(item.complect_id, item?.basket?.count, item.store_id, index)" class="dart-btn dart-btn-primary"><i class="d_icon d_icon-busket"></i></div>
         </form>
       </td>
       <td>{{Math.round(Number(item.new_price)).toLocaleString('ru')}}₽ x {{ item.multiplicity }} шт. <br> {{item.action?.delay ? Number(item.action?.delay).toFixed(1) + ' дн' : 'Предоплата'}}</td>
@@ -114,7 +115,7 @@
         <div class="table-actions">
           <!-- 'red': action?.conflicts?.items[action.action_id]?.sales_conflicts -->
           <div class="table-actions__action" :class="{'active': action.enabled, 'red': action?.conflicts?.items[action.action_id]?.sales_conflicts}" v-for="(action, indexactions) in item.actions" v-bind:key="action.id">
-            <div v-if="action.tags.length > 0" class="table-actions__container" @click="updateAction(item.id == 0? this.action.remain_id : item.remain_id, item.id == 0? this.action.store_id : item.store_id, action, index, indexactions)">
+            <div v-if="action?.tags?.length > 0" class="table-actions__container" @click="updateAction(item.id == 0? this.action.remain_id : item.remain_id, item.id == 0? this.action.store_id : item.store_id, action, index, indexactions, item.conflicts)">
               <div class="table-actions__el" v-for="(tag, indextag) in action.tags" v-bind:key="tag.id">
                 <img v-if="tag.type == 'multiplicity'" src="../../assets/images/icons/action/box.svg" alt="">
                 <p  v-if="tag.type == 'multiplicity'">{{ tag.value }} шт.</p>
@@ -137,7 +138,7 @@
                 <p>Компл-т</p>
               </div> -->
             </div>
-            <div v-if="action.tags.length > 0" class="table-actions__help">
+            <div v-if="action?.tags?.length > 0" class="table-actions__help">
               <p>?</p>
               <div class="table-actions__content">
                 <div class="table-actions__modal">
@@ -173,7 +174,13 @@
       </td>
       <td class="td-center" :class="{'pointer-none' : index !== 0}"><span :style="'top:' +  (complect.length * 74) / 2 + 'px'" v-if="index === 0">{{item.action?.payer === '1' ? 'Поставщик' : 'Покупатель'}} / <br>от {{item.delivery}} дн ({{new Date(item.delivery_day).toLocaleString("ru", {month: 'long', day: 'numeric'})}})</span> </td>
       <td class="td-center" :class="{'pointer-none' : index !== 0}"><span :style="'top:' +  (complect.length * 74) / 2 + 'px'" v-if="index === 0">{{item.remain_complect}} шт.</span></td>
-      <td>{{item.org_name}} <br> <span class="flex align-items-center justify-content-center gap-1"><img :src="item.store_image" class="kenost-table-elem__logo" alt=""> {{ item.store_city }}</span></td>
+      <td class="td-center" :class="{'pointer-none' : index !== 0}">
+          <span :style="'top:' +  (complect.length * 74) / 2 + 'px'" v-if="index === 0">
+            <span style="position: relative;top: 0;transform: unset;">{{item.org_name}}</span>
+            <br>
+            <span style="position: relative;top: 0;transform: unset;" class="flex align-items-center justify-content-center gap-1"><img :src="item.store_image" class="kenost-table-elem__logo" alt=""> {{ item.store_city }}</span>
+          </span>
+      </td>
       <td v-if="item.price && item.price > item.new_price">{{item.price ? Math.round(item.price).toLocaleString('ru') : Math.round(item.new_price).toLocaleString('ru')}} ₽ <br> {{((item.price - item.new_price).toFixed(0)).toLocaleString('ru')}} ₽</td>
       <td v-else>{{Math.round(item.price).toLocaleString('ru')}} ₽</td>
     </tr>
@@ -248,21 +255,22 @@ export default {
     openActions (item) {
       this.$emit('ElemAction', item)
     },
-    async updateAction (remainid, storeid, action, indexstore, indexaction) {
+    async updateAction (remainid, storeid, action, indexstore, indexaction, conflicts) {
       // console.log("updateAction", remainid, storeid, action, index)
       // console.log(this.items.stores[index].actions)
 
       this.items.stores[indexstore].actions[indexaction].enabled = true
 
+      // console.log(conflicts)
       // Выключаем конфликтные акции
 
-      const conflicts = this.items.stores[indexstore].actions.find((act) => act.action_id === action.action_id)
+      // const conflicts = this.items.stores[indexstore].actions.find((act) => act.action_id === action.action_id)
       // console.log(conflicts)
-      if (conflicts.conflicts.items[conflicts.action_id]) {
-        if (conflicts.conflicts.items[conflicts.action_id].postponement_conflicts) {
-          for (let i = 0; i < conflicts.conflicts.items[conflicts.action_id].postponement_conflicts.length; i++) {
+      if (conflicts.items[action.action_id]) {
+        if (conflicts.items[action.action_id]?.postponement_conflicts) {
+          for (let i = 0; i < conflicts.items[action.action_id].postponement_conflicts.length; i++) {
             for (let j = 0; j < Object.keys(this.this.items.stores[indexstore].actions).length; j++) {
-              if (conflicts.conflicts.items[conflicts.action_id].postponement_conflicts[i] === this.items.stores[indexstore].actions[j].action_id) {
+              if (conflicts.items[action.action_id].postponement_conflicts[i] === this.items.stores[indexstore].actions[j].action_id) {
                 if (this.this.items.stores[indexstore].actions[j].enabled) {
                   // console.log('this.items.stores[indexstore].actions', this.this.items.stores[indexstore].actions[j])
                   this.items.stores[indexstore].actions[j].enabled = false
@@ -282,10 +290,10 @@ export default {
           }
         }
 
-        if (conflicts.conflicts.items[conflicts.action_id].sales_conflicts) {
-          for (let i = 0; i < conflicts.conflicts.items[conflicts.action_id].sales_conflicts.length; i++) {
+        if (conflicts.items[action.action_id].sales_conflicts) {
+          for (let i = 0; i < conflicts.items[action.action_id].sales_conflicts.length; i++) {
             for (let j = 0; j < Object.keys(this.items.stores[indexstore].actions).length; j++) {
-              if (conflicts.conflicts.items[conflicts.action_id].sales_conflicts[i] === this.items.stores[indexstore].actions[j].action_id) {
+              if (conflicts.items[action.action_id].sales_conflicts[i] === this.items.stores[indexstore].actions[j].action_id) {
                 if (this.items.stores[indexstore].actions[j].enabled) {
                   // console.log('this.items.stores[indexstore].actions', this.items.stores[indexstore].actions[j])
                   this.items.stores[indexstore].actions[j].enabled = false
@@ -333,7 +341,6 @@ export default {
           this.$store.commit('SET_OPT_PRODUCT_TO_VUEX', data)
         })
       })
-
     },
     getMinDelivery (stores) {
       let minDelivery
@@ -376,7 +383,14 @@ export default {
       } else {
       // eslint-disable-next-line vue/no-mutating-props
         this.items.stores[object.index].basket.count = object.value
-        const data = { action: 'basket/update', id: router.currentRoute._value.params.id, id_remain: object.id, value: object.value, store_id: object.store_id }
+        const data = {
+          action: 'basket/update',
+          id: router.currentRoute._value.params.id,
+          id_remain: object.id,
+          value: object.value,
+          store_id: object.store_id,
+          actions: object.item.basket.ids_actions
+        }
         this.busket_from_api(data).then()
         this.$emit('updateBasket')
       }
@@ -394,6 +408,7 @@ export default {
       }
     },
     isConflict(conflicts, actions, action_id){
+      // console.log(conflicts, actions, action_id)
       if(actions.find((el) => el.action_id == action_id)?.enabled){
         return false
       } else {
