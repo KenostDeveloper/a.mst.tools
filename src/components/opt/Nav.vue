@@ -93,12 +93,16 @@
 						</router-link>
 					</div> -->
 
-					{{ console.log(this.catalog_warehouse, this.catalog) }}
 					<div
 						v-if="this.organizationsOrCategories === 'organizations'"
 						v-for="level1 in this.catalog_warehouse"
 						:key="level1"
-						@mouseenter="setActualCatalog(level1)"
+						@mouseenter="
+							() => {
+								setActualCatalog(level1);
+								this.catalogWarehouseParent = level1.id;
+							}
+						"
 						class="std-catalog__tab-item std-tab-item std-tab-item--alt"
 					>
 						<div class="std-tab-item__img-container">
@@ -535,6 +539,8 @@ export default {
 	},
 	data() {
 		return {
+			catalogWarehouseParent: -1,
+			parentCatalog: {},
 			catalog: [],
 			loading: true,
 			search: "",
@@ -592,23 +598,37 @@ export default {
 		},
 		setActualCatalog(catalog) {
 			this.actualCatalog = catalog;
+			console.log(this.actualCatalog, this.actualCatalog.parent, this.actualCatalog.id);
 		},
 		setPrevCatalog() {
 			if (this.organizationsOrCategories === "organizations") {
-				this.actualCatalog = find(
-					this.catalog_warehouse,
-					(item) => item.id === this.actualCatalog.parent
-				);
-				return;
+				this.actualCatalog = this.findParent(this.catalog_warehouse);
 			}
 
 			if (this.organizationsOrCategories === "categories") {
-				this.actualCatalog = find(
-					this.catalog,
-					(item) => item.id === this.actualCatalog.parent
-				);
-				return;
+				this.actualCatalog = this.findParent(this.catalog);
 			}
+		},
+		findParent(catalog) {
+			catalog.forEach((item) => {
+				if (this.actualCatalog.parent == 0) {
+					if (String(item.id) == String(this.catalogWarehouseParent)) {
+						this.parentCatalog = item;
+						return;
+					}
+				} else {
+					if (String(item.id) == String(this.actualCatalog.parent)) {
+						this.parentCatalog = item;
+						return;
+					}
+				}
+
+				if (Array.isArray(item.children)) {
+					this.findParent(item.children);
+				}
+			});
+
+			return this.parentCatalog;
 		},
 	},
 	mounted() {
