@@ -50,7 +50,7 @@ export default {
 	data() {
 		return {
 			cities: this.modelCities,
-			citiesDates: {},
+			citiesDates: this.modelCitiesDates,
 		};
 	},
 	components: {
