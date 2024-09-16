@@ -1,6 +1,6 @@
 <template>
 	<div class="std-display-contents">
-		<ConfirmDialog/>
+		<ConfirmDialog />
 		<Toast />
 		<div
 			class="not-warehouse"
@@ -85,9 +85,7 @@
 					@deleteElem="deleteShipping"
 				>
 					<template v-slot:button>
-						<div>
-							
-						</div>
+						<div></div>
 					</template>
 				</v-table>
 				<!--
@@ -195,20 +193,48 @@
 							</div>
 							<div class="shopping-kenost__dates">
 								<div class="shopping-kenost__row">
-									<p class="k-mini-text">Дата отгрузки</p>
-									<CalendarVue
-										showIcon
-										id="calendar-24h"
-										v-model="form.dateStart"
-									/>
+									<div
+										class="dart-form-group"
+										:class="{
+											error: v$.form.dateStart.$errors.length,
+										}"
+									>
+										<p class="k-mini-text">Дата отгрузки</p>
+										<CalendarVue
+											showIcon
+											id="calendar-24h"
+											v-model="form.dateStart"
+										/>
+										<span
+											class="error_desc"
+											v-for="error of v$.form.dateStart.$errors"
+											:key="error.$uid"
+										>
+											{{ error.$message }}
+										</span>
+									</div>
 								</div>
 								<div class="shopping-kenost__row">
-									<p class="k-mini-text">Дата окончания приема заказов</p>
-									<CalendarVue
-										showIcon
-										id="calendar-24h"
-										v-model="form.dateEnd"
-									/>
+									<div
+										class="dart-form-group"
+										:class="{
+											error: v$.form.dateEnd.$errors.length,
+										}"
+									>
+										<p class="k-mini-text">Дата окончания приема заказов</p>
+										<CalendarVue
+											showIcon
+											id="calendar-24h"
+											v-model="form.dateEnd"
+										/>
+										<span
+											class="error_desc"
+											v-for="error of v$.form.dateEnd.$errors"
+											:key="error.$uid"
+										>
+											{{ error.$message }}
+										</span>
+									</div>
 								</div>
 							</div>
 							<div class="dart-row mt-2">
@@ -253,9 +279,13 @@
 											optionValue="value"
 											placeholder="Выберите склад"
 										/>
-										<span class="error_desc" v-for="error of v$.form.store_id.$errors" :key="error.$uid">
-												{{ error.$message }}
-											</span>
+										<span
+											class="error_desc"
+											v-for="error of v$.form.store_id.$errors"
+											:key="error.$uid"
+										>
+											{{ error.$message }}
+										</span>
 									</div>
 								</div>
 							</div>
@@ -338,7 +368,7 @@
 								</span>
 							</div>
 						</div>
-						
+
 						<div class="std-display-contents">
 							<p class="shopping-kenost__b mt-2 mb-1 std-dropdown__title">Маршрут</p>
 							<div class="dart-alert dart-alert-info">
@@ -375,12 +405,26 @@
 						<div class="shopping-kenost__button">
 							<div
 								class="router-link-active dart-btn dart-btn-secondary btn-padding"
-								@click="() => {this.formReset(); this.showShip = false}"
+								@click="
+									() => {
+										this.formReset();
+										this.showShip = false;
+									}
+								"
 							>
 								Отменить
 							</div>
-							<button type="submit" class="dart-btn dart-btn-primary btn-padding" :disabled="this.form.loading">
-								<i v-if="this.form.loading" class="pi pi-spin pi-spinner" style="font-size: 14px"></i> Сохранить
+							<button
+								type="submit"
+								class="dart-btn dart-btn-primary btn-padding"
+								:disabled="this.form.loading"
+							>
+								<i
+									v-if="this.form.loading"
+									class="pi pi-spin pi-spinner"
+									style="font-size: 14px"
+								></i>
+								Сохранить
 							</button>
 						</div>
 					</div>
@@ -571,8 +615,8 @@ import router from "../router";
 // import AutoComplete from "primevue/autocomplete";
 import Dropdown from "primevue/dropdown";
 import MultiSelect from "primevue/multiselect";
-import ConfirmDialog from 'primevue/confirmdialog'
-import Toast from 'primevue/toast'
+import ConfirmDialog from "primevue/confirmdialog";
+import Toast from "primevue/toast";
 import { Calendar, DatePicker } from "v-calendar";
 import CalendarVue from "primevue/calendar";
 // import customModal from '@/components/popup/CustomModal'
@@ -582,6 +626,7 @@ import Dialog from "primevue/dialog";
 import Autocomplete from "../components/Autocomplete.vue";
 import ShoppingCities from "../components/ProfileShipping/ShoppingCities.vue";
 import Loading from "../components/Loading.vue";
+import { helpers } from "@vuelidate/validators";
 // import { date } from 'yup'
 // import Checkbox from 'primevue/checkbox'
 // import { Swiper, SwiperSlide } from 'swiper/vue'
@@ -759,53 +804,53 @@ export default {
 				id: {
 					label: "Номер отгрузки",
 					type: "text",
-					sort: true
+					sort: true,
 				},
 				name_short: {
 					label: "Склад",
 					type: "text",
-					sort: true
+					sort: true,
 				},
 				date: {
 					label: "Дата",
 					type: "text",
-					sort: true
+					sort: true,
 				},
 				date_order_end: {
 					label: "Дата окончания приема заказов",
 					type: "clickevent",
-					sort: true
+					sort: true,
 				},
 				city: {
 					label: "Город",
 					type: "text",
-					sort: true
+					sort: true,
 				},
 				weight: {
 					label: "Объем товаров, кг",
 					type: "text",
-					sort: false
+					sort: false,
 				},
 				count: {
 					label: "Кол-во товаров, шт",
 					type: "text",
-					sort: false
+					sort: false,
 				},
-        actions: {
-          label: 'Действия',
-          type: 'actions',
-          sort: false,
-          available: {
-            edit: {
-              icon: 'pi pi-pencil',
-              label: 'Редактировать'
-            },
-            delete: {
-              icon: 'pi pi-trash',
-              label: 'Удалить'
-            }
-          }
-        }
+				actions: {
+					label: "Действия",
+					type: "actions",
+					sort: false,
+					available: {
+						edit: {
+							icon: "pi pi-pencil",
+							label: "Редактировать",
+						},
+						delete: {
+							icon: "pi pi-trash",
+							label: "Удалить",
+						},
+					},
+				},
 			},
 			filters: {
 				range: {
@@ -813,7 +858,7 @@ export default {
 					placeholder: "Выберите даты",
 					range: "all",
 					type: "range",
-				}
+				},
 			},
 			attributes: [
 				{
@@ -836,7 +881,7 @@ export default {
 			"unset_ship_data",
 			"org_get_stores_from_api",
 			"org_get_from_api",
-			"unset_shipping"
+			"unset_shipping",
 		]),
 		...mapMutations(["SET_SHIPPING_CHECK", "SET_SHIPPING_CHECK_ONE"]),
 		// deletePunkt(index) {
@@ -887,14 +932,14 @@ export default {
 			});
 		},
 		async formSubmit(event) {
-			const result = await this.v$.$validate()
+			const result = await this.v$.$validate();
 			// const result = true;
 			if (!result) {
 				console.log(result);
 			} else {
 				this.$load(async () => {
-					this.form.loading = true
-					this.unset_shipping()
+					this.form.loading = true;
+					this.unset_shipping();
 					let data = this.form;
 					data.dateStart = data.dateStart.toDateString();
 					data.dateEnd = data.dateEnd.toDateString();
@@ -907,10 +952,10 @@ export default {
 						data: data,
 					});
 					await this.get_shipping_from_api({ filter: [] });
-					this.attributes.push(this.shipping.dates)
-					this.form.loading = false
-					this.formReset()
-					this.showShip = false										
+					this.attributes.push(this.shipping.dates);
+					this.form.loading = false;
+					this.formReset();
+					this.showShip = false;
 				});
 			}
 		},
@@ -925,10 +970,10 @@ export default {
 			this.modal.store_date = data.date;
 			this.showShipModal = true;
 		},
-		editShipping(data){
-			this.editWindow = true
-			const timing = JSON.parse(data.timing)
-			this.form.id = data.id
+		editShipping(data) {
+			this.editWindow = true;
+			const timing = JSON.parse(data.timing);
+			this.form.id = data.id;
 			this.form.timeSelected.repeater = timing.repeater;
 			this.form.timeSelected.weeks = timing.weeks;
 			this.form.timeSelected.days = timing.days;
@@ -936,24 +981,28 @@ export default {
 			this.form.selectedStores = null;
 			this.form.selectedCities = JSON.parse(data.properties);
 			for (let i = 0; i < this.form.selectedCities.length; i++) {
-				var sparts = this.form.selectedCities[i].date.date.split(' ')
-				var parts = sparts[0].split('-')
-				this.form.citiesDates[this.form.selectedCities[i].value] = new Date(parts[0], parts[1] - 1, parts[2])
+				var sparts = this.form.selectedCities[i].date.date.split(" ");
+				var parts = sparts[0].split("-");
+				this.form.citiesDates[this.form.selectedCities[i].value] = new Date(
+					parts[0],
+					parts[1] - 1,
+					parts[2]
+				);
 			}
 			this.form.store_id = data.warehouse_id;
 			this.form.dateStart = new Date(data.date_from);
-			var parts = data.date_order_end.split('.')			
-			this.form.dateEnd = new Date(parts[2], parts[1] - 1, parts[0])
-			this.showShip = true		
+			var parts = data.date_order_end.split(".");
+			this.form.dateEnd = new Date(parts[2], parts[1] - 1, parts[0]);
+			this.showShip = true;
 		},
-		deleteShipping(data){
+		deleteShipping(data) {
 			this.$confirm.require({
-        message: 'Вы уверены, что хотите удалить отгрузку ID ' + data.id + '?',
-        header: 'Подтверждение удаления',
-        icon: 'pi pi-exclamation-triangle',
-        accept: () => {
-          this.loading = true
-					this.unset_shipping()
+				message: "Вы уверены, что хотите удалить отгрузку ID " + data.id + "?",
+				header: "Подтверждение удаления",
+				icon: "pi pi-exclamation-triangle",
+				accept: () => {
+					this.loading = true;
+					this.unset_shipping();
 					this.$load(async () => {
 						await this.set_shipping_to_api({
 							action: "delete",
@@ -961,23 +1010,30 @@ export default {
 							shipping: data,
 						})
 							.then((result) => {
-								this.$toast.add({ severity: 'success', summary: 'Отгрузка удалена', detail: 'Удаление отгрузки ID ' + data.id + ' произошло успешно!', life: 3000 })
-								this.get_shipping_from_api(data).then(
-									(result) => {
-										
-									}
-								);
+								this.$toast.add({
+									severity: "success",
+									summary: "Отгрузка удалена",
+									detail:
+										"Удаление отгрузки ID " + data.id + " произошло успешно!",
+									life: 3000,
+								});
+								this.get_shipping_from_api(data).then((result) => {});
 							})
 							.catch((result) => {
-								console.log(result)
-							})					
-					})
-					this.loading = false
-        },
-        reject: () => {
-          this.$toast.add({ severity: 'error', summary: 'Удаление отгрузки', detail: 'Удаление отгрузки отклонено', life: 3000 })
-        }
-      })
+								console.log(result);
+							});
+					});
+					this.loading = false;
+				},
+				reject: () => {
+					this.$toast.add({
+						severity: "error",
+						summary: "Удаление отгрузки",
+						detail: "Удаление отгрузки отклонено",
+						life: 3000,
+					});
+				},
+			});
 		},
 		closeShipModal() {
 			this.modal.store_name = "";
@@ -995,7 +1051,7 @@ export default {
 			this.form.store_id = null;
 			this.form.dateStart = new Date();
 			this.form.dateEnd = new Date();
-			this.editWindow = false
+			this.editWindow = false;
 		},
 		dayClicked(day) {
 			this.form.timeSelected.range = {
@@ -1091,8 +1147,7 @@ export default {
 			action: "get/stores",
 			id: this.$route.params.id,
 		});
-		this.get_shipping_statuses()
-			.then();
+		this.get_shipping_statuses().then();
 	},
 	components: {
 		Dropdown,
@@ -1114,20 +1169,14 @@ export default {
 		ShoppingCities,
 	},
 	computed: {
-		...mapGetters([
-			"shipping",
-			"shipping_statuses",
-			"getshipdata",
-			"org_stores",
-			"orgs",
-		]),
-		dialogHeader(){
-			if(this.editWindow){
-				return 'Редактирование отгрузки'
-			}else{
-				return 'Создание отгрузки'
+		...mapGetters(["shipping", "shipping_statuses", "getshipdata", "org_stores", "orgs"]),
+		dialogHeader() {
+			if (this.editWindow) {
+				return "Редактирование отгрузки";
+			} else {
+				return "Создание отгрузки";
 			}
-		}
+		},
 	},
 	setup() {
 		return { v$: useVuelidate() };
@@ -1135,14 +1184,38 @@ export default {
 	validations() {
 		return {
 			form: {
+				dateStart: {
+					required,
+					// moreThanDateEnd: helpers.withMessage(
+					// 	"Дата отгрузки должна быть больше даты окончания приема заказов",
+					// 	() => dateStart >= dateEnd
+					// ),
+					checkDateStart: helpers.withMessage(
+						"Дата отгрузки должна быть больше даты окончания приема заказов",
+						() => this.form.dateStart >= this.form.dateEnd
+					),
+				},
+				dateEnd: {
+					required,
+					checkDateEnd: helpers.withMessage(
+						"Дата окончания приема заказов должна быть меньше даты отгрузки",
+						() => this.form.dateEnd <= this.form.dateStart
+					),
+				},
+
 				timeSelected: {
 					range: {
 						required,
 					},
-					repeater: { required }
+					repeater: { required },
 				},
 				store_id: { required },
-				selectedCities: { required },
+				selectedCities: {
+					required: helpers.withMessage(
+						"Выберите хотя бы один город",
+						() => this.form.selectedCities.length
+					),
+				},
 			},
 		};
 	},
@@ -1493,7 +1566,7 @@ export default {
 			color: #e24c4c;
 			font-size: 12px;
 			display: block;
-			padding: 5px 0
+			padding: 5px 0;
 		}
 	}
 	& > * {

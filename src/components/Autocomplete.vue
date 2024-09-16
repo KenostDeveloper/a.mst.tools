@@ -168,11 +168,9 @@ export default {
 			const suggestions = this.$refs.suggestions;
 			const autocomplete = this.$refs.autocomplete;
 
-			console.log(autocomplete);
-
 			// Позиционирование списка относительно инпута
 			suggestions.style.width = autocomplete.clientWidth + "px";
-			suggestions.style.top = autocomplete.getBoundingClientRect().top - autocomplete.clientHeight - 30 + "px";
+			suggestions.style.top = autocomplete.offsetTop + autocomplete.clientHeight + 10 + "px";
 			suggestions.style.left = autocomplete.offsetLeft + "px";
 		},
 	},

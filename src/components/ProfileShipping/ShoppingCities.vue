@@ -17,20 +17,28 @@
 						<img src="../../assets/images/icons/close.svg" alt="" />
 					</div>
 				</div>
-				<div class="shopping-kenost__cityone-date mb-3" v-if="item">
+				<div
+					class="shopping-kenost__cityone-date mb-3"
+					:class="{
+						error: v$.citiesDates.$errors.length,
+					}"
+					v-if="item"
+				>
 					<p class="k-mini-text">Дата отгрузки</p>
-					<CalendarVue
-						v-model="citiesDates[item.value]"
-						showIcon
-						id="calendar-24h"
-					/>
+					<CalendarVue v-model="citiesDates[item.value]" showIcon id="calendar-24h" />
 				</div>
+
+				<span class="error_desc" v-for="error of v$.citiesDates.$errors" :key="error.$uid">
+					{{ error.$message }}
+				</span>
 			</li>
 		</template>
 	</draggable>
 </template>
 
 <script>
+import useVuelidate from "@vuelidate/core";
+import { helpers } from "@vuelidate/validators";
 import CalendarVue from "primevue/calendar";
 import draggable from "vuedraggable";
 
@@ -75,6 +83,28 @@ export default {
 			},
 			deep: true,
 		},
+	},
+	setup() {
+		return {
+			v$: useVuelidate(),
+		};
+	},
+	validations() {
+		return {
+			citiesDates: {
+				required: helpers.withMessage("Выберите дату отгрузки", () => {
+					let result = true;
+					Object.keys(this.citiesDates).forEach((key) => {
+						if (!this.citiesDates[key]) {
+							result = false;
+							return;
+						}
+					});
+					console.log(result);
+					return result;
+				}),
+			},
+		};
 	},
 };
 </script>
