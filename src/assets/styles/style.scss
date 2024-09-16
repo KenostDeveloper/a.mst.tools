@@ -5614,6 +5614,7 @@ button.std-icon__wrapper {
 			cursor: pointer;
 			margin: 0;
 			line-height: 1;
+			width: fit-content !important;
 
 			&:hover {
 				& + .table-actions__content {
@@ -5641,6 +5642,7 @@ button.std-icon__wrapper {
 			font-size: 13px;
 			text-wrap: nowrap;
 			line-height: 1;
+			width: fit-content !important;
 		}
 
 		img{
@@ -5732,12 +5734,18 @@ button.std-icon__wrapper {
 			p {
 				font-size: 13px;
 				color: #000000;
-				width: 160px;
+				width: 160px !important;
 				text-align: left;
 				margin-bottom: 0px;
 				line-height: 1;
 			}
 		}
+	}
+}
+
+.k-order__product{
+	.k-order__actions{
+		width: calc(100% - 442px);
 	}
 }
 
