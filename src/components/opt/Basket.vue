@@ -76,7 +76,8 @@
 								@click="clearBasketComplect(store.id, complect.info.id)"
 								class="btn-close link-no-style"
 							>
-								<i class="d_icon d_icon-close"></i>
+								<!-- <i class="d_icon d_icon-close"></i> -->
+								<img src="../../assets/images/icons/close.svg" alt="" />
 							</div>
 							<div class="kenost-basket__product">
 								<p class="kenost-basket__name" :title="complect.products[0].name">
@@ -258,7 +259,6 @@ export default {
 			if (object.value > Number(object.max)) {
 				this.modal_remain = true;
 			} else {
-				console.log(object);
 				this.$emit("catalogUpdate");
 				const data = {
 					action: "basket/update",
@@ -305,7 +305,11 @@ export default {
 		clearBasket() {
 			this.$emit("catalogUpdate");
 			this.$emit("actionUpdate");
-			const data = { action: "basket/clear", id: router.currentRoute._value.params.id };
+			const data = {
+				action: "basket/clear",
+				id: router.currentRoute._value.params.id,
+				// store_id: 'all',
+			};
 			this.busket_from_api(data).then((response) => {});
 		},
 		clearBasketProduct(storeid, productid) {
