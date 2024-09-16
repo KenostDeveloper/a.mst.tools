@@ -102,6 +102,9 @@
 			<span>Выйти</span>
 			<i class="pi pi-sign-out"></i>
 		</div>
+		<div class="sitebar-version">
+			v. {{ version }}
+		</div>
 	</div>
 
 	<!-- <Dialog
@@ -404,4 +407,21 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.sitebar{
+	padding-bottom: 15px;
+	&.hide .sitebar-version{
+		display: none;
+	}
+	.sitebar-version{
+		position: absolute;
+		bottom: 5px;
+		left: 40px;
+		color: transparent;
+		font-size: 12px;
+		&:hover{
+			color: #646464;
+		}
+	}
+}
+</style>

@@ -42,10 +42,13 @@ import router from './router'
 import store from './store'
 import App from './App.vue'
 
+import { version } from '../package'
+
 const app = createApp(App)
 const vfm = createVfm()
 
 app.config.globalProperties.site_url_prefix = 'https://mst.tools/'
+app.config.globalProperties.version = version
 
 app
 .use(i18n)
