@@ -406,6 +406,13 @@ export default {
       position: sticky;
       top: 0;
       z-index: 1;
+      background: #282828;
+      th{
+        a,
+        span{
+          color: #fff;
+        }
+      }
     }
   }
   .p-inputnumber-buttons-horizontal{
@@ -462,7 +469,7 @@ export default {
       display: inline-block;
       font-family: 'icomoon' !important;
       font-size: 14px;
-      color: #282828;
+      color: #FFF !important;
       position: absolute;
       right: 0;
       top: 50%;
@@ -476,7 +483,7 @@ export default {
         content: '🠕';
         display: inline-block;
         font-family: sans-serif;
-        color: #282828;
+        color: #FFF !important;
       }
     }
     &_desc{

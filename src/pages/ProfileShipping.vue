@@ -162,7 +162,7 @@
 
 			<Dialog
 				v-model:visible="this.showShip"
-				header="Создание отгрузки"
+				:header="this.dialogHeader"
 				class="std-dialog"
 				:style="{ width: '800px' }"
 			>
@@ -186,7 +186,7 @@
 			</div>
 		</div> -->
 					<div class="shopping-kenost std-shipping-create">
-						<div class="std-display-contents hidden-tablet-l">
+						<div class="std-display-contents">
 							<p class="shopping-kenost__b std-dropdown__title">Дата</p>
 							<div class="dart-alert dart-alert-info">
 								Если Вы выберите повторение отгрузки, то смещение дат относительно
@@ -242,7 +242,7 @@
 									<div
 										class="dart-form-group"
 										:class="{
-											error: v$.form.timeSelected.repeater.$errors.length,
+											error: v$.form.store_id.$errors.length,
 										}"
 									>
 										<label for="">Склад</label>
@@ -253,9 +253,9 @@
 											optionValue="value"
 											placeholder="Выберите склад"
 										/>
-										<!-- <span class="error_desc" v-for="error of v$.form.timeSelected.repeater.$errors" :key="error.$uid">
+										<span class="error_desc" v-for="error of v$.form.store_id.$errors" :key="error.$uid">
 												{{ error.$message }}
-											</span> -->
+											</span>
 									</div>
 								</div>
 							</div>
@@ -338,7 +338,8 @@
 								</span>
 							</div>
 						</div>
-						<div class="std-display-contents hidden-tablet-l">
+						
+						<div class="std-display-contents">
 							<p class="shopping-kenost__b mt-2 mb-1 std-dropdown__title">Маршрут</p>
 							<div class="dart-alert dart-alert-info">
 								Выберите города маршрута и проставьте даты, когда транспорт будет
@@ -350,16 +351,6 @@
 								class="dart-form-group mt-1 mb-2"
 								:class="{ error: v$.form.selectedCities.$errors.length }"
 							>
-								<!-- <AutoComplete
-									v-model="form.selectedCities"
-									:suggestions="form.filteredCities"
-									:multiple="true"
-									:dropdown="true"
-									optionLabel="label"
-									dataKey="value"
-									placeholder="Начните вводить наименование города"
-									@complete="searchCity($event)"
-							/> -->
 								<Autocomplete
 									@setSelections="(cities) => setSelectedCities(cities)"
 									:selections="form.selectedCities"
@@ -380,227 +371,6 @@
 								@removeSelectedCity="this.removeSelectedCity"
 							/>
 						</div>
-
-						<details class="std-dropdown visible-tablet-l">
-							<summary class="std-dropdown__header">
-								<p class="shopping-kenost__b std-dropdown__title">Дата и время</p>
-								<i class="d_icon d_icon-arrow std-dropdown__button"></i>
-							</summary>
-							<div class="std-dropdown__content">
-								<div class="dart-alert dart-alert-info">
-									Если Вы выберите повторение отгрузки, то смещение дат
-									относительно самой отгрузки и датой окончания приемки заказов
-									будет выставлено аналогичное тому, что вы укажете ниже.
-								</div>
-								<div class="shopping-kenost__dates">
-									<div class="shopping-kenost__row">
-										<p class="k-mini-text">Дата и время отгрузки</p>
-										<CalendarVue
-											showIcon
-											id="calendar-24h"
-											v-model="form.dateStart"
-											showTime
-											hourFormat="24"
-										/>
-									</div>
-									<div class="shopping-kenost__row">
-										<p class="k-mini-text">
-											Дата и время окончания приема заказов
-										</p>
-										<CalendarVue
-											showIcon
-											id="calendar-24h"
-											v-model="form.dateEnd"
-											showTime
-											hourFormat="24"
-										/>
-									</div>
-								</div>
-								<div class="dart-row mt-2">
-									<div class="d-col-md-12">
-										<div
-											class="dart-form-group"
-											:class="{
-												error: v$.form.timeSelected.repeater.$errors.length,
-											}"
-										>
-											<label for="">Повторять</label>
-											<Dropdown
-												v-model="form.timeSelected.repeater"
-												:options="form.timeSelect.repeater"
-												optionLabel="label"
-												optionValue="value"
-												placeholder="Выберите период повторения"
-											/>
-											<span
-												class="error_desc"
-												v-for="error of v$.form.timeSelected.repeater
-													.$errors"
-												:key="error.$uid"
-											>
-												{{ error.$message }}
-											</span>
-										</div>
-									</div>
-								</div>
-								<div class="dart-row">
-									<div class="d-col-md-12">
-										<div
-											class="dart-form-group"
-											:class="{
-												error: v$.form.timeSelected.repeater.$errors.length,
-											}"
-										>
-											<label for="">Склад</label>
-											<Dropdown
-												v-model="this.form.store_id"
-												:options="this.stores"
-												optionLabel="label"
-												optionValue="value"
-												placeholder="Выберите склад"
-											/>
-											<!-- <span class="error_desc" v-for="error of v$.form.timeSelected.repeater.$errors" :key="error.$uid">
-												{{ error.$message }}
-											</span> -->
-										</div>
-									</div>
-								</div>
-								<div class="dart-row" v-if="form.timeSelected.repeater != 0">
-									<div
-										class="d-col-md-6"
-										v-if="form.timeSelected.repeater == 'week'"
-									>
-										<div class="dart-form-group">
-											<label for="">В следующие дни</label>
-											<MultiSelect
-												v-model="form.timeSelected.days"
-												:options="form.timeSelect.days"
-												optionLabel="label"
-												optionValue="value"
-												placeholder="Выберите дни отгрузок"
-											/>
-										</div>
-									</div>
-									<div
-										class="d-col-md-6"
-										v-if="form.timeSelected.repeater == 'week'"
-									>
-										<div class="dart-form-group">
-											<label for="">Каждую ... неделю</label>
-											<Dropdown
-												v-model="form.timeSelected.weeks"
-												:options="form.timeSelect.weeks"
-												optionLabel="label"
-												optionValue="value"
-												placeholder="Выберите неделю"
-											/>
-										</div>
-									</div>
-								</div>
-								<div
-									class="dart-form-group-simple"
-									v-if="
-										form.timeSelected.repeater == 'day' ||
-										form.timeSelected.repeater == 'week'
-									"
-									:class="{ error: v$.form.timeSelected.range.$errors.length }"
-								>
-									<label for="">В период</label>
-									<DatePicker
-										v-model.range="form.timeSelected.range"
-										:masks="{ weekdays: 'WW' }"
-										mode="date"
-										range
-									>
-										<template v-slot="{ inputValue, inputEvents, isDragging }">
-											<div class="dart-row">
-												<div class="d-col-md-6">
-													<input
-														class="dart-form-control"
-														:class="
-															isDragging
-																? 'text-gray-600'
-																: 'text-gray-900'
-														"
-														:value="inputValue.start"
-														v-on="inputEvents.start"
-													/>
-												</div>
-												<div class="d-col-md-6">
-													<input
-														class="dart-form-control"
-														:class="
-															isDragging
-																? 'text-gray-600'
-																: 'text-gray-900'
-														"
-														:value="inputValue.end"
-														v-on="inputEvents.end"
-													/>
-												</div>
-											</div>
-										</template>
-									</DatePicker>
-									<span
-										class="error_desc"
-										v-for="error of v$.form.timeSelected.range.$errors"
-										:key="error.$uid"
-									>
-										{{ error.$message }}
-									</span>
-								</div>
-							</div>
-						</details>
-						<details class="std-dropdown visible-tablet-l">
-							<summary class="std-dropdown__header">
-								<p class="shopping-kenost__b mt-2 mb-1 std-dropdown__title">
-									Маршрут
-								</p>
-								<i class="d_icon d_icon-arrow std-dropdown__button"></i>
-							</summary>
-							<div class="std-dropdown__content">
-								<div class="dart-alert dart-alert-info">
-									Выберите города маршрута и проставьте даты, когда транспорт
-									будет разгружен (по умолчанию, дата будет совпадать с выбранной
-									датой начала отгрузки). Если Вы выбрали повторение, то при
-									генерации дальнейших отгрузок будет выбрано аналогичное смещение
-									дат.
-								</div>
-								<div
-									class="dart-form-group mt-1 mb-2"
-									:class="{ error: v$.form.selectedCities.$errors.length }"
-								>
-									<!-- <AutoComplete
-										v-model="form.selectedCities"
-										:suggestions="form.filteredCities"
-										:multiple="true"
-										:dropdown="true"
-										optionLabel="label"
-										dataKey="value"
-										placeholder="Начните вводить наименование города"
-										@complete="searchCity($event)"
-								/> -->
-									<Autocomplete
-										@setSelections="(cities) => setSelectedCities(cities)"
-										:selections="form.selectedCities"
-										type="city"
-										placeholder="Начните вводить наименование города"
-									/>
-									<span
-										class="error_desc"
-										v-for="error of v$.form.selectedCities.$errors"
-										:key="error.$uid"
-									>
-										{{ error.$message }}
-									</span>
-								</div>
-								<ShoppingCities
-									v-model:modelCities="this.form.selectedCities"
-									v-model:modelCitiesDates="this.form.citiesDates"
-									@removeSelectedCity="this.removeSelectedCity"
-								/>
-							</div>
-						</details>
 
 						<div class="shopping-kenost__button">
 							<div
@@ -834,6 +604,7 @@ export default {
 			windowWidth: 1920,
 			calendarIsExpanded: false,
 			loading_page: true,
+			editWindow: false,
 			editMode: false,
 			showShipModal: false,
 			showShip: false,
@@ -881,6 +652,7 @@ export default {
 			checkDate: null,
 			shipping_values: {},
 			form: {
+				id: 0,
 				loading: false,
 				selectedStores: null,
 				filteredStores: null,
@@ -889,7 +661,7 @@ export default {
 				// filteredCities: null,
 				dateStart: new Date(),
 				dateEnd: new Date(),
-				store_id: "",
+				store_id: null,
 				filter: "",
 				timeSelect: {
 					repeater: [
@@ -984,38 +756,40 @@ export default {
 				},
 			},
 			table_data: {
-				check: {
-					label: "",
-					checked: false,
-					type: "editmode",
-				},
 				id: {
 					label: "Номер отгрузки",
 					type: "text",
+					sort: true
 				},
 				name_short: {
 					label: "Склад",
 					type: "text",
+					sort: true
 				},
 				date: {
 					label: "Дата",
 					type: "text",
+					sort: true
 				},
 				date_order_end: {
 					label: "Дата окончания приема заказов",
 					type: "clickevent",
+					sort: true
 				},
 				city: {
 					label: "Город",
 					type: "text",
+					sort: true
 				},
 				weight: {
 					label: "Объем товаров, кг",
 					type: "text",
+					sort: false
 				},
 				count: {
 					label: "Кол-во товаров, шт",
 					type: "text",
+					sort: false
 				},
         actions: {
           label: 'Действия',
@@ -1113,8 +887,8 @@ export default {
 			});
 		},
 		async formSubmit(event) {
-			// const result = await this.v$.$validate()
-			const result = true;
+			const result = await this.v$.$validate()
+			// const result = true;
 			if (!result) {
 				console.log(result);
 			} else {
@@ -1152,8 +926,9 @@ export default {
 			this.showShipModal = true;
 		},
 		editShipping(data){
-			console.log(data)
+			this.editWindow = true
 			const timing = JSON.parse(data.timing)
+			this.form.id = data.id
 			this.form.timeSelected.repeater = timing.repeater;
 			this.form.timeSelected.weeks = timing.weeks;
 			this.form.timeSelected.days = timing.days;
@@ -1220,6 +995,7 @@ export default {
 			this.form.store_id = null;
 			this.form.dateStart = new Date();
 			this.form.dateEnd = new Date();
+			this.editWindow = false
 		},
 		dayClicked(day) {
 			this.form.timeSelected.range = {
@@ -1345,6 +1121,13 @@ export default {
 			"org_stores",
 			"orgs",
 		]),
+		dialogHeader(){
+			if(this.editWindow){
+				return 'Редактирование отгрузки'
+			}else{
+				return 'Создание отгрузки'
+			}
+		}
 	},
 	setup() {
 		return { v$: useVuelidate() };
@@ -1354,8 +1137,9 @@ export default {
 			form: {
 				timeSelected: {
 					range: { required },
-					repeater: { required },
+					repeater: { required }
 				},
+				store_id: { required },
 				selectedCities: { required },
 			},
 		};
@@ -1695,7 +1479,8 @@ export default {
 	flex-wrap: wrap;
 	&.error {
 		.p-inputwrapper,
-		.dart-form-control {
+		.dart-form-control,
+		.autocomplete {
 			border: 1px solid #f00;
 			border-radius: 6px;
 			.p-inputtext {
@@ -1705,6 +1490,8 @@ export default {
 		span.error_desc {
 			color: #e24c4c;
 			font-size: 12px;
+			display: block;
+			padding: 5px 0
 		}
 	}
 	& > * {
