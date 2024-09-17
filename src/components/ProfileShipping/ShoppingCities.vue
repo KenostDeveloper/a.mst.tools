@@ -15,8 +15,27 @@
 						<img src="../../assets/images/icons/close.svg" alt="" />
 					</div>
 				</div>
-					<p class="k-mini-text">Дата отгрузки</p>
-					<CalendarVue v-model="citiesDates[item.value]" showIcon id="calendar-24h" />
+				<p class="k-mini-text">Дата отгрузки</p>
+				<div
+					class="dart-form-group std-display-contents"
+					:class="{
+						error: vDatesErrors.$errors.length,
+					}"
+				>
+					<CalendarVue
+						v-model="citiesDates[item.value]"
+						:minDate="minDate"
+						showIcon
+						id="calendar-24h"
+					/>
+					<span
+						class="error_desc"
+						v-for="error of vDatesErrors.$errors"
+						:key="error.$uid"
+					>
+						{{ error.$message }}
+					</span>
+				</div>
 			</li>
 		</template>
 	</draggable>
@@ -36,6 +55,13 @@ export default {
 		modelCitiesDates: {
 			type: Object,
 			default: {},
+		},
+		minDate: {
+			type: Date,
+			required: true,
+		},
+		vDatesErrors: {
+			type: Object,
 		},
 	},
 	emits: ["update:modelCities", "update:modelCitiesDates"],
@@ -67,7 +93,7 @@ export default {
 			},
 			deep: true,
 		},
-	}
+	},
 };
 </script>
 

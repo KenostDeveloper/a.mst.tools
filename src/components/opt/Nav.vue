@@ -142,9 +142,23 @@
 							name: 'purchases_catalog_warehouse',
 							params: {
 								id: this.$route.params.id,
-								warehouse_id: this.catalogWarehouseParent,
+								warehouse_id: this.actualCatalog.id,
 							},
 						}"
+						class="std-catalog__link"
+						@click="toggleCatalogVisibilityAd()"
+					>
+						<span class="std-tab-item__text">Все товары</span>
+					</router-link>
+					<router-link
+						v-if="this.organizationsOrCategories === 'categories'"
+						:to="{
+								name: 'purchases_catalog',
+								params: {
+									id: this.$route.params.id,
+									category_id: this.actualCatalog.id,
+								},
+							}"
 						class="std-catalog__link"
 						@click="toggleCatalogVisibilityAd()"
 					>
@@ -453,6 +467,9 @@
 							v-model="search"
 						/>
 					</div>
+					<button v-if="this.search" class="std-search-field__delete" @click="this.search = ''">
+						<i class="pi pi-times"></i>
+					</button>
 					<button
 						type="submit"
 						class="navmain__dart_btn a-dart-btn a-dart-btn-primary std-search-field__button"
@@ -632,7 +649,6 @@ export default {
 		},
 		setActualCatalog(catalog) {
 			this.actualCatalog = catalog;
-			console.log(this.actualCatalog, this.actualCatalog.parent, this.actualCatalog.id);
 		},
 		setPrevCatalog() {
 			if (this.organizationsOrCategories === "organizations") {
@@ -645,8 +661,8 @@ export default {
 		},
 		findParent(catalog) {
 			catalog.forEach((item) => {
-				if (this.actualCatalog.parent == 0) {
-					if (String(item.id) == String(this.catalogWarehouseParent)) {
+				if (String(this.actualCatalog.parent).includes("warehouse_")) {
+					if (item.id == String(this.actualCatalog.parent).split("warehouse_")[1]) {
 						this.parentCatalog = item;
 						return;
 					}
@@ -725,6 +741,7 @@ export default {
 		},
 		optcatalogwarehouse: function (newVal, oldVal) {
 			this.catalog_warehouse = newVal;
+			this.actualCatalog = {};
 		},
 	},
 };

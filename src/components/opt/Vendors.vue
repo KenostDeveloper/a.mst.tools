@@ -173,6 +173,7 @@ export default {
     ...mapActions([
       'set_vendors_to_api',
       'get_opt_vendors_from_api',
+			'get_opt_warehouse_catalog_from_api',
       'toggle_opts_visible'
     ]),
     toggleVendorModal () {
@@ -189,6 +190,9 @@ export default {
         }
         this.vendorForm.selected[id] = true
       }
+      if(this.multisupplier) {
+        this.vendorForm.selected[id] = !this.vendorForm.selected[id]
+      }
     },
     changeSelectCheckbox (id) {
       if (!this.multisupplier) {
@@ -197,6 +201,7 @@ export default {
         }
         this.vendorForm.selected[id] = true
       }
+
     },
     changeOpts (id, action) {
       this.loading = true
@@ -211,6 +216,9 @@ export default {
           this.$emit('vendorCheck')
         })
       })
+
+      this.get_opt_warehouse_catalog_from_api();
+
     },
     setFilter (type) {
       if (type === 'filter') {
@@ -235,7 +243,6 @@ export default {
       })
       if (!error) {
         if (!this.multisupplier) {
-          console.log(this.items.selected)
           for (let i = 0; i < this.items.selected.length; i++) {
             const data = {
               id: this.items.selected[i].id,
@@ -262,6 +269,8 @@ export default {
             .catch((result) => {
               console.log(result)
             })
+
+          this.get_opt_warehouse_catalog_from_api();
         })
       } else {
         this.$toast.add({ severity: 'error', summary: 'Укажите поставщиков', detail: 'Для того, чтобы выбрать поставщиков, отметьте флажки рядом с ними', life: 3000 })

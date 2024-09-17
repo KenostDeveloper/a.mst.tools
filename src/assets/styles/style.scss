@@ -2579,6 +2579,7 @@ p {
 		overflow: hidden;
 
 		transition-duration: 0.5s;
+		z-index: 10;
 
 		&--active {
 			max-height: 100dvh;
@@ -3551,6 +3552,7 @@ p {
 
 		transition-duration: .3s;
 
+		&:hover,
 		&--active {
 			background-color: #FF0000;
 			border: none;
@@ -3594,7 +3596,7 @@ p {
 			border: none;
 			outline: none;
 
-			max-width: 280px;
+			width: 280px;
 			padding-inline: 6px 9px;
 
 			position: relative;
@@ -3639,6 +3641,7 @@ p {
 			opacity: 0;
 			overflow-y: auto;
 			transition-duration: .3s;
+			z-index: 10;
 		}
 
 		&--active {
@@ -3654,6 +3657,12 @@ p {
 		font-weight: 400;
 		line-height: 1.17;
 		text-align: left;
+
+		transition-duration: .3s;
+
+		&:hover {
+			color: #ff0000;
+		}
 	}
 }
 
@@ -3721,7 +3730,9 @@ p {
 	}
 
 	&__input {
+		border: none !important;
 		padding-left: 0 !important;
+		padding-right: 0 !important;
 
 		&::placeholder {
 			color: #8a8a8a;
@@ -3731,6 +3742,25 @@ p {
 	&__button {
 		left: 0 !important;
 		height: 100%;
+	}
+
+	&__delete {
+		cursor: pointer;
+
+		background: none;
+		border: none;
+		outline: none;
+
+		margin-right: 5px;
+		padding: 3px;
+
+		i {
+			display: flex;
+
+			&::before {
+				font-size: 12px;
+			}
+		}
 	}
 }
 
@@ -5058,11 +5088,21 @@ button.std-icon__wrapper {
 
 .shopping-kenost__cityone {
 	transition: all 0.5s ease;
+
+	.p-calendar {
+		max-width: 50%;
+	}
 }
 
 .order {
 	.breadcrumbs {
 		margin-bottom: 4px;
+	}
+}
+
+.p-component {
+	* {
+		font-size: inherit !important;
 	}
 }
 

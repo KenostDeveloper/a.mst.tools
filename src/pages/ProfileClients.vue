@@ -23,14 +23,7 @@
 						<i class="d_icon d_icon-search"></i>
 					</div>
 				</div>
-			</div>
-			<div class="d-col-md-3">
-				<div class="dart-form-group ">
-					<Dropdown optionLabel="label" optionValue="value" v-model="filter.store" :options="this.stores_list" filter showClear placeholder="Выберите склад" @change="setFilter" />
-				</div>
-			</div>
-
-			
+			</div>			
 		</div>
 
 		<div class="clients__card-container">
@@ -39,14 +32,13 @@
 					<img :src="item.image" alt="" class="client-card__img" />
 					<div class="client-card__info">
 						<h2 class="client-card__title">«{{ item.name }}»</h2>
-						<p class="client-card__address">Склад: {{ item.warehouse}}</p>
+						<!-- <p class="client-card__address">Склад: {{ item.warehouse}}</p> -->
 						<!-- <p class="client-card__address">Базовая скидка: {{ item.base_sale }}%</p> -->
 					</div>
 				</div>
 				<router-link :to="{ name: 'client_id', params: { id: $route.params.id, client_id: item.id } }" class="link-no-style">
-                    <button class="dart-btn dart-btn-primary client-card__button">Посмотреть остатки</button>
-                </router-link>
-				
+					<button class="dart-btn dart-btn-primary client-card__button">Посмотреть остатки</button>
+				</router-link>				
 			</article>
 		</div>
 	</section>
