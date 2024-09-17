@@ -18,7 +18,7 @@
 					</button>
 				</div>
 
-				<div class="std-basket__warehouse-wrapper">
+				<div class="std-basket__warehouse-wrapper" v-if="this.basket?.warehouses?.length > 0">
 					<span class="std-basket__warehouse-title">Склад для доставки заказа:</span>
 					<div class="std-basket__warehouse-container">
 						<div @click="setWarehouse(warehous.id)" v-for="warehous in this.basket?.warehouses" v-bind:key="warehous.id" class="std-basket__warehouse" :class="{'std-basket__warehouse--active' : warehouse_basket == warehous.id}">
@@ -27,14 +27,14 @@
 					</div>
 				</div>
 
-				<div v-if="this.basket" class="std-basket__info-container">
+				<div v-if="this.basket?.stores" class="std-basket__info-container">
 					<button @click="clearBasket" class="basketClear std-basket__clear-button">
 						Очистить корзину
 						<i class="pi pi-times"></i>
 					</button>
 				</div>
 			</div>
-			<div className="basket-empty" v-if="!this.basket">
+			<div className="basket-empty" v-if="!this.basket?.stores">
 				<div className="basket-empty__content">
 					<img
 						class="hidden-mobile-l"
@@ -49,7 +49,7 @@
 					<h3>В вашей корзине пока пусто</h3>
 				</div>
 			</div>
-			<div v-if="this.basket" class="basket-container">
+			<div v-if="this.basket?.stores" class="basket-container">
 				<div v-for="store in this.basket?.stores" v-bind:key="store.id">
 					<div class="basket-container__adres" :style="{ background: store.color }">
 						{{ store.name }}
@@ -233,7 +233,7 @@
                     </div> -->
 				</div>
 			</div>
-			<div v-if="this.basket" class="std-basket__footer">
+			<div v-if="this.basket?.stores" class="std-basket__footer">
 				<div class="std-basket__total-container">
 					<span class="std-basket__total-label">Итого на поставщика</span>
 					<span class="std-basket__total-value">26 580 ₽</span>
