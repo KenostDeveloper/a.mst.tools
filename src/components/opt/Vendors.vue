@@ -189,6 +189,9 @@ export default {
         }
         this.vendorForm.selected[id] = true
       }
+      if(this.multisupplier) {
+        this.vendorForm.selected[id] = !this.vendorForm.selected[id]
+      }
     },
     changeSelectCheckbox (id) {
       if (!this.multisupplier) {
@@ -197,6 +200,7 @@ export default {
         }
         this.vendorForm.selected[id] = true
       }
+
     },
     changeOpts (id, action) {
       this.loading = true

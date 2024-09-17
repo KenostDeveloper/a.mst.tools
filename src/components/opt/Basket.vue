@@ -18,7 +18,7 @@
 					</button>
 				</div>
 
-				<div class="std-basket__warehouse-wrapper">
+				<div class="std-basket__warehouse-wrapper" v-if="this.basket">
 					<span class="std-basket__warehouse-title">Склад для доставки заказа:</span>
 
 					<div class="std-basket__warehouse-container">

@@ -2579,6 +2579,7 @@ p {
 		overflow: hidden;
 
 		transition-duration: 0.5s;
+		z-index: 10;
 
 		&--active {
 			max-height: 100dvh;
@@ -3594,7 +3595,7 @@ p {
 			border: none;
 			outline: none;
 
-			max-width: 280px;
+			width: 280px;
 			padding-inline: 6px 9px;
 
 			position: relative;
@@ -3639,6 +3640,7 @@ p {
 			opacity: 0;
 			overflow-y: auto;
 			transition-duration: .3s;
+			z-index: 10;
 		}
 
 		&--active {
@@ -3654,6 +3656,12 @@ p {
 		font-weight: 400;
 		line-height: 1.17;
 		text-align: left;
+
+		transition-duration: .3s;
+
+		&:hover {
+			color: #ff0000;
+		}
 	}
 }
 
@@ -5058,6 +5066,10 @@ button.std-icon__wrapper {
 
 .shopping-kenost__cityone {
 	transition: all 0.5s ease;
+
+	.p-calendar {
+		max-width: 50%;
+	}
 }
 
 .order {

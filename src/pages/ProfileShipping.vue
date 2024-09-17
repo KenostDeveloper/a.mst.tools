@@ -205,6 +205,7 @@
 											showIcon
 											id="calendar-24h"
 											v-model="form.dateStart"
+											:minDate="form.dateEnd"
 										/>
 										<span
 											class="error_desc"
@@ -400,6 +401,8 @@
 								v-model:modelCities="this.form.selectedCities"
 								v-model:modelCitiesDates="this.form.citiesDates"
 								@removeSelectedCity="this.removeSelectedCity"
+								:minDate="this.form.dateStart"
+								:vDatesErrors="this.v$.form.citiesDates"
 							/>
 						</div>
 
@@ -1187,21 +1190,9 @@ export default {
 			form: {
 				dateStart: {
 					required,
-					// moreThanDateEnd: helpers.withMessage(
-					// 	"Дата отгрузки должна быть больше даты окончания приема заказов",
-					// 	() => dateStart >= dateEnd
-					// ),
-					checkDateStart: helpers.withMessage(
-						"Дата отгрузки должна быть больше даты окончания приема заказов",
-						() => this.form.dateStart >= this.form.dateEnd
-					),
 				},
 				dateEnd: {
 					required,
-					checkDateEnd: helpers.withMessage(
-						"Дата окончания приема заказов должна быть меньше даты отгрузки",
-						() => this.form.dateEnd <= this.form.dateStart
-					),
 				},
 				timeSelected: {
 					repeater: { required },
@@ -1213,6 +1204,24 @@ export default {
 						() => this.form.selectedCities.length
 					),
 				},
+				citiesDates: {
+					required: helpers.withMessage("Выберите дату отгрузки",
+						() => {
+							if(!Object.keys(this.form.citiesDates).length) {
+								return false;
+							}
+
+							let result = true;
+							Object.keys(this.form.citiesDates).forEach(key => {
+								if(!this.form.citiesDates[key]) {
+									result = false;
+									return;
+								}
+							});
+							return result;
+						}
+					)
+				}
 			},
 		};
 	},
@@ -1231,6 +1240,17 @@ export default {
 				this.sortSelectedCities();
 			},
 			deep: true,
+		},
+		"form.dateEnd": function (newVal, oldVal) {
+			if(newVal > this.form.dateStart) {
+				this.form.dateStart = newVal;
+			}
+
+			Object.keys(this.form.citiesDates).forEach(key => {
+				if(newVal > this.form.citiesDates[key]) {
+					this.form.citiesDates[key] = newVal;
+				}
+			})
 		},
 		orgs: function (newVal, oldVal) {
 			this.organizations = newVal;
