@@ -419,7 +419,7 @@
 			>
 				<img class="std-nav__address-icon" src="/images/icons/map_marker.svg" />
 				<span class="std-nav__address-text">
-					«{{active_warehouse.name_short}}», {{ active_warehouse.address_short }}
+					«{{ org_stores.items.find((el) => el.id == warehouse_basket).name_short }}», {{ org_stores.items.find((el) => el.id == warehouse_basket).address_short }}
 				</span>
 			</button>
 			<ul
@@ -672,6 +672,11 @@ export default {
 			}).then(() => {
 				const data = { action: "basket/get", id: router.currentRoute._value.params.id };
 				this.busket_from_api(data);
+				this.busket_from_api({
+					action: 'basket/get',
+					id: router.currentRoute._value.params.id,
+					warehouse: 'all'
+				})
 			})
 			this.showWarehouseList = false
 		}
@@ -680,11 +685,6 @@ export default {
 		this.get_opt_warehouse_catalog_from_api();
 		this.get_opt_catalog_from_api();
 		this.get_opt_vendors_from_api().then((this.opt_vendors = this.optvendors));
-
-		this.org_get_stores_from_api({
-			action: 'get/stores',
-			id: this.$route.params.id
-		})
 
 		const getOrganizationss = async () => {
 			this.organizations = (await this.org_get_from_api({ action: "get/orgs" })).data.data;
@@ -702,9 +702,14 @@ export default {
 			}
 		});
 		
-		this.opt_warehouse_basket({
-			action: 'get/active/basket/warehouse',
+		this.org_get_stores_from_api({
+			action: 'get/stores',
 			id: this.$route.params.id
+		}).then(() => {
+			this.opt_warehouse_basket({
+				action: 'get/active/basket/warehouse',
+				id: this.$route.params.id
+			})
 		})
 	},
 	components: { Vendors, Accordion },
@@ -720,9 +725,6 @@ export default {
 		},
 		optcatalogwarehouse: function (newVal, oldVal) {
 			this.catalog_warehouse = newVal;
-		},
-		warehouse_basket: function (newVal, oldVal) {
-			this.active_warehouse = this.org_stores?.items?.find((el) => el.id == newVal);
 		},
 	},
 };

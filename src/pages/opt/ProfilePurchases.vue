@@ -74,7 +74,7 @@ export default {
 			"get_opt_mainpage_from_api",
 			"get_opt_catalog_from_api",
 			"get_opt_vendors_from_api",
-			"get_salses_banners_to_api",
+			"get_salses_banners_to_api"
 		]),
 		toOrder() {
 			this.show_order = true;

@@ -319,6 +319,11 @@ export default {
 					this.$store.commit("SET_OPT_COMPLECT_MUTATION_TO_VUEX", datainfo);
 					this.$store.commit("SET_SALES_COMPLECT_MUTATION_TO_VUEX", datainfo);
 				});
+				this.busket_from_api({
+					action: 'basket/get',
+					id: router.currentRoute._value.params.id,
+					warehouse: 'all'
+				})
 			}
 		},
 		ElemCount(object) {
@@ -343,6 +348,11 @@ export default {
 					this.$store.commit("SET_OPT_PRODUCTS_MUTATION_TO_VUEX", datainfo);
 					this.$store.commit("SET_SALES_PRODUCTS_MUTATION_TO_VUEX", datainfo);
 				});
+				this.busket_from_api({
+					action: 'basket/get',
+					id: router.currentRoute._value.params.id,
+					warehouse: 'all'
+				})
 			}
 		},
 		clearBasket() {
@@ -354,6 +364,11 @@ export default {
 				// store_id: 'all',
 			};
 			this.busket_from_api(data).then((response) => {});
+			this.busket_from_api({
+				action: 'basket/get',
+				id: router.currentRoute._value.params.id,
+				warehouse: 'all'
+			})
 		},
 		clearBasketProduct(storeid, productid) {
 			this.$emit("catalogUpdate");
@@ -365,6 +380,11 @@ export default {
 				id_remain: productid,
 			};
 			this.busket_from_api(data).then((response) => {});
+			this.busket_from_api({
+				action: 'basket/get',
+				id: router.currentRoute._value.params.id,
+				warehouse: 'all'
+			})
 		},
 		clearBasketComplect(storeid, complectid) {
 			this.$emit("catalogUpdate");
@@ -376,6 +396,11 @@ export default {
 				id_complect: complectid,
 			};
 			this.busket_from_api(data).then((response) => {});
+			this.busket_from_api({
+				action: 'basket/get',
+				id: router.currentRoute._value.params.id,
+				warehouse: 'all'
+			})
 		},
 		toOrder() {
 			this.$emit("toOrder");
@@ -401,6 +426,11 @@ export default {
 			}).then(() => {
 				const data = { action: "basket/get", id: router.currentRoute._value.params.id };
 				this.busket_from_api(data);
+				this.busket_from_api({
+					action: 'basket/get',
+					id: router.currentRoute._value.params.id,
+					warehouse: 'all'
+				})
 			})
 		}
 	},
