@@ -453,7 +453,7 @@
 							v-model="search"
 						/>
 					</div>
-					<button class="std-search-field__delete" @click="this.search = ''">
+					<button v-if="this.search" class="std-search-field__delete" @click="this.search = ''">
 						<i class="pi pi-times"></i>
 					</button>
 					<button
