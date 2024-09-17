@@ -4089,6 +4089,35 @@ p {
 	.breadcrumbs {
 		margin-bottom: 28px;
 	}
+
+	.categories {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 18px;
+
+		.category-item {
+			border: 1px solid rgba(180, 180, 180, 1);
+			border-radius: 26px;
+
+			padding: 4px 15px;
+
+			text-decoration: none;
+			transition-duration: .3s;
+
+			&:hover,
+			&--active {
+				background-color: rgba(221, 226, 232, 1);
+				border-color: transparent;
+				color: inherit;
+			}
+
+			.title {
+				font-size: 16px;
+				font-weight: 400;
+				line-height: 1.875;
+			}
+		}
+	}
 }
 
 .profile-products__products {

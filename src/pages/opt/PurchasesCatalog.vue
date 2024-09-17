@@ -20,25 +20,27 @@
 					</div>
 					<h1 class="h1-mini" v-else>{{ opt_products?.page?.pagetitle }}</h1>
 					<div v-if="opt_products.categories.length" class="categories">
-						<div class="category" :key="cat.id" v-for="cat in opt_products.categories">
+						<template :key="cat.id" v-for="cat in opt_products.categories">
 							<RouterLink
 								:to="{
 									name: 'org_opt_waregouse_category',
 									params: { warehouse_cat_id: cat.id },
 								}"
 								v-if="$route.params.warehouse_id"
+								class="category-item"
 							>
 								<span class="title">{{ cat.pagetitle }}</span>
-								<img :src="cat.image" :alt="cat.pagetitle" v-if="cat.image" />
+								<!-- <img :src="cat.image" :alt="cat.pagetitle" v-if="cat.image" /> -->
 							</RouterLink>
 							<RouterLink
 								:to="{ name: 'purchases_catalog', params: { category_id: cat.id } }"
 								v-else
+								class="category-item"
 							>
 								<span class="title">{{ cat.pagetitle }}</span>
-								<img :src="cat.image" :alt="cat.pagetitle" v-if="cat.image" />
+								<!-- <img :src="cat.image" :alt="cat.pagetitle" v-if="cat.image" /> -->
 							</RouterLink>
-						</div>
+						</template>
 					</div>
 					<TableCatalog
 						:is_warehouses="true"
