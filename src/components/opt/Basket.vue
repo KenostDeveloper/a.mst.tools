@@ -6,18 +6,37 @@
 					<div class="std-basket__title-container">
 						<p class="d-col-basket__title std-basket__title"><span>Корзина</span></p>
 						<!-- {{ this.basket }} -->
-						<div class="std-cart-icon__wrapper"><span class="basket-count-all" v-if="this.basket?.count">{{this.basket?.count}}</span><span class="basket-count-all" v-else>0</span></div>
+						<div class="std-cart-icon__wrapper">
+							<span class="basket-count-all" v-if="this.basket?.count">{{
+								this.basket?.count
+							}}</span
+							><span class="basket-count-all" v-else>0</span>
+						</div>
 					</div>
 					<button class="std-basket__expand-button">
 						<i class="pi pi-angle-down std-basket__expand-icon"></i>
 					</button>
 				</div>
 
+				<div class="std-basket__warehouse-wrapper">
+					<span class="std-basket__warehouse-title">Склад для доставки заказа:</span>
+
+					<div class="std-basket__warehouse-container">
+						<div class="std-basket__warehouse std-basket__warehouse--active">
+							Ростов на Дону, ул. Микухина Каланахлоя, 11 / 7 к 32 ЛИТ 898
+						</div>
+						<div class="std-basket__warehouse">Сочи, ул. Мира 3</div>
+						<div class="std-basket__warehouse">
+							Ростов на Дону, ул. Микухина Каланахлоя, 11 / 7 к 32 ЛИТ 898
+						</div>
+						<div class="std-basket__warehouse">
+							г. Ростов на Дону, ул. Микухина Каланахлоя, 11 / 7 к 32 ЛИТ 898
+						</div>
+					</div>
+				</div>
+
 				<div v-if="this.basket" class="std-basket__info-container">
-					<button
-						@click="clearBasket"
-						class="basketClear std-basket__clear-button"
-					>
+					<button @click="clearBasket" class="basketClear std-basket__clear-button">
 						Очистить корзину
 						<i class="pi pi-times"></i>
 					</button>
@@ -25,18 +44,34 @@
 			</div>
 			<div className="basket-empty" v-if="!this.basket">
 				<div className="basket-empty__content">
-					<img class="hidden-mobile-l" src="../../assets/images/icons/basket.svg" alt="" />
-					<img class="visible-mobile-l" src="../../assets/images/icons/basket-gray.svg" alt="" />
+					<img
+						class="hidden-mobile-l"
+						src="../../assets/images/icons/basket.svg"
+						alt=""
+					/>
+					<img
+						class="visible-mobile-l"
+						src="../../assets/images/icons/basket-gray.svg"
+						alt=""
+					/>
 					<h3>В вашей корзине пока пусто</h3>
 				</div>
 			</div>
 			<div v-if="this.basket" class="basket-container">
 				<div v-for="store in this.basket?.stores" v-bind:key="store.id">
-					<div class="basket-container__adres" :style="{'background': store.color}">
-						{{store.name}}
+					<div class="basket-container__adres" :style="{ background: store.color }">
+						{{ store.name }}
 					</div>
-					<div class="kenost-product-basket" v-for="items in store.products" v-bind:key="items.id">
-						<div class="kenost-basket" v-for="product in items.basket" v-bind:key="product.id">
+					<div
+						class="kenost-product-basket"
+						v-for="items in store.products"
+						v-bind:key="items.id"
+					>
+						<div
+							class="kenost-basket"
+							v-for="product in items.basket"
+							v-bind:key="product.id"
+						>
 							<div
 								@click="clearBasketProduct(store.id, product.id_remain)"
 								class="btn-close link-no-style"
@@ -45,7 +80,9 @@
 								<img src="../../assets/images/icons/close.svg" alt="" />
 							</div>
 							<div class="kenost-basket__product">
-								<p class="kenost-basket__name" :title="items.name">{{ items.name }}</p>
+								<p class="kenost-basket__name" :title="items.name">
+									{{ items.name }}
+								</p>
 								<div class="kenost-basket__info">
 									<span>{{ items.article }}</span>
 									<div class="kenost-basket__info-left">
@@ -99,7 +136,8 @@
 										<b
 											>{{
 												(
-													complect.products[0].info.count * complect.products[0].info.price
+													complect.products[0].info.count *
+													complect.products[0].info.price
 												).toLocaleString("ru")
 											}}
 											₽</b
@@ -118,7 +156,11 @@
 								class="kenost-basket-gift"
 								:class="{ none: index === 0 }"
 							>
-								<p v-if="index !== 0" class="kenost-basket-gift__name" :title="product.name">
+								<p
+									v-if="index !== 0"
+									class="kenost-basket-gift__name"
+									:title="product.name"
+								>
 									{{ product.name }}
 								</p>
 								<div v-if="index !== 0" class="kenost-basket-gift__info">
@@ -126,7 +168,10 @@
 									<span
 										>{{ product.info.count.toLocaleString("ru") }} х
 										{{
-											(Number(product.info.price) / Number(product.info.count)).toLocaleString("ru")
+											(
+												Number(product.info.price) /
+												Number(product.info.count)
+											).toLocaleString("ru")
 										}}
 										₽</span
 									>
@@ -202,9 +247,13 @@
 					<span class="std-basket__total-value">26 580 ₽</span>
 				</div>
 
-				<div class="basket-container__adres">Мегаснаб, ул. Гоголя, 16, этаж 1, офис 122</div>
+				<div class="basket-container__adres">
+					Мегаснаб, ул. Гоголя, 16, этаж 1, офис 122
+				</div>
 
-				<a class="a-dart-btn a-dart-btn-primary btn-arrange button-basket" @click.prevent="toOrder"
+				<a
+					class="a-dart-btn a-dart-btn-primary btn-arrange button-basket"
+					@click.prevent="toOrder"
 					>Оформить заказ <span>{{ this.basket?.cost?.toLocaleString("ru") }} ₽</span></a
 				>
 			</div>
@@ -215,7 +264,9 @@
 			<!-- <img src="../../../public/img/opt/not-products.png" alt="" /> -->
 			<b>У нас нет столько товаров :(</b>
 			<p>Извините, но количество данного товара ограничено</p>
-			<div class="a-dart-btn a-dart-btn-primary" @click="this.modal_remain = false">Понятно</div>
+			<div class="a-dart-btn a-dart-btn-primary" @click="this.modal_remain = false">
+				Понятно
+			</div>
 		</div>
 	</Dialog>
 </template>
@@ -289,7 +340,7 @@ export default {
 					id_remain: object.id,
 					value: object.value,
 					store_id: object.store_id,
-					actions: object.item.actions_ids
+					actions: object.item.actions_ids,
 				};
 				this.busket_from_api(data).then((response) => {
 					const datainfo = {
@@ -353,7 +404,7 @@ export default {
 	},
 	mounted() {
 		const data = { action: "basket/get", id: router.currentRoute._value.params.id };
-		this.busket_from_api(data)
+		this.busket_from_api(data);
 	},
 	components: {
 		Counter,
