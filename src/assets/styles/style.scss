@@ -2487,7 +2487,7 @@ p {
 	flex-direction: column;
 	gap: 50px !important;
 
-	margin-top: clamp(25px, 3vmax, 100px);
+	margin-top: 0;
 
 	&__table {
 		width: 100% !important;

@@ -163,6 +163,7 @@
 				:header="this.dialogHeader"
 				class="std-dialog"
 				:style="{ width: '800px' }"
+				@hide="formReset()"
 			>
 				<form action="#" @submit.prevent="formSubmit">
 					<!-- <div class="shipping-form">
@@ -1202,11 +1203,7 @@ export default {
 						() => this.form.dateEnd <= this.form.dateStart
 					),
 				},
-
 				timeSelected: {
-					range: {
-						required,
-					},
 					repeater: { required },
 				},
 				store_id: { required },
