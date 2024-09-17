@@ -5079,6 +5079,12 @@ button.std-icon__wrapper {
 	}
 }
 
+.p-component {
+	* {
+		font-size: inherit !important;
+	}
+}
+
 // ----------------
 
 .p-fileupload-buttonbar {
