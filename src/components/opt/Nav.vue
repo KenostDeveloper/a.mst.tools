@@ -453,6 +453,9 @@
 							v-model="search"
 						/>
 					</div>
+					<button class="std-search-field__delete" @click="this.search = ''">
+						<i class="pi pi-times"></i>
+					</button>
 					<button
 						type="submit"
 						class="navmain__dart_btn a-dart-btn a-dart-btn-primary std-search-field__button"
@@ -632,7 +635,6 @@ export default {
 		},
 		setActualCatalog(catalog) {
 			this.actualCatalog = catalog;
-			console.log(this.actualCatalog, this.actualCatalog.parent, this.actualCatalog.id);
 		},
 		setPrevCatalog() {
 			if (this.organizationsOrCategories === "organizations") {

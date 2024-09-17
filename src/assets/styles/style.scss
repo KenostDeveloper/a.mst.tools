@@ -3730,7 +3730,9 @@ p {
 	}
 
 	&__input {
+		border: none !important;
 		padding-left: 0 !important;
+		padding-right: 0 !important;
 
 		&::placeholder {
 			color: #8a8a8a;
@@ -3740,6 +3742,25 @@ p {
 	&__button {
 		left: 0 !important;
 		height: 100%;
+	}
+
+	&__delete {
+		cursor: pointer;
+
+		background: none;
+		border: none;
+		outline: none;
+
+		margin-right: 5px;
+		padding: 3px;
+
+		i {
+			display: flex;
+
+			&::before {
+				font-size: 12px;
+			}
+		}
 	}
 }
 
