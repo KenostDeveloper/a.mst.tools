@@ -207,7 +207,6 @@ export default {
 	methods: {
 		...mapActions(["get_vendors_from_api", "toggle_opts"]),
 		changeOpts(id, action) {
-			console.log(id + " " + action);
 			const data = {
 				id: id,
 				action: action,

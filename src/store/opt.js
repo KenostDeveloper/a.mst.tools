@@ -18,7 +18,8 @@ export default {
     oprprices: [],
     oprpricesremain: [],
     my_orders: [],
-    optcatalogwarehouse: []
+    optcatalogwarehouse: [],
+    warehouse_basket: [],
   },
   actions: {
     set_vendors_to_api ({ commit }, data) {
@@ -407,7 +408,25 @@ export default {
             router.push({ name: 'main' })
           }
         })
-    }
+    },
+    opt_warehouse_basket ({ commit }, data) {
+      return Axios('/rest/front_opt', {
+        method: 'POST',
+        data: data,
+        headers: {
+          'Access-Control-Allow-Origin': '*'
+        }
+      })
+        .then((response) => {
+          commit('SET_BASKET_WAREHOUSE', response.data)
+        })
+        .catch(error => {
+          if (error.response.status === 403) {
+            localStorage.removeItem('user')
+            router.push({ name: 'main' })
+          }
+        })
+    },
   },
   mutations: {
     SET_OPT_MAINPAGE_TO_VUEX: (state, data) => {
@@ -499,7 +518,10 @@ export default {
     },
     SET_OPT_COMPLECTS: (state, data) => {
       state.optcomplects = data.data
-    }
+    },
+    SET_BASKET_WAREHOUSE: (state, data) => {
+      state.warehouse_basket = data.data
+    },
   },
   getters: {
     mainpage (state) {
@@ -543,6 +565,9 @@ export default {
     },
     optcatalogwarehouse (state) {
       return state.optcatalogwarehouse
+    },
+    warehouse_basket (state) {
+      return state.warehouse_basket
     },
   }
 }
