@@ -3552,6 +3552,7 @@ p {
 
 		transition-duration: .3s;
 
+		&:hover,
 		&--active {
 			background-color: #FF0000;
 			border: none;
