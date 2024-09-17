@@ -142,9 +142,23 @@
 							name: 'purchases_catalog_warehouse',
 							params: {
 								id: this.$route.params.id,
-								warehouse_id: this.catalogWarehouseParent,
+								warehouse_id: this.actualCatalog.id,
 							},
 						}"
+						class="std-catalog__link"
+						@click="toggleCatalogVisibilityAd()"
+					>
+						<span class="std-tab-item__text">Все товары</span>
+					</router-link>
+					<router-link
+						v-if="this.organizationsOrCategories === 'categories'"
+						:to="{
+								name: 'purchases_catalog',
+								params: {
+									id: this.$route.params.id,
+									category_id: this.actualCatalog.id,
+								},
+							}"
 						class="std-catalog__link"
 						@click="toggleCatalogVisibilityAd()"
 					>
@@ -419,7 +433,7 @@
 			>
 				<img class="std-nav__address-icon" src="/images/icons/map_marker.svg" />
 				<span class="std-nav__address-text">
-					«{{active_warehouse.name_short}}», {{ active_warehouse.address_short }}
+					«{{active_warehouse?.name_short}}», {{ active_warehouse?.address_short }}
 				</span>
 			</button>
 			<ul
@@ -647,8 +661,8 @@ export default {
 		},
 		findParent(catalog) {
 			catalog.forEach((item) => {
-				if (this.actualCatalog.parent == 0) {
-					if (String(item.id) == String(this.catalogWarehouseParent)) {
+				if (String(this.actualCatalog.parent).includes("warehouse_")) {
+					if (item.id == String(this.actualCatalog.parent).split("warehouse_")[1]) {
 						this.parentCatalog = item;
 						return;
 					}
