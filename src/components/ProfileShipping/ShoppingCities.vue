@@ -17,20 +17,21 @@
 						<img src="../../assets/images/icons/close.svg" alt="" />
 					</div>
 				</div>
-				<div
+				<!-- <div
 					class="shopping-kenost__cityone-date mb-3"
 					:class="{
 						error: v$.citiesDates.$errors.length,
 					}"
 					v-if="item"
-				>
+				> -->
 					<p class="k-mini-text">Дата отгрузки</p>
 					<CalendarVue v-model="citiesDates[item.value]" showIcon id="calendar-24h" />
-				</div>
 
-				<span class="error_desc" v-for="error of v$.citiesDates.$errors" :key="error.$uid">
-					{{ error.$message }}
-				</span>
+					<!-- <span class="error_desc" v-for="error of v$.citiesDates.$errors" :key="error.$uid">
+						{{ error.$message }}
+					</span> -->
+				<!-- </div> -->
+
 			</li>
 		</template>
 	</draggable>
