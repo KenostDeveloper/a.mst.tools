@@ -4473,14 +4473,16 @@ button.std-icon__wrapper {
 		}
 	}
 }
-
+.kenost-action-opt-wrap{
+	margin-bottom: 30px;
+}
 .kenost-action-opt {
 	border: 1px solid #adadad;
 	padding: 12px;
 	border-radius: 5px;
 	text-decoration: none;
 	height: 100%;
-
+	
 	&__image {
 		border-radius: 5px;
 	}
