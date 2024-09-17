@@ -411,13 +411,53 @@
 			<img src="/images/icons/menu.svg" alt="" class="hidden-tablet-l" />
 			<img src="/images/icons/arrow-rounded.svg" alt="" class="visible-tablet-l" />
 		</button>
-		
-		<button class="std-nav__address">
-			<img class="std-nav__address-icon" src="/images/icons/map_marker.svg" />
-			<span class="std-nav__address-text"
-				>Склад доставки: Ростов на Дону, ул. Микухина Каланахлоя, 11 / 7 к 32 ЛИТ 898</span
+
+		<div class="std-nav__address-wrapper">
+			<button
+				class="std-nav__address"
+				@click.stop="() => (this.showWarehouseList = !this.showWarehouseList)"
 			>
-		</button>
+				<img class="std-nav__address-icon" src="/images/icons/map_marker.svg" />
+				<span class="std-nav__address-text"
+					>Склад доставки: Ростов на Дону, ул. Микухина Каланахлоя, 11 / 7 к 32 ЛИТ
+					898</span
+				>
+			</button>
+			<ul
+				class="std-nav__warehouse-list"
+				:class="{ ['std-nav__warehouse-list--active']: this.showWarehouseList }"
+				@click.stop
+			>
+				<li class="std-nav__warehouse-item" @click="() => (this.showWarehouseList = false)">
+					Ростов на Дону, ул. Микухина Каланахлоя, 11 / 7 к 32 ЛИТ 898
+				</li>
+				<li class="std-nav__warehouse-item" @click="() => (this.showWarehouseList = false)">Сочи, ул. Мира</li>
+				<li class="std-nav__warehouse-item" @click="() => (this.showWarehouseList = false)">
+					Ростов на Дону, ул. Микухина Каланахлоя, 11 / 7 к 32 ЛИТ 898
+				</li>
+				<li class="std-nav__warehouse-item" @click="() => (this.showWarehouseList = false)">
+					Ростов на Дону, ул. Микухина Каланахлоя, 11 / 7 к 32 ЛИТ 898
+				</li>
+				<li class="std-nav__warehouse-item" @click="() => (this.showWarehouseList = false)">
+					Ростов на Дону, ул. Микухина Каланахлоя, 11 / 7 к 32 ЛИТ 898
+				</li>
+				<li class="std-nav__warehouse-item" @click="() => (this.showWarehouseList = false)">
+					Ростов на Дону, ул. Микухина Каланахлоя, 11 / 7 к 32 ЛИТ 898
+				</li>
+				<li class="std-nav__warehouse-item" @click="() => (this.showWarehouseList = false)">
+					Ростов на Дону, ул. Микухина Каланахлоя, 11 / 7 к 32 ЛИТ 898
+				</li>
+				<li class="std-nav__warehouse-item" @click="() => (this.showWarehouseList = false)">
+					Ростов на Дону, ул. Микухина Каланахлоя, 11 / 7 к 32 ЛИТ 898
+				</li>
+				<li class="std-nav__warehouse-item" @click="() => (this.showWarehouseList = false)">
+					Ростов на Дону, ул. Микухина Каланахлоя, 11 / 7 к 32 ЛИТ 898
+				</li>
+				<li class="std-nav__warehouse-item" @click="() => (this.showWarehouseList = false)">
+					Ростов на Дону, ул. Микухина Каланахлоя, 11 / 7 к 32 ЛИТ 898
+				</li>
+			</ul>
+		</div>
 
 		<div
 			v-if="opt_vendors.selected_count > 0"
@@ -567,6 +607,7 @@ export default {
 			catalogIsOpened: false,
 			actualCatalog: {},
 			actualImageSrc: "",
+			showWarehouseList: false,
 		};
 	},
 	methods: {
@@ -660,6 +701,10 @@ export default {
 		document.addEventListener("click", (e) => {
 			if (!elem.contains(e.target)) {
 				this.toggleCatalogVisibility(false);
+			}
+
+			if(this.showWarehouseList) {
+				this.showWarehouseList = false;
 			}
 		});
 	},
