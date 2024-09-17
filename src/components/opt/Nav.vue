@@ -411,13 +411,27 @@
 			<img src="/images/icons/menu.svg" alt="" class="hidden-tablet-l" />
 			<img src="/images/icons/arrow-rounded.svg" alt="" class="visible-tablet-l" />
 		</button>
-		
-		<button class="std-nav__address">
-			<img class="std-nav__address-icon" src="/images/icons/map_marker.svg" />
-			<span class="std-nav__address-text"
-				>Склад доставки: Ростов на Дону, ул. Микухина Каланахлоя, 11 / 7 к 32 ЛИТ 898</span
+
+		<div class="std-nav__address-wrapper" v-if="opt_vendors.selected_count > 0">
+			<button
+				class="std-nav__address"
+				@click.stop="() => (this.showWarehouseList = !this.showWarehouseList)"
 			>
-		</button>
+				<img class="std-nav__address-icon" src="/images/icons/map_marker.svg" />
+				<span class="std-nav__address-text">
+					«{{active_warehouse.name_short}}», {{ active_warehouse.address_short }}
+				</span>
+			</button>
+			<ul
+				class="std-nav__warehouse-list"
+				:class="{ ['std-nav__warehouse-list--active']: this.showWarehouseList }"
+				@click.stop
+			>
+				<li v-for="warehous in org_stores.items" v-bind:key="warehous.id" @click="setWarehouse(warehous.id)" class="std-nav__warehouse-item">
+					«{{warehous.name_short}}», {{ warehous.address_short }}
+				</li>
+			</ul>
+		</div>
 
 		<div
 			v-if="opt_vendors.selected_count > 0"
@@ -567,6 +581,8 @@ export default {
 			catalogIsOpened: false,
 			actualCatalog: {},
 			actualImageSrc: "",
+			showWarehouseList: false,
+			active_warehouse: []
 		};
 	},
 	methods: {
@@ -576,6 +592,9 @@ export default {
 			"get_opt_catalog_from_api",
 			"org_get_from_api",
 			"get_opt_warehouse_catalog_from_api",
+			"org_get_stores_from_api",
+			"opt_warehouse_basket",
+			"busket_from_api"
 		]),
 		toSearch() {
 			router.push({ name: "opt_search", params: { search: this.search } });
@@ -645,11 +664,27 @@ export default {
 
 			return this.parentCatalog;
 		},
+		setWarehouse(id){
+			this.opt_warehouse_basket({
+				action: 'set/active/basket/warehouse',
+				id: this.$route.params.id,
+				id_warehouse: id
+			}).then(() => {
+				const data = { action: "basket/get", id: router.currentRoute._value.params.id };
+				this.busket_from_api(data);
+			})
+			this.showWarehouseList = false
+		}
 	},
 	mounted() {
 		this.get_opt_warehouse_catalog_from_api();
 		this.get_opt_catalog_from_api();
 		this.get_opt_vendors_from_api().then((this.opt_vendors = this.optvendors));
+
+		this.org_get_stores_from_api({
+			action: 'get/stores',
+			id: this.$route.params.id
+		})
 
 		const getOrganizationss = async () => {
 			this.organizations = (await this.org_get_from_api({ action: "get/orgs" })).data.data;
@@ -661,11 +696,20 @@ export default {
 			if (!elem.contains(e.target)) {
 				this.toggleCatalogVisibility(false);
 			}
+
+			if(this.showWarehouseList) {
+				this.showWarehouseList = false;
+			}
 		});
+		
+		this.opt_warehouse_basket({
+			action: 'get/active/basket/warehouse',
+			id: this.$route.params.id
+		})
 	},
 	components: { Vendors, Accordion },
 	computed: {
-		...mapGetters(["optvendors", "salesbanners", "optcatalog", "optcatalogwarehouse"]),
+		...mapGetters(["optvendors", "salesbanners", "optcatalog", "optcatalogwarehouse", "org_stores", "warehouse_basket"]),
 	},
 	watch: {
 		optvendors: function (newVal, oldVal) {
@@ -676,6 +720,9 @@ export default {
 		},
 		optcatalogwarehouse: function (newVal, oldVal) {
 			this.catalog_warehouse = newVal;
+		},
+		warehouse_basket: function (newVal, oldVal) {
+			this.active_warehouse = this.org_stores?.items?.find((el) => el.id == newVal);
 		},
 	},
 };
