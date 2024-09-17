@@ -720,6 +720,7 @@ export default {
 		},
 		optcatalogwarehouse: function (newVal, oldVal) {
 			this.catalog_warehouse = newVal;
+			this.actualCatalog = {};
 		},
 		warehouse_basket: function (newVal, oldVal) {
 			this.active_warehouse = this.org_stores?.items?.find((el) => el.id == newVal);

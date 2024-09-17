@@ -173,6 +173,7 @@ export default {
     ...mapActions([
       'set_vendors_to_api',
       'get_opt_vendors_from_api',
+			'get_opt_warehouse_catalog_from_api',
       'toggle_opts_visible'
     ]),
     toggleVendorModal () {
@@ -215,6 +216,9 @@ export default {
           this.$emit('vendorCheck')
         })
       })
+
+      this.get_opt_warehouse_catalog_from_api();
+
     },
     setFilter (type) {
       if (type === 'filter') {
@@ -265,6 +269,8 @@ export default {
             .catch((result) => {
               console.log(result)
             })
+
+          this.get_opt_warehouse_catalog_from_api();
         })
       } else {
         this.$toast.add({ severity: 'error', summary: 'Укажите поставщиков', detail: 'Для того, чтобы выбрать поставщиков, отметьте флажки рядом с ними', life: 3000 })
