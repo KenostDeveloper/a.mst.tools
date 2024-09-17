@@ -411,13 +411,13 @@
 			<img src="/images/icons/menu.svg" alt="" class="hidden-tablet-l" />
 			<img src="/images/icons/arrow-rounded.svg" alt="" class="visible-tablet-l" />
 		</button>
-		<!-- 
+		
 		<button class="std-nav__address">
 			<img class="std-nav__address-icon" src="/images/icons/map_marker.svg" />
 			<span class="std-nav__address-text"
 				>Склад доставки: Ростов на Дону, ул. Микухина Каланахлоя, 11 / 7 к 32 ЛИТ 898</span
 			>
-		</button> -->
+		</button>
 
 		<div
 			v-if="opt_vendors.selected_count > 0"
