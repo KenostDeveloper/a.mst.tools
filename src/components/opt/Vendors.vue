@@ -235,7 +235,6 @@ export default {
       })
       if (!error) {
         if (!this.multisupplier) {
-          console.log(this.items.selected)
           for (let i = 0; i < this.items.selected.length; i++) {
             const data = {
               id: this.items.selected[i].id,
