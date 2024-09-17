@@ -593,7 +593,8 @@ export default {
 			"org_get_from_api",
 			"get_opt_warehouse_catalog_from_api",
 			"org_get_stores_from_api",
-			"opt_warehouse_basket"
+			"opt_warehouse_basket",
+			"busket_from_api"
 		]),
 		toSearch() {
 			router.push({ name: "opt_search", params: { search: this.search } });
@@ -664,11 +665,13 @@ export default {
 			return this.parentCatalog;
 		},
 		setWarehouse(id){
-			console.log(id)
 			this.opt_warehouse_basket({
 				action: 'set/active/basket/warehouse',
 				id: this.$route.params.id,
 				id_warehouse: id
+			}).then(() => {
+				const data = { action: "basket/get", id: router.currentRoute._value.params.id };
+				this.busket_from_api(data);
 			})
 			this.showWarehouseList = false
 		}

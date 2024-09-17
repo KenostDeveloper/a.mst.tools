@@ -20,9 +20,8 @@
 
 				<div class="std-basket__warehouse-wrapper">
 					<span class="std-basket__warehouse-title">Склад для доставки заказа:</span>
-
 					<div class="std-basket__warehouse-container">
-						<div v-for="warehous in this.basket?.warehouses" v-bind:key="warehous.id" class="std-basket__warehouse std-basket__warehouse--active">
+						<div @click="setWarehouse(warehous.id)" v-for="warehous in this.basket?.warehouses" v-bind:key="warehous.id" class="std-basket__warehouse" :class="{'std-basket__warehouse--active' : warehouse_basket == warehous.id}">
 							«{{warehous.name_short}}», {{ warehous.address_short }}
 						</div>
 					</div>
@@ -285,14 +284,14 @@ export default {
 	data() {
 		return {
 			isOpened: false,
-
+			active_warehouse: [],
 			loading: true,
 			basket: {},
 			modal_remain: false,
 		};
 	},
 	methods: {
-		...mapActions(["busket_from_api"]),
+		...mapActions(["busket_from_api", "opt_warehouse_basket"]),
 		updateBasket() {
 			//   const data = { action: 'basket/get', id: router.currentRoute._value.params.id }
 			//   this.busket_from_api(data).then(
@@ -394,17 +393,32 @@ export default {
 				text.innerText = "— Скрыть подарок";
 			}
 		},
+		setWarehouse(id){
+			this.opt_warehouse_basket({
+				action: 'set/active/basket/warehouse',
+				id: this.$route.params.id,
+				id_warehouse: id
+			}).then(() => {
+				const data = { action: "basket/get", id: router.currentRoute._value.params.id };
+				this.busket_from_api(data);
+			})
+		}
 	},
 	mounted() {
 		const data = { action: "basket/get", id: router.currentRoute._value.params.id };
 		this.busket_from_api(data);
+
+		this.opt_warehouse_basket({
+			action: 'get/active/basket/warehouse',
+			id: this.$route.params.id
+		})
 	},
 	components: {
 		Counter,
 		Dialog,
 	},
 	computed: {
-		...mapGetters(["optbasket"]),
+		...mapGetters(["optbasket", "warehouse_basket"]),
 	},
 	watch: {
 		optbasket: function (newVal, oldVal) {
