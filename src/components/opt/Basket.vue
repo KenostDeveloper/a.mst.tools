@@ -22,15 +22,8 @@
 					<span class="std-basket__warehouse-title">Склад для доставки заказа:</span>
 
 					<div class="std-basket__warehouse-container">
-						<div class="std-basket__warehouse std-basket__warehouse--active">
-							Ростов на Дону, ул. Микухина Каланахлоя, 11 / 7 к 32 ЛИТ 898
-						</div>
-						<div class="std-basket__warehouse">Сочи, ул. Мира 3</div>
-						<div class="std-basket__warehouse">
-							Ростов на Дону, ул. Микухина Каланахлоя, 11 / 7 к 32 ЛИТ 898
-						</div>
-						<div class="std-basket__warehouse">
-							г. Ростов на Дону, ул. Микухина Каланахлоя, 11 / 7 к 32 ЛИТ 898
+						<div v-for="warehous in this.basket?.warehouses" v-bind:key="warehous.id" class="std-basket__warehouse std-basket__warehouse--active">
+							«{{warehous.name_short}}», {{ warehous.address_short }}
 						</div>
 					</div>
 				</div>
