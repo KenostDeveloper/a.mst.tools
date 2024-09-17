@@ -130,18 +130,7 @@ export default {
 		},
 
 		getAvailableCity(filteredCities, city) {
-			let cityAbbr = city.split(" ")[0];
-
-			if (
-				cityAbbr === "г" ||
-				cityAbbr === "село" ||
-				cityAbbr === "поселок" ||
-				cityAbbr === "деревня"
-			) {
-				if (!filteredCities?.includes(city) && !this.selections?.includes(city)) {
-					return city;
-				}
-			}
+			return city;
 		},
 
 		removeSelection(index) {
