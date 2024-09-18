@@ -375,7 +375,8 @@
 			>
 				<img class="std-nav__address-icon" src="/images/icons/map_marker.svg" />
 				<span class="std-nav__address-text">
-					«{{ org_stores?.items?.find((el) => el.id == warehouse_basket)?.name_short }}», {{ org_stores?.items?.find((el) => el.id == warehouse_basket)?.address_short }}
+					«{{ org_stores?.items?.find((el) => el.id == warehouse_basket)?.name_short }}»,
+					{{ org_stores?.items?.find((el) => el.id == warehouse_basket)?.address_short }}
 				</span>
 			</button>
 			<ul
@@ -413,11 +414,24 @@
 							placeholder="Найти у выбранных поставщиков"
 							v-model="search"
 						/>
+
+						<ul
+							class="std-search-field__suggestions"
+							:class="{ ['std-search-field__suggestions--active']: this.search }"
+						>
+							<li
+								v-for="suggestion in searchSuggestions"
+								class="std-search-field__suggestion"
+							>
+								{{ suggestion }}
+							</li>
+						</ul>
 					</div>
 					<button
 						v-if="this.search"
 						class="std-search-field__delete"
 						@click="this.search = ''"
+						type="button"
 					>
 						<i class="pi pi-times"></i>
 					</button>
@@ -536,6 +550,7 @@ export default {
 	},
 	data() {
 		return {
+			searchTimer: null,
 			catalogWarehouseParent: 1,
 			// parentCatalog: {},
 			catalog: [],
@@ -613,7 +628,7 @@ export default {
 				parent = this.findParent(this.catalog);
 			}
 
-			if(Object.keys(parent).length) {
+			if (Object.keys(parent).length) {
 				this.actualCatalog = parent;
 			}
 		},
@@ -624,9 +639,8 @@ export default {
 						this.parentCatalog = item;
 						return;
 					}
-				}
-				else if(this.actualCatalog.parent == 0) {
-					if(item.id == this.catalogWarehouseParent) {
+				} else if (this.actualCatalog.parent == 0) {
+					if (item.id == this.catalogWarehouseParent) {
 						this.parentCatalog = item;
 						return;
 					}
@@ -653,12 +667,17 @@ export default {
 				const data = { action: "basket/get", id: router.currentRoute._value.params.id };
 				this.busket_from_api(data);
 				this.busket_from_api({
-					action: 'basket/get',
+					action: "basket/get",
 					id: router.currentRoute._value.params.id,
-					warehouse: 'all'
-				})
-			})
-			this.showWarehouseList = false
+					warehouse: "all",
+				});
+			});
+			this.showWarehouseList = false;
+		},
+
+		debounce(func, delay) {
+			clearTimeout(this.searchTimer);
+			this.searchTimer = setTimeout(func, delay);
 		}
 	},
 	mounted() {
@@ -681,16 +700,16 @@ export default {
 				this.showWarehouseList = false;
 			}
 		});
-		
+
 		this.org_get_stores_from_api({
-			action: 'get/stores',
-			id: this.$route.params.id
+			action: "get/stores",
+			id: this.$route.params.id,
 		}).then(() => {
 			this.opt_warehouse_basket({
-				action: 'get/active/basket/warehouse',
-				id: this.$route.params.id
-			})
-		})
+				action: "get/active/basket/warehouse",
+				id: this.$route.params.id,
+			});
+		});
 	},
 	components: { Vendors, Accordion },
 	computed: {
@@ -735,6 +754,9 @@ export default {
 			this.catalog_warehouse = newVal;
 			this.actualCatalog = {};
 		},
+		search: function (newVal, oldVal) {
+			const searchResult = this.toSearch();
+		}
 	},
 };
 </script>
