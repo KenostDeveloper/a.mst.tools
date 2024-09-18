@@ -16,11 +16,11 @@
 				</div>
 				<div class="w-full kenost-table-elem">
 					<span>Дата создания</span>
-					<div class="kenost-table-elem__content">{{ new Date(this.order.date).toLocaleString('ru', {year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}) }}</div>
+					<div class="kenost-table-elem__content">{{ new Date(this.order.date).toLocaleString('ru', {year: '2-digit', month: '2-digit', day: '2-digit', hour: 'numeric', minute: 'numeric'}) }}</div>
 				</div>
 				<div class="w-full kenost-table-elem">
 					<span>Сумма</span>
-					<div class="kenost-table-elem__content">{{ Number(this.order.cost).toLocaleString('ru') }}</div>
+					<div class="kenost-table-elem__content">{{ Number(this.order.cost).toLocaleString('ru') }} ₽</div>
 				</div>
 				<div class="w-full kenost-table-elem">
 					<span>Поставщик</span>
@@ -28,7 +28,7 @@
 				</div>
 				<div class="w-full kenost-table-elem">
 					<span>Отсрочка</span>
-					<div class="kenost-table-elem__content">???</div>
+					<div class="kenost-table-elem__content">{{ Number(this.order.delay) == 0 ? "Предоплата" : this.order.delay + ' дн.' }}</div>
 				</div>
 				<div class="w-full kenost-table-elem">
 					<span>Статус</span>
@@ -42,16 +42,19 @@
 			<div class="w-full flex">
 				<div class="w-full kenost-table-elem">
 					<span>Оплата доставки</span>
-					<div class="kenost-table-elem__content"><img class="kenost-table-elem__logo" :src="this.order.seller_image">???</div>
+					<div class="kenost-table-elem__content">{{ this.order.payer === '1' ? 'Поставщик' : 'Покупатель'}}</div>
 				</div>
 				<div class="w-full kenost-table-elem">
 					<span>Срок доставки</span>
-					<div class="kenost-table-elem__content">? дня (??.??.??)</div>
+					<div class="kenost-table-elem__content">{{ this.order.day_delivery }} дн. ({{new Date(this.order.delivery_date).toLocaleString("ru", {month: '2-digit', day: '2-digit', year: '2-digit'})}})</div>
 				</div>
 				<div class="w-full kenost-table-elem">
 					<span>Склад</span>
 					<div class="kenost-table-elem__content">{{ this.order.seller_address }}</div>
 				</div>
+				<div class="w-full kenost-table-elem"></div>
+				<div class="w-full kenost-table-elem"></div>
+				<div class="w-full kenost-table-elem"></div>
 			</div>
 			<div class="kenost-table-line">
 				<div><img src="../assets/images/icons/orders.svg" alt=""></div>
@@ -75,14 +78,14 @@
 							<img class="kenost-image-table" :src="item.image" alt="">
 						</td>
 						<td class="std-table__col">{{ item.name }}</td>
-						<td class="std-table__col">{{ item.price }}</td>
-						<td class="std-table__col">{{ item.count }}</td>
-						<td class="std-table__col">{{ item.price * item.count }}</td>
+						<td class="std-table__col">{{ Number(item.price).toLocaleString('ru') }} ₽</td>
+						<td class="std-table__col">{{ item.count }}  шт.</td>
+						<td class="std-table__col">{{ Number(item.price * item.count).toLocaleString('ru') }} ₽</td>
 					</tr>
 				</tbody>
 			</table>
 			<div class="kenost-table-line right">
-				<b>Итого: 34 046 ₽ </b>
+				<b>Итого: {{Number(this.order.cost).toLocaleString('ru')}} ₽ </b>
 			</div>
 		</div>
 	</div>

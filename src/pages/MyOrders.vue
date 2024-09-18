@@ -71,10 +71,12 @@
 				<table class="std-table">
 					<thead class="std-table__head">
 						<tr class="std-table__row">
-							<th class="std-table__hcol">Номер заказа</th>
+							<th class="std-table__hcol">№</th>
 							<th class="std-table__hcol">Дата создания</th>
 							<th class="std-table__hcol">Сумма</th>
 							<th class="std-table__hcol">Оплата доставки</th>
+							<th class="std-table__hcol">Поставщик</th>
+							<th class="std-table__hcol">Склад</th>
 							<th class="std-table__hcol">Отсрочка</th>
 							<!-- <th class="std-table__hcol">Объем товарво, кг</th>
 							<th class="std-table__hcol">Кол-во товаров, шт</th>
@@ -84,10 +86,12 @@
 					<tbody class="std-table__body">
 						<tr class="std-table__row" v-for="item in my_orders.orders" v-bind:key="item.id" style="cursor: pointer" @click.prevent="$router.push({ name: 'my_orders_id', params: { id: this.$route.params.id, order_id: item.id } })">
 							<td class="std-table__col">{{ item.id }}</td>
-							<td class="std-table__col">{{ new Date(item.date).toLocaleString('ru', {year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'}) }}</td>
+							<td class="std-table__col">{{ new Date(item.date).toLocaleString('ru', {year: '2-digit', month: '2-digit', day: '2-digit', hour: 'numeric', minute: 'numeric'}) }}</td>
 							<td class="std-table__col">{{ Number(item.cost).toLocaleString('ru') }} ₽</td>
-							<td class="std-table__col">???</td>
-							<td class="std-table__col">???</td>
+							<td class="std-table__col">{{ item.payer === '1' ? 'Поставщик' : 'Покупатель'}}</td>
+							<td class="std-table__col">{{ item.store_name }}</td>
+							<td class="std-table__col">{{ item.seller_address }}</td>
+							<td class="std-table__col">{{ Number(item.delay) == 0 ? "Предоплата" : item.delay + ' дн.' }}</td>
 						</tr>
 					</tbody>
 				</table>

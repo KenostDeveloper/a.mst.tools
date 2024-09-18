@@ -272,8 +272,11 @@ export default {
       const data = { action: 'order/opt/submit', id: router.currentRoute._value.params.id, store_id: $storeId }
       this.order = this.opt_order_api(data).then((response) => {
         this.$emit('orderSubmit', response.data?.data?.data[0]?.id)
+
+        
         const data = { action: 'basket/get', id: router.currentRoute._value.params.id }
         this.busket_from_api(data)
+
         this.busket_from_api({
             action: 'basket/get',
             id: router.currentRoute._value.params.id,
