@@ -23,8 +23,8 @@
 					<div class="kenost-table-elem__content">{{ Number(this.order.cost).toLocaleString('ru') }} ₽</div>
 				</div>
 				<div class="w-full kenost-table-elem">
-					<span>Поставщик</span>
-					<div class="kenost-table-elem__content"><img class="kenost-table-elem__logo" :src="this.order.seller_image">{{ this.order.name_short }}</div>
+					<span>Клиент</span>
+					<div class="kenost-table-elem__content gap-2"><img class="kenost-table-elem__logo" :src="this.order.buyer_image">{{ this.order.buyer_name }}</div>
 				</div>
 				<div class="w-full kenost-table-elem">
 					<span>Отсрочка</span>
@@ -119,7 +119,7 @@ export default {
 	},
 	mounted() {
 		this.get_opt_order_api({
-			action: 'get/orders/buyer',
+			action: 'get/orders/seller',
 			id: router.currentRoute._value.params.id,
 			order_id: router.currentRoute._value.params.order_id
 		})

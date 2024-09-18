@@ -97,7 +97,7 @@
                                         </div>
                                         <div class="k-order__buttons">
                                             <b>{{(product.count * product.price).toLocaleString('ru')}} ₽</b>
-                                            <Counter :item="product" :key="new Date().getMilliseconds() + product.id_remain" @ElemCount="ElemCount" :min="1" :max="item.remains" :value="product.count" :id="product.id_remain" :store_id="product.store_id"/>
+                                            <Counter :item="product" :key="new Date().getMilliseconds() + product.id_remain" @ElemCount="ElemCount" :min="1" :max="item.remains" :value="product.count" :id="item.id_remain" :store_id="item.store_id"/>
                                         </div>
                                     </div>
                                     <div class="k-order__product-data">
@@ -293,12 +293,14 @@ export default {
         store_id: object.store_id,
         actions: object.item.actions_ids
     }
-      this.busket_from_api(data).then()
-      this.busket_from_api({
-        action: 'basket/get',
-        id: router.currentRoute._value.params.id,
-        warehouse: 'all'
+      this.busket_from_api(data).then(() => {
+        this.busket_from_api({
+            action: 'basket/get',
+            id: router.currentRoute._value.params.id,
+            warehouse: 'all'
+        })
       })
+      
     },
     ElemComplectCount (object) {
       // console.log(object)

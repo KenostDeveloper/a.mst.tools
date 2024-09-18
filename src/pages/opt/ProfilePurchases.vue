@@ -1,31 +1,34 @@
 <template>
-	<ChangeVendorsModal :items="this.opt_vendors" />
-	<Vendors
-		@changeActive="changeActive"
-		@vendorCheck="vendorCheck"
-		:vendorModal="this.vendorModal"
-		:items="this.opt_vendors"
-	/>
-	<!-- {{ this.sales_banners }} -->
-	<div v-if="this.opt_vendors.selected_count > 0" class="dart-custom-grid purchases__wrapper">
-		<!-- <CatalogMenu :items="opt_catalog" /> -->
-		<div class="d-col-content purchases">
-			<div class="dart-home dart-window">
-				<span class="h2 mb-4">Акции</span>
-				<Banners :key="new Date().getMilliseconds() + this.sales_banners?.count" :items="this.sales_banners" />
+	<Loading v-if="this.loading" />
+	<div v-else>
+		<ChangeVendorsModal :items="this.opt_vendors" />
+		<Vendors
+			@changeActive="changeActive"
+			@vendorCheck="vendorCheck"
+			:vendorModal="this.vendorModal"
+			:items="this.opt_vendors"
+		/>
+		<!-- {{ this.sales_banners }} -->
+		<div v-if="this.opt_vendors.selected_count > 0" class="dart-custom-grid purchases__wrapper">
+			<!-- <CatalogMenu :items="opt_catalog" /> -->
+			<div class="d-col-content purchases">
+				<div class="dart-home dart-window">
+					<span class="h2 mb-4">Акции</span>
+					<Banners :key="new Date().getMilliseconds() + this.sales_banners?.count" :items="this.sales_banners" />
+				</div>
+			</div>
+			<div class="d-col-map purchases__basket-wrapper">
+				<Vendors @vendorCheck="vendorCheck" :items="this.opt_vendors" />
+				<Basket ref="childComponent" @toOrder="toOrder" />
 			</div>
 		</div>
-		<div class="d-col-map purchases__basket-wrapper">
-			<Vendors @vendorCheck="vendorCheck" :items="this.opt_vendors" />
-			<Basket ref="childComponent" @toOrder="toOrder" />
+		<div class="not-vendors" v-else>
+			<!-- <img src="../../assets/img/not-vendors.png" alt="" /> -->
+			<p>Для просмотра каталога необходимо выбрать поставщика!</p>
+			<div class="a-dart-btn a-dart-btn-primary" @click="changeActive">Выбрать</div>
 		</div>
+		<OrderModal :show="show_order" @fromOrder="fromOrder" />
 	</div>
-	<div class="not-vendors" v-else>
-		<!-- <img src="../../assets/img/not-vendors.png" alt="" /> -->
-		<p>Для просмотра каталога необходимо выбрать поставщика!</p>
-		<div class="a-dart-btn a-dart-btn-primary" @click="changeActive">Выбрать</div>
-	</div>
-	<OrderModal :show="show_order" @fromOrder="fromOrder" />
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
@@ -40,6 +43,7 @@ import ChangeVendorsModal from "../../components/opt/ChangeVendorsModal.vue";
 import OrderModal from "../../components/opt/OrderModal.vue";
 import router from "../../router";
 import Vendors from "../../components/opt/Vendors.vue";
+import Loading from "../../components/Loading.vue";
 
 export default {
 	name: "OptsMain",
@@ -47,7 +51,8 @@ export default {
 	data() {
 		return {
 			show_order: false,
-			loading: false,
+			loading: true,
+			loading_elems: [],
 			reloading: false,
 			opt_mainpage: {},
 			opt_catalog: {},
@@ -68,6 +73,7 @@ export default {
 		ChangeVendorsModal,
 		OrderModal,
 		Vendors,
+		Loading
 	},
 	methods: {
 		...mapActions([
@@ -82,6 +88,11 @@ export default {
 		fromOrder() {
 			this.show_order = false;
 		},
+		loadingCheack(num) {
+			if (this.loading_elems.length == num) {
+				this.loading = false;
+			}
+		},
 		vendorCheck() {
 			this.get_salses_banners_to_api({
 				action: "get/banners",
@@ -93,10 +104,16 @@ export default {
 		},
 	},
 	mounted() {
-		this.get_opt_vendors_from_api().then((this.opt_vendors = this.optvendors));
+		this.get_opt_vendors_from_api().then((this.opt_vendors = this.optvendors)).then(() => {
+			this.loading_elems.push("load");
+			this.loadingCheack(1);
+		});
 		this.get_salses_banners_to_api({
 			action: "get/banners",
 			id: router.currentRoute._value.params.id,
+		}).then(() => {
+			this.loading_elems.push("load");
+			this.loadingCheack(1);
 		});
 	},
 	computed: {

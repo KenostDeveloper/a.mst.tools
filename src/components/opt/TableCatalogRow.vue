@@ -99,7 +99,7 @@
     <td v-else>{{Math.round(item.price).toLocaleString('ru')}} ₽</td>
   </tr>
   <!-- {{items}} -->
-  <tbody class="complect-button kenost-table-background kenost-table-background-complect" v-for="complect in items.complects" v-bind:key="complect.id" :class="{'active' : this.active || this.is_warehouses || items.total_stores == 1, 'no-active' : !this.active && !this.is_warehouses && items.total_stores > 1, 'bg-white': items.total_stores == 1}">
+  <!-- <tbody class="complect-button kenost-table-background kenost-table-background-complect" v-for="complect in items.complects" v-bind:key="complect.id" :class="{'active' : this.active || this.is_warehouses || items.total_stores == 1, 'no-active' : !this.active && !this.is_warehouses && items.total_stores > 1, 'bg-white': items.total_stores == 1}">
     <tr v-for="(item, index) in complect" v-bind:key="item.id" :class="{'active' : this.active || this.is_warehouses || items.total_stores == 1, 'kenost-table-bg-complect': items.total_stores == 1, 'no-active' : !this.active && !this.is_warehouses && items.total_stores > 1}">
       <td class="td-center" :class="{'pointer-none' : index !== 0}"><span :style="'top:' +  (complect.length * 74) / 2 + 'px'" v-if="index === 0"><i class="pi pi-minus"></i></span></td>
       <td class="k-table__photo"><img class="k-table__image" :src="item.image" alt=""></td>
@@ -113,7 +113,6 @@
       <td>{{Math.round(Number(item.new_price)).toLocaleString('ru')}}₽ x {{ item.multiplicity }} шт. <br> {{item.action?.delay ? Number(item.action?.delay).toFixed(1) + ' дн' : 'Предоплата'}}</td>
       <td>
         <div class="table-actions">
-          <!-- 'red': action?.conflicts?.items[action.action_id]?.sales_conflicts -->
           <div class="table-actions__action" :class="{'active': action.enabled, 'red': action?.conflicts?.items[action.action_id]?.sales_conflicts}" v-for="(action, indexactions) in item.actions" v-bind:key="action.id">
             <div v-if="action?.tags?.length > 0" class="table-actions__container" @click="updateAction(item.id == 0? this.action.remain_id : item.remain_id, item.id == 0? this.action.store_id : item.store_id, action, index, indexactions, item.conflicts)">
               <div class="table-actions__el" v-for="(tag, indextag) in action.tags" v-bind:key="tag.id">
@@ -130,13 +129,7 @@
 
                 <img v-if="tag.type == 'free_delivery'" src="../../assets/images/icons/action/delivery.svg" alt="">
 
-                <!-- TODO: Комплекты -->
               </div>
-            
-              <!-- <div class="table-actions__el">
-                <img src="../../assets/images/icons/action/complect.svg" alt="">
-                <p>Компл-т</p>
-              </div> -->
             </div>
             <div v-if="action?.tags?.length > 0" class="table-actions__help">
               <p>?</p>
@@ -184,7 +177,7 @@
       <td v-if="item.price && item.price > item.new_price">{{item.price ? Math.round(item.price).toLocaleString('ru') : Math.round(item.new_price).toLocaleString('ru')}} ₽ <br> {{((item.price - item.new_price).toFixed(0)).toLocaleString('ru')}} ₽</td>
       <td v-else>{{Math.round(item.price).toLocaleString('ru')}} ₽</td>
     </tr>
-  </tbody>
+  </tbody> -->
   <Dialog v-model:visible="this.modal_remain" header=" " :style="{ width: '340px' }">
       <div class="kenost-not-produc">
           <!-- <img src="../../../public/img/opt/not-products.png" alt=""> -->

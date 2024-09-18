@@ -1,6 +1,6 @@
 <template>
-	<Toast />
-	<div class="dart-custom-grid" :class="{ loading: loading }">
+	<Loading v-if="this.loading" />
+	<div v-else class="dart-custom-grid" :class="{ loading: loading }">
 		<!-- <CatalogMenu :items="opt_catalog" /> -->
 		<div class="d-col-content promotion__wrapper">
 			<div class="dart-home dart-window">
@@ -84,6 +84,7 @@
       <Basket @actionUpdate="actionUpdate" ref="childComponent" @toOrder="toOrder" />
     </div> -->
 	</div>
+	<Toast />
 	<!-- <OrderModal :show="show_order" @fromOrder="fromOrder" /> -->
 </template>
 <script>
@@ -96,6 +97,7 @@ import PromotionCard from "./PromotionCard.vue";
 import router from "../../../router";
 import TableCatalogAction from "../../../components/opt/TableCatalogAction.vue";
 import Toast from "primevue/toast";
+import Loading from "../../../components/Loading.vue";
 
 export default {
 	name: "Promotion",
@@ -103,7 +105,8 @@ export default {
 	data() {
 		return {
 			show_order: false,
-			loading: false,
+			loading: true,
+			loading_elems: [],
 			reloading: false,
 			opt_mainpage: {},
 			opt_catalog: {},
@@ -126,10 +129,19 @@ export default {
 		PromotionCard,
 		TableCatalogAction,
 		Toast,
+		Loading
 	},
 	mounted() {
-		this.get_opt_catalog_from_api().then((this.opt_catalog = this.optcatalog));
-		this.get_opt_vendors_from_api().then((this.opt_vendors = this.optvendors));
+		this.get_opt_catalog_from_api().then(() => {
+			this.opt_catalog = this.optcatalog
+			this.loading_elems.push("load");
+			this.loadingCheack(3);
+		});
+		this.get_opt_vendors_from_api().then(() => {
+			this.opt_vendors = this.optvendors
+			this.loading_elems.push("load");
+			this.loadingCheack(3);
+		});
 		this.get_sales_to_api({
 			id: router.currentRoute._value.params.sales_id,
 			actionid: router.currentRoute._value.params.action,
@@ -145,6 +157,8 @@ export default {
 					this.$router.go(-1);
 				}, 1000);
 			}
+			this.loading_elems.push("load");
+			this.loadingCheack(3);
 		});
 	},
 	updated() {
@@ -168,6 +182,11 @@ export default {
 			this.get_opt_catalog_from_api().then((this.opt_catalog = this.optcatalog));
 			this.get_opt_vendors_from_api().then((this.opt_vendors = this.optvendors));
 			this.loading = false;
+		},
+		loadingCheack(num) {
+			if (this.loading_elems.length == num) {
+				this.loading = false;
+			}
 		},
 		updateBasket() {
 			this.$refs.childComponent.updateBasket();
