@@ -1,6 +1,6 @@
 <template>
 	<div :class="`navmain std-nav ${catalogIsOpened ? 'std-nav--active' : ''}`">
-		<!-- Каталог -->
+		<!-- Каталог десктоп -->
 		<div
 			:class="`std-catalog ${
 				catalogIsOpened ? 'std-catalog--active' : ''
@@ -41,66 +41,14 @@
 				<hr class="std-catalog__line" />
 
 				<div class="std-catalog__nav std-catalog__nav--primary">
-					<!-- <div v-if="this.organizationsOrCategories === 'organizations'">
-						<router-link
-							:to="{
-								name: 'purchases_catalog_warehouse',
-								params: { id: this.$route.params.id, warehouse_id: level1.id },
-							}"
-							:key="level1"
-							@mouseenter="
-								() => {
-									this.actualNav.secondLevel = level1.children;
-									this.actualNav.thirdLevel = [];
-									this.actualNav.warehouse_id = level1.id;
-									this.actualImageSrc = '';
-								}
-							"
-							@click="toggleCatalogVisibilityAd()"
-							class="std-catalog__tab-item std-tab-item std-tab-item--alt"
-							v-for="level1 in this.catalog_warehouse"
-						>
-							<div class="std-tab-item__img-container">
-								<img :src="this.getImageSrc(level1.image)" />
-							</div>
-							<span class="std-tab-item__text">{{ level1.pagetitle }}</span>
-							<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
-						</router-link>
-					</div>
-					<div v-else>
-						<router-link
-							:to="{
-								name: 'purchases_catalog',
-								params: { id: this.$route.params.id, category_id: level1.id },
-							}"
-							:key="level1"
-							@mouseenter="
-								() => {
-									this.actualNav.secondLevel = level1.children;
-									this.actualNav.thirdLevel = [];
-									this.actualImageSrc = '';
-								}
-							"
-							@click="toggleCatalogVisibilityAd()"
-							class="std-catalog__tab-item std-tab-item std-tab-item--alt"
-							v-for="level1 in this.catalog"
-						>
-							<div class="std-tab-item__img-container">
-								<img :src="this.getImageSrc(level1.menu_image)" />
-							</div>
-							<span class="std-tab-item__text">{{ level1.pagetitle }}</span>
-							<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
-						</router-link>
-					</div> -->
-
 					<div
 						v-if="this.organizationsOrCategories === 'organizations'"
 						v-for="level1 in this.catalog_warehouse"
 						:key="level1"
 						@mouseenter="
 							() => {
-								setActualCatalog(level1);
 								this.catalogWarehouseParent = level1.id;
+								setActualCatalog(level1);
 							}
 						"
 						class="std-catalog__tab-item std-tab-item std-tab-item--alt"
@@ -127,8 +75,6 @@
 				</div>
 			</div>
 
-			<!-- <hr class="std-catalog__line" /> -->
-
 			<div v-if="this.actualCatalog.children" class="std-catalog__secondary-tabs-container">
 				<button class="std-catalog__back-button" @click="setPrevCatalog">
 					<i class="d_icon d_icon-arrow std-tab-item__icon"></i>
@@ -138,30 +84,26 @@
 				<div class="std-catalog__nav std-catalog__nav--secondary">
 					<router-link
 						v-if="this.organizationsOrCategories === 'organizations'"
-						:to="{
-							name: 'purchases_catalog_warehouse',
-							params: {
-								id: this.$route.params.id,
-								warehouse_id: this.actualCatalog.id,
-							},
-						}"
+						:to="warehouseLink"
 						class="std-catalog__link"
 						@click="toggleCatalogVisibilityAd()"
 					>
+						<img src="/images/icons/all_products.svg" alt="" />
 						<span class="std-tab-item__text">Все товары</span>
 					</router-link>
 					<router-link
 						v-if="this.organizationsOrCategories === 'categories'"
 						:to="{
-								name: 'purchases_catalog',
-								params: {
-									id: this.$route.params.id,
-									category_id: this.actualCatalog.id,
-								},
-							}"
+							name: 'purchases_catalog',
+							params: {
+								id: this.$route.params.id,
+								category_id: this.actualCatalog.id,
+							},
+						}"
 						class="std-catalog__link"
 						@click="toggleCatalogVisibilityAd()"
 					>
+						<img src="/images/icons/all_products.svg" alt="" />
 						<span class="std-tab-item__text">Все товары</span>
 					</router-link>
 
@@ -189,7 +131,7 @@
 									warehouse_cat_id: catItem.id,
 								},
 							}"
-							class="std-catalog__tab-item std-tab-item std-tab-item--alt2"
+							class="std-catalog__tab-item std-tab-item std-tab-item--none"
 							@click="toggleCatalogVisibilityAd()"
 						>
 							<span class="std-tab-item__text">{{ catItem.pagetitle }}</span>
@@ -217,7 +159,7 @@
 									category_id: catItem.id,
 								},
 							}"
-							class="std-catalog__tab-item std-tab-item std-tab-item--alt2"
+							class="std-catalog__tab-item std-tab-item std-tab-item--none"
 							@click="toggleCatalogVisibilityAd()"
 						>
 							<span class="std-tab-item__text">{{ catItem.pagetitle }}</span>
@@ -227,7 +169,7 @@
 			</div>
 		</div>
 
-		<!-- Каталог -->
+		<!-- Каталог мобилка -->
 		<div
 			:class="`std-catalog ${
 				catalogIsOpened ? 'std-catalog--active' : ''
@@ -433,7 +375,7 @@
 			>
 				<img class="std-nav__address-icon" src="/images/icons/map_marker.svg" />
 				<span class="std-nav__address-text">
-					«{{active_warehouse?.name_short}}», {{ active_warehouse?.address_short }}
+					«{{ active_warehouse?.name_short }}», {{ active_warehouse?.address_short }}
 				</span>
 			</button>
 			<ul
@@ -441,8 +383,13 @@
 				:class="{ ['std-nav__warehouse-list--active']: this.showWarehouseList }"
 				@click.stop
 			>
-				<li v-for="warehous in org_stores.items" v-bind:key="warehous.id" @click="setWarehouse(warehous.id)" class="std-nav__warehouse-item">
-					«{{warehous.name_short}}», {{ warehous.address_short }}
+				<li
+					v-for="warehous in org_stores.items"
+					v-bind:key="warehous.id"
+					@click="setWarehouse(warehous.id)"
+					class="std-nav__warehouse-item"
+				>
+					«{{ warehous.name_short }}», {{ warehous.address_short }}
 				</li>
 			</ul>
 		</div>
@@ -467,7 +414,11 @@
 							v-model="search"
 						/>
 					</div>
-					<button v-if="this.search" class="std-search-field__delete" @click="this.search = ''">
+					<button
+						v-if="this.search"
+						class="std-search-field__delete"
+						@click="this.search = ''"
+					>
 						<i class="pi pi-times"></i>
 					</button>
 					<button
@@ -585,8 +536,8 @@ export default {
 	},
 	data() {
 		return {
-			catalogWarehouseParent: -1,
-			parentCatalog: {},
+			catalogWarehouseParent: 1,
+			// parentCatalog: {},
 			catalog: [],
 			loading: true,
 			search: "",
@@ -599,7 +550,7 @@ export default {
 			actualCatalog: {},
 			actualImageSrc: "",
 			showWarehouseList: false,
-			active_warehouse: []
+			active_warehouse: [],
 		};
 	},
 	methods: {
@@ -611,7 +562,7 @@ export default {
 			"get_opt_warehouse_catalog_from_api",
 			"org_get_stores_from_api",
 			"opt_warehouse_basket",
-			"busket_from_api"
+			"busket_from_api",
 		]),
 		toSearch() {
 			router.push({ name: "opt_search", params: { search: this.search } });
@@ -651,18 +602,31 @@ export default {
 			this.actualCatalog = catalog;
 		},
 		setPrevCatalog() {
+			this.parentCatalog = {};
+			let parent = {};
+
 			if (this.organizationsOrCategories === "organizations") {
-				this.actualCatalog = this.findParent(this.catalog_warehouse);
+				parent = this.findParent(this.catalog_warehouse);
 			}
 
 			if (this.organizationsOrCategories === "categories") {
-				this.actualCatalog = this.findParent(this.catalog);
+				parent = this.findParent(this.catalog);
+			}
+
+			if(Object.keys(parent).length) {
+				this.actualCatalog = parent;
 			}
 		},
 		findParent(catalog) {
 			catalog.forEach((item) => {
 				if (String(this.actualCatalog.parent).includes("warehouse_")) {
 					if (item.id == String(this.actualCatalog.parent).split("warehouse_")[1]) {
+						this.parentCatalog = item;
+						return;
+					}
+				}
+				else if(this.actualCatalog.parent == 0) {
+					if(item.id == this.catalogWarehouseParent) {
 						this.parentCatalog = item;
 						return;
 					}
@@ -680,17 +644,17 @@ export default {
 
 			return this.parentCatalog;
 		},
-		setWarehouse(id){
+		setWarehouse(id) {
 			this.opt_warehouse_basket({
-				action: 'set/active/basket/warehouse',
+				action: "set/active/basket/warehouse",
 				id: this.$route.params.id,
-				id_warehouse: id
+				id_warehouse: id,
 			}).then(() => {
 				const data = { action: "basket/get", id: router.currentRoute._value.params.id };
 				this.busket_from_api(data);
-			})
-			this.showWarehouseList = false
-		}
+			});
+			this.showWarehouseList = false;
+		},
 	},
 	mounted() {
 		this.get_opt_warehouse_catalog_from_api();
@@ -698,9 +662,9 @@ export default {
 		this.get_opt_vendors_from_api().then((this.opt_vendors = this.optvendors));
 
 		this.org_get_stores_from_api({
-			action: 'get/stores',
-			id: this.$route.params.id
-		})
+			action: "get/stores",
+			id: this.$route.params.id,
+		});
 
 		const getOrganizationss = async () => {
 			this.organizations = (await this.org_get_from_api({ action: "get/orgs" })).data.data;
@@ -713,19 +677,47 @@ export default {
 				this.toggleCatalogVisibility(false);
 			}
 
-			if(this.showWarehouseList) {
+			if (this.showWarehouseList) {
 				this.showWarehouseList = false;
 			}
 		});
-		
+
 		this.opt_warehouse_basket({
-			action: 'get/active/basket/warehouse',
-			id: this.$route.params.id
-		})
+			action: "get/active/basket/warehouse",
+			id: this.$route.params.id,
+		});
 	},
 	components: { Vendors, Accordion },
 	computed: {
-		...mapGetters(["optvendors", "salesbanners", "optcatalog", "optcatalogwarehouse", "org_stores", "warehouse_basket"]),
+		...mapGetters([
+			"optvendors",
+			"salesbanners",
+			"optcatalog",
+			"optcatalogwarehouse",
+			"org_stores",
+			"warehouse_basket",
+		]),
+
+		warehouseLink() {
+			if (this.catalogWarehouseParent == this.actualCatalog.id) {
+				return {
+					name: "purchases_catalog_warehouse",
+					params: {
+						id: this.$route.params.id,
+						warehouse_id: this.catalogWarehouseParent,
+					},
+				};
+			}
+
+			return {
+				name: "org_opt_waregouse_category",
+				params: {
+					id: this.$route.params.id,
+					warehouse_id: this.catalogWarehouseParent,
+					warehouse_cat_id: this.actualCatalog.id,
+				},
+			};
+		},
 	},
 	watch: {
 		optvendors: function (newVal, oldVal) {
