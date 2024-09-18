@@ -396,7 +396,13 @@ export default {
           store_id: object.store_id,
           actions: object.item.basket.ids_actions
         }
-        this.busket_from_api(data).then()
+        this.busket_from_api(data).then(() => {
+          this.busket_from_api({
+            action: 'basket/get',
+            id: router.currentRoute._value.params.id,
+            warehouse: 'all'
+          })
+        })
         this.$emit('updateBasket')
       }
     },
