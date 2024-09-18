@@ -156,11 +156,9 @@
 
 			<div class="change-org__links">
 				<router-link
-					v-for="item in this.organizations.filter(
-						(org) => org.id !== this.activeOrganization.id
-					)"
+					v-for="item in this.organizations.filter((org) => org.id !== this.activeOrganization.id)"
 					@click="changeOrg"
-					:to="{ name: 'org', params: { id: item.id } }"
+					:to="this.role == 0 ? { name: 'purchases_home', params: { id: item.id } } : this.role == 1? { name: 'retail_orders', params: { id: item.id } } : { name: 'statistics', params: { id: item.id } }"
 					class="change-org-el"
 					v-bind:key="item.id"
 				>
