@@ -529,7 +529,7 @@
 								>
 									<div class="dart-form-block">
 										<span class="title">{{ group.label }}</span>
-										<div class="dart-form-block__content">
+										<div class="dart-form-setting-group">
 											<div
 												class="dart-form-group"
 												v-for="setting in group.settings"
@@ -590,6 +590,66 @@
 														setting.label
 													}}</label>
 												</FloatLabel>
+												<div v-if="setting.type == 5">													
+													<div class="flex dart-align-items-center mt-2" v-for="(item, index) in JSON.parse(setting.properties)" :key="index">
+														<RadioButton v-model="this.settingsForm[setting.key]" :inputId="setting.key + '_' + index" :name="setting.key" :value="String(item.id)"/>
+														<label :for="setting.key + '_' + index" class="ml-2 mb-0">{{ item.label }}</label>
+													</div>
+												</div>
+												<div v-if="setting.type == 6">			
+													<label for="regions">Выберите регионы</label>										
+													<MultiSelect filter v-model="this.settingsForm[setting.key]" display="chip" :options="this.regions_all" optionLabel="name" placeholder="Выберите регионы"
+                    				class="w-full md:w-20rem kenost-multiselect mt-2" />
+												</div>
+												<div v-if="setting.type == 7">
+													<div class="PickList">
+														<div class="PickList__product" :style="{ width: '40%' }">
+															<b class="PickList__title">Добавление отдельных организаций</b>
+															<div class="PickList__filters">
+																<div class="form_input_group input_pl input-parent required">
+																	<input
+																	type="text"
+																	id="filter_name"
+																	placeholder="Введите артикул или название"
+																	class="dart-form-control"
+																	v-model="filter_organizations.name"
+																	@input="setFilterOrganization('filter')"
+																	/>
+																	<label for="product_filter_name" class="s-complex-input__label">Введите название организации</label>
+																	<div class="form_input_group__icon">
+																			<i class="d_icon d_icon-search"></i>
+																	</div>
+																</div>
+															</div>
+															<div class="PickList__products">
+																<div class="PickList__el center" v-for="item in this.all_organizations" :key="item.id">
+																	<img :src="item.image" alt="">
+																	<div class="PickList__product-info">
+																		<div>{{item.name}}</div>
+																	</div>
+																	<div @click="selectOrganization(item.id)" class="PickList__select"><i class="pi pi-angle-right"></i></div>
+																</div>
+															</div>
+														</div>
+				
+														<div class="PickList__selected" :style="{ width: '40%' }">
+															<div class="PickList__title mb-4">
+																<b>Добавленные организации</b>
+															</div>
+															<div class="PickList__products PickList__products-selected">
+																<div class="PickList__el center" v-for="(item) in this.all_organizations_selected" :key="item.id">
+																	<img :src="item.image" alt="">
+																		<div class="PickList__info">
+																		<div class="PickList__product-info off">
+																			<div>{{item.name}}</div>
+																		</div>
+																	</div>
+																	<div @click="deleteSelectOrganization(item.id)" class="PickList__select"><i class="pi pi-times"></i></div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
 											</div>
 										</div>
 									</div>
@@ -1078,6 +1138,7 @@ import Dropdown from "primevue/dropdown";
 import InputText from "primevue/inputtext";
 import InputNumber from "primevue/inputnumber";
 import Checkbox from "primevue/checkbox";
+import MultiSelect from 'primevue/multiselect'
 import { Calendar, DatePicker } from "v-calendar";
 import Toast from "primevue/toast";
 import primeCalendar from "primevue/calendar";
@@ -1110,6 +1171,7 @@ export default {
 		return {
 			showOperatingModeModal: false,
 			showOperatingModeCalendarModal: false,
+			regions_all: [],
 			work_loading: false,
 			work_calendar_loading: false,
 			work_date: new Date(),
@@ -1241,6 +1303,12 @@ export default {
 			page: 1,
 			page_brand: 1,
 			page_modal: 1,
+			filter_organizations: {
+        name: '',
+        type: [1, 2]
+      },
+			all_organizations: [],
+      all_organizations_selected: {},
 			filters: {
 				name: {
 					name: "Наименование, артикул",
@@ -1429,6 +1497,8 @@ export default {
 			"get_vendors_from_api",
 			"get_msproducts_from_api",
 			"get_catalog_from_api",
+			'get_regions_from_api',
+			'get_all_organizations_from_api',
 			"opt_get_prices",
 			"set_organization_settings",
 			"set_work_to_api",
@@ -1832,6 +1902,31 @@ export default {
 				this.work_loading = false;
 			}
 		},
+		selectOrganization (id) {
+      const organization = this.all_organizations.find(r => r.id === id)
+      this.all_organizations_selected[organization.id] = organization
+      this.all_organizations = this.all_organizations.filter((r) => r.id !== id)
+    },
+    setFilterOrganization () {
+      const data = { filter: this.filter_organizations }
+      this.get_all_organizations_from_api(data).then(
+        this.all_organizations = this.allorganizations
+      )
+    },
+    deleteSelectOrganization (id) {
+      this.all_organizations.push(this.all_organizations_selected[id])
+      // eslint-disable-next-line camelcase
+      const new_all_organizations_selected = {}
+
+      for (let i = 0; i < Object.keys(this.all_organizations_selected).length; i++) {
+        if (this.all_organizations_selected[Object.keys(this.all_organizations_selected)[i]].id !== id) {
+          new_all_organizations_selected[Object.keys(this.all_organizations_selected)[i]] = this.all_organizations_selected[Object.keys(this.all_organizations_selected)[i]]
+        }
+      }
+
+      // eslint-disable-next-line camelcase
+      this.all_organizations_selected = new_all_organizations_selected
+    },
 	},
 	mounted() {
 		this.get_data_from_api({
@@ -1844,6 +1939,12 @@ export default {
 			page: this.page,
 			perpage: this.pagination_items_per_page,
 		});
+		this.get_regions_from_api().then(() => {
+      this.regions = this.getregions
+      this.regions_all = this.regions.map(function (el) {
+        return { name: el.label, code: el.key }
+      })
+    })
 		this.get_org_store_from_api().then(() => {
 			this.chartDataHelpOne = this.setChartDataHelpOne();
 			this.chartDataHelpTwo = this.setChartDataHelpTwo();
@@ -1864,11 +1965,15 @@ export default {
 				page: this.page_modal,
 				perpage: this.pagination_items_per_page,
 			});
+			const data = { filter: this.filter_organizations }
+			this.get_all_organizations_from_api(data).then(
+				this.all_organizations = this.allorganizations
+			);
 			this.opt_get_prices({
 				action: "get/type/prices",
 				store_id: router.currentRoute._value.params.store_id,
 			});
-		});
+		});		
 	},
 	components: {
 		vTable,
@@ -1880,6 +1985,7 @@ export default {
 		InputText,
 		InputNumber,
 		Checkbox,
+		MultiSelect,
 		customModal,
 		primeCalendar,
 		Calendar,
@@ -1895,7 +2001,9 @@ export default {
 			"getvendors",
 			"msproducts",
 			"getcatalog",
+			"getregions",
 			"oprprices",
+			"allorganizations"
 		]),
 		date() {
 			const today = new Date();
@@ -1978,8 +2086,7 @@ export default {
 					if (settings.groups[groupKeys[i]].settings[keys[j]].type === "2") {
 						this.settingsForm[settings.groups[groupKeys[i]].settings[keys[j]].key] =
 							settings.groups[groupKeys[i]].settings[keys[j]].value;
-					}
-					if (settings.groups[groupKeys[i]].settings[keys[j]].type === "3") {
+					} else if (settings.groups[groupKeys[i]].settings[keys[j]].type === "3") {
 						if (settings.groups[groupKeys[i]].settings[keys[j]].value === "1") {
 							this.settingsForm[
 								settings.groups[groupKeys[i]].settings[keys[j]].key
@@ -2014,6 +2121,9 @@ export default {
 				this.typePrice.push({ key: newVal[i].guid, name: newVal[i].name });
 			}
 		},
+		getregions: function (newVal, oldVal) {
+      this.regions = this.getregions
+    },
 	},
 };
 </script>

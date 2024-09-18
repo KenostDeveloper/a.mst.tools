@@ -206,6 +206,8 @@
      ...mapActions([
        'org_get_stores_from_api',
        'org_profile_from_api',
+       'get_vendors_from_api',
+       'get_catalog_from_api',
        'get_data_from_api'
      ]),
      filter (data) {
@@ -242,13 +244,18 @@
           page: this.page,
           perpage: this.pagination_items_per_page,
           id: router.currentRoute._value.params.client_id
-        }).then(() => { })
+        }).then(() => { 
+          this.get_vendors_from_api()
+          this.get_catalog_from_api()
+        })
    },
    components: { vTable, Chart, TabView, TabPanel, RadioButton },
    computed: {
      ...mapGetters([
        'org_stores',
        'org_profile',
+       'getvendors',
+       'getcatalog',
        'products'
      ])
    },
@@ -271,7 +278,13 @@
           this.avg_info.no_money = 0
           this.avg_info.sales_speed = 0
         }
-        },
+      },
+      getvendors(newVal, oldVal) {
+        this.products_filters.vendor.values = newVal
+      },
+      getcatalog(newVal, oldVal) {
+        this.products_filters.catalog.values = newVal
+      }
    }
  }
  </script>
