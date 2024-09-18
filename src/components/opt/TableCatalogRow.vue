@@ -11,7 +11,7 @@
     </td>
     <td>от {{Math.round(getMinPrice(items.stores)).toLocaleString('ru')}} ₽</td>
     <td class="hidden-mobile-l"></td>
-    <td>от {{getMinDelivery(items.stores).delivery}} дн ({{new Date(getMinDelivery(items.stores).delivery_day).toLocaleString("ru", {month: 'long', day: 'numeric'})}})</td>
+    <td>~ {{getMinDelivery(items.stores).delivery}} дней ({{new Date(getMinDelivery(items.stores).delivery_day).toLocaleString("ru", {month: '2-digit', day: '2-digit', year: '2-digit'})}})</td>
     <td class="hidden-mobile-l"></td>
     <td>{{ items.total_stores }}</td>
     <td class="hidden-mobile-l"></td>
@@ -89,7 +89,7 @@
         </div>
       </div>
     </td>
-    <td>{{item.payer === '1' ? 'Поставщик' : 'Покупатель'}} / <br> от {{getMinDelivery(items.stores).delivery}} дн ({{new Date(getMinDelivery(items.stores).delivery_day).toLocaleString("ru", {month: 'long', day: 'numeric'})}})</td>
+    <td>{{item.payer === '1' ? 'Поставщик' : 'Покупатель'}} / <br> ~ {{getMinDelivery(items.stores).delivery}} дней ({{new Date(getMinDelivery(items.stores).delivery_day).toLocaleString("ru", {month: '2-digit', day: '2-digit', year: '2-digit'})}})</td>
     <td>{{item.remains}} шт.</td>
     <td>
       <span class="flex align-items-center justify-content-center gap-1 mb-1"><img :src="item.store_image" class="kenost-table-elem__logo" alt=""> {{ item.store_name }}</span>
@@ -172,7 +172,7 @@
           </div>
         </div>
       </td>
-      <td class="td-center" :class="{'pointer-none' : index !== 0}"><span :style="'top:' +  (complect.length * 74) / 2 + 'px'" v-if="index === 0">{{item.action?.payer === '1' ? 'Поставщик' : 'Покупатель'}} / <br>от {{item.delivery}} дн ({{new Date(item.delivery_day).toLocaleString("ru", {month: 'long', day: 'numeric'})}})</span> </td>
+      <td class="td-center" :class="{'pointer-none' : index !== 0}"><span :style="'top:' +  (complect.length * 74) / 2 + 'px'" v-if="index === 0">{{item.action?.payer === '1' ? 'Поставщик' : 'Покупатель'}} / <br>~ {{item.delivery}} дней ({{new Date(item.delivery_day).toLocaleString("ru", {month: '2-digit', day: '2-digit', year: '2-digit'})}})</span> </td>
       <td class="td-center" :class="{'pointer-none' : index !== 0}"><span :style="'top:' +  (complect.length * 74) / 2 + 'px'" v-if="index === 0">{{item.remain_complect}} шт.</span></td>
       <td class="td-center" :class="{'pointer-none' : index !== 0}">
           <span :style="'top:' +  (complect.length * 74) / 2 + 'px'" v-if="index === 0">
@@ -368,6 +368,11 @@ export default {
       // eslint-disable-next-line vue/no-mutating-props
       this.items.stores[index].basket.availability = true
       this.$emit('updateBasket')
+      this.busket_from_api({
+        action: 'basket/get',
+        id: router.currentRoute._value.params.id,
+        warehouse: 'all'
+      })
     },
     addBasketComplect (complectid, value, storeid, index) {
       const data = { action: 'basket/add', id: router.currentRoute._value.params.id, id_complect: complectid, value, store_id: storeid }
@@ -375,6 +380,11 @@ export default {
       // eslint-disable-next-line vue/no-mutating-props
       this.items.complects[index][0].basket.availability = true
       this.$emit('updateBasket')
+      this.busket_from_api({
+        action: 'basket/get',
+        id: router.currentRoute._value.params.id,
+        warehouse: 'all'
+      })
     },
     ElemCount (object) {
       if (object.value >= Number(object.max)) {

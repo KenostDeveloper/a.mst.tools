@@ -433,7 +433,7 @@
 			>
 				<img class="std-nav__address-icon" src="/images/icons/map_marker.svg" />
 				<span class="std-nav__address-text">
-					«{{ org_stores.items.find((el) => el.id == warehouse_basket).name_short }}», {{ org_stores.items.find((el) => el.id == warehouse_basket).address_short }}
+					«{{ org_stores?.items?.find((el) => el.id == warehouse_basket)?.name_short }}», {{ org_stores?.items?.find((el) => el.id == warehouse_basket)?.address_short }}
 				</span>
 			</button>
 			<ul

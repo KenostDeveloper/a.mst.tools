@@ -120,6 +120,11 @@ export default {
       // eslint-disable-next-line vue/no-mutating-props
       this.items.products[id].basket.availability = true
       this.$emit('updateBasket')
+      this.busket_from_api({
+        action: 'basket/get',
+        id: router.currentRoute._value.params.id,
+        warehouse: 'all'
+      })
     },
     addBasketComplect (complectid, value, storeid, index) {
       const data = { action: 'basket/add', id: router.currentRoute._value.params.id, id_complect: complectid, value, store_id: storeid }
@@ -127,6 +132,11 @@ export default {
       // eslint-disable-next-line vue/no-mutating-props
       this.items.complects[complectid].products[0].basket.availability = true
       this.$emit('updateBasket')
+      this.busket_from_api({
+        action: 'basket/get',
+        id: router.currentRoute._value.params.id,
+        warehouse: 'all'
+      })
     },
     ElemCount (object) {
       if (object.value > Number(object.max)) {
