@@ -22,7 +22,7 @@
     <td class="k-table__title"><p>{{item.name}}</p><b>Арт: {{item.article}}</b></td>
     <td class="k-table__busket">
         <form class="k-table__form" action="" :class="{'basket-true' : item?.basket?.availability}">
-          <Counter :item="item" :key="new Date().getMilliseconds() + item.id" @ElemCount="ElemCount" :min="1" :max="item.remains" :id="item.remain_id" :store_id="item.store_id" :index="index" :value="item?.basket?.count"/>
+          <Counter :item="item" :key="new Date().getMilliseconds() + item.id" @ElemCount="ElemCount" :min="1" :max="item.max" :id="item.remain_id" :store_id="item.store_id" :index="index" :value="item?.basket?.count"/>
           <div @click="addBasket(item.remain_id, item.basket.count, item.store_id, index)" class="dart-btn dart-btn-primary"><i class="d_icon d_icon-busket"></i></div>
         </form>
     </td>
@@ -357,27 +357,29 @@ export default {
     },
     addBasket (id, value, storeid, index) {
       const data = { action: 'basket/add', id: router.currentRoute._value.params.id, id_remain: id, value, store_id: storeid }
-      this.busket_from_api(data).then()
+      this.busket_from_api(data).then(() => {
+        this.busket_from_api({
+          action: 'basket/get',
+          id: router.currentRoute._value.params.id,
+          warehouse: 'all'
+        })
+      })
       // eslint-disable-next-line vue/no-mutating-props
       this.items.stores[index].basket.availability = true
       this.$emit('updateBasket')
-      this.busket_from_api({
-        action: 'basket/get',
-        id: router.currentRoute._value.params.id,
-        warehouse: 'all'
-      })
     },
     addBasketComplect (complectid, value, storeid, index) {
       const data = { action: 'basket/add', id: router.currentRoute._value.params.id, id_complect: complectid, value, store_id: storeid }
-      this.busket_from_api(data).then()
+      this.busket_from_api(data).then(() => {
+        this.busket_from_api({
+          action: 'basket/get',
+          id: router.currentRoute._value.params.id,
+          warehouse: 'all'
+        })
+      })
       // eslint-disable-next-line vue/no-mutating-props
       this.items.complects[index][0].basket.availability = true
       this.$emit('updateBasket')
-      this.busket_from_api({
-        action: 'basket/get',
-        id: router.currentRoute._value.params.id,
-        warehouse: 'all'
-      })
     },
     ElemCount (object) {
       if (object.value >= Number(object.max)) {
