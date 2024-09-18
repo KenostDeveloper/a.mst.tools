@@ -18,7 +18,7 @@
 					</button>
 				</div>
 
-				<div class="std-basket__warehouse-wrapper" v-if="this.basket">
+				<div class="std-basket__warehouse-wrapper" v-if="this.basket?.warehouses?.length > 0">
 					<span class="std-basket__warehouse-title">Склад для доставки заказа:</span>
 					<div class="std-basket__warehouse-container">
 						<div @click="setWarehouse(warehous.id)" v-for="warehous in this.basket?.warehouses" v-bind:key="warehous.id" class="std-basket__warehouse" :class="{'std-basket__warehouse--active' : warehouse_basket == warehous.id}">
@@ -27,14 +27,14 @@
 					</div>
 				</div>
 
-				<div v-if="this.basket" class="std-basket__info-container">
+				<div v-if="this.basket?.stores" class="std-basket__info-container">
 					<button @click="clearBasket" class="basketClear std-basket__clear-button">
 						Очистить корзину
 						<i class="pi pi-times"></i>
 					</button>
 				</div>
 			</div>
-			<div className="basket-empty" v-if="!this.basket">
+			<div className="basket-empty" v-if="!this.basket?.stores">
 				<div className="basket-empty__content">
 					<img
 						class="hidden-mobile-l"
@@ -49,7 +49,7 @@
 					<h3>В вашей корзине пока пусто</h3>
 				</div>
 			</div>
-			<div v-if="this.basket" class="basket-container">
+			<div v-if="this.basket?.stores" class="basket-container">
 				<div v-for="store in this.basket?.stores" v-bind:key="store.id">
 					<div class="basket-container__adres" :style="{ background: store.color }">
 						{{ store.name }}
@@ -233,7 +233,7 @@
                     </div> -->
 				</div>
 			</div>
-			<div v-if="this.basket" class="std-basket__footer">
+			<div v-if="this.basket?.stores" class="std-basket__footer">
 				<div class="std-basket__total-container">
 					<span class="std-basket__total-label">Итого на поставщика</span>
 					<span class="std-basket__total-value">26 580 ₽</span>
@@ -319,6 +319,11 @@ export default {
 					this.$store.commit("SET_OPT_COMPLECT_MUTATION_TO_VUEX", datainfo);
 					this.$store.commit("SET_SALES_COMPLECT_MUTATION_TO_VUEX", datainfo);
 				});
+				this.busket_from_api({
+					action: 'basket/get',
+					id: router.currentRoute._value.params.id,
+					warehouse: 'all'
+				})
 			}
 		},
 		ElemCount(object) {
@@ -343,6 +348,11 @@ export default {
 					this.$store.commit("SET_OPT_PRODUCTS_MUTATION_TO_VUEX", datainfo);
 					this.$store.commit("SET_SALES_PRODUCTS_MUTATION_TO_VUEX", datainfo);
 				});
+				this.busket_from_api({
+					action: 'basket/get',
+					id: router.currentRoute._value.params.id,
+					warehouse: 'all'
+				})
 			}
 		},
 		clearBasket() {
@@ -354,6 +364,11 @@ export default {
 				// store_id: 'all',
 			};
 			this.busket_from_api(data).then((response) => {});
+			this.busket_from_api({
+				action: 'basket/get',
+				id: router.currentRoute._value.params.id,
+				warehouse: 'all'
+			})
 		},
 		clearBasketProduct(storeid, productid) {
 			this.$emit("catalogUpdate");
@@ -365,6 +380,11 @@ export default {
 				id_remain: productid,
 			};
 			this.busket_from_api(data).then((response) => {});
+			this.busket_from_api({
+				action: 'basket/get',
+				id: router.currentRoute._value.params.id,
+				warehouse: 'all'
+			})
 		},
 		clearBasketComplect(storeid, complectid) {
 			this.$emit("catalogUpdate");
@@ -376,6 +396,11 @@ export default {
 				id_complect: complectid,
 			};
 			this.busket_from_api(data).then((response) => {});
+			this.busket_from_api({
+				action: 'basket/get',
+				id: router.currentRoute._value.params.id,
+				warehouse: 'all'
+			})
 		},
 		toOrder() {
 			this.$emit("toOrder");
@@ -401,6 +426,11 @@ export default {
 			}).then(() => {
 				const data = { action: "basket/get", id: router.currentRoute._value.params.id };
 				this.busket_from_api(data);
+				this.busket_from_api({
+					action: 'basket/get',
+					id: router.currentRoute._value.params.id,
+					warehouse: 'all'
+				})
 			})
 		}
 	},

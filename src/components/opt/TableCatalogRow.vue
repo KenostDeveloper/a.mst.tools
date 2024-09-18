@@ -11,7 +11,7 @@
     </td>
     <td>от {{Math.round(getMinPrice(items.stores)).toLocaleString('ru')}} ₽</td>
     <td class="hidden-mobile-l"></td>
-    <td>от {{getMinDelivery(items.stores).delivery}} дн ({{new Date(getMinDelivery(items.stores).delivery_day).toLocaleString("ru", {month: 'long', day: 'numeric'})}})</td>
+    <td>~ {{getMinDelivery(items.stores).delivery}} дней ({{new Date(getMinDelivery(items.stores).delivery_day).toLocaleString("ru", {month: '2-digit', day: '2-digit', year: '2-digit'})}})</td>
     <td class="hidden-mobile-l"></td>
     <td>{{ items.total_stores }}</td>
     <td class="hidden-mobile-l"></td>
@@ -22,7 +22,7 @@
     <td class="k-table__title"><p>{{item.name}}</p><b>Арт: {{item.article}}</b></td>
     <td class="k-table__busket">
         <form class="k-table__form" action="" :class="{'basket-true' : item?.basket?.availability}">
-          <Counter :item="item" :key="new Date().getMilliseconds() + item.id" @ElemCount="ElemCount" :min="1" :max="item.remains" :id="item.remain_id" :store_id="item.store_id" :index="index" :value="item?.basket?.count"/>
+          <Counter :item="item" :key="new Date().getMilliseconds() + item.id" @ElemCount="ElemCount" :min="1" :max="item.max" :id="item.remain_id" :store_id="item.store_id" :index="index" :value="item?.basket?.count"/>
           <div @click="addBasket(item.remain_id, item.basket.count, item.store_id, index)" class="dart-btn dart-btn-primary"><i class="d_icon d_icon-busket"></i></div>
         </form>
     </td>
@@ -89,7 +89,7 @@
         </div>
       </div>
     </td>
-    <td>{{item.payer === '1' ? 'Поставщик' : 'Покупатель'}} / <br> от {{getMinDelivery(items.stores).delivery}} дн ({{new Date(getMinDelivery(items.stores).delivery_day).toLocaleString("ru", {month: 'long', day: 'numeric'})}})</td>
+    <td>{{item.payer === '1' ? 'Поставщик' : 'Покупатель'}} / <br> ~ {{getMinDelivery(items.stores).delivery}} дней ({{new Date(getMinDelivery(items.stores).delivery_day).toLocaleString("ru", {month: '2-digit', day: '2-digit', year: '2-digit'})}})</td>
     <td>{{item.remains}} шт.</td>
     <td>
       <span class="flex align-items-center justify-content-center gap-1 mb-1"><img :src="item.store_image" class="kenost-table-elem__logo" alt=""> {{ item.store_name }}</span>
@@ -99,7 +99,7 @@
     <td v-else>{{Math.round(item.price).toLocaleString('ru')}} ₽</td>
   </tr>
   <!-- {{items}} -->
-  <tbody class="complect-button kenost-table-background kenost-table-background-complect" v-for="complect in items.complects" v-bind:key="complect.id" :class="{'active' : this.active || this.is_warehouses || items.total_stores == 1, 'no-active' : !this.active && !this.is_warehouses && items.total_stores > 1, 'bg-white': items.total_stores == 1}">
+  <!-- <tbody class="complect-button kenost-table-background kenost-table-background-complect" v-for="complect in items.complects" v-bind:key="complect.id" :class="{'active' : this.active || this.is_warehouses || items.total_stores == 1, 'no-active' : !this.active && !this.is_warehouses && items.total_stores > 1, 'bg-white': items.total_stores == 1}">
     <tr v-for="(item, index) in complect" v-bind:key="item.id" :class="{'active' : this.active || this.is_warehouses || items.total_stores == 1, 'kenost-table-bg-complect': items.total_stores == 1, 'no-active' : !this.active && !this.is_warehouses && items.total_stores > 1}">
       <td class="td-center" :class="{'pointer-none' : index !== 0}"><span :style="'top:' +  (complect.length * 74) / 2 + 'px'" v-if="index === 0"><i class="pi pi-minus"></i></span></td>
       <td class="k-table__photo"><img class="k-table__image" :src="item.image" alt=""></td>
@@ -113,7 +113,6 @@
       <td>{{Math.round(Number(item.new_price)).toLocaleString('ru')}}₽ x {{ item.multiplicity }} шт. <br> {{item.action?.delay ? Number(item.action?.delay).toFixed(1) + ' дн' : 'Предоплата'}}</td>
       <td>
         <div class="table-actions">
-          <!-- 'red': action?.conflicts?.items[action.action_id]?.sales_conflicts -->
           <div class="table-actions__action" :class="{'active': action.enabled, 'red': action?.conflicts?.items[action.action_id]?.sales_conflicts}" v-for="(action, indexactions) in item.actions" v-bind:key="action.id">
             <div v-if="action?.tags?.length > 0" class="table-actions__container" @click="updateAction(item.id == 0? this.action.remain_id : item.remain_id, item.id == 0? this.action.store_id : item.store_id, action, index, indexactions, item.conflicts)">
               <div class="table-actions__el" v-for="(tag, indextag) in action.tags" v-bind:key="tag.id">
@@ -130,13 +129,7 @@
 
                 <img v-if="tag.type == 'free_delivery'" src="../../assets/images/icons/action/delivery.svg" alt="">
 
-                <!-- TODO: Комплекты -->
               </div>
-            
-              <!-- <div class="table-actions__el">
-                <img src="../../assets/images/icons/action/complect.svg" alt="">
-                <p>Компл-т</p>
-              </div> -->
             </div>
             <div v-if="action?.tags?.length > 0" class="table-actions__help">
               <p>?</p>
@@ -172,7 +165,7 @@
           </div>
         </div>
       </td>
-      <td class="td-center" :class="{'pointer-none' : index !== 0}"><span :style="'top:' +  (complect.length * 74) / 2 + 'px'" v-if="index === 0">{{item.action?.payer === '1' ? 'Поставщик' : 'Покупатель'}} / <br>от {{item.delivery}} дн ({{new Date(item.delivery_day).toLocaleString("ru", {month: 'long', day: 'numeric'})}})</span> </td>
+      <td class="td-center" :class="{'pointer-none' : index !== 0}"><span :style="'top:' +  (complect.length * 74) / 2 + 'px'" v-if="index === 0">{{item.action?.payer === '1' ? 'Поставщик' : 'Покупатель'}} / <br>~ {{item.delivery}} дней ({{new Date(item.delivery_day).toLocaleString("ru", {month: '2-digit', day: '2-digit', year: '2-digit'})}})</span> </td>
       <td class="td-center" :class="{'pointer-none' : index !== 0}"><span :style="'top:' +  (complect.length * 74) / 2 + 'px'" v-if="index === 0">{{item.remain_complect}} шт.</span></td>
       <td class="td-center" :class="{'pointer-none' : index !== 0}">
           <span :style="'top:' +  (complect.length * 74) / 2 + 'px'" v-if="index === 0">
@@ -184,7 +177,7 @@
       <td v-if="item.price && item.price > item.new_price">{{item.price ? Math.round(item.price).toLocaleString('ru') : Math.round(item.new_price).toLocaleString('ru')}} ₽ <br> {{((item.price - item.new_price).toFixed(0)).toLocaleString('ru')}} ₽</td>
       <td v-else>{{Math.round(item.price).toLocaleString('ru')}} ₽</td>
     </tr>
-  </tbody>
+  </tbody> -->
   <Dialog v-model:visible="this.modal_remain" header=" " :style="{ width: '340px' }">
       <div class="kenost-not-produc">
           <!-- <img src="../../../public/img/opt/not-products.png" alt=""> -->
@@ -364,14 +357,26 @@ export default {
     },
     addBasket (id, value, storeid, index) {
       const data = { action: 'basket/add', id: router.currentRoute._value.params.id, id_remain: id, value, store_id: storeid }
-      this.busket_from_api(data).then()
+      this.busket_from_api(data).then(() => {
+        this.busket_from_api({
+          action: 'basket/get',
+          id: router.currentRoute._value.params.id,
+          warehouse: 'all'
+        })
+      })
       // eslint-disable-next-line vue/no-mutating-props
       this.items.stores[index].basket.availability = true
       this.$emit('updateBasket')
     },
     addBasketComplect (complectid, value, storeid, index) {
       const data = { action: 'basket/add', id: router.currentRoute._value.params.id, id_complect: complectid, value, store_id: storeid }
-      this.busket_from_api(data).then()
+      this.busket_from_api(data).then(() => {
+        this.busket_from_api({
+          action: 'basket/get',
+          id: router.currentRoute._value.params.id,
+          warehouse: 'all'
+        })
+      })
       // eslint-disable-next-line vue/no-mutating-props
       this.items.complects[index][0].basket.availability = true
       this.$emit('updateBasket')
@@ -391,7 +396,13 @@ export default {
           store_id: object.store_id,
           actions: object.item.basket.ids_actions
         }
-        this.busket_from_api(data).then()
+        this.busket_from_api(data).then(() => {
+          this.busket_from_api({
+            action: 'basket/get',
+            id: router.currentRoute._value.params.id,
+            warehouse: 'all'
+          })
+        })
         this.$emit('updateBasket')
       }
     },

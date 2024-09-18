@@ -2218,6 +2218,10 @@ img {
 	color: #adadad;
 }
 
+.form_input_group .p-radiobutton + label{
+	margin-bottom: 0;
+}
+
 .dart-form-control {
 	background: #ffffff;
 	display: block;
@@ -2676,6 +2680,7 @@ p {
 		font-weight: 500;
 		line-height: 1;
 		letter-spacing: 0.25px;
+		color: #B4B4B4;
 
 		padding-block: 9px;
 	}

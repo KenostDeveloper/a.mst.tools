@@ -9,6 +9,7 @@ export default {
     optvendors: [],
     optproducts: [],
     optbasket: [],
+    optbasketall: [],
     optorder: [],
     optcomplects: [],
     optproductsfile: [],
@@ -511,7 +512,13 @@ export default {
       }
     },
     SET_BUSKET_TO_VUEX: (state, data) => {
-      state.optbasket = data.data
+      if(!data.data.basket){
+        //Корзина склада
+        state.optbasket = data.data
+      } else {
+        //Вся корзина
+        state.optbasketall = data.data
+      }
     },
     GET_OPT_ORDER_TO_VUEX: (state, data) => {
       state.optorder = data.data
@@ -541,6 +548,9 @@ export default {
     },
     optbasket (state) {
       return state.optbasket
+    },
+    optbasketall (state) {
+      return state.optbasketall
     },
     optorder (state) {
       return state.optorder
