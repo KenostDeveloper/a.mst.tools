@@ -119,7 +119,7 @@ export default {
 	},
 	mounted() {
 		this.get_opt_order_api({
-			action: 'get/orders/seller',
+			action: 'get/orders/buyer',
 			id: router.currentRoute._value.params.id,
 			order_id: router.currentRoute._value.params.order_id
 		})

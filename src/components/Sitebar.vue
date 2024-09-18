@@ -286,6 +286,11 @@ export default {
 						to: { name: "statistics", params: { id: this.$route.params.id } },
 					},
 					{
+						label: "Оптовые заказы",
+						icon: "orders.svg",
+						to: { name: "opt_orders", params: { id: this.$route.params.id } },
+					},
+					{
 						label: "Отгрузки",
 						icon: "shipments.svg",
 						to: { name: "shipments", params: { id: this.$route.params.id } },
