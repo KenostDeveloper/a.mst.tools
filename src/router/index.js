@@ -35,6 +35,7 @@ import Balance from "../pages/store/balance.vue";
 import ProfileClientStatistics from '../pages/ProfileClientStatistics.vue'
 import PurchasesActions from '../pages/opt/Actions.vue'
 import OrdersOpt from '../pages/OrdersOpt.vue'
+import OrderOpt from '../pages/OrderOpt.vue'
 
 const routes = [
   {
@@ -354,7 +355,7 @@ const routes = [
                         }]
                       },
                       {
-                        path: 'otp',
+                        path: 'opt',
                         children: [{
                           path: '',
                           name: 'opt_orders',
@@ -362,8 +363,8 @@ const routes = [
                         },
                         {
                           path: ':order_id',
-                          name: 'my_orders_id',
-                          component: MyOrder
+                          name: 'my_orders_opt_id',
+                          component: OrderOpt
                         }]
                       }]
                     

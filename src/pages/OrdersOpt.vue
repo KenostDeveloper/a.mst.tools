@@ -84,12 +84,12 @@
 						</tr>
 					</thead>
 					<tbody class="std-table__body">
-						<tr class="std-table__row" v-for="item in my_orders.orders" v-bind:key="item.id" style="cursor: pointer" @click.prevent="$router.push({ name: 'my_orders_id', params: { id: this.$route.params.id, order_id: item.id } })">
+						<tr class="std-table__row" v-for="item in my_orders.orders" v-bind:key="item.id" style="cursor: pointer" @click.prevent="$router.push({ name: 'my_orders_opt_id', params: { id: this.$route.params.id, order_id: item.id } })">
 							<td class="std-table__col">{{ item.id }}</td>
 							<td class="std-table__col">{{ new Date(item.date).toLocaleString('ru', {year: '2-digit', month: '2-digit', day: '2-digit', hour: 'numeric', minute: 'numeric'}) }}</td>
 							<td class="std-table__col">{{ Number(item.cost).toLocaleString('ru') }} ₽</td>
 							<td class="std-table__col">{{ item.payer === '1' ? 'Поставщик' : 'Покупатель'}}</td>
-							<td class="std-table__col">{{ item.store_name }}</td>
+							<td class="std-table__col flex align-items-center gap-1 justify-content-center"><img class="kenost-table-elem__logo" :src="item.buyer_image">{{ item.buyer_name }}</td>
 							<td class="std-table__col">{{ item.seller_address }}</td>
 							<td class="std-table__col">{{ Number(item.delay) == 0 ? "Предоплата" : item.delay + ' дн.' }}</td>
 						</tr>
