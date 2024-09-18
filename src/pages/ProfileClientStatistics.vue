@@ -212,6 +212,7 @@
      ]),
      filter (data) {
         this.page = 1
+        data.id = router.currentRoute._value.params.client_id
         this.loading_products = true
         this.get_data_from_api(data).then(() => {
           this.avg_info.remains = this.products.avg_info?.remains
@@ -222,6 +223,7 @@
       },
       paginate (data) {
         this.page = data.page
+        data.id = router.currentRoute._value.params.client_id
         this.loading_products = true
         this.get_data_from_api(data).then(() => {
           this.avg_info.remains = this.products.avg_info?.remains
