@@ -415,7 +415,7 @@
 							v-model="search"
 						/>
 
-						<ul
+						<!-- <ul
 							class="std-search-field__suggestions"
 							:class="{ ['std-search-field__suggestions--active']: this.search }"
 						>
@@ -425,7 +425,7 @@
 							>
 								{{ suggestion }}
 							</li>
-						</ul>
+						</ul> -->
 					</div>
 					<button
 						v-if="this.search"
@@ -754,9 +754,9 @@ export default {
 			this.catalog_warehouse = newVal;
 			this.actualCatalog = {};
 		},
-		search: function (newVal, oldVal) {
-			const searchResult = this.toSearch();
-		}
+		// search: function (newVal, oldVal) {
+		// 	const searchResult = this.toSearch();
+		// }
 	},
 };
 </script>
