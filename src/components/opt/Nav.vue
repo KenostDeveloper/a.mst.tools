@@ -605,6 +605,7 @@ export default {
 			"get_opt_products_from_api",
 		]),
 		toSearch() {
+			this.showSearchSuggestions = false;
 			router.push({ name: "opt_search", params: { search: this.search } });
 		},
 		changeActive() {
