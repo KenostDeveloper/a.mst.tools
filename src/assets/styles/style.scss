@@ -3757,7 +3757,7 @@ p {
 		border: none;
 		outline: none;
 
-		margin-right: 5px;
+		margin-inline: 5px;
 		padding: 3px;
 
 		i {
@@ -3778,6 +3778,7 @@ p {
 			box-shadow: 0px 4px 10.6px 0px rgba(0, 0, 0, 0.25);
 			border-radius: 5px;
 
+			overflow-y: auto;
 			position: absolute;
 			top: calc(100% + 10px);
 
@@ -3786,9 +3787,17 @@ p {
 			max-width: 100%;
 
 			margin: 0;
-			padding: 18px 35px;
-			
+
+			transition-duration: .5s;
+			visibility: hidden;
+			opacity: 0;
 			z-index: 10;
+		}
+
+		&--active {
+			padding: 18px 35px;
+			visibility: visible;
+			opacity: 1;
 		}
 	}
 	&__suggestion {
@@ -5163,6 +5172,29 @@ button.std-icon__wrapper {
 .p-component {
 	* {
 		font-size: inherit !important;
+	}
+}
+
+.std-product-card-s {
+	@include flex($align:center, $gap: 10px);
+
+	&__img {
+		border-radius: 5px;
+		height: 35px !important;
+	}
+
+	&__content {
+		@include flex-direction(column, $gap: 5px);
+	}
+
+	&__title {
+		font-size: 13px;
+		font-weight: 400;
+	}
+
+	&__article {
+		font-size: 11px;
+		font-weight: 500;
 	}
 }
 

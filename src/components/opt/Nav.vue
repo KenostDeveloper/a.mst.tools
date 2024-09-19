@@ -398,6 +398,7 @@
 		<div
 			v-if="opt_vendors.selected_count > 0"
 			class="navmain__search a-dart-input a-dart-input-search std-search-field__wrapper"
+			@click.stop
 		>
 			<form action="#" method="post" @submit.prevent="toSearch()">
 				<div class="navmain__search_btn std-search-field">
@@ -414,23 +415,16 @@
 							placeholder="Найти у выбранных поставщиков"
 							v-model="search"
 						/>
-
-						<ul
-							class="std-search-field__suggestions"
-							:class="{ ['std-search-field__suggestions--active']: this.search }"
-						>
-							<li
-								v-for="suggestion in searchSuggestions"
-								class="std-search-field__suggestion"
-							>
-								{{ suggestion }}
-							</li>
-						</ul>
 					</div>
 					<button
 						v-if="this.search"
 						class="std-search-field__delete"
-						@click="this.search = ''"
+						@click="
+							() => {
+								this.search = '';
+								this.searchSuggestions = [];
+							}
+						"
 						type="button"
 					>
 						<i class="pi pi-times"></i>
@@ -442,6 +436,34 @@
 						Найти
 					</button>
 				</div>
+
+				<ul
+					class="std-search-field__suggestions"
+					:class="{
+						['std-search-field__suggestions--active']: this.showSearchSuggestions,
+					}"
+				>
+					<li
+						v-for="suggestion in searchSuggestions"
+						class="std-search-field__suggestion"
+						@click="
+							() => {
+								this.search = suggestion.name;
+								this.toSearch();
+							}
+						"
+					>
+						<div class="std-product-card-s">
+							<img :src="suggestion.image" alt="" class="std-product-card-s__img" />
+							<div class="std-product-card-s__content">
+								<span class="std-product-card-s__title">{{ suggestion.name }}</span>
+								<span class="std-product-card-s__article"
+									>арт. {{ suggestion.article }}</span
+								>
+							</div>
+						</div>
+					</li>
+				</ul>
 			</form>
 		</div>
 		<!-- </div> -->
@@ -534,7 +556,7 @@ import { mapActions, mapGetters } from "vuex";
 import router from "../../router";
 import Vendors from "./Vendors.vue";
 import Accordion from "../Accordion.vue";
-import { find } from "lodash";
+import axios from "axios";
 
 export default {
 	name: "Nav",
@@ -550,6 +572,8 @@ export default {
 	},
 	data() {
 		return {
+			showSearchSuggestions: false,
+			searchSuggestions: [],
 			searchTimer: null,
 			catalogWarehouseParent: 1,
 			// parentCatalog: {},
@@ -578,6 +602,7 @@ export default {
 			"org_get_stores_from_api",
 			"opt_warehouse_basket",
 			"busket_from_api",
+			"get_opt_products_from_api",
 		]),
 		toSearch() {
 			router.push({ name: "opt_search", params: { search: this.search } });
@@ -675,10 +700,49 @@ export default {
 			this.showWarehouseList = false;
 		},
 
+		async searchProducts() {
+			this.searchSuggestions = [];
+			
+			let cat = 0;
+			if (
+				router.currentRoute._value.params.warehouse_id &&
+				!router.currentRoute._value.params.warehouse_cat_id
+			) {
+				cat = "all";
+			}
+			if (
+				!router.currentRoute._value.params.warehouse_id &&
+				!router.currentRoute._value.params.warehouse_cat_id
+			) {
+				cat = router.currentRoute._value.params.category_id;
+			}
+
+			const response = await axios.post(
+				"/rest/front_opt",
+				{
+					id: router.currentRoute._value.params.id,
+					type: router.currentRoute._value.params.type,
+					category_id: cat,
+					warehouse_id: router.currentRoute._value.params.warehouse_id,
+					warehouse_cat_id: router.currentRoute._value.params.warehouse_cat_id,
+					search: this.search,
+					page: 1,
+					perpage: 25,
+					action: "get/products",
+				},
+				{
+					headers: {
+						"Access-Control-Allow-Origin": "*",
+					},
+				}
+			);
+			return response.data.data.items;
+		},
+
 		debounce(func, delay) {
 			clearTimeout(this.searchTimer);
 			this.searchTimer = setTimeout(func, delay);
-		}
+		},
 	},
 	mounted() {
 		this.get_opt_warehouse_catalog_from_api();
@@ -698,6 +762,9 @@ export default {
 
 			if (this.showWarehouseList) {
 				this.showWarehouseList = false;
+			}
+			if (this.showSearchSuggestions) {
+				this.showSearchSuggestions = false;
 			}
 		});
 
@@ -720,6 +787,7 @@ export default {
 			"optcatalogwarehouse",
 			"org_stores",
 			"warehouse_basket",
+			"optproducts",
 		]),
 
 		warehouseLink() {
@@ -755,8 +823,13 @@ export default {
 			this.actualCatalog = {};
 		},
 		search: function (newVal, oldVal) {
-			const searchResult = this.toSearch();
-		}
+			this.showSearchSuggestions = !!newVal;
+
+			this.debounce(async () => {
+				console.log(await this.searchProducts());
+				this.searchSuggestions = await this.searchProducts();
+			}, 300);
+		},
 	},
 };
 </script>
