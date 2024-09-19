@@ -727,7 +727,7 @@ export default {
 					warehouse_cat_id: router.currentRoute._value.params.warehouse_cat_id,
 					search: this.search,
 					page: 1,
-					perpage: 25,
+					perpage: 5,
 					action: "get/products",
 				},
 				{
