@@ -29,6 +29,7 @@ import MyOrder from '../pages/MyOrder.vue'
 import ProfileStatistics from '../pages/ProfileStatistics.vue'
 import ProfileStoreStatistics from '../pages/ProfileStoreStatistics.vue'
 import ProfileDiscounts from '../pages/ProfileDiscounts.vue'
+import ProfileDiscountsEdit from '../pages/ProfileDiscountsEdit.vue'
 import RetailOrders from "../pages/RetailOrders.vue"
 import Order from "../pages/Order.vue";
 import Balance from "../pages/store/balance.vue";
@@ -296,8 +297,24 @@ const routes = [
                   },
                   {
                     path: 'discounts',
-                    name: 'discounts',
-                    component: ProfileDiscounts
+                    children: [
+                      {
+                        path: "",
+                        children: [
+                          {
+                            path: "",
+                            name: 'discounts',
+                            component: ProfileDiscounts
+                          },
+                          {
+                            path: ':discounts_id',
+                            name: 'discounts_id',
+                            component: ProfileDiscountsEdit
+                          }
+                        ]
+                      },
+                    ]
+                    
                   },
                   {
                     path: 'statistics',

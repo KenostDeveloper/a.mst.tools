@@ -6,7 +6,7 @@
                 <i class="pi pi-minus"></i>
             </div>
             <!-- <InputNumber class="k-quantity__counter" :step="1" :min="this.d_min" :max="this.d_max" v-model="this.d_value"/> -->
-            <input @input="onEmit" type="number" v-model="this.d_value" class="k-quantity__counter" :min="this.d_min" :max="this.d_max" name="count" :value="this.d_value">
+            <input @input="onEmit" :step="d_step" type="number" v-model="this.d_value" class="k-quantity__counter" :min="this.d_min" :max="this.d_max" name="count" :value="this.d_value">
             <div class="k-quantity__btn pls" @click="onPlus">
                 <i class="pi pi-plus"></i>
             </div>
@@ -32,6 +32,10 @@ export default {
     value: {
       type: Number,
       default: 0
+    },
+    step: {
+      type: Number,
+      default: 1
     },
     id: {
       type: Number,
@@ -59,7 +63,8 @@ export default {
       loading: true,
       d_min: this.min,
       d_max: this.max,
-      d_value: this.value
+      d_value: this.value,
+      d_step: this.step
     }
   },
   methods: {
@@ -67,7 +72,7 @@ export default {
     ]),
     onMinus () {
       if (this.d_value > this.d_min) {
-        this.d_value = this.d_value - 1
+        this.d_value = this.d_value - (1 * this.d_step)
       }
       const data = {
         value: this.d_value,
@@ -81,7 +86,7 @@ export default {
     },
     onPlus () {
       if (this.d_value < this.d_max) {
-        this.d_value = Number(this.d_value) + 1
+        this.d_value = Number(this.d_value) + (1 * this.d_step)
       }
       const data = {
         value: this.d_value,
@@ -94,6 +99,11 @@ export default {
       this.$emit('ElemCount', data)
     },
     onEmit () {
+      if(this.d_value % this.d_step !== 0){
+        const remains = this.d_value % this.d_step;
+        this.d_value = this.d_value - remains;
+      }
+
       const data = {
         value: this.d_value,
         id: this.id,
@@ -103,6 +113,7 @@ export default {
         item: this.item
       }
       this.$emit('ElemCount', data)
+      
     }
   },
   mounted () {

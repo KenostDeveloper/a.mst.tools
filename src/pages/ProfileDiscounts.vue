@@ -153,11 +153,15 @@
         'set_diler_to_api',
       ]),
       editDiler (value) {
-        this.form.diler.name = value.name
-        this.form.diler.warehouse_id = value.warehouse_id
-        this.form.diler.id = value.obj_id
-        this.form.diler.base_sale = value.base_sale
-        this.modals.diler = !this.modals.diler
+        // this.form.diler.name = value.name
+        // this.form.diler.warehouse_id = value.warehouse_id
+        // this.form.diler.id = value.obj_id
+        // this.form.diler.base_sale = value.base_sale
+        // this.modals.diler = !this.modals.diler
+        router.push({
+          name: "discounts_id",
+          params: { id: this.$route.params.id, discounts_id: value.id },
+        });
       },
       setSale () {
         this.diler_loading = true

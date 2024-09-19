@@ -22,8 +22,8 @@
     <td class="k-table__title"><p>{{item.name}}</p><b>Арт: {{item.article}}</b></td>
     <td class="k-table__busket">
         <form class="k-table__form" action="" :class="{'basket-true' : item?.basket?.availability}">
-          <Counter :item="item" :key="new Date().getMilliseconds() + item.id" @ElemCount="ElemCount" :min="1" :max="item.max" :id="item.remain_id" :store_id="item.store_id" :index="index" :value="item?.basket?.count"/>
-          <div @click="addBasket(item.remain_id, item.basket.count, item.store_id, index)" class="dart-btn dart-btn-primary"><i class="d_icon d_icon-busket"></i></div>
+          <Counter :item="item" :key="new Date().getMilliseconds() + item.id" @ElemCount="ElemCount" :min="1" :max="item.max" :step="item?.action?.multiplicity ? item?.action?.multiplicity : 1" :id="item.remain_id" :store_id="item.store_id" :index="index" :value="item?.basket?.count"/>
+          <div @click="addBasket(item.remain_id, item?.action?.multiplicity > 1 ? item.basket.count * item?.action?.multiplicity : item.basket.count, item.store_id, index)" class="dart-btn dart-btn-primary"><i class="d_icon d_icon-busket"></i></div>
         </form>
     </td>
     <td>{{Math.round(item.price).toLocaleString('ru')}} ₽ <br> {{item.delay ? Number(item.delay).toFixed(1) + ' дн' : 'Предоплата'}}</td>
@@ -73,7 +73,7 @@
                     <p v-if="tag.type == 'delay'">Отсрочка {{ tag.value }} дн.</p>
 
                     <img v-if="tag.type == 'multiplicity'" src="../../assets/images/icons/action/box.svg" alt="">
-                    <p v-if="tag.type == 'multiplicity'">Краткость упаковки {{ (tag.value).toLocaleString('ru') }} шт.</p>
+                    <p v-if="tag.type == 'multiplicity'">Кратность упаковки {{ (tag.value).toLocaleString('ru') }} шт.</p>
 
                     <img v-if="tag.type == 'sale'" src="../../assets/images/icons/action/sale.svg" alt="">
                     <p v-if="tag.type == 'sale'">Скидка {{ (tag.value).toLocaleString('ru') }}% <span v-if="tag.min_count > 0">при покупке от {{ tag.min_count }} шт.</span></p>
@@ -150,7 +150,7 @@
                       <p v-if="tag.type == 'delay'">Отсрочка {{ tag.value }} дн.</p>
 
                       <img v-if="tag.type == 'multiplicity'" src="../../assets/images/icons/action/box.svg" alt="">
-                      <p v-if="tag.type == 'multiplicity'">Краткость упаковки {{ (tag.value).toLocaleString('ru') }} шт.</p>
+                      <p v-if="tag.type == 'multiplicity'">Кратность упаковки {{ (tag.value).toLocaleString('ru') }} шт.</p>
 
                       <img v-if="tag.type == 'sale'" src="../../assets/images/icons/action/sale.svg" alt="">
                       <p v-if="tag.type == 'sale'">Скидка {{ (tag.value).toLocaleString('ru') }}%</p>

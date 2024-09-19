@@ -370,7 +370,7 @@
                   </div>
                 </div>
 
-                <div v-if="this.form.addProductType == '2'" class="dart-form-group mb-4">
+                  <div v-if="this.form.addProductType == '2'" class="dart-form-group mb-4">
                     <DropZone
                       v-if="!this.upload_product"
                       class="kenost-dropzone"
