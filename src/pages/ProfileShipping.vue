@@ -205,7 +205,6 @@
 											showIcon
 											id="calendar-24h"
 											v-model="form.dateStart"
-											:minDate="form.dateEnd"
 										/>
 										<span
 											class="error_desc"
@@ -239,32 +238,6 @@
 									</div>
 								</div>
 							</div>
-							<div class="dart-row mt-2">
-								<div class="d-col-md-12">
-									<div
-										class="dart-form-group"
-										:class="{
-											error: v$.form.timeSelected.repeater.$errors.length,
-										}"
-									>
-										<label for="">Повторять</label>
-										<Dropdown
-											v-model="form.timeSelected.repeater"
-											:options="form.timeSelect.repeater"
-											optionLabel="label"
-											optionValue="value"
-											placeholder="Выберите период повторения"
-										/>
-										<span
-											class="error_desc"
-											v-for="error of v$.form.timeSelected.repeater.$errors"
-											:key="error.$uid"
-										>
-											{{ error.$message }}
-										</span>
-									</div>
-								</div>
-							</div>
 							<div class="dart-row">
 								<div class="d-col-md-12">
 									<div
@@ -284,6 +257,32 @@
 										<span
 											class="error_desc"
 											v-for="error of v$.form.store_id.$errors"
+											:key="error.$uid"
+										>
+											{{ error.$message }}
+										</span>
+									</div>
+								</div>
+							</div>
+							<div class="dart-row mt-2">
+								<div class="d-col-md-12">
+									<div
+										class="dart-form-group"
+										:class="{
+											error: v$.form.timeSelected.repeater.$errors.length,
+										}"
+									>
+										<label for="">Повторять</label>
+										<Dropdown
+											v-model="form.timeSelected.repeater"
+											:options="form.timeSelect.repeater"
+											optionLabel="label"
+											optionValue="value"
+											placeholder="Выберите период повторения"
+										/>
+										<span
+											class="error_desc"
+											v-for="error of v$.form.timeSelected.repeater.$errors"
 											:key="error.$uid"
 										>
 											{{ error.$message }}
@@ -323,7 +322,6 @@
 									form.timeSelected.repeater == 'day' ||
 									form.timeSelected.repeater == 'week'
 								"
-								:class="{ error: v$.form.timeSelected.range.$errors.length }"
 							>
 								<label for="">В период</label>
 								<DatePicker
@@ -361,13 +359,6 @@
 										</div>
 									</template>
 								</DatePicker>
-								<span
-									class="error_desc"
-									v-for="error of v$.form.timeSelected.range.$errors"
-									:key="error.$uid"
-								>
-									{{ error.$message }}
-								</span>
 							</div>
 						</div>
 

@@ -24,7 +24,6 @@
 				>
 					<CalendarVue
 						v-model="citiesDates[item.value]"
-						:minDate="minDate"
 						showIcon
 						id="calendar-24h"
 					/>
