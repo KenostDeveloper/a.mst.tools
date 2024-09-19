@@ -662,7 +662,6 @@ export default {
 			this.$emit("updateBasket");
 		},
 		ElemCount(object) {
-      console.log(object);
       if(object.value == object.min) return;
 
 			if (object.value > Number(object.max)) {
