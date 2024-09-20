@@ -5218,6 +5218,18 @@ button.std-icon__wrapper {
 	}
 }
 
+.k-table {
+	tr:not(.kenost-table-background) {
+		cursor: pointer;
+	}
+
+	.kenost-table-background {
+		p {
+			cursor: default !important;
+		}
+	}
+}
+
 // /Steiden
 
 .p-fileupload-buttonbar {
