@@ -352,16 +352,16 @@
                     <p class="table-kenost__settings" @click="settings(item, true)" >Настроить</p>
                     </td>
                     <td v-if="this.selected_data[item.id]">
-                    <Counter class="margin-auto" @ElemCount="ElemMinCount" :item="item" :id="item.id" :min="1" :value="this.selected_data[item.id].min_count" :key="new Date().getMilliseconds() + item.id"/>
+                        <Counter class="margin-auto" @ElemCount="ElemMinCount" :item="item" :id="item.id" :min="1" :value="this.selected_data[item.id].min_count" :key="new Date().getMilliseconds() + item.id"/>
                     </td>
                     <td v-else>
-                    <Counter class="margin-auto" @ElemCount="ElemMinCount" :item="item" :id="item.id" :min="1" :value="1"/>
+                        <Counter class="margin-auto" @ElemCount="ElemMinCount" :item="item" :id="item.id" :min="1" :value="1"/>
                     </td>
                     <td v-if="this.selected_data[item.id]">
-                    <Counter class="margin-auto" @ElemCount="ElemCount" :item="item" :id="item.id" :min="1" :value="this.selected_data[item.id].multiplicity" :key="new Date().getMilliseconds() + item.id"/>
+                        <Counter class="margin-auto" @ElemCount="ElemCount" :item="item" :id="item.id" :min="1" :value="this.selected_data[item.id].multiplicity" :key="new Date().getMilliseconds() + item.id"/>
                     </td>
                     <td v-else>
-                    <Counter class="margin-auto" @ElemCount="ElemCount" :item="item" :id="item.id" :min="1" :value="1"/>
+                        <Counter class="margin-auto" @ElemCount="ElemCount" :item="item" :id="item.id" :min="1" :value="1"/>
                     </td>
                     <td>
                     {{ this.selected_data[item.id] ? (Number(this.selected_data[item.id].finalPrice) * this.selected_data[item.id].multiplicity).toFixed(2) : item.price.toLocaleString('ru') }} ₽
@@ -799,40 +799,41 @@
                         multiplicity: 1,
                         min_count: 1,
                         finalPrice: this.selected[this.kenost_table[i]].price,
+                        store_id: this.selected[this.kenost_table[i]].store_id,
                         discountInterest: 0,
                         discountInRubles: 0
                     }
                     this.selected_data[this.kenost_table[i]] = elem
                     }
                     switch (this.kenostActivityAll.type.key) {
-                    case 0:
-                        this.selected_data[this.kenost_table[i]].typePrice = this.kenostActivityAll.typePrice
-                        if (this.kenostActivityAll.typeFormul.key === 0) {
-                        this.selected[this.kenost_table[i]].finalPrice = Number(this.selected_data[this.kenost_table[i]].price) - this.kenostActivityAll.value
-                        this.selected_data[this.kenost_table[i]].discountInRubles = this.kenostActivityAll.value
-                        this.selected_data[this.kenost_table[i]].discountInterest = this.kenostActivityAll.value / (Number(this.selected_data[this.kenost_table[i]].price) / 100)
-                        } else {
-                        this.selected_data[this.kenost_table[i]].finalPrice = Number(this.selected_data[this.kenost_table[i]].price) - ((Number(this.selected_data[this.kenost_table[i]].price) / 100) * this.kenostActivityAll.value)
-                        this.selected_data[this.kenost_table[i]].discountInRubles = this.selected_data[this.kenost_table[i]].finalPrice - Number(this.selected_data[this.kenost_table[i]].price)
-                        this.selected_data[this.kenost_table[i]].discountInterest = this.kenostActivityAll.value
-                        }
-                        break
-                    case 1:
-                        // console.log(this.selected)
-                        // eslint-disable-next-line no-case-declarations
-                        const isPrice = this.selected[this.kenost_table[i]].prices.find(r => r.guid === this.kenostActivityAll.typePrice.key)
+                        case 0:
+                            this.selected_data[this.kenost_table[i]].typePrice = this.kenostActivityAll.typePrice
+                            if (this.kenostActivityAll.typeFormul.key === 0) {
+                            this.selected[this.kenost_table[i]].finalPrice = Number(this.selected_data[this.kenost_table[i]].price) - this.kenostActivityAll.value
+                            this.selected_data[this.kenost_table[i]].discountInRubles = this.kenostActivityAll.value
+                            this.selected_data[this.kenost_table[i]].discountInterest = this.kenostActivityAll.value / (Number(this.selected_data[this.kenost_table[i]].price) / 100)
+                            } else {
+                            this.selected_data[this.kenost_table[i]].finalPrice = Number(this.selected_data[this.kenost_table[i]].price) - ((Number(this.selected_data[this.kenost_table[i]].price) / 100) * this.kenostActivityAll.value)
+                            this.selected_data[this.kenost_table[i]].discountInRubles = this.selected_data[this.kenost_table[i]].finalPrice - Number(this.selected_data[this.kenost_table[i]].price)
+                            this.selected_data[this.kenost_table[i]].discountInterest = this.kenostActivityAll.value
+                            }
+                            break
+                        case 1:
+                            // console.log(this.selected)
+                            // eslint-disable-next-line no-case-declarations
+                            const isPrice = this.selected[this.kenost_table[i]].prices.find(r => r.guid === this.kenostActivityAll.typePrice.key)
 
-                        if (isPrice) {
-                        // console.log(this.selected[this.kenost_table[i]])
-                        this.selected_data[this.kenost_table[i]].typePrice = this.kenostActivityAll.typePrice
-                        this.selected_data[this.kenost_table[i]].finalPrice = isPrice.price
-                        this.selected_data[this.kenost_table[i]].discountInRubles = Number(this.selected_data[this.kenost_table[i]].price) - this.selected_data[this.kenost_table[i]].finalPrice
-                        this.selected_data[this.kenost_table[i]].discountInterest = isPrice.price / (Number(this.selected_data[this.kenost_table[i]].price) / 100)
-                        }
-                        break
-                    case 3:
-                        this.selected_data[this.kenost_table[i]].multiplicity = this.kenostActivityAll.multiplicity
-                        break
+                            if (isPrice) {
+                            // console.log(this.selected[this.kenost_table[i]])
+                            this.selected_data[this.kenost_table[i]].typePrice = this.kenostActivityAll.typePrice
+                            this.selected_data[this.kenost_table[i]].finalPrice = isPrice.price
+                            this.selected_data[this.kenost_table[i]].discountInRubles = Number(this.selected_data[this.kenost_table[i]].price) - this.selected_data[this.kenost_table[i]].finalPrice
+                            this.selected_data[this.kenost_table[i]].discountInterest = isPrice.price / (Number(this.selected_data[this.kenost_table[i]].price) / 100)
+                            }
+                            break
+                        case 3:
+                            this.selected_data[this.kenost_table[i]].multiplicity = this.kenostActivityAll.multiplicity
+                            break
                     }
                     // console.log(this.selected[this.kenost_table[i]])
                 }
@@ -842,12 +843,13 @@
                 this.modals.product_id = item.id
                 if (!this.selected_data[item.id]) {
                     const elem = {
-                    price: item.price,
-                    multiplicity: 1,
-                    min_count: 1,
-                    finalPrice: item.price,
-                    discountInterest: 0,
-                    discountInRubles: 0
+                        store_id: item.store_id,
+                        price: item.price,
+                        multiplicity: 1,
+                        min_count: 1,
+                        finalPrice: item.price,
+                        discountInterest: 0,
+                        discountInRubles: 0
                     }
                     this.selected_data[item.id] = elem
                 }
@@ -1281,6 +1283,7 @@
             },
             ElemCount (obj) {
                 this.settings(obj.item, false)
+                console.log(obj)
                 if (!this.selected_data[obj.id]) {
                     this.selected_data[obj.id] = []
                     this.selected_data[obj.id].multiplicity = obj.value
