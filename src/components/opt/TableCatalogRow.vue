@@ -662,7 +662,7 @@ export default {
 			this.$emit("updateBasket");
 		},
 		ElemCount(object) {
-      if(object.value == object.min) return;
+			if (object.value == object.min) return;
 
 			if (object.value > Number(object.max)) {
 				this.modal_remain = true;

@@ -14,6 +14,7 @@
 				:min="this.d_min"
 				name="count"
 				:value="this.d_value"
+				:step="d_step"
 			/>
 			<div class="k-quantity__btn pls" @click="onPlus">
 				<i class="pi pi-plus"></i>
@@ -62,6 +63,10 @@ export default {
 			type: Object,
 			default: {},
 		},
+		step: {
+			type: Number,
+			default: 1
+		}
 	},
 	data() {
 		return {
@@ -69,6 +74,7 @@ export default {
 			d_min: this.min,
 			d_max: this.max,
 			d_value: this.value,
+			d_step: this.step
 		};
 	},
 	methods: {
@@ -76,7 +82,7 @@ export default {
 		onMinus() {
 			debounce(() => {
 				if (this.d_value > this.d_min) {
-					this.d_value = this.d_value - 1;
+					this.d_value = this.d_value - (1 * this.d_step);
 				}
 				const data = {
 					value: this.d_value,
@@ -93,7 +99,7 @@ export default {
 		onPlus() {
 			debounce(() => {
 				if (this.d_value <= this.d_max) {
-					this.d_value = Number(this.d_value) + 1;
+					this.d_value = Number(this.d_value) + (1 * this.d_step);
 				}
 				const data = {
 					value: this.d_value,
@@ -107,57 +113,49 @@ export default {
 				this.$emit("ElemCount", data);
 			}, 300);
 		},
+		onPlus() {
+			if (this.d_value < this.d_max) {
+				this.d_value = Number(this.d_value) + (1 * this.d_step);
+			}
+			const data = {
+				value: this.d_value,
+				id: this.id,
+				store_id: this.store_id,
+				max: this.d_max,
+				index: this.index,
+				item: this.item,
+			};
+			this.$emit("ElemCount", data);
+		},
 		onEmit(e) {
-      if(!this.d_value || this.d_value < 0) {
-        this.d_value = this.d_min;
-      }
-      if (this.d_value > this.d_max) {
-        e.stopPropagation();
-      }
-      this.$emit('ElemCount', data)
-    },
-    onPlus () {
-      if (this.d_value < this.d_max) {
-        this.d_value = Number(this.d_value) + (1 * this.d_step)
-      }
-      const data = {
-        value: this.d_value,
-        id: this.id,
-        store_id: this.store_id,
-        max: this.d_max,
-        index: this.index,
-        item: this.item
-      }
-      this.$emit('ElemCount', data)
-    },
-    onEmit () {
-      if(this.d_value % this.d_step !== 0){
-        const remains = this.d_value % this.d_step;
-        this.d_value = this.d_value - remains;
-      }
+			if (!this.d_value || this.d_value < 0) {
+				this.d_value = this.d_min;
+			}
 
-      const data = {
-        value: this.d_value,
-        id: this.id,
-        store_id: this.store_id,
-        max: this.d_max,
-        index: this.index,
-        item: this.item
-      }
-      this.$emit('ElemCount', data)
-      
-    }
-  },
-  mounted () {
-  },
-  components: {
-    // InputNumber
-  },
-  computed: {
-    ...mapGetters([
-    ])
-  }
-}
+			if (this.d_value % this.d_step !== 0) {
+				const remains = this.d_value % this.d_step;
+				this.d_value = this.d_value - remains;
+			}
+
+			const data = {
+				value: this.d_value,
+				id: this.id,
+				store_id: this.store_id,
+				max: this.d_max,
+				index: this.index,
+				item: this.item,
+			};
+			this.$emit("ElemCount", data);
+		},
+	},
+	mounted() {},
+	components: {
+		// InputNumber
+	},
+	computed: {
+		...mapGetters([]),
+	},
+};
 </script>
 <style lang="scss">
 .k-quantity {
