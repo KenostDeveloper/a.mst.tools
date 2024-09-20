@@ -420,13 +420,6 @@
 	}
 }
 @include tablet-l-above {
-	.std-calendar {
-		.calendar-associations {
-			&__blue::before {
-				background-color: white;
-			}
-		}
-	}
 }
 @include tablet-l {
 	.std-shipping {
