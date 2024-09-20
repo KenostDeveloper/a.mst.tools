@@ -17,6 +17,7 @@
                 optionLabel="label"
                 optionValue="value"
                 placeholder="Выберите склад"
+                disabled
             />
         </div>
 
@@ -768,7 +769,7 @@
                 'opt_get_prices',
                 'get_available_products_from_api',
                 'opt_get_remain_prices',
-                'opt_get_complects'
+                'opt_get_complects',
             ]),
             formSubmit (event) {
                 this.$load(async () => {
@@ -786,7 +787,7 @@
                         complects: this.selected_complects,
                         method_adding_products: this.form.addProductType, //Метод добавления товаров
                         id: router.currentRoute._value.params.id,
-                        id_client: router.currentRoute._value.params.discounts_id,
+                        id_client: router.currentRoute._value.params.client_id,
                     })
                 })
             },
@@ -1374,6 +1375,12 @@
                 this.stores = []
                 for (let i = 0; i < newVal.items.length; i++) {
                     this.stores.push({ label: newVal.items[i].name, value: newVal.items[i].id })
+
+                    if(newVal.items[i].id == router.currentRoute._value.params.store_id){
+                        this.form.store_id.push(newVal.items[i].id);
+
+                        this.updateProducts()
+                    }
                 }
             },
             oprprices: function (newVal, oldVal) {

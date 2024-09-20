@@ -307,9 +307,16 @@ const routes = [
                             component: ProfileDiscounts
                           },
                           {
-                            path: ':discounts_id',
-                            name: 'discounts_id',
-                            component: ProfileDiscountsEdit
+                            path: ':client_id',
+                            name: 'discounts_client_id',
+                            component: ProfileDiscountsEdit,
+                            children: [
+                              {
+                                path: ':store_id',
+                                name: 'discounts_edit',
+                                component: ProfileDiscountsEdit
+                              }
+                            ]
                           }
                         ]
                       },

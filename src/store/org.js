@@ -6,7 +6,8 @@ export default {
     org_profile: [],
     orgs: [],
     org_stores: [],
-    org_store: []
+    org_store: [],
+    individual_discount: []
   },
   actions: {
     get_org_store_from_api ({ commit }) {
@@ -110,9 +111,30 @@ export default {
             localStorage.removeItem('user')
             router.push({ name: 'main' })
           }
+      })
+    },
+    org_get_discount_individual_api ({ commit }, data) {
+      return Axios('/rest/front_org', {
+        method: 'POST',
+        data: data,
+        headers: {
+          'Access-Control-Allow-Origin': '*'
+        }
+      })
+        .then((response) => {
+          commit('SET_ORG_INDIVIDUAL_TO_VUEX', response.data)
+          // console.log(response)
+          return response
         })
+        .catch(error => {
+          if (error.response.status === 403) {
+            localStorage.removeItem('user')
+            router.push({ name: 'main' })
+          }
+      })
     }
   },
+  
   mutations: {
     SET_ORG_PROFILE_TO_VUEX: (state, data) => {
       state.org_profile = data.data
@@ -125,7 +147,10 @@ export default {
     },
     SET_ORG_STORE_TO_VUEX: (state, data) => {
       state.org_store = data.data
-    }
+    },
+    SET_ORG_INDIVIDUAL_TO_VUEX: (state, data) => {
+      state.individual_discount = data.data
+    },
   },
   getters: {
     org_profile (state) {
@@ -139,6 +164,9 @@ export default {
     },
     org_store (state) {
       return state.org_store
-    }
+    },
+    individual_discount (state) {
+      return state.individual_discount
+    },
   }
 }
