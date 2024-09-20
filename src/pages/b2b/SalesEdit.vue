@@ -1199,7 +1199,7 @@ export default {
     },
     updateProducts () {
       const data = {
-        storeid: this.form.store_id,
+        storeid: [this.form.store_id],
         filter: this.filter,
         filterselected: this.filter_table,
         selected: Object.keys(this.selected),
@@ -1220,7 +1220,7 @@ export default {
       this.selectedGift = {}
 
       const dataGift = {
-        storeid: this.form.store_id,
+        storeid: [this.form.store_id],
         filter: this.filterGift,
         filterselected: this.filter_table,
         selected: Object.keys(this.selected),
@@ -1316,7 +1316,7 @@ export default {
           }
 
           const data = {
-            storeid: this.form.store_id,
+            storeid: [this.form.store_id],
             filter: this.filter,
             filterselected: this.filter_table,
             selected: Object.keys(this.selected),
@@ -1396,7 +1396,7 @@ export default {
       this.page_selected = 1
       this.page = 1
       const data = {
-        storeid: this.form.store_id,
+        storeid: [this.form.store_id],
         filter: this.filter,
         filterselected: this.filter_table,
         pageselected: this.page_selected,
@@ -1412,7 +1412,7 @@ export default {
     setFilterGift () {
       this.pageGift = 1
       const data = {
-        storeid: this.form.store_id,
+        storeid: [this.form.store_id],
         filter: this.filterGift,
         filterselected: this.filter_table,
         pageselected: this.page_selected,
@@ -1427,7 +1427,7 @@ export default {
     },
     setAllProducts (is) {
       const data = {
-        storeid: this.form.store_id,
+        storeid: [this.form.store_id],
         filter: this.filter,
         filterselected: this.filter_table,
         pageselected: this.page_selected,
@@ -1636,7 +1636,7 @@ export default {
         this.selected[product.id] = product
         this.products = this.products.filter((r) => r.id !== id)
         const data = {
-          storeid: this.form.store_id,
+          storeid: [this.form.store_id],
           filter: this.filter,
           filterselected: this.filter_table,
           selected: Object.keys(this.selected),
@@ -1664,7 +1664,7 @@ export default {
       // console.log(this.selectedGift)
       this.productsGift = this.productsGift.filter((r) => r.id !== id)
       const data = {
-        storeid: this.form.store_id,
+        storeid: [this.form.store_id],
         filter: this.filterGift,
         filterselected: this.filter_table,
         selected: Object.keys(this.selectedGift),
@@ -1694,7 +1694,7 @@ export default {
 
       // this.selected = this.selected.filter((r) => r.id !== id)
       const data = {
-        storeid: this.form.store_id,
+        storeid: [this.form.store_id],
         filter: this.filterGift,
         filterselected: this.filter_table,
         selected: Object.keys(this.selected),
@@ -1724,7 +1724,7 @@ export default {
 
       // this.selected = this.selected.filter((r) => r.id !== id)
       const data = {
-        storeid: this.form.store_id,
+        storeid: [this.form.store_id],
         filter: this.filter,
         filterselected: this.filter_table,
         selected: Object.keys(this.selected),
@@ -1765,7 +1765,7 @@ export default {
     pagClickCallback (pageNum) {
       this.page = pageNum
       const data = {
-        storeid: this.form.store_id,
+        storeid: [this.form.store_id],
         filter: this.filter,
         filterselected: this.filter_table,
         selected: Object.keys(this.selected),
@@ -1780,7 +1780,7 @@ export default {
     pagClickCallbackGift (pageNum) {
       this.pageGift = pageNum
       const data = {
-        storeid: this.form.store_id,
+        storeid: [this.form.store_id],
         filter: this.filterGift,
         filterselected: this.filter_table,
         selected: Object.keys(this.selectedGift),
@@ -1796,7 +1796,7 @@ export default {
     pagClickCallbackSelect (pageNum) {
       this.page_selected = pageNum
       const data = {
-        storeid: this.form.store_id,
+        storeid: [this.form.store_id],
         filter: this.filter,
         filterselected: this.filter_table,
         selected: Object.keys(this.selected),
@@ -1931,7 +1931,7 @@ export default {
     }
   },
   mounted () {
-    this.get_available_products_from_api({ storeid: this.form.store_id, filter: '', selected: ['0'], page: this.page }).then((res) => {
+    this.get_available_products_from_api({ storeid: [this.form.store_id], filter: '', selected: ['0'], page: this.page }).then((res) => {
       if (this.available_products) {
         this.products = this.available_products?.products
       }
@@ -2119,7 +2119,7 @@ export default {
           })
 
           const data = {
-            storeid: newVal.store_id.toString(),
+            storeid: [newVal.store_id.toString()],
             filter: this.filterGift,
             filterselected: this.filter_table,
             selected: Object.keys(this.selectedGift),
@@ -2212,7 +2212,7 @@ export default {
         )
 
         const data = {
-          storeid: this.form.store_id,
+          storeid: [this.form.store_id],
           filter: this.filter,
           filterselected: this.filter_table,
           selected: Object.keys(this.selected),

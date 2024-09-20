@@ -10,17 +10,17 @@
 
         <div class="dart-form-group mt-2 mb-4">
             <span class="ktitle">Склад</span>
-            <Dropdown
-            @change="updateProducts"
-            v-model="this.form.store_id"
-            :options="this.stores"
-            optionLabel="label"
-            optionValue="value"
-            placeholder="Выберите склад"
+            <MultiSelect
+                @change="updateProducts"
+                v-model="this.form.store_id"
+                :options="this.stores"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Выберите склад"
             />
         </div>
 
-        <div v-if="this.form.store_id">
+        <div v-if="this.form.store_id.length > 0">
 
             <div class="dart-form-group mb-4">
                 <span class="ktitle">Комментарий</span>
@@ -617,13 +617,14 @@
     import Checkbox from 'primevue/checkbox'
     import router from '../router'
     import Paginate from 'vuejs-paginate-next'
+    import MultiSelect from 'primevue/multiselect'
 
     export default {
         name: 'ProfileDiscountsEdit',
         data () {
             return {
                 form: {
-                    store_id: null,
+                    store_id: [],
                     comment: "",
                     paymentDelivery: { name: 'Покупатель', key: 0 },
                     min_amount: 0,
@@ -716,7 +717,8 @@
             TreeSelect,
             Counter,
             Checkbox,
-            Paginate
+            Paginate,
+            MultiSelect
         },
         computed: {
             ...mapGetters([
@@ -724,7 +726,21 @@
                 'oprprices',
                 'available_products',
                 'optcomplects'
-            ])
+            ]),
+            pagesCountSelect () {
+                let pages = Math.round(this.total_selected / this.per_page)
+                if (pages === 0) {
+                    pages = 1
+                }
+                return pages
+            },
+            pagesCount () {
+                let pages = Math.round(this.total_products / this.per_page)
+                if (pages === 0) {
+                    pages = 1
+                }
+                return pages
+            },
         },
         async mounted () {
             this.org_get_stores_from_api({
@@ -769,6 +785,8 @@
                         products_data: this.selected_data,
                         complects: this.selected_complects,
                         method_adding_products: this.form.addProductType, //Метод добавления товаров
+                        id: router.currentRoute._value.params.id,
+                        id_client: router.currentRoute._value.params.discounts_id,
                     })
                 })
             },
@@ -910,20 +928,20 @@
                     this.kenostTableCheckedAllCheck()
                 )
 
-                this.selectedGift = {}
+                // this.selectedGift = {}
 
-                const dataGift = {
-                    storeid: this.form.store_id,
-                    filter: this.filterGift,
-                    filterselected: this.filter_table,
-                    selected: Object.keys(this.selected),
-                    pageselected: this.page_selected,
-                    page: this.page,
-                    perpage: this.per_page,
-                    type: 'gift'
-                }
+                // const dataGift = {
+                //     storeid: this.form.store_id,
+                //     filter: this.filterGift,
+                //     filterselected: this.filter_table,
+                //     selected: Object.keys(this.selected),
+                //     pageselected: this.page_selected,
+                //     page: this.page,
+                //     perpage: this.per_page,
+                //     type: 'gift'
+                // }
 
-                this.get_available_products_from_api(dataGift).then()
+                // this.get_available_products_from_api(dataGift).then()
 
                 this.opt_get_prices({
                     action: 'get/type/prices',
@@ -1023,39 +1041,39 @@
                     this.kenostTableCheckedAllCheck()
                 })
             },
-            setFilterGift () {
-                this.pageGift = 1
-                const data = {
-                    storeid: this.form.store_id,
-                    filter: this.filterGift,
-                    filterselected: this.filter_table,
-                    pageselected: this.page_selected,
-                    page: this.pageGift,
-                    perpage: this.per_page,
-                    selected: Object.keys(this.selectedGift),
-                    type: 'gift'
-                }
-                this.get_available_products_from_api(data).then((res) => {
-                    this.kenostTableCheckedAllCheck()
-                })
-                },
-                setAllProducts (is) {
-                const data = {
-                    storeid: this.form.store_id,
-                    filter: this.filter,
-                    filterselected: this.filter_table,
-                    pageselected: this.page_selected,
-                    page: this.page,
-                    perpage: this.per_page,
-                    isallproducts: is ? 'all' : 'null'
-                }
-                if (is) {
-                    data.selected = Object.keys(this.selected)
-                }
-                this.get_available_products_from_api(data).then((res) => {
-                    this.kenostTableCheckedAllCheck()
-                })
-            },
+            // setFilterGift () {
+            //     this.pageGift = 1
+            //     const data = {
+            //         storeid: this.form.store_id,
+            //         filter: this.filterGift,
+            //         filterselected: this.filter_table,
+            //         pageselected: this.page_selected,
+            //         page: this.pageGift,
+            //         perpage: this.per_page,
+            //         selected: Object.keys(this.selectedGift),
+            //         type: 'gift'
+            //     }
+            //     this.get_available_products_from_api(data).then((res) => {
+            //         this.kenostTableCheckedAllCheck()
+            //     })
+            //     },
+            //     setAllProducts (is) {
+            //     const data = {
+            //         storeid: this.form.store_id,
+            //         filter: this.filter,
+            //         filterselected: this.filter_table,
+            //         pageselected: this.page_selected,
+            //         page: this.page,
+            //         perpage: this.per_page,
+            //         isallproducts: is ? 'all' : 'null'
+            //     }
+            //     if (is) {
+            //         data.selected = Object.keys(this.selected)
+            //     }
+            //     this.get_available_products_from_api(data).then((res) => {
+            //         this.kenostTableCheckedAllCheck()
+            //     })
+            // },
             select (id) {
                 const product = this.products.find(r => r.id === id)
                 product.discountInterest = 0
@@ -1093,63 +1111,63 @@
                     this.total_selected++
                 })
             },
-            selectGift (id) {
-                const product = this.productsGift.find(r => r.id === id)
-                // console.log(product)
-                // product.discountInterest = 0
-                // product.discountInRubles = 0
-                product.multiplicity = 1
-                // product.finalPrice = Number(product.price)
-                // product.typeFormul = {}
-                // product.typePrice = ''
+            // selectGift (id) {
+            //     const product = this.productsGift.find(r => r.id === id)
+            //     // console.log(product)
+            //     // product.discountInterest = 0
+            //     // product.discountInRubles = 0
+            //     product.multiplicity = 1
+            //     // product.finalPrice = Number(product.price)
+            //     // product.typeFormul = {}
+            //     // product.typePrice = ''
 
-                this.selectedGift[product.id] = product
-                // console.log(this.selectedGift)
-                this.productsGift = this.productsGift.filter((r) => r.id !== id)
-                const data = {
-                    storeid: this.form.store_id,
-                    filter: this.filterGift,
-                    filterselected: this.filter_table,
-                    selected: Object.keys(this.selectedGift),
-                    pageselected: this.page_selected,
-                    page: this.pageGift,
-                    perpage: this.per_page,
-                    type: 'gift'
-                }
-                this.get_available_products_from_api(data).then((res) => {
-                    this.kenostTableCheckedAllCheck()
-                })
-            },
-            deleteSelectGift (id) {
-                this.productsGift.push(this.selectedGift[id])
+            //     this.selectedGift[product.id] = product
+            //     // console.log(this.selectedGift)
+            //     this.productsGift = this.productsGift.filter((r) => r.id !== id)
+            //     const data = {
+            //         storeid: this.form.store_id,
+            //         filter: this.filterGift,
+            //         filterselected: this.filter_table,
+            //         selected: Object.keys(this.selectedGift),
+            //         pageselected: this.page_selected,
+            //         page: this.pageGift,
+            //         perpage: this.per_page,
+            //         type: 'gift'
+            //     }
+            //     this.get_available_products_from_api(data).then((res) => {
+            //         this.kenostTableCheckedAllCheck()
+            //     })
+            // },
+            // deleteSelectGift (id) {
+            //     this.productsGift.push(this.selectedGift[id])
 
-                // eslint-disable-next-line camelcase
-                const new_selected = {}
+            //     // eslint-disable-next-line camelcase
+            //     const new_selected = {}
 
-                for (let i = 0; i < Object.keys(this.selectedGift).length; i++) {
-                    if (this.selectedGift[Object.keys(this.selectedGift)[i]].id !== id) {
-                    new_selected[Object.keys(this.selectedGift)[i]] = this.selectedGift[Object.keys(this.selectedGift)[i]]
-                    }
-                }
+            //     for (let i = 0; i < Object.keys(this.selectedGift).length; i++) {
+            //         if (this.selectedGift[Object.keys(this.selectedGift)[i]].id !== id) {
+            //         new_selected[Object.keys(this.selectedGift)[i]] = this.selectedGift[Object.keys(this.selectedGift)[i]]
+            //         }
+            //     }
 
-                // eslint-disable-next-line camelcase
-                this.selectedGift = new_selected
+            //     // eslint-disable-next-line camelcase
+            //     this.selectedGift = new_selected
 
-                // this.selected = this.selected.filter((r) => r.id !== id)
-                const data = {
-                    storeid: this.form.store_id,
-                    filter: this.filterGift,
-                    filterselected: this.filter_table,
-                    selected: Object.keys(this.selected),
-                    pageselected: this.page_selected,
-                    page: this.page,
-                    perpage: this.per_page,
-                    type: 'gift'
-                }
-                this.get_available_products_from_api(data).then((res) => {
-                    this.kenostTableCheckedAllCheck()
-                })
-            },
+            //     // this.selected = this.selected.filter((r) => r.id !== id)
+            //     const data = {
+            //         storeid: this.form.store_id,
+            //         filter: this.filterGift,
+            //         filterselected: this.filter_table,
+            //         selected: Object.keys(this.selected),
+            //         pageselected: this.page_selected,
+            //         page: this.page,
+            //         perpage: this.per_page,
+            //         type: 'gift'
+            //     }
+            //     this.get_available_products_from_api(data).then((res) => {
+            //         this.kenostTableCheckedAllCheck()
+            //     })
+            // },
             deleteSelect (id) {
                 this.products.push(this.selected[id])
 
@@ -1195,22 +1213,22 @@
                     this.kenostTableCheckedAllCheck()
                 })
             },
-            pagClickCallbackGift (pageNum) {
-                this.pageGift = pageNum
-                const data = {
-                    storeid: this.form.store_id,
-                    filter: this.filterGift,
-                    filterselected: this.filter_table,
-                    selected: Object.keys(this.selectedGift),
-                    pageselected: this.page_selected,
-                    page: this.pageGift,
-                    perpage: this.per_page,
-                    type: 'gift'
-                }
-                this.get_available_products_from_api(data).then((res) => {
-                    this.kenostTableCheckedAllCheck()
-                })
-            },
+            // pagClickCallbackGift (pageNum) {
+            //     this.pageGift = pageNum
+            //     const data = {
+            //         storeid: this.form.store_id,
+            //         filter: this.filterGift,
+            //         filterselected: this.filter_table,
+            //         selected: Object.keys(this.selectedGift),
+            //         pageselected: this.page_selected,
+            //         page: this.pageGift,
+            //         perpage: this.per_page,
+            //         type: 'gift'
+            //     }
+            //     this.get_available_products_from_api(data).then((res) => {
+            //         this.kenostTableCheckedAllCheck()
+            //     })
+            // },
             pagClickCallbackSelect (pageNum) {
                 this.page_selected = pageNum
                 const data = {
@@ -1368,23 +1386,23 @@
             available_products: function (newVal, oldVal) {
                 if (newVal) {
                     if (newVal.type === 'gift') {
-                    this.productsGift = newVal.products
-                    // this.selected = newVal.selected
-                    if (newVal.selected) {
-                        this.selectedGift = newVal.selected
-                    }
-                    this.total_gift_products = newVal.total
+                        this.productsGift = newVal.products
+                        // this.selected = newVal.selected
+                        if (newVal.selected) {
+                            this.selectedGift = newVal.selected
+                        }
+                        this.total_gift_products = newVal.total
                     } else {
-                    this.products = newVal.products
-                    // this.selected = newVal.selected
-                    if (newVal.selected) {
-                        this.selected = newVal.selected
-                    }
-                    if (newVal.visible) {
-                        this.selected_visible = newVal.visible
-                    }
-                    this.total_products = newVal.total
-                    this.total_selected = newVal.total_selected
+                        this.products = newVal.products
+                        // this.selected = newVal.selected
+                        if (newVal.selected) {
+                            this.selected = newVal.selected
+                        }
+                        if (newVal.visible) {
+                            this.selected_visible = newVal.visible
+                        }
+                        this.total_products = newVal.total
+                        this.total_selected = newVal.total_selected
                     }
                 }
             },
