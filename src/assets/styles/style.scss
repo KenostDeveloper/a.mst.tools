@@ -5198,7 +5198,26 @@ button.std-icon__wrapper {
 	}
 }
 
-// ----------------
+
+.profile-table {
+	td {
+		.actions {
+			.p-buttonset {
+				@include flex($align: center, $gap: 8px);
+
+				& {
+					flex-wrap: wrap;
+				}
+
+				.kenostButton {
+					margin: 0;
+				}
+			}
+		}
+	}
+}
+
+// /Steiden
 
 .p-fileupload-buttonbar {
 	padding: 0 !important;
