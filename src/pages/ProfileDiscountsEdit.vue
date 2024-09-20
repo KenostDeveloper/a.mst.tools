@@ -770,11 +770,13 @@
                 'get_available_products_from_api',
                 'opt_get_remain_prices',
                 'opt_get_complects',
+                'set_sales_to_api'
             ]),
             formSubmit (event) {
                 this.$load(async () => {
-                    console.log({
+                    await this.set_sales_to_api({
                         type: 'discounts',
+                        action: 'set',
                         store_id: this.form.store_id, //Склад
                         comment: this.form.comment, //Комментарий
                         payer: this.form.paymentDelivery.key, //Плательщик доставки
