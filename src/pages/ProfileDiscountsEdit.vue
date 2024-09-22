@@ -1417,6 +1417,7 @@
                 this.total_complects = newVal.total
             },
             available_products: function (newVal, oldVal) {
+                console.log(newVal != null)
                 if (newVal) {
                     if (newVal.type === 'gift') {
                         this.productsGift = newVal.products
