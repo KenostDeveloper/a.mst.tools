@@ -726,7 +726,8 @@
                 'org_stores',
                 'oprprices',
                 'available_products',
-                'optcomplects'
+                'optcomplects',
+                'action_discount'
             ]),
             pagesCountSelect () {
                 let pages = Math.round(this.total_selected / this.per_page)
@@ -759,6 +760,25 @@
                 perpage: this.pagination_items_per_page_complects,
                 store_id: router.currentRoute._value.params.id
             })
+            this.get_actions_discount_api({
+                action: 'get/individual',
+                id: router.currentRoute._value.params.id,
+                store_id: router.currentRoute._value.params.store_id,
+                client_id: router.currentRoute._value.params.client_id
+            }).then(() => {
+                const data = {
+                    storeid: this.form.store_id,
+                    filter: this.filter,
+                    filterselected: this.filter_table,
+                    selected: Object.keys(this.selected),
+                    pageselected: this.page_selected,
+                    page: this.page,
+                    perpage: this.per_page
+                }
+                this.get_available_products_from_api(data).then((res) => {
+                    this.kenostTableCheckedAllCheck()
+                })
+            })
         },
         updated () {
             
@@ -770,7 +790,8 @@
                 'get_available_products_from_api',
                 'opt_get_remain_prices',
                 'opt_get_complects',
-                'set_sales_to_api'
+                'set_sales_to_api',
+                'get_actions_discount_api'
             ]),
             formSubmit (event) {
                 this.$load(async () => {
@@ -1416,6 +1437,42 @@
                         this.total_products = newVal.total
                         this.total_selected = newVal.total_selected
                     }
+                }
+            },
+            action_discount: function (newVal, oldVal) {
+                if(newVal){
+                    this.form.comment = newVal.comment
+                    this.form.paymentDelivery = this.paymentDelivery[newVal.payer]
+                    this.form.min_amount = newVal.condition_min_sum
+                    this.form.delay = newVal.delay_graph
+                    this.postponement_period = newVal.delay
+                    this.selected_complects = newVal.complects
+                    this.selected = newVal.products
+                    this.selected_data = newVal.products_data
+                    this.total_selected = newVal.total_products
+
+                    const data = {
+                        storeid: this.form.store_id,
+                        filter: this.filter,
+                        filterselected: this.filter_table,
+                        selected: Object.keys(newVal.products),
+                        pageselected: this.page_selected,
+                        page: this.page,
+                        perpage: this.per_page
+                    }
+                    this.get_available_products_from_api(data).then((res) => {
+                        this.kenostTableCheckedAllCheck()
+                    })
+
+                    // const dataComplect = {
+                    //     action: 'complects/get',
+                    //     filter: this.filter_complects,
+                    //     page: this.page_complects,
+                    //     perpage: this.pagination_items_per_page_complects,
+                    //     store_id: router.currentRoute._value.params.id,
+                    //     selected: this.selected_complects
+                    // }
+                    // this.opt_get_complects(dataComplect)
                 }
             },
         }
