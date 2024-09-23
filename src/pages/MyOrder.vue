@@ -1,5 +1,5 @@
 <template>
-	<div class="shipping std-shipping">
+	<div class="shipping std-shipping std-my-order">
 		<div class="std-shipping__title-container hidden-tablet-l">
 			<h1 class="table-kenost__title std-shipping__title">Заказ № {{ this.order?.id }}</h1>
 		</div>

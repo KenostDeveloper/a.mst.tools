@@ -5240,6 +5240,35 @@ button.std-icon__wrapper {
 	}
 }
 
+.std-my-order {
+	.std-table {
+		margin-top: 16px;
+
+		&__hcol {
+			font-size: 16px;
+			font-weight: 400;
+		}
+
+		&__head {
+			.std-table__row {
+				&:nth-child(1) {
+					border-bottom: none;
+				}
+			}
+		}
+
+		&__hcol,
+		&__col {
+			height: auto;
+			padding-block: 10px;
+		}
+	}
+
+	.kenost-table-line b {
+		font-weight: 500;
+	}
+}
+
 // /Steiden
 
 .p-fileupload-buttonbar {
