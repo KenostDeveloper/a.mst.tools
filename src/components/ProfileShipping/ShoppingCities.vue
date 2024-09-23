@@ -18,26 +18,20 @@
 				<p class="k-mini-text">Дата отгрузки</p>
 				<div
 					class="dart-form-group std-display-contents"
-					:class="{
-						error: vDatesErrors.$errors.length,
-					}"
-				>
+					:class="{ error: !citiesDates[item.value] }">
 					<CalendarVue
 						v-model="citiesDates[item.value]"
 						showIcon
 						id="calendar-24h"
+						:minDate="minDate"
 					/>
-					<span
-						class="error_desc"
-						v-for="error of vDatesErrors.$errors"
-						:key="error.$uid"
-					>
-						{{ error.$message }}
-					</span>
 				</div>
 			</li>
 		</template>
 	</draggable>
+	<span class="error_desc" v-for="error of vDatesErrors.$errors" :key="error.$uid">
+		{{ error.$message }}
+	</span>
 </template>
 
 <script>

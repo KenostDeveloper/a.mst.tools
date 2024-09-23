@@ -431,6 +431,7 @@ import { mapActions, mapGetters, mapMutations } from "vuex";
 import Counter from "./Counter.vue";
 import router from "../../router";
 import Dialog from "primevue/dialog";
+import debounce from "../../utils/debounce";
 
 export default {
 	name: "TableCatalogRow",
@@ -662,31 +663,33 @@ export default {
 			this.$emit("updateBasket");
 		},
 		ElemCount(object) {
-			if (object.value == object.min) return;
+			debounce(() => {
+				if (object.value == object.min) return;
 
-			if (object.value > Number(object.max)) {
-				this.modal_remain = true;
-				// console.log(this.modal_remain)
-			} else {
-				// eslint-disable-next-line vue/no-mutating-props
-				this.items.stores[object.index].basket.count = object.value;
-				const data = {
-					action: "basket/update",
-					id: router.currentRoute._value.params.id,
-					id_remain: object.id,
-					value: object.value,
-					store_id: object.store_id,
-					actions: object.item.basket.ids_actions,
-				};
-				this.busket_from_api(data).then(() => {
-					this.busket_from_api({
-						action: "basket/get",
+				if (object.value > Number(object.max)) {
+					this.modal_remain = true;
+					// console.log(this.modal_remain)
+				} else {
+					// eslint-disable-next-line vue/no-mutating-props
+					this.items.stores[object.index].basket.count = object.value;
+					const data = {
+						action: "basket/update",
 						id: router.currentRoute._value.params.id,
-						warehouse: "all",
+						id_remain: object.id,
+						value: object.value,
+						store_id: object.store_id,
+						actions: object.item.basket.ids_actions,
+					};
+					this.busket_from_api(data).then(() => {
+						this.busket_from_api({
+							action: "basket/get",
+							id: router.currentRoute._value.params.id,
+							warehouse: "all",
+						});
 					});
-				});
-				this.$emit("updateBasket");
-			}
+					this.$emit("updateBasket");
+				}
+			}, 300);
 		},
 		ElemCountComplect(object) {
 			if (object.value >= Number(object.max)) {

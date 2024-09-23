@@ -2098,6 +2098,10 @@ img {
 	color: #b5b5b5;
 }
 
+.error_desc {
+	color: #f00;
+}
+
 .form_input_group.error .base_input {
 	border-color: #f00;
 }
@@ -3561,7 +3565,7 @@ p {
 		&:hover,
 		&--active {
 			background-color: #FF0000;
-			border: none;
+			border-color: transparent;
 			color: #fff;
 			font-weight: 500;
 		}

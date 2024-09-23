@@ -205,6 +205,7 @@
 											showIcon
 											id="calendar-24h"
 											v-model="form.dateStart"
+											:minDate="this.form.dateEnd"
 										/>
 										<span
 											class="error_desc"
@@ -622,6 +623,7 @@ import Autocomplete from "../components/Autocomplete.vue";
 import ShoppingCities from "../components/ProfileShipping/ShoppingCities.vue";
 import Loading from "../components/Loading.vue";
 import { helpers } from "@vuelidate/validators";
+import { cloneDeep } from "lodash";
 // import { date } from 'yup'
 // import Checkbox from 'primevue/checkbox'
 // import { Swiper, SwiperSlide } from 'swiper/vue'
@@ -916,8 +918,8 @@ export default {
 			this.form.selectedCities = Array.from(cities);
 		},
 		removeSelectedCity(index) {
+			delete this.form.citiesDates[this.form.selectedCities[index].value];
 			this.form.selectedCities.splice(index, 1);
-			delete this.form.citiesDates[index];
 		},
 		sortSelectedCities() {
 			const citiesDates = this.form.citiesDates;
@@ -927,6 +929,7 @@ export default {
 			});
 		},
 		async formSubmit(event) {
+			// TODO Лоадер шестеренок при отправке формы
 			const result = await this.v$.$validate();
 			// const result = true;
 			if (!result) {
@@ -935,12 +938,12 @@ export default {
 				this.$load(async () => {
 					this.form.loading = true;
 					this.unset_shipping();
-					let data = this.form;
-					data.dateStart = data.dateStart.toDateString();
-					data.dateEnd = data.dateEnd.toDateString();
-					for (let i = 0; i < data.citiesDates.length; i++) {
-						data.citiesDates[i] = data.citiesDates[i].toDateString();
-					}
+					let data = cloneDeep(this.form);
+					data.dateStart = data.dateStart.toLocaleDateString();
+					data.dateEnd = data.dateEnd.toLocaleDateString();
+					Object.keys(data.citiesDates).forEach((key) => {
+						data.citiesDates[key] = data.citiesDates[key].toLocaleDateString();
+					});
 					await this.set_shipping_to_api({
 						action: "set",
 						id: router.currentRoute._value.params.id,
@@ -951,6 +954,7 @@ export default {
 					this.form.loading = false;
 					this.formReset();
 					this.showShip = false;
+					this.v$.$reset();
 				});
 			}
 		},
@@ -1196,11 +1200,10 @@ export default {
 					),
 				},
 				citiesDates: {
-					required: helpers.withMessage("Выберите дату отгрузки",
+					required: helpers.withMessage(
+						"Заполните все даты отгрузок",
 						() => {
-							if(!Object.keys(this.form.citiesDates).length) {
-								return false;
-							}
+							if(Object.keys(this.form.citiesDates).length !== this.form.selectedCities.length) return false
 
 							let result = true;
 							Object.keys(this.form.citiesDates).forEach(key => {
@@ -1212,7 +1215,7 @@ export default {
 							return result;
 						}
 					)
-				}
+				},
 			},
 		};
 	},
@@ -1233,15 +1236,16 @@ export default {
 			deep: true,
 		},
 		"form.dateEnd": function (newVal, oldVal) {
-			if(newVal > this.form.dateStart) {
+			if (newVal > this.form.dateStart) {
 				this.form.dateStart = newVal;
 			}
-
-			Object.keys(this.form.citiesDates).forEach(key => {
-				if(newVal > this.form.citiesDates[key]) {
+		},
+		"form.dateStart": function (newVal, oldVal) {
+			Object.keys(this.form.citiesDates).forEach((key) => {
+				if (newVal > this.form.citiesDates[key]) {
 					this.form.citiesDates[key] = newVal;
 				}
-			})
+			});
 		},
 		orgs: function (newVal, oldVal) {
 			this.organizations = newVal;

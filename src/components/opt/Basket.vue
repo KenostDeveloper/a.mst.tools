@@ -56,12 +56,12 @@
 					</div>
 					<div
 						class="kenost-product-basket"
-						v-for="items in store.products"
-						v-bind:key="items.id"
+						v-for="product in store.products"
+						v-bind:key="product.id"
 					>
 						<div
 							class="kenost-basket"
-							v-for="product in items.basket"
+							v-for="basket in product.basket"
 							v-bind:key="product.id"
 						>
 							<div
@@ -72,24 +72,24 @@
 								<img src="../../assets/images/icons/close.svg" alt="" />
 							</div>
 							<div class="kenost-basket__product">
-								<p class="kenost-basket__name" :title="items.name">
-									{{ items.name }}
+								<p class="kenost-basket__name" :title="product.name">
+									{{ product.name }}
 								</p>
 								<div class="kenost-basket__info">
-									<span>{{ items.article }}</span>
+									<span>{{ product.article }}</span>
 									<div class="kenost-basket__info-left">
 										<Counter
-											:key="new Date().getMilliseconds() + items.id_remain"
+											:key="new Date().getMilliseconds() + product.id_remain"
 											@ElemCount="ElemCount"
-											:item="product"
+											:item="basket"
 											:mini="true"
 											:min="1"
-											:max="items?.remains"
-											:value="product?.count"
-											:id="items?.id_remain"
+											:max="product?.remains"
+											:value="basket?.count"
+											:id="product?.id_remain"
 											:store_id="store.id"
 										/>
-										<b>{{ (product?.cost).toLocaleString("ru") }} ₽</b>
+										<b>{{ (basket?.cost).toLocaleString("ru") }} ₽</b>
 									</div>
 								</div>
 							</div>
