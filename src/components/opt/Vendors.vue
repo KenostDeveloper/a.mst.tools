@@ -45,14 +45,14 @@
             </div>
             <div class="d-col-md-6">
               <div class="modalright__header">
-                <span class="title">Выбор поставщиков</span>
+                <span class="title">Выбор складов поставщиков</span>
                 <a href="#" class="btn-close modalright__close" @click.prevent="toggleVendorModal">
                   <!-- <i class="d_icon d_icon-close"></i> -->
                   <img src="../../assets/images/icons/close.svg" alt="">
                 </a>
               </div>
               <div class="vendors_selected">
-                <span class="vendors_selected__label">Выбранные поставщики</span>
+                <span class="vendors_selected__label">Выбранные склады</span>
                 <div class="vendors_selected__rows" v-if="items.selected_count">
                   <div class="vendors_selected__row" v-for="(item) in items.selected" :key="item.id">
                     <a href="#" class="btn btn-close" @click.prevent="changeOpts(item.id, 0)">
@@ -74,11 +74,11 @@
                     </div>
                   </div>
                 </div>
-                <div class="dart-alert dart-alert-info dart-mt-1" v-else>Поставщики еще не выбраны</div>
+                <div class="dart-alert dart-alert-info dart-mt-1" v-else>Склады еще не выбраны</div>
               </div>
               <div class="vendor_select" v-if="items.selected_count < items.available_count">
                 <div class="vendor_select__title">
-                  <span>Список подключенных поставщиков</span>
+                  <span>Список подключенных складов поставщиков</span>
                   <!--
                   <a href="#" class="add_vendor">
                     <i class="d_icon d_icon-close"></i>
@@ -87,7 +87,7 @@
                 </div>
                 <div class="dart-form-group search-input">
                   <i class="d-icon d-icon-search"></i>
-                  <input type="text" class="dart-form-control" v-model="filter" placeholder="Адрес или наименование поставщика" @input="setFilter('filter')">
+                  <input type="text" class="dart-form-control" v-model="filter" placeholder="Адрес или наименование склада поставщика" @input="setFilter('filter')">
                 </div>
                 <div class="vendor_select__rows" v-if="avLength">
                   <div class="vendor_select__row" v-for="(item) in items.available" :key="item.id">
@@ -117,7 +117,7 @@
                 </div>
               </div>
               <div class="dart-mt-2" v-else>
-                <div class="dart-alert dart-alert-info">Вы выбрали всех доступных поставщиков</div>
+                <div class="dart-alert dart-alert-info">Вы выбрали всех доступных складов поставщиков</div>
               </div>
             </div>
           </div>
