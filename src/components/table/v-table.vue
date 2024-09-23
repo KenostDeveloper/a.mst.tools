@@ -60,10 +60,10 @@
             </AutoComplete>
           </div>
           <div class="dart-form-group" v-if="ffilter.type == 'range'">
-            <Calendar v-model="filtersdata[i]" selectionMode="range" placeholder="Выберите диапазон дат" :manualInput="false" :maxDate="calendar.maxDate" showIcon @update:modelValue="setFilter"/>
+            <Calendar v-model="filtersdata[i]" selectionMode="range" placeholder="Выберите диапазон дат" :manualInput="true" :maxDate="calendar.maxDate" showIcon @update:modelValue="setFilter"/>
           </div>
           <div class="dart-form-group" v-if="ffilter.type == 'months_range'">
-            <Calendar v-model="filtersdata[i]" selectionMode="range" placeholder="Выберите диапазон дат" view="month" :manualInput="false" :maxDate="calendar.maxDate" showIcon @update:modelValue="setFilter"/>
+            <Calendar v-model="filtersdata[i]" selectionMode="range" placeholder="Выберите диапазон дат" view="month" :manualInput="true" :maxDate="calendar.maxDate" showIcon @update:modelValue="setFilter"/>
           </div>
           <div class="dart-form-group" v-if="ffilter.type == 'tree'">
             <TreeSelect v-model="filtersdata[i]" :options="ffilter.values" selectionMode="checkbox" :placeholder="ffilter.placeholder" class="w-full" @change="setFilter"/>
