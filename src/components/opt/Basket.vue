@@ -28,7 +28,7 @@
 				</div>
 
 				<div v-if="this.basket?.stores" class="std-basket__info-container">
-					<button @click="clearBasket" class="basketClear std-basket__clear-button">
+					<button @click="this.showClearBasketModal = true" class="basketClear std-basket__clear-button">
 						Очистить корзину
 						<i class="pi pi-times"></i>
 					</button>
@@ -261,6 +261,14 @@
 			</div>
 		</div>
 	</Dialog>
+
+	<Dialog v-model:visible="this.showClearBasketModal" header="Вы точно хотите очистить корзину?" :style="{ width: '340px' }">
+		<div class="std-clear-basket">
+			<!-- <img src="../../../public/img/opt/not-products.png" alt="" /> -->
+			<button class="dart-btn dart-btn-primary" @click="clearBasket">Да</button>
+			<button class="dart-btn dart-btn-secondary" @click="this.showClearBasketModal = false">Нет</button>
+		</div>
+	</Dialog>
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
@@ -283,6 +291,7 @@ export default {
 	},
 	data() {
 		return {
+			showClearBasketModal: false,
 			isOpened: false,
 			active_warehouse: [],
 			loading: true,
@@ -369,6 +378,8 @@ export default {
 				id: router.currentRoute._value.params.id,
 				warehouse: 'all'
 			})
+
+			this.showClearBasketModal = false;
 		},
 		clearBasketProduct(storeid, productid) {
 			this.$emit("catalogUpdate");

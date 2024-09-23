@@ -5230,6 +5230,16 @@ button.std-icon__wrapper {
 	}
 }
 
+.std-clear-basket {
+	@include flex($align: center, $direction: column, $gap: 15px);
+
+	.dart-btn {
+		justify-content: center;
+		width: 90%;
+		padding: 7px 10px;
+	}
+}
+
 // /Steiden
 
 .p-fileupload-buttonbar {
