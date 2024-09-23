@@ -67,7 +67,7 @@
                 <div class="kenost-all-table-activity">
                     <div class="kenost-wiget">
                       <p>Массовое действие</p>
-                      <Dropdown v-model="this.kenostActivity.type" :options="this.massAction" optionLabel="name" placeholder="Массовое действие" class="w-full md:w-14rem" />
+                      <Dropdown v-model="this.kenostActivity.type" :options="this.massActionAll" optionLabel="name" placeholder="Массовое действие" class="w-full md:w-14rem" />
                     </div>
                     <div class="kenost-wiget" v-if="this.kenostActivity.type.key == 0 || this.kenostActivity.type.key == 1">
                       <p>Тип цен</p>
@@ -662,6 +662,10 @@
                     { name: 'Скидка по формуле', key: 0 },
                     { name: 'Тип цен', key: 1 },
                     { name: 'Кратность', key: 3 }
+                ],
+                massActionAll: [
+                    { name: 'Скидка по формуле', key: 0 },
+                    { name: 'Тип цен', key: 1 },
                 ],
                 kenostActivity: {
                     type: {},
@@ -1451,6 +1455,16 @@
                     this.selected = newVal.products
                     this.selected_data = newVal.products_data
                     this.total_selected = newVal.total_products
+
+                    if(newVal.type_all_sale != null){
+                        this.kenostActivity = {
+                            type: this.massActionAll[newVal.type_all_sale],
+                            typePrice: this.typePrice[newVal.type_price],
+                            value: newVal.all_sale_value,
+                            typeFormul: this.typeFormul[newVal.type_all_sale_symbol]
+                        }
+                    }
+                    
 
                     const data = {
                         storeid: this.form.store_id,
