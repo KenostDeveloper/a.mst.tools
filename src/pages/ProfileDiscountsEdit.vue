@@ -639,6 +639,10 @@
                     ],
                     addProductType: '1' 
                 },
+                files: {
+                    xlsx: {}
+                },
+                error_product: [],
                 modals: {
                     delay: false,
                     price: false,
@@ -795,7 +799,8 @@
                 'opt_get_remain_prices',
                 'opt_get_complects',
                 'set_sales_to_api',
-                'get_actions_discount_api'
+                'get_actions_discount_api',
+                'opt_upload_products_file'
             ]),
             formSubmit (event) {
                 this.$load(async () => {
@@ -975,7 +980,7 @@
 
                 this.opt_get_prices({
                     action: 'get/type/prices',
-                    store_id: this.form.store_id
+                    store_id: router.currentRoute._value.params.store_id
                 })
             },
             parseFile (files, xhr, formData) {
@@ -986,7 +991,7 @@
 
                     const data = {
                         action: 'upload/products/file',
-                        store_id: this.form.store_id,
+                        store_id: router.currentRoute._value.params.store_id,
                         file: res.data.files[0].original,
                         type: 'b2b'
                     }
@@ -1029,7 +1034,7 @@
 
                             this.selected_data[tempProduct.remain.id] = selectdata
                             } else {
-                            this.error_product.push(tempProduct.A)
+                                this.error_product.push(tempProduct.A)
                             }
                         }
 
@@ -1403,7 +1408,6 @@
                 for (let i = 0; i < newVal.items.length; i++) {
                     this.stores.push({ label: newVal.items[i].name, value: newVal.items[i].id })
 
-                    console.log(router.currentRoute._value.params.store_id)
                     if(newVal.items[i].id == router.currentRoute._value.params.store_id){
                         this.form.store_id.push(newVal.items[i].id);
 
@@ -1446,7 +1450,7 @@
                 }
             },
             action_discount: function (newVal, oldVal) {
-                if(newVal.length > 0){
+                if(Object.keys(newVal).length > 0){
                     this.form.comment = newVal.comment
                     this.form.paymentDelivery = this.paymentDelivery[newVal.payer]
                     this.form.min_amount = newVal.condition_min_sum
@@ -1466,9 +1470,6 @@
                         }
                     }
                     
-
-                    // if(newVal.products){
-                    console.log('newVal', newVal)
                         const data = {
                             storeid: this.form.store_id,
                             filter: this.filter,

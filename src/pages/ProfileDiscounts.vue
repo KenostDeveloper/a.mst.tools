@@ -11,8 +11,9 @@
           :pagination_offset="this.pagination_offset_dilers"
           :page="this.page_dilers"
           :table_data="this.table_data_dilers"
+          :filters="this.filters"
+          @filter="filter"
           title=""
-          @filter="filterDilers"
           @paginate="paginateDilers"
           @editElem="editDiler"
       />
@@ -116,6 +117,13 @@
         page_complects: 1,
         page_dilers: 1,
         optpage: 1,
+        filters: {
+          name: {
+            name: "Наименование",
+            placeholder: "Наименование",
+            type: "text",
+          },
+        },
         table_data_dilers: {
           image: {
             label: "Логотип",
@@ -138,8 +146,20 @@
             label: 'Склад',
             type: 'text'
           },
-          base_sale: {
-            label: 'Базовая скидка, %',
+          payer: {
+            label: 'Оплата доставки',
+            type: 'text'
+          },
+          condition_min_sum: {
+            label: 'Минимальная сумма заказа',
+            type: 'text'
+          },
+          delay: {
+            label: 'Отсрочка',
+            type: 'text'
+          },
+          sale: {
+            label: 'Скидка',
             type: 'text'
           },
           actions: {
@@ -161,6 +181,17 @@
         'get_dilers_from_api',
         'org_get_discount_individual_api'
       ]),
+      filter(data) {
+          this.org_get_discount_individual_api({
+            page: this.page_dilers,
+            id: router.currentRoute._value.params.id,
+            perpage: this.pagination_items_per_page_dilers,
+            action: 'get/individual/discount',
+            filter: data
+          })
+        // data.type = "b2b";
+        // this.get_sales_to_api(data);
+      },
       editDiler (value) {
         // this.form.diler.name = value.name
         // this.form.diler.warehouse_id = value.warehouse_id
