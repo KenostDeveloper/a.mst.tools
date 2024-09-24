@@ -939,6 +939,11 @@
                 this.opt_get_complects(data)
             },
             updateProducts () {
+                this.selected = {}
+                this.selected_data = {}
+                this.selected_visible = {}
+                this.products = []
+
                 const data = {
                     storeid: this.form.store_id,
                     filter: this.filter,
@@ -948,11 +953,6 @@
                     page: this.page,
                     perpage: this.per_page
                 }
-
-                this.selected = {}
-                this.selected_data = {}
-                this.selected_visible = {}
-                this.products = []
 
                 this.get_available_products_from_api(data).then(
                     this.kenostTableCheckedAllCheck()
@@ -1446,7 +1446,7 @@
                 }
             },
             action_discount: function (newVal, oldVal) {
-                if(newVal){
+                if(newVal.length > 0){
                     this.form.comment = newVal.comment
                     this.form.paymentDelivery = this.paymentDelivery[newVal.payer]
                     this.form.min_amount = newVal.condition_min_sum
@@ -1468,6 +1468,7 @@
                     
 
                     // if(newVal.products){
+                    console.log('newVal', newVal)
                         const data = {
                             storeid: this.form.store_id,
                             filter: this.filter,
