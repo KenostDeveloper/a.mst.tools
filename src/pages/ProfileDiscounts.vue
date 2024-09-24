@@ -130,6 +130,10 @@
               diler_id: 'id'
             }
           },
+          address: {
+            label: 'Адрес организации',
+            type: 'text',
+          },
           store_name: {
             label: 'Склад',
             type: 'text'

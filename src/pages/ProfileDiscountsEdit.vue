@@ -1403,6 +1403,7 @@
                 for (let i = 0; i < newVal.items.length; i++) {
                     this.stores.push({ label: newVal.items[i].name, value: newVal.items[i].id })
 
+                    console.log(router.currentRoute._value.params.store_id)
                     if(newVal.items[i].id == router.currentRoute._value.params.store_id){
                         this.form.store_id.push(newVal.items[i].id);
 
@@ -1466,18 +1467,21 @@
                     }
                     
 
-                    const data = {
-                        storeid: this.form.store_id,
-                        filter: this.filter,
-                        filterselected: this.filter_table,
-                        selected: Object.keys(newVal.products),
-                        pageselected: this.page_selected,
-                        page: this.page,
-                        perpage: this.per_page
-                    }
-                    this.get_available_products_from_api(data).then((res) => {
-                        this.kenostTableCheckedAllCheck()
-                    })
+                    // if(newVal.products){
+                        const data = {
+                            storeid: this.form.store_id,
+                            filter: this.filter,
+                            filterselected: this.filter_table,
+                            selected: Object.keys(newVal.products),
+                            pageselected: this.page_selected,
+                            page: this.page,
+                            perpage: this.per_page
+                        }
+                        this.get_available_products_from_api(data).then((res) => {
+                            this.kenostTableCheckedAllCheck()
+                        })
+                    // }
+                    
 
                     // const dataComplect = {
                     //     action: 'complects/get',
