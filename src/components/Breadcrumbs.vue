@@ -60,16 +60,6 @@ export default {
 						path: pathRoutesWithId.slice(0, index + 1).join("/"),
 					};
 				}
-				if (route == "search" || route == "opt_actions") {
-					return {
-						name: routeMatched.find(
-							(matchedRoute) =>
-								matchedRoute.path ===
-								pathRoutes.slice(0, index + 1).join("/") + "/:" + route
-						)?.meta.breadcrumb?.label,
-						path: pathRoutesWithId.slice(0, index + 1).join("/"),
-					};
-				}
 
 				return {
 					name: routeMatched.find(

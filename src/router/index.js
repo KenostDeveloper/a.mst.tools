@@ -5,666 +5,715 @@ import ProfileStoreProducts from "../pages/ProfileStoreProducts.vue";
 // import ReportCopoAll from '../pages/store/report_copo_all'
 // import ReportCopoAllDetails from '../pages/store/report_copo_all_details'
 import ReportCopo from "../pages/store/report_copo.vue";
-import OrgProfile from '../pages/OrgProfile.vue'
-import ProfileProduct from '../pages/ProfileProduct.vue'
+import OrgProfile from "../pages/OrgProfile.vue";
+import ProfileProduct from "../pages/ProfileProduct.vue";
 import ReportCopoDetails from "../pages/store/report_copo_details.vue";
 import Home from "../pages/Home.vue";
 import notFound from "../pages/notFound.vue";
 import { createRouter, createWebHistory } from "vue-router";
 import ProfileShipping from "../pages/ProfileShipping.vue";
-import Actions from '../pages/b2c/Actions.vue'
-import ActionEdit from '../pages/b2c/ActionEdit.vue'
-import Sales from '../pages/b2b/Sales.vue'
-import SalesEdit from '../pages/b2b/SalesEdit.vue'
-import ComplectAdd from '../pages/b2b/complects/ComplectAdd.vue'
-import ComplectEdit from '../pages/b2b/complects/ComplectEdit.vue'
-import ProfilePurchases from '../pages/opt/ProfilePurchases.vue'
-import PurchasesCatalog from '../pages/opt/PurchasesCatalog.vue'
-import PurchasesSearch from '../pages/opt/Search.vue'
-import Promotion from '../pages/opt/Promotion/Promotion.vue'
+import Actions from "../pages/b2c/Actions.vue";
+import ActionEdit from "../pages/b2c/ActionEdit.vue";
+import Sales from "../pages/b2b/Sales.vue";
+import SalesEdit from "../pages/b2b/SalesEdit.vue";
+import ComplectAdd from "../pages/b2b/complects/ComplectAdd.vue";
+import ComplectEdit from "../pages/b2b/complects/ComplectEdit.vue";
+import ProfilePurchases from "../pages/opt/ProfilePurchases.vue";
+import PurchasesCatalog from "../pages/opt/PurchasesCatalog.vue";
+import PurchasesSearch from "../pages/opt/Search.vue";
+import Promotion from "../pages/opt/Promotion/Promotion.vue";
 import ProfileClients from "../pages/ProfileClients.vue";
-import ProfileVendors from '../pages/ProfileVendors.vue'
-import MyOrders from '../pages/MyOrders.vue'
-import MyOrder from '../pages/MyOrder.vue'
-import ProfileStatistics from '../pages/ProfileStatistics.vue'
-import ProfileStoreStatistics from '../pages/ProfileStoreStatistics.vue'
-import ProfileDiscounts from '../pages/ProfileDiscounts.vue'
-import ProfileDiscountsEdit from '../pages/ProfileDiscountsEdit.vue'
-import RetailOrders from "../pages/RetailOrders.vue"
+import ProfileVendors from "../pages/ProfileVendors.vue";
+import MyOrders from "../pages/MyOrders.vue";
+import MyOrder from "../pages/MyOrder.vue";
+import ProfileStatistics from "../pages/ProfileStatistics.vue";
+import ProfileStoreStatistics from "../pages/ProfileStoreStatistics.vue";
+import ProfileDiscounts from "../pages/ProfileDiscounts.vue";
+import ProfileDiscountsEdit from "../pages/ProfileDiscountsEdit.vue";
+import RetailOrders from "../pages/RetailOrders.vue";
 import Order from "../pages/Order.vue";
 import Balance from "../pages/store/balance.vue";
-import ProfileClientStatistics from '../pages/ProfileClientStatistics.vue'
-import PurchasesActions from '../pages/opt/Actions.vue'
-import OrdersOpt from '../pages/OrdersOpt.vue'
-import OrderOpt from '../pages/OrderOpt.vue'
+import ProfileClientStatistics from "../pages/ProfileClientStatistics.vue";
+import PurchasesActions from "../pages/opt/Actions.vue";
+import OrdersOpt from "../pages/OrdersOpt.vue";
+import OrderOpt from "../pages/OrderOpt.vue";
 
 const routes = [
-  {
-    path: "/",
-    name: "home",
-    component: MainLoyout,
-    meta: {
-      breadcrumb: {
-        label: "Главная"
-      }
-    },
-    props: true,
-    children: [
-      {
-        path: "",
-        meta: {
-          breadcrumb: {
-            label: 'Главная'
-          }
-        },
-        children: [
-          {
-            path: "",
-            name: "main",
-            props: true,
-            label: "Главная",
-            meta: {
-              breadcrumb: {
-                label: 'Главная'
-              }
-            },
-            component: Home,
-          },
-          {
-            path: "",
-            beforeEnter: (to, from, next) => {
-              if (localStorage.getItem("user")) {
-                next();
-              } else {
-                next({ name: "main" });
-              }
-            },
-            children: [
-              {
-                path: ":id",
-                children: [
-                  {
-                    path: "",
-                    name: "org",
-                    props: true,
-                    meta: {
-                      breadcrumb: {
-                        label: "Организация"
-                      }
-                    },
-                    label: "Организация",
-                    component: ProfileOrganization,
-                  },
-                  {
-                    path: "stores",
-                    meta: {
-                      breadcrumb: {
-                        label: 'Товары'
-                      }
-                    },
-                    children: [
-                      {
-                        path: "",
-                        name: "stores",
-                        props: true,
-                        label: "Товары",
-                        meta: {
-                          breadcrumb: {
-                            label: 'Товары'
-                          }
-                        },
-                        component: ProfileProducts,
-                      },
-                      {
-                        path: "",
-                        children: [
-                          {
-                            path: ":store_id",
-                            children: [
-                              {
-                                path: "",
-                                name: "store",
-                                props: true,
-                                label: "Товары на складе",
-                                meta: {
-                                  breadcrumb: {
-                                    label: 'Товары на складе'
-                                  }
-                                },
-                                component: ProfileStoreProducts,
-                              },
-                              {
-                                path: 'report',
-                                meta: {
-                                  breadcrumb: {
-                                    label: 'Отчет'
-                                  }
-                                },
-                                children: [{
-                                  path: '',
-                                  name: 'report_copo_store',
-                                  props: true,
-                                  label: 'Отчет по сопоставлению',
-                                  meta: {
-                                    breadcrumb: {
-                                      label: 'Отчет по со лению'
-                                    }
-                                  },
-                                  component: ReportCopo
-                                }, {
-                                  path: ':brand_id',
-                                  name: 'report_copo_details_store',
-                                  label: 'Отчет по бренду',
-                                  meta: {
-                                    breadcrumb: {
-                                      label: 'Отчет по бренду'
-                                    }
-                                  },
-                                  component: ReportCopoDetails
-                                }]
-                              },
-                              {
-                                path: ":product_id",
-                                name: "org_product",
-                                props: true,
-                                label: "Товар",
-                                meta: {
-                                  breadcrumb: {
-                                    label: 'Товар'
-                                  }
-                                },
-                                component: ProfileProduct,
-                              },
-                            ],
-                          },
-                        ],
-                      },
-                    ],
-                  },
-                  {
-                    path: 'report',
-                    meta: {
-                      breadcrumb: {
-                        label: 'Отчет'
-                      }
-                    },
-                    children: [{
-                      path: '',
-                      name: 'report_copo',
-                      props: true,
-                      label: 'Отчет по сопоставлению',
-                      meta: {
-                        breadcrumb: {
-                          label: 'Отчет по сопоставлению'
-                        }
-                      },
-                      component: ReportCopo
-                    }, {
-                      path: ':brand_id',
-                      name: 'report_copo_details',
-                      label: 'Отчет по бренду',
-                      meta: {
-                        breadcrumb: {
-                          label: 'Отчет по бренду'
-                        }
-                      },
-                      component: ReportCopoDetails
-                    }]
-                  },
-                  {
-                    path: 'b2c',
-                    meta: {
-                      breadcrumb: {
-                        label: 'Акции'
-                      }
-                    },
-                    children: [{
-                      path: '',
-                      name: 'b2c',
-                      props: true,
-                      label: 'Акции',
-                      meta: {
-                        breadcrumb: {
-                          label: 'Акции'
-                        }
-                      },
-                      component: Actions
-                    }, {
-                      path: 'add',
-                      name: 'org_action_add',
-                      props: true,
-                      label: 'Добавление акции',
-                      meta: {
-                        breadcrumb: {
-                          label: 'Добавление акции'
-                        }
-                      },
-                      component: ActionEdit
-                    }, {
-                      path: ':action_id',
-                      name: 'org_action_edit',
-                      props: true,
-                      label: 'Редактирование акции',
-                      meta: {
-                        breadcrumb: {
-                          label: 'Редактирование акции'
-                        }
-                      },
-                      component: ActionEdit
-                    }]
-                  },
-                  {
-                    path: 'b2b',
-                    meta: {
-                      breadcrumb: {
-                        label: 'Акции'
-                      }
-                    },
-                    children: [{
-                      path: '',
-                      name: 'b2b',
-                      props: true,
-                      label: 'Акции',
-                      meta: {
-                        breadcrumb: {
-                          label: 'Акции'
-                        }
-                      },
-                      component: Sales
-                    }, {
-                      path: 'add',
-                      name: 'org_sales_add',
-                      props: true,
-                      label: 'Добавление акции',
-                      meta: {
-                        breadcrumb: {
-                          label: 'Добавление акции'
-                        }
-                      },
-                      component: SalesEdit
-                    }, {
-                      path: ':sales_id',
-                      name: 'org_sales_edit',
-                      props: true,
-                      label: 'Редактирование акции',
-                      meta: {
-                        breadcrumb: {
-                          label: 'Редактирование акции'
-                        }
-                      },
-                      component: SalesEdit
-                    }]
-                  },
-                  {
-                    path: 'complects',
-                    meta: {
-                      breadcrumb: {
-                        label: 'Комплекты'
-                      }
-                    },
-                    children: [{
-                      path: 'add',
-                      name: 'complect_add',
-                      props: true,
-                      label: 'Добавление комлекта',
-                      meta: {
-                        breadcrumb: {
-                          label: 'Добавление комплекта'
-                        }
-                      },
-                      component: ComplectAdd
-                    },
-                    {
-                      path: ':complect_id',
-                      name: 'complect_edit',
-                      props: true,
-                      label: 'Редактирование комлекта',
-                      meta: {
-                        breadcrumb: {
-                          label: 'Редактирование комплекта'
-                        }
-                      },
-                      component: ComplectEdit
-                    }]
-                  },
-                  {
-                    path: 'opt',
-                    name: 'purchases',
-                    props: true,
-                    label: "Закупки",
-                    meta: {
-                      breadcrumb: {
-                        label: 'Закупки'
-                      }
-                    },
-                    children: [{
-                      path: '',
-                      name: 'purchases_home',
-                      component: ProfilePurchases,
-                      label: "Закупки",
-                      meta: {
-                        breadcrumb: {
-                          label: 'Закупки'
-                        }
-                      }
-                    }, {
-                      path: ':category_id',
-                      name: 'purchases_catalog',
-                      component: PurchasesCatalog,
-                      label: "Каталог",
-                      meta: {
-                        breadcrumb: {
-                          label: ""
-                        }
-                      }
-                    }, {
-                      path: 'action/:action',
-                      name: 'promotion',
-                      meta: {
-                        breadcrumb: {
-                          label: 'Акция'
-                        }
-                      },
-                      component: Promotion
-                    }, {
-                      path: 'warehouses/:warehouse_id',
-                      children: [{
-                        path: '',
-                        name: 'purchases_catalog_warehouse',
-                        component: PurchasesCatalog,
-                        label: "Каталог оптовика",
-                        meta: {
-                          breadcrumb: {
-                            label: 'Каталог оптовика',
-                            link: 'warehouse_id'
-                          }
-                        }
-                      },
-                      {
-                        path: ':warehouse_cat_id',
-                        children: [{
-                          path: '',
-                          name: 'org_opt_waregouse_category',
-                          label: 'Мой оптовик',
-                          component: PurchasesCatalog
-                        }]
-                      }]
-                    }, {
-                      path: 'search/:search',
-                      name: 'opt_search',
-                      meta: {
-                        breadcrumb: {
-                          label: "Поиск"
-                        }
-                      },
-                      component: PurchasesSearch
-                    }]
-                  },
-                  {
-                    path: 'opt/actions',
-                    name: 'opt_actions',
-                    meta: {
-                      breadcrumb: {
-                        label: 'Оптовые акции'
-                      }
-                    },
-                    component: PurchasesActions
-                  },
-                  {
-                    path: 'settings',
-                    name: 'org_settings',
-                    meta: {
-                      breadcrumb: {
-                        label: 'Настройки'
-                      }
-                    },
-                    component: OrgProfile
-                  },
-                  {
-                    path: 'shipments',
-                    name: 'shipments',
-                    meta: {
-                      breadcrumb: {
-                        label: 'Отгрузки'
-                      }
-                    },
-                    component: ProfileShipping
-                  },
-                  {
-                    path: 'discounts',
-                    meta: {
-                      breadcrumb: {
-                        label: 'Скидки'
-                      }
-                    },
-                    children: [
-                      {
-                        path: "",
-                        children: [
-                          {
-                            path: "",
-                            name: 'discounts',
+	{
+		path: "/",
+		name: "home",
+		component: MainLoyout,
+		meta: {
+			breadcrumb: {
+				label: "Главная",
+			},
+		},
+		props: true,
+		children: [
+			{
+				path: "",
+				meta: {
+					breadcrumb: {
+						label: "Главная",
+					},
+				},
+				children: [
+					{
+						path: "",
+						name: "main",
+						props: true,
+						label: "Главная",
+						meta: {
+							breadcrumb: {
+								label: "Главная",
+							},
+						},
+						component: Home,
+					},
+					{
+						path: "",
+						beforeEnter: (to, from, next) => {
+							if (localStorage.getItem("user")) {
+								next();
+							} else {
+								next({ name: "main" });
+							}
+						},
+						children: [
+							{
+								path: ":id",
+								children: [
+									{
+										path: "",
+										name: "org",
+										props: true,
+										meta: {
+											breadcrumb: {
+												label: "Организация",
+											},
+										},
+										label: "Организация",
+										component: ProfileOrganization,
+									},
+									{
+										path: "stores",
+										meta: {
+											breadcrumb: {
+												label: "Товары",
+											},
+										},
+										children: [
+											{
+												path: "",
+												name: "stores",
+												props: true,
+												label: "Товары",
+												meta: {
+													breadcrumb: {
+														label: "Товары",
+													},
+												},
+												component: ProfileProducts,
+											},
+											{
+												path: "",
+												children: [
+													{
+														path: ":store_id",
+														children: [
+															{
+																path: "",
+																name: "store",
+																props: true,
+																label: "Товары на складе",
+																meta: {
+																	breadcrumb: {
+																		label: "Товары на складе",
+																	},
+																},
+																component: ProfileStoreProducts,
+															},
+															{
+																path: "report",
+																meta: {
+																	breadcrumb: {
+																		label: "Отчет",
+																	},
+																},
+																children: [
+																	{
+																		path: "",
+																		name: "report_copo_store",
+																		props: true,
+																		label: "Отчет по сопоставлению",
+																		meta: {
+																			breadcrumb: {
+																				label: "Отчет по со лению",
+																			},
+																		},
+																		component: ReportCopo,
+																	},
+																	{
+																		path: ":brand_id",
+																		name: "report_copo_details_store",
+																		label: "Отчет по бренду",
+																		meta: {
+																			breadcrumb: {
+																				label: "Отчет по бренду",
+																			},
+																		},
+																		component:
+																			ReportCopoDetails,
+																	},
+																],
+															},
+															{
+																path: ":product_id",
+																name: "org_product",
+																props: true,
+																label: "Товар",
+																meta: {
+																	breadcrumb: {
+																		label: "Товар",
+																	},
+																},
+																component: ProfileProduct,
+															},
+														],
+													},
+												],
+											},
+										],
+									},
+									{
+										path: "report",
+										meta: {
+											breadcrumb: {
+												label: "Отчет",
+											},
+										},
+										children: [
+											{
+												path: "",
+												name: "report_copo",
+												props: true,
+												label: "Отчет по сопоставлению",
+												meta: {
+													breadcrumb: {
+														label: "Отчет по сопоставлению",
+													},
+												},
+												component: ReportCopo,
+											},
+											{
+												path: ":brand_id",
+												name: "report_copo_details",
+												label: "Отчет по бренду",
+												meta: {
+													breadcrumb: {
+														label: "Отчет по бренду",
+													},
+												},
+												component: ReportCopoDetails,
+											},
+										],
+									},
+									{
+										path: "b2c",
+										meta: {
+											breadcrumb: {
+												label: "Акции",
+											},
+										},
+										children: [
+											{
+												path: "",
+												name: "b2c",
+												props: true,
+												label: "Акции",
+												meta: {
+													breadcrumb: {
+														label: "Акции",
+													},
+												},
+												component: Actions,
+											},
+											{
+												path: "add",
+												name: "org_action_add",
+												props: true,
+												label: "Добавление акции",
+												meta: {
+													breadcrumb: {
+														label: "Добавление акции",
+													},
+												},
+												component: ActionEdit,
+											},
+											{
+												path: ":action_id",
+												name: "org_action_edit",
+												props: true,
+												label: "Редактирование акции",
+												meta: {
+													breadcrumb: {
+														label: "Редактирование акции",
+													},
+												},
+												component: ActionEdit,
+											},
+										],
+									},
+									{
+										path: "b2b",
+										meta: {
+											breadcrumb: {
+												label: "Акции",
+											},
+										},
+										children: [
+											{
+												path: "",
+												name: "b2b",
+												props: true,
+												label: "Акции",
+												meta: {
+													breadcrumb: {
+														label: "Акции",
+													},
+												},
+												component: Sales,
+											},
+											{
+												path: "add",
+												name: "org_sales_add",
+												props: true,
+												label: "Добавление акции",
+												meta: {
+													breadcrumb: {
+														label: "Добавление акции",
+													},
+												},
+												component: SalesEdit,
+											},
+											{
+												path: ":sales_id",
+												name: "org_sales_edit",
+												props: true,
+												label: "Редактирование акции",
+												meta: {
+													breadcrumb: {
+														label: "Редактирование акции",
+													},
+												},
+												component: SalesEdit,
+											},
+										],
+									},
+									{
+										path: "complects",
+										meta: {
+											breadcrumb: {
+												label: "Комплекты",
+											},
+										},
+										children: [
+											{
+												path: "add",
+												name: "complect_add",
+												props: true,
+												label: "Добавление комлекта",
+												meta: {
+													breadcrumb: {
+														label: "Добавление комплекта",
+													},
+												},
+												component: ComplectAdd,
+											},
+											{
+												path: ":complect_id",
+												name: "complect_edit",
+												props: true,
+												label: "Редактирование комлекта",
+												meta: {
+													breadcrumb: {
+														label: "Редактирование комплекта",
+													},
+												},
+												component: ComplectEdit,
+											},
+										],
+									},
+									{
+										path: "opt",
+										name: "purchases",
+										props: true,
+										label: "Закупки",
+										meta: {
+											breadcrumb: {
+												label: "Закупки",
+											},
+										},
+										children: [
+											{
+												path: "",
+												name: "purchases_home",
+												component: ProfilePurchases,
+												label: "Закупки",
+												meta: {
+													breadcrumb: {
+														label: "Закупки",
+													},
+												},
+											},
+											{
+												path: ":category_id",
+												name: "purchases_catalog",
+												component: PurchasesCatalog,
+												label: "Каталог",
+												meta: {
+													breadcrumb: {
+														label: "",
+													},
+												},
+											},
+											{
+												path: "action",
+												meta: {
+													breadcrumb: {
+														label: "Акции",
+													},
+												},
+												children: [
+													{
+														path: ":action",
+                            name: "promotion",
+                            props: true,
                             meta: {
                               breadcrumb: {
-                                label: 'Скидки'
-                              }
+                                label: "Акция",
+                              },
                             },
-                            component: ProfileDiscounts
-                          },
+                            component: Promotion,
+													},
+												],
+											},
+											{
+												path: "warehouses/:warehouse_id",
+												children: [
+													{
+														path: "",
+														name: "purchases_catalog_warehouse",
+														component: PurchasesCatalog,
+														label: "Каталог оптовика",
+														meta: {
+															breadcrumb: {
+																label: "Каталог оптовика",
+																link: "warehouse_id",
+															},
+														},
+													},
+													{
+														path: ":warehouse_cat_id",
+														children: [
+															{
+																path: "",
+																name: "org_opt_waregouse_category",
+																label: "Мой оптовик",
+																component: PurchasesCatalog,
+															},
+														],
+													},
+												],
+											},
+											{
+												path: "search",
+												meta: {
+													breadcrumb: {
+														label: "Поиск",
+													},
+												},
+                        children: [
                           {
-                            path: ':client_id',
-                            name: 'discounts_client_id',
-                            meta: {
-                              breadcrumb: {
-                                label: 'Мои скидки'
-                              }
-                            },
-                            component: ProfileDiscountsEdit,
-                            children: [
-                              {
-                                path: ':store_id',
-                                name: 'discounts_edit',
-                                meta: {
-                                  breadcrumb: {
-                                    label: 'Редактиование скидки'
-                                  }
-                                },
-                                component: ProfileDiscountsEdit
-                              }
-                            ]
+                            path: ':search',
+												    name: "opt_search",
+                            props: true,
+                            component: PurchasesSearch,
                           }
                         ]
-                      },
-                    ]
-                    
-                  },
-                  {
-                    path: 'statistics',
-                    meta: {
-                      breadcrumb: {
-                        label: 'Статистики'
-                      }
-                    },
-                    children: [{
-                      path: '',
-                      name: 'statistics',
-                      meta: {
-                        breadcrumb: {
-                          label: 'Статистики'
-                        }
-                      },
-                      component: ProfileStatistics
-                    },
-                    {
-                      path: ':store_id',
-                      name: 'statistics_id',
-                      meta: {
-                        breadcrumb: {
-                          label: 'Статистика'
-                        }
-                      },
-                      component: ProfileStoreStatistics
-                    }  
-                    ]
-                  },
-                  {
-                    path: 'orders',
-                    meta: {
-                      breadcrumb: {
-                        label: "Мои заказы"
-                      }
-                    },
-                    children: [
-                      {
-                        path: "",
-                        children: [
-                          {
-                            path: "",
-                            name: 'retail_orders',
-                            meta: {
-                              breadcrumb: {
-                                label: 'Розничные заказы'
-                              }
-                            },
-                            component: RetailOrders
-                          },
-                          {
-                            path: ':order_id',
-                            name: 'retail_orders_id',
-                            meta: {
-                              breadcrumb: {
-                                label: 'Розничный заказ'
-                              }
-                            },
-                            component: Order
-                          }
-                        ]
-                      },
-                      {
-                        path: 'my',
-                        meta: {
-                          breadcrumb: {
-                            label: 'Мои заказы'
-                          }
-                        },
-                        children: [{
-                          path: '',
-                          name: 'my_orders',
-                          meta: {
-                            breadcrumb: {
-                              label: 'Мои заказы'
-                            }
-                          },
-                          component: MyOrders
-                        },
-                        {
-                          path: ':order_id',
-                          name: 'my_orders_id',
-                          meta: {
-                            breadcrumb: {
-                              label: 'Мой заказ'
-                            }
-                          },
-                          component: MyOrder
-                        }]
-                      },
-                      {
-                        path: 'opt',
-                        meta: {
-                          breadcrumb: {
-                            label: 'Оптовые заказы'
-                          }
-                        },
-                        children: [{
-                          path: '',
-                          name: 'opt_orders',
-                          meta: {
-                            breadcrumb: {
-                              label: 'Оптовые заказы'
-                            }
-                          },
-                          component: OrdersOpt
-                        },
-                        {
-                          path: ':order_id',
-                          name: 'my_orders_opt_id',
-                          meta: {
-                            breadcrumb: {
-                              label: 'Мой оптовый заказ'
-                            }
-                          },
-                          component: OrderOpt
-                        }]
-                      }]
-                    
-                  },
-                  {
-                    path: 'vendors',
-                    name: 'vendors',
-                    meta: {
-                      breadcrumb: {
-                        label: 'Поставщики'
-                      }
-                    },
-                    component: ProfileVendors
-                  },
-                  {
-                    path: 'clients',
-                    meta: {
-                      breadcrumb: {
-                        label: 'Клиенты'
-                      }
-                    },
-                    children: [{
-                      path: '',
-                      name: 'clients',
-                      meta: {
-                        breadcrumb: {
-                          label: 'Клиенты'
-                        }
-                      },
-                      component: ProfileClients
-                    },
-                    {
-                      path: ':client_id',
-                      name: 'client_id',
-                      meta: {
-                        breadcrumb: {
-                          label: 'Клиент'
-                        }
-                      },
-                      component: ProfileClientStatistics
-                    }
-                    ]
-                  },
-                  {
-                    path: 'balance',
-                    name: 'org_balance',
-                    meta: {
-                      breadcrumb: {
-                        label: 'Баланс'
-                      }
-                    },
-                    component: Balance
-                  }
-                ],
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  },
-  {
-    path: "/:pathMatch(.*)*",
-    name: "404",
-    component: notFound,
-  },
+											},
+										],
+									},
+									{
+										path: "opt/actions",
+										name: "opt_actions",
+										meta: {
+											breadcrumb: {
+												label: "Оптовые акции",
+											},
+										},
+										component: PurchasesActions,
+									},
+									{
+										path: "settings",
+										name: "org_settings",
+										meta: {
+											breadcrumb: {
+												label: "Настройки",
+											},
+										},
+										component: OrgProfile,
+									},
+									{
+										path: "shipments",
+										name: "shipments",
+										meta: {
+											breadcrumb: {
+												label: "Отгрузки",
+											},
+										},
+										component: ProfileShipping,
+									},
+									{
+										path: "discounts",
+										meta: {
+											breadcrumb: {
+												label: "Скидки",
+											},
+										},
+										children: [
+											{
+												path: "",
+												children: [
+													{
+														path: "",
+														name: "discounts",
+														meta: {
+															breadcrumb: {
+																label: "Скидки",
+															},
+														},
+														component: ProfileDiscounts,
+													},
+													{
+														path: ":client_id",
+														name: "discounts_client_id",
+														meta: {
+															breadcrumb: {
+																label: "Мои скидки",
+															},
+														},
+														component: ProfileDiscountsEdit,
+														children: [
+															{
+																path: ":store_id",
+																name: "discounts_edit",
+																meta: {
+																	breadcrumb: {
+																		label: "Редактиование скидки",
+																	},
+																},
+																component: ProfileDiscountsEdit,
+															},
+														],
+													},
+												],
+											},
+										],
+									},
+									{
+										path: "statistics",
+										meta: {
+											breadcrumb: {
+												label: "Статистики",
+											},
+										},
+										children: [
+											{
+												path: "",
+												name: "statistics",
+												meta: {
+													breadcrumb: {
+														label: "Статистики",
+													},
+												},
+												component: ProfileStatistics,
+											},
+											{
+												path: ":store_id",
+												name: "statistics_id",
+												meta: {
+													breadcrumb: {
+														label: "Статистика",
+													},
+												},
+												component: ProfileStoreStatistics,
+											},
+										],
+									},
+									{
+										path: "orders",
+										meta: {
+											breadcrumb: {
+												label: "Мои заказы",
+											},
+										},
+										children: [
+											{
+												path: "",
+												children: [
+													{
+														path: "",
+														name: "retail_orders",
+														meta: {
+															breadcrumb: {
+																label: "Розничные заказы",
+															},
+														},
+														component: RetailOrders,
+													},
+													{
+														path: ":order_id",
+														name: "retail_orders_id",
+														meta: {
+															breadcrumb: {
+																label: "Розничный заказ",
+															},
+														},
+														component: Order,
+													},
+												],
+											},
+											{
+												path: "my",
+												meta: {
+													breadcrumb: {
+														label: "Мои заказы",
+													},
+												},
+												children: [
+													{
+														path: "",
+														name: "my_orders",
+														meta: {
+															breadcrumb: {
+																label: "Мои заказы",
+															},
+														},
+														component: MyOrders,
+													},
+													{
+														path: ":order_id",
+														name: "my_orders_id",
+														meta: {
+															breadcrumb: {
+																label: "Мой заказ",
+															},
+														},
+														component: MyOrder,
+													},
+												],
+											},
+											{
+												path: "opt",
+												meta: {
+													breadcrumb: {
+														label: "Оптовые заказы",
+													},
+												},
+												children: [
+													{
+														path: "",
+														name: "opt_orders",
+														meta: {
+															breadcrumb: {
+																label: "Оптовые заказы",
+															},
+														},
+														component: OrdersOpt,
+													},
+													{
+														path: ":order_id",
+														name: "my_orders_opt_id",
+														meta: {
+															breadcrumb: {
+																label: "Мой оптовый заказ",
+															},
+														},
+														component: OrderOpt,
+													},
+												],
+											},
+										],
+									},
+									{
+										path: "vendors",
+										name: "vendors",
+										meta: {
+											breadcrumb: {
+												label: "Поставщики",
+											},
+										},
+										component: ProfileVendors,
+									},
+									{
+										path: "clients",
+										meta: {
+											breadcrumb: {
+												label: "Клиенты",
+											},
+										},
+										children: [
+											{
+												path: "",
+												name: "clients",
+												meta: {
+													breadcrumb: {
+														label: "Клиенты",
+													},
+												},
+												component: ProfileClients,
+											},
+											{
+												path: ":client_id",
+												name: "client_id",
+												meta: {
+													breadcrumb: {
+														label: "Клиент",
+													},
+												},
+												component: ProfileClientStatistics,
+											},
+										],
+									},
+									{
+										path: "balance",
+										name: "org_balance",
+										meta: {
+											breadcrumb: {
+												label: "Баланс",
+											},
+										},
+										component: Balance,
+									},
+								],
+							},
+						],
+					},
+				],
+			},
+		],
+	},
+	{
+		path: "/:pathMatch(.*)*",
+		name: "404",
+		component: notFound,
+	},
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
-  routes,
+	history: createWebHistory(),
+	routes,
 });
 
 export default router;
