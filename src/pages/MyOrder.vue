@@ -66,7 +66,7 @@
 						<th class="std-table__hcol">Артикул</th>
 						<th class="std-table__hcol">Фото</th>
 						<th class="std-table__hcol">Название</th>
-						<th class="std-table__hcol">Стоимость за еденицу</th>
+						<th class="std-table__hcol">Стоимость за единицу</th>
 						<th class="std-table__hcol">Количество</th>
 						<th class="std-table__hcol">Сумма</th>
 					</tr>
