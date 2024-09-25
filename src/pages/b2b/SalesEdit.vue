@@ -140,7 +140,7 @@
               -->
               <div class="dart-form-group mt-4" v-if="this.form.compatibilityDiscount == 3 || this.form.compatibilityDiscount == 4">
                 <label>Выберите акции из списка</label>
-                <MultiSelect filter v-model="this.form.bigDiscount" display="chip" :options="this.allAction" optionLabel="name" placeholder="Выберите из списка" class="w-full md:w-20rem kenost-multiselect" />
+                <MultiSelect :key="new Date().getMilliseconds()" filter v-model="this.form.bigDiscount" display="chip" :options="this.allAction" optionLabel="name" placeholder="Выберите из списка" class="w-full md:w-20rem kenost-multiselect" />
               </div>
               <div class="dart-form-group mt-4" v-if="this.form.compatibilityDiscount == 1 || this.form.compatibilityDiscount == 3 || this.form.compatibilityDiscount == 4">
                 <label>Выберите режим совместимости</label>
@@ -347,12 +347,12 @@
                     </div>
                   </div>
 
-              <div class="dart-form-group mb-4">
+              <!-- <div class="dart-form-group mb-4">
                 <div class="flex align-items-center gap-1">
                   <Checkbox v-model="this.form.not_sale_client" inputId="not_sale_client-1" name="not_sale_client-1" value="true" />
                   <label for="not_sale_client-1" class="ml-2 mb-0">Не действует скидка клиента</label>
                 </div>
-              </div>
+              </div> -->
 
               <div class="dart-form-group picker-wrap">
                   <span class="ktitle">Добавление товаров</span>
@@ -1236,6 +1236,13 @@ export default {
         action: 'get/type/prices',
         store_id: this.form.store_id
       })
+
+      this.get_all_sales_to_api({
+        id: router.currentRoute._value.params.id,
+        action: 'get/all',
+        store_id: this.form.store_id
+      })
+      this.form.bigDiscount = []
     },
     delayUpdate () {
       this.delayPercentSum = 0
@@ -1947,10 +1954,6 @@ export default {
       })
       // console.log(this.regions_all)
     })
-    this.get_all_sales_to_api({
-      id: router.currentRoute._value.params.id,
-      action: 'get/all'
-    })
     this.opt_get_complects({
       action: 'complects/get',
       page: this.page_complects,
@@ -2073,7 +2076,8 @@ export default {
       this.total_complects = newVal.total
     },
     allactions: function (newVal, oldVal) {
-      this.allAction = this.allactions.items.map(function (el) {
+      this.allAction = [];
+      this.allAction = newVal.items.map(function (el) {
         return { name: el.name, code: el.id }
       })
     },
@@ -2210,6 +2214,12 @@ export default {
         this.get_all_organizations_from_api(dataorg).then(
           this.all_organizations = this.allorganizations
         )
+
+        this.get_all_sales_to_api({
+          id: router.currentRoute._value.params.id,
+          action: 'get/all',
+          store_id: this.form.store_id
+        })
 
         const data = {
           storeid: [this.form.store_id],

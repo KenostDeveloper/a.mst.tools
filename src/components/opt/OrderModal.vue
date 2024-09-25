@@ -73,10 +73,16 @@
                                                                     <p v-if="tag.type == 'delay'">Отсрочка {{ tag.value }} дн.</p>
 
                                                                     <img v-if="tag.type == 'multiplicity'" src="../../assets/images/icons/action/box.svg" alt="">
-                                                                    <p v-if="tag.type == 'multiplicity'">Краткость упаковки {{ (tag.value).toLocaleString('ru') }} шт.</p>
+                                                                    <p v-if="tag.type == 'multiplicity'">Кратность упаковки {{ (tag.value).toLocaleString('ru') }} шт.</p>
 
                                                                     <img v-if="tag.type == 'sale'" src="../../assets/images/icons/action/sale.svg" alt="">
-                                                                    <p v-if="tag.type == 'sale'">Скидка {{ (tag.value).toLocaleString('ru') }}%</p>
+                                                                    <p v-if="tag.type == 'sale'">
+                                                                        Скидка {{ (tag.value).toLocaleString('ru') }}%
+                                                                        <span v-if="tag.min_count > 1">
+                                                                            при покупке от
+                                                                            {{ tag.min_count.toLocaleString("ru") }} шт.</span
+                                                                        >
+                                                                    </p> 
                                                                     </div>
                                                                 </div>
                                                                 <div class="table-actions__modal-btn-container">
@@ -435,7 +441,7 @@ export default {
 
         &__orders{
             height: calc(100% - 240px);
-            overflow-y: auto;
+            // overflow-y: auto;
             margin: 20px 0;
 
             &::-webkit-scrollbar {

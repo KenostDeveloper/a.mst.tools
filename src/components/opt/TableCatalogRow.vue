@@ -55,6 +55,7 @@
 			<b>Арт: {{ item.article }}</b>
 		</td>
 		<td class="k-table__busket">
+			<!-- {{item}} -->
 			<form
 				class="k-table__form"
 				action=""
@@ -70,9 +71,10 @@
 					:store_id="item.store_id"
 					:index="index"
 					:value="item?.basket?.count"
+					:step="item?.action?.multiplicity ? item?.action?.multiplicity : 1"
 				/>
 				<div
-					@click="addBasket(item.remain_id, item.basket.count, item.store_id, index)"
+					@click="addBasket(item.remain_id, item?.action?.multiplicity > 1 ? item.basket.count * item?.action?.multiplicity : item.basket.count, item.store_id, index)"
 					class="dart-btn dart-btn-primary"
 				>
 					<i class="d_icon d_icon-busket"></i>
@@ -277,7 +279,7 @@
 											alt=""
 										/>
 										<p v-if="tag.type == 'multiplicity'">
-											Краткость упаковки
+											Кратность упаковки
 											{{ tag.value.toLocaleString("ru") }} шт.
 										</p>
 
@@ -288,12 +290,20 @@
 										/>
 										<p v-if="tag.type == 'sale'">
 											Скидка {{ tag.value.toLocaleString("ru") }}%
+											<!-- <span v-if="tag.condition == '2'">
+												при покупке от
+												{{ tag.value.toLocaleString("ru") }} ₽</span
+											> -->
+											<span v-if="tag.min_count > 1">
+												при покупке от
+												{{ tag.min_count.toLocaleString("ru") }} шт.</span
+											>
 										</p>
 									</div>
 								</div>
 								<div class="table-actions__modal-btn-container">
 									<router-link
-										v-if="action.action_id > 0"
+										v-if="action.type != 3"
 										:to="{
 											name: 'promotion',
 											params: {
@@ -484,10 +494,10 @@ export default {
 			this.$emit("ElemAction", item);
 		},
 		async updateAction(remainid, storeid, action, indexstore, indexaction, conflicts) {
-			// console.log("updateAction", remainid, storeid, action, index)
+			console.log("updateAction", remainid, storeid, action, indexstore, indexaction, conflicts)
 			// console.log(this.items.stores[index].actions)
 
-			this.items.stores[indexstore].actions[indexaction].enabled = true;
+			this.items.stores[indexstore].actions[indexaction].enabled = !this.items.stores[indexstore].actions[indexaction].enabled;
 
 			// console.log(conflicts)
 			// Выключаем конфликтные акции

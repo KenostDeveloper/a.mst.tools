@@ -204,7 +204,7 @@ h1,
 	font-size: 28px;
 	font-weight: 500;
 	line-height: 1;
-	margin-bottom: 20px;
+	margin-bottom: 44px;
 	margin-top: 0;
 }
 
