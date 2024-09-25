@@ -820,6 +820,8 @@
                         method_adding_products: this.form.addProductType, //Метод добавления товаров
                         id: router.currentRoute._value.params.id,
                         id_client: router.currentRoute._value.params.client_id,
+                    }).then(() => {
+                        router.push({ name: 'discounts', params: { id: router.currentRoute._value.params.id } })
                     })
                 })
             },

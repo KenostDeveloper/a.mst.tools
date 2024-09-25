@@ -1,7 +1,7 @@
 {
   "name": "a.mst.tools",
   "private": true,
-  "version": "0.4.24092024",
+  "version": "0.4.25092024",
   "type": "module",
   "scripts": {
     "dev": "vite --host",
