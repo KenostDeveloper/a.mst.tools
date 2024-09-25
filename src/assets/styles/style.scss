@@ -5545,11 +5545,23 @@ button.std-icon__wrapper {
 	background: #DBDBDB;
 }
 
-.k-table thead {
-	position: sticky;
-	z-index: 1;
-	top: 0;
-	background: #fff;
+.k-table {
+	border-collapse: separate;
+	thead {
+		position: sticky;
+		z-index: 1;
+		top: 0;
+		background: #282828;
+		border-radius: 3px;
+		tr th{
+			&:first-child{
+				border-radius: 3px 0 0 3px;
+			}
+			&:last-child{
+				border-radius:  0 3px 3px 0;
+			}
+		}
+	}
 }
 
 .bg-white {
@@ -5579,6 +5591,9 @@ button.std-icon__wrapper {
 	}
 
 	.active-el {
+		& + tr.kenost-table-background.active td{
+			border-top: 4px solid #e8e8e8 !important;
+		}
 		.k-table__title {
 			p {
 				font-weight: 700;
@@ -5588,6 +5603,12 @@ button.std-icon__wrapper {
 		td {
 			font-weight: 700;
 			transition: all 0.3s;
+			&:first-child{
+				border-radius: 5px 0 0 0;
+			}
+			&:last-child{
+				border-radius: 0 5px 0 0;
+			}
 		}
 	}
 
@@ -5807,8 +5828,14 @@ button.std-icon__wrapper {
 		background: #dbdbdb;
 	}
 
-	tr.kenost-table-background.active:not(.bg-white) {
+	tr.kenost-table-background.active:not(.bg-white) td{
 		border-top: 20px solid #e8e8e8;
+		&:first-child{
+			padding-left: 18px;
+		}
+		img{
+			width: 30px;
+		}
 	}
 
 	tr.no-active {

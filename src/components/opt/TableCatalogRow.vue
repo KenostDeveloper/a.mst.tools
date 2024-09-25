@@ -279,7 +279,7 @@
 											alt=""
 										/>
 										<p v-if="tag.type == 'multiplicity'">
-											Краткость упаковки
+											Кратность упаковки
 											{{ tag.value.toLocaleString("ru") }} шт.
 										</p>
 
