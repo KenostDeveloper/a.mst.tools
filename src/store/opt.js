@@ -467,12 +467,10 @@ export default {
     SET_OPT_PRODUCT_TO_VUEX: (state, data) => {
       if (Object.keys(state.optproducts).length) {
         for (let i = 0; i < Object.keys(state.optproducts.items).length; i++) {
-          if (state.optproducts.items[i].remain_id, data.remain_id) {
+          if (state.optproducts.items[i].remain_id == data.remain_id) {
             for (let j = 0; j < Object.keys(state.optproducts.items[i].stores).length; j++) {
               if (state.optproducts.items[i].stores[j].store_id === data.store_id) {
                 for (let h = 0; h < Object.keys(state.optproducts.items[i].stores[j].actions).length; h++) {
-                  //console.log(state.optproducts.items[i].stores[j])
-                  
                   state.optproducts.items[i].stores[j].price = data.data.price
                   state.optproducts.items[i].stores[j].delay = data.data.delay
                   state.optproducts.items[i].stores[j].basket = data.data.basket
