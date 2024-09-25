@@ -1,4 +1,5 @@
 <template>
+	<Breadcrumbs class="std-breadcrumbs--margin" />
 	<h1 class="h1-mini">{{ store.name }}</h1>
 	<Toast />
 	<TabView class="tab-custom">
@@ -1144,6 +1145,7 @@ import Toast from "primevue/toast";
 import primeCalendar from "primevue/calendar";
 import "v-calendar/dist/style.css";
 import customModal from "../components/CustomModal.vue";
+import Breadcrumbs from "../components/Breadcrumbs.vue";
 
 export default {
 	name: "ProfileStoreProducts",
@@ -1991,6 +1993,7 @@ export default {
 		Calendar,
 		DatePicker,
 		Toast,
+		Breadcrumbs
 	},
 	computed: {
 		...mapGetters([

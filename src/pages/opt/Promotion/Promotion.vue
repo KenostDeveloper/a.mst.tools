@@ -7,6 +7,7 @@
 				<div>
 					<section class="promotion">
 						<header class="promotion__header promotion-header">
+							<Breadcrumbs class="std-breadcrumbs--margin" />
 							<button class="promotion__back-button" @click="$router.go(-1)">
 								<i class="pi pi-angle-left"></i>
 								Назад
@@ -98,6 +99,7 @@ import router from "../../../router";
 import TableCatalogAction from "../../../components/opt/TableCatalogAction.vue";
 import Toast from "primevue/toast";
 import Loading from "../../../components/Loading.vue";
+import Breadcrumbs from "../../../components/Breadcrumbs.vue";
 
 export default {
 	name: "Promotion",
@@ -129,7 +131,8 @@ export default {
 		PromotionCard,
 		TableCatalogAction,
 		Toast,
-		Loading
+		Loading,
+		Breadcrumbs,
 	},
 	mounted() {
 		this.get_opt_catalog_from_api().then(() => {

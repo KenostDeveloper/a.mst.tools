@@ -11,7 +11,12 @@
 						><span itemprop="name">{{ crumb.name }}</span></router-link
 					>
 				</li>
-				<li v-if="index !== breadcrumbs.length - 1 && crumb" class="breadcrumb-item">/</li>
+				<li
+					v-if="index !== breadcrumbs.length - 1 && crumb"
+					class="breadcrumb-item breacrumb-item--separator"
+				>
+					/
+				</li>
 			</template>
 		</ul>
 	</nav>
@@ -30,7 +35,7 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters(["optcatalog", "orgs"]),
+		...mapGetters(["optcatalog", "orgs", "org_store", "product", "actions"]),
 
 		breadcrumbs() {
 			const currentRoute = router.currentRoute.value;
@@ -39,6 +44,8 @@ export default {
 			const pathRoutesWithId = currentRoute.fullPath.split("/");
 
 			const routeMatched = this.$route.matched;
+
+			console.log(routeMatched, currentRoute);
 
 			const breadcrumbs = pathRoutes.map((route, index) => {
 				if (index == 0) {
@@ -53,12 +60,22 @@ export default {
 						path: pathRoutesWithId.slice(0, index + 1).join("/"),
 					};
 				}
+				if (route == "search" || route == "opt_actions") {
+					return {
+						name: routeMatched.find(
+							(matchedRoute) =>
+								matchedRoute.path ===
+								pathRoutes.slice(0, index + 1).join("/") + "/:" + route
+						)?.meta.breadcrumb?.label,
+						path: pathRoutesWithId.slice(0, index + 1).join("/"),
+					};
+				}
 
 				return {
 					name: routeMatched.find(
 						(matchedRoute) =>
 							matchedRoute.path === pathRoutes.slice(0, index + 1).join("/")
-					).meta.breadcrumb?.label,
+					)?.meta.breadcrumb?.label,
 					path: pathRoutesWithId.slice(0, index + 1).join("/"),
 				};
 			});
@@ -67,7 +84,12 @@ export default {
 		},
 	},
 	methods: {
-		...mapActions(["get_opt_catalog_from_api", "org_get_from_api"]),
+		...mapActions([
+			"get_opt_catalog_from_api",
+			"org_get_from_api",
+			"get_org_store_from_api",
+			"get_product_from_api",
+		]),
 		getRouteName(currentRoute, param) {
 			switch (param) {
 				case ":id": {
@@ -78,6 +100,22 @@ export default {
 				}
 				case ":order_id": {
 					return `Заказ № ${currentRoute.params[param.slice(1)]}`;
+				}
+				case ":search": {
+					return currentRoute.params[param.slice(1)];
+				}
+				case ":store_id": {
+					return this.getStoreName();
+				}
+				case ":brand_id": {
+				}
+				case ":product_id": {
+					return this.getProductName();
+				}
+				case ":action": {
+					return this.getActionName();
+				}
+				case ":client_id": {
 				}
 			}
 		},
@@ -111,10 +149,19 @@ export default {
 
 			return orgName;
 		},
+		getStoreName() {
+			return this.org_store?.name_short;
+		},
+		getProductName() {
+			return this.product?.pagetitle;
+		},
+		getActionName() {
+			return this.actions?.name;
+		}
 	},
 	mounted() {
-		this.get_opt_catalog_from_api();
-		this.org_get_from_api({ action: 'get/orgs' });
+		this.get_org_store_from_api();
+		this.get_product_from_api();
 	},
 };
 </script>
@@ -171,7 +218,7 @@ export default {
 	margin: 0 !important;
 	transition-duration: 0.3s;
 
-	&:hover {
+	a:hover {
 		color: rgb(129, 129, 129) !important;
 		text-decoration: underline;
 	}

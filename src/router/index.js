@@ -52,12 +52,22 @@ const routes = [
     children: [
       {
         path: "",
+        meta: {
+          breadcrumb: {
+            label: 'Главная'
+          }
+        },
         children: [
           {
             path: "",
             name: "main",
             props: true,
             label: "Главная",
+            meta: {
+              breadcrumb: {
+                label: 'Главная'
+              }
+            },
             component: Home,
           },
           {
@@ -89,7 +99,7 @@ const routes = [
                     path: "stores",
                     meta: {
                       breadcrumb: {
-                        label: "Товары"
+                        label: 'Товары'
                       }
                     },
                     children: [
@@ -98,6 +108,11 @@ const routes = [
                         name: "stores",
                         props: true,
                         label: "Товары",
+                        meta: {
+                          breadcrumb: {
+                            label: 'Товары'
+                          }
+                        },
                         component: ProfileProducts,
                       },
                       {
@@ -111,20 +126,40 @@ const routes = [
                                 name: "store",
                                 props: true,
                                 label: "Товары на складе",
+                                meta: {
+                                  breadcrumb: {
+                                    label: 'Товары на складе'
+                                  }
+                                },
                                 component: ProfileStoreProducts,
                               },
                               {
                                 path: 'report',
+                                meta: {
+                                  breadcrumb: {
+                                    label: 'Отчет'
+                                  }
+                                },
                                 children: [{
                                   path: '',
                                   name: 'report_copo_store',
                                   props: true,
-                                  label: 'Отчет по со лению',
+                                  label: 'Отчет по сопоставлению',
+                                  meta: {
+                                    breadcrumb: {
+                                      label: 'Отчет по со лению'
+                                    }
+                                  },
                                   component: ReportCopo
                                 }, {
                                   path: ':brand_id',
                                   name: 'report_copo_details_store',
                                   label: 'Отчет по бренду',
+                                  meta: {
+                                    breadcrumb: {
+                                      label: 'Отчет по бренду'
+                                    }
+                                  },
                                   component: ReportCopoDetails
                                 }]
                               },
@@ -133,6 +168,11 @@ const routes = [
                                 name: "org_product",
                                 props: true,
                                 label: "Товар",
+                                meta: {
+                                  breadcrumb: {
+                                    label: 'Товар'
+                                  }
+                                },
                                 component: ProfileProduct,
                               },
                             ],
@@ -143,70 +183,135 @@ const routes = [
                   },
                   {
                     path: 'report',
+                    meta: {
+                      breadcrumb: {
+                        label: 'Отчет'
+                      }
+                    },
                     children: [{
                       path: '',
                       name: 'report_copo',
                       props: true,
                       label: 'Отчет по сопоставлению',
+                      meta: {
+                        breadcrumb: {
+                          label: 'Отчет по сопоставлению'
+                        }
+                      },
                       component: ReportCopo
                     }, {
                       path: ':brand_id',
                       name: 'report_copo_details',
                       label: 'Отчет по бренду',
+                      meta: {
+                        breadcrumb: {
+                          label: 'Отчет по бренду'
+                        }
+                      },
                       component: ReportCopoDetails
                     }]
                   },
                   {
                     path: 'b2c',
+                    meta: {
+                      breadcrumb: {
+                        label: 'Акции'
+                      }
+                    },
                     children: [{
                       path: '',
                       name: 'b2c',
                       props: true,
                       label: 'Акции',
+                      meta: {
+                        breadcrumb: {
+                          label: 'Акции'
+                        }
+                      },
                       component: Actions
                     }, {
                       path: 'add',
                       name: 'org_action_add',
                       props: true,
                       label: 'Добавление акции',
+                      meta: {
+                        breadcrumb: {
+                          label: 'Добавление акции'
+                        }
+                      },
                       component: ActionEdit
                     }, {
                       path: ':action_id',
                       name: 'org_action_edit',
                       props: true,
                       label: 'Редактирование акции',
+                      meta: {
+                        breadcrumb: {
+                          label: 'Редактирование акции'
+                        }
+                      },
                       component: ActionEdit
                     }]
                   },
                   {
                     path: 'b2b',
+                    meta: {
+                      breadcrumb: {
+                        label: 'Акции'
+                      }
+                    },
                     children: [{
                       path: '',
                       name: 'b2b',
                       props: true,
                       label: 'Акции',
+                      meta: {
+                        breadcrumb: {
+                          label: 'Акции'
+                        }
+                      },
                       component: Sales
                     }, {
                       path: 'add',
                       name: 'org_sales_add',
                       props: true,
                       label: 'Добавление акции',
+                      meta: {
+                        breadcrumb: {
+                          label: 'Добавление акции'
+                        }
+                      },
                       component: SalesEdit
                     }, {
                       path: ':sales_id',
                       name: 'org_sales_edit',
                       props: true,
                       label: 'Редактирование акции',
+                      meta: {
+                        breadcrumb: {
+                          label: 'Редактирование акции'
+                        }
+                      },
                       component: SalesEdit
                     }]
                   },
                   {
                     path: 'complects',
+                    meta: {
+                      breadcrumb: {
+                        label: 'Комплекты'
+                      }
+                    },
                     children: [{
                       path: 'add',
                       name: 'complect_add',
                       props: true,
                       label: 'Добавление комлекта',
+                      meta: {
+                        breadcrumb: {
+                          label: 'Добавление комплекта'
+                        }
+                      },
                       component: ComplectAdd
                     },
                     {
@@ -214,6 +319,11 @@ const routes = [
                       name: 'complect_edit',
                       props: true,
                       label: 'Редактирование комлекта',
+                      meta: {
+                        breadcrumb: {
+                          label: 'Редактирование комплекта'
+                        }
+                      },
                       component: ComplectEdit
                     }]
                   },
@@ -250,6 +360,11 @@ const routes = [
                     }, {
                       path: 'action/:action',
                       name: 'promotion',
+                      meta: {
+                        breadcrumb: {
+                          label: 'Акция'
+                        }
+                      },
                       component: Promotion
                     }, {
                       path: 'warehouses/:warehouse_id',
@@ -277,26 +392,51 @@ const routes = [
                     }, {
                       path: 'search/:search',
                       name: 'opt_search',
+                      meta: {
+                        breadcrumb: {
+                          label: "Поиск"
+                        }
+                      },
                       component: PurchasesSearch
                     }]
                   },
                   {
                     path: 'opt/actions',
                     name: 'opt_actions',
+                    meta: {
+                      breadcrumb: {
+                        label: 'Оптовые акции'
+                      }
+                    },
                     component: PurchasesActions
                   },
                   {
                     path: 'settings',
                     name: 'org_settings',
+                    meta: {
+                      breadcrumb: {
+                        label: 'Настройки'
+                      }
+                    },
                     component: OrgProfile
                   },
                   {
                     path: 'shipments',
                     name: 'shipments',
+                    meta: {
+                      breadcrumb: {
+                        label: 'Отгрузки'
+                      }
+                    },
                     component: ProfileShipping
                   },
                   {
                     path: 'discounts',
+                    meta: {
+                      breadcrumb: {
+                        label: 'Скидки'
+                      }
+                    },
                     children: [
                       {
                         path: "",
@@ -304,16 +444,31 @@ const routes = [
                           {
                             path: "",
                             name: 'discounts',
+                            meta: {
+                              breadcrumb: {
+                                label: 'Скидки'
+                              }
+                            },
                             component: ProfileDiscounts
                           },
                           {
                             path: ':client_id',
                             name: 'discounts_client_id',
+                            meta: {
+                              breadcrumb: {
+                                label: 'Мои скидки'
+                              }
+                            },
                             component: ProfileDiscountsEdit,
                             children: [
                               {
                                 path: ':store_id',
                                 name: 'discounts_edit',
+                                meta: {
+                                  breadcrumb: {
+                                    label: 'Редактиование скидки'
+                                  }
+                                },
                                 component: ProfileDiscountsEdit
                               }
                             ]
@@ -327,17 +482,27 @@ const routes = [
                     path: 'statistics',
                     meta: {
                       breadcrumb: {
-                        label: 'Статистика'
+                        label: 'Статистики'
                       }
                     },
                     children: [{
                       path: '',
                       name: 'statistics',
+                      meta: {
+                        breadcrumb: {
+                          label: 'Статистики'
+                        }
+                      },
                       component: ProfileStatistics
                     },
                     {
                       path: ':store_id',
                       name: 'statistics_id',
+                      meta: {
+                        breadcrumb: {
+                          label: 'Статистика'
+                        }
+                      },
                       component: ProfileStoreStatistics
                     }  
                     ]
@@ -356,38 +521,78 @@ const routes = [
                           {
                             path: "",
                             name: 'retail_orders',
+                            meta: {
+                              breadcrumb: {
+                                label: 'Розничные заказы'
+                              }
+                            },
                             component: RetailOrders
                           },
                           {
                             path: ':order_id',
                             name: 'retail_orders_id',
+                            meta: {
+                              breadcrumb: {
+                                label: 'Розничный заказ'
+                              }
+                            },
                             component: Order
                           }
                         ]
                       },
                       {
                         path: 'my',
+                        meta: {
+                          breadcrumb: {
+                            label: 'Мои заказы'
+                          }
+                        },
                         children: [{
                           path: '',
                           name: 'my_orders',
+                          meta: {
+                            breadcrumb: {
+                              label: 'Мои заказы'
+                            }
+                          },
                           component: MyOrders
                         },
                         {
                           path: ':order_id',
                           name: 'my_orders_id',
+                          meta: {
+                            breadcrumb: {
+                              label: 'Мой заказ'
+                            }
+                          },
                           component: MyOrder
                         }]
                       },
                       {
                         path: 'opt',
+                        meta: {
+                          breadcrumb: {
+                            label: 'Оптовые заказы'
+                          }
+                        },
                         children: [{
                           path: '',
                           name: 'opt_orders',
+                          meta: {
+                            breadcrumb: {
+                              label: 'Оптовые заказы'
+                            }
+                          },
                           component: OrdersOpt
                         },
                         {
                           path: ':order_id',
                           name: 'my_orders_opt_id',
+                          meta: {
+                            breadcrumb: {
+                              label: 'Мой оптовый заказ'
+                            }
+                          },
                           component: OrderOpt
                         }]
                       }]
@@ -396,18 +601,38 @@ const routes = [
                   {
                     path: 'vendors',
                     name: 'vendors',
+                    meta: {
+                      breadcrumb: {
+                        label: 'Поставщики'
+                      }
+                    },
                     component: ProfileVendors
                   },
                   {
                     path: 'clients',
+                    meta: {
+                      breadcrumb: {
+                        label: 'Клиенты'
+                      }
+                    },
                     children: [{
                       path: '',
                       name: 'clients',
+                      meta: {
+                        breadcrumb: {
+                          label: 'Клиенты'
+                        }
+                      },
                       component: ProfileClients
                     },
                     {
                       path: ':client_id',
                       name: 'client_id',
+                      meta: {
+                        breadcrumb: {
+                          label: 'Клиент'
+                        }
+                      },
                       component: ProfileClientStatistics
                     }
                     ]
@@ -415,6 +640,11 @@ const routes = [
                   {
                     path: 'balance',
                     name: 'org_balance',
+                    meta: {
+                      breadcrumb: {
+                        label: 'Баланс'
+                      }
+                    },
                     component: Balance
                   }
                 ],
