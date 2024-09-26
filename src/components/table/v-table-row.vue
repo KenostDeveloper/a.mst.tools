@@ -18,7 +18,6 @@
     />
   </tr>
   <tr v-else>
-    {{ console.log(linkParams(row)) }}
     <v-table-cell
       v-for="(row, index) in keys"
       :key="index"

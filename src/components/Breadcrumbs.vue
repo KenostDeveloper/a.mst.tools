@@ -35,7 +35,7 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters(["optcatalog", "orgs", "org_store", "product", "actions", "org_profile"]),
+		...mapGetters(["optcatalog", "orgs", "org_store", "product", "actions", "org_profile", "optcatalogwarehouse"]),
 
 		breadcrumbs() {
 			const currentRoute = router.currentRoute.value;
@@ -46,7 +46,7 @@ export default {
 			const routeMatched = this.$route.matched;
 
 			const breadcrumbs = pathRoutes.map((route, index) => {
-				// console.log(route, index, currentRoute.params[route.slice(1)]);
+				console.log(route, index, currentRoute.params[route.slice(1)]);
 
 				if (
 					route == "/" ||
@@ -117,6 +117,13 @@ export default {
 				case ":client_id": {
 					return this.org_profile?.name;
 				}
+				case ":warehouse_id": {
+					return this.optcatalogwarehouse?.find((catItem) => catItem.id == currentRoute.params[param.slice(1)])?.pagetitle;
+				}
+				case ":warehouse_cat_id": {
+					console.log("Start search category");
+					return this.getWarehouseCatName(currentRoute.params[param.slice(1)]);
+				}
 			}
 		},
 		getCatalogNameById(id) {
@@ -151,6 +158,27 @@ export default {
 		},
 		getActionName() {
 			return this.actions?.name;
+		},
+		getWarehouseCatName(id, catalog = this.optcatalogwarehouse) {
+			// TODO Отображение категории выбранной категории поставщика
+			let catName = "";
+
+			for(let i = 0; i < catalog.length; i++) {
+				console.log(catalog[i], catalog[i].id, id);
+	
+				if(catalog[i].id == id) {
+					console.log("True", catalog[i].pagetitle);
+					catName = catalog[i].pagetitle;
+					break;
+				}
+				else {
+					if (Array.isArray(catalog[i].children)) {
+						this.getWarehouseCatName(id, catalog[i].children);
+					}
+				}
+			}
+			console.log(catName);
+			return catName;
 		},
 	},
 	mounted() {
