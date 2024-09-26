@@ -174,7 +174,8 @@ export default {
       'set_vendors_to_api',
       'get_opt_vendors_from_api',
 			'get_opt_warehouse_catalog_from_api',
-      'toggle_opts_visible'
+      'toggle_opts_visible',
+      'get_opt_products_from_api'
     ]),
     toggleVendorModal () {
       this.$emit('changeActive')
@@ -201,7 +202,11 @@ export default {
         }
         this.vendorForm.selected[id] = true
       }
-
+      console.log('tut1')
+      this.get_opt_products_from_api({
+        page: 1,
+        perpage: 25
+      });
     },
     changeOpts (id, action) {
       this.loading = true
@@ -218,6 +223,11 @@ export default {
       })
 
       this.get_opt_warehouse_catalog_from_api();
+      console.log('tut')
+      this.get_opt_products_from_api({
+        page: 1,
+        perpage: 25
+      });
 
     },
     setFilter (type) {
