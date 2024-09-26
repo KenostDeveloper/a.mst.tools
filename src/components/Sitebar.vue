@@ -55,16 +55,28 @@
 				</div>
 			</div>
 			<div class="sitebar-info">
-				<span class="sitebar-text" v-if="this.organozation.store == '1' || this.organozation.warehouse == '1'">Выбор роли:</span>
+				<span
+					class="sitebar-text"
+					v-if="this.organozation.store == '1' || this.organozation.warehouse == '1'"
+					>Выбор роли:</span
+				>
 				<div class="sitebar-roles">
 					<!-- {{ this.organozation }} -->
 					<button class="sitebar-role" @click="changeRole(0)" v-if="this.role != 0">
 						Закупщик
 					</button>
-					<button class="sitebar-role" @click="changeRole(1)" v-if="this.role != 1 && this.organozation.store == '1'">
+					<button
+						class="sitebar-role"
+						@click="changeRole(1)"
+						v-if="this.role != 1 && this.organozation.store == '1'"
+					>
 						Маркетплейс
 					</button>
-					<button class="sitebar-role" @click="changeRole(2)" v-if="this.role != 2 && this.organozation.warehouse == '1'">
+					<button
+						class="sitebar-role"
+						@click="changeRole(2)"
+						v-if="this.role != 2 && this.organozation.warehouse == '1'"
+					>
 						Поставщик
 					</button>
 				</div>
@@ -104,9 +116,7 @@
 			<span>Выйти</span>
 			<i class="pi pi-sign-out"></i>
 		</div>
-		<div class="sitebar-version">
-			v. {{ version }}
-		</div>
+		<div class="sitebar-version">v. {{ version }}</div>
 	</div>
 
 	<!-- <Dialog
@@ -158,9 +168,17 @@
 
 			<div class="change-org__links">
 				<router-link
-					v-for="item in this.organizations?.filter((org) => org.id !== this.activeOrganization.id)"
+					v-for="item in this.organizations?.filter(
+						(org) => org.id !== this.activeOrganization.id
+					)"
 					@click="changeOrg"
-					:to="this.role == 0 ? { name: 'purchases_home', params: { id: item.id } } : this.role == 1? { name: 'retail_orders', params: { id: item.id } } : { name: 'statistics', params: { id: item.id } }"
+					:to="
+						this.role == 0
+							? { name: 'purchases_home', params: { id: item.id } }
+							: this.role == 1
+							? { name: 'retail_orders', params: { id: item.id } }
+							: { name: 'statistics', params: { id: item.id } }
+					"
 					class="change-org-el"
 					v-bind:key="item.id"
 				>
@@ -324,6 +342,9 @@ export default {
 			setUser: "user/setUser",
 			deleteUser: "user/deleteUser",
 			org_get_from_api: "org_get_from_api",
+			get_opt_vendors_from_api: "get_opt_vendors_from_api",
+			get_opt_warehouse_catalog_from_api: "get_opt_warehouse_catalog_from_api",
+			get_opt_catalog_from_api: "get_opt_catalog_from_api",
 		}),
 		sidebarToggle() {
 			this.sitebar = !this.sitebar;
@@ -360,15 +381,15 @@ export default {
 		getRole() {
 			if (localStorage.getItem("role")) {
 				// console.log(localStorage.getItem("role"))
-				let role = localStorage.getItem("role")
-				if(role == 1){
-					if(this.organozation.store == '0'){
-						role = 0
+				let role = localStorage.getItem("role");
+				if (role == 1) {
+					if (this.organozation.store == "0") {
+						role = 0;
 						localStorage.setItem("role", role);
 					}
-				} else if(role == 2){
-					if(this.organozation.warehouse == '0'){
-						role = 0
+				} else if (role == 2) {
+					if (this.organozation.warehouse == "0") {
+						role = 0;
 						localStorage.setItem("role", role);
 					}
 				}
@@ -382,6 +403,9 @@ export default {
 				action: "get/orgs",
 			};
 			this.org_get_from_api(data);
+
+			// TODO Нужно другое решение
+			setTimeout(() => location.reload(), 100);
 
 			// if(router?.currentRoute?._value.matched[0]?.name == 'home') {
 			//   this.get_organization_from_api()
@@ -413,18 +437,18 @@ export default {
 </script>
 
 <style scoped>
-.sitebar{
+.sitebar {
 	padding-bottom: 15px;
-	&.hide .sitebar-version{
+	&.hide .sitebar-version {
 		display: none;
 	}
-	.sitebar-version{
+	.sitebar-version {
 		position: absolute;
 		bottom: 5px;
 		left: 40px;
 		color: transparent;
 		font-size: 12px;
-		&:hover{
+		&:hover {
 			color: #646464;
 		}
 	}
