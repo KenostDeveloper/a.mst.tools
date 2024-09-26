@@ -164,7 +164,7 @@
 								"
 								alt=""
 							/>
-							<p v-if="tag.type == 'delay'">От-ка {{ tag.value }} дн.</p>
+							<p v-if="tag.type == 'delay'">Отсроч. {{ tag.value }} дн.</p>
 
 							<img
 								v-if="tag.type == 'sale'"
@@ -266,7 +266,7 @@
 
 										<img
 											v-if="tag.type == 'delay'"
-											src="../../assets/images/icons/action/gift.svg"
+											src="../../assets/images/icons/action/time.svg"
 											alt=""
 										/>
 										<p v-if="tag.type == 'delay'">
@@ -369,7 +369,7 @@
                 <img v-if="tag.type == 'gift'" src="../../assets/images/icons/action/gift.svg" alt="">
 
                 <img v-if="tag.type == 'delay'" src="../../assets/images/icons/action/time.svg" alt="">
-                <p  v-if="tag.type == 'delay'">От-ка {{ tag.value }} дн.</p>
+                <p  v-if="tag.type == 'delay'">Отсроч. {{ tag.value }} дн.</p>
 
                 <img v-if="tag.type == 'sale'" src="../../assets/images/icons/action/sale.svg" alt="">
                 <p  v-if="tag.type == 'sale'">Скидка {{ Number(tag.value).toFixed(0) }}%</p>
