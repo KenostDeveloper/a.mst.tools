@@ -161,24 +161,17 @@ export default {
 		},
 		getWarehouseCatName(id, catalog = this.optcatalogwarehouse) {
 			// TODO Отображение категории выбранной категории поставщика
-			let catName = "";
-
 			for(let i = 0; i < catalog.length; i++) {
-				console.log(catalog[i], catalog[i].id, id);
-	
 				if(catalog[i].id == id) {
-					console.log("True", catalog[i].pagetitle);
-					catName = catalog[i].pagetitle;
-					break;
+					return catalog[i].pagetitle;
 				}
 				else {
 					if (Array.isArray(catalog[i].children)) {
-						this.getWarehouseCatName(id, catalog[i].children);
+						let res = this.getWarehouseCatName(id, catalog[i].children);
+						if (res) return res;
 					}
 				}
 			}
-			console.log(catName);
-			return catName;
 		},
 	},
 	mounted() {
