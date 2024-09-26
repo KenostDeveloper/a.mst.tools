@@ -2466,6 +2466,9 @@ p {
 .f-align-center {
 	align-items: center !important;
 }
+.g-3 {
+	gap: 15px;
+}
 
 .std-title {
 	font-size: 24px;
@@ -5277,6 +5280,12 @@ button.std-icon__wrapper {
 .std-breadcrumbs {
 	&--margin {
 		margin-bottom: 30px;
+	}
+}
+
+.p-radiobutton {
+	& + label {
+		cursor: pointer;
 	}
 }
 
