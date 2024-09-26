@@ -12,6 +12,7 @@
 			:page="this.page_modal"
 			:table_data="this.table_stores"
 			:filters="{}"
+			:link_row="link_row"
 			title="Склады"
 			class="mb-5 std-statistics__warehouse-table"
 		>
@@ -46,11 +47,7 @@
 		</div>
 	</div>
 
-	<button
-		class="std-statistics__up-button visible-mobile-l"
-		@click="scrollToTop"
-	>
-	</button>
+	<button class="std-statistics__up-button visible-mobile-l" @click="scrollToTop"></button>
 </template>
 
 <script>
@@ -118,6 +115,13 @@ export default {
 					name: "Только в наличии",
 					placeholder: "Только в наличии",
 					type: "checkbox",
+				},
+			},
+			link_row: {
+				link_to: "statistics_id",
+				link_params: {
+					id: this.$route.params.id,
+					store_id: "id",
 				},
 			},
 			table_stores: {
@@ -223,7 +227,7 @@ export default {
 			"org_profile_from_api",
 			"get_data_from_api",
 			"get_vendors_from_api",
-			"get_catalog_from_api"
+			"get_catalog_from_api",
 		]),
 		filter(data) {
 			this.page = 1;
@@ -252,9 +256,9 @@ export default {
 		scrollToTop() {
 			window.scrollTo({
 				top: 0,
-				behavior: 'smooth'
-			})
-		}
+				behavior: "smooth",
+			});
+		},
 	},
 	created() {
 		this.setWindowWidth(window.innerWidth);
@@ -273,18 +277,12 @@ export default {
 			page: this.page,
 			perpage: this.pagination_items_per_page,
 		}).then(() => {});
-		this.get_vendors_from_api()
-		this.get_catalog_from_api()
+		this.get_vendors_from_api();
+		this.get_catalog_from_api();
 	},
 	components: { vTable, Chart, TabView, TabPanel, RadioButton },
 	computed: {
-		...mapGetters([
-			"org_stores",
-			"org_profile",
-			"products",
-			'getvendors',
-			'getcatalog'
-		]),
+		...mapGetters(["org_stores", "org_profile", "products", "getvendors", "getcatalog"]),
 		tableData() {
 			if (this.windowWidth <= 480) {
 				return {
@@ -317,11 +315,11 @@ export default {
 			}
 		},
 		getvendors(newVal, oldVal) {
-			this.products_filters.vendor.values = newVal
+			this.products_filters.vendor.values = newVal;
 		},
 		getcatalog(newVal, oldVal) {
-			this.products_filters.catalog.values = newVal
-		}
+			this.products_filters.catalog.values = newVal;
+		},
 	},
 };
 </script>
