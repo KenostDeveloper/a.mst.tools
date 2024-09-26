@@ -1,6 +1,8 @@
 <template>
     <div class="copo">
-        <h1 class="title-mini"><img class="mst-image-org" :src="org_profile.image" alt="">{{org_profile.name}}</h1>
+        <Breadcrumbs class="std-breadcrumbs--margin" />
+
+        <h1 class="title-mini"><img class="mst-image-org" :src="org_profile?.image" alt="">{{org_profile?.name}}</h1>
         <!-- {{org_stores}} -->
         <v-table
             :items_data="org_stores.items"
@@ -48,6 +50,7 @@
  import TabPanel from 'primevue/tabpanel'
  import RadioButton from 'primevue/radiobutton'
  import router from '../router'
+import Breadcrumbs from '../components/Breadcrumbs.vue'
  
  export default {
    name: 'ProfileProducts',
@@ -251,7 +254,7 @@
           this.get_catalog_from_api()
         })
    },
-   components: { vTable, Chart, TabView, TabPanel, RadioButton },
+   components: { vTable, Chart, TabView, TabPanel, RadioButton, Breadcrumbs },
    computed: {
      ...mapGetters([
        'org_stores',

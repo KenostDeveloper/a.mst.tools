@@ -1,6 +1,8 @@
 <template>
 	<Toast />
 	<ConfirmDialog></ConfirmDialog>
+	<Breadcrumbs class="std-breadcrumbs--margin" />
+
 	<TabView class="tab-custom hidden-mobile-l">
 		<TabPanel header="Акции" v-if="organization.type != 1">
 			<div class="flex align-items-center justify-content-space-between mb-4">
@@ -59,27 +61,30 @@
 	</TabView>
 
 	<div class="std-sales visible-mobile-l">
-    <div class="flex align-items-center justify-content-space-between mb-4 std-sales__title-container">
-      <div class="title-h1 std-sales__title">Оптовые акции</div>
-    </div>
-    <v-table
-      :items_data="actions.items"
-      :total="actions.total"
-      :pagination_items_per_page="this.pagination_items_per_page"
-      :pagination_offset="this.pagination_offset"
-      :page="this.page"
-      :table_data="getTableData"
-      :filters="[]"
-      :title="''"
-      @filter="filter"
-      @sort="filter"
-      @paginate="paginate"
-      @editElem="editElem"
-      @approveElem="approveElem"
-      @deleteElem="deleteElem"
-    >
-    </v-table>
-  </div>
+
+		<div
+			class="flex align-items-center justify-content-space-between mb-4 std-sales__title-container"
+		>
+			<div class="title-h1 std-sales__title">Оптовые акции</div>
+		</div>
+		<v-table
+			:items_data="actions.items"
+			:total="actions.total"
+			:pagination_items_per_page="this.pagination_items_per_page"
+			:pagination_offset="this.pagination_offset"
+			:page="this.page"
+			:table_data="getTableData"
+			:filters="[]"
+			:title="''"
+			@filter="filter"
+			@sort="filter"
+			@paginate="paginate"
+			@editElem="editElem"
+			@approveElem="approveElem"
+			@deleteElem="deleteElem"
+		>
+		</v-table>
+	</div>
 
 	<Dialog
 		v-model:visible="this.modals.diler"
@@ -128,6 +133,7 @@ import InputNumber from "primevue/inputnumber";
 import ConfirmDialog from "primevue/confirmdialog";
 import Toast from "primevue/toast";
 import router from "../../router";
+import Breadcrumbs from "../../components/Breadcrumbs.vue";
 
 export default {
 	name: "ProfileSales",
@@ -572,6 +578,7 @@ export default {
 		TabPanel,
 		Dialog,
 		InputNumber,
+		Breadcrumbs,
 	},
 	computed: {
 		...mapGetters(["actions", "optcomplects", "dilers", "organization", "getregions", "opts"]),

@@ -1,6 +1,8 @@
 <template>
     <!-- <span class="title-h1 mb-4">Розничные акции</span> -->
+    <Breadcrumbs class="std-breadcrumbs--margin" />
     <div class="flex align-items-center justify-content-space-between mb-4">
+
 				<div class="title-h1">Розничные акции</div>
 				<RouterLink
 					:to="{ name: 'org_action_add', params: { id: $route.params.id } }"
@@ -59,6 +61,7 @@ import { RouterLink } from 'vue-router'
 import TabView from 'primevue/tabview'
 import TabPanel from 'primevue/tabpanel'
 import router from '../../router'
+import Breadcrumbs from '../../components/Breadcrumbs.vue'
 
 export default {
   name: 'ProfileSales',
@@ -202,7 +205,7 @@ export default {
       type: 'b2c'
     })
   },
-  components: { vTable, RouterLink, TabView, TabPanel },
+  components: { vTable, RouterLink, TabView, TabPanel, Breadcrumbs },
   computed: {
     ...mapGetters([
       'actions'

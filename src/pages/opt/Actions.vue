@@ -1,5 +1,6 @@
 <template>
     <div>
+        <Breadcrumbs class="std-breadcrumbs--margin" />
         <h1 class="title-h1">Оптовые акции</h1>
         <div class="dart-row">
             <router-link :to="{ name: 'promotion', params: { id: this.$route.params.id, action: item.id } }" v-for="item in action_buyer.items" v-bind:key="item.id" class="d-col-lg-4 d-col-sm-6 d-col-12 link-no-style mb-3">
@@ -21,6 +22,7 @@
   <script>
   import { mapActions, mapGetters } from 'vuex'
   import router from "../../router";
+import Breadcrumbs from '../../components/Breadcrumbs.vue';
   
   export default {
     name: 'OptsSearch',
@@ -32,7 +34,7 @@
       }
     },
     components: {
-      
+      Breadcrumbs
     },
     mounted () {
       this.get_actions_buyer_to_api({

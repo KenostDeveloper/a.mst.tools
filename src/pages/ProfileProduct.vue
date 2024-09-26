@@ -1,7 +1,7 @@
 <template>
 	<Toast />
 	<ConfirmDialog></ConfirmDialog>
-	<Breadcrumbs class="std-breadcrumbs--margin" />
+	<!-- <Breadcrumbs class="std-breadcrumbs--margin" /> -->
 	<div class="to__up">
 		<router-link :to="{ name: 'stores', params: { id: $route.params.id } }">
 			<mdicon name="arrow-left" />

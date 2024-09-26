@@ -1,8 +1,6 @@
 <template>
 	<section class="clients retails">
-        <!-- <div class="std-breadcrumbs">
-            МАРКЕТСОВИЧ / Розничные заказы
-        </div> -->
+        <Breadcrumbs />
 
 		<div class="std-title__container">
 			<h1 class="std-title title-h1">Розничные заказы</h1>
@@ -120,6 +118,7 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import Dropdown from "primevue/dropdown";
+import Breadcrumbs from "../components/Breadcrumbs.vue";
 
 export default {
 	data() {
@@ -147,7 +146,7 @@ export default {
 	computed: {
 		...mapGetters(['orders']),
 	},
-	components: { Dropdown },
+	components: { Dropdown, Breadcrumbs },
 	watch: {
 	},
 };

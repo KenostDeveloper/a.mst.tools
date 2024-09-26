@@ -222,7 +222,7 @@ const routes = [
 										path: "b2c",
 										meta: {
 											breadcrumb: {
-												label: "Акции",
+												label: "Розничные акции",
 											},
 										},
 										children: [
@@ -233,7 +233,7 @@ const routes = [
 												label: "Акции",
 												meta: {
 													breadcrumb: {
-														label: "Акции",
+														label: "Розничные акции",
 													},
 												},
 												component: Actions,
@@ -242,10 +242,10 @@ const routes = [
 												path: "add",
 												name: "org_action_add",
 												props: true,
-												label: "Добавление акции",
+												label: "Добавление розничной акции",
 												meta: {
 													breadcrumb: {
-														label: "Добавление акции",
+														label: "Добавление розничной акции",
 													},
 												},
 												component: ActionEdit,
@@ -257,7 +257,7 @@ const routes = [
 												label: "Редактирование акции",
 												meta: {
 													breadcrumb: {
-														label: "Редактирование акции",
+														label: "Редактирование розничной акции",
 													},
 												},
 												component: ActionEdit,
@@ -268,7 +268,7 @@ const routes = [
 										path: "b2b",
 										meta: {
 											breadcrumb: {
-												label: "Акции",
+												label: "Мои оптовые акции",
 											},
 										},
 										children: [
@@ -279,7 +279,7 @@ const routes = [
 												label: "Акции",
 												meta: {
 													breadcrumb: {
-														label: "Акции",
+														label: "Мои оптовые акции",
 													},
 												},
 												component: Sales,
@@ -291,7 +291,7 @@ const routes = [
 												label: "Добавление акции",
 												meta: {
 													breadcrumb: {
-														label: "Добавление акции",
+														label: "Добавление оптовой акции",
 													},
 												},
 												component: SalesEdit,
@@ -303,7 +303,7 @@ const routes = [
 												label: "Редактирование акции",
 												meta: {
 													breadcrumb: {
-														label: "Редактирование акции",
+														label: "Редактирование оптовой акции",
 													},
 												},
 												component: SalesEdit,
@@ -387,14 +387,14 @@ const routes = [
 												children: [
 													{
 														path: ":action",
-                            name: "promotion",
-                            props: true,
-                            meta: {
-                              breadcrumb: {
-                                label: "Акция",
-                              },
-                            },
-                            component: Promotion,
+														name: "promotion",
+														props: true,
+														meta: {
+															breadcrumb: {
+																label: "Акция",
+															},
+														},
+														component: Promotion,
 													},
 												],
 											},
@@ -433,14 +433,19 @@ const routes = [
 														label: "Поиск",
 													},
 												},
-                        children: [
-                          {
-                            path: ':search',
-												    name: "opt_search",
-                            props: true,
-                            component: PurchasesSearch,
-                          }
-                        ]
+												children: [
+													{
+														path: ":search",
+														name: "opt_search",
+														props: true,
+														meta: {
+															breadcrumb: {
+																label: "Поиск"
+															}
+														},
+														component: PurchasesSearch,
+													},
+												],
 											},
 										],
 									},
@@ -478,7 +483,7 @@ const routes = [
 										path: "discounts",
 										meta: {
 											breadcrumb: {
-												label: "Скидки",
+												label: "Индивидуальные скидки",
 											},
 										},
 										children: [
@@ -490,7 +495,7 @@ const routes = [
 														name: "discounts",
 														meta: {
 															breadcrumb: {
-																label: "Скидки",
+																label: "Индивидуальные скидки",
 															},
 														},
 														component: ProfileDiscounts,
@@ -525,7 +530,7 @@ const routes = [
 										path: "statistics",
 										meta: {
 											breadcrumb: {
-												label: "Статистики",
+												label: "Статистика",
 											},
 										},
 										children: [
@@ -534,7 +539,7 @@ const routes = [
 												name: "statistics",
 												meta: {
 													breadcrumb: {
-														label: "Статистики",
+														label: "Статистика",
 													},
 												},
 												component: ProfileStatistics,
@@ -555,7 +560,7 @@ const routes = [
 										path: "orders",
 										meta: {
 											breadcrumb: {
-												label: "Мои заказы",
+												label: "Розничные заказы",
 											},
 										},
 										children: [
@@ -651,7 +656,7 @@ const routes = [
 										name: "vendors",
 										meta: {
 											breadcrumb: {
-												label: "Поставщики",
+												label: "Доступные поставщики",
 											},
 										},
 										component: ProfileVendors,
@@ -660,7 +665,7 @@ const routes = [
 										path: "clients",
 										meta: {
 											breadcrumb: {
-												label: "Клиенты",
+												label: "Мои клиенты",
 											},
 										},
 										children: [
@@ -669,7 +674,7 @@ const routes = [
 												name: "clients",
 												meta: {
 													breadcrumb: {
-														label: "Клиенты",
+														label: "Мои клиенты",
 													},
 												},
 												component: ProfileClients,

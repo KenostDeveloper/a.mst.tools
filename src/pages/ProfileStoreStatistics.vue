@@ -1,5 +1,7 @@
 <template>
     <div class="copo">
+        <Breadcrumbs class="std-breadcrumbs--margin" />
+
         <router-link :to="{ name: 'statistics', params: { id: $route.params.id } }" class="title-mini"><img class="mst-image-org" :src="org_profile.image" alt="">{{org_profile.name}}</router-link>
         <div class="mst-statistic-title mt-3 mb-5">Склад {{ org_store.name_short }}</div>
 
@@ -58,6 +60,7 @@
  import TabPanel from 'primevue/tabpanel'
  import RadioButton from 'primevue/radiobutton'
  import router from '../router'
+import Breadcrumbs from '../components/Breadcrumbs.vue'
  
  export default {
    name: 'ProfileProducts',
@@ -250,7 +253,7 @@
           perpage: this.pagination_items_per_page
         }).then(() => { })
    },
-   components: { vTable, Chart, TabView, TabPanel, RadioButton },
+   components: { vTable, Chart, TabView, TabPanel, RadioButton, Breadcrumbs },
    computed: {
      ...mapGetters([
        'org_store',

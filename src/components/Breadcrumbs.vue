@@ -35,7 +35,7 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters(["optcatalog", "orgs", "org_store", "product", "actions"]),
+		...mapGetters(["optcatalog", "orgs", "org_store", "product", "actions", "org_profile"]),
 
 		breadcrumbs() {
 			const currentRoute = router.currentRoute.value;
@@ -45,14 +45,19 @@ export default {
 
 			const routeMatched = this.$route.matched;
 
-			console.log(routeMatched, currentRoute);
-
 			const breadcrumbs = pathRoutes.map((route, index) => {
-				if (index == 0) {
-					return {
-						name: "Главная",
-						path: "/",
-					};
+				console.log(route, index, currentRoute.params[route.slice(1)]);
+
+				if (
+					route == "/" ||
+					route == "" ||
+					(!route.startsWith(":") &&
+						!routeMatched.find(
+							(matchedRoute) =>
+								matchedRoute.path === pathRoutes.slice(0, index + 1).join("/")
+						)?.meta.breadcrumb?.label)
+				) {
+					return;
 				}
 				if (route.startsWith(":")) {
 					return {
@@ -79,6 +84,7 @@ export default {
 			"org_get_from_api",
 			"get_org_store_from_api",
 			"get_product_from_api",
+			"org_profile_from_api",
 		]),
 		getRouteName(currentRoute, param) {
 			switch (param) {
@@ -86,6 +92,8 @@ export default {
 					return this.getOrgNameById(currentRoute.params[param.slice(1)]);
 				}
 				case ":category_id": {
+					if (currentRoute.params.category_id == 4) return "Каталог";
+					if (currentRoute.params.category_id == "search") return "Поиск";
 					return this.getCatalogNameById(currentRoute.params[param.slice(1)]);
 				}
 				case ":order_id": {
@@ -95,9 +103,10 @@ export default {
 					return currentRoute.params[param.slice(1)];
 				}
 				case ":store_id": {
-					return this.getStoreName();
+					return `Склад ${this.getStoreName()}`;
 				}
 				case ":brand_id": {
+					return "Бренд";
 				}
 				case ":product_id": {
 					return this.getProductName();
@@ -106,6 +115,7 @@ export default {
 					return this.getActionName();
 				}
 				case ":client_id": {
+					return this.org_profile?.name;
 				}
 			}
 		},
@@ -131,13 +141,7 @@ export default {
 			return categoryName;
 		},
 		getOrgNameById(id) {
-			let orgName = "";
-
-			this.orgs?.find((org) => {
-				if (org.id === id) orgName = org.name;
-			});
-
-			return orgName;
+			return this.orgs?.find((org) => org.id == id)?.name;
 		},
 		getStoreName() {
 			return this.org_store?.name_short;
@@ -147,11 +151,14 @@ export default {
 		},
 		getActionName() {
 			return this.actions?.name;
-		}
+		},
 	},
 	mounted() {
-		this.get_org_store_from_api();
-		this.get_product_from_api();
+		// this.get_opt_catalog_from_api();
+		// this.org_get_from_api();
+		// this.get_org_store_from_api();
+		// this.get_product_from_api();
+		// this.org_profile_from_api();
 	},
 };
 </script>
@@ -213,9 +220,11 @@ export default {
 		text-decoration: underline;
 	}
 
+	/*
 	&.active {
 		color: rgb(104, 104, 104) !important;
 	}
+*/
 }
 
 .breadcrumb-item + .breadcrumb-item {

@@ -3,6 +3,8 @@
     <ConfirmDialog></ConfirmDialog>
 
     <div class="std-discounts">
+      <Breadcrumbs class="std-breadcrumbs--margin" />
+
       <div class="title-h1 mb-4 std-discounts__title">Индивидуальные скидки</div>
       <v-table
           :items_data="individual_discount.items"
@@ -58,6 +60,7 @@
   import Toast from 'primevue/toast'
   import vOpts from '../components/table/v-opts.vue'
   import router from '../router'
+import Breadcrumbs from '../components/Breadcrumbs.vue'
   
   export default {
     name: 'ProfileSales',
@@ -250,7 +253,7 @@
         action: 'get/individual/discount'
       })
     },
-    components: { vTable, vOpts, Toast, ConfirmDialog, RouterLink, TabView, TabPanel, Dialog, InputNumber },
+    components: { vTable, vOpts, Toast, ConfirmDialog, RouterLink, TabView, TabPanel, Dialog, InputNumber, Breadcrumbs },
     computed: {
       ...mapGetters([
         'individual_discount'

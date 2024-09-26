@@ -1,4 +1,6 @@
 <template>
+    <Breadcrumbs class="std-breadcrumbs--margin" />
+
     <div>
         <div class="title-h1 mb-3">Доступные поставщики</div>
     </div>
@@ -24,6 +26,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import vOpts from '../components/table/v-opts.vue'
+import Breadcrumbs from '../components/Breadcrumbs.vue';
 
 
 export default {
@@ -85,7 +88,7 @@ export default {
 			'opts'
 		])
   	},
-    components: { vOpts },
+    components: { vOpts, Breadcrumbs },
 	watch: {
         opts: function (newVal, oldVal) {
             if (typeof newVal === 'object') {

@@ -2,6 +2,8 @@
    <!-- <TabView class="tab-custom"> -->
       <!-- <TabPanel header="Сопоставление товаров"> -->
         <div class="copo">
+          <Breadcrumbs class="std-breadcrumbs--margin" />
+
           <div class="title-h1 mb-3 mt-4">Сопоставление товаров</div>
           <p class="info-text mb-4">Для работы вам необходимо достигнуть и поддерживать уровень сопоставления товаров по стоимости не менее 80%.</p>
           <div class="analitics-widget">
@@ -429,6 +431,7 @@ import Chart from 'primevue/chart'
 import TabView from 'primevue/tabview'
 import TabPanel from 'primevue/tabpanel'
 import RadioButton from 'primevue/radiobutton'
+import Breadcrumbs from '../components/Breadcrumbs.vue'
 
 export default {
   name: 'ProfileProducts',
@@ -900,7 +903,7 @@ export default {
       })
     })
   },
-  components: { vTable, Chart, TabView, TabPanel, RadioButton },
+  components: { vTable, Chart, TabView, TabPanel, RadioButton, Breadcrumbs },
   computed: {
     ...mapGetters([
       'products',

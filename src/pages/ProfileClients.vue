@@ -1,5 +1,7 @@
 <template>
 	<section class="clients">
+		<Breadcrumbs />
+
 		<div class="std-title__container">
 			<h1 class="std-title title-h1">Мои клиенты</h1>
 			<p class="std-title__description">
@@ -47,6 +49,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import Dropdown from 'primevue/dropdown'
+import Breadcrumbs from '../components/Breadcrumbs.vue';
 
 export default {
 	data() {
@@ -109,7 +112,7 @@ export default {
 			'org_stores'
 		])
   	},
-	components: { Dropdown },
+	components: { Dropdown, Breadcrumbs },
 	watch: {
 		dilers: function (newVal, oldVal) {
 			if (typeof newVal === 'object') {

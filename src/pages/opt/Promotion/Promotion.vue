@@ -7,7 +7,6 @@
 				<div>
 					<section class="promotion">
 						<header class="promotion__header promotion-header">
-							<Breadcrumbs class="std-breadcrumbs--margin" />
 							<button class="promotion__back-button" @click="$router.go(-1)">
 								<i class="pi pi-angle-left"></i>
 								Назад
