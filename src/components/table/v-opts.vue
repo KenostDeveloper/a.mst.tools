@@ -71,7 +71,7 @@
 								@click.prevent="changeOpts(row.id, 0)"
 							>
 								<mdicon name="close" />
-								<span>Убрать из поставщика</span>
+								<span>Убрать из поставщиков</span>
             </button>
 						</div>
             <!-- <div class="participation participation-soon" v-if="row.connection != 2">
