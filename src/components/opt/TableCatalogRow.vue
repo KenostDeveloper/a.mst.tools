@@ -345,11 +345,18 @@
 		</td>
 		<td v-else>{{ Math.round(item.price).toLocaleString("ru") }} ₽</td>
 	</tr>
-	<!-- {{items}} -->
-	<!-- <tbody class="complect-button kenost-table-background kenost-table-background-complect" v-for="complect in items.complects" v-bind:key="complect.id" :class="{'active' : this.active || this.is_warehouses || items.total_stores == 1, 'no-active' : !this.active && !this.is_warehouses && items.total_stores > 1, 'bg-white': items.total_stores == 1}">
+	<!-- Вывод комплектов -->
+	<tbody class="complect-button kenost-table-background kenost-table-background-complect" v-for="complect in items.complects" v-bind:key="complect.id" :class="{'active' : this.active || this.is_warehouses || items.total_stores == 1, 'no-active' : !this.active && !this.is_warehouses && items.total_stores > 1, 'bg-white': items.total_stores == 1}">
     <tr v-for="(item, index) in complect" v-bind:key="item.id" :class="{'active' : this.active || this.is_warehouses || items.total_stores == 1, 'kenost-table-bg-complect': items.total_stores == 1, 'no-active' : !this.active && !this.is_warehouses && items.total_stores > 1}">
       <td class="td-center" :class="{'pointer-none' : index !== 0}"><span :style="'top:' +  (complect.length * 74) / 2 + 'px'" v-if="index === 0"><i class="pi pi-minus"></i></span></td>
-      <td class="k-table__photo"><img class="k-table__image" :src="item.image" alt=""></td>
+      <td class="k-table__photo">
+		<img class="k-table__image" :src="item.image" alt="">
+		<div class="kenost-complect-icon" v-if="index < complect.length - 1">
+			<svg class="kenost-screp" width="12" height="18" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<path d="M0.665365 6.33398L0.665365 3.66732C0.665365 2.74509 0.990365 1.95898 1.64037 1.30898C2.29036 0.658984 3.07648 0.333984 3.9987 0.333984C4.92092 0.333984 5.70703 0.658984 6.35703 1.30898C7.00703 1.95898 7.33203 2.7451 7.33203 3.66732L7.33203 6.33398L5.9987 6.33398L5.9987 3.66732C5.9987 3.11176 5.80425 2.63954 5.41536 2.25065C5.02648 1.86176 4.55425 1.66732 3.9987 1.66732C3.44314 1.66732 2.97092 1.86176 2.58203 2.25065C2.19314 2.63954 1.9987 3.11176 1.9987 3.66732L1.9987 6.33398L0.665365 6.33398ZM3.33203 4.33398L4.66536 4.33398L4.66536 9.66732L3.33203 9.66732L3.33203 4.33398ZM0.665365 7.66732L1.9987 7.66732L1.9987 10.334C1.9987 10.8895 2.19314 11.3618 2.58203 11.7507C2.97092 12.1395 3.44314 12.334 3.9987 12.334C4.55425 12.334 5.02648 12.1395 5.41536 11.7507C5.80425 11.3618 5.9987 10.8895 5.9987 10.334L5.9987 7.66732L7.33203 7.66732L7.33203 10.334C7.33203 11.2562 7.00703 12.0423 6.35703 12.6923C5.70703 13.3423 4.92092 13.6673 3.9987 13.6673C3.07648 13.6673 2.29036 13.3423 1.64036 12.6923C0.990365 12.0423 0.665365 11.2562 0.665365 10.334L0.665365 7.66732Z" fill="#ADADAD"/>
+			</svg>
+		</div>
+	  </td>
       <td class="k-table__title"><p>{{item.pagetitle}}</p><b>Арт: {{item.article}}</b></td>
       <td class="k-table__busket complect-button__td" :class="{'pointer-none' : index !== 0}">
         <form class="k-table__form complect-button__form" :class="{'basket-true' : item?.basket?.availability}" :style="'top:' +  (complect.length * 74) / 2 + 'px'" action="" v-if="index === 0">
@@ -424,7 +431,7 @@
       <td v-if="item.price && item.price > item.new_price">{{item.price ? Math.round(item.price).toLocaleString('ru') : Math.round(item.new_price).toLocaleString('ru')}} ₽ <br> {{((item.price - item.new_price).toFixed(0)).toLocaleString('ru')}} ₽</td>
       <td v-else>{{Math.round(item.price).toLocaleString('ru')}} ₽</td>
     </tr>
-  </tbody> -->
+  </tbody>
 	<Dialog v-model:visible="this.modal_remain" header=" " :style="{ width: '340px' }">
 		<div class="kenost-not-produc">
 			<!-- <img src="../../../public/img/opt/not-products.png" alt=""> -->
