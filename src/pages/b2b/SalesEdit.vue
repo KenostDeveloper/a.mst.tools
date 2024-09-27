@@ -2102,16 +2102,22 @@ export default {
           this.files.small.original_href = this.site_url_prefix + newVal.image_small
         }
 
+        console.log(newVal.page_places)
+
         this.place_action = newVal.page_places
+
+
         this.geo_action = this.geo[newVal.page_geo]
         this.position = newVal.page_place_position
 
-        if (newVal.page_create) {
-          this.create_page_action = ['true']
-        }
+        this.create_page_action = ['true']
 
         if (newVal.gift) {
           this.selectedGift = newVal.gift
+        }
+
+        if(newVal.compatibility_discount_mode){
+          this.form.compabilityMode = this.compabilityMode[newVal.compatibility_discount_mode]
         }
 
         if (newVal.store_id) {
