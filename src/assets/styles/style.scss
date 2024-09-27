@@ -5561,8 +5561,15 @@ button.std-icon__wrapper {
 	background: #DBDBDB;
 }
 
+.kenost-screp{
+	position: absolute;
+    top: 6px;
+    right: 13px;
+}
+
 .k-table {
 	border-collapse: separate;
+	border-collapse: collapse;
 	thead {
 		position: sticky;
 		z-index: 1;

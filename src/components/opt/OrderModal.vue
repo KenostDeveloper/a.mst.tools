@@ -35,21 +35,21 @@
                                         <div class="k-order__actions">
                                             <div class="table-actions">
                                                 <!-- 'red': action?.conflicts?.items[action.action_id]?.sales_conflicts -->
-                                                <div class="table-actions__action" v-for="(action, indexactions) in product.tags" v-bind:key="action.id">
+                                                <div class="table-actions__action active" v-for="(action, indexactions) in product.tags" v-bind:key="action.id">
                                                     <div v-if="action.length > 0" class="table-actions__container" >
                                                         <div class="table-actions__el" v-for="(tag, indextag) in action" v-bind:key="tag.id">
-                                                            <img v-if="tag.type == 'multiplicity'" src="../../assets/images/icons/action/box.svg" alt="">
+                                                            <img v-if="tag.type == 'multiplicity'" src="/images/icons/action/gray/box.svg" alt="">
                                                             <p  v-if="tag.type == 'multiplicity'">{{ tag.value }} шт.</p>
 
-                                                            <img v-if="tag.type == 'gift'" src="../../assets/images/icons/action/gift.svg" alt="">
+                                                            <img v-if="tag.type == 'gift'" src="/images/icons/action/gray/gift.svg" alt="">
 
-                                                            <img v-if="tag.type == 'delay'" src="../../assets/images/icons/action/time.svg" alt="">
+                                                            <img v-if="tag.type == 'delay'" src="/images/icons/action/gray/time.svg" alt="">
                                                             <p  v-if="tag.type == 'delay'">Отсроч. {{ tag.value }} дн.</p>
 
-                                                            <img v-if="tag.type == 'sale'" src="../../assets/images/icons/action/sale.svg" alt="">
+                                                            <img v-if="tag.type == 'sale'" src="/images/icons/action/gray/sale.svg" alt="">
                                                             <p  v-if="tag.type == 'sale'">Скидка {{ Number(tag.value).toFixed(0) }}%</p>
 
-                                                            <img v-if="tag.type == 'free_delivery'" src="../../assets/images/icons/action/delivery.svg" alt="">
+                                                            <img v-if="tag.type == 'free_delivery'" src="/images/icons/action/gray/delivery.svg" alt="">
 
                                                             <!-- TODO: Комплекты -->
                                                         </div>
@@ -441,7 +441,7 @@ export default {
 
         &__orders{
             height: calc(100% - 240px);
-            // overflow-y: auto;
+            overflow-y: auto;
             margin: 20px 0;
 
             &::-webkit-scrollbar {
