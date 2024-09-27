@@ -524,7 +524,7 @@
                         <b>Добавленные комплекты</b>
                         </div>
                         <div class="PickList__products PickList__products-selected">
-                        <div class="PickList__el" v-for="(item) in this.selected_complects" :key="item.id">
+                        <div class="PickList__el" v-for="(item, index) in this.selected_complects" :key="item.id">
                           <img :src="item.image" alt="">
                             <div class="PickList__info">
                             <div class="PickList__product-info off">
@@ -1581,9 +1581,13 @@ export default {
       // }
     },
     selectComplect (id) {
+      console.log(id)
       const complect = this.complects.find(r => r.id === id)
+      console.log(complect)
       this.selected_complects[complect.id] = complect
+      console.log(this.selected_complects)
       this.complects = this.complects.filter((r) => r.id !== id)
+      console.log(this.selected_complects)
       const data = {
         action: 'complects/get',
         filter: this.filter_complects,
@@ -1592,6 +1596,7 @@ export default {
         store_id: router.currentRoute._value.params.id,
         selected: this.selected_complects
       }
+      console.log(data)
       this.opt_get_complects(data)
       // this.total_selected++
     },
@@ -2144,7 +2149,9 @@ export default {
         if (newVal.icon) {
           this.files.icon.original_href = this.site_url_prefix + newVal.icon
         }
-        this.selected_complects = newVal.complects
+        if(newVal.complects.length){
+          this.selected_complects = newVal.complects
+        }
         this.form.description = newVal.description
         if (newVal.compatibility_discount) {
           this.form.compatibilityDiscount = newVal.compatibility_discount.toString()

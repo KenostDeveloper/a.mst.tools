@@ -18,6 +18,7 @@
             <span class="ktitle">Склад</span>
             <!-- <label for="name">Введите наименование, которое будет отражать смысл вашей акции</label> -->
             <!-- <input v-model="form.name" type="text" name="name" placeholder="Укажите склад акции" class="dart-form-control"> -->
+             {{ this.form.store_id }}
             <Dropdown
               @change="updateProducts"
               v-model="this.form.store_id"

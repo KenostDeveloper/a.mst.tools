@@ -418,7 +418,7 @@ export default {
       'org_get_stores_from_api',
     ]),
     setFilter () {
-      const data = { storeid: this.form.store_id, filter: this.filter, filterselected: this.filter_table, selected: Object.keys(this.selected), pageselected: this.page_selected, page: this.page, perpage: this.per_page }
+      const data = { storeid: [this.form.store_id], filter: this.filter, filterselected: this.filter_table, selected: Object.keys(this.selected), pageselected: this.page_selected, page: this.page, perpage: this.per_page }
       this.get_available_products_from_api(data)
     },
     ElemCount (obj) {
@@ -434,7 +434,7 @@ export default {
     },
     updateProducts () {
       const data = {
-        storeid: this.form.store_id,
+        storeid: [this.form.store_id],
         filter: this.filter,
         filterselected: this.filter_table,
         selected: Object.keys(this.selected),
@@ -502,7 +502,7 @@ export default {
 
       this.selected[product.id] = product
       this.products = this.products.filter((r) => r.id !== id)
-      const data = { storeid: this.form.store_id, filter: this.filter, filterselected: this.filter_table, selected: Object.keys(this.selected), pageselected: this.page_selected, page: this.page, perpage: this.per_page }
+      const data = { storeid: [this.form.store_id], filter: this.filter, filterselected: this.filter_table, selected: Object.keys(this.selected), pageselected: this.page_selected, page: this.page, perpage: this.per_page }
       this.get_available_products_from_api(data)
       this.total_selected++
     },
@@ -556,18 +556,18 @@ export default {
       this.selected = new_selected
 
       // this.selected = this.selected.filter((r) => r.id !== id)
-      const data = { storeid: this.form.store_id, filter: this.filter, filterselected: this.filter_table, selected: Object.keys(this.selected), pageselected: this.page_selected, page: this.page, perpage: this.per_page }
+      const data = { storeid: [this.form.store_id], filter: this.filter, filterselected: this.filter_table, selected: Object.keys(this.selected), pageselected: this.page_selected, page: this.page, perpage: this.per_page }
       this.get_available_products_from_api(data)
       this.total_selected--
     },
     pagClickCallback (pageNum) {
       this.page = pageNum
-      const data = { storeid: this.form.store_id, filter: this.filter, filterselected: this.filter_table, selected: Object.keys(this.selected), pageselected: this.page_selected, page: this.page, perpage: this.per_page }
+      const data = { storeid: [this.form.store_id], filter: this.filter, filterselected: this.filter_table, selected: Object.keys(this.selected), pageselected: this.page_selected, page: this.page, perpage: this.per_page }
       this.get_available_products_from_api(data)
     }
   },
   mounted () {
-    this.get_available_products_from_api({ storeid: this.form.store_id, filter: '', selected: [], page: this.page }).then(
+    this.get_available_products_from_api({ storeid: [this.form.store_id], filter: '', selected: [], page: this.page }).then(
       this.products = this.available_products.products
     )
     this.get_catalog_from_api().then(
