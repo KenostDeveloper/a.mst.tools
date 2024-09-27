@@ -474,6 +474,7 @@ export default {
                   state.optproducts.items[i].stores[j].price = data.data.price
                   state.optproducts.items[i].stores[j].delay = data.data.delay
                   state.optproducts.items[i].stores[j].basket = data.data.basket
+                  state.optproducts.items[i].stores[j].action = data.data.action
                 }
               }
             }
