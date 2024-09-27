@@ -1,5 +1,6 @@
 import Axios from 'axios'
 import router from '../router'
+import { transformCatalog } from '../utils/helpers'
 
 export default {
   state: {
@@ -177,6 +178,7 @@ export default {
         }
       })
         .then((response) => {
+          response.data.data = transformCatalog(response.data.data);
           commit('SET_OPT_CATALOG_TO_VUEX', response.data)
         })
         .catch(error => {
