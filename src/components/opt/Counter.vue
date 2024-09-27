@@ -108,20 +108,20 @@ export default {
 			};
 			this.$emit("ElemCount", data);
 		},
-		onPlus() {
-			if (this.d_value < this.d_max) {
-				this.d_value = Number(this.d_value) + (1 * this.d_step);
-			}
-			const data = {
-				value: this.d_value,
-				id: this.id,
-				store_id: this.store_id,
-				max: this.d_max,
-				index: this.index,
-				item: this.item,
-			};
-			this.$emit("ElemCount", data);
-		},
+		// onPlus() {
+		// 	if (this.d_value < this.d_max) {
+		// 		this.d_value = Number(this.d_value) + (1 * this.d_step);
+		// 	}
+		// 	const data = {
+		// 		value: this.d_value,
+		// 		id: this.id,
+		// 		store_id: this.store_id,
+		// 		max: this.d_max,
+		// 		index: this.index,
+		// 		item: this.item,
+		// 	};
+		// 	this.$emit("ElemCount", data);
+		// },
 		onEmit(e) {
 			if (!this.d_value || this.d_value < 0) {
 				this.d_value = this.d_min;

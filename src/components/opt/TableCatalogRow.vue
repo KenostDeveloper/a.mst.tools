@@ -74,7 +74,7 @@
 					:step="item?.action?.multiplicity ? item?.action?.multiplicity : 1"
 				/>
 				<div
-					@click="addBasket(item.remain_id, item?.action?.multiplicity > 1 ? item.basket.count * item?.action?.multiplicity : item.basket.count, item.store_id, index)"
+					@click="addBasket(item.remain_id, item?.action?.multiplicity > 1 ? item?.action?.multiplicity : item.basket.count, item.store_id, index)"
 					class="dart-btn dart-btn-primary"
 				>
 					<i class="d_icon d_icon-busket"></i>
@@ -673,7 +673,7 @@ export default {
 			this.$emit("updateBasket");
 		},
 		ElemCount(object) {
-			debounce(() => {
+			// debounce(() => {
 				if (object.value == object.min) return;
 
 				if (object.value > Number(object.max)) {
@@ -699,7 +699,7 @@ export default {
 					});
 					this.$emit("updateBasket");
 				}
-			}, 300);
+			// }, 300);
 		},
 		ElemCountComplect(object) {
 			if (object.value >= Number(object.max)) {
