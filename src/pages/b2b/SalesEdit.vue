@@ -2116,6 +2116,10 @@ export default {
           this.selectedGift = newVal.gift
         }
 
+        if(newVal.compatibility_discount_mode){
+          this.form.compabilityMode = this.compabilityMode[newVal.compatibility_discount_mode]
+        }
+
         if (newVal.store_id) {
           this.form.store_id = newVal.store_id.toString()
 
