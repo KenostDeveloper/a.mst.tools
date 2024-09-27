@@ -46,7 +46,6 @@ export default {
 			const routeMatched = this.$route.matched;
 
 			const breadcrumbs = pathRoutes.map((route, index) => {
-				console.log(route, index, currentRoute.params[route.slice(1)]);
 
 				if (
 					route == "/" ||
