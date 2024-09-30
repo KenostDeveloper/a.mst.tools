@@ -708,7 +708,7 @@ export default {
 					type: "dropdown",
 					values: this.getvendors,
 				},
-				parent_name: {
+				parent: {
 					name: "Выберите категорию",
 					placeholder: "Выберите категорию",
 					type: "tree",
@@ -1203,7 +1203,7 @@ export default {
 			this.filters_modal.vendor.values = newVal;
 		},
 		getcatalog: function (newVal, oldVal) {
-			this.filters_modal.parent_name.values = newVal;
+			this.filters_modal.parent.values = newVal;
 		},
 		addBrandForm: {
 			handler: function (newVal, oldVal) {

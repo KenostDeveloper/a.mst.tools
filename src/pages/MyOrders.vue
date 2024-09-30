@@ -513,6 +513,7 @@ export default {
 }
 .p-multiselect .p-multiselect-label,
 .p-inputtext,
+.p-treeselect .p-treeselect-label,
 .p-autocomplete .p-autocomplete-multiple-container {
 	padding: 10px 15px !important;
 }
