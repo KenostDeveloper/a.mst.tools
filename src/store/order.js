@@ -13,7 +13,6 @@ export default {
         method: 'POST',
         data: {
           id: router.currentRoute._value.params.id,
-          type: router.currentRoute._value.params.type,
           order_id: router.currentRoute._value.params.order_id
         },
         headers: {
@@ -49,7 +48,7 @@ export default {
   mutations: {
     SET_ORDER_TO_VUEX: (state, data) => {
       state.order = data.data.orders[0]
-      state.store = data.data.store
+      state.store = data.data.orders[0].store
       state.order_products = data.data.products
     }
   },
