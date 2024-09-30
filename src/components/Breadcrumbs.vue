@@ -25,6 +25,7 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import router from "../router";
+import { mdiConsoleLine } from "@mdi/js";
 
 export default {
 	name: "Breadcrumbs",
@@ -35,7 +36,15 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters(["optcatalog", "orgs", "org_store", "product", "actions", "org_profile", "optcatalogwarehouse"]),
+		...mapGetters([
+			"optcatalog",
+			"orgs",
+			"org_store",
+			"product",
+			"actions",
+			"org_profile",
+			"optcatalogwarehouse",
+		]),
 
 		breadcrumbs() {
 			const currentRoute = router.currentRoute.value;
@@ -46,6 +55,7 @@ export default {
 			const routeMatched = this.$route.matched;
 
 			const breadcrumbs = pathRoutes.map((route, index) => {
+				console.log(route, index);
 
 				if (
 					route == "/" ||
@@ -64,6 +74,12 @@ export default {
 						path: pathRoutesWithId.slice(0, index + 1).join("/"),
 					};
 				}
+				if (
+					route == "orders" &&
+					(pathRoutes[index + 1] == "my" || pathRoutes[index + 1] == "opt")
+				) {
+					return;
+				}
 
 				return {
 					name: routeMatched.find(
@@ -73,6 +89,34 @@ export default {
 					path: pathRoutesWithId.slice(0, index + 1).join("/"),
 				};
 			});
+
+			if(pathRoutes[pathRoutes.length - 1] == ":warehouse_cat_id") {
+				const parents = this.getWarehouseCatItemParents(currentRoute.params.warehouse_id, currentRoute.params.warehouse_cat_id);
+				
+				parents?.forEach(parent => {
+					const newPathRoutesWithId = pathRoutesWithId.map(path => path);
+					newPathRoutesWithId[newPathRoutesWithId.length - 1] = parent.id;
+
+					breadcrumbs.splice(-1, 0, {
+						name: parent?.pagetitle,
+						path: newPathRoutesWithId.join("/")
+					});
+				})
+			}
+			if(pathRoutes[pathRoutes.length - 1] == ":category_id") {
+				const parents = this.getCategoriesCatItemParents(4, currentRoute.params.category_id);
+				console.log("Result parents", parents);
+
+				parents?.forEach(parent => {
+					const newPathRoutesWithId = pathRoutesWithId.map(path => path);
+					newPathRoutesWithId[newPathRoutesWithId.length - 1] = parent.id;
+
+					breadcrumbs.splice(-1, 0, {
+						name: parent?.pagetitle,
+						path: newPathRoutesWithId.join("/")
+					});
+				})
+			}
 
 			return breadcrumbs;
 		},
@@ -93,7 +137,7 @@ export default {
 				case ":category_id": {
 					if (currentRoute.params.category_id == 4) return "Каталог";
 					if (currentRoute.params.category_id == "search") return "Поиск";
-					return this.getCatalogNameById(currentRoute.params[param.slice(1)]);
+					return this.getCatItem(currentRoute.params[param.slice(1)], this.optcatalog)?.pagetitle;
 				}
 				case ":order_id": {
 					return `Заказ № ${currentRoute.params[param.slice(1)]}`;
@@ -117,34 +161,14 @@ export default {
 					return this.org_profile?.name;
 				}
 				case ":warehouse_id": {
-					return this.optcatalogwarehouse?.find((catItem) => catItem.id == currentRoute.params[param.slice(1)])?.pagetitle;
+					return this.optcatalogwarehouse?.find(
+						(catItem) => catItem.id == currentRoute.params[param.slice(1)]
+					)?.pagetitle;
 				}
 				case ":warehouse_cat_id": {
-					console.log("Start search category");
-					return this.getWarehouseCatName(currentRoute.params[param.slice(1)]);
+					return this.getCatItem(currentRoute.params[param.slice(1)])?.pagetitle;
 				}
 			}
-		},
-		getCatalogNameById(id) {
-			let categoryName = "";
-
-			this.optcatalog.find((firstLevel) => {
-				if (firstLevel.id == id) categoryName = firstLevel.pagetitle;
-
-				if (firstLevel.children) {
-					Object.values(firstLevel?.children)?.find((secondLevel) => {
-						if (secondLevel.id == id) categoryName = secondLevel.pagetitle;
-
-						if (secondLevel.children) {
-							Object.values(secondLevel?.children)?.find((thirdLevel) => {
-								if (thirdLevel.id == id) categoryName = thirdLevel.pagetitle;
-							});
-						}
-					});
-				}
-			});
-
-			return categoryName;
 		},
 		getOrgNameById(id) {
 			return this.orgs?.find((org) => org.id == id)?.name;
@@ -158,20 +182,51 @@ export default {
 		getActionName() {
 			return this.actions?.name;
 		},
-		getWarehouseCatName(id, catalog = this.optcatalogwarehouse) {
-			// TODO Отображение категории выбранной категории поставщика
-			for(let i = 0; i < catalog.length; i++) {
-				if(catalog[i].id == id) {
-					return catalog[i].pagetitle;
-				}
-				else {
+		getCatItem(id, catalog = this.optcatalogwarehouse) {
+			for (let i = 0; i < catalog.length; i++) {
+				if (catalog[i].id == id) {
+					return catalog[i];
+				} else {
 					if (Array.isArray(catalog[i].children)) {
-						let res = this.getWarehouseCatName(id, catalog[i].children);
-						if (res) return res;
+						let res = this.getCatItem(id, catalog[i].children);
+						if (res) {
+							return res;
+						}
 					}
 				}
 			}
 		},
+		getWarehouseCatItemParents(stopId, catItemId) {
+			const catItem = this.getCatItem(catItemId);
+
+			if(!catItem) return
+			if(catItem?.parent == 0) return;
+
+			let parents = this.getAllParents(stopId, catItem, [], this.optcatalogwarehouse);
+			return parents;
+		},
+		getCategoriesCatItemParents(stopId, catItemId) {
+			const catItem = this.getCatItem(catItemId, this.optcatalog);
+			console.log("Searched catItem", catItem);
+
+			if(!catItem) return
+			if(catItem?.parent == 0) return;
+
+			let parents = this.getAllParents(stopId, catItem, [], this.optcatalog);
+			return parents;
+		},
+		getAllParents(stopId, catItem, parents, catalog) {
+			if(catItem.id == stopId) return parents;
+
+            console.log("Search parent data", catItem, catalog);
+			let currParent = this.getCatItem(catItem?.parent, catalog);
+			console.log("Searched parent", currParent);
+			if(currParent) {
+                parents.unshift(currParent);
+                this.getAllParents(stopId, currParent, parents, catalog);
+            }
+			return parents;
+		}
 	},
 	mounted() {
 		// this.get_opt_catalog_from_api();

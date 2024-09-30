@@ -1,5 +1,7 @@
 <template>
 	<div class="shipping std-shipping std-my-order">
+        <Breadcrumbs />
+
 		<div class="std-shipping__title-container hidden-tablet-l">
 			<h1 class="table-kenost__title std-shipping__title">Заказ № {{ this.order?.id }}</h1>
 		</div>
@@ -102,6 +104,7 @@ import CalendarVue from "primevue/calendar";
 import vTable from "../components/table/v-table.vue";
 import "v-calendar/style.css";
 import Dialog from "primevue/dialog";
+import Breadcrumbs from "../components/Breadcrumbs.vue";
 
 export default {
 	name: "MyOrders",
@@ -137,6 +140,7 @@ export default {
 		// Checkbox,
 		// Swiper,
 		// SwiperSlide
+		Breadcrumbs
 	},
 	computed: {
 		...mapGetters([
