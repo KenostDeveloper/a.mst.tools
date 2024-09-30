@@ -680,6 +680,7 @@ export default {
 			this.$emit("updateBasket");
 		},
 		ElemCount(object) {
+			console.log(object)
 			// debounce(() => {
 				if (object.value == object.min) return;
 
