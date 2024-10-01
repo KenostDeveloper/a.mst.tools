@@ -73,7 +73,7 @@
 								</div>
 							</div>
 
-							<!-- <TableCatalogAction @updateBasket="updateBasket" v-if="actions" :items="actions" /> -->
+							<TableCatalogAction @updateBasket="updateBasket" v-if="actions" :items="actions" />
 						</main>
 					</section>
 				</div>
