@@ -37,6 +37,7 @@ import ProfileClientStatistics from "../pages/ProfileClientStatistics.vue";
 import PurchasesActions from "../pages/opt/Actions.vue";
 import OrdersOpt from "../pages/OrdersOpt.vue";
 import OrderOpt from "../pages/OrderOpt.vue";
+import Register from "../components/auth/v-reg.vue";
 
 const routes = [
 	{
@@ -702,6 +703,8 @@ const routes = [
 										component: Balance,
 									},
 								],
+								// path: "/auth/register",
+								// component: Register
 							},
 						],
 					},
