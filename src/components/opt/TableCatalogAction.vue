@@ -49,7 +49,7 @@
             </tbody> -->
 
             <tbody class="kenost-table-border-bottom" v-for="item in items.products" v-bind:key="item.id">
-                <tr v-if="item.remain != '0' && item.remain != 0 && item.remain != 'Нет в наличии'">
+                <tr v-if="item.max != 0">
                     <td class="k-table__photo hidden-mobile-l">
                         <img class="k-table__image" :src="item.image" alt="" />
                     </td>
