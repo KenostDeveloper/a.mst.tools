@@ -43,6 +43,7 @@ import { mapActions } from 'vuex'
 import customModal from '../CustomModal.vue'
 import vForgot from './v-forgot.vue'
 import Toast from 'primevue/toast'
+import { sendMetrik } from '../../utils/metrika'
 
 export default {
   name: 'auth-form',
@@ -64,6 +65,7 @@ export default {
     }
   },
   methods: {
+    sendMetrik: sendMetrik,
     ...mapActions([
       'org_get_from_api',
     ]),
@@ -96,7 +98,7 @@ export default {
                 // console.log(orgs.data.data)
                 let role = localStorage.getItem("role");
                 //const res = await this.$router.push({ name: 'org', params: { id: orgs.data.data[0].id } })
-
+                this.sendMetrik("auth")
                 if(role == 1){
                     const res = await this.$router.push({ name: 'retail_orders', params: { id: orgs.data.data[0].id } })
                 }else if(role == 2){

@@ -52,7 +52,7 @@
                 </a>
               </div>
               <div class="vendors_selected">
-                <span class="vendors_selected__label">Выбранные склады</span>
+                <span class="vendors_selected__label">Выбранные склады поставщиков</span>
                 <div class="vendors_selected__rows" v-if="items.selected_count">
                   <div class="vendors_selected__row" v-for="(item) in items.selected" :key="item.id">
                     <a href="#" class="btn btn-close" @click.prevent="changeOpts(item.id, 0)">
@@ -74,11 +74,11 @@
                     </div>
                   </div>
                 </div>
-                <div class="dart-alert dart-alert-info dart-mt-1" v-else>Склады еще не выбраны</div>
+                <div class="dart-alert dart-alert-info dart-mt-1" v-else>Склады поставщиков еще не выбраны</div>
               </div>
               <div class="vendor_select" v-if="items.selected_count < items.available_count">
                 <div class="vendor_select__title">
-                  <span>Список подключенных складов поставщиков</span>
+                  <span>Список складов подключенных поставщиков</span>
                   <!--
                   <a href="#" class="add_vendor">
                     <i class="d_icon d_icon-close"></i>
@@ -113,11 +113,11 @@
                   <div class="dart-alert dart-alert-info">Ничего не найдено</div>
                 </div>
                 <div class="vendor_select__actions">
-                  <button class="dart-btn dart-btn-primary dart-btn-block" @click.prevent="checkVendors" v-if="avLength">Выбрать</button>
+                  <button class="dart-btn dart-btn-primary dart-btn-block" @click.prevent="checkVendors" v-if="avLength">Выбрать склады</button>
                 </div>
               </div>
               <div class="dart-mt-2" v-else>
-                <div class="dart-alert dart-alert-info">Вы выбрали всех доступных складов поставщиков</div>
+                <div class="dart-alert dart-alert-info">Вы выбрали все доступные склады поставщиков</div>
               </div>
             </div>
           </div>

@@ -3443,7 +3443,7 @@ p {
 
 	.basket-container__adres {
 		& {
-			background: #6ca632 !important;
+			// background: #6ca632 !important;
 			// margin: 0 !important;
 			margin: 12px 0 8px 0;
 			width: 100% !important;
@@ -3501,7 +3501,7 @@ p {
 
 		.basket-container__adres {
 			& {
-				background: #50c0e6 !important;
+				// background: #50c0e6 !important;
 				margin-block: 19px 45px !important;
 				width: 100%;
 			}
@@ -6456,4 +6456,23 @@ button.std-icon__wrapper {
 
 .w-1\/2{
 	width: 50% !important;
+}
+
+.store-name-b2b{
+	color: #FFF !important;
+	padding: 2px 5px;
+    font-size: 12px !important;
+    border-radius: 5px;
+    width: fit-content;
+	margin-left: 8px;
+}
+
+.table-kenost__product-text span,
+.PickList__article{
+	display: flex;
+    align-items: center;
+}
+
+.kenost-table-border-bottom{
+	border-bottom: 1px solid #ADADAD;
 }

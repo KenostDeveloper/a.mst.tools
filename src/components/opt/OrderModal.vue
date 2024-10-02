@@ -103,7 +103,7 @@
                                         </div>
                                         <div class="k-order__buttons">
                                             <b>{{(product.count * product.price).toLocaleString('ru')}} ₽</b>
-                                            <Counter :item="product" :key="new Date().getMilliseconds() + product.id_remain" @ElemCount="ElemCount" :min="1" :max="item.remains" :value="product.count" :id="item.id_remain" :store_id="item.store_id"/>
+                                            <Counter :item="{product: product, warehouse_id: this.basket.warehouses.find((el) => el.id == key)}" :key="new Date().getMilliseconds() + product.id_remain" @ElemCount="ElemCount" :min="1" :max="item.remains" :value="product.count" :id="item.id_remain" :store_id="item.store_id"/>
                                         </div>
                                     </div>
                                     <div class="k-order__product-data">
@@ -155,7 +155,7 @@
                                 </div>
                                 <div class="k-order__complect-data d-col-md-3">
                                     <div class="k-order__complect-data-items">
-                                        <Counter :key="new Date().getMilliseconds() + complect.info.id" @ElemCount="ElemComplectCount" :min="1" :max="complect.info.complect_data?.min_count" :value="complect.info.count" :id="complect.info.id" :store_id="store.id"/>
+                                        <Counter :item="{warehouse_id: this.basket.warehouses.find((el) => el.id == key)}" :key="new Date().getMilliseconds() + complect.info.id" @ElemCount="ElemComplectCount" :min="1" :max="complect.info.complect_data?.min_count" :value="complect.info.count" :id="complect.info.id" :store_id="store.id"/>
                                         <b>{{(Number(complect.info.count) * complect.info.price).toLocaleString('ru')}} ₽</b>
                                     </div>
                                 </div>
@@ -297,7 +297,8 @@ export default {
         id_remain: object.id,
         value: object.value,
         store_id: object.store_id,
-        actions: object.item.actions_ids
+        actions: object.item.product.actions_ids,
+        id_warehouse: object.item.warehouse_id.id
     }
       this.busket_from_api(data).then(() => {
         this.busket_from_api({
@@ -309,12 +310,19 @@ export default {
       
     },
     ElemComplectCount (object) {
-      // console.log(object)
+      console.log(object)
       if (object.value > Number(object.max)) {
         this.modal_remain = true
         console.log(this.modal_remain)
       } else {
-        const data = { action: 'basket/update', id: router.currentRoute._value.params.id, id_complect: object.id, value: object.value, store_id: object.store_id }
+        const data = { 
+            action: 'basket/update',
+            id: router.currentRoute._value.params.id,
+            id_complect: object.id,
+            value: object.value,
+            store_id: object.store_id,
+            id_warehouse: object.item.warehouse_id.id
+        }
         this.busket_from_api(data).then()
         this.busket_from_api({
         action: 'basket/get',

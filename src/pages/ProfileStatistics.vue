@@ -58,6 +58,7 @@ import TabView from "primevue/tabview";
 import TabPanel from "primevue/tabpanel";
 import RadioButton from "primevue/radiobutton";
 import router from "../router";
+import { sendMetrik } from '../utils/metrika'
 
 export default {
 	name: "ProfileProducts",
@@ -222,6 +223,7 @@ export default {
 		};
 	},
 	methods: {
+		sendMetrik: sendMetrik,
 		...mapActions([
 			"org_get_stores_from_api",
 			"org_profile_from_api",

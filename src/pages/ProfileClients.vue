@@ -5,7 +5,7 @@
 		<div class="std-title__container">
 			<h1 class="std-title title-h1">Мои клиенты</h1>
 			<p class="std-title__description">
-				Доступные организации, которые являются вашими поставщиками
+				Доступные организации, которые являются вашими клиентами
 			</p>
 		</div>
 

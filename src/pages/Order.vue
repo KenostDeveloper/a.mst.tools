@@ -44,7 +44,7 @@
 				<!-- <div class="order-info__col"> -->
 					<article class="order-info__row">
 						<span class="order-info__label">ФИО покупателя</span>
-						<span class="order-info__value">{{ this.orderData?.receiver }}</span>
+						<span class="order-info__value">{{ this.orderData?.customer }}</span>
 					</article>
 					<article v-if="this.orderData?.delivery !== 'Самовывоз'" class="order-info__row">
 						<span class="order-info__label">Адрес доставки</span>
@@ -94,7 +94,7 @@
 					<tr v-for="product in this.productsData" class="std-table__row">
 						<td class="std-table__col">
 							<img
-								:src="'https://dev.mst.tools/' + product.image"
+								:src="product.image"
 								:alt="product.name"
 								class="order-structure__product-img"
 							/>
@@ -108,49 +108,6 @@
 				</tbody>
 			</table>
 		</div>
-
-
-		<!-- История событий -->
-		<!-- <div class="order-structure order-history">
-			<h2 class="order__title order-history__title">История событий</h2>
-
-			<table class="std-table">
-				<thead class="std-table__head">
-					<tr class="std-table__row">
-						<th class="std-table__hcol"></th>
-						<th class="std-table__hcol">Время</th>
-						<th class="std-table__hcol">Событие</th>
-						<th class="std-table__hcol"></th>
-					</tr>
-				</thead>
-				<tbody class="std-table__body">
-					<tr class="std-table__row">
-						<td class="std-table__col">Система</td>
-						<td class="std-table__col">07.11.2022 9:18</td>
-						<td class="std-table__col">Обрабатывается</td>
-						<td class="std-table__col"></td>
-					</tr>
-					<tr class="std-table__row">
-						<td class="std-table__col">Система</td>
-						<td class="std-table__col">07.11.2022 9:18</td>
-						<td class="std-table__col">Изменение условий доставки заказа</td>
-						<td class="std-table__col"></td>
-					</tr>
-					<tr class="std-table__row">
-						<td class="std-table__col">Система</td>
-						<td class="std-table__col">07.11.2022 9:18</td>
-						<td class="std-table__col">Не оплачен</td>
-						<td class="std-table__col"></td>
-					</tr>
-					<tr class="std-table__row">
-						<td class="std-table__col">Система</td>
-						<td class="std-table__col">07.11.2022 9:18</td>
-						<td class="std-table__col">Изменение условий доставки заказа</td>
-						<td class="std-table__col"></td>
-					</tr>
-				</tbody>
-			</table>
-		</div> -->
 
 		<Dialog
 			v-model:visible="this.showShip"
@@ -231,7 +188,7 @@ export default {
 					this.showShip2 = true
 					this.change_ststatus()
 					this.showShip = false;
-                    this.showShip2 = true;
+          this.showShip2 = true;
 				}
 			})
 		},
