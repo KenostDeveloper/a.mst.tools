@@ -48,7 +48,7 @@
                 </tr>
             </tbody> -->
 
-            <tr class="kenost-table-background" v-for="item in items.products" v-bind:key="item.id">
+            <tr class="kenost-table-border-bottom" v-for="item in items.products" v-bind:key="item.id">
                 {{ console.log(item) }}
                 <td class="k-table__photo hidden-mobile-l">
                     <img class="k-table__image" :src="item.image" alt="" />
