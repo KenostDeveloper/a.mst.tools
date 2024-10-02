@@ -1,11 +1,13 @@
 <template>
     <Sitebar v-if="this.getUser" :active="this.sitebar"/>
-    <div class="content dart_container" :class='{"white": this.namePathIsNav == "purchases"}'>
-        <Nav v-if="namePathIsNav == 'purchases'" />
-        <div class="dart_wrapper">
-            <router-view>
+    <div class="content" :class='{"white": this.namePathIsNav == "purchases"}'>
+        <div class="dart_container_wrap">
+            <Nav v-if="namePathIsNav == 'purchases'" />
+            <div class="dart_wrapper">
+                <router-view>
 
-            </router-view>
+                </router-view>
+            </div>
         </div>
     </div>
 </template>
@@ -55,5 +57,10 @@ export default {
 </script>
   
 <style scoped>
-
+    .dart_container_wrap{
+        max-width: 1920px;
+        width: 100%;
+        padding-left: 12px;
+        padding-right: 12px;
+    }
 </style>
