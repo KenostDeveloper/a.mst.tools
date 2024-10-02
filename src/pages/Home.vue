@@ -23,11 +23,11 @@
             })
         },
         async mounted () {
-            if (localStorage.getItem("user") !== null) {
+            // if (localStorage.getItem("user") !== null) {
                 this.setUser(JSON.parse(localStorage.getItem('user')))
-            }else{
-                location.reload();
-            }
+            // }else{
+                // location.reload();
+            // }
             if (this.getUser) {
                 const orgs = await this.org_get_from_api({
                     action: 'get/orgs'
