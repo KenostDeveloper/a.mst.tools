@@ -10,7 +10,7 @@
 export default {
   name: 'app',
   created () {
-    document.title = 'MST Аналитика'
+    document.title = 'МСТ Аналитика'
   }
 }
 </script>

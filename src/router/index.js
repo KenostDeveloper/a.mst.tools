@@ -50,9 +50,11 @@ const routes = [
 			},
 		},
 		props: true,
+		name: "prehome",
 		children: [
 			{
 				path: "",
+				name: "hommy",
 				meta: {
 					breadcrumb: {
 						label: "Главная",
@@ -73,6 +75,7 @@ const routes = [
 					},
 					{
 						path: "",
+						name: "preenter",
 						beforeEnter: (to, from, next) => {
 							if (localStorage.getItem("user")) {
 								next();

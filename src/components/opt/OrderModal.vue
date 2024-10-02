@@ -189,7 +189,7 @@
                                
                             </div>
                             <div class="k-order__final-button">
-                                <div class="a-dart-btn a-dart-btn-secondary" @click="generateXSLX(store.id)">Скачать</div>
+                                <div class="a-dart-btn a-dart-btn-secondary" @click="generateXSLX(store.id, key)">Скачать</div>
                                 <div class="a-dart-btn a-dart-btn-primary k-order__oplata" @click.prevent="orderSubmit(store.id)"><p>Отправить заказ</p> <p>{{ store?.cost?.toLocaleString('ru') }} ₽</p></div>
                             </div>
                         </div>
@@ -349,8 +349,13 @@ export default {
         warehouse: 'all'
       })
     },
-    generateXSLX (storeId) {
-      const data = { action: 'generate/xslx', id: router.currentRoute._value.params.id, store_id: storeId }
+    generateXSLX (storeId, warehouseId) {
+      const data = {
+        action: 'generate/xslx',
+        id: router.currentRoute._value.params.id,
+        store_id: storeId,
+        warehouse_id: warehouseId
+    }
       this.opt_api(data).then((res) => {
         console.log(res)
         window.location.href = res.data.data
