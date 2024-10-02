@@ -7,6 +7,7 @@
 <script>
     import { mapGetters, mapActions } from 'vuex'
     import authForm from '../components/auth/v-auth.vue'
+    import regForm from '../components/auth/v-reg.vue';
 
     export default {
         name: 'Home',
