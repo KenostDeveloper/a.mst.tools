@@ -4,35 +4,21 @@
 
 		<div class="order__header">
 			<div class="std-title__container order__title-container">
-				<h1 class="std-title">Заказ № {{ this.$route.params.order_id }}</h1>
-				<p class="std-title__description">Подготовка заказа к отправке покупателю</p>
+				<h1 class="std-title">Заказ № {{ this.$route.params.order_id }} от {{ this.orderData?.createdon }}</h1>
+				<div class="std-title__description" v-if="this.orderData?.status_name">
+          <b>{{ this.orderData?.status_name }}</b>
+					<!-- {{ this.orderData }} <br/>
+					{{ this.organization }} -->
+        </div>
 			</div>
-
-			<div class="order-confirm" v-if="this.orderData?.stores_available != 0 && this.organozation?.store">
-				<p class="order-confirm__text">
-					Провертье наличие и состояние товара в заказе, и упакуйте их для отправки, после чего
-					нажимте на кнопку “Подтвердить заказ”
-				</p>
+			<div class="order-confirm" v-if="this.orderData?.stores_available != 0 && this.organization?.store">
+				<p class="order-confirm__text" v-if="this.orderData?.stage_description">{{ this.orderData?.stage_description }}</p>
 				<button
-					:disabled="isLoading == true"
+					:disabled="isLoading == true" :class="{ 'dart-btn-loading': isLoading }" 
+					@click="this.orderData?.stage_check_code? check_code() : change_ststatus()" 
 					class="dart-btn dart-btn-primary order-confirm__button"
-					@click="this.orderData?.stage_check_code? check_code() : change_ststatus()"
 				>
-					Подтвердить заказ
-				</button>
-			</div>
-
-			<div class="order-confirm hidden" v-if="this.orderData?.warehouses_available != 0 && (this.organozation?.store?.warehouse || this.organozation?.store?.vendor)">
-				<p class="order-confirm__text">
-					Запросите у курьера секретный код. Нажмите на кнопку “Передать курьеру”.В открывшимся окне
-					введите секретный код. После сообщения “код принят” - передайте товар курьеру.
-				</p>
-				<button
-					:disabled="isLoading == true"
-					class="dart-btn dart-btn-primary order-confirm__button"
-					@click="this.showShip = true"
-				>
-					Передать курьеру
+					{{ this.orderData?.transition_anchor }}
 				</button>
 			</div>
 		</div>
@@ -116,7 +102,7 @@
 			:style="{ width: '450px' }"
 		>
 			<form class="order-secret">
-				<input :value="this.code" type="text" name="key" id="key" class="order-secret__input" />
+				<input v-model="this.code" type="text" name="key" id="key" class="order-secret__input" />
 				<button type="button" class="dart-btn dart-btn-primary order-secret__button" @click="() => formSubmit()">Отправить</button>
 			</form>
 		</Dialog>
@@ -130,10 +116,7 @@
 			<div class="order-secret">
 				<h3 class="order-secret__title">Код принят</h3>
 				<img src="../assets/images/icons/check.svg" alt="" class="order-secret__img" />
-				<button class="dart-btn dart-btn-primary order-secret__button" @click="() => {
-                    this.showShip2 = false;
-                    this.showShip3 = true;
-                }">Ок</button>
+				<button class="dart-btn dart-btn-primary order-secret__button" @click="() => {this.showShip2 = false;}">Ок</button>
 			</div>
 		</Dialog>
 
@@ -156,6 +139,7 @@
 import { mapActions, mapGetters } from "vuex";
 import Dropdown from "primevue/dropdown";
 import Dialog from "primevue/dialog";
+import router from '../router'
 import Breadcrumbs from "../components/Breadcrumbs.vue";
 
 export default {
@@ -166,11 +150,11 @@ export default {
 			productsData: [],
 			code: null,
 			isLoading: false,
-			organozation: [],
+			organization: [],
 			
 			showShip: false,
-            showShip2: false,
-            showShip3: false,
+      showShip2: false,
+      showShip3: false,
 		};
 	},
 	methods: {
@@ -185,10 +169,12 @@ export default {
 				})
 				this.response = data.data.data
 				if (this.response.success) {
-					this.showShip2 = true
 					this.change_ststatus()
 					this.showShip = false;
           this.showShip2 = true;
+				}else{
+					this.showShip = false;
+					this.showShip3 = true;
 				}
 			})
 		},
@@ -225,7 +211,7 @@ export default {
 			if (newVal) {
 				const org = newVal.find((el) => el.id === this.$route.params.id);
 				if (org) {
-					this.organozation = org;
+					this.organization = org;
 				}
 			}
 		},
