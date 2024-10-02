@@ -6,7 +6,7 @@
                     <th class="k-table__name k-tablr-th-photo hidden-mobile-l">Фото</th>
                     <th class="k-table__name k-tablr-th-title">Наименование / Артикул</th>
                     <th class="k-table__name k-tablr-th-buttons hidden-mobile-l"><i class="d_icon d_icon-busket"></i></th>
-                    <th class="k-table__name k-tablr-th-price">РЦЦ</th>
+                    <th class="k-table__name k-tablr-th-price">РРЦ</th>
                     <th class="k-table__name k-tablr-th-delivery hidden-mobile-l">Скидка %</th>
                     <th class="k-table__name k-tablr-th-action">Цена со скидкой за шт. (₽)</th>
                     <th class="k-table__name k-tablr-th-remain hidden-mobile-l">Сумма (₽)</th>
@@ -48,41 +48,41 @@
                 </tr>
             </tbody> -->
 
-            <tr class="kenost-table-border-bottom" v-for="item in items.products" v-bind:key="item.id">
-                {{ console.log(item) }}
-                <td class="k-table__photo hidden-mobile-l">
-                    <img class="k-table__image" :src="item.image" alt="" />
-                </td>
-                <td class="k-table__title">
-                    <p>{{ item.name }}</p>
-                    <b>Арт: {{ item.article }}</b>
-                </td>
-                <td class="k-table__busket">
-                    <form class="k-table__form" action="" :class="{ 'basket-true': item?.basket?.availability }">
-                        <Counter :item="item" :key="new Date().getMilliseconds() + item.id" @ElemCount="ElemCount" :min="1" :max="item.max" :id="item.remain_id" :store_id="item.store_id" :index="index" :value="item?.basket?.count" :step="item?.action?.multiplicity ? item?.action?.multiplicity : 1" />
-                        <div @click="addBasket(item.remain_id, item?.action?.multiplicity > 1 ? item?.action?.multiplicity : item.basket.count, item.store_id, index)" class="dart-btn dart-btn-primary">
-                            <i class="d_icon d_icon-busket"></i>
-                        </div>
-                    </form>
-                </td>
-                <td>
-                    {{ Math.round(item.price).toLocaleString('ru') }} ₽
-                </td>
-                <td>
-                    {{ Math.round((Number(item.old_price) - (Number(item.new_price))) / (Number(item.old_price) / 100)).toLocaleString('ru') }} %
-                </td>
-                <td>
-                    {{ Math.round(item.new_price).toLocaleString('ru') }} ₽
-                </td>
-                <td>
-                    {{ (Number(item.multiplicity) * Number(item.new_price)).toLocaleString('ru') }} ₽
-                </td>
-                <td>
-                    {{ item.multiplicity }}
-                </td>
-                <td>{{ item.remain.remains }} шт.</td>
-                
-            </tr>
+            <tbody class="kenost-table-border-bottom" v-for="item in items.products" v-bind:key="item.id">
+                <tr v-if="item.remain != '0' && item.remain != 0 && item.remain != 'Нет в наличии'">
+                    <td class="k-table__photo hidden-mobile-l">
+                        <img class="k-table__image" :src="item.image" alt="" />
+                    </td>
+                    <td class="k-table__title">
+                        <p>{{ item.name }}</p>
+                        <b>Арт: {{ item.article }}</b>
+                    </td>
+                    <td class="k-table__busket">
+                        <form class="k-table__form" action="" :class="{ 'basket-true': item?.basket?.availability }">
+                            <Counter :item="item" :key="new Date().getMilliseconds() + item.id" @ElemCount="ElemCount" :min="1" :max="item.max" :id="item.remain_id" :store_id="item.store_id" :index="index" :value="item?.basket?.count" :step="item?.action?.multiplicity ? item?.action?.multiplicity : 1" />
+                            <div @click="addBasket(item.remain_id, item?.action?.multiplicity > 1 ? item?.action?.multiplicity : item.basket.count, item.store_id, index)" class="dart-btn dart-btn-primary">
+                                <i class="d_icon d_icon-busket"></i>
+                            </div>
+                        </form>
+                    </td>
+                    <td>
+                        {{ Number(item.price) != 0 ? Math.round(Number(item.price)).toLocaleString('ru') : Math.round(Number(item.new_price)).toLocaleString('ru') }} ₽
+                    </td>
+                    <td>
+                        {{ Number(item.price) != 0 ? Math.round((Number(item.old_price) - (Number(item.new_price))) / (Number(item.old_price) / 100)).toLocaleString('ru') : 0 }} %
+                    </td>
+                    <td>
+                        {{ Math.round(item.new_price).toLocaleString('ru') }} ₽
+                    </td>
+                    <td>
+                        {{ (Number(item.multiplicity) * Number(item.new_price)).toLocaleString('ru') }} ₽
+                    </td>
+                    <td>
+                        {{ item.multiplicity }}
+                    </td>
+                    <td>{{ item.remain }} шт.</td>
+                </tr>
+            </tbody>
             <!-- </tbody> -->
         </table>
     </div>
