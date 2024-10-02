@@ -48,7 +48,8 @@
                 </tr>
             </tbody> -->
 
-            <tbody class="kenost-table-border-bottom" v-for="item in items.products" v-bind:key="item.id">
+            <tbody class="kenost-table-border-bottom" v-for="(item, index) in items.products" v-bind:key="item.id">
+                {{ console.log(item) }}
                 <tr v-if="item.max != 0">
                     <td class="k-table__photo hidden-mobile-l">
                         <img class="k-table__image" :src="item.image" alt="" />
@@ -86,11 +87,19 @@
             <!-- </tbody> -->
         </table>
     </div>
+    <Dialog v-model:visible="this.modal_remain" header=" " :style="{ width: '340px' }">
+        <div class="kenost-not-produc">
+            <!-- <img src="../../../public/img/opt/not-products.png" alt=""> -->
+            <b>У нас нет столько товаров :(</b>
+            <p>Извините, но количество данного товара ограничено</p>
+            <div class="a-dart-btn a-dart-btn-primary" @click="this.modal_remain = false">Понятно</div>
+        </div>
+    </Dialog>
 </template>
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex';
 // import TableCatalogActionRow from './TableCatalogActionRow.vue'
-// import Dialog from 'primevue/dialog'
+import Dialog from 'primevue/dialog'
 // import InputSwitch from 'primevue/inputswitch'
 import Counter from './Counter.vue';
 import router from '../../router';
@@ -118,7 +127,8 @@ export default {
             marginValue: 1,
             modal_actions: false,
             actions_item: null,
-            value: 1
+            value: 1,
+            modal_remain: false
         };
     },
     methods: {
@@ -128,18 +138,26 @@ export default {
             this.$emit('updateBasket');
         },
         addBasket(id, value, storeid, index) {
-            const data = { action: 'basket/add', id: router.currentRoute._value.params.id, id_remain: id, value, store_id: storeid };
-            this.busket_from_api(data).then();
-            console.log(this.items.products[id]);
-            // eslint-disable-next-line vue/no-mutating-props
-            this.items.products[id].basket.availability = true;
-            this.$emit('updateBasket');
-            this.busket_from_api({
-                action: 'basket/get',
-                id: router.currentRoute._value.params.id,
-                warehouse: 'all'
-            });
-        },
+            console.log(id, value, storeid, index)
+			const data = {
+				action: "basket/add",
+				id: router.currentRoute._value.params.id,
+				id_remain: id,
+				value,
+				store_id: storeid,
+                actions: [this.items.action_id]
+			};
+			this.busket_from_api(data).then(() => {
+				this.busket_from_api({
+					action: "basket/get",
+					id: router.currentRoute._value.params.id,
+					warehouse: "all",
+				});
+			});
+			// eslint-disable-next-line vue/no-mutating-props
+			this.items.products[index].basket.availability = true;
+			this.$emit("updateBasket");
+		},
         getMinDelivery(stores) {
 			console.log(stores)
 
@@ -162,19 +180,8 @@ export default {
                 delivery_day: minDeliveryDate
             };
         },
-        addBasketComplect(complectid, value, storeid, index) {
-            const data = { action: 'basket/add', id: router.currentRoute._value.params.id, id_complect: complectid, value, store_id: storeid };
-            this.busket_from_api(data).then();
-            // eslint-disable-next-line vue/no-mutating-props
-            this.items.complects[complectid].products[0].basket.availability = true;
-            this.$emit('updateBasket');
-            this.busket_from_api({
-                action: 'basket/get',
-                id: router.currentRoute._value.params.id,
-                warehouse: 'all'
-            });
-        },
         ElemCount(object) {
+            console.log(object)
             if (object.value > Number(object.max)) {
                 this.modal_remain = true;
             } else {
@@ -186,7 +193,7 @@ export default {
                     id_remain: object.id,
                     value: object.value,
                     store_id: object.store_id,
-                    actions: object.item.actions_ids
+                    actions: [object.item.action_id]
                 };
                 this.busket_from_api(data).then();
                 this.$emit('updateBasket');
@@ -323,7 +330,7 @@ export default {
         }
     },
     mounted() {},
-    components: { Counter },
+    components: { Counter, Dialog },
     computed: {
         ...mapGetters(['basket'])
     }

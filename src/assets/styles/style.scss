@@ -3314,6 +3314,7 @@ p {
 
 // Basket
 .std-basket {
+	z-index: 1;
 	border: 1px solid #e2e2e2;
 	border-radius: 5px;
 
@@ -5287,6 +5288,31 @@ button.std-icon__wrapper {
 .p-radiobutton {
 	& + label {
 		cursor: pointer;
+	}
+}
+
+
+.form-signup {
+	@include flex-direction(column, 35px);
+
+	.logo {
+		margin-bottom: 10px;
+	}
+}
+.std-auth {
+	&__input-container-wrapper {
+		@include flex-direction(column, 8px);
+	}
+
+	&__input-container {
+		@include flex-direction(column, 12px);
+	}
+
+	&__input-label {
+		font-size: 20px;
+		font-weight: 400;
+		line-height: normal;
+		margin: 0;
 	}
 }
 

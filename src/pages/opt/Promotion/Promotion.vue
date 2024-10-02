@@ -45,10 +45,10 @@
                 </div>
             </div>
         </div>
-        <!-- <div class="d-col-map">
-      <Vendors :items="this.opt_vendors" />
-      <Basket @actionUpdate="actionUpdate" ref="childComponent" @toOrder="toOrder" />
-    </div> -->
+        <!-- <div class="d-col-map"> -->
+			<!-- <Vendors :items="this.opt_vendors" /> -->
+			<Basket @actionUpdate="actionUpdate" ref="childComponent" @toOrder="toOrder" />
+		<!-- </div> -->
     </div>
     <Toast />
     <!-- <OrderModal :show="show_order" @fromOrder="fromOrder" /> -->
