@@ -1,133 +1,133 @@
 <template>
-  <div class="analytics_auth">
-    <form class="form-signin" @submit.prevent="formSubmit">
-      <Toast />
-      <div class="logo text-center">
-        <img src="../../assets/images/logo.svg" alt="" width="200">
-      </div>
-      <input
-        type="text"
-        name="username"
-        class="dart-form-control"
-        placeholder="Логин"
-        required=""
-        v-model="form.email"
-      />
-      <input
-        type="password"
-        name="password"
-        class="dart-form-control"
-        placeholder="Пароль"
-        required=""
-        v-model="form.password"
-      />
-      <button class="dart-btn dart-btn-primary dart-btn-block align-items-center flex justify-content-center" :disabled="this.loading" type="submit"> <i v-if="this.loading" class="pi pi-spin pi-spinner" style="font-size: 14px"></i> <span>Войти</span></button>
-      <teleport to="body">
-        <custom-modal v-model="showForgotModal" @cancel="cancel">
-          <template v-slot:title>Восстановление пароля</template>
-          <v-forgot />
-        </custom-modal>
-      </teleport>
-      <div class="form-signin__desc">
-        <a href="" @click.prevent="showForgotModal = true">Забыли пароль?</a>
-      </div>
-      <div class="form-signin__copy">
-        <span>© MST, {{ getYear }}.</span>
-      </div>
-    </form>
-  </div>
+    <div class="analytics_auth">
+        <form class="form-signin" @submit.prevent="formSubmit">
+            <Toast />
+            <div class="logo text-center">
+                <img src="../../assets/images/logo.svg" alt="" width="200" />
+            </div>
+            <input type="text" name="username" class="dart-form-control" placeholder="Логин" required="" v-model="form.email" />
+            <input type="password" name="password" class="dart-form-control" placeholder="Пароль" required="" v-model="form.password" />
+            <div class="std-auth__button-container">
+                <button
+                    class="dart-btn dart-btn-primary dart-btn-block align-items-center flex justify-content-center"
+                    :disabled="this.loading"
+                    type="submit">
+                    <i v-if="this.loading" class="pi pi-spin pi-spinner" style="font-size: 14px"></i> <span>Войти</span>
+                </button>
+                <button
+                    class="dart-btn dart-btn-secondary dart-btn-block align-items-center flex justify-content-center"
+                    :disabled="this.loading"
+                    type="button"
+                    @click="this.setRegForm">
+                    <i v-if="this.loading" class="pi pi-spin pi-spinner" style="font-size: 14px"></i>
+                    <span>Зарегистрироваться</span>
+                </button>
+            </div>
+            <teleport to="body">
+                <custom-modal v-model="showForgotModal" @cancel="cancel">
+                    <template v-slot:title>Восстановление пароля</template>
+                    <v-forgot />
+                </custom-modal>
+            </teleport>
+            <div class="form-signin__desc">
+                <a href="" @click.prevent="showForgotModal = true">Забыли пароль?</a>
+            </div>
+            <div class="form-signin__copy">
+                <span>© MST, {{ getYear }}.</span>
+            </div>
+        </form>
+    </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
-import customModal from '../CustomModal.vue'
-import vForgot from './v-forgot.vue'
-import Toast from 'primevue/toast'
-import { sendMetrik } from '../../utils/metrika'
+import { mapActions } from 'vuex';
+import customModal from '../CustomModal.vue';
+import vForgot from './v-forgot.vue';
+import Toast from 'primevue/toast';
+import { sendMetrik } from '../../utils/metrika';
 
 export default {
-  name: 'auth-form',
-  data () {
-    return {
-      mode: 'signIn',
-      loading: false,
-      showForgotModal: false,
-      form: {
-        email: '',
-        password: ''
-      },
-      errors: []
-    }
-  },
-  computed: {
-    getYear () {
-      return new Date().getFullYear()
-    }
-  },
-  methods: {
-    sendMetrik: sendMetrik,
-    ...mapActions([
-      'org_get_from_api',
-    ]),
-    formSubmit () {
-      this.signIn()
+    name: 'auth-form',
+    data() {
+        return {
+            mode: 'signIn',
+            loading: false,
+            showForgotModal: false,
+            form: {
+                email: '',
+                password: ''
+            },
+            errors: []
+        };
     },
-    signIn () {
-      this.loading = true
-      this.$load(async () => {
-        const data = await this.$api.auth.signIn({
-          username: this.form.email,
-          password: this.form.password
-        })
-        if (data) {
-          if (data === 'technical error') {
-            this.$toast.add({ severity: 'info', summary: 'Техническая ошибка', detail: 'Попробуйте позже.', life: 3000 })
-            this.loading = false
-          } else {
-            localStorage.setItem('user', JSON.stringify(data.data.data))
-            this.$store.dispatch('user/setUser', data.data.data)
-            // this.$router.push({ name: 'home' })
-
-            // this.$router.push({ name: 'org', params: { id: '48' } })
-
-            const orgs = await this.org_get_from_api({
-              action: 'get/orgs'
-            })
-
-            if(orgs){
-                // console.log(orgs.data.data)
-                let role = localStorage.getItem("role");
-                //const res = await this.$router.push({ name: 'org', params: { id: orgs.data.data[0].id } })
-                this.sendMetrik("auth")
-                if(role == 1){
-                    const res = await this.$router.push({ name: 'retail_orders', params: { id: orgs.data.data[0].id } })
-                }else if(role == 2){
-                    const res = await this.$router.push({ name: 'statistics', params: { id: orgs.data.data[0].id } })
-                }else {
-                    const res = await this.$router.push({ name: 'purchases_home', params: { id: orgs.data.data[0].id } })
-                }
-
-                location.reload();
-            }
-            
-          }
-        } else {
-          this.$toast.add({ severity: 'info', summary: 'Вход запрещен', detail: 'Введен некорректный логин или пароль.', life: 3000 })
-          this.loading = false
+    computed: {
+        getYear() {
+            return new Date().getFullYear();
         }
-      })
     },
-    cancel (close) {
-      close()
+    methods: {
+        sendMetrik: sendMetrik,
+        ...mapActions(['org_get_from_api']),
+        formSubmit() {
+            this.signIn();
+        },
+        signIn() {
+            this.loading = true;
+            this.$load(async () => {
+                const data = await this.$api.auth.signIn({
+                    username: this.form.email,
+                    password: this.form.password
+                });
+                if (data) {
+                    if (data === 'technical error') {
+                        this.$toast.add({ severity: 'info', summary: 'Техническая ошибка', detail: 'Попробуйте позже.', life: 3000 });
+                        this.loading = false;
+                    } else {
+                        localStorage.setItem('user', JSON.stringify(data.data.data));
+                        this.$store.dispatch('user/setUser', data.data.data);
+                        // this.$router.push({ name: 'home' })
+
+                        // this.$router.push({ name: 'org', params: { id: '48' } })
+
+                        const orgs = await this.org_get_from_api({
+                            action: 'get/orgs'
+                        });
+
+                        if (orgs) {
+                            // console.log(orgs.data.data)
+                            let role = localStorage.getItem('role');
+                            //const res = await this.$router.push({ name: 'org', params: { id: orgs.data.data[0].id } })
+                            this.sendMetrik('auth');
+                            if (role == 1) {
+                                const res = await this.$router.push({ name: 'retail_orders', params: { id: orgs.data.data[0].id } });
+                            } else if (role == 2) {
+                                const res = await this.$router.push({ name: 'statistics', params: { id: orgs.data.data[0].id } });
+                            } else {
+                                const res = await this.$router.push({ name: 'purchases_home', params: { id: orgs.data.data[0].id } });
+                            }
+
+                            location.reload();
+                        }
+                    }
+                } else {
+                    this.$toast.add({ severity: 'info', summary: 'Вход запрещен', detail: 'Введен некорректный логин или пароль.', life: 3000 });
+                    this.loading = false;
+                }
+            });
+        },
+        cancel(close) {
+            close();
+        },
+        setRegForm() {
+            this.$emit('setRegForm', true);
+        }
+    },
+    components: {
+        customModal,
+        vForgot,
+        Toast
     }
-  },
-  components: {
-    customModal,
-    vForgot,
-    Toast
-  }
-}
+};
 </script>
 
-<style lang="scss">
-</style>
+<style lang="scss"></style>
