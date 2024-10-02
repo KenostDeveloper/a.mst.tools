@@ -354,7 +354,7 @@
                     <img :src="item.image">
                     <div class="table-kenost__product-text">
                       <p>{{ item.name }}</p>
-                      <span>{{item.article}}</span>
+                      <span>{{item.article}} </span>
                     </div>
                   </td>
                   <td>

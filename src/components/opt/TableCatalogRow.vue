@@ -543,6 +543,55 @@ export default {
                 }
             }
 
+<<<<<<< HEAD
+			return {
+				delivery: minDelivery,
+				delivery_day: minDeliveryDate,
+			};
+		},
+		addBasket(id, value, storeid, index) {
+			const data = {
+				action: "basket/add",
+				id: router.currentRoute._value.params.id,
+				id_remain: id,
+				value,
+				store_id: storeid,
+			};
+			this.busket_from_api(data).then(() => {
+				this.busket_from_api({
+					action: "basket/get",
+					id: router.currentRoute._value.params.id,
+					warehouse: "all",
+				});
+			});
+			// eslint-disable-next-line vue/no-mutating-props
+			this.items.stores[index].basket.availability = true;
+			this.$emit("updateBasket");
+		},
+		addBasketComplect(complectid, value, storeid, index) {
+			const data = {
+				action: "basket/add",
+				id: router.currentRoute._value.params.id,
+				id_complect: complectid,
+				value,
+				store_id: storeid,
+			};
+			this.busket_from_api(data).then(() => {
+				this.busket_from_api({
+					action: "basket/get",
+					id: router.currentRoute._value.params.id,
+					warehouse: "all",
+				});
+			});
+			// eslint-disable-next-line vue/no-mutating-props
+			this.items.complects[index][0].basket.availability = true;
+			this.$emit("updateBasket");
+		},
+		ElemCount(object) {
+			console.log(object)
+			// debounce(() => {
+				if (object.value == object.min) return;
+=======
             return {
                 delivery: minDelivery,
                 delivery_day: minDeliveryDate
@@ -589,6 +638,7 @@ export default {
         ElemCount(object) {
             // debounce(() => {
             if (object.value == object.min) return;
+>>>>>>> 46c9dc7deb50857a0518d6ca64475dadbdf619a2
 
             if (object.value > Number(object.max)) {
                 this.modal_remain = true;

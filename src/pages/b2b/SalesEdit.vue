@@ -18,7 +18,15 @@
               <span class="ktitle">Склад</span>
               <!-- <label for="name">Введите наименование, которое будет отражать смысл вашей акции</label> -->
               <!-- <input v-model="form.name" type="text" name="name" placeholder="Укажите склад акции" class="dart-form-control"> -->
-              <Dropdown
+              <!-- <Dropdown
+                @change="updateProducts"
+                v-model="this.form.store_id"
+                :options="this.stores"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Выберите склад"
+              /> -->
+              <MultiSelect
                 @change="updateProducts"
                 v-model="this.form.store_id"
                 :options="this.stores"
@@ -434,7 +442,7 @@
                               <img :src="item.image" alt="">
                               <div class="PickList__product-info">
                               <div class="PickList__name">{{item.name}}</div>
-                              <div class="PickList__article">{{item.article}}</div>
+                              <div class="PickList__article">{{item.article}} <span class="store-name-b2b" :style="{'background': item.color}">{{ item.store }}</span></div>
                               <div class="PickList__price">{{Number(item.price).toFixed(0)}} ₽</div>
                               </div>
                               <div @click="select(item.id)" class="PickList__select"><i class="pi pi-angle-right"></i></div>
@@ -467,7 +475,7 @@
                             <div class="PickList__info">
                             <div class="PickList__product-info off">
                                 <div class="PickList__name">{{item.name}}</div>
-                                <div class="PickList__article">{{item.article}}</div>
+                                <div class="PickList__article">{{item.article}} <span class="store-name-b2b" :style="{'background': item.color}">{{ item.store }}</span></div>
                                 <div class="PickList__price">{{Number(item.price).toFixed(0)}} ₽</div>
                             </div>
                             </div>
@@ -586,7 +594,7 @@
                             <img :src="item.image">
                             <div class="table-kenost__product-text">
                               <p>{{ item.name }}</p>
-                              <span>{{item.article}}</span>
+                              <span>{{item.article}} <span class="store-name-b2b" :style="{'background': item.color}">{{ item.store }}</span></span>
                             </div>
                           </td>
                           <td>
@@ -1199,7 +1207,7 @@ export default {
     },
     updateProducts () {
       const data = {
-        storeid: [this.form.store_id],
+        storeid: this.form.store_id,
         filter: this.filter,
         filterselected: this.filter_table,
         selected: Object.keys(this.selected),
@@ -1220,7 +1228,7 @@ export default {
       this.selectedGift = {}
 
       const dataGift = {
-        storeid: [this.form.store_id],
+        storeid: this.form.store_id,
         filter: this.filterGift,
         filterselected: this.filter_table,
         selected: Object.keys(this.selected),
@@ -1323,7 +1331,7 @@ export default {
           }
 
           const data = {
-            storeid: [this.form.store_id],
+            storeid: this.form.store_id,
             filter: this.filter,
             filterselected: this.filter_table,
             selected: Object.keys(this.selected),
@@ -1403,7 +1411,7 @@ export default {
       this.page_selected = 1
       this.page = 1
       const data = {
-        storeid: [this.form.store_id],
+        storeid: this.form.store_id,
         filter: this.filter,
         filterselected: this.filter_table,
         pageselected: this.page_selected,
@@ -1419,7 +1427,7 @@ export default {
     setFilterGift () {
       this.pageGift = 1
       const data = {
-        storeid: [this.form.store_id],
+        storeid: this.form.store_id,
         filter: this.filterGift,
         filterselected: this.filter_table,
         pageselected: this.page_selected,
@@ -1434,7 +1442,7 @@ export default {
     },
     setAllProducts (is) {
       const data = {
-        storeid: [this.form.store_id],
+        storeid: this.form.store_id,
         filter: this.filter,
         filterselected: this.filter_table,
         pageselected: this.page_selected,
@@ -1648,7 +1656,7 @@ export default {
         this.selected[product.id] = product
         this.products = this.products.filter((r) => r.id !== id)
         const data = {
-          storeid: [this.form.store_id],
+          storeid: this.form.store_id,
           filter: this.filter,
           filterselected: this.filter_table,
           selected: Object.keys(this.selected),
@@ -1676,7 +1684,7 @@ export default {
       // console.log(this.selectedGift)
       this.productsGift = this.productsGift.filter((r) => r.id !== id)
       const data = {
-        storeid: [this.form.store_id],
+        storeid: this.form.store_id,
         filter: this.filterGift,
         filterselected: this.filter_table,
         selected: Object.keys(this.selectedGift),
@@ -1706,7 +1714,7 @@ export default {
 
       // this.selected = this.selected.filter((r) => r.id !== id)
       const data = {
-        storeid: [this.form.store_id],
+        storeid: this.form.store_id,
         filter: this.filterGift,
         filterselected: this.filter_table,
         selected: Object.keys(this.selected),
@@ -1736,7 +1744,7 @@ export default {
 
       // this.selected = this.selected.filter((r) => r.id !== id)
       const data = {
-        storeid: [this.form.store_id],
+        storeid: this.form.store_id,
         filter: this.filter,
         filterselected: this.filter_table,
         selected: Object.keys(this.selected),
@@ -1777,7 +1785,7 @@ export default {
     pagClickCallback (pageNum) {
       this.page = pageNum
       const data = {
-        storeid: [this.form.store_id],
+        storeid: this.form.store_id,
         filter: this.filter,
         filterselected: this.filter_table,
         selected: Object.keys(this.selected),
@@ -1792,7 +1800,7 @@ export default {
     pagClickCallbackGift (pageNum) {
       this.pageGift = pageNum
       const data = {
-        storeid: [this.form.store_id],
+        storeid: this.form.store_id,
         filter: this.filterGift,
         filterselected: this.filter_table,
         selected: Object.keys(this.selectedGift),
@@ -1808,7 +1816,7 @@ export default {
     pagClickCallbackSelect (pageNum) {
       this.page_selected = pageNum
       const data = {
-        storeid: [this.form.store_id],
+        storeid: this.form.store_id,
         filter: this.filter,
         filterselected: this.filter_table,
         selected: Object.keys(this.selected),
@@ -1943,7 +1951,7 @@ export default {
     }
   },
   mounted () {
-    this.get_available_products_from_api({ storeid: [this.form.store_id], filter: '', selected: ['0'], page: this.page }).then((res) => {
+    this.get_available_products_from_api({ storeid: this.form.store_id, filter: '', selected: ['0'], page: this.page }).then((res) => {
       if (this.available_products) {
         this.products = this.available_products?.products
       }
@@ -2126,7 +2134,7 @@ export default {
         }
 
         if (newVal.store_id) {
-          this.form.store_id = newVal.store_id.toString()
+          this.form.store_id = newVal.store_id
 
           this.opt_get_prices({
             action: 'get/type/prices',
@@ -2235,7 +2243,7 @@ export default {
         })
 
         const data = {
-          storeid: [this.form.store_id],
+          storeid: this.form.store_id,
           filter: this.filter,
           filterselected: this.filter_table,
           selected: Object.keys(this.selected),
