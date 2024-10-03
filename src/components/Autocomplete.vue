@@ -1,6 +1,6 @@
 <template>
-	<div ref="autocomplete" class="autocomplete">
-		<!-- <ul v-if="this.selections.length" class="autocomplete__selections">
+    <div ref="autocomplete" class="autocomplete">
+        <!-- <ul v-if="this.selections.length" class="autocomplete__selections">
 			<li v-for="(selection, index) in selections" class="autocomplete__selection">
 				<span class="autocomplete__selection-name">{{ selection.value }}</span>
 				<svg
@@ -23,272 +23,352 @@
 				</svg>
 			</li>
 		</ul> -->
-		<input
-			@focus="getData"
-			@blur="this.isActive = false"
-			@input="getData"
-			v-model="value"
-			type="text"
-			class="autocomplete__input"
-			:placeholder="placeholder"
-			:required="required"
-		/>
+        <input
+            @focus="getData"
+            @blur="this.isActive = false"
+            @input="getData"
+            v-model="value"
+            type="text"
+            class="autocomplete__input"
+            :placeholder="placeholder"
+            :required="required" />
 
-		<ul ref="suggestions" class="autocomplete__suggestions" :class="{ active: this.isActive }">
-			<li
-				v-for="suggestion in suggestions"
-				@click="addSelection(suggestion)"
-				class="autocomplete__suggestion"
-			>
-				{{ suggestion.value }}
-				<!-- {{ suggestion }} -->
-			</li>
-		</ul>
-	</div>
+        <ul ref="suggestions" class="autocomplete__suggestions" :class="{ active: this.isActive }">
+            <li v-for="suggestion in suggestions" @click="addSelection(suggestion)" class="autocomplete__suggestion">
+                {{ suggestion.value }}
+                <!-- {{ suggestion }} -->
+            </li>
+        </ul>
+    </div>
 </template>
 
 <script>
-import axios from "axios";
+import axios from 'axios';
 
 export default {
-	name: "Autocomplete",
-	props: {
-		type: {
-			type: String,
-			default: "city",
-		},
-		placeholder: {
-			type: String,
-		},
-		required: {
-			type: Boolean,
-			default: false,
-		},
-		selections: {
-			type: Array,
-			default: [],
-		},
-	},
-	data() {
-		return {
-			inputTimer: null,
-			isActive: false,
-			value: "",
-			suggestions: [],
-		};
-	},
-	methods: {
-		getData() {
-			let funcChanged = null;
+    name: 'Autocomplete',
+    props: {
+        modelValue: {
+            type: String,
+            default: ''
+        },
+        type: {
+            type: String,
+            default: 'city'
+        },
+        placeholder: {
+            type: String
+        },
+        required: {
+            type: Boolean,
+            default: false
+        },
+        selectionType: {
+            type: String,
+            default: 'multiple'
+        },
+        selections: {
+            type: Array,
+            default: []
+        },
+    },
+    data() {
+        return {
+            inputTimer: null,
+            isActive: false,
+            value: this.modelValue,
+            suggestions: []
+        };
+    },
+    methods: {
+        async getData() {
+            let funcChanged = null;
 
-			switch (this.type) {
-				case "city": {
-					funcChanged = this.getCities;
-				}
-			}
+            console.log("Type", this.type);
 
-			this.debounce(funcChanged, 300);
-		},
-		async getCities() {
-			const citiesSuggestions = await axios.post(
-				"https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address",
-				{
-					query: this.value,
-					from_bound: { value: "city" },
-					to_bound: { value: "settlement" },
-				},
-				{
-					headers: {
-						Authorization: "Token 34e9caeb5d40781585d9b5cb3b156199fbaca4e2",
-					},
-				}
-			);
+            switch (this.type) {
+                case 'city': {
+                    funcChanged = this.getCities;
+                    break;
+                }
+                case 'company': {
+                    console.log("Change company");
+                    funcChanged = this.getCompanies;
+                    break;
+                }
+                case 'address': {
+                    console.log("Change adress");
+                    funcChanged = this.getAddress;
+                    break;
+                }
+            }
 
-			this.suggestions = this.filterCities(citiesSuggestions.data?.suggestions);
+            this.debounce(await funcChanged, 300);
+        },
+        async getCities() {
+            const citiesSuggestions = await axios.post(
+                'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address',
+                {
+                    query: this.value,
+                    from_bound: { value: 'city' },
+                    to_bound: { value: 'settlement' }
+                },
+                {
+                    headers: {
+                        Authorization: 'Token 34e9caeb5d40781585d9b5cb3b156199fbaca4e2'
+                    }
+                }
+            );
 
-			if (this.suggestions.length) {
-				this.isActive = true;
-			} else {
-				this.isActive = false;
-			}
-		},
+            this.suggestions = this.filterCities(citiesSuggestions.data?.suggestions);
 
-		filterCities(cities) {
-			return cities?.reduce((filteredCities, city) => {
-				const citySplitted = city.value.split(", ");
+            if (this.suggestions.length) {
+                this.isActive = true;
+            } else {
+                this.isActive = false;
+            }
+        },
+        async getCompanies() {
+            const companiesResponse = await axios.post(
+                'https://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/party',
+                {
+                    query: this.value
+                },
+                {
+                    headers: {
+                        Authorization: 'Token 34e9caeb5d40781585d9b5cb3b156199fbaca4e2'
+                    }
+                }
+            );
 
-				citySplitted.forEach((currentCity) => {
-					const filteredCity = this.getAvailableCity(filteredCities, currentCity);
+            this.suggestions = companiesResponse.data?.suggestions;
 
-					if (filteredCity) {
-						filteredCities.push(city);
-					}
-				});
+            console.log("Companies suggestions", this.suggestions);
 
-				return filteredCities;
-			}, []);
-		},
+            if (this.suggestions.length) {
+                this.isActive = true;
+            } else {
+                this.isActive = false;
+            }
+        },
+        async getAddress() {
+            const response = await axios.post(
+                'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address',
+                {
+                    query: this.value
+                },
+                {
+                    headers: {
+                        Authorization: 'Token 34e9caeb5d40781585d9b5cb3b156199fbaca4e2'
+                    }
+                }
+            );
+			
+            this.suggestions = response.data?.suggestions;
 
-		getAvailableCity(filteredCities, city) {
-			return city;
-		},
+            console.log("Address suggestions", this.suggestions);
 
-		removeSelection(index) {
-			const tempSelections = this.selections;
-			tempSelections.splice(index, 1);
+            if (this.suggestions.length) {
+                this.isActive = true;
+            } else {
+                this.isActive = false;
+            }
+        },
 
-			this.$emit("setSelections", tempSelections);
-		},
-		addSelection(selection) {
-			const tempSelections = this.selections;
+        filterCities(cities) {
+            return cities?.reduce((filteredCities, city) => {
+                const citySplitted = city.value.split(', ');
 
-			tempSelections.push(selection);
+                citySplitted.forEach((currentCity) => {
+                    const filteredCity = this.getAvailableCity(filteredCities, currentCity);
 
-			this.isActive = false;
-			this.value = "";
+                    if (filteredCity) {
+                        filteredCities.push(city);
+                    }
+                });
 
-			this.$emit("setSelections", tempSelections);
-		},
-		debounce(func, delay) {
-			clearTimeout(this.inputTimer);
-			this.inputTimer = setTimeout(func, delay);
-		},
-		suggestionsListToInput() {
-			const suggestions = this.$refs.suggestions;
-			const autocomplete = this.$refs.autocomplete;
+                return filteredCities;
+            }, []);
+        },
 
-			// Позиционирование списка относительно инпута
-			suggestions.style.width = autocomplete.clientWidth + "px";
-			suggestions.style.top = autocomplete.offsetTop + autocomplete.clientHeight + 10 + "px";
-			suggestions.style.left = autocomplete.offsetLeft + "px";
-		},
-	},
-	mounted() {
-		this.getData();
-		this.suggestionsListToInput();
-	},
-	watch: {
-		isActive(newVal) {
-			if(newVal) {
-				this.suggestionsListToInput();
-			}
-		}
-	}
+        getAvailableCity(filteredCities, city) {
+            return city;
+        },
+
+        removeSelection(index) {
+            const tempSelections = this.selections;
+            tempSelections.splice(index, 1);
+
+            this.$emit('setSelections', tempSelections);
+        },
+        addSelection(selection) {
+            if (this.selectionType == 'multiple') {
+                const tempSelections = this.selections;
+
+                tempSelections.push(selection);
+
+                this.isActive = false;
+
+                this.value = '';
+                this.$emit('setSelections', tempSelections);
+
+				return;
+            }
+
+            if (this.selectionType == 'single') {
+                this.$emit('setSelection', selection);
+                this.isActive = false;
+
+				return;
+            }
+        },
+        debounce(func, delay) {
+            clearTimeout(this.inputTimer);
+            this.inputTimer = setTimeout(func, delay);
+        },
+        suggestionsListToInput() {
+            const suggestions = this.$refs.suggestions;
+            const autocomplete = this.$refs.autocomplete;
+
+            // Позиционирование списка относительно инпута
+            suggestions.style.width = autocomplete.clientWidth + 'px';
+            suggestions.style.top = autocomplete.offsetTop + autocomplete.clientHeight + 10 + 'px';
+            suggestions.style.left = autocomplete.offsetLeft + 'px';
+        }
+    },
+    mounted() {
+        // this.getData();
+        // this.suggestionsListToInput();
+    },
+    watch: {
+        modelValue: {
+            handler(newVal) {
+                this.value = newVal;
+            },
+            deep: true
+        },
+        value: {
+            handler(newVal) {
+                this.$emit('update:modelValue', newVal);
+            },
+            deep: true
+        }
+    }
 };
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/styles/mixins.scss";
+@import '../assets/styles/mixins.scss';
 
 .autocomplete {
-	@include flex($align: center, $gap: 15px);
+    @include flex($align: center, $gap: 15px);
 
-	& {
-		flex-wrap: wrap;
-		max-width: 100%;
+    & {
+        flex-wrap: wrap;
+        max-width: 100%;
 
-		background-color: #fff;
-		border: 1px solid #e2e2e2;
-		border-radius: 5px;
+        background-color: #fff;
+        border: 1px solid #e2e2e2;
+        border-radius: 5px;
 
-		color: #282828;
-		font-size: 14px;
-		font-weight: 400;
-		line-height: 1.06;
-		letter-spacing: 0.25px;
-		width: 100%;
-		padding: 10px 15px;
+        color: #282828;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 1.06;
+        letter-spacing: 0.25px;
+        width: 100%;
+        padding: 10px 15px;
 
-		// position: relative;
-	}
+        position: relative;
+    }
 
-	&__selections,
-	&__suggestions {
-		margin: 0;
-		padding: 0;
-	}
+    &__selections,
+    &__suggestions {
+        margin: 0;
+        padding: 0;
+    }
 
-	&__selections {
-		@include flex($align: center, $gap: 8px);
+    &__selections {
+        @include flex($align: center, $gap: 8px);
 
-		& {
-			flex-wrap: wrap;
-		}
-	}
+        & {
+            flex-wrap: wrap;
+        }
+    }
 
-	&__selection {
-		@include flex($justify: center, $align: center, $gap: 8px);
+    &__selection {
+        @include flex($justify: center, $align: center, $gap: 8px);
 
-		& {
-			background-color: #dee2e6;
-			border-radius: 16px;
-			color: #495057;
+        & {
+            background-color: #dee2e6;
+            border-radius: 16px;
+            color: #495057;
 
-			padding: 6px 12px;
-		}
+            padding: 6px 12px;
+        }
 
-		svg {
-			cursor: pointer;
-		}
-	}
+        svg {
+            cursor: pointer;
+        }
+    }
 
-	&__input {
-		flex-basis: 0;
-		flex-grow: 1;
+    &__input {
+        flex-basis: 0;
+        flex-grow: 1;
 
-		border: none;
-		outline: none;
-		color: #495057;
-		font-size: 16px;
+        border: none;
+        outline: none;
+        color: #495057;
+        font-size: 16px;
 
-		margin: 0;
-		padding: 0;
+        margin: 0;
+        padding: 0;
 
-		&::placeholder {
-			color: #6c757d;
-		}
-	}
+        &::placeholder {
+            color: #6c757d;
+        }
+    }
 
-	&__suggestions {
-		@include scrollbar;
-		@include flex($direction: column);
+    &__suggestions {
+        @include scrollbar;
+        @include flex($direction: column);
 
-		& {
-			background-color: #fff;
-			border-radius: 5px;
-			box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.3);
+        & {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.3);
 
-			width: 100%;
-			max-height: 0px;
+            width: 100%;
+            max-height: 0px;
 
-			overflow-y: auto;
+            overflow-y: auto;
 
-			position: absolute;
-			// top: calc(100% + 2px);
-			// left: 0;
-			transition-duration: 0.5s;
-			z-index: 1110;
-		}
+            position: absolute;
+            top: calc(100% + 2px);
+            left: 0;
+            transition-duration: 0.5s;
+            z-index: 1110;
+        }
 
-		&.active {
-			max-height: 200px;
-			padding-top: 0;
-		}
-	}
+        &.active {
+            max-height: 200px;
+            padding-top: 0;
+        }
+    }
 
-	&__suggestion {
-		@include flex($align: center);
+    &__suggestion {
+        @include flex($align: center);
 
-		& {
-			cursor: pointer;
-			width: 100%;
-			padding: 15px 20px;
-			transition-duration: 0.3s;
-		}
+        & {
+            cursor: pointer;
+            width: 100%;
+            padding: 15px 20px;
+            transition-duration: 0.3s;
+        }
 
-		&:hover {
-			background-color: #e9ecef;
-		}
-	}
+        &:hover {
+            background-color: #e9ecef;
+        }
+    }
 }
 </style>
