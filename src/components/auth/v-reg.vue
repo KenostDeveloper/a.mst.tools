@@ -1,6 +1,6 @@
 <template>
     <div class="analytics_auth analytics_reg">
-        <form class="form-signin form-signup" @submit.prevent="formSubmit">
+        <form class="form-signup" @submit.prevent="formSubmit">
             <Toast />
             <div class="logo text-center">
                 <img src="../../assets/images/logo.svg" alt="" width="200" />
