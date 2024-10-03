@@ -5494,6 +5494,14 @@ button.std-icon__wrapper {
 		}
 	}
 
+	&__input {
+		background: #FFF !important;
+		border-radius: 5px !important;
+		border: 1px solid #E2E2E2 !important;
+		height: 47px !important;
+		padding: 8px 16px !important;
+	}
+
 	.std-auth__button {
 		font-size: 14px !important;
 		font-weight: 400;

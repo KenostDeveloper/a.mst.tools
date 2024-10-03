@@ -79,7 +79,7 @@
                         <input
                             type="text"
                             v-model="this.orgprofile[field.name]"
-                            class="dart-form-control"
+                            class="dart-form-control std-create-clients__input"
                             :name="field.name"
                             :placeholder="field.placeholder" />
                     </div>
@@ -89,10 +89,18 @@
                 <span class="ktitle mb-3">Данные компании</span>
                 <div class="kenost-form-grid">
                     <div class="form_input_group w-50">
-                        <input type="text" v-model="this.form.company.name" class="dart-form-control" placeholder="Наименование организации" />
+                        <input type="text" v-model="this.form.company.data.value" class="dart-form-control std-create-clients__input" placeholder="Наименование организации" />
                     </div>
                     <div class="form_input_group w-50">
-                        <input type="text" v-model="this.form.company.inn" class="dart-form-control" placeholder="ИНН" />
+                        <Autocomplete
+                            name="inn"
+                            class="dart-form-control std-create-clients__input"
+                            type="company"
+                            selectionType="single"
+                            placeholder="ИНН"
+                            required
+                            v-model="form.company.inn"
+                            @setSelection="form.company.data = $event" />
                     </div>
                 </div>
                 <div class="form_input_group w-50" v-for="(warehouse, index) in this.form.company.warehouses" :key="index">
@@ -129,6 +137,7 @@ import Dialog from 'primevue/dialog';
 import Accordion from '../components/Accordion.vue';
 import Breadcrumbs from '../components/Breadcrumbs.vue';
 import AddAddress from '../components/auth/AddAddress.vue';
+import Autocomplete from '../components/Autocomplete.vue';
 
 export default {
     name: 'ProfileCreateClient',
@@ -177,7 +186,7 @@ export default {
                     ]
                 },
                 company: {
-                    name: '',
+                    data: { value: '' },
                     inn: '',
                     warehouses: [{ value: '' }]
                 }
@@ -259,7 +268,8 @@ export default {
         DropZone,
         Accordion,
         Breadcrumbs,
-        AddAddress
+        AddAddress,
+        Autocomplete
     },
     computed: {
         ...mapGetters(['org_profile'])
