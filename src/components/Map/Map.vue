@@ -71,12 +71,12 @@ const onClick = (object, event) => {
 
 const updateCoordinates = (coordinates) => {
 	defaultMarker.value?.update({
-		coordinates: props.coordinates
+		coordinates: coordinates
 			? [
-					+coordinates.response.GeoObjectCollection.featureMember[0].GeoObject.Point.pos.split(
+					+coordinates.response?.GeoObjectCollection?.featureMember[0]?.GeoObject?.Point?.pos.split(
 						" "
 					)[0],
-					+coordinates.response.GeoObjectCollection.featureMember[0].GeoObject.Point.pos.split(
+					+coordinates.response?.GeoObjectCollection?.featureMember[0]?.GeoObject?.Point?.pos.split(
 						" "
 					)[1],
 			  ]
@@ -108,8 +108,7 @@ const refreshGeo = async () => {
 
 	address.value =
 		response.data.response.GeoObjectCollection.featureMember[0].GeoObject.metaDataProperty.GeocoderMetaData.text;
-
-	emit('update:modelValue', address.value);
+	emit('setMapAddress', address.value);
 };
 
 const debounce = (func, delay) => {

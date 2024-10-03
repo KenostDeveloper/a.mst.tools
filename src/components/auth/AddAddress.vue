@@ -1,7 +1,7 @@
 <template>
     <div class="std-auth__input-container">
         <Autocomplete
-            v-model="address"
+            v-model="this.address"
             placeholder="Адрес доставки"
             name="address"
             class="dart-form-control std-auth__input"
@@ -9,7 +9,7 @@
             selectionType="single"
             required
             @setSelection="setSelection" />
-        <Map ref="mapRef" class="std-auth__map" v-model="address" :coordinates="coordinates" />
+        <Map ref="mapRef" class="std-auth__map" v-model="this.address" :coordinates="coordinates" @setMapAddress="mapAddress = $event" />
     </div>
 </template>
 
@@ -29,6 +29,7 @@ export default {
     data() {
         return {
             address: this.modelValue,
+            mapAddress: this.modelValue,
             coordindates: ''
         };
     },
@@ -55,7 +56,7 @@ export default {
 
             if (response.status !== 200) return;
 
-            this.coordinates = response.data?.response?.GeoObjectCollection?.featureMember[0]?.GeoObject?.Point?.pos;
+            this.coordinates = response.data?.response?.GeoObjectCollection?.featureMember[0]?.GeoObject?.Point?.pos?.split(' ');
             this.updateCoordinates(response.data);
         },
         updateCoordinates(coordinates) {
@@ -66,15 +67,21 @@ export default {
         this.setCoordinates();
     },
     watch: {
-        modelValue: {
+        // modelValue: {
+        //     handler(newVal) {
+        //         this.address = newVal;
+        //     },
+        //     deep: true
+        // },
+        // address: {
+        //     handler(newVal) {
+        //         this.$emit('update:modelValue', newVal);
+        //     },
+        //     deep: true
+        // }
+        mapAddress: {
             handler(newVal) {
-                this.address = newVal;
-            },
-            deep: true
-        },
-        address: {
-            handler(newVal) {
-                this.$emit('setDeliveryAddress', newVal);
+                this.$emit('update:modelValue', newVal);
             },
             deep: true
         }

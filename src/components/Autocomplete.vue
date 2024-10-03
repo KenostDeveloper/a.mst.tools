@@ -228,6 +228,14 @@ export default {
     mounted() {
         // this.getData();
         // this.suggestionsListToInput();
+    },
+    watch: {
+        value: {
+            handler(newVal) {
+                this.$emit('update:modelValue', newVal);
+            },
+            deep: true
+        }
     }
 };
 </script>
