@@ -81,22 +81,29 @@ export default {
         };
     },
     methods: {
-        getData() {
+        async getData() {
             let funcChanged = null;
+
+            console.log("Type", this.type);
 
             switch (this.type) {
                 case 'city': {
                     funcChanged = this.getCities;
+                    break;
                 }
                 case 'company': {
+                    console.log("Change company");
                     funcChanged = this.getCompanies;
+                    break;
                 }
                 case 'address': {
+                    console.log("Change adress");
                     funcChanged = this.getAddress;
+                    break;
                 }
             }
 
-            this.debounce(funcChanged, 300);
+            this.debounce(await funcChanged, 300);
         },
         async getCities() {
             const citiesSuggestions = await axios.post(
@@ -136,6 +143,8 @@ export default {
 
             this.suggestions = companiesResponse.data?.suggestions;
 
+            console.log("Companies suggestions", this.suggestions);
+
             if (this.suggestions.length) {
                 this.isActive = true;
             } else {
@@ -156,6 +165,8 @@ export default {
             );
 			
             this.suggestions = response.data?.suggestions;
+
+            console.log("Address suggestions", this.suggestions);
 
             if (this.suggestions.length) {
                 this.isActive = true;

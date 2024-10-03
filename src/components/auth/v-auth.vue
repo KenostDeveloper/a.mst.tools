@@ -1,21 +1,23 @@
 <template>
     <div class="analytics_auth">
-        <form class="form-signin" @submit.prevent="formSubmit">
+        <form class="form-signin form-signup" @submit.prevent="formSubmit">
             <Toast />
             <div class="logo text-center">
                 <img src="../../assets/images/logo.svg" alt="" width="200" />
             </div>
-            <input type="text" name="username" class="dart-form-control" placeholder="Логин" required="" v-model="form.email" />
-            <input type="password" name="password" class="dart-form-control" placeholder="Пароль" required="" v-model="form.password" />
+            <div class="std-auth__input-container">
+                <input type="text" name="username" class="dart-form-control std-auth__input" placeholder="Логин" required="" v-model="form.email" />
+                <input type="password" name="password" class="dart-form-control std-auth__input" placeholder="Пароль" required="" v-model="form.password" />
+            </div>
             <div class="std-auth__button-container">
                 <button
-                    class="dart-btn dart-btn-primary dart-btn-block align-items-center flex justify-content-center"
+                    class="dart-btn dart-btn-primary dart-btn-block align-items-center flex justify-content-center std-auth__button"
                     :disabled="this.loading"
                     type="submit">
                     <i v-if="this.loading" class="pi pi-spin pi-spinner" style="font-size: 14px"></i> <span>Войти</span>
                 </button>
                 <button
-                    class="dart-btn dart-btn-secondary dart-btn-block align-items-center flex justify-content-center"
+                    class="dart-btn dart-btn-secondary dart-btn-block align-items-center flex justify-content-center std-auth__button  std-auth__button--secondary"
                     :disabled="this.loading"
                     type="button"
                     @click="this.setRegForm">
