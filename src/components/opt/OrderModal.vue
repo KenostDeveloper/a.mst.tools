@@ -18,213 +18,226 @@
                 <p>В ближайшее время с Вами свяжутся наши менеджеры.</p>
                 <img v-if="order" class="k-order-img" src="../../assets/images/order.png" alt="">
             </div>
-            <div class="k-order__orders" v-else>
-                <div v-for="(warehouse, key) in this.basket.basket" v-bind:key="warehouse.id">
-                    <div class="k-order__order" v-for="store in warehouse.stores" v-bind:key="store.id">
-                        <h3>Склад: «{{ this.basket.warehouses.find((el) => el.id == key).name_short }}», {{ this.basket.warehouses.find((el) => el.id == key).address_short }}</h3>
-                        <div class="k-order__shop">
-                            <!-- <img src="../../assets/img/ava.png" alt=""> -->
-                            <p :style="{'background': store.color}">{{store.name}}</p>
-                        </div>
-                        <div v-for="item in store.products" v-bind:key="item.id">
-                            <div class="k-order__product" v-for="product in item.basket" v-bind:key="product.id">
-                                <img class="k-order__product-img" :src="item.image" :alt="product.name">
-                                <div class="k-order__product-info">
-                                    <div class="k-order__main-info">
-                                        <p>{{item.name}}</p>
-                                        <div class="k-order__actions">
-                                            <div class="table-actions">
-                                                <!-- 'red': action?.conflicts?.items[action.action_id]?.sales_conflicts -->
-                                                <div class="table-actions__action active" v-for="(action, indexactions) in product.tags" v-bind:key="action.id">
-                                                    <div v-if="action.length > 0" class="table-actions__container" >
-                                                        <div class="table-actions__el" v-for="(tag, indextag) in action" v-bind:key="tag.id">
-                                                            <img v-if="tag.type == 'multiplicity'" src="/images/icons/action/gray/box.svg" alt="">
-                                                            <p  v-if="tag.type == 'multiplicity'">{{ tag.value }} шт.</p>
-
-                                                            <img v-if="tag.type == 'gift'" src="/images/icons/action/gray/gift.svg" alt="">
-
-                                                            <img v-if="tag.type == 'delay'" src="/images/icons/action/gray/time.svg" alt="">
-                                                            <p  v-if="tag.type == 'delay'">Отсроч. {{ tag.value }} дн.</p>
-
-                                                            <img v-if="tag.type == 'sale'" src="/images/icons/action/gray/sale.svg" alt="">
-                                                            <p  v-if="tag.type == 'sale'">Скидка {{ Number(tag.value).toFixed(0) }}%</p>
-
-                                                            <img v-if="tag.type == 'free_delivery'" src="/images/icons/action/gray/delivery.svg" alt="">
-
-                                                            <!-- TODO: Комплекты -->
+            <div v-else>
+                <div class="k-order__orders" v-if="this.basket.basket">
+                    <div v-for="(warehouse, key) in this.basket.basket" v-bind:key="warehouse.id">
+                        <div class="k-order__order" v-for="store in warehouse.stores" v-bind:key="store.id">
+                            <h3>Склад: «{{ this.basket.warehouses.find((el) => el.id == key).name_short }}», {{ this.basket.warehouses.find((el) => el.id == key).address_short }}</h3>
+                            <div class="k-order__shop">
+                                <!-- <img src="../../assets/img/ava.png" alt=""> -->
+                                <p :style="{'background': store.color}">{{store.name}}</p>
+                            </div>
+                            <div v-for="item in store.products" v-bind:key="item.id">
+                                <div class="k-order__product" v-for="product in item.basket" v-bind:key="product.id">
+                                    <img class="k-order__product-img" :src="item.image" :alt="product.name">
+                                    <div class="k-order__product-info">
+                                        <button href="#" class="k-order__product-delete" @click="clearBasketProduct(store.id, item.id_remain)">
+                                            <img src="/images/icons/trash.svg" alt="">
+                                        </button>
+                                        <div class="k-order__main-info">
+                                            <p :data-id="item.id_remain">{{item.name}}</p>
+                                            <div class="k-order__actions">
+                                                <div class="table-actions">
+                                                    <!-- 'red': action?.conflicts?.items[action.action_id]?.sales_conflicts -->
+                                                    <div class="table-actions__action active" v-for="(action, indexactions) in product.tags" v-bind:key="action.id">
+                                                        <div v-if="action.length > 0" class="table-actions__container" >
+                                                            <div class="table-actions__el" v-for="(tag, indextag) in action" v-bind:key="tag.id">
+                                                                <img v-if="tag.type == 'multiplicity'" src="/images/icons/action/gray/box.svg" alt="">
+                                                                <p  v-if="tag.type == 'multiplicity'">{{ tag.value }} шт.</p>
+    
+                                                                <img v-if="tag.type == 'gift'" src="/images/icons/action/gray/gift.svg" alt="">
+    
+                                                                <img v-if="tag.type == 'delay'" src="/images/icons/action/gray/time.svg" alt="">
+                                                                <p  v-if="tag.type == 'delay'">Отсроч. {{ tag.value }} дн.</p>
+    
+                                                                <img v-if="tag.type == 'sale'" src="/images/icons/action/gray/sale.svg" alt="">
+                                                                <p  v-if="tag.type == 'sale'">Скидка {{ Number(tag.value).toFixed(0) }}%</p>
+    
+                                                                <img v-if="tag.type == 'free_delivery'" src="/images/icons/action/gray/delivery.svg" alt="">
+    
+                                                                <!-- TODO: Комплекты -->
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div v-if="action.length > 0" class="table-actions__help">
-                                                        <p>?</p>
-                                                        <div class="table-actions__content">
-                                                            <div class="table-actions__modal">
-                                                                <div class="table-actions__modal-elems">
-                                                                    <div class="table-actions__modal-el" v-for="(tag, index) in action" v-bind:key="tag.id">
-                                                                    <img v-if="tag.type == 'min_sum'" src="../../assets/images/icons/action/basket.svg" alt="">
-                                                                    <p v-if="tag.type == 'min_sum'">Минимальна сумма покупки {{ Number(tag.value).toLocaleString('ru') }} ₽</p>
-
-                                                                    <img v-if="tag.type == 'free_delivery'" src="../../assets/images/icons/action/delivery.svg" alt="">
-                                                                    <p v-if="tag.type == 'free_delivery'"><span>Бесплатная доставка</span> <span v-if="tag.condition == '2'"> при покупке от {{ (tag.value).toLocaleString('ru') }} ₽</span> <span v-if="tag.condition == '3'"> при покупке от {{ (tag.value).toLocaleString('ru') }} шт.</span></p>
-
-                                                                    <img v-if="tag.type == 'gift'" src="../../assets/images/icons/action/gift.svg" alt="">
-                                                                    <p v-if="tag.type == 'gift'">Подарок</p>
-
-                                                                    <img v-if="tag.type == 'delay'" src="../../assets/images/icons/action/gift.svg" alt="">
-                                                                    <p v-if="tag.type == 'delay'">Отсрочка {{ tag.value }} дн.</p>
-
-                                                                    <img v-if="tag.type == 'multiplicity'" src="../../assets/images/icons/action/box.svg" alt="">
-                                                                    <p v-if="tag.type == 'multiplicity'">Кратность упаковки {{ (tag.value).toLocaleString('ru') }} шт.</p>
-
-                                                                    <img v-if="tag.type == 'sale'" src="../../assets/images/icons/action/sale.svg" alt="">
-                                                                    <p v-if="tag.type == 'sale'">
-                                                                        Скидка {{ (tag.value).toLocaleString('ru') }}%
-                                                                        <span v-if="tag.min_count > 1">
-                                                                            при покупке от
-                                                                            {{ tag.min_count.toLocaleString("ru") }} шт.</span
-                                                                        >
-                                                                    </p> 
+                                                        <div v-if="action.length > 0" class="table-actions__help">
+                                                            <p>?</p>
+                                                            <div class="table-actions__content">
+                                                                <div class="table-actions__modal">
+                                                                    <div class="table-actions__modal-elems">
+                                                                        <div class="table-actions__modal-el" v-for="(tag, index) in action" v-bind:key="tag.id">
+                                                                        <img v-if="tag.type == 'min_sum'" src="../../assets/images/icons/action/basket.svg" alt="">
+                                                                        <p v-if="tag.type == 'min_sum'">Минимальна сумма покупки {{ Number(tag.value).toLocaleString('ru') }} ₽</p>
+    
+                                                                        <img v-if="tag.type == 'free_delivery'" src="../../assets/images/icons/action/delivery.svg" alt="">
+                                                                        <p v-if="tag.type == 'free_delivery'"><span>Бесплатная доставка</span> <span v-if="tag.condition == '2'"> при покупке от {{ (tag.value).toLocaleString('ru') }} ₽</span> <span v-if="tag.condition == '3'"> при покупке от {{ (tag.value).toLocaleString('ru') }} шт.</span></p>
+    
+                                                                        <img v-if="tag.type == 'gift'" src="../../assets/images/icons/action/gift.svg" alt="">
+                                                                        <p v-if="tag.type == 'gift'">Подарок</p>
+    
+                                                                        <img v-if="tag.type == 'delay'" src="../../assets/images/icons/action/gift.svg" alt="">
+                                                                        <p v-if="tag.type == 'delay'">Отсрочка {{ tag.value }} дн.</p>
+    
+                                                                        <img v-if="tag.type == 'multiplicity'" src="../../assets/images/icons/action/box.svg" alt="">
+                                                                        <p v-if="tag.type == 'multiplicity'">Кратность упаковки {{ (tag.value).toLocaleString('ru') }} шт.</p>
+    
+                                                                        <img v-if="tag.type == 'sale'" src="../../assets/images/icons/action/sale.svg" alt="">
+                                                                        <p v-if="tag.type == 'sale'">
+                                                                            Скидка {{ (tag.value).toLocaleString('ru') }}%
+                                                                            <span v-if="tag.min_count > 1">
+                                                                                при покупке от
+                                                                                {{ tag.min_count.toLocaleString("ru") }} шт.</span
+                                                                            >
+                                                                        </p> 
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="table-actions__modal-btn-container">
+                                                                        <router-link v-if="action.action_id > 0" :to="{name: 'promotion', params: { id: this.$route.params.id, action: action.action_id }}" class="table-actions__modal-btn">Подробнее об акции</router-link>
                                                                     </div>
                                                                 </div>
-                                                                <div class="table-actions__modal-btn-container">
-                                                                    <router-link v-if="action.action_id > 0" :to="{name: 'promotion', params: { id: this.$route.params.id, action: action.action_id }}" class="table-actions__modal-btn">Подробнее об акции</router-link>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                <!-- {{ product.tags }} -->
+                                                <!-- {{ product.tags }} -->
+                                                
+                                                <!-- <div class="k-actions" v-for="(action, index) in product?.actions" v-bind:key="action.id">
+                                                <img :style="index > 2 ? { display: 'none' } : false" class="k-order__actions-el" :src="site_url_prefix + action.icon" >
+                                                </div>
+                                                <div v-if="product?.actions?.length > 3" class="k-order__actions-el last">+{{ product?.actions?.length - 3 }}</div> -->
+                                            </div>
+                                            <div class="k-order__buttons">
+                                                <b>{{(product.count * product.price).toLocaleString('ru')}} ₽</b>
+                                                <Counter :item="{product: product, warehouse_id: this.basket.warehouses.find((el) => el.id == key)}" :key="new Date().getMilliseconds() + product.id_remain" @ElemCount="ElemCount" :min="1" :max="item.remains" :value="product.count" :id="item.id_remain" :store_id="item.store_id"/>
+                                            </div>
+                                        </div>
+                                        <div class="k-order__product-data">
+                                            <span class="k-order__article">{{item.article}}</span>
+                                            <p class="k-order__info">Отсрочка: <span>{{product.delay ? Number(product.delay).toFixed(1) + ' дн' : 'Нет'}}</span></p>
+                                            <p class="k-order__info">Оплата доставки: <span>{{product.payer === '1' ? 'Поставщик' : 'Покупатель'}}</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-for="complect in store.complects" v-bind:key="complect.id" class="k-order__complect">
+                                <div class="k-order__complect-title">
+                                    <p>Комплект</p>
+                                </div>
+                                <div class="k-order__complect-rows dart-row dart-align-items-center">
+                                    <div class="k-order__complect-products d-col-md-9">
+                                        <div class="k-order__product" v-for="product in complect.products" v-bind:key="product.id">
+                                            <div class="dart-row">
+                                                <div class="d-col-md-1">
+                                                    <img class="k-order__product-img " :src="product.image" :alt="product.name">
+                                                </div>
+                                                <div class="d-col-md-9">
+                                                    <div class="k-order__product-info">
+                                                        <div class="k-order__main-info">
+                                                            <p>{{product.name}} </p>
+                                                            <!-- <div class="k-order__actions">
+                                                                <img class="k-order__actions-el" src="https://mst.tools/assets/cache_image/products/7021/51158554_450x450_71b.jpg">
+                                                                <img class="k-order__actions-el" src="https://mst.tools/assets/cache_image/products/7021/51158554_450x450_71b.jpg">
+                                                                <img class="k-order__actions-el" src="https://mst.tools/assets/cache_image/products/7021/51158554_450x450_71b.jpg">
+                                                                <img class="k-order__actions-el" src="https://mst.tools/assets/cache_image/products/7021/51158554_450x450_71b.jpg">
+                                                                <img class="k-order__actions-el" src="https://mst.tools/assets/cache_image/products/7021/51158554_450x450_71b.jpg">
+                                                                <div class="k-order__actions-el last">+3</div>
+                                                            </div> -->
+                                                            <div class="k-order__actions center">
+                                                                <div class="k-actions" v-for="(action, index) in product.actions" v-bind:key="action.id">
+                                                                <img :style="index > 2 ? { display: 'none' } : false" class="k-order__actions-el" :src="site_url_prefix + action.icon" >
+                                                                <!-- <div v-if="action.conflicts.items[action.action_id]?.length" :style="index > 2 ? { display: 'none' } : false" class="k-err-icon"><i class="pi pi-info"></i></div> -->
                                                                 </div>
+                                                                <!-- <div v-if="item.actions.length > 3" class="k-order__actions-el last">+{{ item.actions.length - 3 }}</div> -->
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                </div>
-                                            <!-- {{ product.tags }} -->
-                                            <!-- {{ product.tags }} -->
-                                            
-                                            <!-- <div class="k-actions" v-for="(action, index) in product?.actions" v-bind:key="action.id">
-                                            <img :style="index > 2 ? { display: 'none' } : false" class="k-order__actions-el" :src="site_url_prefix + action.icon" >
-                                            </div>
-                                            <div v-if="product?.actions?.length > 3" class="k-order__actions-el last">+{{ product?.actions?.length - 3 }}</div> -->
-                                        </div>
-                                        <div class="k-order__buttons">
-                                            <b>{{(product.count * product.price).toLocaleString('ru')}} ₽</b>
-                                            <Counter :item="{product: product, warehouse_id: this.basket.warehouses.find((el) => el.id == key)}" :key="new Date().getMilliseconds() + product.id_remain" @ElemCount="ElemCount" :min="1" :max="item.remains" :value="product.count" :id="item.id_remain" :store_id="item.store_id"/>
-                                        </div>
-                                    </div>
-                                    <div class="k-order__product-data">
-                                        <span class="k-order__article">{{item.article}}</span>
-                                        <p class="k-order__info">Отсрочка: <span>{{product.delay ? Number(product.delay).toFixed(1) + ' дн' : 'Нет'}}</span></p>
-                                        <p class="k-order__info">Оплата доставки: <span>{{product.payer === '1' ? 'Поставщик' : 'Покупатель'}}</span></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div v-for="complect in store.complects" v-bind:key="complect.id" class="k-order__complect">
-                            <div class="k-order__complect-title">
-                                <p>Комплект</p>
-                            </div>
-                            <div class="k-order__complect-rows dart-row dart-align-items-center">
-                                <div class="k-order__complect-products d-col-md-9">
-                                    <div class="k-order__product" v-for="product in complect.products" v-bind:key="product.id">
-                                        <div class="dart-row">
-                                            <div class="d-col-md-1">
-                                                <img class="k-order__product-img " :src="product.image" :alt="product.name">
-                                            </div>
-                                            <div class="d-col-md-9">
-                                                <div class="k-order__product-info">
-                                                    <div class="k-order__main-info">
-                                                        <p>{{product.name}} </p>
-                                                        <!-- <div class="k-order__actions">
-                                                            <img class="k-order__actions-el" src="https://mst.tools/assets/cache_image/products/7021/51158554_450x450_71b.jpg">
-                                                            <img class="k-order__actions-el" src="https://mst.tools/assets/cache_image/products/7021/51158554_450x450_71b.jpg">
-                                                            <img class="k-order__actions-el" src="https://mst.tools/assets/cache_image/products/7021/51158554_450x450_71b.jpg">
-                                                            <img class="k-order__actions-el" src="https://mst.tools/assets/cache_image/products/7021/51158554_450x450_71b.jpg">
-                                                            <img class="k-order__actions-el" src="https://mst.tools/assets/cache_image/products/7021/51158554_450x450_71b.jpg">
-                                                            <div class="k-order__actions-el last">+3</div>
-                                                        </div> -->
-                                                        <div class="k-order__actions center">
-                                                            <div class="k-actions" v-for="(action, index) in product.actions" v-bind:key="action.id">
-                                                            <img :style="index > 2 ? { display: 'none' } : false" class="k-order__actions-el" :src="site_url_prefix + action.icon" >
-                                                            <!-- <div v-if="action.conflicts.items[action.action_id]?.length" :style="index > 2 ? { display: 'none' } : false" class="k-err-icon"><i class="pi pi-info"></i></div> -->
-                                                            </div>
-                                                            <!-- <div v-if="item.actions.length > 3" class="k-order__actions-el last">+{{ item.actions.length - 3 }}</div> -->
-                                                        </div>
+                                                    <div class="k-order__product-data">
+                                                        <span class="k-order__article">{{product.article}} x {{product.multiplicity * complect.info.count}} шт</span>
                                                     </div>
                                                 </div>
-                                                <div class="k-order__product-data">
-                                                    <span class="k-order__article">{{product.article}} x {{product.multiplicity * complect.info.count}} шт</span>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="k-order__complect-data d-col-md-3">
-                                    <div class="k-order__complect-data-items">
-                                        <Counter :item="{warehouse_id: this.basket.warehouses.find((el) => el.id == key)}" :key="new Date().getMilliseconds() + complect.info.id" @ElemCount="ElemComplectCount" :min="1" :max="complect.info.complect_data?.min_count" :value="complect.info.count" :id="complect.info.id" :store_id="store.id"/>
-                                        <b>{{(Number(complect.info.count) * complect.info.price).toLocaleString('ru')}} ₽</b>
+                                    <div class="k-order__complect-data d-col-md-3">
+                                        <div class="k-order__complect-data-items">
+                                            <Counter :item="{warehouse_id: this.basket.warehouses.find((el) => el.id == key)}" :key="new Date().getMilliseconds() + complect.info.id" @ElemCount="ElemComplectCount" :min="1" :max="complect.info.complect_data?.min_count" :value="complect.info.count" :id="complect.info.id" :store_id="store.id"/>
+                                            <b>{{(Number(complect.info.count) * complect.info.price).toLocaleString('ru')}} ₽</b>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="k-order__product-data">
-                                <!--
-                                    <p class="k-order__info">Отсрочка: <span>50 дн.</span></p>
-                                    <p class="k-order__info">Оплата доставки: <span>Покупатель</span></p>
-                                -->
-                            </div>
-                        </div>
-                        <div class="k-order__final">
-                            <div class="k-order__final-info">
-                                
-                                <!-- <div class="k-order__colums">
-                                    <p>Кол-во SKU с отсрочкой Х</p>
-                                    <p>0</p>
-                                </div> -->
-                                <div class="k-order__colums">
-                                    <p>Вес заказа (кг)</p>
-                                    <p>{{ Number(store?.weight).toFixed(2) }}</p>
+                                <div class="k-order__product-data">
+                                    <!--
+                                        <p class="k-order__info">Отсрочка: <span>50 дн.</span></p>
+                                        <p class="k-order__info">Оплата доставки: <span>Покупатель</span></p>
+                                    -->
                                 </div>
-                                <div class="k-order__colums">
-                                    <!-- <p>Кол-во SKU с отсрочкой Y</p>
-                                    <p>0</p> -->
-                                </div>
-                                <div class="k-order__colums">
-                                    <p>Объем заказа </p>
-                                    <p>{{store?.volume }}</p>
-                                </div>
-                               
                             </div>
-                            <div class="k-order__final-button">
-                                <div class="a-dart-btn a-dart-btn-secondary" @click="generateXSLX(store.id, key)">Скачать</div>
-                                <div class="a-dart-btn a-dart-btn-primary k-order__oplata" @click.prevent="orderSubmit(store.id)"><p>Отправить заказ</p> <p>{{ store?.cost?.toLocaleString('ru') }} ₽</p></div>
+                            <div class="k-order__final">
+                                <div class="k-order__final-info">
+                                    
+                                    <!-- <div class="k-order__colums">
+                                        <p>Кол-во SKU с отсрочкой Х</p>
+                                        <p>0</p>
+                                    </div> -->
+                                    <div class="k-order__colums">
+                                        <p>Вес заказа (кг)</p>
+                                        <p>{{ Number(store?.weight).toFixed(2) }}</p>
+                                    </div>
+                                    <div class="k-order__colums">
+                                        <!-- <p>Кол-во SKU с отсрочкой Y</p>
+                                        <p>0</p> -->
+                                    </div>
+                                    <div class="k-order__colums">
+                                        <p>Объем заказа </p>
+                                        <p>{{store?.volume }}</p>
+                                    </div>
+                                   
+                                </div>
+                                <div class="k-order__final-button">
+                                    <div class="a-dart-btn a-dart-btn-secondary" @click="generateXSLX(store.id, key)">Скачать</div>
+                                    <div class="a-dart-btn a-dart-btn-primary k-order__oplata" @click.prevent="orderSubmit(store.id)"><p>Отправить заказ</p> <p>{{ store?.cost?.toLocaleString('ru') }} ₽</p></div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="k-order__order" v-if="!order">
-                <h3 class="k-order__line">Итого</h3>
-                <div class="k-order__final">
-                    <div class="k-order__final-info">
-                        
-                        <!-- <div class="k-order__colums bold">
-                            <p>Кол-во SKU с отсрочкой Х</p>
-                            <p>0</p>
-                        </div> -->
-                        <div class="k-order__colums bold">
-                            <p>Вес заказа (кг)</p>
-                            <p>{{ Number(this.basket?.weight).toFixed(2) }}</p>
-                        </div>
-                        <div class="k-order__colums bold">
-                            <!-- <p>Кол-во SKU с отсрочкой Y</p>
-                            <p>0</p> -->
-                        </div>
-                        <div class="k-order__colums bold">
-                            <p>Объем заказа</p>
-                            <p>{{ this.basket?.volume }}</p>
-                        </div>
-                       
-                    </div>
-                    <div class="k-order__final-button">
-                        <div @click="generateXSLXAll" class="a-dart-btn a-dart-btn-secondary"><i class="pi pi-download"></i></div>
-                        <div class="a-dart-btn a-dart-btn-primary k-order__oplata" @click.prevent="orderSubmit('all')"><p>Отправить все заказы</p> <p>{{ this.basket?.cost?.toLocaleString('ru') }} ₽</p></div>
+                <div class="d-col-basket" v-else>
+                    <div class="basket-empty__content">
+                        <img class="hidden-mobile-l" src="/src/assets/images/icons/basket.svg" alt="">
+                        <img class="visible-mobile-l" src="/src/assets/images/icons/basket-gray.svg" alt="">
+                        <h3>В вашей корзине пока пусто</h3>
                     </div>
                 </div>
+    
+                <div class="k-order__order" v-if="!order && this.basket.basket">
+                    <h3 class="k-order__line">Итого</h3>
+                    <div class="k-order__final">
+                        <div class="k-order__final-info">
+                            
+                            <!-- <div class="k-order__colums bold">
+                                <p>Кол-во SKU с отсрочкой Х</p>
+                                <p>0</p>
+                            </div> -->
+                            <div class="k-order__colums bold">
+                                <p>Вес заказа (кг)</p>
+                                <p>{{ Number(this.basket?.weight).toFixed(2) }}</p>
+                            </div>
+                            <div class="k-order__colums bold">
+                                <!-- <p>Кол-во SKU с отсрочкой Y</p>
+                                <p>0</p> -->
+                            </div>
+                            <div class="k-order__colums bold">
+                                <p>Объем заказа</p>
+                                <p>{{ this.basket?.volume }}</p>
+                            </div>
+                           
+                        </div>
+                        <div class="k-order__final-button">
+                            <div @click="generateXSLXAll" class="a-dart-btn a-dart-btn-secondary"><i class="pi pi-download"></i></div>
+                            <div class="a-dart-btn a-dart-btn-primary k-order__oplata" @click.prevent="orderSubmit('all')"><p>Отправить все заказы</p> <p>{{ this.basket?.cost?.toLocaleString('ru') }} ₽</p></div>
+                        </div>
+                    </div>
+                </div>
+                
             </div>
         </div>
     </div>
@@ -341,13 +354,22 @@ export default {
       })
     },
     clearBasketProduct (storeid, productid) {
-      const data = { action: 'basket/clear', id: router.currentRoute._value.params.id, store_id: storeid, id_remain: productid }
-      this.busket_from_api(data).then()
-      this.busket_from_api({
-        action: 'basket/get',
-        id: router.currentRoute._value.params.id,
-        warehouse: 'all'
-      })
+      const data = { 
+        action: 'basket/clear', 
+        id: router.currentRoute._value.params.id, 
+        store_id: storeid, 
+        id_remain: productid 
+      }
+      this.busket_from_api(data).then(() => {
+        console.log("бабадумс")
+        this.busket_from_api({
+            action: 'basket/get',
+            id: router.currentRoute._value.params.id,
+            warehouse: 'all'
+        }).then(() => {
+            console.log("бабадумс 2")
+        })
+      })      
     },
     generateXSLX (storeId, warehouseId) {
       const data = {
@@ -357,15 +379,19 @@ export default {
         warehouse_id: warehouseId
     }
       this.opt_api(data).then((res) => {
-        console.log(res)
-        window.location.href = res.data.data
+        var anchor = document.createElement('a');
+        anchor.href = res.data.data;
+        anchor.target="_blank";
+        a.click();
       })
     },
     generateXSLXAll () {
       const data = { action: 'generate/xslx', id: router.currentRoute._value.params.id }
       this.opt_api(data).then((res) => {
-        console.log(res)
-        window.location.href = res.data.data
+        var anchor = document.createElement('a');
+        anchor.href = res.data.data;
+        anchor.target="_blank";
+        a.click();
       })
     }
   },
@@ -387,7 +413,7 @@ export default {
   },
   watch: {
     optbasketall: function (newVal, oldVal) {
-      this.basket = newVal
+        this.basket = newVal
     }
   }
 }
@@ -509,6 +535,15 @@ export default {
             &.order{
                 width: 480px;
             }
+
+            .d-col-basket{
+                box-shadow: none;
+                padding: 30px 30px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+            }
         }
 
         &__oplata{
@@ -609,9 +644,20 @@ export default {
         &__product{
             display: flex;
             align-items: flex-start;
+            position: relative;
             gap: 8px;
-            padding: 16px 0;
+            padding: 35px 0 16px;
             border-bottom: 1px solid #E2E2E2;
+            &-delete{
+                position: absolute;
+                cursor: pointer;
+                top: 8px;
+                right: 0;
+                padding: 0;
+                margin: 0;
+                border: none;
+                background: transparent;
+            }
         }
 
         &__main-info{

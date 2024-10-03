@@ -513,7 +513,7 @@ export default {
       }
     },
     SET_BUSKET_TO_VUEX: (state, data) => {
-      if(!data.data.basket){
+      if(data.data.props.warehouse != 'all'){
         //Корзина склада
         state.optbasket = data.data
       } else {
