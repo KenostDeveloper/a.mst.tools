@@ -36,7 +36,8 @@
                         required
                         v-model="form.login" />
                     <input
-                        type="text"
+                        v-imask="mask"
+                        type="tel"
                         name="telephone"
                         class="dart-form-control std-auth__input"
                         placeholder="Телефон"
@@ -113,6 +114,7 @@
 <script>
 import Autocomplete from '../Autocomplete.vue';
 import AddAddress from './AddAddress.vue';
+import { IMaskDirective } from 'vue-imask';
 
 export default {
     name: 'reg-form',
@@ -128,6 +130,10 @@ export default {
                 org: {},
                 inn: '',
                 delivery_addresses: [{ value: '' }]
+            },
+            mask: {
+                mask: "+{7} (000) 000-00-00",
+                lazy: false
             }
         };
     },
@@ -151,6 +157,9 @@ export default {
         getYear() {
             return new Date().getFullYear();
         }
+    },
+    directives: {
+        imask: IMaskDirective
     }
 };
 </script>
