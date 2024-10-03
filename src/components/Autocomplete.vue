@@ -230,6 +230,12 @@ export default {
         // this.suggestionsListToInput();
     },
     watch: {
+        modelValue: {
+            handler(newVal) {
+                this.value = newVal;
+            },
+            deep: true
+        },
         value: {
             handler(newVal) {
                 this.$emit('update:modelValue', newVal);

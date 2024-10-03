@@ -1,7 +1,7 @@
 <template>
     <div class="std-auth__input-container">
         <Autocomplete
-            v-model="this.address"
+            v-model="this.address.value"
             placeholder="Адрес доставки"
             name="address"
             class="dart-form-control std-auth__input"
@@ -9,7 +9,7 @@
             selectionType="single"
             required
             @setSelection="setSelection" />
-        <Map ref="mapRef" class="std-auth__map" v-model="this.address" :coordinates="coordinates" @setMapAddress="mapAddress = $event" />
+        <Map ref="mapRef" class="std-auth__map" v-model="this.address.value" :coordinates="coordinates" @setMapAddress="mapAddress = $event" />
     </div>
 </template>
 
@@ -22,8 +22,8 @@ export default {
     name: 'AddAddress',
     props: {
         modelValue: {
-            type: String,
-            default: ''
+            type: Object,
+            default: {}
         }
     },
     data() {
@@ -39,20 +39,17 @@ export default {
     },
     methods: {
         setSelection(address) {
-            this.$emit('update:modelValue', address?.value);
+            this.$emit('update:modelValue', address);
             this.setCoordinates();
         },
         async setCoordinates() {
-            console.log(this.address);
-            if(!this.address) return;
+            if(!this.address?.value) return;
 
-            const addressForSearch = this.address?.split(' ').join('+');
+            const addressForSearch = this.address?.value?.split(' ').join('+');
 
             const response = await axios.get(
                 `https://geocode-maps.yandex.ru/1.x/?apikey=9cc9371c-b0ef-422b-b0be-2b1d49e32386&geocode=${addressForSearch}&format=json`
             );
-
-            console.log("Response", response.data, response.data?.response?.GeoObjectCollection?.featureMember[0]?.GeoObject?.Point?.pos);
 
             if (response.status !== 200) return;
 
@@ -67,24 +64,12 @@ export default {
         this.setCoordinates();
     },
     watch: {
-        // modelValue: {
+        // mapAddress: {
         //     handler(newVal) {
-        //         this.address = newVal;
-        //     },
-        //     deep: true
-        // },
-        // address: {
-        //     handler(newVal) {
-        //         this.$emit('update:modelValue', newVal);
+        //         this.$emit('update:modelValue', { ...this.modelValue, value: newVal });
         //     },
         //     deep: true
         // }
-        mapAddress: {
-            handler(newVal) {
-                this.$emit('update:modelValue', newVal);
-            },
-            deep: true
-        }
     }
 };
 </script>

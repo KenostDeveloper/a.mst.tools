@@ -45,6 +45,7 @@ import axios from "axios";
 import MapMarker from './MapMarker.vue';
 
 const props = defineProps({
+	modelValue: Object,
 	companyIndex: Number,
 	coordinates: Object,
 });
@@ -54,7 +55,7 @@ const emit = defineEmits(["updateStoreData", "refreshStoreData", 'update:modelVa
 const yandexMapCoords = ref([37.617644, 55.755819]);
 const defaultMarker = shallowRef(null);
 
-let address = ref("Москва");
+let address = ref(props.modelValue);
 let timer = ref({});
 
 const onDragMove = () => {
@@ -84,7 +85,7 @@ const updateCoordinates = (coordinates) => {
 	});
 
 	yandexMapCoords.value = defaultMarker.value?.coordinates;
-	refreshGeo();
+	// refreshGeo();
 };
 
 defineExpose({
@@ -108,7 +109,7 @@ const refreshGeo = async () => {
 
 	address.value =
 		response.data.response.GeoObjectCollection.featureMember[0].GeoObject.metaDataProperty.GeocoderMetaData.text;
-	emit('setMapAddress', address.value);
+	emit('update:modelValue', address.value);
 };
 
 const debounce = (func, delay) => {
