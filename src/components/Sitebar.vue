@@ -112,9 +112,14 @@
 				</PanelMenu>
 			</div>
 		</div>
-		<div class="sitebar-logout" @click="onAuthBtnClick">
-			<span>Выйти</span>
-			<i class="pi pi-sign-out"></i>
+		<div class="sitebar-logout__container">
+			<button class="button-none sitebar-logout__question">
+				
+			</button>
+			<div class="sitebar-logout" @click="onAuthBtnClick">
+				<span>Выйти</span>
+				<i class="pi pi-sign-out"></i>
+			</div>
 		</div>
 		<div class="sitebar-version">v. {{ version }}</div>
 	</div>

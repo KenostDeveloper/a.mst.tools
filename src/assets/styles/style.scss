@@ -5573,6 +5573,50 @@ button.std-icon__wrapper {
 	padding: 0 !important;
 }
 
+.sitebar-logout {
+	@include flex-center($gap: 14px);
+
+	& {
+		color: #B5B5B5;
+		font-size: 14px;
+
+		border-radius: 17px;
+		border: 0.5px solid #B5B5B5;
+
+		padding: 3px 12px;
+		width: fit-content;
+	}
+
+	&__container {
+		@include flex-direction($gap: 10px);
+
+		& {
+			margin-left: 40px;
+			margin-bottom: 24px;
+		}
+	}
+
+	&__question {
+		@include flex-center();
+
+		& {
+			border: 0.5px solid #B5B5B5;
+			border-radius: 50%;
+
+			height: 28px;
+			width: 28px;
+		}
+
+		&::before {
+			content: '?';
+
+			color: #B5B5B5;
+			font-size: 24px;
+			font-weight: 400;
+		}
+	}
+}
+
 // /Steiden
 
 .p-fileupload-buttonbar {
