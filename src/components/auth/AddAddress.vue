@@ -5,6 +5,7 @@
             placeholder="Адрес доставки"
             name="address"
             class="dart-form-control std-auth__input"
+            :class="inputClasses"
             type="address"
             selectionType="single"
             required
@@ -24,6 +25,10 @@ export default {
         modelValue: {
             type: Object,
             default: {}
+        },
+        inputClasses: {
+            type: String,
+            default: ''
         }
     },
     data() {
@@ -59,17 +64,34 @@ export default {
         updateCoordinates(coordinates) {
             this.$refs.mapRef?.updateCoordinates(coordinates);
         },
+        async getAddress(address) {
+            console.log("Map addres for search", address);
+            const response = await axios.post(
+                'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address',
+                {
+                    query: address?.value
+                },
+                {
+                    headers: {
+                        Authorization: 'Token 34e9caeb5d40781585d9b5cb3b156199fbaca4e2'
+                    }
+                }
+            );
+
+            const firstAddress = await response?.data?.suggestions[0];
+            console.log("First searched address", firstAddress);
+            this.$emit('update:modelValue', firstAddress);
+        }
     },
     mounted() {
         this.setCoordinates();
     },
     watch: {
-        // mapAddress: {
-        //     handler(newVal) {
-        //         this.$emit('update:modelValue', { ...this.modelValue, value: newVal });
-        //     },
-        //     deep: true
-        // }
+        mapAddress: {
+            handler(newVal) {
+                this.getAddress(newVal);
+            },
+        }
     }
 };
 </script>
