@@ -5472,6 +5472,23 @@ button.std-icon__wrapper {
 }
 
 .std-create-clients {
+	&__header {
+		padding: 0 !important;
+		margin-top: 34px;
+		margin-bottom: 50px !important;
+	}
+
+	&__logo-container {
+		@include flex-direction(column, 35px);
+
+		& {
+			margin-bottom: 40px !important;
+		}
+	}
+
+	&__data-container {
+		margin-bottom: 88px;
+	}
 	&__data {
 		flex-direction: column;
 	}
@@ -5500,6 +5517,10 @@ button.std-icon__wrapper {
 		border: 1px solid #E2E2E2 !important;
 		height: 47px !important;
 		padding: 8px 16px !important;
+	}
+
+	.ktitle {
+		font-weight: 700;
 	}
 
 	.std-auth__button {

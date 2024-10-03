@@ -4,7 +4,7 @@
         <Breadcrumbs class="std-breadcrumbs--margin" />
 
         <Toast />
-        <div class="profile-content__title sticky-element">
+        <div class="profile-content__title sticky-element std-create-clients__header">
             <!-- <span class="maintitle hidden-mobile-l">Организация {{ this.orgprofile?.name }}</span> -->
             <div class="title-h1 hidden-mobile-l">О клиенте</div>
             <span class="maintitle visible-mobile-l">Карточка клиента</span>
@@ -24,7 +24,7 @@
           </div> -->
         <form action="#" @submit.prevent="formChangeSimple">
             <!-- <div class="dart-alert dart-alert-info">Вы можете изменить только данные контактного лица и логотип организации.</div> -->
-            <div class="dart-form-group mb-5">
+            <div class="dart-form-group mb-5 std-create-clients__logo-container">
                 <span class="ktitle">Логотип</span>
                 <DropZone
                     v-if="!this.orgprofile.image"
@@ -71,7 +71,7 @@
                     </FileUpload>
                 </div>
             </div>
-            <div class="dart-form-group mb-4">
+            <div class="dart-form-group mb-4 std-create-clients__data-container">
                 <span class="ktitle mb-3">Данные контактного лица</span>
                 <div class="kenost-form-grid">
                     <div class="form_input_group w-50" v-for="(field, index) in form.fields.contacts" :key="index">
