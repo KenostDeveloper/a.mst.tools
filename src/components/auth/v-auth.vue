@@ -1,13 +1,19 @@
 <template>
     <div class="analytics_auth">
-        <form class="form-signin form-signup" @submit.prevent="formSubmit">
+        <form class="form-signin" @submit.prevent="formSubmit">
             <Toast />
             <div class="logo text-center">
                 <img src="../../assets/images/logo.svg" alt="" width="200" />
             </div>
             <div class="std-auth__input-container">
                 <input type="text" name="username" class="dart-form-control std-auth__input" placeholder="Логин" required="" v-model="form.email" />
-                <input type="password" name="password" class="dart-form-control std-auth__input" placeholder="Пароль" required="" v-model="form.password" />
+                <input
+                    type="password"
+                    name="password"
+                    class="dart-form-control std-auth__input"
+                    placeholder="Пароль"
+                    required=""
+                    v-model="form.password" />
             </div>
             <div class="std-auth__button-container">
                 <button
@@ -17,13 +23,16 @@
                     <i v-if="this.loading" class="pi pi-spin pi-spinner" style="font-size: 14px"></i> <span>Войти</span>
                 </button>
                 <button
-                    class="dart-btn dart-btn-secondary dart-btn-block align-items-center flex justify-content-center std-auth__button  std-auth__button--secondary"
+                    class="dart-btn dart-btn-secondary dart-btn-block align-items-center flex justify-content-center std-auth__button std-auth__button--secondary"
                     :disabled="this.loading"
                     type="button"
                     @click="this.setRegForm">
                     <i v-if="this.loading" class="pi pi-spin pi-spinner" style="font-size: 14px"></i>
                     <span>Зарегистрироваться</span>
                 </button>
+                <div class="form-signin__desc">
+                    <a href="" @click.prevent="showForgotModal = true">Забыли пароль?</a>
+                </div>
             </div>
             <teleport to="body">
                 <custom-modal v-model="showForgotModal" @cancel="cancel">
@@ -31,9 +40,6 @@
                     <v-forgot />
                 </custom-modal>
             </teleport>
-            <div class="form-signin__desc">
-                <a href="" @click.prevent="showForgotModal = true">Забыли пароль?</a>
-            </div>
             <div class="form-signin__copy">
                 <span>© MST, {{ getYear }}.</span>
             </div>

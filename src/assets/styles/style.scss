@@ -5399,11 +5399,17 @@ button.std-icon__wrapper {
 
 	& {
 		max-width: 450px !important;
+		margin-bottom: 120px !important;
 	}
 
 	.logo {
 		margin-bottom: 10px;
 	}
+}
+.form-signin {
+	@extend .form-signup;
+
+	margin-bottom: 0 !important;
 }
 .std-auth {
 	&__input-container-wrapper {
@@ -5428,12 +5434,12 @@ button.std-icon__wrapper {
 
 	&__input {
 		color: #282828;
-		font-size: 20px;
+		font-size: 20px !important;
 		font-weight: 500;
 
 		border-radius: 5px !important;
 		height: 58px !important;
-		padding: 18px 30px !important;
+		padding: 16px 30px !important;
 		margin: 0 !important;
 
 		&::placeholder {
@@ -5442,6 +5448,8 @@ button.std-icon__wrapper {
 
 		.autocomplete__input {
 			color: #282828 !important;
+			font-size: 20px !important;
+			font-weight: 500;
 
 			&::placeholder {
 				color: #A0A0A0 !important;
@@ -5540,6 +5548,29 @@ button.std-icon__wrapper {
 			color: #ADADAD;
 		}
 	}
+}
+
+.form-signin__desc {
+	color: #FFF;
+	font-size: 20px;
+	font-weight: 500;
+	line-height: normal;
+	text-decoration-line: underline;
+
+	margin: 0 !important;
+}
+.form-signin__copy {
+	color: #FFF !important;
+	font-size: 24px;
+	font-weight: 500;
+	line-height: normal;
+
+	position: absolute;
+	bottom: 25px;
+	left: 50%;
+	translate: -50% 0;
+
+	padding: 0 !important;
 }
 
 // /Steiden

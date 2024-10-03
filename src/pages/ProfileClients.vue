@@ -114,7 +114,7 @@
 							<i class="std_icon std_icon-trash"></i>
 						</button>
 					</div>
-				</div>		
+				</div>
 			</article>
 		</div>
 	</section>
