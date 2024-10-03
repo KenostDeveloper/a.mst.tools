@@ -70,7 +70,7 @@ export default {
         selections: {
             type: Array,
             default: []
-        }
+        },
     },
     data() {
         return {
@@ -205,8 +205,8 @@ export default {
             }
 
             if (this.selectionType == 'single') {
-                this.isActive = false;
                 this.$emit('setSelection', selection);
+                this.isActive = false;
 
 				return;
             }
@@ -226,14 +226,8 @@ export default {
         }
     },
     mounted() {
-        this.getData();
+        // this.getData();
         // this.suggestionsListToInput();
-    },
-    watch: {
-        // value(newVal) {
-        //     this.$emit('update:modelValue', newVal);
-		// 	console.log(newVal)
-        // },
     }
 };
 </script>

@@ -1,7 +1,7 @@
 <template>
     <div class="std-auth__input-container">
         <Autocomplete
-            v-model="this.address.value"
+            v-model="address"
             placeholder="Адрес доставки"
             name="address"
             class="dart-form-control std-auth__input"
@@ -21,14 +21,14 @@ import Map from '../Map/Map.vue';
 export default {
     name: 'AddAddress',
     props: {
-        deliveryAddress: {
-            type: Object,
-            default: {}
+        modelValue: {
+            type: String,
+            default: ''
         }
     },
     data() {
         return {
-            address: {},
+            address: this.modelValue,
             coordindates: ''
         };
     },
@@ -38,26 +38,40 @@ export default {
     },
     methods: {
         setSelection(address) {
-            this.$emit('setDeliveryAddress', address);
+            this.$emit('update:modelValue', address?.value);
             this.setCoordinates();
         },
         async setCoordinates() {
-            const addressForSearch = this.deliveryAddress?.value?.split(' ').join('+');
+            console.log(this.address);
+            if(!this.address) return;
+
+            const addressForSearch = this.address?.split(' ').join('+');
 
             const response = await axios.get(
                 `https://geocode-maps.yandex.ru/1.x/?apikey=9cc9371c-b0ef-422b-b0be-2b1d49e32386&geocode=${addressForSearch}&format=json`
             );
 
+            console.log("Response", response.data, response.data?.response?.GeoObjectCollection?.featureMember[0]?.GeoObject?.Point?.pos);
+
             if (response.status !== 200) return;
 
-            this.coordinates = response.data;
+            this.coordinates = response.data?.response?.GeoObjectCollection?.featureMember[0]?.GeoObject?.Point?.pos;
             this.updateCoordinates(response.data);
         },
         updateCoordinates(coordinates) {
             this.$refs.mapRef?.updateCoordinates(coordinates);
         },
     },
+    mounted() {
+        this.setCoordinates();
+    },
     watch: {
+        modelValue: {
+            handler(newVal) {
+                this.address = newVal;
+            },
+            deep: true
+        },
         address: {
             handler(newVal) {
                 this.$emit('setDeliveryAddress', newVal);

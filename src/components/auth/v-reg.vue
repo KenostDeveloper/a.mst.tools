@@ -71,8 +71,7 @@
                         v-for="(address, index) in form.delivery_addresses"
                         :key="address"
                         :index="index"
-                        :deliveryAddress="form.delivery_addresses[index]" 
-                        @setDeliveryAddress="(address) => setDeliveryAddress(index, address)"
+                        v-model="form.delivery_addresses[index]"
                     />
                     <button
                         class="dart-btn dart-btn-secondary dart-btn-block align-items-center flex justify-content-center std-auth__button std-auth__button--secondary"
@@ -128,7 +127,7 @@ export default {
                 email: '',
                 org: {},
                 inn: '',
-                delivery_addresses: [{}]
+                delivery_addresses: ['']
             }
         };
     },
