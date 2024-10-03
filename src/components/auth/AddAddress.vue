@@ -5,6 +5,7 @@
             placeholder="Адрес доставки"
             name="address"
             class="dart-form-control std-auth__input"
+            :class="inputClasses"
             type="address"
             selectionType="single"
             required
@@ -24,6 +25,10 @@ export default {
         modelValue: {
             type: Object,
             default: {}
+        },
+        inputClasses: {
+            type: String,
+            default: ''
         }
     },
     data() {

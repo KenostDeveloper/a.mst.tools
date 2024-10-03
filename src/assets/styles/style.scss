@@ -5462,12 +5462,54 @@ button.std-icon__wrapper {
 		}
 
 		&--secondary {
-			background: transparent;
+			background: #282828;
 		}
 	}
 
 	&__map {
 		height: 300px !important;
+	}
+}
+
+.std-create-clients {
+	&__data {
+		flex-direction: column;
+	}
+
+	&__add-address {
+		.autocomplete {
+			background: #FFF !important;
+			border-radius: 5px !important;
+			border: 1px solid #E2E2E2 !important;
+			height: 47px !important;
+			padding: 8px 16px !important;
+
+			&__input {
+				color: #ADADAD;
+				font-size: 14px !important;
+				font-weight: 400;
+				line-height: 106%; /* 14.84px */
+				letter-spacing: 0.25px;
+			}
+		}
+	}
+
+	.std-auth__button {
+		font-size: 14px !important;
+		font-weight: 400;
+		line-height: 106%; /* 14.84px */
+		letter-spacing: 0.25px;
+
+		align-self: flex-end;
+		height: 47px !important;
+		padding: 8px 16px !important;
+		width: fit-content;
+	}
+
+	.kenost-form-grid input {
+		&::placeholder {
+			color: #ADADAD;
+		}
 	}
 }
 
