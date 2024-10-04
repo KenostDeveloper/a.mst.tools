@@ -84,16 +84,16 @@
 
 @font-face {
     font-family: 'icomoon-std';
-    src: url('/fonts/icomoon-std.eot?cxebhd');
-    src: url('/fonts/icomoon-std.eot?cxebhd#iefix') format('embedded-opentype'), url('/fonts/icomoon-std.ttf?cxebhd') format('truetype'),
-        url('/fonts/icomoon-std.woff?cxebhd') format('woff'), url('/fonts/icomoon-std.svg?cxebhd#icomoon') format('svg');
+    src: url('/fonts/icomoon-std.eot?q7a2ru');
+    src: url('/fonts/icomoon-std.eot?q7a2ru#iefix') format('embedded-opentype'), url('/fonts/icomoon-std.ttf?q7a2ru') format('truetype'),
+        url('/fonts/icomoon-std.woff?q7a2ru') format('woff'), url('/fonts/icomoon-std.svg?q7a2ru#icomoon-std') format('svg');
     font-weight: normal;
     font-style: normal;
     font-display: block;
 }
 
-[class^='std_icon'],
-[class*=' std_icon'] {
+[class^='std_icon-'],
+[class*=' std_icon-'] {
     /* use !important to prevent issues with browser extensions that change fonts */
     font-family: 'icomoon-std' !important;
     speak: never;
@@ -109,8 +109,12 @@
 }
 
 .std_icon-pen:before {
-    content: '\e900';
+    content: '\e901';
 }
 .std_icon-trash:before {
-    content: '\e901';
+    content: '\e902';
+}
+.std_icon-location:before {
+    content: '\e900';
+    color: #aea3a3;
 }

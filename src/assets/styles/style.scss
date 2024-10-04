@@ -2509,6 +2509,7 @@ p {
 }
 
 .button-none {
+	cursor: pointer;
 	background: none;
 	border: none;
 	outline: none;
@@ -3053,12 +3054,30 @@ p {
 			@include flex-direction($gap: 4px);
 		}
 		&__action-button {
-			background-color: gray;
 			aspect-ratio: 1;
 			padding: 5px;
 
 			width: 33px;
 			height: 33px;
+
+			padding: 5px;
+
+			&:hover {
+				background: none !important;
+
+				i {
+					opacity: 0.6;
+				}
+			}
+
+			i {
+				display: block;
+				transition-duration: .3s;
+
+				&::before {
+					font-size: 23px;
+				}
+			}
 		}
 	}
 }
@@ -4512,6 +4531,12 @@ p {
 	.std-money {
 		@include visually-hidden;
 	}
+
+	.sitebar-profile {
+		&__address {
+			@include visually-hidden;
+		}
+	}
 }
 
 .p-button:focus {
@@ -5618,6 +5643,21 @@ button.std-icon__wrapper {
 			color: #B5B5B5;
 			font-size: 24px;
 			font-weight: 400;
+		}
+	}
+}
+
+.sitebar-profile {
+	&__address {
+		@include flex($align: center, $gap: 5px);
+
+		& {
+			color: rgba(255, 255, 255, 0.58);
+			font-size: 13px;
+			font-weight: 400;
+
+			margin-top: 6px;
+			padding-right: 40px;
 		}
 	}
 }
