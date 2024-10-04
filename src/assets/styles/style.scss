@@ -2349,6 +2349,10 @@ img {
 	width: 100%;
 }
 
+.h-full{
+	height: 100%;
+}
+
 .upload-banner__text span.ktitle {
 	display: block;
 	font-style: normal;
@@ -5900,7 +5904,7 @@ button.std-icon__wrapper {
 	border-collapse: collapse;
 	thead {
 		position: sticky;
-		z-index: 1;
+		z-index: 2;
 		top: 0;
 		background: #282828;
 		border-radius: 3px;

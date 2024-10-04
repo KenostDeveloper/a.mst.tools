@@ -83,6 +83,8 @@
                             <img v-if="tag.type == 'multiplicity'" :src="action.enabled ? '/images/icons/action/gray/box.svg' : isConflict(item.conflicts.items, item.actions, action.action_id) ? '/images/icons/action/red/box.svg' : '/images/icons/action/black/box.svg'" alt="" />
                             <p v-if="tag.type == 'multiplicity'">{{ tag.value }} шт.</p>
 
+                            <img v-if="tag.type == 'min'" :src="action.enabled ? '/images/icons/action/gray/min.svg' : isConflict(item.conflicts.items, item.actions, action.action_id) ? '/images/icons/action/red/min.svg' : '/images/icons/action/black/min.svg'" alt="" />
+
                             <img v-if="tag.type == 'gift'" :src="action.enabled ? '/images/icons/action/gray/gift.svg' : isConflict(item.conflicts.items, item.actions, action.action_id) ? '/images/icons/action/red/gift.svg' : '/images/icons/action/black/gift.svg'" alt="" />
 
                             <img v-if="tag.type == 'delay'" :src="action.enabled ? '/images/icons/action/gray/time.svg' : isConflict(item.conflicts.items, item.actions, action.action_id) ? '/images/icons/action/red/time.svg' : '/images/icons/action/black/time.svg'" alt="" />

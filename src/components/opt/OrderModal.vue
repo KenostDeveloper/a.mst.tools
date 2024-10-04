@@ -18,7 +18,7 @@
                 <p>В ближайшее время с Вами свяжутся наши менеджеры.</p>
                 <img v-if="order" class="k-order-img" src="../../assets/images/order.png" alt="">
             </div>
-            <div v-else>
+            <div v-else class="h-full">
                 <div class="k-order__orders" v-if="this.basket.basket">
                     <div v-for="(warehouse, key) in this.basket.basket" v-bind:key="warehouse.id">
                         <div class="k-order__order" v-for="store in warehouse.stores" v-bind:key="store.id">
@@ -44,6 +44,8 @@
                                                             <div class="table-actions__el" v-for="(tag, indextag) in action" v-bind:key="tag.id">
                                                                 <img v-if="tag.type == 'multiplicity'" src="/images/icons/action/gray/box.svg" alt="">
                                                                 <p  v-if="tag.type == 'multiplicity'">{{ tag.value }} шт.</p>
+
+                                                                <img v-if="tag.type == 'min'" src="/images/icons/action/gray/min.svg" alt="">
     
                                                                 <img v-if="tag.type == 'gift'" src="/images/icons/action/gray/gift.svg" alt="">
     
@@ -372,18 +374,18 @@ export default {
       })      
     },
     generateXSLX (storeId, warehouseId) {
-      const data = {
-        action: 'generate/xslx',
-        id: router.currentRoute._value.params.id,
-        store_id: storeId,
-        warehouse_id: warehouseId
-    }
-      this.opt_api(data).then((res) => {
-        var anchor = document.createElement('a');
-        anchor.href = res.data.data;
-        anchor.target="_blank";
-        a.click();
-      })
+        const data = {
+            action: 'generate/xslx',
+            id: router.currentRoute._value.params.id,
+            store_id: storeId,
+            warehouse_id: warehouseId
+        }
+        this.opt_api(data).then((res) => {
+            var anchor = document.createElement('a');
+            anchor.href = res.data.data;
+            anchor.target="_blank";
+            anchor.click();
+        })
     },
     generateXSLXAll () {
       const data = { action: 'generate/xslx', id: router.currentRoute._value.params.id }
@@ -479,7 +481,7 @@ export default {
         }
 
         &__orders{
-            height: calc(100% - 240px);
+            height: calc(100% - 200px);
             overflow-y: auto;
             margin: 20px 0;
 
