@@ -1,6 +1,6 @@
 <template>
     <div v-if="this.getUser"></div>
-    <auth-form v-if="!this.getUser || !this.isRegForm" @setRegForm="setRegForm" />
+    <auth-form v-if="!this.getUser && !this.isRegForm" @setRegForm="setRegForm" />
     <reg-form v-if="this.isRegForm" @setRegForm="setRegForm" />
 </template>
 

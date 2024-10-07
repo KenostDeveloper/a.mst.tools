@@ -24,6 +24,7 @@
 			</li>
 		</ul> -->
         <input
+            ref="input"
             @focus="getData"
             @blur="this.isActive = false"
             @input="getData"
@@ -231,6 +232,10 @@ export default {
             suggestions.style.width = autocomplete.clientWidth + 'px';
             suggestions.style.top = autocomplete.offsetTop + autocomplete.clientHeight + 10 + 'px';
             suggestions.style.left = autocomplete.offsetLeft + 'px';
+        },
+
+        focus() {
+            this.$refs.input.focus();
         }
     },
     mounted() {
