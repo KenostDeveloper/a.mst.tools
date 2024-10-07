@@ -30,11 +30,11 @@
                 <div class="std-auth__input-container">
                     <input
                         type="text"
-                        name="login"
+                        name="name"
                         class="dart-form-control std-auth__input"
                         placeholder="ФИО контактного лица"
                         required
-                        v-model="form.login" />
+                        v-model="form.name" />
                     <input
                         v-imask="mask"
                         type="tel"
@@ -57,7 +57,7 @@
                         class="dart-form-control std-auth__input"
                         placeholder="Наименование организации"
                         required
-                        v-model="form.org.value" />
+                        v-model="form.org.name" />
                     <!-- <input type="text" name="inn" class="dart-form-control std-auth__input" placeholder="ИНН" required v-model="form.inn" /> -->
                     <Autocomplete
                         name="inn"
@@ -66,7 +66,7 @@
                         selectionType="single"
                         placeholder="ИНН"
                         required
-                        v-model="form.inn"
+                        v-model="form.org.inn"
                         @setSelection="setCompany" />
                     <AddAddress
                         v-for="(address, index) in form.delivery_addresses"
@@ -76,10 +76,8 @@
                     />
                     <button
                         class="dart-btn dart-btn-secondary dart-btn-block align-items-center flex justify-content-center std-auth__button std-auth__button--secondary"
-                        :disabled="this.loading"
                         type="button"
                         @click="() => this.form.delivery_addresses.push({ value: '' })">
-                        <i v-if="this.loading" class="pi pi-spin pi-spinner" style="font-size: 14px"></i>
                         <span>Добавить адрес</span>
                         <i class="pi pi-plus"></i>
                     </button>
@@ -113,11 +111,14 @@
 import Autocomplete from '../Autocomplete.vue';
 import AddAddress from './AddAddress.vue';
 import { IMaskDirective } from 'vue-imask';
+import Toast from 'primevue/toast';
+import { sendMetrik } from '../../utils/metrika';
 
 export default {
     name: 'reg-form',
     data() {
         return {
+            loading: false,
             form: {
                 login: '',
                 password: '',
@@ -125,8 +126,10 @@ export default {
                 login: '',
                 telephone: '',
                 email: '',
-                org: {},
-                inn: '',
+                org: {
+                    name: '',
+                    inn: ''
+                },
                 delivery_addresses: [{ value: '' }]
             },
             mask: {
@@ -137,10 +140,33 @@ export default {
     },
     components: {
         Autocomplete,
-        AddAddress
+        AddAddress,
+        Toast
     },
     methods: {
-        formSubmit() {},
+        sendMetrik: sendMetrik,
+        formSubmit() {
+            if(this.form.password === this.form.passwordConfirm){
+                // this.sendMetrik('register');
+                // this.loading = true;
+                this.$load(async () => {
+                    const data = await this.$api.auth.register(this.form);
+                    if (data) {
+                        console.log(data)
+                        if (data === 'technical error') {
+                            this.$toast.add({ severity: 'error', summary: 'Техническая ошибка', detail: 'Попробуйте позже.', life: 3000 });
+                        }else{
+                            if(!data.success){
+                                this.$toast.add({ severity: 'error', summary: 'Ошибка!', detail: data.data.message, life: 3000 });
+                            }
+                        }
+                        this.loading = false;
+                    }
+                })
+            }else{
+                this.$toast.add({ severity: 'info', summary: 'Пароли не совпадают', detail: 'Проверьте правильно ли введен пароль', life: 3000 });
+            }
+        },
         setRegForm() {
             this.$emit('setRegForm', false);
         },
