@@ -5658,6 +5658,37 @@ button.std-icon__wrapper {
 	}
 }
 
+.sitebar {
+	padding-bottom: 18px;
+
+	&.hide {
+		.sitebar-logout {
+			border: none;
+			padding: 0;
+
+			&__container {
+				align-items: center;
+				flex-direction: column;
+				gap: 14px;
+				margin: 0;
+				margin-inline: 7px;
+			}
+
+			&__question {
+				width: 24px;
+			}
+
+			span {
+				display: none;
+			}
+
+			i::before {
+				font-size: 18px;
+			}
+		}
+	}
+}
+
 // /Steiden
 
 .p-fileupload-buttonbar {

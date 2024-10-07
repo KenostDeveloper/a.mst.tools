@@ -145,7 +145,7 @@
                         class="w-full md:w-14rem" />
                 </div>
 
-                <div class="dart-form-group mb-4 mt-3">
+                <!-- <div class="dart-form-group mb-4 mt-3">
                     <div class="upload-banner">
                         <div class="upload-banner__text">
                             <span class="ktitle">Иконка</span>
@@ -165,7 +165,7 @@
                     <div class="upload-icon__image">
                         <img :src="files?.icon?.original_href" v-if="files?.icon?.original_href" />
                     </div>
-                </div>
+                </div> -->
 
                 <div class="dart-form-group mb-4">
                     <span class="ktitle">Описание</span>
@@ -1018,7 +1018,7 @@
                     </div>
                 </div>
 
-                <div class="dart-form-group mt-4">
+                <!-- <div class="dart-form-group mt-4">
                     <span class="ktitle">Ограничения</span>
                     <div class="flex align-items-center gap-1 mt-2">
                         <RadioButton v-model="this.form.limitations" inputId="limitations-1" name="limitations" value="1" />
@@ -1028,7 +1028,7 @@
                         <RadioButton v-model="this.form.limitations" inputId="limitations-2" name="limitations" value="2" />
                         <label for="limitations-2" class="ml-2 radioLabel">Ограничить по сумме</label>
                     </div>
-                </div>
+                </div> -->
 
                 <div class="kenost-wiget" v-if="this.form.limitations == '2'">
                     <p>Значение</p>
