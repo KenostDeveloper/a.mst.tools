@@ -5689,6 +5689,29 @@ button.std-icon__wrapper {
 	}
 }
 
+.error {
+	position: relative;
+
+	:is(.p-inputwrapper, .dart-form-control) {
+		border: 1px solid #f00;
+		border-radius: 6px;
+
+		:is(.p-inputtext) {
+			border: none;
+		}
+	}
+
+	&_desc {
+		display: block;
+		color: #e24c4c;
+		font-size: 12px;
+
+		padding: 0 !important;
+		position: absolute;
+		top: calc(100% + 5px);
+	}
+}
+
 // /Steiden
 
 .p-fileupload-buttonbar {
