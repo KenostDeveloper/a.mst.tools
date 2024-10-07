@@ -12,13 +12,21 @@
             </div>
         </div>
         <div>
-            <div class="dart-form-group mb-4">
+            <div
+                class="dart-form-group mb-4"
+                :class="{
+                    error: v$.form.name.$errors.length
+                }">
                 <span class="ktitle">Наименование акции</span>
                 <label for="name">Введите наименование, которое будет отражать смысл вашей акции.</label>
                 <input v-model="this.form.name" type="text" name="name" placeholder="Укажите название акции" class="dart-form-control mt-2" />
+
+                <span class="error_desc" v-for="error of v$.form.name.$errors" :key="error.$uid">
+                    {{ error.$message }}
+                </span>
             </div>
 
-            <div class="dart-form-group mt-2 mb-4">
+            <div class="dart-form-group mt-2 mb-4" :class="{ error: v$.form.store_id.$errors.length }">
                 <span class="ktitle">Склад</span>
                 <!-- <label for="name">Введите наименование, которое будет отражать смысл вашей акции</label> -->
                 <!-- <input v-model="form.name" type="text" name="name" placeholder="Укажите склад акции" class="dart-form-control"> -->
@@ -37,9 +45,13 @@
                     optionLabel="label"
                     optionValue="value"
                     placeholder="Выберите склад" />
+
+                <span class="error_desc" v-for="error of v$.form.store_id.$errors" :key="error.$uid">
+                    {{ error.$message }}
+                </span>
             </div>
 
-            <div v-if="this.form.store_id">
+            <div v-if="this.form.store_id?.length">
                 <div class="dart-form-group mb-0">
                     <span class="ktitle">Реклама</span>
                     <div class="flex align-items-center gap-1">
@@ -47,7 +59,10 @@
                         <label for="create-page-action" class="ml-2 mb-0"> Разместить рекламные баннеры </label>
                     </div>
                 </div>
-                <div class="dart-form-group kenost-action-page pt-3" v-if="this.create_page_action.length != 0">
+                <div
+                    class="dart-form-group kenost-action-page pt-3"
+                    :class="{ error: v$.place_action.$errors.length }"
+                    v-if="this.create_page_action.length != 0">
                     <span class="ktitle">Место размещение баннера/товара</span>
                     <MultiSelect
                         v-model="this.place_action"
@@ -55,6 +70,10 @@
                         optionLabel="name"
                         placeholder="Выберите один или несколько вариантов"
                         class="w-full" />
+
+                    <span class="error_desc" v-for="error of v$.place_action.$errors" :key="error.$uid">
+                        {{ error.$message }}
+                    </span>
                 </div>
 
                 <div class="dart-form-group kenost-action-page pt-3" v-if="this.create_page_action.length != 0">
@@ -226,7 +245,10 @@
                 <label for="actionLast-1" class="ml-2 mb-0">Применяется последней (от стоимости товара по всем акциям)</label>
               </div>
               -->
-                <div class="dart-form-group mt-4" v-if="this.form.compatibilityDiscount == 3 || this.form.compatibilityDiscount == 4">
+                <div
+                    class="dart-form-group mt-4"
+                    :class="{ error: v$.form.bigDiscount.$errors.length }"
+                    v-if="this.form.compatibilityDiscount == 3 || this.form.compatibilityDiscount == 4">
                     <label>Выберите акции из списка</label>
                     <MultiSelect
                         :key="new Date().getMilliseconds()"
@@ -237,6 +259,10 @@
                         optionLabel="name"
                         placeholder="Выберите из списка"
                         class="w-full md:w-20rem kenost-multiselect" />
+
+                    <span class="error_desc" v-for="error of v$.form.bigDiscount.$errors" :key="error.$uid">
+                        {{ error.$message }}
+                    </span>
                 </div>
                 <div
                     class="dart-form-group mt-4"
@@ -273,7 +299,10 @@
                     </div>
                 </div>
 
-                <div class="dart-form-group mt-4" v-if="this.form.compatibilityPost == 3 || this.form.compatibilityPost == 4">
+                <div
+                    class="dart-form-group mt-4"
+                    :class="{ error: v$.form.bigPost.$errors.length }"
+                    v-if="this.form.compatibilityPost == 3 || this.form.compatibilityPost == 4">
                     <label>Выберите акции из списка</label>
                     <MultiSelect
                         filter
@@ -283,6 +312,10 @@
                         optionLabel="name"
                         placeholder="Выберите из списка"
                         class="w-full md:w-20rem kenost-multiselect" />
+
+                    <span class="error_desc" v-for="error of v$.form.bigPost.$errors" :key="error.$uid">
+                        {{ error.$message }}
+                    </span>
                 </div>
 
                 <div
@@ -297,12 +330,16 @@
                         class="w-full md:w-14rem" />
                 </div>
 
-                <div class="dart-form-group mb-4">
+                <div class="dart-form-group mb-4" :class="{ error: v$.form.dates.$errors.length }">
                     <span class="ktitle">Даты проведения</span>
                     <Calendar v-model="this.form.dates" selectionMode="range" placeholder="Выберите даты" :manualInput="false" showIcon />
+
+                    <span class="error_desc" v-for="error of v$.form.dates.$errors" :key="error.$uid">
+                        {{ error.$message }}
+                    </span>
                 </div>
 
-                <div class="dart-form-group mb-4">
+                <div class="dart-form-group mb-4" :class="{ error: v$.form.dateShipment.$errors.length }">
                     <span class="ktitle">Срок отгрузки товаров</span>
                     <div class="flex align-items-center gap-1 mt-3">
                         <RadioButton v-model="this.form.typeShipment" inputId="typeShipment-1" name="typeShipment" value="1" />
@@ -324,6 +361,10 @@
                         placeholder="Выберите ближайшую дату отгрузки"
                         :manualInput="false"
                         showIcon />
+
+                    <span class="error_desc" v-for="error of v$.form.dateShipment.$errors" :key="error.$uid">
+                        {{ error.$message }}
+                    </span>
                 </div>
 
                 <div class="dart-form-group mb-4">
@@ -532,44 +573,6 @@
                     </div>
                 </div>
 
-                <div v-if="this.form.addProductType == '2'" class="dart-form-group mb-4">
-                    <DropZone
-                        v-if="!this.upload_product"
-                        class="kenost-dropzone"
-                        :maxFiles="Number(1)"
-                        url="/rest/file_upload.php?upload_products=xlsx"
-                        :uploadOnDrop="true"
-                        :multipleUpload="true"
-                        :acceptedFiles="['xlsx', 'xlsx']"
-                        :parallelUpload="1"
-                        @sending="parseFile"
-                        v-bind="args">
-                        <template v-slot:message>
-                            <div class="kenost-dropzone__custom">
-                                <i class="pi pi-cloud-upload"></i>
-                                <b>Перетащите файл в эту область</b>
-                                <p>Вы также можете загрузить файл, <span>нажав сюда</span></p>
-                            </div>
-                        </template>
-                    </DropZone>
-
-                    <div class="kenost-upload-xlsx" v-if="this.upload_product">
-                        <div class="kenost-upload-xlsx__file">
-                            <!-- <img src="../../../public/img/files/xls.png" alt=""> -->
-                            <a targer="_blank" :href="files?.xlsx?.original_href">{{ files?.xlsx?.name }}</a>
-                        </div>
-                        <div class="kenost-upload-xlsx__info">
-                            <p>Загружено товаров: {{ Object.keys(this.selected).length }} шт</p>
-                            <p>Всего товаров: {{ Object.keys(this.selected).length + error_product.length }} шт</p>
-                            <div class="kenost-link-blue" @click="this.modals.error_product = true">Список незагруженных товаров</div>
-                        </div>
-                    </div>
-
-                    <a :href="site_url_prefix + '/assets/files/files/examples/ExampleLoadingProducts.xlsx'" class="kenost-link-blue mt-2"
-                        >Скачать шаблон файла</a
-                    >
-                </div>
-
                 <div v-if="this.form.addProductType == '1'" class="PickList mt-3">
                     <div class="PickList__product" :style="{ width: '40%' }">
                         <b class="PickList__title">Доступные товары</b>
@@ -626,27 +629,70 @@
                         <div class="PickList__select mt-2" @click="setAllProducts(false)"><i class="pi pi-angle-double-left"></i></div>
                     </div>
 
-                    <div class="PickList__selected" :style="{ width: '40%' }">
-                        <div class="PickList__title mb-4">
-                            <b>Добавленные товары</b>
-                        </div>
-                        <div class="PickList__products PickList__products-selected">
-                            <div class="PickList__el" v-for="item in this.selected" :key="item.id">
-                                <img :src="item.image" alt="" />
-                                <div class="PickList__info">
-                                    <div class="PickList__product-info off">
-                                        <div class="PickList__name">{{ item.name }}</div>
-                                        <div class="PickList__article">
-                                            {{ item.article }}
-                                            <span class="store-name-b2b" :style="{ background: item.color }">{{ item.store }}</span>
+                    <div :class="{ error: v$.selected.$errors.length }" :style="{ width: '40%' }">
+                        <div class="PickList__selected">
+                            <div class="PickList__title mb-4">
+                                <b>Добавленные товары</b>
+                            </div>
+                            <div class="PickList__products PickList__products-selected">
+                                <div class="PickList__el" v-for="item in this.selected" :key="item.id">
+                                    <img :src="item.image" alt="" />
+                                    <div class="PickList__info">
+                                        <div class="PickList__product-info off">
+                                            <div class="PickList__name">{{ item.name }}</div>
+                                            <div class="PickList__article">
+                                                {{ item.article }}
+                                                <span class="store-name-b2b" :style="{ background: item.color }">{{ item.store }}</span>
+                                            </div>
+                                            <div class="PickList__price">{{ Number(item.price).toFixed(0) }} ₽</div>
                                         </div>
-                                        <div class="PickList__price">{{ Number(item.price).toFixed(0) }} ₽</div>
                                     </div>
+                                    <div @click="deleteSelect(item.id)" class="PickList__select"><i class="pi pi-times"></i></div>
                                 </div>
-                                <div @click="deleteSelect(item.id)" class="PickList__select"><i class="pi pi-times"></i></div>
                             </div>
                         </div>
+                        <span class="error_desc" v-for="error of v$.selected.$errors" :key="error.$uid">
+                            {{ error.$message }}
+                        </span>
                     </div>
+                </div>
+
+                <div v-if="this.form.addProductType == '2'" class="dart-form-group mb-4">
+                    <DropZone
+                        v-if="!this.upload_product"
+                        class="kenost-dropzone"
+                        :maxFiles="Number(1)"
+                        url="/rest/file_upload.php?upload_products=xlsx"
+                        :uploadOnDrop="true"
+                        :multipleUpload="true"
+                        :acceptedFiles="['xlsx', 'xlsx']"
+                        :parallelUpload="1"
+                        @sending="parseFile"
+                        v-bind="args">
+                        <template v-slot:message>
+                            <div class="kenost-dropzone__custom">
+                                <i class="pi pi-cloud-upload"></i>
+                                <b>Перетащите файл в эту область</b>
+                                <p>Вы также можете загрузить файл, <span>нажав сюда</span></p>
+                            </div>
+                        </template>
+                    </DropZone>
+
+                    <div class="kenost-upload-xlsx" v-if="this.upload_product">
+                        <div class="kenost-upload-xlsx__file">
+                            <!-- <img src="../../../public/img/files/xls.png" alt=""> -->
+                            <a targer="_blank" :href="files?.xlsx?.original_href">{{ files?.xlsx?.name }}</a>
+                        </div>
+                        <div class="kenost-upload-xlsx__info">
+                            <p>Загружено товаров: {{ Object.keys(this.selected).length }} шт</p>
+                            <p>Всего товаров: {{ Object.keys(this.selected).length + error_product.length }} шт</p>
+                            <div class="kenost-link-blue" @click="this.modals.error_product = true">Список незагруженных товаров</div>
+                        </div>
+                    </div>
+
+                    <a :href="site_url_prefix + '/assets/files/files/examples/ExampleLoadingProducts.xlsx'" class="kenost-link-blue mt-2"
+                        >Скачать шаблон файла</a
+                    >
                 </div>
 
                 <div v-if="this.form.addProductType == '3'" class="PickList mt-3">
@@ -690,7 +736,7 @@
                         </div>
                     </div>
 
-                    <div class="PickList__selected" :style="{ width: '40%' }">
+                    <div class="PickList__selected" :class="{ error: v$.selected_complects.$errors.length }" :style="{ width: '40%' }">
                         <div class="PickList__title mb-4">
                             <b>Добавленные комплекты</b>
                         </div>
@@ -707,6 +753,10 @@
                                 <div @click="deleteSelectComplect(item.id)" class="PickList__select"><i class="pi pi-times"></i></div>
                             </div>
                         </div>
+
+                        <span class="error_desc" v-for="error of v$.selected_complects.$errors" :key="error.$uid">
+                            {{ error.$message }}
+                        </span>
                     </div>
                 </div>
                 <div v-if="this.form.addProductType != '3'" class="table-kenost mt-4">
@@ -869,7 +919,7 @@
                 </div>
 
                 <div class="kenost-all-table-activity" v-if="this.form.addProductType == '1' || this.form.addProductType == '2'">
-                    <div class="kenost-wiget">
+                    <div class="kenost-wiget" :class="{ error: v$.kenostActivityAll.type.$errors.length }">
                         <p>Массовое действие</p>
                         <Dropdown
                             v-model="this.kenostActivityAll.type"
@@ -877,8 +927,15 @@
                             optionLabel="name"
                             placeholder="Массовое действие"
                             class="w-full md:w-14rem" />
+
+                        <span class="error_desc" v-for="error of v$.kenostActivityAll.type.$errors" :key="error.$uid">
+                            {{ error.$message }}
+                        </span>
                     </div>
-                    <div class="kenost-wiget" v-if="this.kenostActivityAll.type.key == 0 || this.kenostActivityAll.type.key == 1">
+                    <div
+                        class="kenost-wiget"
+                        :class="{ error: v$.kenostActivityAll.typePrice.$errors.length }"
+                        v-if="this.kenostActivityAll.type.key == 0 || this.kenostActivityAll.type.key == 1">
                         <p>Тип цен</p>
                         <Dropdown
                             v-model="this.kenostActivityAll.typePrice"
@@ -886,8 +943,15 @@
                             optionLabel="name"
                             placeholder="Тип цен"
                             class="w-full md:w-14rem" />
+
+                        <span class="error_desc" v-for="error of v$.kenostActivityAll.typePrice.$errors" :key="error.$uid">
+                            {{ error.$message }}
+                        </span>
                     </div>
-                    <div class="kenost-wiget" v-if="this.kenostActivityAll.type.key == 0">
+                    <div
+                        class="kenost-wiget"
+                        :class="{ error: v$.kenostActivityAll.value.$errors.length }"
+                        v-if="this.kenostActivityAll.type.key == 0">
                         <p>Значение</p>
                         <InputNumber
                             v-model="this.kenostActivityAll.value"
@@ -896,13 +960,27 @@
                             min="0"
                             incrementButtonIcon="pi pi-plus"
                             decrementButtonIcon="pi pi-minus" />
+
+                        <span class="error_desc" v-for="error of v$.kenostActivityAll.value.$errors" :key="error.$uid">
+                            {{ error.$message }}
+                        </span>
                     </div>
-                    <div class="kenost-wiget" v-if="this.kenostActivityAll.type.key == 0">
+                    <div
+                        class="kenost-wiget"
+                        :class="{ error: v$.kenostActivityAll.typeFormul.$errors.length }"
+                        v-if="this.kenostActivityAll.type.key == 0">
                         <p>&nbsp;</p>
                         <Dropdown v-model="kenostActivityAll.typeFormul" :options="this.typeFormul" optionLabel="name" class="w-full md:w-14rem" />
+
+                        <span class="error_desc" v-for="error of v$.kenostActivityAll.typeFormul.$errors" :key="error.$uid">
+                            {{ error.$message }}
+                        </span>
                     </div>
 
-                    <div class="kenost-wiget" v-if="this.kenostActivityAll.type.key == 3">
+                    <div
+                        class="kenost-wiget"
+                        :class="{ error: v$.kenostActivityAll.multiplicity.$errors.length }"
+                        v-if="this.kenostActivityAll.type.key == 3">
                         <p>Значение</p>
                         <InputNumber
                             v-model="this.kenostActivityAll.multiplicity"
@@ -911,6 +989,10 @@
                             min="1"
                             incrementButtonIcon="pi pi-plus"
                             decrementButtonIcon="pi pi-minus" />
+
+                        <span class="error_desc" v-for="error of v$.kenostActivityAll.multiplicity.$errors" :key="error.$uid">
+                            {{ error.$message }}
+                        </span>
                     </div>
 
                     <div
@@ -942,7 +1024,7 @@
                     </div>
                 </div>
 
-                <div class="dart-form-group">
+                <div class="dart-form-group" :class="{ error: v$.regions_select.$errors.length }">
                     <div v-if="this.form.participantsType == '1'" class="kenost-select-reginos">
                         <p class="kenost-select-reginos__title">Выбор участников по регионам</p>
                         <p class="kenost-select-reginos__gray">Акция будет доступна в том числе для новых компаний из выбранного региона</p>
@@ -969,6 +1051,10 @@
                             placeholder="Выберите регионы"
                             class="w-full md:w-20rem kenost-multiselect mt-2" />
                     </div>
+
+                    <span class="error_desc" v-for="error of v$.regions_select.$errors" :key="error.$uid">
+                        {{ error.$message }}
+                    </span>
                 </div>
 
                 <div class="PickList" v-if="this.form.participantsType == '2'">
@@ -1000,7 +1086,7 @@
                         </div>
                     </div>
 
-                    <div class="PickList__selected" :style="{ width: '40%' }">
+                    <div class="PickList__selected" :class="{ error: v$.all_organizations_selected.$errors.length }" :style="{ width: '40%' }">
                         <div class="PickList__title mb-4">
                             <b>Добавленные организации</b>
                         </div>
@@ -1015,6 +1101,10 @@
                                 <div @click="deleteSelectOrganization(item.id)" class="PickList__select"><i class="pi pi-times"></i></div>
                             </div>
                         </div>
+
+                        <span class="error_desc" v-for="error of v$.all_organizations_selected.$errors" :key="error.$uid">
+                            {{ error.$message }}
+                        </span>
                     </div>
                 </div>
 
@@ -1270,6 +1360,7 @@
     </Dialog>
 </template>
 <script>
+import { useVuelidate } from '@vuelidate/core';
 import { mapActions, mapGetters } from 'vuex';
 import FileUpload from 'primevue/fileupload';
 import Calendar from 'primevue/calendar';
@@ -1284,213 +1375,209 @@ import Counter from '../../components/opt/Counter.vue';
 import MultiSelect from 'primevue/multiselect';
 import router from '../../router';
 import Paginate from 'vuejs-paginate-next';
+import { helpers, required } from '@vuelidate/validators';
 
 export default {
-  name: 'ProfileSalesAdd',
-  props: { },
-  data () {
-    return {
-      page: 1,
-      pageGift: 1,
-      loading: true,
-      filter: {
-        name: '',
-        category: {}
-      },
-      filterGift: {
-        name: '',
-        category: {}
-      },
-      filter_table: {
-        name: '',
-        category: {}
-      },
-      geo_action: { name: 'По географии акции', key: 1 },
-      opt_catalog_tree: [],
-      error_product: [],
-      create_page_action: [],
-      upload_product: false,
-      page_complects: 1,
-      per_complects: 25,
-      filter_complects: '',
-      complects: [],
-      stores: [],
-      selected_complects: {},
-      postponement_period: 0,
-      selected: {},
-      selectedGift: {},
-      selected_data: {},
-      selected_visible: {},
-      total_selected: -1,
-      kenost_table_all: [],
-      kenost_table: [],
-      products: [],
-      productsGift: [],
-      total_products: 0,
-      total_gift_products: 0,
-      saleValue: 0,
-      per_page: 25,
-      filter_organizations: {
-        name: '',
-        type: [1, 2]
-      },
-      all_organizations: [],
-      all_organizations_selected: {},
-      page_selected: 1,
-      regions: [],
-      place_action: [],
-      regions_all: [],
-      regions_select: [],
-      complects_ids: [],
-      form: {
-        actionLast: [],
-        global_kenost_table: [],
-        name: '',
-        description: '',
-        award: '',
-        dates: [],
-        compatibilityDiscount: '1',
-        compatibilityPost: '1',
-        typeShipment: '1',
-        dateShipment: '',
-        paymentDelivery: { name: 'Покупатель', key: 0 },
-        conditionPaymentDelivery: { name: 'Без условий', key: 0 },
-        compabilityMode: { name: 'Применяется бóльшая', key: 0 },
-        compabilityModePost: { name: 'Применяется бóльшая', key: 0 },
-        conditionPaymentDeliveryValue: 0,
-        postponementConditions: { name: 'Без условий', key: 0 },
-        postponementConditionsValue: 0,
-        condition: { name: 'Скидка без условий', key: 0 },
-        limitations: '1',
-        limitationValue: 0,
-        addProductType: '1',
-        store_id: '',
-        delay: [
-          {
-            percent: 100,
-            day: 0
-          }
-        ],
-        delayPercentSum: 0,
-        participantsType: '3',
-        available_stores: [],
-        available_vendors: [],
-        available_opt: [],
-        conditionMinCount: 0,
-        conditionMinSum: 0,
-        bigDiscount: [],
-        not_sale_client: []
-      },
-      listAction: {},
-      kenostActivityAll: {
-        type: {},
-        typePrice: {},
-        value: 0,
-        typeFormul: {},
-        discountInterest: 0,
-        multiplicity: 1
-      },
-      modals: {
-        delay: false,
-        price: false,
-        error_product: false,
-        price_step: 0,
-        type_price: '1',
-        product_id: -1,
-        headers: [
-          'Метод редактирования цены',
-          'Скидка по формуле',
-          'Тип цен',
-          'Скидка вручную'
-        ]
-      },
-      files: {
-        max: {
-          original_href: ''
-        },
-        min: {
-          original_href: ''
-        },
-        icon: {
-          original_href: ''
-        },
-        small: {
-          original_href: ''
-        },
-      },
-      compabilityMode: [
-        { name: 'Применяется бóльшая', key: 0 },
-        { name: 'Скидки складываются', key: 1 },
-        { name: 'Скидки назначаются последовательно', key: 2 }
-      ],
-      compabilityModePost: [
-        { name: 'Применяется бóльшая', key: 0 },
-        { name: 'Применяется меньшая', key: 1 }
-      ],
-      paymentDelivery: [
-        { name: 'Покупатель', key: 0 },
-        { name: 'Поставщик', key: 1 }
-      ],
-      conditionPaymentDelivery: [
-        { name: 'Без условий', key: 0 },
-        { name: 'Купи на Х рублей', key: 1 },
-        { name: 'При покупке Х шт товара', key: 2 }
-      ],
-      postponementConditions: [
-        { name: 'Без условий', key: 0 },
-        { name: 'При покупке на Х рублей получи отсрочку', key: 1 },
-        { name: 'При покупке Х товара получи отсрочку на него', key: 2 }
-      ],
-      condition: [
-        { name: 'Скидка без условий', key: 0 },
-        { name: 'Купи Х товаров по цене Y', key: 1 },
-        { name: 'Получи подарок при покупке Х товаров', key: 2 },
-        { name: 'Купи на X рублей и получи скидку Y', key: 3 }
-      ],
-      typeFormul: [
-        { name: '₽', key: 0 },
-        { name: '%', key: 1 }
-      ],
-      typePrice: [],
-      massAction: [
-        { name: 'Скидка по формуле', key: 0 },
-        { name: 'Тип цен', key: 1 },
-        { name: 'Кратность', key: 3 }
-      ],
-      place: [
-        // { name: 'На главной', code: 0 },
-        // { name: 'На странице огранизаций', code: 1 },
-        // { name: 'В каталоге', code: 2 },
-        // { name: 'При выборе поставщика', code: 3 },
-        // { name: 'При офомлении заказа', code: 4 }
-      ],
-      geo: [
-        { name: 'Показывать всем', key: 0 },
-        { name: 'По географии акции', key: 1 }
-      ]
-    }
-  },
-  methods: {
-    ...mapActions([
-      'get_available_products_from_api',
-      'get_all_organizations_from_api',
-      'get_regions_from_api',
-      'set_sales_to_api',
-      'get_sales_to_api',
-      'opt_get_complects',
-      'opt_upload_products_file',
-      'get_all_sales_to_api',
-      'opt_get_prices',
-      'opt_get_remain_prices',
-      'get_opt_catalog_tree_from_api',
-      'org_get_stores_from_api',
-      'get_sales_adv_pages_to_api'
-    ]),
-    onUpload (data) {
-      if (data.xhr.response) {
-        const response = JSON.parse(data.xhr.response)
-        if (Object.prototype.hasOwnProperty.call(response.data, 'files')) {
-          // перечень загруженныйх файлов
+    name: 'ProfileSalesAdd',
+    props: {},
+    data() {
+        return {
+            page: 1,
+            pageGift: 1,
+            loading: true,
+            filter: {
+                name: '',
+                category: {}
+            },
+            filterGift: {
+                name: '',
+                category: {}
+            },
+            filter_table: {
+                name: '',
+                category: {}
+            },
+            geo_action: { name: 'По географии акции', key: 1 },
+            opt_catalog_tree: [],
+            error_product: [],
+            create_page_action: [],
+            upload_product: false,
+            page_complects: 1,
+            per_complects: 25,
+            filter_complects: '',
+            complects: [],
+            stores: [],
+            selected_complects: {},
+            postponement_period: 0,
+            selected: {},
+            selectedGift: {},
+            selected_data: {},
+            selected_visible: {},
+            total_selected: -1,
+            kenost_table_all: [],
+            kenost_table: [],
+            products: [],
+            productsGift: [],
+            total_products: 0,
+            total_gift_products: 0,
+            saleValue: 0,
+            per_page: 25,
+            filter_organizations: {
+                name: '',
+                type: [1, 2]
+            },
+            all_organizations: [],
+            all_organizations_selected: {},
+            page_selected: 1,
+            regions: [],
+            place_action: [],
+            regions_all: [],
+            regions_select: [],
+            complects_ids: [],
+            form: {
+                actionLast: [],
+                global_kenost_table: [],
+                name: '',
+                description: '',
+                award: '',
+                dates: [],
+                compatibilityDiscount: '1',
+                compatibilityPost: '1',
+                typeShipment: '1',
+                dateShipment: '',
+                paymentDelivery: { name: 'Покупатель', key: 0 },
+                conditionPaymentDelivery: { name: 'Без условий', key: 0 },
+                compabilityMode: { name: 'Применяется бóльшая', key: 0 },
+                compabilityModePost: { name: 'Применяется бóльшая', key: 0 },
+                conditionPaymentDeliveryValue: 0,
+                postponementConditions: { name: 'Без условий', key: 0 },
+                postponementConditionsValue: 0,
+                condition: { name: 'Скидка без условий', key: 0 },
+                limitations: '1',
+                limitationValue: 0,
+                addProductType: '1',
+                store_id: '',
+                delay: [
+                    {
+                        percent: 100,
+                        day: 0
+                    }
+                ],
+                delayPercentSum: 0,
+                participantsType: '3',
+                available_stores: [],
+                available_vendors: [],
+                available_opt: [],
+                conditionMinCount: 0,
+                conditionMinSum: 0,
+                bigDiscount: [],
+                not_sale_client: []
+            },
+            listAction: {},
+            kenostActivityAll: {
+                type: {},
+                typePrice: {},
+                value: 0,
+                typeFormul: {},
+                discountInterest: 0,
+                multiplicity: 1
+            },
+            modals: {
+                delay: false,
+                price: false,
+                error_product: false,
+                price_step: 0,
+                type_price: '1',
+                product_id: -1,
+                headers: ['Метод редактирования цены', 'Скидка по формуле', 'Тип цен', 'Скидка вручную']
+            },
+            files: {
+                max: {
+                    original_href: ''
+                },
+                min: {
+                    original_href: ''
+                },
+                icon: {
+                    original_href: ''
+                },
+                small: {
+                    original_href: ''
+                }
+            },
+            compabilityMode: [
+                { name: 'Применяется бóльшая', key: 0 },
+                { name: 'Скидки складываются', key: 1 },
+                { name: 'Скидки назначаются последовательно', key: 2 }
+            ],
+            compabilityModePost: [
+                { name: 'Применяется бóльшая', key: 0 },
+                { name: 'Применяется меньшая', key: 1 }
+            ],
+            paymentDelivery: [
+                { name: 'Покупатель', key: 0 },
+                { name: 'Поставщик', key: 1 }
+            ],
+            conditionPaymentDelivery: [
+                { name: 'Без условий', key: 0 },
+                { name: 'Купи на Х рублей', key: 1 },
+                { name: 'При покупке Х шт товара', key: 2 }
+            ],
+            postponementConditions: [
+                { name: 'Без условий', key: 0 },
+                { name: 'При покупке на Х рублей получи отсрочку', key: 1 },
+                { name: 'При покупке Х товара получи отсрочку на него', key: 2 }
+            ],
+            condition: [
+                { name: 'Скидка без условий', key: 0 },
+                { name: 'Купи Х товаров по цене Y', key: 1 },
+                { name: 'Получи подарок при покупке Х товаров', key: 2 },
+                { name: 'Купи на X рублей и получи скидку Y', key: 3 }
+            ],
+            typeFormul: [
+                { name: '₽', key: 0 },
+                { name: '%', key: 1 }
+            ],
+            typePrice: [],
+            massAction: [
+                { name: 'Скидка по формуле', key: 0 },
+                { name: 'Тип цен', key: 1 },
+                { name: 'Кратность', key: 3 }
+            ],
+            place: [
+                // { name: 'На главной', code: 0 },
+                // { name: 'На странице огранизаций', code: 1 },
+                // { name: 'В каталоге', code: 2 },
+                // { name: 'При выборе поставщика', code: 3 },
+                // { name: 'При офомлении заказа', code: 4 }
+            ],
+            geo: [
+                { name: 'Показывать всем', key: 0 },
+                { name: 'По географии акции', key: 1 }
+            ]
+        };
+    },
+    methods: {
+        ...mapActions([
+            'get_available_products_from_api',
+            'get_all_organizations_from_api',
+            'get_regions_from_api',
+            'set_sales_to_api',
+            'get_sales_to_api',
+            'opt_get_complects',
+            'opt_upload_products_file',
+            'get_all_sales_to_api',
+            'opt_get_prices',
+            'opt_get_remain_prices',
+            'get_opt_catalog_tree_from_api',
+            'org_get_stores_from_api',
+            'get_sales_adv_pages_to_api'
+        ]),
+        onUpload(data) {
+            if (data.xhr.response) {
+                const response = JSON.parse(data.xhr.response);
+                if (Object.prototype.hasOwnProperty.call(response.data, 'files')) {
+                    // перечень загруженныйх файлов
 
                     if (response.data.files[0].type_banner === 'max') {
                         this.files.max = response.data.files[0];
@@ -1772,7 +1859,13 @@ export default {
             };
             this.opt_get_complects(data);
         },
-        formSubmit(event) {
+        async formSubmit(event) {
+            const validationResult = await this.v$.$validate();
+            if (!validationResult) {
+                console.log('validation failed');
+                return;
+            }
+
             this.$load(async () => {
                 if (router.currentRoute._value.params.sales_id) {
                     await this.set_sales_to_api({
@@ -2576,6 +2669,110 @@ export default {
                 this.opt_get_complects(dataComplect);
             }
         }
+    },
+    setup() {
+        return { v$: useVuelidate() };
+    },
+    validations() {
+        return {
+            form: {
+                name: {
+                    required: helpers.withMessage('Заполните наименование', required)
+                },
+                store_id: {
+                    required: helpers.withMessage('Выберите склад', () => this.form.store_id?.length > 0)
+                },
+                // description: {
+                //   required: helpers.withMessage("Заполните описание", required),
+                // },
+                // award: {
+                //   required: helpers.withMessage("Заполните награду", required),
+                // },
+                bigDiscount: {
+                    required: helpers.withMessage('Выберите акции', () => {
+                        if (this.form.compatibilityDiscount != 3 && this.form.compatibilityPost != 4) return true;
+                        return this.form.bigDiscount?.length > 0;
+                    })
+                },
+                bigPost: {
+                    required: helpers.withMessage('Выберите отсрочки', () => {
+                        if (this.form.compatibilityPost != 3 && this.form.compatibilityPost != 4) return true;
+                        return this.form.bigPost?.length > 0;
+                    })
+                },
+                dates: {
+                    required: helpers.withMessage('Заполните даты проведения', () => this.form.dates?.length > 0)
+                },
+                dateShipment: {
+                    required: helpers.withMessage('Заполните дату отгрузки', () => {
+                        if (this.form.typeShipment != 3) return true;
+                        return required(this.form.dateShipment);
+                    })
+                }
+            },
+            place_action: {
+                required: helpers.withMessage('Выберите хотя бы одно место размещения баннера/товара', () => {
+                    if (this.create_page_action?.length < 1) return true;
+                    return this.place_action?.length > 0;
+                })
+            },
+            selected: {
+                required: helpers.withMessage('Выберите хотя бы один товар', () => {
+                    if (this.form.addProductType != 1 && this.form.addProductType != 2) return true;
+                    return Object.keys(this.selected).length > 0;
+                })
+            },
+            selected_complects: {
+                required: helpers.withMessage('Выберите хотя бы один комплект', () => {
+                    if (this.form.addProductType != 3) return true;
+                    return Object.keys(this.selected_complects).length > 0;
+                })
+            },
+            kenostActivityAll: {
+                type: {
+                    required: helpers.withMessage('Выберите тип массового действия', () => {
+                        if (this.form.addProductType != 1 && this.form.addProductType != 2) return true;
+                        return this.kenostActivityAll?.type?.name;
+                    })
+                },
+                typePrice: {
+                    required: helpers.withMessage('Выберите тип цен', () => {
+                        if (this.kenostActivityAll?.type?.key != 0 && this.kenostActivityAll?.type?.key != 1) return true;
+                        return this.kenostActivityAll?.typePrice?.name;
+                    })
+                },
+                value: {
+                    required: helpers.withMessage('Заполните значение', () => {
+                        if (this.kenostActivityAll?.type?.key != 0) return true;
+                        return this.kenostActivityAll?.value;
+                    })
+                },
+                typeFormul: {
+                    required: helpers.withMessage('Выберите единицу измерения', () => {
+                        if (this.kenostActivityAll?.type?.key != 0) return true;
+                        return this.kenostActivityAll?.typeFormul?.name;
+                    })
+                },
+                multiplicity: {
+                    required: helpers.withMessage('Заполните кратность', () => {
+                        if (this.kenostActivityAll?.type?.key != 3) return true;
+                        return this.kenostActivityAll?.multiplicity;
+                    })
+                }
+            },
+            regions_select: {
+              required: helpers.withMessage('Выберите хотя бы один регион', () => {
+                if(this.form.participantsType != 1) return true;
+                return this.regions_select?.length > 0
+              })
+            },
+            all_organizations_selected: {
+              required: helpers.withMessage('Выберите хотя бы одну организацию', () => {
+                if(this.form.participantsType != 2) return true;
+                return Object.keys(this.all_organizations_selected).length > 0
+              })
+            }
+        };
     }
 };
 </script>
@@ -2998,6 +3195,10 @@ export default {
 .PickList {
     &__products-selected {
         height: 412px !important;
+    }
+
+    &__selected {
+        width: auto;
     }
 }
 
