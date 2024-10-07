@@ -7,54 +7,86 @@
             </div>
 
             <div v-if="!this.regIsSuccess" class="std-auth__input-container">
-                <input ref="loginInput" type="text" id="login" class="dart-form-control std-auth__input" placeholder="Логин" required v-model="form.login" autocomplete="off" />
-                <input
-                    type="password"
-                    name="password"
-                    class="dart-form-control std-auth__input"
-                    placeholder="Пароль"
-                    required
-                    v-model="form.password"
-                    autocomplete="off" />
-                <input
-                    type="password"
-                    name="passwordConfirm"
-                    class="dart-form-control std-auth__input"
-                    placeholder="Подтверждение пароля"
-                    required
-                    v-model="form.passwordConfirm"
-                    autocomplete="off" />
+                <FloatLabel>
+                    <input
+                        ref="loginInput"
+                        type="text"
+                        id="login"
+                        placeholder="Логин"
+                        class="dart-form-control std-auth__input"
+                        required
+                        v-model="form.login"
+                        autocomplete="off" />
+                    <!-- <label for="login" class="std-auth__input-label">Логин</label> -->
+                </FloatLabel>
+                <FloatLabel>
+                    <input
+                        ref="passwordInput"
+                        type="password"
+                        name="password"
+                        id="password"
+                        placeholder="Пароль"
+                        class="dart-form-control std-auth__input"
+                        required
+                        v-model="form.password"
+                        autocomplete="off" />
+                    <!-- <label for="password" class="std-auth__input-label">Пароль</label> -->
+                </FloatLabel>
+                <FloatLabel>
+                    <input
+                        type="password"
+                        name="passwordConfirm"
+                        id="passwordConfirm"
+                        placeholder="Подтверждение пароля"
+                        class="dart-form-control std-auth__input"
+                        required
+                        v-model="form.passwordConfirm"
+                        autocomplete="off" />
+                    <!-- <label for="passwordConfirm" class="std-auth__input-label">Подтверждение пароля</label> -->
+                </FloatLabel>
             </div>
 
             <div v-if="!this.regIsSuccess" class="std-auth__input-container-wrapper">
                 <span class="std-auth__input-label">Данные контактного лица</span>
 
                 <div class="std-auth__input-container">
+                    <!-- <FloatLabel> -->
                     <input
                         type="text"
-                        name="name"
-                        class="dart-form-control std-auth__input"
+                        id="name"
                         placeholder="ФИО контактного лица"
+                        class="dart-form-control std-auth__input"
                         required
                         v-model="form.name"
                         autocomplete="off" />
+                    <!-- <label for="name" class="std-auth__input-label">ФИО контактного лица</label> -->
+                    <!-- </FloatLabel> -->
                     <input
                         v-imask="mask"
                         type="tel"
                         name="telephone"
-                        class="dart-form-control std-auth__input"
+                        id="telephone"
                         placeholder="Телефон"
+                        class="dart-form-control std-auth__input"
                         required
                         autocomplete="off"
-                        @complete="(e) => { this.form.telephone = e.detail.unmaskedValue }" />
+                        @complete="
+                            (e) => {
+                                this.form.telephone = e.detail.unmaskedValue;
+                            }
+                        " />
+                    <!-- <FloatLabel> -->
                     <input
                         type="email"
                         name="email"
-                        class="dart-form-control std-auth__input"
+                        id="email"
                         placeholder="Email"
+                        class="dart-form-control std-auth__input"
                         required
                         v-model="form.email"
                         autocomplete="off" />
+                    <!-- <label for="email" class="std-auth__input-label">Email</label> -->
+                    <!-- </FloatLabel> -->
                 </div>
             </div>
 
@@ -62,25 +94,32 @@
                 <span class="std-auth__input-label">Данные компании</span>
 
                 <div class="std-auth__input-container">
+                    <!-- <FloatLabel> -->
                     <input
                         type="text"
                         name="org_name"
-                        class="dart-form-control std-auth__input"
+                        id="org_name"
                         placeholder="Наименование организации"
+                        class="dart-form-control std-auth__input"
                         required
                         v-model="form.org.name"
                         autocomplete="off" />
-                    <!-- <input type="text" name="inn" class="dart-form-control std-auth__input" placeholder="ИНН" required v-model="form.inn" /> -->
-                    <Autocomplete
-                        ref="innInput"
-                        name="inn"
-                        class="dart-form-control std-auth__input"
-                        type="company"
-                        selectionType="single"
-                        placeholder="ИНН"
-                        required
-                        v-model="form.org.inn"
-                        @setSelection="setCompany" />
+                    <!-- <label for="org_name" class="std-auth__input-label">Наименование организации</label> -->
+                    <!-- </FloatLabel> -->
+                    <FloatLabel>
+                        <Autocomplete
+                            ref="innInput"
+                            name="inn"
+                            id="inn"
+                            placeholder="ИНН"
+                            class="dart-form-control std-auth__input"
+                            type="company"
+                            selectionType="single"
+                            required
+                            v-model="form.org.inn"
+                            @setSelection="setCompany" />
+                        <!-- <label for="inn" class="std-auth__input-label">ИНН</label> -->
+                    </FloatLabel>
                     <AddAddress
                         v-for="(address, index) in form.delivery_addresses"
                         :key="address"
@@ -118,10 +157,12 @@
                 <button
                     class="dart-btn dart-btn-secondary dart-btn-block align-items-center flex justify-content-center std-auth__button std-auth__button--secondary"
                     type="button"
-                    @click="() => {
-                        this.setRegForm();
-                        this.regIsSuccess = false;
-                    }">
+                    @click="
+                        () => {
+                            this.setRegForm();
+                            this.regIsSuccess = false;
+                        }
+                    ">
                     <span>Войти</span>
                 </button>
             </div>
@@ -140,7 +181,7 @@ import AddAddress from './AddAddress.vue';
 import { IMaskDirective } from 'vue-imask';
 import Toast from 'primevue/toast';
 import { sendMetrik } from '../../utils/metrika';
-import FloatLabel from 'primevue/floatlabel';
+import FloatLabel from '../FloatLabel.vue';
 
 export default {
     name: 'reg-form',
@@ -191,7 +232,7 @@ export default {
 
                         if (!data.success) {
                             this.$toast.add({ severity: 'error', summary: 'Ошибка!', detail: data.message, life: 3000 });
-                            this.goToErroInput(data.message);
+                            this.goToErrorInput(data.message);
                             return;
                         }
 
@@ -201,6 +242,7 @@ export default {
                 });
             } else {
                 this.$toast.add({ severity: 'info', summary: 'Пароли не совпадают', detail: 'Проверьте правильно ли введен пароль', life: 3000 });
+                this.goToErrorInput('пароль');
             }
         },
         setRegForm() {
@@ -212,13 +254,16 @@ export default {
         setDeliveryAddress(index, address) {
             this.form.delivery_addresses[index] = address;
         },
-        goToErroInput(errorMessage) {
-            if(errorMessage.includes("ИНН")) {
-                console.log(this.$refs.innInput);
+        goToErrorInput(errorMessage) {
+            if (errorMessage.includes('ИНН')) {
                 this.$refs.innInput.focus();
-            } else if(errorMessage.includes("логин")) {
-                console.log(this.$refs.loginInput);
+                this.$refs.innInput.$el.parentElement.classList.add('error');
+            } else if (errorMessage.includes('логин')) {
                 this.$refs.loginInput.focus();
+                this.$refs.loginInput.parentElement.classList.add('error');
+            } else if (errorMessage.includes('пароль')) {
+                this.$refs.passwordInput.focus();
+                this.$refs.passwordInput.parentElement.classList.add('error');
             }
         }
     },
