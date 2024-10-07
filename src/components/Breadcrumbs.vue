@@ -55,7 +55,7 @@ export default {
 			const routeMatched = this.$route.matched;
 
 			const breadcrumbs = pathRoutes.map((route, index) => {
-				console.log(route, index);
+				// console.log(route, index);
 
 				if (
 					route == "/" ||
@@ -105,7 +105,7 @@ export default {
 			}
 			if(pathRoutes[pathRoutes.length - 1] == ":category_id") {
 				const parents = this.getCategoriesCatItemParents(4, currentRoute.params.category_id);
-				console.log("Result parents", parents);
+				// console.log("Result parents", parents);
 
 				parents?.forEach(parent => {
 					const newPathRoutesWithId = pathRoutesWithId.map(path => path);
@@ -207,7 +207,7 @@ export default {
 		},
 		getCategoriesCatItemParents(stopId, catItemId) {
 			const catItem = this.getCatItem(catItemId, this.optcatalog);
-			console.log("Searched catItem", catItem);
+			// console.log("Searched catItem", catItem);
 
 			if(!catItem) return
 			if(catItem?.parent == 0) return;
@@ -218,9 +218,9 @@ export default {
 		getAllParents(stopId, catItem, parents, catalog) {
 			if(catItem.id == stopId) return parents;
 
-            console.log("Search parent data", catItem, catalog);
+            // console.log("Search parent data", catItem, catalog);
 			let currParent = this.getCatItem(catItem?.parent, catalog);
-			console.log("Searched parent", currParent);
+			// console.log("Searched parent", currParent);
 			if(currParent) {
                 parents.unshift(currParent);
                 this.getAllParents(stopId, currParent, parents, catalog);

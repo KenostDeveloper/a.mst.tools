@@ -463,10 +463,12 @@ export default {
                                     // console.log('this.items.stores[indexstore].actions', this.this.items.stores[indexstore].actions[j])
                                     this.items.stores[indexstore].actions[j].enabled = false;
                                     //this.items.stores[indexstore].actions[indexaction].enabled = false
+                                    console.log(conflicts.store_id)
                                     const data = {
                                         action: 'action/user/off/on',
                                         remain_id: this.items.stores[indexstore].actions[j].remain_id ? this.items.stores[indexstore].actions[j].remain_id : conflicts.remain_id,
-                                        store_id: this.items.stores[indexstore].actions[j].store_id ? this.items.stores[indexstore].actions[j].store_id : conflicts.store_id,
+                                        // store_id: this.items.stores[indexstore].actions[j].store_id ? this.items.stores[indexstore].actions[j].store_id : conflicts.store_id,
+                                        id: router.currentRoute._value.params.id,
                                         action_id: this.items.stores[indexstore].actions[j].action_id,
                                         status: false,
                                         test: 'true2'
@@ -490,7 +492,8 @@ export default {
                                     const data = {
                                         action: 'action/user/off/on',
                                         remain_id: this.items.stores[indexstore].actions[j].remain_id ? this.items.stores[indexstore].actions[j].remain_id : conflicts.remain_id,
-                                        store_id: this.items.stores[indexstore].actions[j].store_id ? this.items.stores[indexstore].actions[j].store_id : conflicts.store_id,
+                                        // store_id: this.items.stores[indexstore].actions[j].store_id ? this.items.stores[indexstore].actions[j].store_id : conflicts.store_id,
+                                        id: router.currentRoute._value.params.id,
                                         action_id: this.items.stores[indexstore].actions[j].action_id,
                                         status: false,
                                         test: 'true2'
@@ -505,7 +508,8 @@ export default {
             const data = {
                 action: 'action/user/off/on',
                 remain_id: remainid,
-                store_id: storeid,
+                // store_id: storeid,
+                id: router.currentRoute._value.params.id,
                 action_id: action.action_id,
                 status: action.enabled,
                 test: 'true3'
