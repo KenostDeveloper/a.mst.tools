@@ -1777,7 +1777,7 @@ img {
 
 .analytics_auth {
 	// background-color: $secondary-color !important;
-	width: 100vw;
+	width: 100%;
 	position: absolute;
 	left: 0;
 	background: var(--secondary-color);
@@ -5459,19 +5459,12 @@ button.std-icon__wrapper {
 	}
 
 	&__input {
-		color: #282828;
-		font-size: 20px !important;
-		font-weight: 500;
-
 		border-radius: 5px !important;
 		height: 58px !important;
 		padding: 16px 30px !important;
 		margin: 0 !important;
 
-		&::placeholder {
-			color: #A0A0A0;
-		}
-
+		&,
 		.autocomplete__input {
 			color: #282828 !important;
 			font-size: 20px !important;
@@ -5480,7 +5473,19 @@ button.std-icon__wrapper {
 			&::placeholder {
 				color: #A0A0A0 !important;
 			}	
+		
 		}
+
+		&:focus + .std-auth__input-label {
+			background: white !important;
+		}
+	}
+
+	&__input-label {
+		color: #A0A0A0 !important;
+		left: 30px !important;
+		// translate: 0 -50%;
+		margin-top: -.5rem;
 	}
 
 	&__button {
@@ -5502,6 +5507,15 @@ button.std-icon__wrapper {
 
 	&__map {
 		height: 300px !important;
+	}
+
+	&__actions-container {
+		@include flex-direction($gap: 10px);
+
+		.std-auth__button {
+			flex-grow: 1;
+			width: max-content;
+		}
 	}
 }
 

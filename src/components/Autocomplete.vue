@@ -31,7 +31,8 @@
             type="text"
             class="autocomplete__input"
             :placeholder="placeholder"
-            :required="required" />
+            :required="required"
+            :autocomplete="autocomplete" />
 
         <ul ref="suggestions" class="autocomplete__suggestions" :class="{ active: this.isActive }">
             <li v-for="suggestion in suggestions" @click="addSelection(suggestion)" class="autocomplete__suggestion">
@@ -71,6 +72,10 @@ export default {
             type: Array,
             default: []
         },
+        autocomplete: {
+            type: String,
+            default: "off"
+        }
     },
     data() {
         return {
@@ -157,7 +162,7 @@ export default {
                     }
                 }
             );
-			
+
             this.suggestions = response.data?.suggestions;
 
             if (this.suggestions.length) {
@@ -204,14 +209,14 @@ export default {
                 this.value = '';
                 this.$emit('setSelections', tempSelections);
 
-				return;
+                return;
             }
 
             if (this.selectionType == 'single') {
                 this.$emit('setSelection', selection);
                 this.isActive = false;
 
-				return;
+                return;
             }
         },
         debounce(func, delay) {
