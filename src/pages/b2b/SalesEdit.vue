@@ -1121,7 +1121,8 @@ export default {
       },
       compabilityMode: [
         { name: 'Применяется бóльшая', key: 0 },
-        { name: 'Скидки складываются', key: 1 }
+        { name: 'Скидки складываются', key: 1 },
+        { name: 'Скидки назначаются последовательно', key: 2 }
       ],
       compabilityModePost: [
         { name: 'Применяется бóльшая', key: 0 },
