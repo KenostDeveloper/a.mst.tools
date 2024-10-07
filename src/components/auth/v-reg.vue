@@ -180,7 +180,7 @@ export default {
             if (this.form.password === this.form.passwordConfirm) {
                 this.loading = true;
                 this.$load(async () => {
-                    const data = (await this.$api.auth.register(this.form)).data;
+                    const data = (await this.$api.auth.register(this.form));
                     if (data) {
                         if (data === 'technical error') {
                             this.$toast.add({ severity: 'error', summary: 'Техническая ошибка', detail: 'Попробуйте позже.', life: 3000 });
@@ -188,7 +188,7 @@ export default {
                         }
 
                         if(!data.data.success){
-                            this.$toast.add({ severity: 'error', summary: 'Ошибка!', detail: data.message, life: 3000 });
+                            this.$toast.add({ severity: 'error', summary: 'Ошибка!', detail: data.data.message, life: 3000 });
                             this.goToErroInput(data.message);
                         }else{
                             this.sendMetrik('register');
