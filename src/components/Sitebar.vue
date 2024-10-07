@@ -116,8 +116,25 @@
 				</PanelMenu>
 			</div>
 		</div>
+		<div class="helpModal" @click="helpMenuToggle" :class="{'show': this.menuHelp}">
+			<div class="helpModal__content" @click.stop="">
+				<div class="helpModal__close" @click="helpMenuToggle">
+				<i class="pi pi-times"></i>
+				</div>
+				<div class="helpModal__catalog-mobile" @click="this.menuHelpMobile = !this.menuHelpMobile">
+				<i class="pi pi-align-right"></i>
+				</div>
+				<div class="helpModal__menu" :class="{'show': this.menuHelpMobile || !this.menuHelp}">
+				<CatalogMenu :active1="this.index1" :active2="this.index2" @getMenuIndex="changeContentTraining" :items="training_catalog"/>
+				</div>
+				<div class="helpModal__text">
+				<p class="helpModal__title">{{ this.index2 == null? training_catalog[this.index1]?.pagetitle : training_catalog[this.index1].children[this.index2]?.pagetitle}}</p>
+				<div v-html="this.index2 == null? training_catalog[this.index1]?.content : training_catalog[this.index1].children[this.index2]?.content"></div>
+				</div>
+			</div>
+		</div>
 		<div class="sitebar-logout__container">
-			<button class="button-none sitebar-logout__question">
+			<button @click="helpMenuToggle" class="button-none sitebar-logout__question">
 				
 			</button>
 			<div class="sitebar-logout" @click="onAuthBtnClick">
@@ -209,6 +226,7 @@ import OverlayPanel from "primevue/overlaypanel";
 import Dialog from "primevue/dialog";
 import EmptyDialog from "./EmptyDialog.vue";
 import router from "../router";
+import CatalogMenu from './training/CatalogMenu.vue'
 
 export default {
 	name: "Sitebar",
@@ -225,7 +243,12 @@ export default {
 			organizations: [],
 			organozation: [],
 			changeOrgModal: false,
+			menuHelp: false,
+      		menuHelpMobile: false,
 			role: 0,
+			index1: 0,
+      		index2: null,
+			training_catalog: {},
 			//РОЛИ
 			// 0 - Закупки
 			// 1 - Маркетплейс
@@ -236,12 +259,18 @@ export default {
 		PanelMenu,
 		Dialog,
 		EmptyDialog,
+		CatalogMenu
 	},
-	mounted() {},
+	mounted() {
+		this.get_training_catalog_from_api().then(
+			this.training_catalog = this.trainingcatalog
+		)
+	},
 	computed: {
 		...mapGetters({
 			getUser: "user/getUser",
 			orgs: "orgs",
+			trainingcatalog: 'trainingcatalog'
 		}),
 		getMenu() {
 			if (this.role == 0) {
@@ -346,6 +375,12 @@ export default {
 			}
 		},
 	},
+	updated () {
+		// this.namePathIsNav = router?.currentRoute?._value.matched[3]?.name
+		this.get_training_catalog_from_api().then(
+			this.training_catalog = this.trainingcatalog
+		)
+	},
 	methods: {
 		...mapActions({
 			setUser: "user/setUser",
@@ -354,7 +389,21 @@ export default {
 			get_opt_vendors_from_api: "get_opt_vendors_from_api",
 			get_opt_warehouse_catalog_from_api: "get_opt_warehouse_catalog_from_api",
 			get_opt_catalog_from_api: "get_opt_catalog_from_api",
+			get_training_catalog_from_api: 'get_training_catalog_from_api'
 		}),
+		changeContentTraining (elem) {
+			// console.log(elem)
+			this.index1 = elem.index1
+			this.index2 = elem.index2
+		},
+		helpMenuToggle () {
+			this.menuHelp = !this.menuHelp
+			// if(this.menuHelp){
+			// 	document.body.style.overflow = 'auto'
+			// } else {
+			// 	document.body.style.overflow = 'hidden'
+			// }
+		},
 		sidebarToggle() {
 			this.sitebar = !this.sitebar;
 			this.$cookies.set("sidebar_active", Number(this.sitebar));

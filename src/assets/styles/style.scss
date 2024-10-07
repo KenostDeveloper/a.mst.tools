@@ -6850,3 +6850,142 @@ button.std-icon__wrapper {
 .kenost-table-border-bottom{
 	border-bottom: 1px solid #ADADAD;
 }
+
+
+.helpModal{
+	width: 100vw;
+	height: 100vh;
+	position: fixed;
+	left: 0;
+	top: 0;
+	z-index: 100;
+	pointer-events: none;
+	background: rgba($color: #000000, $alpha: 0);
+	transition: all 0.5s;
+
+	.helpModal__text{
+		li{
+			list-style: disc;
+			padding: 7px 0;
+			line-height: 1.1;
+		}
+	}
+
+	.dart-catalog-menu__el{
+		line-height: 21px;
+	}
+
+	.d-col-menu{
+		li{
+			padding: 7px 0;
+		}
+	}
+	
+  
+	&__content{
+	  width: 800px;
+	  background: #FFF;
+	  position: fixed;
+	  right: 0;
+	  height: 100vh;
+	  transform: translateX(100%);
+	  transition: all 0.5s;
+	  display: flex;
+	}
+  
+	&__text{
+	  padding: 40px 24px;
+	  height: 100vh;
+	  overflow-y: auto;
+  
+	  &::-webkit-scrollbar {
+		width: 8px;
+		background-color: #e0e0e0; /* blue */
+		border-radius: 9em;
+	  }
+	  &::-webkit-scrollbar-thumb {
+		  background-color: #b4b4b4; /* green */
+		  border-radius: 9em;
+	  }
+	}
+  
+	&__title{
+	  font-size: 24px;
+	  font-weight: 500;
+	  margin-bottom: 24px;
+	}
+  
+	&.show{
+	  background: rgba($color: #000000, $alpha: 0.5);
+	  pointer-events: all;
+  
+	  .helpModal{
+		&__content{
+		  transform: translateX(0);
+		}
+  
+		&__close{
+		  left: -45px;
+		}
+	  }
+	}
+  
+	&__catalog-mobile{
+	  position: absolute;
+	  left: 0px;
+	  top: 60px;
+	  width: 45px;
+	  height: 35px;
+	  background: #FF0000;
+	  border-radius: 20px 0 0 20px;
+	  display: flex;
+	  align-items: center;
+	  justify-content: center;
+	  cursor: pointer;
+	  transition: all 0.4s;
+	  rotate: 180deg;
+	  z-index: 2;
+	  display: none;
+  
+	  .pi{
+		color: #FFF;
+		font-size: 16px;
+	  }
+  
+	  &:hover{
+		background: #ff5e5e;
+  
+		.pi{
+		  font-size: 18px;
+		}
+	  }
+	}
+  
+	&__close{
+	  position: absolute;
+	  left: 0px;
+	  top: 20px;
+	  width: 45px;
+	  height: 35px;
+	  background: #FF0000;
+	  border-radius: 20px 0 0 20px;
+	  display: flex;
+	  align-items: center;
+	  justify-content: center;
+	  cursor: pointer;
+	  transition: all 0.4s;
+  
+	  .pi{
+		color: #FFF;
+		font-size: 16px;
+	  }
+  
+	  &:hover{
+		background: #ff5e5e;
+  
+		.pi{
+		  font-size: 18px;
+		}
+	  }
+	}
+  }
