@@ -5483,17 +5483,11 @@ button.std-icon__wrapper {
 			}	
 		
 		}
-
-		&:focus + .std-auth__input-label {
-			background: white !important;
-		}
 	}
 
 	&__input-label {
 		color: #A0A0A0 !important;
 		left: 30px !important;
-		// translate: 0 -50%;
-		margin-top: -.5rem;
 	}
 
 	&__button {
@@ -5721,8 +5715,8 @@ button.std-icon__wrapper {
 .error {
 	position: relative;
 
-	:is(.p-inputwrapper, .dart-form-control) {
-		border: 1px solid #f00;
+	:is(.p-inputwrapper, .dart-form-control, .autocomplete) {
+		border: 1px solid #f00 !important;
 		border-radius: 6px;
 
 		:is(.p-inputtext) {
