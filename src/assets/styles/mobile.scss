@@ -23,6 +23,39 @@
 }
 
 @media (max-width: 991px) {
+	.helpModal.show .helpModal__content{
+		width: 100%;
+	  }
+	
+	  .helpModal__close{
+		rotate: 180deg;
+		left: 0 !important;
+		z-index: 2;
+	  }
+	  .helpModal__menu{
+		position: fixed;
+		left: 0;
+		height: 100vh;
+		z-index: 1;
+		padding-top: 100px;
+		background: #F3F3F3;
+		transform: translateX(-100%);
+		transition: all 0.4s;
+	
+		&.show{
+		  transform: translateX(0);
+		}
+	  }
+	
+	  .helpModal__catalog-mobile{
+		display: flex;
+		background: #282828;
+	
+		&:hover{
+		  background: #1a1a1a;
+		}
+	  }
+	  
 	.content {
 		// background: #a6fffb;
 	}

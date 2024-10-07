@@ -1,34 +1,10 @@
 <template>
     <div class="d-col-menu menuShow" :class="{'active' : this.isMenuActive}">
-        <ul class="dart-catalog-menu" v-if="$route.params.warehouse_id">
-            <li class="dart-catalog-menu__category">
-                <div @click="$router.push({ name: 'purchases_home', params: { id: $route.params.id }})" class="dart-catalog-menu__el">
-                    <img src="../../assets/images/icons/arrow.svg" style="padding: 15px 15px;" alt="">
-                    <span><b>Поставщик «{{ optwarehouse.name_short }}»</b></span>
-                </div>
-            </li>
-            <CatalogEl v-for="item in items" v-bind:key="item.id" :items="item"/>
-        </ul>
-        <ul class="dart-catalog-menu" v-else>
-            <li class="dart-catalog-menu__category">
-                <div @click="setActive($event)" class="dart-catalog-menu__el">
-                    <img src="../../assets/images/icons/arrow.svg" style="padding: 5px 5px;" alt="">
-                    <span>Каталоги поставщиков</span>
-                </div>
-                <ul class="dart-catalog-menu__list">
-                    <li v-for="(item) in this.optvendors.selected" :key="item.id">
-                        <span></span>
-                        <RouterLink :to="{ name: 'purchases_catalog_warehouse', params: { warehouse_id: item.id }}" class="dart-catalog-menu__el">
-                            {{ item.name_short }}
-                        </RouterLink>
-                    </li>
-                </ul>
-            </li>
-            <CatalogEl v-for="item in items" v-bind:key="item.id" :items="item"/>
-        </ul>
-        <div @click="this.isMenuActive = !this.isMenuActive" class="closemenu">
-            <i class="pi pi-angle-left"></i>
-            <p>Скрыть</p>
+        <div class="dart-catalog-menu">
+            <div class="dart-catalog-menu__title">
+                <p>Поддержка МСТ</p>
+            </div>
+            <CatalogEl :active1="this.active1" :active2="this.active2" @menuIndex="changeMenuEl" v-for="item in items" v-bind:key="item.id" :items="item"/>
         </div>
     </div>
 </template>
@@ -37,7 +13,7 @@ import { mapActions, mapGetters } from 'vuex'
 import CatalogEl from './CatalogEl.vue'
 
 export default {
-  name: 'CatalogMenu',
+  name: 'TraningCatalogMenu',
   props: {
     pagination_items_per_page: {
       type: Number,
@@ -49,6 +25,12 @@ export default {
     },
     items: {
       type: Array
+    },
+    active1: {
+      type: Number
+    },
+    active2: {
+      type: Number
     }
   },
   data () {
@@ -57,89 +39,45 @@ export default {
       isMenuActive: false
     }
   },
+  emits: ['getMenuIndex'],
   methods: {
     ...mapActions([
-      'get_opt_warehouse'
     ]),
-    setActive (e) {
-      this.active = !this.active
-      // console.log(e.target.parentNode.querySelector('.dart-catalog-menu__list'))
-      if (e.target.parentNode.parentNode.querySelector('.dart-catalog-menu__list')) {
-        if (e.target.parentNode.parentNode.querySelector('.dart-catalog-menu__list').style.maxHeight) {
-          e.target.parentNode.parentNode.querySelector('.dart-catalog-menu__list').style.maxHeight = null
-        } else {
-          e.target.parentNode.parentNode.querySelector('.dart-catalog-menu__list').style.maxHeight = e.target.parentNode.parentNode.querySelector('.dart-catalog-menu__list').scrollHeight + 'px'
-        }
-      }
+    changeMenuEl (elem) {
+      const index1 = elem.index1
+      const index2 = elem.index2
+      this.$emit('getMenuIndex', { index1, index2 })
     }
   },
   mounted () {
-    if (this.$route.params.warehouse_id) {
-      this.get_opt_warehouse().then(
-        this.opt_warehouse = this.optwarehouse
-      )
-    }
   },
   components: { CatalogEl },
   computed: {
     ...mapGetters([
-      'optvendors',
-      'optwarehouse'
     ])
   }
 }
 </script>
 <style lang="scss">
-    .dart-catalog-menu__prev{
-        a{
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            transition: all 1s;
-            padding: 7px;
-            background: #fff;
-            span.icon{
-                width: 40px;
-                height: 40px;
-                border-radius: 5px;
-                background: #F8F7F5;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                i{
-                    padding-right: 3px;
-                    font-size: 20px;
-                }
-                & + span{
-                    font-size: 16px;
-                    font-weight: 500;
-                    padding-left: 10px;
-                }
-            }
-        }
-    }
-    .d-col-menu.active + .d-col-content{
-        max-width: calc(100% - calc(64px + 350px));
-        min-width: calc(100% - calc(64px + 350px));
-        transition: all 0.4s
-    }
+
+    //.d-col-menu.active + .d-col-content{
+    //    max-width: calc(100% - calc(64px + 350px));
+    //    min-width: calc(100% - calc(64px + 350px));
+    //    transition: all 0.4s
+    //}
 
     .d-col-menu{
-        max-width: 287px;
-        min-width: 287px;
+    //    max-width: 287px;
+    //    min-width: 287px;
         height: 100%;
-        position: sticky;
-        top: 8px;
-        transition: all 0.4s
+    //    position: sticky;
+    //    top: 8px;
+    //    transition: all 0.4s
     }
 
     .d-col-menu.active{
         max-width: 64px;
         min-width: 64px;
-
-        .dart-catalog-menu__list{
-            max-height: 0px !important;
-        }
 
         .closemenu{
             p{
@@ -205,7 +143,6 @@ export default {
         &.menuShow{
             .dart-catalog-menu{
                 display: block;
-                width: 100%;
             }
 
             .dart-menu-category{
@@ -224,11 +161,11 @@ export default {
     .dart-catalog-menu{
         border-radius: 5px;
         padding: 18px;
-        background: #fff;
+        background: #F3F3F3;
         margin-bottom: 10px;
-        height: calc(100vh - 88px);
-        overflow-y: auto;
-        overflow-x: hidden;
+        height: 100%;
+        width: 230px;
+        font-size: 14px;
 
         &::-webkit-scrollbar {
             width: 4px;
@@ -240,6 +177,16 @@ export default {
             border-radius: 9em;
         }
 
+        &__title{
+            display: flex;
+            justify-content: center;
+            p{
+                font-weight: 500;
+                font-size: 20px;
+                color: #282828;
+            }
+        }
+
         ul{
             padding: 0;
             margin: 0;
@@ -248,16 +195,14 @@ export default {
         &__category{
             list-style: none;
             transition: all 1s;
-            padding: 7px;
+            padding: 7px 0;
 
             ul{
                 li{
                     list-style: none;
+                    cursor: pointer;
                 }
-
-                & {
-                    padding-left: 30px;
-                }
+                padding-left: 16px;
             }
         }
 
@@ -269,7 +214,7 @@ export default {
             transition: all 0.5s;
             transform: scale(1);
             text-decoration: none;
-            width: calc(100% - 25px);
+            width: calc(100% - 20px);
 
             &::after{
                 width: 55px;
@@ -277,7 +222,7 @@ export default {
                 height: 100%;
                 position: absolute;
                 z-index: 1;
-                background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 44%);
+                background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(243 243 243) 44%);
                 right: -65px;
                 transform: translate(-50%, 0);
             }
@@ -294,14 +239,6 @@ export default {
                 }
             }
 
-            .img_blank{
-                display: inline-block;
-                width: 40px;
-                height: 40px;
-                border-radius: 5px;
-                background: transparent;
-            }
-
             img{
                 width: 40px;
                 height: 40px;
@@ -311,8 +248,7 @@ export default {
 
             &:hover{
                 color: #F00;
-                img,
-                .img_blank{
+                img{
                     transform: scale(1.1);
                 }
 
@@ -331,6 +267,7 @@ export default {
             max-height: 0;
             // opacity: 0;
             transition: max-height .5s;
+            font-size: 14px;
             a{
                 color: #282828;
                 width: 100%;
