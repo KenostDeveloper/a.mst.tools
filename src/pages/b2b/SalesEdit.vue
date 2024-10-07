@@ -1286,205 +1286,211 @@ import router from '../../router';
 import Paginate from 'vuejs-paginate-next';
 
 export default {
-    name: 'ProfileSalesAdd',
-    props: {},
-    data() {
-        return {
-            page: 1,
-            pageGift: 1,
-            loading: true,
-            filter: {
-                name: '',
-                category: {}
-            },
-            filterGift: {
-                name: '',
-                category: {}
-            },
-            filter_table: {
-                name: '',
-                category: {}
-            },
-            geo_action: { name: 'По географии акции', key: 1 },
-            opt_catalog_tree: [],
-            error_product: [],
-            create_page_action: [],
-            upload_product: false,
-            page_complects: 1,
-            per_complects: 25,
-            filter_complects: '',
-            complects: [],
-            stores: [],
-            selected_complects: {},
-            postponement_period: 0,
-            selected: {},
-            selectedGift: {},
-            selected_data: {},
-            selected_visible: {},
-            total_selected: -1,
-            kenost_table_all: [],
-            kenost_table: [],
-            products: [],
-            productsGift: [],
-            total_products: 0,
-            total_gift_products: 0,
-            saleValue: 0,
-            per_page: 25,
-            filter_organizations: {
-                name: '',
-                type: [1, 2]
-            },
-            all_organizations: [],
-            all_organizations_selected: {},
-            page_selected: 1,
-            regions: [],
-            place_action: [],
-            regions_all: [],
-            regions_select: [],
-            complects_ids: [],
-            form: {
-                actionLast: [],
-                global_kenost_table: [],
-                name: '',
-                description: '',
-                award: '',
-                dates: [],
-                compatibilityDiscount: '1',
-                compatibilityPost: '1',
-                typeShipment: '1',
-                dateShipment: '',
-                paymentDelivery: { name: 'Покупатель', key: 0 },
-                conditionPaymentDelivery: { name: 'Без условий', key: 0 },
-                compabilityMode: { name: 'Применяется бóльшая', key: 0 },
-                compabilityModePost: { name: 'Применяется бóльшая', key: 0 },
-                conditionPaymentDeliveryValue: 0,
-                postponementConditions: { name: 'Без условий', key: 0 },
-                postponementConditionsValue: 0,
-                condition: { name: 'Скидка без условий', key: 0 },
-                limitations: '1',
-                limitationValue: 0,
-                addProductType: '1',
-                store_id: '',
-                delay: [
-                    {
-                        percent: 100,
-                        day: 0
-                    }
-                ],
-                delayPercentSum: 0,
-                participantsType: '3',
-                available_stores: [],
-                available_vendors: [],
-                available_opt: [],
-                conditionMinCount: 0,
-                conditionMinSum: 0,
-                bigDiscount: [],
-                not_sale_client: []
-            },
-            listAction: {},
-            kenostActivityAll: {
-                type: {},
-                typePrice: {},
-                value: 0,
-                typeFormul: {},
-                discountInterest: 0,
-                multiplicity: 1
-            },
-            modals: {
-                delay: false,
-                price: false,
-                error_product: false,
-                price_step: 0,
-                type_price: '1',
-                product_id: -1,
-                headers: ['Метод редактирования цены', 'Скидка по формуле', 'Тип цен', 'Скидка вручную']
-            },
-            files: {
-                max: {
-                    original_href: ''
-                },
-                min: {
-                    original_href: ''
-                },
-                icon: {
-                    original_href: ''
-                },
-                small: {
-                    original_href: ''
-                }
-            },
-            compabilityMode: [
-                { name: 'Применяется бóльшая', key: 0 },
-                { name: 'Скидки складываются', key: 1 }
-            ],
-            compabilityModePost: [
-                { name: 'Применяется бóльшая', key: 0 },
-                { name: 'Применяется меньшая', key: 1 }
-            ],
-            paymentDelivery: [
-                { name: 'Покупатель', key: 0 },
-                { name: 'Поставщик', key: 1 }
-            ],
-            conditionPaymentDelivery: [
-                { name: 'Без условий', key: 0 },
-                { name: 'Купи на Х рублей', key: 1 },
-                { name: 'При покупке Х шт товара', key: 2 }
-            ],
-            postponementConditions: [
-                { name: 'Без условий', key: 0 },
-                { name: 'При покупке на Х рублей получи отсрочку', key: 1 },
-                { name: 'При покупке Х товара получи отсрочку на него', key: 2 }
-            ],
-            condition: [
-                { name: 'Скидка без условий', key: 0 },
-                { name: 'Купи Х товаров по цене Y', key: 1 },
-                { name: 'Получи подарок при покупке Х товаров', key: 2 },
-                { name: 'Купи на X рублей и получи скидку Y', key: 3 }
-            ],
-            typeFormul: [
-                { name: '₽', key: 0 },
-                { name: '%', key: 1 }
-            ],
-            typePrice: [],
-            massAction: [
-                { name: 'Скидка по формуле', key: 0 },
-                { name: 'Тип цен', key: 1 },
-                { name: 'Кратность', key: 3 }
-            ],
-            place: [
-                // { name: 'На главной', code: 0 },
-                // { name: 'На странице огранизаций', code: 1 },
-                // { name: 'В каталоге', code: 2 },
-                // { name: 'При выборе поставщика', code: 3 },
-                // { name: 'При офомлении заказа', code: 4 }
-            ],
-            geo: [
-                { name: 'Показывать всем', key: 0 },
-                { name: 'По географии акции', key: 1 }
-            ]
-        };
-    },
-    methods: {
-        ...mapActions([
-            'get_available_products_from_api',
-            'get_all_organizations_from_api',
-            'get_regions_from_api',
-            'set_sales_to_api',
-            'get_sales_to_api',
-            'opt_get_complects',
-            'opt_upload_products_file',
-            'get_all_sales_to_api',
-            'opt_get_prices',
-            'opt_get_remain_prices',
-            'get_opt_catalog_tree_from_api',
-            'org_get_stores_from_api',
-            'get_sales_adv_pages_to_api'
-        ]),
-        onUpload(data) {
-            if (data.xhr.response) {
-                const response = JSON.parse(data.xhr.response);
-                if (Object.prototype.hasOwnProperty.call(response.data, 'files')) {
-                    // перечень загруженныйх файлов
+  name: 'ProfileSalesAdd',
+  props: { },
+  data () {
+    return {
+      page: 1,
+      pageGift: 1,
+      loading: true,
+      filter: {
+        name: '',
+        category: {}
+      },
+      filterGift: {
+        name: '',
+        category: {}
+      },
+      filter_table: {
+        name: '',
+        category: {}
+      },
+      geo_action: { name: 'По географии акции', key: 1 },
+      opt_catalog_tree: [],
+      error_product: [],
+      create_page_action: [],
+      upload_product: false,
+      page_complects: 1,
+      per_complects: 25,
+      filter_complects: '',
+      complects: [],
+      stores: [],
+      selected_complects: {},
+      postponement_period: 0,
+      selected: {},
+      selectedGift: {},
+      selected_data: {},
+      selected_visible: {},
+      total_selected: -1,
+      kenost_table_all: [],
+      kenost_table: [],
+      products: [],
+      productsGift: [],
+      total_products: 0,
+      total_gift_products: 0,
+      saleValue: 0,
+      per_page: 25,
+      filter_organizations: {
+        name: '',
+        type: [1, 2]
+      },
+      all_organizations: [],
+      all_organizations_selected: {},
+      page_selected: 1,
+      regions: [],
+      place_action: [],
+      regions_all: [],
+      regions_select: [],
+      complects_ids: [],
+      form: {
+        actionLast: [],
+        global_kenost_table: [],
+        name: '',
+        description: '',
+        award: '',
+        dates: [],
+        compatibilityDiscount: '1',
+        compatibilityPost: '1',
+        typeShipment: '1',
+        dateShipment: '',
+        paymentDelivery: { name: 'Покупатель', key: 0 },
+        conditionPaymentDelivery: { name: 'Без условий', key: 0 },
+        compabilityMode: { name: 'Применяется бóльшая', key: 0 },
+        compabilityModePost: { name: 'Применяется бóльшая', key: 0 },
+        conditionPaymentDeliveryValue: 0,
+        postponementConditions: { name: 'Без условий', key: 0 },
+        postponementConditionsValue: 0,
+        condition: { name: 'Скидка без условий', key: 0 },
+        limitations: '1',
+        limitationValue: 0,
+        addProductType: '1',
+        store_id: '',
+        delay: [
+          {
+            percent: 100,
+            day: 0
+          }
+        ],
+        delayPercentSum: 0,
+        participantsType: '3',
+        available_stores: [],
+        available_vendors: [],
+        available_opt: [],
+        conditionMinCount: 0,
+        conditionMinSum: 0,
+        bigDiscount: [],
+        not_sale_client: []
+      },
+      listAction: {},
+      kenostActivityAll: {
+        type: {},
+        typePrice: {},
+        value: 0,
+        typeFormul: {},
+        discountInterest: 0,
+        multiplicity: 1
+      },
+      modals: {
+        delay: false,
+        price: false,
+        error_product: false,
+        price_step: 0,
+        type_price: '1',
+        product_id: -1,
+        headers: [
+          'Метод редактирования цены',
+          'Скидка по формуле',
+          'Тип цен',
+          'Скидка вручную'
+        ]
+      },
+      files: {
+        max: {
+          original_href: ''
+        },
+        min: {
+          original_href: ''
+        },
+        icon: {
+          original_href: ''
+        },
+        small: {
+          original_href: ''
+        },
+      },
+      compabilityMode: [
+        { name: 'Применяется бóльшая', key: 0 },
+        { name: 'Скидки складываются', key: 1 },
+        { name: 'Скидки назначаются последовательно', key: 2 }
+      ],
+      compabilityModePost: [
+        { name: 'Применяется бóльшая', key: 0 },
+        { name: 'Применяется меньшая', key: 1 }
+      ],
+      paymentDelivery: [
+        { name: 'Покупатель', key: 0 },
+        { name: 'Поставщик', key: 1 }
+      ],
+      conditionPaymentDelivery: [
+        { name: 'Без условий', key: 0 },
+        { name: 'Купи на Х рублей', key: 1 },
+        { name: 'При покупке Х шт товара', key: 2 }
+      ],
+      postponementConditions: [
+        { name: 'Без условий', key: 0 },
+        { name: 'При покупке на Х рублей получи отсрочку', key: 1 },
+        { name: 'При покупке Х товара получи отсрочку на него', key: 2 }
+      ],
+      condition: [
+        { name: 'Скидка без условий', key: 0 },
+        { name: 'Купи Х товаров по цене Y', key: 1 },
+        { name: 'Получи подарок при покупке Х товаров', key: 2 },
+        { name: 'Купи на X рублей и получи скидку Y', key: 3 }
+      ],
+      typeFormul: [
+        { name: '₽', key: 0 },
+        { name: '%', key: 1 }
+      ],
+      typePrice: [],
+      massAction: [
+        { name: 'Скидка по формуле', key: 0 },
+        { name: 'Тип цен', key: 1 },
+        { name: 'Кратность', key: 3 }
+      ],
+      place: [
+        // { name: 'На главной', code: 0 },
+        // { name: 'На странице огранизаций', code: 1 },
+        // { name: 'В каталоге', code: 2 },
+        // { name: 'При выборе поставщика', code: 3 },
+        // { name: 'При офомлении заказа', code: 4 }
+      ],
+      geo: [
+        { name: 'Показывать всем', key: 0 },
+        { name: 'По географии акции', key: 1 }
+      ]
+    }
+  },
+  methods: {
+    ...mapActions([
+      'get_available_products_from_api',
+      'get_all_organizations_from_api',
+      'get_regions_from_api',
+      'set_sales_to_api',
+      'get_sales_to_api',
+      'opt_get_complects',
+      'opt_upload_products_file',
+      'get_all_sales_to_api',
+      'opt_get_prices',
+      'opt_get_remain_prices',
+      'get_opt_catalog_tree_from_api',
+      'org_get_stores_from_api',
+      'get_sales_adv_pages_to_api'
+    ]),
+    onUpload (data) {
+      if (data.xhr.response) {
+        const response = JSON.parse(data.xhr.response)
+        if (Object.prototype.hasOwnProperty.call(response.data, 'files')) {
+          // перечень загруженныйх файлов
 
                     if (response.data.files[0].type_banner === 'max') {
                         this.files.max = response.data.files[0];
