@@ -160,7 +160,7 @@
                         v-model="this.geo_action"
                         :options="this.geo"
                         optionLabel="name"
-                        placeholder="Массовое действие"
+                        placeholder="География показа"
                         class="w-full md:w-14rem" />
                 </div>
 
@@ -919,7 +919,7 @@
                 </div>
 
                 <div class="kenost-all-table-activity" v-if="this.form.addProductType == '1' || this.form.addProductType == '2'">
-                    <div class="kenost-wiget" :class="{ error: v$.kenostActivityAll.type.$errors.length }">
+                    <div class="kenost-wiget" >
                         <p>Массовое действие</p>
                         <Dropdown
                             v-model="this.kenostActivityAll.type"
@@ -927,10 +927,6 @@
                             optionLabel="name"
                             placeholder="Массовое действие"
                             class="w-full md:w-14rem" />
-
-                        <span class="error_desc" v-for="error of v$.kenostActivityAll.type.$errors" :key="error.$uid">
-                            {{ error.$message }}
-                        </span>
                     </div>
                     <div
                         class="kenost-wiget"
@@ -2729,12 +2725,12 @@ export default {
                 })
             },
             kenostActivityAll: {
-                type: {
-                    required: helpers.withMessage('Выберите тип массового действия', () => {
-                        if (this.form.addProductType != 1 && this.form.addProductType != 2) return true;
-                        return this.kenostActivityAll?.type?.name;
-                    })
-                },
+                // type: {
+                //     required: helpers.withMessage('Выберите тип массового действия', () => {
+                //         if (this.form.addProductType != 1 && this.form.addProductType != 2) return true;
+                //         return this.kenostActivityAll?.type?.name;
+                //     })
+                // },
                 typePrice: {
                     required: helpers.withMessage('Выберите тип цен', () => {
                         if (this.kenostActivityAll?.type?.key != 0 && this.kenostActivityAll?.type?.key != 1) return true;
