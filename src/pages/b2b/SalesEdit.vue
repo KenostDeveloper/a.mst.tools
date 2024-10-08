@@ -2712,18 +2712,18 @@ export default {
                     return this.place_action?.length > 0;
                 })
             },
-            selected: {
-                required: helpers.withMessage('Выберите хотя бы один товар', () => {
-                    if (this.form.addProductType != 1 && this.form.addProductType != 2) return true;
-                    return Object.keys(this.selected).length > 0;
-                })
-            },
-            selected_complects: {
-                required: helpers.withMessage('Выберите хотя бы один комплект', () => {
-                    if (this.form.addProductType != 3) return true;
-                    return Object.keys(this.selected_complects).length > 0;
-                })
-            },
+            // selected: {
+            //     required: helpers.withMessage('Выберите хотя бы один товар', () => {
+            //         if (this.form.addProductType != 1 && this.form.addProductType != 2) return true;
+            //         return Object.keys(this.selected).length > 0;
+            //     })
+            // },
+            // selected_complects: {
+            //     required: helpers.withMessage('Выберите хотя бы один комплект', () => {
+            //         if (this.form.addProductType != 3) return true;
+            //         return Object.keys(this.selected_complects).length > 0;
+            //     })
+            // },
             kenostActivityAll: {
                 // type: {
                 //     required: helpers.withMessage('Выберите тип массового действия', () => {
