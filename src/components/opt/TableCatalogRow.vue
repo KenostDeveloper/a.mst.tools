@@ -227,30 +227,32 @@
                 'no-active': !this.active && !this.is_warehouses && items.total_stores > 1
             }">
             <td class="td-center" :class="{ 'pointer-none': index !== 0 }">
-                <span :style="'top:' + (complect.length * 74) / 2 + 'px'" v-if="index === 0"><i class="pi pi-minus"></i></span>
+                <!-- <span :style="'top:' + (complect.length * 74) / 2 + 'px'" v-if="index === 0"><i class="pi pi-minus"></i></span> -->
             </td>
             <td class="k-table__photo">
                 <img class="k-table__image" :src="item.image" alt="" />
                 <div class="kenost-complect-icon" v-if="index < complect.length - 1">
-                    <svg class="kenost-screp" width="12" height="18" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- <svg class="kenost-screp" width="12" height="18" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M0.665365 6.33398L0.665365 3.66732C0.665365 2.74509 0.990365 1.95898 1.64037 1.30898C2.29036 0.658984 3.07648 0.333984 3.9987 0.333984C4.92092 0.333984 5.70703 0.658984 6.35703 1.30898C7.00703 1.95898 7.33203 2.7451 7.33203 3.66732L7.33203 6.33398L5.9987 6.33398L5.9987 3.66732C5.9987 3.11176 5.80425 2.63954 5.41536 2.25065C5.02648 1.86176 4.55425 1.66732 3.9987 1.66732C3.44314 1.66732 2.97092 1.86176 2.58203 2.25065C2.19314 2.63954 1.9987 3.11176 1.9987 3.66732L1.9987 6.33398L0.665365 6.33398ZM3.33203 4.33398L4.66536 4.33398L4.66536 9.66732L3.33203 9.66732L3.33203 4.33398ZM0.665365 7.66732L1.9987 7.66732L1.9987 10.334C1.9987 10.8895 2.19314 11.3618 2.58203 11.7507C2.97092 12.1395 3.44314 12.334 3.9987 12.334C4.55425 12.334 5.02648 12.1395 5.41536 11.7507C5.80425 11.3618 5.9987 10.8895 5.9987 10.334L5.9987 7.66732L7.33203 7.66732L7.33203 10.334C7.33203 11.2562 7.00703 12.0423 6.35703 12.6923C5.70703 13.3423 4.92092 13.6673 3.9987 13.6673C3.07648 13.6673 2.29036 13.3423 1.64036 12.6923C0.990365 12.0423 0.665365 11.2562 0.665365 10.334L0.665365 7.66732Z" fill="#ADADAD" />
-                    </svg>
+                    </svg> -->
                 </div>
             </td>
             <td class="k-table__title">
+                <span class="complect-icon" v-if="index == 0">Комплект</span>
                 <p>{{ item.pagetitle }}</p>
                 <b>Арт: {{ item.article }}</b>
             </td>
-            <td class="k-table__busket complect-button__td" :class="{ 'pointer-none': index !== 0 }">
-                <form class="k-table__form complect-button__form" :class="{ 'basket-true': item?.basket?.availability }" :style="'top:' + (complect.length * 74) / 2 + 'px'" action="" v-if="index === 0">
-                    <Counter :key="new Date().getMilliseconds() + item.id" @ElemCount="ElemCountComplect" :min="1" :max="item.remain_complect" :id="item.complect_id" :store_id="item.store_id" :index="index" :value="item?.basket?.count" />
+            <td class="k-table__busket complect-button__td">
+                <!-- {{item.multiplicity}} -->
+                <form class="k-table__form" :class="{ 'basket-true': item?.basket?.availability }" action="">
+                    <Counter :key="new Date().getMilliseconds() + item.id" @ElemCount="ElemCountComplect" :step="item.multiplicity" :min="1" :item="item" :max="item.remain_complect * item.multiplicity" :id="item.complect_id" :store_id="item.store_id" :index="index" :value="item?.basket?.count * item.multiplicity" />
                     <div @click="addBasketComplect(item.complect_id, item?.basket?.count, item.store_id, index)" class="dart-btn dart-btn-primary">
                         <i class="d_icon d_icon-busket"></i>
                     </div>
                 </form>
             </td>
             <td>
-                {{ Math.round(Number(item.new_price)).toLocaleString('ru') }}₽ x {{ item.multiplicity }} шт. <br />
+                {{ Math.round(Number(item.new_price)).toLocaleString('ru') }} ₽<br />
                 {{ item.action?.delay ? Number(item.action?.delay).toFixed(1) + ' дн' : 'Предоплата' }}
             </td>
             <td>
@@ -361,12 +363,10 @@
             <td class="td-center" :class="{ 'pointer-none': index !== 0 }">
                 <span :style="'top:' + (complect.length * 74) / 2 + 'px'" v-if="index === 0">{{ item.remain_complect }} шт.</span>
             </td>
-            <td class="td-center" :class="{ 'pointer-none': index !== 0 }">
-                <span :style="'top:' + (complect.length * 74) / 2 + 'px'" v-if="index === 0">
-                    <span style="position: relative; top: 0; transform: unset">{{ item.org_name }}</span>
-                    <br />
-                    <span style="position: relative; top: 0; transform: unset" class="flex align-items-center justify-content-center gap-1"><img :src="item.store_image" class="kenost-table-elem__logo" alt="" /> {{ item.store_city }}</span>
-                </span>
+            <td class="td-center">
+                <span style="position: relative; top: 0; transform: unset">{{ item.org_name }}</span>
+                <br />
+                <span style="position: relative; top: 0; transform: unset" class="flex align-items-center justify-content-center gap-1"><img :src="item.store_image" class="kenost-table-elem__logo" alt="" /> {{ item.store_city }}</span>
             </td>
             <td v-if="item.price && item.price > item.new_price">
                 {{ item.price ? Math.round(item.price).toLocaleString('ru') : Math.round(item.new_price).toLocaleString('ru') }}
@@ -595,7 +595,7 @@ export default {
 		ElemCount(object) {
 			console.log(object)
 			// debounce(() => {
-				if (object.value == object.min) return;
+			if (object.value == object.min) return;
 
             if (object.value > Number(object.max)) {
                 this.modal_remain = true;
@@ -623,19 +623,23 @@ export default {
             // }, 300);
         },
         ElemCountComplect(object) {
-            if (object.value >= Number(object.max)) {
+            // console.log(object)
+            if (object.value == object.min) return;
+
+            if (object.value > Number(object.max)) {
                 this.modal_remain = true;
                 // console.log(this.modal_remain)
             } else {
                 // eslint-disable-next-line vue/no-mutating-props
-                this.items.stores[object.index].basket.count = object.value;
+                //this.items.stores[object.index].basket.count = object.value;
                 const data = {
                     action: 'basket/update',
                     id: router.currentRoute._value.params.id,
                     id_complect: object.id,
-                    value: object.value,
+                    value: object.value / object.item.multiplicity,
                     store_id: object.store_id
                 };
+                // console.log(data)
                 this.busket_from_api(data).then();
                 this.$emit('updateBasket');
             }

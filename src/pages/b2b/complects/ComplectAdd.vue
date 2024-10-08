@@ -576,7 +576,7 @@ export default {
             this.$load(async () => {
                 await this.opt_api({
                     action: 'complect/set',
-                    store_id: router.currentRoute._value.params.id,
+                    store_id: this.form.store_id,
                     products: this.selected,
                     // dates: [this.form.dates[0].toDateString(), this.form.dates[1].toDateString()],
                     name: this.form.name

@@ -14,42 +14,61 @@
                     <th class="k-table__name k-tablr-th-retail hidden-mobile-l">Остатки на складе</th>
                 </tr>
             </thead>
-            <!-- Комплекты -->
-            <!-- <tbody class="complect-button kenost-table-background kenost-table-background-complect" v-for="complect in items.complects" v-bind:key="complect.id">
-                <tr v-for="(item, index) in complect.products" v-bind:key="item.id" class="no-line">
-                    <td>
-                        <span class="k-table__article">{{ item.article }}</span>
-                    </td>
+            <!-- Вывод комплектов -->
+            <tbody
+                class="complect-button kenost-table-background kenost-table-background-complect active"
+                v-for="complect in items.complects"
+                v-bind:key="complect.id"
+                :class="{
+                    active: this.active || this.is_warehouses || items.total_stores == 1,
+                    'no-active': !this.active && !this.is_warehouses && items.total_stores > 1,
+                    'bg-white': items.total_stores == 1
+                }">
+                <!-- {{ complect.products }} -->
+                <tr
+                    v-for="(item, index) in complect.products"
+                    v-bind:key="item.id" class="active">
                     <td class="k-table__photo">
                         <img class="k-table__image" :src="item.image" alt="" />
-                        <div v-if="index < complect.products.length - 1" class="kenost-complect-icon">
-                            <i class="mst-icon mst-icon-link"></i>
-                        </div>
                     </td>
-                    <td class="k-table__title" @click="openActions(item)">
+                    <td class="k-table__title">
+                        <span class="complect-icon" v-if="index == 0">Комплект</span>
                         <p>{{ item.name }}</p>
+                        <b>Арт: {{ item.article }}</b>
                     </td>
-                    <td class="k-table__busket complect-button__td" :class="{ 'pointer-none': index !== 0 }">
-                        <form class="k-table__form complect-button__form" action="" v-if="index === 0" :class="{ 'basket-true': item.basket.availability }">
-                            <Counter :key="new Date().getMilliseconds() + item.id" @ElemCount="ElemCountComplect" :min="1" :id="item.complect_id" :store_id="items.store_id" :index="item.complect_id" :max="item.remain.min_count" :value="item.basket.count" />
-                            <div @click="addBasketComplect(item.complect_id, item.basket.count, items.store_id, index)" class="dart-btn dart-btn-primary">
+                    <td class="k-table__busket complect-button__td">
+                        <form class="k-table__form" :class="{ 'basket-true': item?.basket?.availability }" action="">
+                            <Counter :key="new Date().getMilliseconds() + item.id" @ElemCount="ElemCountComplect" :step="item.multiplicity" :min="1" :item="item" :max="item.remain.min_count * item.multiplicity" :id="item.complect_id" :store_id="complect.store_id" :index="index" :value="item?.basket?.count * item.multiplicity" />
+                            <div @click="addBasketComplect(item.complect_id, item?.basket?.count, complect.store_id, index)" class="dart-btn dart-btn-primary">
                                 <i class="d_icon d_icon-busket"></i>
                             </div>
                         </form>
                     </td>
-                    <td>{{ Math.round(item.old_price).toLocaleString('ru') }} ₽</td>
-                    <td>{{ item.new_price / 100 == 0 ? '100.00' : ((item.old_price - item.new_price) / (item.old_price / 100)).toFixed(2) }}</td>
-                    <td>{{ Math.round(item.new_price).toLocaleString('ru') }} ₽</td>
-                    <td>{{ item.multiplicity }}</td>
-                    <td>{{ (Math.round(item.new_price) * item.multiplicity * item.basket.count).toLocaleString('ru') }} ₽</td>
-                    <td class="td-center">
-                        <span v-if="index === 0" :style="'top:' + (complect.products.length * 70) / 2 + 'px'">{{ complect.remain.min_count }} шт</span>
+                    <td >
+                        {{ Math.round(Number(item.old_price)).toLocaleString('ru') }} ₽
                     </td>
+                    <td >
+                        {{ ((Number(item.old_price) - Number(item.new_price)) / (Number(item.old_price) / 100)).toFixed(2).toLocaleString('ru') }} %
+                    </td>
+                    <td>
+                        {{ Math.round(Number(item.new_price)).toLocaleString('ru') }} ₽
+                    </td>
+                    <td>
+                        {{ Math.round(Number(item.new_price) * item.multiplicity).toLocaleString('ru') }} ₽
+                    </td>
+                    <td>
+                        {{ Math.round(item.multiplicity).toLocaleString('ru') }} ₽
+                    </td>
+                    <td>
+                        {{ Math.round(Number(item.remain.min_count * item.multiplicity)).toLocaleString('ru') }} шт
+                    </td>
+                    <!-- {{ console.log(complect.store_id) }}
+                    {{console.log(item)}} -->
                 </tr>
-            </tbody> -->
+            </tbody>
 
             <tbody class="kenost-table-border-bottom" v-for="(item, index) in items.products" v-bind:key="item.id">
-                {{ console.log(item) }}
+                <!-- {{ console.log(item) }} -->
                 <tr v-if="item.max != 0">
                     <td class="k-table__photo hidden-mobile-l">
                         <img class="k-table__image" :src="item.image" alt="" />
@@ -145,7 +164,7 @@ export default {
 				id_remain: id,
 				value,
 				store_id: storeid,
-                actions: [this.items.action_id]
+                actions: [router.currentRoute._value.params.action]
 			};
 			this.busket_from_api(data).then(() => {
 				this.busket_from_api({
@@ -156,6 +175,28 @@ export default {
 			});
 			// eslint-disable-next-line vue/no-mutating-props
 			this.items.products[index].basket.availability = true;
+			this.$emit("updateBasket");
+		},
+        addBasketComplect(complectid, value, storeid, index) {
+			const data = {
+				action: "basket/add",
+				id: router.currentRoute._value.params.id,
+				id_complect: complectid,
+				value,
+				store_id: storeid,
+			};
+			this.busket_from_api(data).then(() => {
+				this.busket_from_api({
+					action: "basket/get",
+					id: router.currentRoute._value.params.id,
+					warehouse: "all",
+				});
+			});
+			// eslint-disable-next-line vue/no-mutating-props
+            for(let i = 0; i < this.items.complects[complectid].products.length; i++){
+                this.items.complects[complectid].products[i].basket.availability = true;
+            }
+			// this.items.complects[index][0].basket.availability = true;
 			this.$emit("updateBasket");
 		},
         getMinDelivery(stores) {
@@ -193,20 +234,30 @@ export default {
                     id_remain: object.id,
                     value: object.value,
                     store_id: object.store_id,
-                    actions: [object.item.action_id]
+                    actions: [router.currentRoute._value.params.action]
                 };
                 this.busket_from_api(data).then();
                 this.$emit('updateBasket');
             }
         },
         ElemCountComplect(object) {
+            console.log(object)
+            if (object.value == object.min) return;
+
             if (object.value > Number(object.max)) {
                 this.modal_remain = true;
-                console.log(this.modal_remain);
+                // console.log(this.modal_remain)
             } else {
                 // eslint-disable-next-line vue/no-mutating-props
-                this.items.complects[object.id].products[0].basket.count = object.value;
-                const data = { action: 'basket/update', id: router.currentRoute._value.params.id, id_complect: object.id, value: object.value, store_id: object.store_id };
+                //this.items.stores[object.index].basket.count = object.value;
+                const data = {
+                    action: 'basket/update',
+                    id: router.currentRoute._value.params.id,
+                    id_complect: object.id,
+                    value: object.value / object.item.multiplicity,
+                    store_id: object.store_id
+                };
+                // console.log(data)
                 this.busket_from_api(data).then();
                 this.$emit('updateBasket');
             }
@@ -240,93 +291,6 @@ export default {
             this.actions_item = obj;
             // console.log(obj)
             this.modal_actions = true;
-        },
-        async updateAction(remainid, storeid, action, indexstore, indexaction, conflicts) {
-            // console.log("updateAction", remainid, storeid, action, index)
-            // console.log(this.items.stores[index].actions)
-
-            this.items.stores[indexstore].actions[indexaction].enabled = true;
-
-            // console.log(conflicts)
-            // Выключаем конфликтные акции
-
-            // const conflicts = this.items.stores[indexstore].actions.find((act) => act.action_id === action.action_id)
-            // console.log(conflicts)
-            if (conflicts.items[action.action_id]) {
-                if (conflicts.items[action.action_id]?.postponement_conflicts) {
-                    for (let i = 0; i < conflicts.items[action.action_id].postponement_conflicts.length; i++) {
-                        for (let j = 0; j < Object.keys(this.this.items.stores[indexstore].actions).length; j++) {
-                            if (conflicts.items[action.action_id].postponement_conflicts[i] === this.items.stores[indexstore].actions[j].action_id) {
-                                if (this.this.items.stores[indexstore].actions[j].enabled) {
-                                    // console.log('this.items.stores[indexstore].actions', this.this.items.stores[indexstore].actions[j])
-                                    this.items.stores[indexstore].actions[j].enabled = false;
-                                    //this.items.stores[indexstore].actions[indexaction].enabled = false
-                                    const data = {
-                                        action: 'action/user/off/on',
-                                        remain_id: this.items.stores[indexstore].actions[j].remain_id ? this.items.stores[indexstore].actions[j].remain_id : conflicts.remain_id,
-                                        store_id: this.items.stores[indexstore].actions[j].store_id ? this.items.stores[indexstore].actions[j].store_id : conflicts.store_id,
-                                        action_id: this.items.stores[indexstore].actions[j].action_id,
-                                        status: false,
-                                        test: 'true2'
-                                    };
-                                    this.opt_api(data);
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if (conflicts.items[action.action_id].sales_conflicts) {
-                    for (let i = 0; i < conflicts.items[action.action_id].sales_conflicts.length; i++) {
-                        for (let j = 0; j < Object.keys(this.items.stores[indexstore].actions).length; j++) {
-                            if (conflicts.items[action.action_id].sales_conflicts[i] === this.items.stores[indexstore].actions[j].action_id) {
-                                if (this.items.stores[indexstore].actions[j].enabled) {
-                                    // console.log('this.items.stores[indexstore].actions', this.items.stores[indexstore].actions[j])
-                                    this.items.stores[indexstore].actions[j].enabled = false;
-                                    //this.items.stores[indexstore].actions[indexaction].enabled = false
-                                    //console.log(this.items.stores[indexstore].actions[indexaction])
-                                    const data = {
-                                        action: 'action/user/off/on',
-                                        remain_id: this.items.stores[indexstore].actions[j].remain_id ? this.items.stores[indexstore].actions[j].remain_id : conflicts.remain_id,
-                                        store_id: this.items.stores[indexstore].actions[j].store_id ? this.items.stores[indexstore].actions[j].store_id : conflicts.store_id,
-                                        action_id: this.items.stores[indexstore].actions[j].action_id,
-                                        status: false,
-                                        test: 'true2'
-                                    };
-                                    this.opt_api(data);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            const data = {
-                action: 'action/user/off/on',
-                remain_id: remainid,
-                store_id: storeid,
-                action_id: action.action_id,
-                status: action.enabled,
-                test: 'true3'
-            };
-            this.opt_api(data).then(() => {
-                const dataUpdate = {
-                    action: 'get/info/product',
-                    store_id: storeid,
-                    remain_id: remainid,
-                    id: router.currentRoute._value.params.id,
-                    count: this.items.stores[indexstore].basket.count
-                };
-
-                this.opt_api(dataUpdate).then((response) => {
-                    // console.log("response", response)
-                    const data = {
-                        remain_id: remainid,
-                        store_id: storeid,
-                        data: response.data.data
-                    };
-                    this.$store.commit('SET_OPT_PRODUCT_TO_VUEX', data);
-                });
-            });
         }
     },
     mounted() {},
