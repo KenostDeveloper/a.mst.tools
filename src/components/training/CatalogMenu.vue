@@ -202,7 +202,10 @@ export default {
                     list-style: none;
                     cursor: pointer;
                 }
-                padding-left: 16px;
+
+                & {
+                    padding-left: 16px;
+                }
             }
         }
 

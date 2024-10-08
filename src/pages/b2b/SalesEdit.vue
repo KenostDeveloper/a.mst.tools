@@ -629,7 +629,7 @@
                         <div class="PickList__select mt-2" @click="setAllProducts(false)"><i class="pi pi-angle-double-left"></i></div>
                     </div>
 
-                    <div :class="{ error: v$.selected.$errors.length }" :style="{ width: '40%' }">
+                    <div :style="{ width: '40%' }">
                         <div class="PickList__selected">
                             <div class="PickList__title mb-4">
                                 <b>Добавленные товары</b>
@@ -651,9 +651,6 @@
                                 </div>
                             </div>
                         </div>
-                        <span class="error_desc" v-for="error of v$.selected.$errors" :key="error.$uid">
-                            {{ error.$message }}
-                        </span>
                     </div>
                 </div>
 
@@ -736,7 +733,7 @@
                         </div>
                     </div>
 
-                    <div class="PickList__selected" :class="{ error: v$.selected_complects.$errors.length }" :style="{ width: '40%' }">
+                    <div class="PickList__selected" :style="{ width: '40%' }">
                         <div class="PickList__title mb-4">
                             <b>Добавленные комплекты</b>
                         </div>
@@ -753,10 +750,6 @@
                                 <div @click="deleteSelectComplect(item.id)" class="PickList__select"><i class="pi pi-times"></i></div>
                             </div>
                         </div>
-
-                        <span class="error_desc" v-for="error of v$.selected_complects.$errors" :key="error.$uid">
-                            {{ error.$message }}
-                        </span>
                     </div>
                 </div>
                 <div v-if="this.form.addProductType != '3'" class="table-kenost mt-4">
