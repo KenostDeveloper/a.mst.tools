@@ -46,7 +46,7 @@
                 <Calendar v-model="this.form.dates" selectionMode="range" placeholder="Выберите даты" :manualInput="false" showIcon/>
             </div> -->
 
-            <div class="dart-form-group" :class="{ error: v$.selected.$errors.length }">
+            <div class="dart-form-group w-max-full" :class="{ error: v$.selected.$errors.length }">
                 <div v-if="this.form.store_id" class="PickList mt-3">
                     <div class="PickList__product" :style="{ width: '40%' }">
                         <b class="PickList__title">Доступные товары</b>

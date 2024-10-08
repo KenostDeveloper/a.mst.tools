@@ -160,7 +160,7 @@
                         v-model="this.geo_action"
                         :options="this.geo"
                         optionLabel="name"
-                        placeholder="Массовое действие"
+                        placeholder="География показа"
                         class="w-full md:w-14rem" />
                 </div>
 
@@ -629,7 +629,7 @@
                         <div class="PickList__select mt-2" @click="setAllProducts(false)"><i class="pi pi-angle-double-left"></i></div>
                     </div>
 
-                    <div :class="{ error: v$.selected.$errors.length }" :style="{ width: '40%' }">
+                    <div :style="{ width: '40%' }">
                         <div class="PickList__selected">
                             <div class="PickList__title mb-4">
                                 <b>Добавленные товары</b>
@@ -651,9 +651,6 @@
                                 </div>
                             </div>
                         </div>
-                        <span class="error_desc" v-for="error of v$.selected.$errors" :key="error.$uid">
-                            {{ error.$message }}
-                        </span>
                     </div>
                 </div>
 
@@ -736,7 +733,7 @@
                         </div>
                     </div>
 
-                    <div class="PickList__selected" :class="{ error: v$.selected_complects.$errors.length }" :style="{ width: '40%' }">
+                    <div class="PickList__selected" :style="{ width: '40%' }">
                         <div class="PickList__title mb-4">
                             <b>Добавленные комплекты</b>
                         </div>
@@ -753,10 +750,6 @@
                                 <div @click="deleteSelectComplect(item.id)" class="PickList__select"><i class="pi pi-times"></i></div>
                             </div>
                         </div>
-
-                        <span class="error_desc" v-for="error of v$.selected_complects.$errors" :key="error.$uid">
-                            {{ error.$message }}
-                        </span>
                     </div>
                 </div>
                 <div v-if="this.form.addProductType != '3'" class="table-kenost mt-4">
@@ -919,7 +912,7 @@
                 </div>
 
                 <div class="kenost-all-table-activity" v-if="this.form.addProductType == '1' || this.form.addProductType == '2'">
-                    <div class="kenost-wiget" :class="{ error: v$.kenostActivityAll.type.$errors.length }">
+                    <div class="kenost-wiget" >
                         <p>Массовое действие</p>
                         <Dropdown
                             v-model="this.kenostActivityAll.type"
@@ -927,10 +920,6 @@
                             optionLabel="name"
                             placeholder="Массовое действие"
                             class="w-full md:w-14rem" />
-
-                        <span class="error_desc" v-for="error of v$.kenostActivityAll.type.$errors" :key="error.$uid">
-                            {{ error.$message }}
-                        </span>
                     </div>
                     <div
                         class="kenost-wiget"
@@ -2716,25 +2705,25 @@ export default {
                     return this.place_action?.length > 0;
                 })
             },
-            selected: {
-                required: helpers.withMessage('Выберите хотя бы один товар', () => {
-                    if (this.form.addProductType != 1 && this.form.addProductType != 2) return true;
-                    return Object.keys(this.selected).length > 0;
-                })
-            },
-            selected_complects: {
-                required: helpers.withMessage('Выберите хотя бы один комплект', () => {
-                    if (this.form.addProductType != 3) return true;
-                    return Object.keys(this.selected_complects).length > 0;
-                })
-            },
+            // selected: {
+            //     required: helpers.withMessage('Выберите хотя бы один товар', () => {
+            //         if (this.form.addProductType != 1 && this.form.addProductType != 2) return true;
+            //         return Object.keys(this.selected).length > 0;
+            //     })
+            // },
+            // selected_complects: {
+            //     required: helpers.withMessage('Выберите хотя бы один комплект', () => {
+            //         if (this.form.addProductType != 3) return true;
+            //         return Object.keys(this.selected_complects).length > 0;
+            //     })
+            // },
             kenostActivityAll: {
-                type: {
-                    required: helpers.withMessage('Выберите тип массового действия', () => {
-                        if (this.form.addProductType != 1 && this.form.addProductType != 2) return true;
-                        return this.kenostActivityAll?.type?.name;
-                    })
-                },
+                // type: {
+                //     required: helpers.withMessage('Выберите тип массового действия', () => {
+                //         if (this.form.addProductType != 1 && this.form.addProductType != 2) return true;
+                //         return this.kenostActivityAll?.type?.name;
+                //     })
+                // },
                 typePrice: {
                     required: helpers.withMessage('Выберите тип цен', () => {
                         if (this.kenostActivityAll?.type?.key != 0 && this.kenostActivityAll?.type?.key != 1) return true;
