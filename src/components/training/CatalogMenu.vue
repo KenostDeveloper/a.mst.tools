@@ -198,11 +198,11 @@ export default {
             padding: 7px 0;
 
             ul{
+                padding-left: 16px;
                 li{
                     list-style: none;
                     cursor: pointer;
-                }
-                padding-left: 16px;
+                }                
             }
         }
 

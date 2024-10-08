@@ -5430,8 +5430,9 @@ button.std-icon__wrapper {
 
 	& {
 		max-width: 450px !important;
-		width: 450px;
+		width: 100%;
 		margin-bottom: 120px !important;
+		padding: 0 15px;
 		margin: 0 auto;
 		max-height: 100%;
 	}

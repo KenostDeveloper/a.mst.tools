@@ -1,6 +1,6 @@
 <template>
     <div class="analytics_auth analytics_reg">
-        <form class="form-signup" @submit.prevent="formSubmit">
+        <form class="form-signup" @submit.prevent="formSubmit" autocomplete="false">
             <Toast />
             <div class="logo text-center">
                 <img src="../../assets/images/logo.svg" alt="" width="200" />
@@ -16,7 +16,7 @@
                         class="dart-form-control std-auth__input"
                         required
                         v-model="form.login"
-                        autocomplete="off" />
+                        autocomplete="false" />
                     <!-- <label for="login" class="std-auth__input-label">Логин</label> -->
                 </FloatLabel>
                 <FloatLabel>
@@ -29,7 +29,7 @@
                         class="dart-form-control std-auth__input"
                         required
                         v-model="form.password"
-                        autocomplete="off" />
+                        autocomplete="new-password" />
                     <!-- <label for="password" class="std-auth__input-label">Пароль</label> -->
                 </FloatLabel>
                 <FloatLabel>
@@ -41,7 +41,7 @@
                         class="dart-form-control std-auth__input"
                         required
                         v-model="form.passwordConfirm"
-                        autocomplete="off" />
+                        autocomplete="new-password" />
                     <!-- <label for="passwordConfirm" class="std-auth__input-label">Подтверждение пароля</label> -->
                 </FloatLabel>
             </div>
@@ -51,15 +51,18 @@
 
                 <div class="std-auth__input-container">
                     <!-- <FloatLabel> -->
-                    <input
-                        type="text"
+                    <Autocomplete
+                        ref="nameInput"
+                        name="name"
                         id="name"
                         placeholder="ФИО контактного лица"
                         class="dart-form-control std-auth__input"
+                        type="fio"
+                        selectionType="single"
                         required
                         v-model="form.name"
+                        @setSelection="setName"
                         autocomplete="off" />
-                    <!-- <label for="name" class="std-auth__input-label">ФИО контактного лица</label> -->
                     <!-- </FloatLabel> -->
                     <input
                         v-imask="mask"
@@ -198,8 +201,11 @@ export default {
                 email: '',
                 org: {
                     name: '',
-                    inn: ''
+                    inn: '',
+                    ogrn: '',
+                    opf: ''
                 },
+                contact: { },
                 delivery_addresses: [{ value: '' }]
             },
             mask: {
@@ -230,12 +236,12 @@ export default {
 
                         if(!data.data.success){
                             this.$toast.add({ severity: 'error', summary: 'Ошибка!', detail: data.data.message, life: 3000 });
-                            this.goToErroInput(data.message);
+                            this.goToErrorInput(data.data.message);
                         }else{
                             this.sendMetrik('register');
                             this.regIsSuccess = true;
-                            this.loading = false;
                         }                        
+                        this.loading = false;
                     }
                 });
             } else {
@@ -247,7 +253,13 @@ export default {
             this.$emit('setRegForm', false);
         },
         setCompany(company) {
-            this.form.org = company;
+            this.form.org.name = company.data.name.short_with_opf;
+            this.form.org.ogrn = company.data.ogrn;
+            this.form.org.opf = company.data.opf.short;
+        },
+        setName(name){
+            this.form.name = name.value
+            this.form.contact = name.data
         },
         setDeliveryAddress(index, address) {
             this.form.delivery_addresses[index] = address;
