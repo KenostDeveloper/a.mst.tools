@@ -103,6 +103,10 @@ export default {
                     funcChanged = this.getAddress;
                     break;
                 }
+                case 'fio': {
+                    funcChanged = this.getFio;
+                    break;
+                }
             }
 
             this.debounce(await funcChanged, 300);
@@ -172,7 +176,27 @@ export default {
                 this.isActive = false;
             }
         },
+        async getFio() {
+            const response = await axios.post(
+                'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/fio',
+                {
+                    query: this.value
+                },
+                {
+                    headers: {
+                        Authorization: 'Token 34e9caeb5d40781585d9b5cb3b156199fbaca4e2'
+                    }
+                }
+            );
 
+            this.suggestions = response.data?.suggestions;
+
+            if (this.suggestions.length) {
+                this.isActive = true;
+            } else {
+                this.isActive = false;
+            }
+        },
         filterCities(cities) {
             return cities?.reduce((filteredCities, city) => {
                 const citySplitted = city.value.split(', ');
