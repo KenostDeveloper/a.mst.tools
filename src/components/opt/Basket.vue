@@ -141,6 +141,9 @@
 							</div>
 						</div>
 					</div>
+					
+
+
 
 					<!-- ПОДАРОК -->
 					<!-- <div
@@ -279,6 +282,23 @@
                         </div>
                     </div> -->
 				</div>
+			</div>
+			
+			<div v-if="this.basket?.stores" class="std-basket__footer">
+				<div class="std-basket__total-container">
+					<span class="std-basket__total-label">Итого на поставщика</span>
+					<span class="std-basket__total-value">26 580 ₽</span>
+				</div>
+
+				<div class="basket-container__adres">
+					Мегаснаб, ул. Гоголя, 16, этаж 1, офис 122
+				</div>
+
+				<a
+					class="a-dart-btn a-dart-btn-primary btn-arrange button-basket"
+					@click.prevent="toOrder"
+					>Оформить заказ <span>{{ this.basket?.cost?.toLocaleString("ru") }} ₽</span></a
+				>
 			</div>
 			
 		</div>

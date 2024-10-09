@@ -1,7 +1,7 @@
 {
   "name": "a.mst.tools",
   "private": true,
-  "version": "0.7.02102024",
+  "version": "0.8.09102024",
   "type": "module",
   "browserslist": [
     "cover 99.5%"
