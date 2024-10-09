@@ -2551,7 +2551,9 @@ export default {
                 if (newVal.icon) {
                     this.files.icon.original_href = this.site_url_prefix + newVal.icon;
                 }
-                if (newVal.complects.length) {
+
+                if (Object.keys(newVal.complects).length > 0) {
+                    console.log(newVal.complects)
                     this.selected_complects = newVal.complects;
                 }
                 this.form.description = newVal.description;

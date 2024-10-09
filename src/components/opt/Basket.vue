@@ -95,7 +95,58 @@
 							</div>
 						</div>
 					</div>
+
 					<div
+						v-for="complect in store.complects"
+						v-bind:key="complect.id"
+						class="kenost-product-basket kenost-product-basket-complect"
+					>
+						{{ console.log(complect) }}
+						<span class="complect-icon">Комплект</span>
+						<div
+							class="kenost-basket"
+							v-for="(product, index) in complect.products"
+							v-bind:key="product.id"
+						>
+						
+							<div
+								@click="clearBasketComplect(store.id, product.complect_id)"
+								class="btn-close link-no-style"
+							>
+								<!-- <i class="d_icon d_icon-close"></i> -->
+								<img src="../../assets/images/icons/close.svg" alt="" />
+							</div>
+							<div class="kenost-basket__product">
+								<p class="kenost-basket__name" :title="product.name">
+									{{ product.name }}
+								</p>
+								<div class="kenost-basket__info">
+									<span>{{ product.article }}</span>
+									<div class="kenost-basket__info-left">
+										<Counter
+											:key="new Date().getMilliseconds() + product.id_remain"
+											@ElemCount="ElemComplectCount"
+											:item="product"
+											:mini="true"
+											:min="1"
+											:step="Number(product.multiplicity)"
+											:max="complect?.info?.complect_data?.min_count * Number(product.multiplicity)"
+											:value="complect?.info?.count * Number(product.multiplicity)"
+											:id="product?.id_remain"
+											:store_id="store.id"
+										/>
+										<b>{{ (Number(product?.new_price) * complect?.info?.complect_data?.min_count * Number(product.multiplicity)).toLocaleString("ru") }} ₽</b>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+
+
+
+					<!-- ПОДАРОК -->
+					<!-- <div
 						v-for="complect in store.complects"
 						v-bind:key="complect.id"
 						class="kenost-basket__complect"
@@ -105,7 +156,6 @@
 								@click="clearBasketComplect(store.id, complect.info.id)"
 								class="btn-close link-no-style"
 							>
-								<!-- <i class="d_icon d_icon-close"></i> -->
 								<img src="../../assets/images/icons/close.svg" alt="" />
 							</div>
 							<div class="kenost-basket__product">
@@ -170,7 +220,7 @@
 								</div>
 							</div>
 						</div>
-					</div>
+					</div> -->
 					<!-- <div v-for="product in store.products" v-bind:key="product.id" class="basket-container__card basket-item">
                         <img
                             class="basket-container__img"
@@ -233,6 +283,7 @@
                     </div> -->
 				</div>
 			</div>
+			
 			<div v-if="this.basket?.stores" class="std-basket__footer">
 				<div class="std-basket__total-container">
 					<span class="std-basket__total-label">Итого на поставщика</span>
@@ -249,6 +300,7 @@
 					>Оформить заказ <span>{{ this.basket?.cost?.toLocaleString("ru") }} ₽</span></a
 				>
 			</div>
+			
 		</div>
 	</div>
 	<Dialog v-model:visible="this.modal_remain" header=" " :style="{ width: '340px' }">
@@ -308,6 +360,7 @@ export default {
 			//   )
 		},
 		ElemComplectCount(object) {
+			console.log(object)
 			if (object.value > Number(object.max)) {
 				this.modal_remain = true;
 			} else {
@@ -315,15 +368,15 @@ export default {
 				const data = {
 					action: "basket/update",
 					id: router.currentRoute._value.params.id,
-					id_complect: object.id,
-					value: object.value,
+					id_complect: object.item.complect_id,
+					value: object.value / object.item.multiplicity,
 					store_id: object.store_id,
 				};
 				this.busket_from_api(data).then((response) => {
 					const datainfo = {
-						complect_id: object.id,
+						complect_id: object.item.complect_id,
 						store_id: object.store_id,
-						count: object.value,
+						count: object.value / object.item.multiplicity,
 					};
 					this.$store.commit("SET_OPT_COMPLECT_MUTATION_TO_VUEX", datainfo);
 					this.$store.commit("SET_SALES_COMPLECT_MUTATION_TO_VUEX", datainfo);

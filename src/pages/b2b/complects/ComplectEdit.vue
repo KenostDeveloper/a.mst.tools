@@ -18,7 +18,7 @@
             <span class="ktitle">Склад</span>
             <!-- <label for="name">Введите наименование, которое будет отражать смысл вашей акции</label> -->
             <!-- <input v-model="form.name" type="text" name="name" placeholder="Укажите склад акции" class="dart-form-control"> -->
-             {{ this.form.store_id }}
+             <!-- {{ this.form.store_id }} -->
             <Dropdown
               @change="updateProducts"
               v-model="this.form.store_id"
@@ -512,7 +512,7 @@ export default {
       this.$load(async () => {
         await this.opt_api({
           action: 'complect/set',
-          store_id: router.currentRoute._value.params.id,
+          store_id: this.form.store_id,
           products: this.selected,
           // dates: [this.form.dates[0].toDateString(), this.form.dates[1].toDateString()],
           name: this.form.name,
