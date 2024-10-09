@@ -469,6 +469,12 @@
 		</div>
 		<!-- </div> -->
 
+		<button
+			class="std-nav__button std-catalog-button std-nav__needs-button"
+		>
+			Потребности
+		</button>
+
 		<button class="a-dart-btn a-dart-btn-secondary kenost-vendors" @click="changeActive">
 			<!-- <i class="mst-icon mst-icon-my_vendors kenost-vendors__icon"></i> -->
 			<span class="std-icon">
