@@ -44,78 +44,27 @@
 					<button class="dart-btn dart-btn-primary client-card__button">Посмотреть остатки</button>
 				</router-link>				
 			</article>
-
-			<article class="clients__card client-card client-card--created" v-for="item in this.stores.items" v-bind:key="item.id">
-				<div class="client-card__content">
-					<img :src="item.image" alt="" class="client-card__img" />
-					<div class="client-card__info">
-						<h2 class="client-card__title">«{{ item.name }}»</h2>
-						<!-- <div class="client-card__data">
-							<p class="client-card__address"><span class="client-card__data-label">Склад:</span> {{ item.warehouse}}</p>
-							<p class="client-card__address"><span class="client-card__data-label">Базовая скидка:</span> {{ item.base_sale }}%</p>
-						</div> -->
+			<!-- 
+				<article class="clients__card client-card client-card--created" v-for="item in this.stores.items" v-bind:key="item.id">
+					<div class="client-card__content">
+						<img :src="item.image" alt="" class="client-card__img" />
+						<div class="client-card__info">
+							<h2 class="client-card__title">«{{ item.name }}»</h2>
+						</div>
 					</div>
-				</div>
-				<div class="client-card__footer">
-					<span class="client-card__status">Созданный поставщиком</span>
-					<div class="client-card__actions">
-						<button class="button-none std-icon__wrapper client-card__action-button">
-							<i class="std_icon std_icon-pen"></i>
-						</button>
-						<button class="button-none std-icon__wrapper client-card__action-button">
-							<i class="std_icon std_icon-trash"></i>
-						</button>
-					</div>
-				</div>		
-			</article>
-
-			<article class="clients__card client-card client-card--created" v-for="item in this.stores.items" v-bind:key="item.id">
-				<div class="client-card__content">
-					<img :src="item.image" alt="" class="client-card__img" />
-					<div class="client-card__info">
-						<h2 class="client-card__title">«{{ item.name }}»</h2>
-						<!-- <div class="client-card__data">
-							<p class="client-card__address"><span class="client-card__data-label">Склад:</span> {{ item.warehouse}}</p>
-							<p class="client-card__address"><span class="client-card__data-label">Базовая скидка:</span> {{ item.base_sale }}%</p>
-						</div> -->
-					</div>
-				</div>
-				<div class="client-card__footer">
-					<span class="client-card__status">Созданный поставщиком</span>
-					<div class="client-card__actions">
-						<button class="button-none std-icon__wrapper client-card__action-button">
-							<i class="std_icon std_icon-pen"></i>
-						</button>
-						<button class="button-none std-icon__wrapper client-card__action-button">
-							<i class="std_icon std_icon-trash"></i>
-						</button>
-					</div>
-				</div>		
-			</article>
-
-			<article class="clients__card client-card client-card--created" v-for="item in this.stores.items" v-bind:key="item.id">
-				<div class="client-card__content">
-					<img :src="item.image" alt="" class="client-card__img" />
-					<div class="client-card__info">
-						<h2 class="client-card__title">«{{ item.name }}»</h2>
-						<!-- <div class="client-card__data">
-							<p class="client-card__address"><span class="client-card__data-label">Склад:</span> {{ item.warehouse}}</p>
-							<p class="client-card__address"><span class="client-card__data-label">Базовая скидка:</span> {{ item.base_sale }}%</p>
-						</div> -->
-					</div>
-				</div>
-				<div class="client-card__footer">
-					<span class="client-card__status">Созданный поставщиком</span>
-					<div class="client-card__actions">
-						<button class="button-none std-icon__wrapper client-card__action-button">
-							<i class="std_icon std_icon-pen"></i>
-						</button>
-						<button class="button-none std-icon__wrapper client-card__action-button">
-							<i class="std_icon std_icon-trash"></i>
-						</button>
-					</div>
-				</div>
-			</article>
+					<div class="client-card__footer">
+						<span class="client-card__status">Созданный поставщиком</span>
+						<div class="client-card__actions">
+							<button class="button-none std-icon__wrapper client-card__action-button">
+								<i class="std_icon std_icon-pen"></i>
+							</button>
+							<button class="button-none std-icon__wrapper client-card__action-button">
+								<i class="std_icon std_icon-trash"></i>
+							</button>
+						</div>
+					</div>		
+				</article>
+			-->			
 		</div>
 	</section>
 </template>

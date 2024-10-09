@@ -42,7 +42,7 @@
         </div>
         <div class="not-vendors" v-if="opt_vendors.selected_count <= 0">
           <img src="../../assets/img/not-vendors.png" alt="">
-          <p>Для просмотра каталога необходимо выбрать поставщика!</p>
+          <p>Для просмотра каталога необходимо выбрать склады поставщиков!</p>
           <div class="a-dart-btn a-dart-btn-primary" @click="changeActive" >Выбрать</div>
         </div>
       </div>
