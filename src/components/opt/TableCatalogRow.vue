@@ -201,12 +201,12 @@
                         </p>
                         <div class="table-actions__content">
                             <div class="table-actions__modal">
-                                <div class="table-actions__modal-banner">
-                                    <img src="/images/promotions/promotion1.png" />
+                                <div v-if="action?.image" class="table-actions__modal-banner">
+                                    <img :src="action?.image" />
                                 </div>
                                 <div class="table-actions__modal-content">
                                     <p class="table-actions__modal-title">
-                                        Эксклюзивная акция от Интерскол и СПО: дополнительная скидка 6% на всю линейку Интерскол!
+                                        {{ action?.name }}
                                     </p>
                                     <div class="table-actions__modal-elems">
                                         <div class="table-actions__modal-el" v-for="(tag, index) in action.tags" v-bind:key="tag.id">

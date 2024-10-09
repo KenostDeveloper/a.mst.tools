@@ -5774,11 +5774,12 @@ button.std-icon__wrapper {
 			}
 		}
 		&__modal-banner {
-			background: #f2f2f2;
 			height: 130px;
 			width: 100%;
+			overflow: hidden;
 
 			img {
+				height: 100% !important;
 				object-fit: contain;
 			}
 		}
@@ -5795,6 +5796,8 @@ button.std-icon__wrapper {
 			font-weight: 500 !important;
 			line-height: 1 !important;
 			margin-bottom: 0 !important;
+			margin: 0 auto !important;
+			text-align: center;
 		}
 		&__modal-elems {
 			@include flex(center, center, row, 14px);
