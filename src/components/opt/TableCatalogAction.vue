@@ -16,7 +16,7 @@
             </thead>
             <!-- Вывод комплектов -->
             <tbody
-                class="complect-button kenost-table-background kenost-table-background-complect active"
+                class="complect-button kenost-table-background kenost-table-background-complect active bg-white"
                 v-for="complect in items.complects"
                 v-bind:key="complect.id"
                 :class="{

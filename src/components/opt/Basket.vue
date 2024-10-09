@@ -110,7 +110,7 @@
 						>
 						
 							<div
-								@click="clearBasketProduct(store.id, product.id_remain)"
+								@click="clearBasketComplect(store.id, product.complect_id)"
 								class="btn-close link-no-style"
 							>
 								<!-- <i class="d_icon d_icon-close"></i> -->
