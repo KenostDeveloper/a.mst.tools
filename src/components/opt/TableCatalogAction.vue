@@ -37,6 +37,7 @@
                         <b>Арт: {{ item.article }}</b>
                     </td>
                     <td class="k-table__busket complect-button__td">
+                        <!-- {{ item?.basket?.count }} -->
                         <form class="k-table__form" :class="{ 'basket-true': item?.basket?.availability }" action="">
                             <Counter :key="new Date().getMilliseconds() + item.id" @ElemCount="ElemCountComplect" :step="item.multiplicity" :min="1" :item="item" :max="item.remain.min_count * item.multiplicity" :id="item.complect_id" :store_id="complect.store_id" :index="index" :value="item?.basket?.count * item.multiplicity" />
                             <div @click="addBasketComplect(item.complect_id, item?.basket?.count, complect.store_id, index)" class="dart-btn dart-btn-primary">
@@ -152,12 +153,12 @@ export default {
     },
     methods: {
         ...mapActions(['opt_api', 'busket_from_api']),
-        ...mapMutations(['SET_OPT_PRODUCT_TO_VUEX']),
+        ...mapMutations(['SET_OPT_PRODUCT_TO_VUEX', 'SET_SALES_COMPLECT_MUTATION_TO_VUEX', 'SET_OPT_COMPLECT_MUTATION_TO_VUEX']),
         updateBasket() {
             this.$emit('updateBasket');
         },
         addBasket(id, value, storeid, index) {
-            console.log(id, value, storeid, index)
+            // console.log(id, value, storeid, index)
 			const data = {
 				action: "basket/add",
 				id: router.currentRoute._value.params.id,
@@ -200,7 +201,7 @@ export default {
 			this.$emit("updateBasket");
 		},
         getMinDelivery(stores) {
-			console.log(stores)
+			// console.log(stores)
 
             let minDelivery;
             let minDeliveryDate;
@@ -222,7 +223,7 @@ export default {
             };
         },
         ElemCount(object) {
-            console.log(object)
+            // console.log(object)
             if (object.value > Number(object.max)) {
                 this.modal_remain = true;
             } else {
@@ -241,7 +242,7 @@ export default {
             }
         },
         ElemCountComplect(object) {
-            console.log(object)
+            // console.log(object)
             if (object.value == object.min) return;
 
             if (object.value > Number(object.max)) {
@@ -249,17 +250,30 @@ export default {
                 // console.log(this.modal_remain)
             } else {
                 // eslint-disable-next-line vue/no-mutating-props
-                //this.items.stores[object.index].basket.count = object.value;
-                const data = {
-                    action: 'basket/update',
+
+                this.$emit("catalogUpdate");
+				const data = {
+					action: 'basket/update',
                     id: router.currentRoute._value.params.id,
                     id_complect: object.id,
-                    value: object.value / object.item.multiplicity,
+                    value: object.value / Number(object.item.multiplicity),
                     store_id: object.store_id
-                };
+				};
                 // console.log(data)
-                this.busket_from_api(data).then();
-                this.$emit('updateBasket');
+				this.busket_from_api(data).then((response) => {
+					const datainfo = {
+						complect_id: object.id,
+						store_id: object.store_id,
+						count: object.value / Number(object.item.multiplicity),
+					};
+					// this.$store.commit("SET_OPT_COMPLECT_MUTATION_TO_VUEX", datainfo);
+					this.$store.commit("SET_SALES_COMPLECT_MUTATION_TO_VUEX", datainfo);
+				});
+				this.busket_from_api({
+					action: 'basket/get',
+					id: router.currentRoute._value.params.id,
+					warehouse: 'all'
+				})
             }
         },
         leftScroll(event) {

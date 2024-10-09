@@ -7081,3 +7081,18 @@ button.std-icon__wrapper {
 .k-table__title{
 	text-align: left !important;
 }
+
+.kenost-product-basket-complect{
+	border: 1px solid #A7A7A7;
+	border-radius: 5px;
+	padding: 4px;
+
+	.kenost-basket + .kenost-basket{
+		border-top: none;
+		margin-top: 0px;
+	}
+
+	.complect-icon{
+		margin-top: 0px;
+	}
+}
