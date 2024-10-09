@@ -24,7 +24,7 @@
 		</div>
 		<div class="not-vendors" v-else>
 			<!-- <img src="../../assets/img/not-vendors.png" alt="" /> -->
-			<p>Для просмотра каталога необходимо выбрать поставщика!</p>
+			<p>Для просмотра каталога необходимо выбрать склады поставщиков!</p>
 			<div class="a-dart-btn a-dart-btn-primary" @click="changeActive">Выбрать</div>
 		</div>
 		<OrderModal :show="show_order" @fromOrder="fromOrder" />

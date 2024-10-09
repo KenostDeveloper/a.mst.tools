@@ -116,8 +116,14 @@
                   <button class="dart-btn dart-btn-primary dart-btn-block" @click.prevent="checkVendors" v-if="avLength">Выбрать склады</button>
                 </div>
               </div>
-              <div class="dart-mt-2" v-else>
-                <div class="dart-alert dart-alert-info">Вы выбрали все доступные склады поставщиков</div>
+              <div class="mt-2" v-else>
+                <div v-if="items.selected_count == 0 && items.available_count == 0">
+                  <div class="dart-alert dart-alert-text">Для просмотра доступных складов необходимо выбрать поставщика!</div>
+                  <div class="text-center">
+                    <RouterLink class="dart-btn dart-btn-primary" :to="{ name: 'vendors', params: { id: $route.params.id }}">Выбрать поставщика</RouterLink>
+                  </div>                  
+                </div>
+                <div class="dart-alert dart-alert-info" v-else>Вы выбрали все доступные склады поставщиков</div>
               </div>
             </div>
           </div>
@@ -132,6 +138,7 @@ import router from '../../router'
 import Toast from 'primevue/toast'
 import { YandexMap, YandexMapDefaultSchemeLayer, YandexMapDefaultFeaturesLayer, YandexMapMarker, YandexMapClusterer } from 'vue-yandex-maps'
 import Checkbox from 'primevue/checkbox'
+import { RouterLink } from 'vue-router'
 
 export default {
   name: 'Vendors',
