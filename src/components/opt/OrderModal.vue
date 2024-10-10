@@ -114,7 +114,7 @@
                                         </div>
                                         <div class="k-order__product-data">
                                             <span class="k-order__article">{{item.article}}</span>
-                                            <p class="k-order__info">Отсрочка: <span>{{product.delay ? Number(product.delay).toFixed(1) + ' дн' : 'Нет'}}</span></p>
+                                            <p class="k-order__info">Отсрочка: <span>{{product.delay ? Number(product.delay).toFixed(1) + ' дн' : 'Предоплата'}}</span></p>
                                             <p class="k-order__info">Оплата доставки: <span>{{product.payer === '1' ? 'Поставщик' : 'Покупатель'}}</span></p>
                                         </div>
                                     </div>
@@ -176,7 +176,7 @@
                                     <!-- <p class="k-order__info">Отсрочка: <span>50 дн.</span></p>
                                     <p class="k-order__info">Оплата доставки: <span>Покупатель</span></p> -->
                                     <!-- {{ store }} -->
-                                    <p class="k-order__info">Отсрочка: <span>{{complect.products[0].delay ? Number(complect.products[0].delay).toFixed(1) + ' дн' : 'Нет'}}</span></p>
+                                    <p class="k-order__info">Отсрочка: <span>{{complect.products[0].delay ? Number(complect.products[0].delay).toFixed(1) + ' дн' : 'Предоплата'}}</span></p>
                                     <p class="k-order__info">Оплата доставки: <span>{{complect.products[0].payer === '1' ? 'Поставщик' : 'Покупатель'}}</span></p>
                                 </div>
                             </div>
@@ -436,7 +436,7 @@ export default {
         var anchor = document.createElement('a');
         anchor.href = res.data.data;
         anchor.target="_blank";
-        a.click();
+        anchor.click();
       })
     }
   },
