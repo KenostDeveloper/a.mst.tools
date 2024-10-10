@@ -5756,6 +5756,7 @@ button.std-icon__wrapper {
 
 @layer table-actions-2 {
 	.table-actions {
+
 		&__content {
 			width: 435px;
 			bottom: 10px;
@@ -6938,9 +6939,10 @@ button.std-icon__wrapper {
 		gap: 6px;
 
 		&__action {
-			background: #adadad;
+			background: #C4C4C4;
+			border: 0.5px solid #adadad;
 			border-radius: 34px;
-			height: 20px;
+			height: 21px;
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
@@ -6950,6 +6952,12 @@ button.std-icon__wrapper {
 			&.red {
 				background: #ffc9c9;
 				border: #ff0000 1px solid;
+				
+				.table-actions__el {
+					p {
+						color: #ff0000 !important;
+					}
+				}
 
 				.table-actions__container {
 					background: #ffe8e8;
@@ -6958,7 +6966,13 @@ button.std-icon__wrapper {
 
 			&.active {
 				background: #81D589;
-				border: #00f619 1px solid;
+				border: 0.5px solid #00f619;
+
+				.table-actions__el {
+					p {
+						color: #282828 !important;
+					}
+				}
 
 				.table-actions__container {
 					background: #B4FFBB;
@@ -6969,9 +6983,9 @@ button.std-icon__wrapper {
 		&__container {
 			background: #fff;
 			border-radius: 34px;
-			height: 18px;
+			height: 100%;
 			width: calc(100% - 12px);
-			margin-left: 1px;
+			// margin-left: 1px;
 			display: flex;
 			align-items: center;
 			gap: 5px;
@@ -6982,7 +6996,7 @@ button.std-icon__wrapper {
 			position: relative;
 			p {
 				color: #282828;
-				font-size: 13px;
+				font-size: 13px !important;
 				padding-right: 4px;
 				cursor: pointer;
 				margin: 0;
@@ -6998,11 +7012,11 @@ button.std-icon__wrapper {
 			}
 
 			p.active {
-				color: #515151;
+				color: #515151 !important;
 			}
 
 			p.red {
-				color: #ff0000;
+				color: #ff0000 !important;
 			}
 		}
 
@@ -7012,7 +7026,7 @@ button.std-icon__wrapper {
 			align-items: center;
 			p {
 				margin: 0;
-				font-size: 13px;
+				font-size: 13px !important;
 				text-wrap: nowrap;
 				line-height: 1;
 				// width: fit-content !important;
