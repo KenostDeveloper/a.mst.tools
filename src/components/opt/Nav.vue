@@ -404,7 +404,7 @@
             <div class="std-notification-button__badge">+100</div>
         </button>
 
-        <div class="std-notification__list">
+        <!-- <div class="std-notification__list">
             <div class="std-notification">
                 <div class="std-notification__header">
                     <div class="std-notification__header-content">
@@ -465,7 +465,7 @@
                     </span>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <!-- <a href="#" class="navmain__components_desctop a-dart-btn">
             <i class="pi pi-sliders-h"></i>

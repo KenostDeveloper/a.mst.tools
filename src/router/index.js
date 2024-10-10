@@ -38,6 +38,7 @@ import PurchasesActions from "../pages/opt/Actions.vue";
 import OrdersOpt from "../pages/OrdersOpt.vue";
 import OrderOpt from "../pages/OrderOpt.vue";
 import ProfileCreateClient from "../pages/ProfileCreateClient.vue";
+import Notifications from "../components/opt/Notifications.vue";
 
 const routes = [
 	{
@@ -451,6 +452,17 @@ const routes = [
 													},
 												],
 											},
+											{
+												path: "notifications",
+												name: "purchases_notifications",
+												component: Notifications,
+												label: "Уведомления",
+												meta: {
+													breadcrumb: {
+														label: "Уведомления",
+													},
+												}
+											}
 										],
 									},
 									{
