@@ -51,7 +51,7 @@
 		<!-- </div> -->
     </div>
     <Toast />
-    <!-- <OrderModal :show="show_order" @fromOrder="fromOrder" /> -->
+    <OrderModal :show="show_order" @fromOrder="fromOrder" />
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';

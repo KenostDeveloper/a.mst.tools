@@ -472,16 +472,14 @@
                     </div>
                 </div>
             </td>
-            <td class="td-center" :class="{ 'pointer-none': index !== 0 }">
-                <span :style="'top:' + (complect.length * 74) / 2 + 'px'" v-if="index === 0"
-                    >{{ item.action?.payer === '1' ? 'Поставщик' : 'Покупатель' }} / <br />~ {{ item.delivery }} дней ({{
+            <td class="td-center">
+                {{ item.action?.payer === '1' ? 'Поставщик' : 'Покупатель' }} / <br />~ {{ item.delivery }} дней ({{
                         new Date(item.delivery_day).toLocaleString('ru', {
                             month: '2-digit',
                             day: '2-digit',
                             year: '2-digit'
                         })
-                    }})</span
-                >
+                    }})
             </td>
             <td class="td-center" :class="{ 'pointer-none': index !== 0 }">
                 <span :style="'top:' + (complect.length * 74) / 2 + 'px'" v-if="index === 0">{{ item.remain_complect }} шт.</span>
