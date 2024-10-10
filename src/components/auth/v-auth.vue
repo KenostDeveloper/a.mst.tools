@@ -23,7 +23,7 @@
                     <i v-if="this.loading" class="pi pi-spin pi-spinner" style="font-size: 14px"></i> <span>Войти</span>
                 </button>
                 <button
-                    class="dart-btn dart-btn-secondary dart-btn-block align-items-center flex justify-content-center std-auth__button std-auth__button--secondary"
+                    class="dart-btn dart-btn-secondary-outline dart-btn-block align-items-center flex justify-content-center std-auth__button std-auth__button--secondary"
                     type="button"
                     @click="this.setRegForm">
                     <span>Зарегистрироваться</span>

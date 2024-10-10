@@ -158,7 +158,7 @@
                 </button>
                 <span v-if="this.regIsSuccess" class="std-auth__span">Регистрация прошла успешно!</span>
                 <button
-                    class="dart-btn dart-btn-secondary dart-btn-block align-items-center flex justify-content-center std-auth__button std-auth__button--secondary"
+                    class="dart-btn dart-btn-secondary-outline dart-btn-block align-items-center flex justify-content-center std-auth__button std-auth__button--secondary"
                     type="button"
                     @click="
                         () => {

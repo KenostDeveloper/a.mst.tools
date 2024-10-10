@@ -3,7 +3,7 @@
     <div class="std-profile std-create-clients">
         <Breadcrumbs class="std-breadcrumbs--margin" />
         <Toast />
-        <div class="profile-content__title sticky-element std-create-clients__header">
+        <div class="profile-content__title sticky-element">
             <!-- <span class="maintitle hidden-mobile-l">Организация {{ this.orgprofile?.name }}</span> -->
             <div class="title-h1 hidden-mobile-l">О клиенте</div>
             <span class="maintitle visible-mobile-l">Карточка клиента</span>
@@ -63,7 +63,11 @@
             <div class="dart-form-group mb-4 std-create-clients__data-container">
                 <span class="ktitle mb-3">Данные контактного лица</span>
                 <div class="kenost-form-grid">
-                    <div class="form_input_group w-50" v-for="(field, index) in form.fields.contacts" :key="index">
+                    <div class="dart-form-group w-50" 
+                    :class="{
+                        error: v$.orgprofile[field.name].$errors.length,
+                    }"
+                    v-for="(field, index) in form.fields.contacts" :key="index">
                         <!-- <label for="">{{ field.label }}</label> -->
                         <input
                             type="text"
@@ -71,16 +75,39 @@
                             class="dart-form-control std-create-clients__input"
                             :name="field.name"
                             :placeholder="field.placeholder" />
+                        <span
+                            class="error_desc"
+                            v-for="error of v$.orgprofile[field.name].$errors"
+                            :key="error.$uid"
+                        >
+                            {{ error.$message }}
+                        </span>
                     </div>
                 </div>
             </div>
             <div class="dart-form-group mb-4 std-create-clients__data">
                 <span class="ktitle mb-3">Данные компании</span>
                 <div class="kenost-form-grid">
-                    <div class="form_input_group w-50">
+                    <div 
+                    class="form_input_group dart-form-group w-50"
+                    :class="{
+                        error: v$.form.company.data.value.$errors.length,
+                    }"
+                    >
                         <input type="text" v-model="this.form.company.data.value" class="dart-form-control std-create-clients__input" placeholder="Наименование организации" />
+                        <span
+                            class="error_desc"
+                            v-for="error of v$.form.company.data.value.$errors"
+                            :key="error.$uid"
+                        >
+                            {{ error.$message }}
+                        </span>
                     </div>
-                    <div class="form_input_group w-50">
+                    <div class="form_input_group dart-form-group w-50"
+                    :class="{
+                        error: v$.form.company.inn.$errors.length,
+                    }"
+                    >
                         <Autocomplete
                             name="inn"
                             class="dart-form-control std-create-clients__input"
@@ -90,24 +117,51 @@
                             required
                             v-model="form.company.inn"
                             @setSelection="form.company.data = $event" />
+                        <span
+                            class="error_desc"
+                            v-for="error of v$.form.company.inn.$errors"
+                            :key="error.$uid"
+                        >
+                            {{ error.$message }}
+                        </span>
                     </div>
                 </div>
-                <div class="form_input_group w-50" v-for="(warehouse, index) in this.form.company.warehouses" :key="index">
+                <div class="form_input_group dart-form-group w-50" v-for="(warehouse, index) in this.form.company.warehouses" :key="index"
+                :class="{
+                    error: v$.form.company.warehouses.$errors.length,
+                }"
+                >
                     <AddAddress
                         :key="warehouse"
                         :index="index"
                         v-model="this.form.company.warehouses[index]"
                         class="std-create-clients__add-address" />
+                    <span
+                        class="error_desc"
+                        v-for="error of v$.form.company.warehouses.$errors"
+                        :key="error.$uid"
+                    >
+                        {{ error.$message }}
+                    </span>
                 </div>
-                <button
-                    class="dart-btn dart-btn-secondary dart-btn-block align-items-center flex justify-content-center std-auth__button std-auth__button--secondary"
-                    :disabled="this.loading"
-                    type="button"
-                    @click="() => this.form.company.warehouses.push({ value: '' })">
-                    <i v-if="this.loading" class="pi pi-spin pi-spinner" style="font-size: 14px"></i>
-                    <span>Добавить адрес</span>
-                    <i class="pi pi-plus"></i>
-                </button>
+                <div class="std-auth__actions-container">
+                    <button
+                        v-if="this.form.company.warehouses.length > 1"
+                        class="dart-btn dart-btn-secondary dart-btn-block align-items-center flex justify-content-center std-auth__button std-auth__button--secondary"
+                        type="button"
+                        @click="() => this.form.company.warehouses.pop()">
+                        <span>Удалить</span>
+                    </button>
+                    <button
+                        class="dart-btn dart-btn-secondary dart-btn-block align-items-center flex justify-content-center std-auth__button std-auth__button--secondary"
+                        :disabled="this.loading"
+                        type="button"
+                        @click="() => this.form.company.warehouses.push({ value: '' })">
+                        <i v-if="this.loading" class="pi pi-spin pi-spinner" style="font-size: 14px"></i>
+                        <span>Добавить адрес</span>
+                        <i class="pi pi-plus"></i>
+                    </button>
+                </div>
             </div>
         </form>
     </div>
@@ -115,6 +169,9 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import { useVuelidate } from "@vuelidate/core";
+import { required } from "../utils/i18n-validators";
+import { helpers } from "@vuelidate/validators";
 import router from '../router';
 import FileUpload from 'primevue/fileupload';
 import Toast from 'primevue/toast';
@@ -199,7 +256,7 @@ export default {
             this.$toast.add({
                 severity: 'info',
                 summary: 'Логотип успешно загружен!',
-                detail: 'Не забудте сохранить изменения',
+                detail: 'Не забудьте сохранить изменения',
                 life: 3000
             });
         },
@@ -220,32 +277,54 @@ export default {
                 }
             };
         },
-        saveProfile() {
-            this.org_profile_set_from_api({
-                action: 'set/org/profile',
-                id: router.currentRoute._value.params.id,
-                data: {
-                    contact: this.orgprofile.contact,
-                    email: this.orgprofile.email,
-                    phone: this.orgprofile.phone,
-                    image: this.orgprofile.image,
-                    upload_image: this.orgprofile.upload_image
-                }
-            }).then((res) => {
-                this.$toast.add({
-                    severity: 'info',
-                    summary: 'Сохранено!',
-                    detail: res.data.data.message,
-                    life: 3000
-                });
-            });
+        async saveProfile() {
+            // Валидируем
+            // TODO Лоадер шестеренок при отправке формы
+			const result = await this.v$.$validate();
+			// const result = true;
+			if (!result) {
+				console.log(result);
+			} else {
+                const data = {
+                    action: 'set/org/virtual_profile',
+                    id: router.currentRoute._value.params.id,
+                    client_id: router.currentRoute._value.params.client_id,
+                    data: {
+                        contact: this.orgprofile.contact,
+                        email: this.orgprofile.email,
+                        phone: this.orgprofile.phone,
+                        image: this.orgprofile.image,
+                        org: {
+                            inn: this.form.company.inn,
+                            name: this.form.company.data,
+                            warehouses: this.form.company.warehouses
+                        },
+                        upload_image: this.orgprofile.upload_image
+                    }
+                }                
+                this.org_profile_set_from_api(data).then((res) => {
+                    if(!res.data.success){
+                        this.$toast.add({ severity: 'error', summary: 'Ошибка!', detail: res.data.message, life: 3000 });
+                    }else{
+                        this.$toast.add({
+                            severity: 'info',
+                            summary: 'Сохранено!',
+                            detail: res.data.message,
+                            life: 3000
+                        });
+                        router.push({ name: 'clients', params: { id: router.currentRoute._value.params.id } });
+                    }                    
+                });                
+            }
         }
     },
     mounted() {
-        this.org_profile_from_api({
-            action: 'get/org/profile',
-            id: router.currentRoute._value.params.id
-        });
+        if(router.currentRoute._value.params.client_id){
+            this.org_profile_from_api({
+                action: 'get/org/profile',
+                id: router.currentRoute._value.params.client_id
+            });
+        }        
     },
     components: {
         Toast,
@@ -263,6 +342,44 @@ export default {
     computed: {
         ...mapGetters(['org_profile'])
     },
+    setup() {
+		return { v$: useVuelidate() };
+	},
+	validations() {
+		return {
+			orgprofile: {
+				contact: {
+					required,
+				},
+				email: {
+					required,
+				},
+                phone: {
+					required,
+				}
+			},
+            form: {
+                company: {
+                    inn: {
+                        required
+                    },
+                    data: {
+                        value: {
+                            required
+                        }
+                    },
+                    warehouses: {
+                        required: helpers.withMessage(
+                            "Выберите хотя бы один адрес",
+                            () => {
+                                return this.form.company.warehouses.length && this.form.company.warehouses[0].value != ''
+                            }
+                        ),
+                    },
+                }
+            }
+		};
+    },
     watch: {
         org_profile: function (newVal, oldVal) {
             this.orgprofile = newVal;
@@ -272,6 +389,9 @@ export default {
 </script>
 
 <style lang="scss">
+.std-create-clients{
+    padding-bottom: 80px;
+}
 .m-0 {
     margin: 0;
 }
