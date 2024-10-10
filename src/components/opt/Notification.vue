@@ -15,7 +15,7 @@
             <p class="std-notification__text">{{ data?.description }}</p>
             <span class="std-notification__span">
                 Просмотреть детали заказа, нажав
-                <router-link class="std-notification__link" to="/">здесь</router-link>
+                <router-link class="std-notification__link" to="/" @click.stop>здесь</router-link>
             </span>
         </div>
     </div>
