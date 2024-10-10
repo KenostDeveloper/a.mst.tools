@@ -1,78 +1,34 @@
 <template>
 	<section class="clients">
 		<Breadcrumbs />
-
-		<div class="std-title__container">
-			<h1 class="std-title title-h1">Мои клиенты</h1>
-			<p class="std-title__description">
-				Доступные организации, которые являются вашими клиентами
-			</p>
-		</div>
-
-		<div class="flex dart-row">
-			<div class="d-col-md-3">
-				<div class="form_input_group input_pl input-parent required">
-					<input
-						type="text"
-						id="filter_name"
-						placeholder="Введите наименование"
-						class="dart-form-control"
-						v-model="filter.name"
-						@input="setFilter('filter')"
-					/>
-					<label for="product_filter_name" class="s-complex-input__label">Введите наименование</label>
-					<div class="form_input_group__icon">
-						<i class="d_icon d_icon-search"></i>
-					</div>
-				</div>
-			</div>			
-		</div>
-
-		<div class="clients__card-container">
-			<article class="clients__card client-card" v-for="item in this.stores.items" v-bind:key="item.id">
-				<div class="client-card__content">
-					<img :src="item.image" alt="" class="client-card__img" />
-					<div class="client-card__info">
-						<h2 class="client-card__title">«{{ item.name }}»</h2>
-						<!-- <div class="client-card__data">
-							<p class="client-card__address"><span class="client-card__data-label">Склад:</span> {{ item.warehouse}}</p>
-							<p class="client-card__address"><span class="client-card__data-label">Базовая скидка:</span> {{ item.base_sale }}%</p>
-						</div> -->
-					</div>
-				</div>
-				<router-link :to="{ name: 'client_id', params: { id: $route.params.id, client_id: item.id } }" class="link-no-style">
-					<button class="dart-btn dart-btn-primary client-card__button">Посмотреть остатки</button>
-				</router-link>				
-			</article>
-			<!-- 
-				<article class="clients__card client-card client-card--created" v-for="item in this.stores.items" v-bind:key="item.id">
-					<div class="client-card__content">
-						<img :src="item.image" alt="" class="client-card__img" />
-						<div class="client-card__info">
-							<h2 class="client-card__title">«{{ item.name }}»</h2>
-						</div>
-					</div>
-					<div class="client-card__footer">
-						<span class="client-card__status">Созданный поставщиком</span>
-						<div class="client-card__actions">
-							<button class="button-none std-icon__wrapper client-card__action-button">
-								<i class="std_icon std_icon-pen"></i>
-							</button>
-							<button class="button-none std-icon__wrapper client-card__action-button">
-								<i class="std_icon std_icon-trash"></i>
-							</button>
-						</div>
-					</div>		
-				</article>
-			-->			
-		</div>
+		<v-clients
+        :items_data="stores.items"
+        :total="stores.total"
+        :pagination_items_per_page="this.pagination_items_per_page"
+        :pagination_offset="this.pagination_offset"
+        :page="this.page"
+        :filters="this.filters"
+        :title="'Мои клиенты'"
+        @update="optUpdate"
+        @filter="filter"
+        @sort="filter"
+        @paginate="paginate"
+        >
+        <template v-slot:desc>
+            <span class="desc">Доступные организации, которые являются вашими клиентами</span>
+        </template>
+				<template v-slot:button>
+					<router-link :to="{ name: 'client_create', params: { id: $route.params.id } }" class="dart-btn dart-btn-primary dart-btn-long">Создать нового клиента</router-link>
+				</template>
+    </v-clients>
 	</section>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import Dropdown from 'primevue/dropdown'
-import Breadcrumbs from '../components/Breadcrumbs.vue';
+import Breadcrumbs from '../components/Breadcrumbs.vue'
+import vClients from '../components/table/v-clients.vue'
 
 export default {
 	data() {
@@ -82,9 +38,18 @@ export default {
 				total: -1
 			},
 			store_id: null,
-			filter: {
-				name: "",
-				store: []
+			filters: {
+				filter: {
+          name: 'Введите название организации',
+          placeholder: 'Введите название организации',
+          type: 'text'
+        },
+        our: {
+          name: 'Созданные поставщиком',
+          placeholder: 'Созданные поставщиком',
+          type: 'checkbox',
+          values: 1
+        }
 			},
 			stores_list: []
 		};
@@ -95,13 +60,12 @@ export default {
 			'set_diler_to_api',
 			'org_get_stores_from_api'
 		]),
-		setFilter() {
-			this.get_dilers_from_api({
-				type: 1,
-				page: this.page_dilers,
-				perpage: this.pagination_items_per_page_dilers,
-				filter: this.filter
-			})
+		filter (data) {
+			console.log(data)
+			this.get_dilers_from_api(data)
+		},
+		paginate (data) {
+			this.get_dilers_from_api(data)
 		}
 	},
 	mounted() {
@@ -135,7 +99,7 @@ export default {
 			'org_stores'
 		])
   	},
-	components: { Dropdown, Breadcrumbs },
+	components: { Dropdown, Breadcrumbs, vClients },
 	watch: {
 		dilers: function (newVal, oldVal) {
 			if (typeof newVal === 'object') {
@@ -164,4 +128,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss"></style>

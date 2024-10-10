@@ -2,7 +2,6 @@
 <template>
     <div class="std-profile std-create-clients">
         <Breadcrumbs class="std-breadcrumbs--margin" />
-
         <Toast />
         <div class="profile-content__title sticky-element std-create-clients__header">
             <!-- <span class="maintitle hidden-mobile-l">Организация {{ this.orgprofile?.name }}</span> -->
@@ -12,16 +11,6 @@
                 <div @click="saveProfile()" class="dart-btn dart-btn-primary btn-padding">Сохранить</div>
             </div>
         </div>
-        <!-- <div class="profile-content b-wrap" :class="{ loading: loading }"> -->
-        <!-- <TabView class="tab-custom">
-			<TabPanel header="О компании"> -->
-        <!-- <div class="profile-content__title">
-            <span class="title">О компании</span>
-            <div class="info info-default">
-              <i class="d_icon d_icon-clock"></i>
-              <span>Подана заявка на изменение реквизитов</span>
-            </div>
-          </div> -->
         <form action="#" @submit.prevent="formChangeSimple">
             <!-- <div class="dart-alert dart-alert-info">Вы можете изменить только данные контактного лица и логотип организации.</div> -->
             <div class="dart-form-group mb-5 std-create-clients__logo-container">

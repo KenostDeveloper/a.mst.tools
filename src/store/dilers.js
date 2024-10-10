@@ -24,12 +24,13 @@ export default {
           }
         })
     },
-    get_dilers_from_api ({ commit }, { filter, page, perpage }) {
+    get_dilers_from_api ({ commit }, { filter, filtersdata, page, perpage }) {
       return Axios('/rest/front_getdilers', {
         method: 'POST',
         data: {
           id: router.currentRoute._value.params.id,
           filter: filter,
+          filtersdata: filtersdata,
           page: page,
           perpage: perpage
         },
