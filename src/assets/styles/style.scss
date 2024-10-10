@@ -7546,3 +7546,32 @@ button.std-icon__wrapper {
 		margin-top: 0px;
 	}
 }
+
+.w-fit{
+	width: fit-content;
+}
+
+.flex{
+	display: flex !important;
+}
+
+.flex-col{
+	flex-direction: column;
+}
+
+.text-right{
+	text-align: right;
+}
+
+.items-end{
+	align-items: flex-end !important;
+}
+
+.relative{
+	position: relative;
+}
+
+.complect-delete{
+	top: 12px !important;
+	right: 12px !important;
+}

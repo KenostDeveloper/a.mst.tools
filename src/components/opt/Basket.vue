@@ -101,7 +101,7 @@
 						v-bind:key="complect.id"
 						class="kenost-product-basket kenost-product-basket-complect"
 					>
-						{{ console.log(complect) }}
+						<!-- {{ console.log(complect) }} -->
 						<span class="complect-icon">Комплект</span>
 						<div
 							class="kenost-basket"

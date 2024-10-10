@@ -43,17 +43,17 @@
                                                         <div v-if="action.length > 0" class="table-actions__container" >
                                                             <div class="table-actions__el" v-for="(tag, indextag) in action" v-bind:key="tag.id">
                                                                 <img v-if="tag.type == 'multiplicity'" src="/images/icons/action/gray/box.svg" alt="">
-                                                                <p  v-if="tag.type == 'multiplicity'">{{ tag.value }} шт.</p>
+                                                                <p class="w-fit" v-if="tag.type == 'multiplicity'">{{ tag.value }} шт.</p>
 
                                                                 <img v-if="tag.type == 'min'" src="/images/icons/action/gray/min.svg" alt="">
     
                                                                 <img v-if="tag.type == 'gift'" src="/images/icons/action/gray/gift.svg" alt="">
     
                                                                 <img v-if="tag.type == 'delay'" src="/images/icons/action/gray/time.svg" alt="">
-                                                                <p  v-if="tag.type == 'delay'">Отсроч. {{ tag.value }} дн.</p>
+                                                                <p class="w-fit" v-if="tag.type == 'delay'">Отсроч. {{ tag.value }} дн.</p>
     
                                                                 <img v-if="tag.type == 'sale'" src="/images/icons/action/gray/sale.svg" alt="">
-                                                                <p  v-if="tag.type == 'sale'">Скидка {{ Number(tag.value).toFixed(0) }}%</p>
+                                                                <p class="w-fit" v-if="tag.type == 'sale'">Скидка {{ Number(tag.value).toFixed(0) }}%</p>
     
                                                                 <img v-if="tag.type == 'free_delivery'" src="/images/icons/action/gray/delivery.svg" alt="">
     
@@ -120,57 +120,52 @@
                                     </div>
                                 </div>
                             </div>
-                            <div v-for="complect in store.complects" v-bind:key="complect.id" class="k-order__complect">
-                                <div class="k-order__complect-title">
+                            <div v-for="complect in store.complects" v-bind:key="complect.id" class="k-order__complects relative">
+                                <!-- <div class="k-order__complect-title">
                                     <p>Комплект</p>
-                                </div>
-                                <div class="k-order__complect-rows dart-row dart-align-items-center">
-                                    <div class="k-order__complect-products d-col-md-9">
-                                        <div class="k-order__product" v-for="product in complect.products" v-bind:key="product.id">
-                                            <div class="dart-row">
-                                                <div class="d-col-md-1">
-                                                    <img class="k-order__product-img " :src="product.image" :alt="product.name">
-                                                </div>
-                                                <div class="d-col-md-9">
-                                                    <div class="k-order__product-info">
-                                                        <div class="k-order__main-info">
-                                                            <p>{{product.name}} </p>
-                                                            <!-- <div class="k-order__actions">
-                                                                <img class="k-order__actions-el" src="https://mst.tools/assets/cache_image/products/7021/51158554_450x450_71b.jpg">
-                                                                <img class="k-order__actions-el" src="https://mst.tools/assets/cache_image/products/7021/51158554_450x450_71b.jpg">
-                                                                <img class="k-order__actions-el" src="https://mst.tools/assets/cache_image/products/7021/51158554_450x450_71b.jpg">
-                                                                <img class="k-order__actions-el" src="https://mst.tools/assets/cache_image/products/7021/51158554_450x450_71b.jpg">
-                                                                <img class="k-order__actions-el" src="https://mst.tools/assets/cache_image/products/7021/51158554_450x450_71b.jpg">
-                                                                <div class="k-order__actions-el last">+3</div>
-                                                            </div> -->
-                                                            <div class="k-order__actions center">
-                                                                <div class="k-actions" v-for="(action, index) in product.actions" v-bind:key="action.id">
-                                                                <img :style="index > 2 ? { display: 'none' } : false" class="k-order__actions-el" :src="site_url_prefix + action.icon" >
-                                                                <!-- <div v-if="action.conflicts.items[action.action_id]?.length" :style="index > 2 ? { display: 'none' } : false" class="k-err-icon"><i class="pi pi-info"></i></div> -->
-                                                                </div>
-                                                                <!-- <div v-if="item.actions.length > 3" class="k-order__actions-el last">+{{ item.actions.length - 3 }}</div> -->
+                                </div> -->
+                                <span class="complect-icon">Комплект</span>
+                                <button href="#" class="k-order__product-delete complect-delete" @click="clearBasketComplect(store.id, complect.products[0].complect_id)">
+                                    <img src="/images/icons/trash.svg" alt="">
+                                </button>
+                                <div class="k-order__complect-rows dart-align-items-center flex flex-col">
+                                    <div class="k-order__complect" v-for="product in complect.products" v-bind:key="product.id">
+                                        <div class="flex">
+                                            <div class="">
+                                                <img class="k-order__product-img " :src="product.image" :alt="product.name">
+                                            </div>
+                                            <div class="">
+                                                <div class="k-order__product-info">
+                                                    <div class="k-order__main-info">
+                                                        <p>{{product.name}} </p>
+                                                        <div class="k-order__actions center">
+                                                            <div class="k-actions" v-for="(action, index) in product.actions" v-bind:key="action.id">
+                                                            <img :style="index > 2 ? { display: 'none' } : false" class="k-order__actions-el" :src="site_url_prefix + action.icon" >
+                                                            <!-- <div v-if="action.conflicts.items[action.action_id]?.length" :style="index > 2 ? { display: 'none' } : false" class="k-err-icon"><i class="pi pi-info"></i></div> -->
                                                             </div>
+                                                            <!-- <div v-if="item.actions.length > 3" class="k-order__actions-el last">+{{ item.actions.length - 3 }}</div> -->
                                                         </div>
                                                     </div>
-                                                    <div class="k-order__product-data">
-                                                        <span class="k-order__article">{{product.article}} x {{product.multiplicity * complect.info.count}} шт</span>
-                                                    </div>
+                                                </div>
+                                                <div class="k-order__product-data">
+                                                    <span class="k-order__article">{{product.article}} x {{product.multiplicity * complect.info.count}} шт</span>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="k-order__complect-data d-col-md-3">
-                                        <div class="k-order__complect-data-items">
-                                            <Counter :item="{warehouse_id: this.basket.warehouses.find((el) => el.id == key)}" :key="new Date().getMilliseconds() + complect.info.id" @ElemCount="ElemComplectCount" :min="1" :max="complect.info.complect_data?.min_count" :value="complect.info.count" :id="complect.info.id" :store_id="store.id"/>
-                                            <b>{{(Number(complect.info.count) * complect.info.price).toLocaleString('ru')}} ₽</b>
+                                        <div class="k-order__complect-data">
+                                            <div class="k-order__complect-data-items flex flex-col items-end">
+                                                <b>{{(Number(complect.info.count) * complect.info.price).toLocaleString('ru')}} ₽</b>
+                                                <Counter :item="{warehouse_id: this.basket.warehouses.find((el) => el.id == key)}" :key="new Date().getMilliseconds() + complect.info.id" @ElemCount="ElemComplectCount" :min="1" :max="complect.info.complect_data?.min_count" :value="complect.info.count" :id="complect.info.id" :store_id="store.id"/>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="k-order__product-data">
-                                    <!--
-                                        <p class="k-order__info">Отсрочка: <span>50 дн.</span></p>
-                                        <p class="k-order__info">Оплата доставки: <span>Покупатель</span></p>
-                                    -->
+                                    <!-- <p class="k-order__info">Отсрочка: <span>50 дн.</span></p>
+                                    <p class="k-order__info">Оплата доставки: <span>Покупатель</span></p> -->
+                                    <!-- {{ store }} -->
+                                    <p class="k-order__info">Отсрочка: <span>{{complect.products[0].delay ? Number(complect.products[0].delay).toFixed(1) + ' дн' : 'Нет'}}</span></p>
+                                    <p class="k-order__info">Оплата доставки: <span>{{complect.products[0].payer === '1' ? 'Поставщик' : 'Покупатель'}}</span></p>
                                 </div>
                             </div>
                             <div class="k-order__final">
@@ -363,16 +358,32 @@ export default {
         id_remain: productid 
       }
       this.busket_from_api(data).then(() => {
-        console.log("бабадумс")
+        // console.log("бабадумс")
         this.busket_from_api({
             action: 'basket/get',
             id: router.currentRoute._value.params.id,
             warehouse: 'all'
         }).then(() => {
-            console.log("бабадумс 2")
+            // console.log("бабадумс 2")
         })
       })      
     },
+    clearBasketComplect(storeid, complectid) {
+			this.$emit("catalogUpdate");
+			this.$emit("actionUpdate");
+			const data = {
+				action: "basket/clear",
+				id: router.currentRoute._value.params.id,
+				store_id: storeid,
+				id_complect: complectid,
+			};
+			this.busket_from_api(data).then((response) => {});
+			this.busket_from_api({
+				action: 'basket/get',
+				id: router.currentRoute._value.params.id,
+				warehouse: 'all'
+			})
+		},
     generateXSLX (storeId, warehouseId) {
         const data = {
             action: 'generate/xslx',
@@ -437,9 +448,19 @@ export default {
             gap: 14px;  
         }
 
+        &__complects{
+            padding: 12px 16px;
+            border-radius: 5px;
+            border: 1px solid #A7A7A7;
+        }
+
         &__complect {
             padding: 16px 0;
-            border-bottom: 1px solid #E2E2E2;
+            // border-bottom: 1px solid #E2E2E2;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+
             .k-order__main-info p{
                 max-width: 290px;
                 width: auto;
