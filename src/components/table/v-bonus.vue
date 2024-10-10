@@ -396,7 +396,7 @@ export default ({
   }
   .v-table .profile-content__title{
     display: flex;
-    align-items: center;
+    align-items: start;
     justify-content: space-between;
   }
   .p-inputtext,
