@@ -155,7 +155,19 @@
                                         <div class="k-order__complect-data">
                                             <div class="k-order__complect-data-items flex flex-col items-end">
                                                 <b>{{(Number(complect.info.count) * complect.info.price).toLocaleString('ru')}} ₽</b>
-                                                <Counter :item="{warehouse_id: this.basket.warehouses.find((el) => el.id == key)}" :key="new Date().getMilliseconds() + complect.info.id" @ElemCount="ElemComplectCount" :min="1" :max="complect.info.complect_data?.min_count" :value="complect.info.count" :id="complect.info.id" :store_id="store.id"/>
+                                                <Counter
+                                                    :key="new Date().getMilliseconds() + product.id_remain"
+                                                    @ElemCount="ElemComplectCount"
+                                                    :item="product"
+                                                    :mini="true"
+                                                    :min="1"
+                                                    :step="Number(product.multiplicity)"
+                                                    :max="complect?.info?.complect_data?.min_count * Number(product.multiplicity)"
+                                                    :value="complect?.info?.count * Number(product.multiplicity)"
+                                                    :id="complect.info.id"
+                                                    :store_id="store.id"
+                                                />
+                                                <!-- <Counter :item="{warehouse_id: this.basket.warehouses.find((el) => el.id == key)}" :key="new Date().getMilliseconds() + complect.info.id" @ElemCount="ElemComplectCount" :min="1" :max="complect.info.complect_data?.min_count" :value="complect.info.count" :id="complect.info.id" :store_id="store.id"/> -->
                                             </div>
                                         </div>
                                     </div>
@@ -238,12 +250,24 @@
             </div>
         </div>
     </div>
+
+    <Dialog v-model:visible="this.modal_remain" header=" " :style="{ width: '340px' }">
+		<div class="kenost-not-produc">
+			<!-- <img src="../../../public/img/opt/not-products.png" alt="" /> -->
+			<b>У нас нет столько товаров :(</b>
+			<p>Извините, но количество данного товара ограничено</p>
+			<div class="a-dart-btn a-dart-btn-primary" @click="this.modal_remain = false">
+				Понятно
+			</div>
+		</div>
+	</Dialog>
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import { toRaw } from 'vue'
 import router from '../../router'
 import Counter from './Counter.vue'
+import Dialog from "primevue/dialog";
 
 export default {
   name: 'OrderForm',
@@ -270,7 +294,8 @@ export default {
       loading: false,
       basket: {},
       order: 0,
-      value: 1
+      value: 1,
+      modal_remain: false
     }
   },
   emits: ['fromOrder', 'orderSubmit'],
@@ -319,27 +344,34 @@ export default {
       })
       
     },
-    ElemComplectCount (object) {
-      console.log(object)
-      if (object.value > Number(object.max)) {
-        this.modal_remain = true
-        console.log(this.modal_remain)
-      } else {
-        const data = { 
-            action: 'basket/update',
-            id: router.currentRoute._value.params.id,
-            id_complect: object.id,
-            value: object.value,
-            store_id: object.store_id,
-            id_warehouse: object.item.warehouse_id.id
+    ElemComplectCount(object) {
+        console.log(object)
+        if (object.value > Number(object.max)) {
+            this.modal_remain = true;
+        } else {
+            this.$emit("catalogUpdate");
+            const data = {
+                action: "basket/update",
+                id: router.currentRoute._value.params.id,
+                id_complect: object.item.complect_id,
+                value: object.value / object.item.multiplicity,
+                store_id: object.store_id,
+            };
+            this.busket_from_api(data).then((response) => {
+                const datainfo = {
+                    complect_id: object.item.complect_id,
+                    store_id: object.store_id,
+                    count: object.value / object.item.multiplicity,
+                };
+                this.$store.commit("SET_OPT_COMPLECT_MUTATION_TO_VUEX", datainfo);
+                this.$store.commit("SET_SALES_COMPLECT_MUTATION_TO_VUEX", datainfo);
+            });
+            this.busket_from_api({
+                action: 'basket/get',
+                id: router.currentRoute._value.params.id,
+                warehouse: 'all'
+            })
         }
-        this.busket_from_api(data).then()
-        this.busket_from_api({
-        action: 'basket/get',
-        id: router.currentRoute._value.params.id,
-        warehouse: 'all'
-      })
-      }
     },
     clearBasket () {
       const data = { action: 'basket/clear', id: router.currentRoute._value.params.id }
@@ -418,7 +450,7 @@ export default {
         warehouse: 'all'
     })
   },
-  components: { Counter },
+  components: { Counter, Dialog },
   computed: {
     ...mapGetters([
       'optbasketall'
