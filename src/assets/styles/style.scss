@@ -5857,6 +5857,8 @@ button.std-icon__wrapper {
 	border: none;
 	border-radius: 50%;
 
+	text-decoration: none;
+
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -5887,7 +5889,7 @@ button.std-icon__wrapper {
 
 		position: absolute;
 		top: 5px;
-		right: -22px;
+		left: 22px;
 
 		padding: 1px 4px;
 	}
@@ -5905,7 +5907,21 @@ button.std-icon__wrapper {
 
 	padding: 15px;
 
+	animation-duration: .3s;
+	animation-timing-function: ease-out;
+	transition: all .2s ease-in;
+
 	width: 290px;
+
+	&:not(.std-notification--big) {
+		visibility: collapse;
+		opacity: 0;
+
+		&:hover {
+			cursor: pointer;
+			background: #f6f6f6;
+		}
+	}
 
 	&--big {
 		border-radius: 5px;
@@ -6058,6 +6074,27 @@ button.std-icon__wrapper {
 		}
 	}
 }
+@keyframes notification-enter {
+	0% {
+		opacity: 0;
+		visibility: collapse;
+	}
+	100% {
+		opacity: 1;
+		visibility: visible;
+	}
+}
+
+@keyframes notification-leave {
+	0% {
+		opacity: 1;
+		visibility: visible;
+	}
+	100% {
+		opacity: 0;
+		visibility: collapse;
+	}
+}
 
 .notifications {
 	background: #FFF;
@@ -6125,7 +6162,7 @@ button.std-icon__wrapper {
 		margin: 0;
 		padding: 0;
 
-		li.std-notification {
+		.std-notification {
 			width: 100%;
 		}
 	}
@@ -7239,6 +7276,8 @@ button.std-icon__wrapper {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+
+	z-index: 100;
 
 	&__content {
 		align-items: center;

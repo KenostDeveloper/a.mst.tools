@@ -399,73 +399,19 @@
         </button>
         <Vendors @changeActive="changeActive" @vendorCheck="vendorCheck" :vendorModal="this.vendorModal" :items="this.opt_vendors" />
 
-        <button class="std-notification-button">
+        <router-link :to="{ name: 'purchases_notifications' }" class="std-notification-button">
             <i class="std_icon std_icon-notification"></i>
-            <div class="std-notification-button__badge">+100</div>
-        </button>
+            <div v-if="notifications.length > 0" class="std-notification-button__badge">+{{ notifications.length }}</div>
+        </router-link>
 
-        <!-- <div class="std-notification__list">
-            <div class="std-notification">
-                <div class="std-notification__header">
-                    <div class="std-notification__header-content">
-						<i class="std_icon std_icon-notification std-notification__icon"></i>
-						<span class="std-notification__span">12.12.2024</span>
-						<span class="std-notification__span">12:00</span>
-					</div>
-					<button class="button-none std-notification__close">
-						<i class="std_icon std_icon-close"></i>
-					</button>
-                </div>
-                <div class="std-notification__main">
-                    <h6 class="std-notification__title">Изменение в заказе №2345</h6>
-                    <p class="std-notification__text">Заказ №2345 задерживается на складе МСТ.</p>
-                    <span class="std-notification__span">
-                        Просмотреть детали заказа, нажав
-                        <router-link class="std-notification__link" to="/">здесь</router-link>
-                    </span>
-                </div>
-            </div>
-			<div class="std-notification">
-                <div class="std-notification__header">
-                    <div class="std-notification__header-content">
-						<i class="std_icon std_icon-notification std-notification__icon"></i>
-						<span class="std-notification__span">12.12.2024</span>
-						<span class="std-notification__span">12:00</span>
-					</div>
-					<button class="button-none std-notification__close">
-						<i class="std_icon std_icon-close"></i>
-					</button>
-                </div>
-                <div class="std-notification__main">
-                    <h6 class="std-notification__title">Изменение в заказе №2345</h6>
-                    <p class="std-notification__text">Заказ №2345 задерживается на складе МСТ.</p>
-                    <span class="std-notification__span">
-                        Просмотреть детали заказа, нажав
-                        <router-link class="std-notification__link" to="/">здесь</router-link>
-                    </span>
-                </div>
-            </div>
-			<div class="std-notification">
-                <div class="std-notification__header">
-                    <div class="std-notification__header-content">
-						<i class="std_icon std_icon-notification std-notification__icon"></i>
-						<span class="std-notification__span">12.12.2024</span>
-						<span class="std-notification__span">12:00</span>
-					</div>
-					<button class="button-none std-notification__close">
-						<i class="std_icon std_icon-close"></i>
-					</button>
-                </div>
-                <div class="std-notification__main">
-                    <h6 class="std-notification__title">Изменение в заказе №2345</h6>
-                    <p class="std-notification__text">Заказ №2345 задерживается на складе МСТ.</p>
-                    <span class="std-notification__span">
-                        Просмотреть детали заказа, нажав
-                        <router-link class="std-notification__link" to="/">здесь</router-link>
-                    </span>
-                </div>
-            </div>
-        </div> -->
+        <div class="std-notification__list">
+            <Notification
+                v-for="(notification, index) in notifications"
+                :key="notification.id"
+                :data="notification"
+				:lifetime="10000"
+                @delete="deleteNotification(index)" />
+        </div>
 
         <!-- <a href="#" class="navmain__components_desctop a-dart-btn">
             <i class="pi pi-sliders-h"></i>
@@ -479,6 +425,7 @@ import router from '../../router';
 import Vendors from './Vendors.vue';
 import Accordion from '../Accordion.vue';
 import axios from 'axios';
+import Notification from './Notification.vue';
 
 export default {
     name: 'Nav',
@@ -494,6 +441,27 @@ export default {
     },
     data() {
         return {
+            notifications: [
+                {
+                    date: '12.12.2024',
+                    time: '12:00',
+                    title: 'Заголовок',
+                    description: 'Текст'
+                },
+                {
+                    date: '12.12.2024',
+                    time: '12:00',
+                    title: 'Заголовок',
+                    description: 'Текст'
+                },
+                {
+                    date: '12.12.2024',
+                    time: '12:00',
+                    title: 'Заголовок',
+                    description: 'Текст'
+                }
+            ],
+
             showSearchSuggestions: false,
             searchSuggestions: [],
             searchTimer: null,
@@ -659,6 +627,9 @@ export default {
         debounce(func, delay) {
             clearTimeout(this.searchTimer);
             this.searchTimer = setTimeout(func, delay);
+        },
+        deleteNotification(index) {
+            this.notifications.splice(index, 1);
         }
     },
     mounted() {
@@ -695,7 +666,7 @@ export default {
             });
         });
     },
-    components: { Vendors, Accordion },
+    components: { Vendors, Accordion, Notification },
     computed: {
         ...mapGetters(['optvendors', 'salesbanners', 'optcatalog', 'optcatalogwarehouse', 'org_stores', 'warehouse_basket', 'optproducts']),
 
