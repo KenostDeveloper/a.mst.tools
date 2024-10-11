@@ -12,7 +12,7 @@
                         :lifetime="10000"
                         @delete="deleteNotification(index)" />
                 </div>
-                <router-link :to="{ name: 'purchases_notifications' }" class="std-notification-button absolute">
+                <router-link v-if="this.$route.params.id" :to="{ name: 'purchases_notifications', params: { id: this.$route.params.id, } }" class="std-notification-button absolute">
                     <i class="std_icon std_icon-notification"></i>
                     <div v-if="notifications.total > 0" class="std-notification-button__badge">+{{ notifications.total }}</div>
                 </router-link>
@@ -76,10 +76,12 @@ export default {
 
         this.namePathIsNav = router?.currentRoute?._value.matched[4]?.name
 
-        this.get_notification_api({
-            action: "get",
-            id: router.currentRoute._value.params.id,
-        })
+        if(router.currentRoute?._value?.params?.id){
+            this.get_notification_api({
+                action: "get",
+                id: router.currentRoute._value.params.id,
+            })
+        }
     },
     updated () {
         // this.setUser(JSON.parse(localStorage.getItem('user')))
