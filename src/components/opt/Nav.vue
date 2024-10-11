@@ -404,15 +404,6 @@
             <div v-if="notifications.length > 0" class="std-notification-button__badge">+{{ notifications.length }}</div>
         </router-link>
 
-        <div class="std-notification__list">
-            <Notification
-                v-for="(notification, index) in notifications"
-                :key="notification.id"
-                :data="notification"
-				:lifetime="10000"
-                @delete="deleteNotification(index)" />
-        </div>
-
         <!-- <a href="#" class="navmain__components_desctop a-dart-btn">
             <i class="pi pi-sliders-h"></i>
             <b>Сравнение</b>
@@ -441,26 +432,7 @@ export default {
     },
     data() {
         return {
-            notifications: [
-                {
-                    date: '12.12.2024',
-                    time: '12:00',
-                    title: 'Заголовок',
-                    description: 'Текст'
-                },
-                {
-                    date: '12.12.2024',
-                    time: '12:00',
-                    title: 'Заголовок',
-                    description: 'Текст'
-                },
-                {
-                    date: '12.12.2024',
-                    time: '12:00',
-                    title: 'Заголовок',
-                    description: 'Текст'
-                }
-            ],
+            
 
             showSearchSuggestions: false,
             searchSuggestions: [],
@@ -628,9 +600,6 @@ export default {
             clearTimeout(this.searchTimer);
             this.searchTimer = setTimeout(func, delay);
         },
-        deleteNotification(index) {
-            this.notifications.splice(index, 1);
-        }
     },
     mounted() {
         this.get_opt_warehouse_catalog_from_api();
