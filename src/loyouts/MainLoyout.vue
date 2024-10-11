@@ -14,25 +14,25 @@
                 <!-- </div> -->
 
                 <Toast>
-                    <!-- <template #container="data">
-                        <div class="std-notification">
+                    <template #message>
+                        <!-- <div class="std-notification"> -->
                             <div class="std-notification__header">
                                 <div class="std-notification__header-content">
                                     <i class="std_icon std_icon-notification std-notification__icon"></i>
-                                    <span class="std-notification__span">{{ data?.date }}</span>
-                                    <span class="std-notification__span">{{ data?.time }}</span>
+                                    <span class="std-notification__span">12.04.2024</span>
+                                    <span class="std-notification__span">12:00</span>
                                 </div>
                             </div>
                             <div class="std-notification__main">
-                                <h6 class="std-notification__title">{{ data?.title }}</h6>
-                                <p class="std-notification__text">{{ data?.description }}</p>
+                                <h6 class="std-notification__title">Заголовок</h6>
+                                <p class="std-notification__text">Описание</p>
                                 <span class="std-notification__span">
                                     Просмотреть детали заказа, нажав
                                     <router-link class="std-notification__link" to="/" @click.stop>здесь</router-link>
                                 </span>
                             </div>
-                        </div>
-                    </template> -->
+                        <!-- </div> -->
+                    </template>
                 </Toast>
 
                 <router-link
@@ -108,6 +108,7 @@ export default {
             });
         }
 
+        this.$toast.add({ severity: 'secondary', summary: 'Приветствую', detail: 'Добро пожаловать', life: 3000 });
         this.$toast.add({ severity: 'secondary', summary: 'Приветствую', detail: 'Добро пожаловать', life: 3000 });
     },
     updated() {
