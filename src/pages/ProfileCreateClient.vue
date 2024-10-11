@@ -1,6 +1,6 @@
 <!-- eslint-disable indent -->
 <template>
-    <div class="std-profile std-create-clients">
+    <div class="std-profile std-create-clients" :class="{ 'loading': loading }">
         <Breadcrumbs class="std-breadcrumbs--margin" />
         <!-- <Toast /> -->
         <div class="profile-content__title sticky-element">
@@ -8,7 +8,12 @@
             <div class="title-h1 hidden-mobile-l">О клиенте</div>
             <span class="maintitle visible-mobile-l">Карточка клиента</span>
             <div class="buttons_container">
-                <div @click="saveProfile()" class="dart-btn dart-btn-primary btn-padding">Сохранить</div>
+                <div 
+                    :class="{ 'dart-btn-loading': loading }"
+                    @click="saveProfile()" 
+                    class="dart-btn dart-btn-primary btn-padding" 
+                    :disabled="this.loading"
+                >Сохранить</div>
             </div>
         </div>
         <form action="#" @submit.prevent="formChangeSimple">
@@ -132,10 +137,12 @@
                 }"
                 >
                     <AddAddress
-                        :key="warehouse"
+                        :key="new Date().getMilliseconds() + index"
                         :index="index"
-                        v-model="this.form.company.warehouses[index]"
-                        class="std-create-clients__add-address" />
+                        :value="this.form.company.warehouses[index].address"
+                        v-model="this.form.company.warehouses[index].address"
+                        class="std-create-clients__add-address"
+                    />
                     <span
                         class="error_desc"
                         v-for="error of v$.form.company.warehouses.$errors"
@@ -234,7 +241,7 @@ export default {
                 company: {
                     data: { value: '' },
                     inn: '',
-                    warehouses: [{ value: '' }]
+                    warehouses: [{ address: {value: ''} }]
                 }
             }
         };
@@ -285,6 +292,7 @@ export default {
 			if (!result) {
 				console.log(result);
 			} else {
+                this.loading = true
                 const data = {
                     action: 'set/org/virtual_profile',
                     id: router.currentRoute._value.params.id,
@@ -313,9 +321,14 @@ export default {
                             life: 3000
                         });
                         router.push({ name: 'clients', params: { id: router.currentRoute._value.params.id } });
-                    }                    
+                    }          
+                    this.loading = false          
                 });                
             }
+        },
+        updateAddress (address, index) {
+            console.log(address)
+            console.log(index)
         }
     },
     mounted() {
@@ -372,7 +385,7 @@ export default {
                         required: helpers.withMessage(
                             "Выберите хотя бы один адрес",
                             () => {
-                                return this.form.company.warehouses.length && this.form.company.warehouses[0].value != ''
+                                return this.form.company.warehouses.length && this.form.company.warehouses[0].address.value != ''
                             }
                         ),
                     },
@@ -382,7 +395,33 @@ export default {
     },
     watch: {
         org_profile: function (newVal, oldVal) {
-            this.orgprofile = newVal;
+            if(!newVal.success){
+                this.$toast.add({ severity: 'error', summary: 'Ошибка!', detail: newVal.message, life: 3000 });
+                router.push({ name: 'clients', params: { id: router.currentRoute._value.params.id } });
+            }else{
+                this.orgprofile = newVal;
+                this.form.company.inn = newVal.requisites["0"].inn
+                this.form.company.data.value = newVal.requisites["0"].name
+                if(newVal.warehouses){
+                    const array1 = newVal.warehouses
+                    array1.forEach((element, index) => {
+                        if(index == 0){
+                            this.form.company.warehouses[0].address.value = element.address
+                            this.form.company.warehouses[0].address.coordinats = element.coordinats
+                            this.form.company.warehouses[0].id = element.id
+                        }else{
+                            const newWarehouse = {
+                                address: {
+                                    value: element.address,
+                                    coordinats: element.coordinats,
+                                },                                
+                                id: element.id
+                            }
+                            this.form.company.warehouses.push(newWarehouse)
+                        }
+                    });
+                }
+            }            
         }
     }
 };
