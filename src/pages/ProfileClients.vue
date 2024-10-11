@@ -1,6 +1,8 @@
 <template>
 	<section class="clients">
 		<Breadcrumbs />
+		<ConfirmDialog/>
+		<Toast />
 		<v-clients
         :items_data="stores.items"
         :total="stores.total"
@@ -9,7 +11,7 @@
         :page="this.page"
         :filters="this.filters"
         :title="'Мои клиенты'"
-        @update="optUpdate"
+        @delete="deleteClient"
         @filter="filter"
         @sort="filter"
         @paginate="paginate"
@@ -26,11 +28,24 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import Toast from 'primevue/toast';
 import Dropdown from 'primevue/dropdown'
+import router from "../router"
+import ConfirmDialog from "primevue/confirmdialog";
 import Breadcrumbs from '../components/Breadcrumbs.vue'
 import vClients from '../components/table/v-clients.vue'
 
 export default {
+	props: {
+    pagination_items_per_page: {
+      type: Number,
+      default: 24
+    },
+    pagination_offset: {
+      type: Number,
+      default: 0
+    }
+  },
 	data() {
 		return {
 			stores: {
@@ -51,28 +66,82 @@ export default {
           values: 1
         }
 			},
-			stores_list: []
+			stores_list: [],
+			page: 1
 		};
 	},
 	methods: {
 		...mapActions([
 			'get_dilers_from_api',
 			'set_diler_to_api',
-			'org_get_stores_from_api'
+			'unset_dilers',
+			'org_get_stores_from_api',
+			'org_profile_set_from_api'
 		]),
 		filter (data) {
-			console.log(data)
+			this.unset_dilers()
+			this.page = data.page
 			this.get_dilers_from_api(data)
 		},
 		paginate (data) {
+			this.unset_dilers()
+			this.page = data.page
 			this.get_dilers_from_api(data)
-		}
+		},
+		deleteClient(data) {
+			this.$confirm.require({
+				message: "Вы уверены, что хотите удалить организацию клиента с ID " + data.id + "?",
+				header: "Подтверждение удаления",
+				icon: "pi pi-exclamation-triangle",
+				accept: () => {
+					this.loading = true;
+					this.unset_dilers()
+					this.$load(async () => {
+            const requestdata = {
+              action: 'delete/org/virtual_profile',
+              id: router.currentRoute._value.params.id,
+              client_id: data.id,
+            }
+						await this.org_profile_set_from_api(requestdata)
+							.then((result) => {
+                if(result.data.data.success === false){
+                  this.$toast.add({ severity: 'error', summary: 'Ошибка!', detail: result.data.data.message, life: 3000 });
+									// страницу не меняем, остаемся тут же
+									this.get_dilers_from_api(data)
+                }else{
+                  this.$toast.add({
+                    severity: "success",
+                    summary: "Организация удалена",
+                    detail:
+                      "Удаление организации клиента с ID " + data.id + " произошло успешно!",
+                    life: 3000,
+                  });
+									// страницу не меняем, остаемся тут же
+									this.get_dilers_from_api(data)
+                }								
+							})
+							.catch((result) => {
+								console.log(result);
+							});
+					});
+					this.loading = false;
+				},
+				reject: () => {
+					this.$toast.add({
+						severity: "error",
+						summary: "Удаление отгрузки",
+						detail: "Удаление отгрузки отклонено",
+						life: 3000,
+					});
+				},
+			});
+		},
 	},
 	mounted() {
 		this.get_dilers_from_api({
 			type: 1,
-			page: this.page_dilers,
-			perpage: this.pagination_items_per_page_dilers
+			page: this.page,
+			perpage: this.pagination_items_per_page
 		}).then(() => {
 			if (this.dilers) {
 				if (Object.prototype.hasOwnProperty.call(this.dilers, 'items')) {
@@ -81,9 +150,9 @@ export default {
 				this.stores.items = []
 				}
 				if (Object.prototype.hasOwnProperty.call(this.dilers, 'total')) {
-				this.stores.total = this.dilers.total
+					this.stores.total = this.dilers.total
 				} else {
-				this.stores.total = 0
+					this.stores.total = 0
 				}
 			}
 		})
@@ -98,8 +167,8 @@ export default {
 			'dilers',
 			'org_stores'
 		])
-  	},
-	components: { Dropdown, Breadcrumbs, vClients },
+  },
+	components: { Dropdown, Breadcrumbs, vClients, ConfirmDialog, Toast },
 	watch: {
 		dilers: function (newVal, oldVal) {
 			if (typeof newVal === 'object') {
@@ -109,13 +178,13 @@ export default {
 				this.stores.items = []
 				}
 				if (Object.prototype.hasOwnProperty.call(newVal, 'total')) {
-				this.stores.total = newVal.total
+					this.stores.total = newVal.total
 				} else {
-				this.stores.total = 0
+					this.stores.total = -1
 				}
 			} else {
 				this.stores.items = []
-				this.stores.total = 0
+				this.stores.total = -1
 			}
 		},
 		org_stores: function (newVal, oldVal) {

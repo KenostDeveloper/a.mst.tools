@@ -24,6 +24,9 @@ export default {
           }
         })
     },
+    unset_dilers ({ commit }){
+      commit('UNSET_DILERS_IN_VUEX')
+    },
     get_dilers_from_api ({ commit }, { filter, filtersdata, page, perpage }) {
       return Axios('/rest/front_getdilers', {
         method: 'POST',
@@ -52,7 +55,10 @@ export default {
   mutations: {
     SET_DILERS_TO_VUEX: (state, data) => {
       state.dilers = data.data
-    }
+    },
+    UNSET_DILERS_IN_VUEX: (state) => {
+      state.dilers = []
+    },
   },
   getters: {
     dilers (state) {

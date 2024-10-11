@@ -76,7 +76,7 @@
                 <button class="button-none std-icon__wrapper client-card__action-button">
                   <i class="std_icon std_icon-pen"></i>
                 </button>
-                <button class="button-none std-icon__wrapper client-card__action-button">
+                <button class="button-none std-icon__wrapper client-card__action-button" @click.prevent="deleteClient(item)">
                   <i class="std_icon std_icon-trash"></i>
                 </button>
               </div>
@@ -86,33 +86,6 @@
                 <button class="dart-btn dart-btn-primary">Посмотреть остатки</button>
               </router-link>	
             </div>    			
-          </div>
-        </div>
-        <div class="d-col-md-3">
-          <div class="d-client-card">
-            <div class="d-client-card__content">
-              <img src="https://dev.mst.tools/assets/content/avatars/66e03cd305ab6." alt="" class="client-card__img" />
-              <div class="d-client-card__info">
-                <span class="d-client-card__title">«KENOST TESTING»</span>
-                <div class="d-client-card__data">
-                  <p class="d-client-card__item"><span class="d-client-card__data-label">Адрес:</span> г. Москва, Большая Никитская улица, 10</p>
-                  <p class="d-client-card__item"><span class="d-client-card__data-label">ИНН:</span> 77856974123</p>
-                  <p class="d-client-card__item"><span class="d-client-card__data-label">Телефон:</span> +79194464596</p>
-                  <p class="d-client-card__item"><span class="d-client-card__data-label">Email:</span> kenostru@mail.ru</p>
-                </div>
-              </div>
-            </div>
-            <div class="d-client-card__buttons d-client-card__buttons-flex">
-              <span class="status status-green">Созданный поставщиком</span>
-              <div class="d-client-card__actions">
-                <button class="button-none std-icon__wrapper client-card__action-button">
-                  <i class="std_icon std_icon-pen"></i>
-                </button>
-                <button class="button-none std-icon__wrapper client-card__action-button">
-                  <i class="std_icon std_icon-trash"></i>
-                </button>
-              </div>
-            </div>            			
           </div>
         </div>
       </div>
@@ -137,6 +110,8 @@
 			:prev-text="'Пред'"
 			:next-text="'След'"
 			:container-class="'pagination justify-content-center'"
+      :initialPage="this.page"
+			:forcePage="this.page"
 		>
 		</paginate>
     </div>
@@ -146,7 +121,6 @@
 <script>
 import { toRaw } from "vue";
 import { mapActions, mapGetters } from "vuex";
-import router from "../../router";
 import Paginate from "vuejs-paginate-next";
 import TreeSelect from "primevue/treeselect";
 import Dropdown from "primevue/dropdown";
@@ -154,8 +128,8 @@ import Checkbox from "primevue/checkbox";
 import Skeleton from "primevue/skeleton";
 
 export default {
-	name: "v-clients",
-	emits: ["filter","sort","paginate","update"],
+	name: "vClients",
+	emits: ["delete","filter","sort","paginate","update"],
 	components: {
 		Paginate,
 		Skeleton,
@@ -190,6 +164,10 @@ export default {
 			type: Number,
 			default: -1,
 		},
+    page: {
+      type: Number,
+			default: 1
+    },
 		pagination_items_per_page: {
 			type: Number,
 			default: 24,
@@ -208,8 +186,7 @@ export default {
 			filter: "",
 			filtersdata: {},
 			loading: [],
-			sort: {},
-			page: 1,
+			sort: {},			
 			calendar: {
 				maxDate: null,
 			},
@@ -269,6 +246,9 @@ export default {
 				};
 				this.filteredVendors = this.get_vendors_from_api(data);
 			}
+		},
+		deleteClient(data) {
+      this.$emit("delete", data);
 		},
 	},
 	mounted() {
