@@ -5864,6 +5864,12 @@ button.std-icon__wrapper {
 	height: 40px;
 	width: 40px;
 
+	&.absolute{
+		position: absolute;
+		top: 15px;
+		right: 62px;
+	}
+
 	i {
 		&::before {
 			color: #fff;
@@ -5946,6 +5952,9 @@ button.std-icon__wrapper {
 			font-size: 16px;
 			font-weight: 400;
 			line-height: 1.12;
+			// display: flex;
+			// align-items: center;
+			// gap: 4px;
 		}
 
 		.std-notification__title {
@@ -5971,9 +5980,9 @@ button.std-icon__wrapper {
 		flex-direction: column;
 		gap: 6px;
 
-		position: absolute;
-		top: calc(100% + 6px);
-		right: 0;
+		position: fixed;
+		top: 40px;
+		right: 40px;
 
 		z-index: 10;
 	}
@@ -7570,4 +7579,20 @@ button.std-icon__wrapper {
 .complect-delete{
 	top: 12px !important;
 	right: 12px !important;
+}
+
+.notificate-image{
+	width: 18px;
+	height: 18px !important;
+	border-radius: 50%;
+	border: 1px solid var(--border-color);
+	object-fit: contain;
+	position: relative;
+    top: 3px;
+}
+
+.std-notification.read{
+	*{
+		color: #7B7B7B !important;
+	}
 }

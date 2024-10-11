@@ -451,17 +451,6 @@ const routes = [
 														component: PurchasesSearch,
 													},
 												],
-											},
-											{
-												path: "notifications",
-												name: "purchases_notifications",
-												component: Notifications,
-												label: "Уведомления",
-												meta: {
-													breadcrumb: {
-														label: "Уведомления",
-													},
-												}
 											}
 										],
 									},
@@ -474,6 +463,17 @@ const routes = [
 											},
 										},
 										component: PurchasesActions,
+									},
+									{
+										path: "notifications",
+										name: "purchases_notifications",
+										component: Notifications,
+										label: "Уведомления",
+										meta: {
+											breadcrumb: {
+												label: "Уведомления",
+											},
+										}
 									},
 									{
 										path: "settings",
