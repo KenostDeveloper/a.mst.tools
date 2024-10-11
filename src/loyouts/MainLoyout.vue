@@ -101,11 +101,19 @@ export default {
 
         this.namePathIsNav = router?.currentRoute?._value.matched[4]?.name;
 
+<<<<<<< Updated upstream
         if (router.currentRoute?._value?.params?.id) {
             this.get_notification_api({
                 action: 'get',
                 id: router.currentRoute._value.params.id
             });
+=======
+        if(this.$route.params.id){
+            this.get_notification_api({
+                action: "get",
+                id: this.$route.params.id,
+            })
+>>>>>>> Stashed changes
         }
 
         this.$toast.add({ severity: 'secondary', summary: 'Приветствую', detail: 'Добро пожаловать', life: 3000 });

@@ -39,6 +39,7 @@ export default {
     name: 'Notifications',
     data() {
         return {
+            tobserver: null
             // notifications: [
             //     {
             //         id: 1,
@@ -67,8 +68,22 @@ export default {
     mounted() {
         this.get_notification_api({
             action: "get",
-            id: router.currentRoute._value.params.id,
+            id: this.$route.params.id,
+        }).then(() => {
+            const notifElems = document.querySelectorAll('.std-notification--big');
+            this.tobserver = new IntersectionObserver(this.callback, {
+                // root: document.querySelector('.notifications__list'),
+                threshold: 1.0,
+            });
+            for(let i = 0; i< notifElems.length; i++){
+                // console.log(notifElems[i])
+            
+                this.tobserver.observe(notifElems[i]);
+
+                // console.log(tobserver)
+            }
         })
+        
     },
     computed: {
         ...mapGetters(['notifications']),
@@ -84,9 +99,17 @@ export default {
         // deleteNotification(index) {
         //     this.notifications.splice(index, 1);
         // },
-        // deleteAllNotifications() {
-        //     this.notifications = [];
-        // }
+        deleteAllNotifications() {
+            this.get_notification_api({
+                action: "read",
+                id: this.$route.params.id,
+                ids: 'all'
+            })
+        },
+        callback (entries, observer, target) {
+            console.log('teeest', entries, observer, target)
+            // this.observe.unobserve(observer.target)
+        }
     }
 };
 </script>

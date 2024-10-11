@@ -399,10 +399,10 @@
         </button>
         <Vendors @changeActive="changeActive" @vendorCheck="vendorCheck" :vendorModal="this.vendorModal" :items="this.opt_vendors" />
 
-        <router-link :to="{ name: 'purchases_notifications' }" class="std-notification-button">
+        <!-- <router-link :to="{ name: 'purchases_notifications' }" class="std-notification-button">
             <i class="std_icon std_icon-notification"></i>
             <div v-if="notifications.length > 0" class="std-notification-button__badge">+{{ notifications.length }}</div>
-        </router-link>
+        </router-link> -->
 
         <!-- <a href="#" class="navmain__components_desctop a-dart-btn">
             <i class="pi pi-sliders-h"></i>
@@ -432,8 +432,6 @@ export default {
     },
     data() {
         return {
-            
-
             showSearchSuggestions: false,
             searchSuggestions: [],
             searchTimer: null,
