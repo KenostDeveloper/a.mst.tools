@@ -715,6 +715,16 @@ const routes = [
 												},
 												component: ProfileCreateClient,
 											},
+											{
+												path: "update/:client_id",
+												name: "client_update",
+												meta: {
+													breadcrumb: {
+														label: "Редактирование клиента",
+													},
+												},
+												component: ProfileCreateClient,
+											}
 										],
 									},
 									{

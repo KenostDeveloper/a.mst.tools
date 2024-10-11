@@ -73,9 +73,9 @@
             <div class="d-client-card__buttons d-client-card__buttons-flex" v-if="item.owner_id > 0">
               <span class="status status-green">Созданный поставщиком</span>
               <div class="d-client-card__actions">
-                <button class="button-none std-icon__wrapper client-card__action-button">
+                <router-link :to="{ name: 'client_update', params: { id: $route.params.id, client_id: item.id } }" class="button-none std-icon__wrapper client-card__action-button">
                   <i class="std_icon std_icon-pen"></i>
-                </button>
+                </router-link>
                 <button class="button-none std-icon__wrapper client-card__action-button" @click.prevent="deleteClient(item)">
                   <i class="std_icon std_icon-trash"></i>
                 </button>
@@ -342,6 +342,11 @@ export default {
         justify-content: space-between;
         .d-client-card__actions{
           button{
+            color: #666;
+          }
+          a{
+            display: inline-block;
+            text-decoration: none;
             color: #666;
           }
         }

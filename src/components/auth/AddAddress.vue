@@ -29,6 +29,9 @@ export default {
         inputClasses: {
             type: String,
             default: ''
+        },
+        value: {
+
         }
     },
     data() {
@@ -65,7 +68,6 @@ export default {
             this.$refs.mapRef?.updateCoordinates(coordinates);
         },
         async getAddress(address) {
-            console.log("Map addres for search", address);
             const response = await axios.post(
                 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address',
                 {
@@ -79,14 +81,19 @@ export default {
             );
 
             const firstAddress = await response?.data?.suggestions[0];
-            console.log("First searched address", firstAddress);
             this.$emit('update:modelValue', firstAddress);
         }
     },
     mounted() {
-        this.setCoordinates();
+        setTimeout(() => this.setCoordinates(), 500)
+        
     },
     watch: {
+        value: {
+            handler(newVal) {
+                console.log(newVal)
+            }
+        },
         mapAddress: {
             handler(newVal) {
                 this.getAddress(newVal);
