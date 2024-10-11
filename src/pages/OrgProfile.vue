@@ -1,7 +1,7 @@
 <!-- eslint-disable indent -->
 <template>
 	<div class="std-profile">
-		<Toast />
+		<!-- <Toast /> -->
 		<div class="profile-content__title sticky-element">
 			<!-- <span class="maintitle hidden-mobile-l">Организация {{ this.orgprofile?.name }}</span> -->
 			<div class="title-h1 hidden-mobile-l">О компании</div>

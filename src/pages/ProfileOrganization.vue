@@ -1,7 +1,7 @@
 <template>
     <div>
       <div class="analitics-widget">
-        <Toast />
+        <!-- <Toast /> -->
         <h2 class="title mb-4 mt-5">{{ organization.name }}</h2>
         <div class="organization" >
           <div class="dart-row">

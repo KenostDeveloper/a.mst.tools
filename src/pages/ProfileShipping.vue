@@ -1,7 +1,7 @@
 <template>
 	<div class="std-display-contents">
 		<ConfirmDialog />
-		<Toast />
+		<!-- <Toast /> -->
 		<div
 			class="not-warehouse"
 			v-if="this.organozation.warehouse == 0 && this.organozation.vendor == 0"

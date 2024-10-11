@@ -1,10 +1,10 @@
 <template>
     <section class="notifications">
         <div class="notifications__header">
-            <h1 class="notifications__title">Уведомления ({{ notifications.total }})</h1>
+            <h1 class="notifications__title">Уведомления ({{ this.notifications_all.total }})</h1>
             <div class="notifications__header-actions">
-                <button class="dart-btn dart-btn-primary notifications__button" @click="deleteAllNotifications">Прочитать все</button>
-                <button class="button-none notifications__close">
+                <button class="dart-btn dart-btn-primary notifications__button" @click="readAllNotifications">Прочитать все</button>
+                <button class="button-none notifications__close" @click="deleteAllNotifications()">
                     <i class="std_icon std_icon-close"></i>
                 </button>
             </div>
@@ -17,9 +17,9 @@
                     :data="notification"
                     type="big"
                     @delete="deleteNotification(index)" /> -->
-                    <div v-for="item in notifications.items" v-bind:key="item.id" class="std-notification std-notification--big" :class="{read: item.read == '1'}">
+                    <div :data-id="item.id" :data-read="item.read" v-for="item in this.notifications_all.items" v-bind:key="item.id" class="std-notification std-notification--big" :class="{read: item.read == '1'}">
                         <div v-html="item.chunk"></div>
-                        <button class="button-none std-notification__delete" @click="$emit('delete')">
+                        <button class="button-none std-notification__delete" @click="deleteNotificate(item.id)">
                             <!-- <i class="std_icon std_icon-delete"></i> -->
                             <i class="std_icon std_icon-trash"></i>
                         </button>
@@ -39,7 +39,10 @@ export default {
     name: 'Notifications',
     data() {
         return {
-            tobserver: null
+            tobserver: null,
+            ids_read: [],
+            timeOut: null,
+            notifications_all: []
             // notifications: [
             //     {
             //         id: 1,
@@ -75,12 +78,10 @@ export default {
                 // root: document.querySelector('.notifications__list'),
                 threshold: 1.0,
             });
-            for(let i = 0; i< notifElems.length; i++){
-                // console.log(notifElems[i])
-            
-                this.tobserver.observe(notifElems[i]);
-
-                // console.log(tobserver)
+            for(let i = 0; i < notifElems.length; i++){
+                if(notifElems[i].dataset.read == '0'){
+                    this.tobserver.observe(notifElems[i]);
+                }
             }
         })
         
@@ -99,16 +100,66 @@ export default {
         // deleteNotification(index) {
         //     this.notifications.splice(index, 1);
         // },
-        deleteAllNotifications() {
+        readAllNotifications() {
             this.get_notification_api({
                 action: "read",
                 id: this.$route.params.id,
                 ids: 'all'
             })
         },
+        deleteNotificate(id){
+            this.get_notification_api({
+                action: "delete",
+                id: this.$route.params.id,
+                notification_id: id
+            })
+        },
+        deleteAllNotifications(){
+            this.get_notification_api({
+                action: "delete",
+                id: this.$route.params.id
+            })
+        },
         callback (entries, observer, target) {
-            console.log('teeest', entries, observer, target)
+            // console.log('entries', entries)
+            // console.log('observer', observer)
+            // console.log('target', target)
+
+            // console.log(this.tobserver)
+
+            if(entries.length <= 5){
+                for(let i = 0; i < entries.length; i++){
+                    this.tobserver.unobserve(entries[i].target)
+                    // console.log(entries[i].target.dataset.id)
+
+                    this.ids_read.push(entries[i].target.dataset.id);
+
+                    if(this.timeOut){
+                        clearTimeout(this.timeOut);
+                    }
+
+                    this.timeOut = setTimeout(() => {
+                        // Ваш запрос на сервер
+                        this.get_notification_api({
+                            action: "read",
+                            id: this.$route.params.id,
+                            ids: this.ids_read
+                        })
+                        this.ids_read = []
+                    }, 2000);
+                }
+            }
+            // for(let i = 0; i < entries.length; i++){
+            //     this.tobserver.unobserve(entries[i].target)
+            //     console.log(entries[0].target)
+            // }
+
             // this.observe.unobserve(observer.target)
+        }
+    },
+    watch: {
+        notifications: function (newVal, oldVal) {
+            this.notifications_all = newVal
         }
     }
 };

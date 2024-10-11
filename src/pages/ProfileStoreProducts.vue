@@ -1,7 +1,7 @@
 <template>
 	<Breadcrumbs class="std-breadcrumbs--margin" />
 	<h1 class="h1-mini">{{ store.name }}</h1>
-	<Toast />
+	<!-- <Toast /> -->
 	<TabView class="tab-custom">
 		<TabPanel header="Сопоставление товаров">
 			<h1 class="h1-mini">Сопоставление товаров</h1>

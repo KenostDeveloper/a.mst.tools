@@ -1,5 +1,5 @@
 <template>
-    <Toast />
+    <!-- <Toast /> -->
 
     <!-- <div className="d-col-shop mb-2">
         <div className="d-col-shop__left">

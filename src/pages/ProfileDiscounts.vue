@@ -1,5 +1,5 @@
 <template>
-    <Toast />
+    <!-- <Toast /> -->
     <ConfirmDialog></ConfirmDialog>
 
     <div class="std-discounts">

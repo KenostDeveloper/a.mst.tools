@@ -50,7 +50,7 @@
 			<Basket @actionUpdate="actionUpdate" ref="childComponent" @toOrder="toOrder" />
 		<!-- </div> -->
     </div>
-    <Toast />
+    <!-- <Toast /> -->
     <OrderModal :show="show_order" @fromOrder="fromOrder" />
 </template>
 <script>

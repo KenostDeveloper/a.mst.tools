@@ -1,4 +1,22 @@
 <template>
+    <Toast>
+
+        <template #message="slotProps">
+            <div v-if="slotProps.message.severity === 'secondary'" class="custom-toast">
+                <h3>{{ slotProps.message.summary }}</h3>
+                <p>{{ slotProps.message.detail }}</p>
+                <button @click="handleClick">Дополнительное действие</button>
+            </div>
+
+            <div v-else>
+                <!-- <i class="pi pi-cloud-upload text-primary-500 text-2xl"></i> -->
+                <div class="p-toast-message-text" data-pc-section="text">
+                    <span class="p-toast-summary" data-pc-section="summary">{{ slotProps.message.summary }}</span>
+                    <div class="p-toast-detail" data-pc-section="detail">{{ slotProps.message.detail }}</div>
+                </div>
+            </div>
+      </template>
+    </Toast>
     <Sitebar v-if="this.getUser" :active="this.sitebar" />
     <div class="content" :class="{ white: this.namePathIsNav == 'purchases' }">
         <div class="dart_container_wrap">
@@ -12,35 +30,14 @@
                         :lifetime="10000"
                         @delete="deleteNotification(index)" /> -->
                 <!-- </div> -->
-
-                <Toast>
-                    <!-- <template #container="data">
-                        <div class="std-notification">
-                            <div class="std-notification__header">
-                                <div class="std-notification__header-content">
-                                    <i class="std_icon std_icon-notification std-notification__icon"></i>
-                                    <span class="std-notification__span">{{ data?.date }}</span>
-                                    <span class="std-notification__span">{{ data?.time }}</span>
-                                </div>
-                            </div>
-                            <div class="std-notification__main">
-                                <h6 class="std-notification__title">{{ data?.title }}</h6>
-                                <p class="std-notification__text">{{ data?.description }}</p>
-                                <span class="std-notification__span">
-                                    Просмотреть детали заказа, нажав
-                                    <router-link class="std-notification__link" to="/" @click.stop>здесь</router-link>
-                                </span>
-                            </div>
-                        </div>
-                    </template> -->
-                </Toast>
+                
 
                 <router-link
                     v-if="this.$route.params.id"
                     :to="{ name: 'purchases_notifications', params: { id: this.$route.params.id } }"
                     class="std-notification-button absolute">
                     <i class="std_icon std_icon-notification"></i>
-                    <div v-if="notifications.total > 0" class="std-notification-button__badge">+{{ notifications.total }}</div>
+                    <div v-if="this.notifications_all.no_read > 0" class="std-notification-button__badge">+{{ this.notifications_all.no_read }}</div>
                 </router-link>
                 <router-view> </router-view>
             </div>
@@ -63,32 +60,15 @@ export default {
             isUser: false,
             sitebar: false,
             namePathIsNav: null,
-            notifications: [
-                {
-                    date: '12.12.2024',
-                    time: '12:00',
-                    title: 'Заголовок',
-                    description: 'Текст'
-                },
-                {
-                    date: '12.12.2024',
-                    time: '12:00',
-                    title: 'Заголовок',
-                    description: 'Текст'
-                },
-                {
-                    date: '12.12.2024',
-                    time: '12:00',
-                    title: 'Заголовок',
-                    description: 'Текст'
-                }
-            ]
+            data_start: new Date(),
+            notifications_all: []
         };
     },
     components: { Sitebar, Nav, Notification, Toast },
     computed: {
         ...mapGetters({
             getUser: 'user/getUser',
+            new_notifications: 'new_notifications',
             notifications: 'notifications'
         })
     },
@@ -101,22 +81,20 @@ export default {
 
         this.namePathIsNav = router?.currentRoute?._value.matched[4]?.name;
 
-<<<<<<< Updated upstream
-        if (router.currentRoute?._value?.params?.id) {
-            this.get_notification_api({
-                action: 'get',
-                id: router.currentRoute._value.params.id
-            });
-=======
         if(this.$route.params.id){
             this.get_notification_api({
                 action: "get",
                 id: this.$route.params.id,
             })
->>>>>>> Stashed changes
         }
 
-        this.$toast.add({ severity: 'secondary', summary: 'Приветствую', detail: 'Добро пожаловать', life: 3000 });
+        if(this.$route.params.id){
+            this.intervalId = setInterval(() => {
+                this.fetchNotification();
+            }, 40000);
+
+            this.fetchNotification();
+        }
     },
     updated() {
         // this.setUser(JSON.parse(localStorage.getItem('user')))
@@ -126,10 +104,72 @@ export default {
         ...mapActions({
             setUser: 'user/setUser',
             deleteUser: 'user/deleteUser',
-            get_notification_api: 'get_notification_api'
+            get_new_notification_api: 'get_new_notification_api',
+            get_notification_api: 'get_notification_api',
         }),
         deleteNotification(index) {
             this.notifications.splice(index, 1);
+        },
+        fetchNotification() {
+            this.get_new_notification_api({
+                action: "get",
+                id: this.$route.params.id,
+                data_start: this.data_start
+            }).then((res) => {
+                for(let i = 0; i < res.data.data?.total; i++){
+                    setTimeout(() => {
+                        let title = "";
+                        switch(res.data.data.items[i].namespace){
+                            case '1':
+                                title = "Изменение статуса заказа в маркетплейсе"
+                                break;
+                            case '2':
+                                title = "Поступил новый оптовый заказ"
+                                break;
+                            case '3':
+                                title = "Ваша компания отключена"
+                                break;
+                            case '4':
+                                title = "Ваша компания подключена"
+                                break;
+                            case '5':
+                                title = "Появился новый поставщик"
+                                break;
+                            case '6':
+                                title = "Появился новый поставщик"
+                                break;
+                            case '7':
+                                title = "Вас добавили в поставщики"
+                                break;
+                            case '8':
+                                title = "Вас удалили из поставщиков"
+                                break;
+                            case '9':
+                                title = "Ваш склад отключен"
+                                break;
+                            case '10':
+                                title = "Ваш склад подключен"
+                                break;
+                        }
+                        console.log(title)
+                        this.$toast.add({ severity: 'secondary', summary: title, detail: 'Нажмите, чтобы узнать подробнее', life: 5000 });
+                    }, i * 500)
+                }
+                if(res.data.data.items.length > 0){
+                    if(this.$route.params.id){
+                        this.get_notification_api({
+                            action: "get",
+                            id: this.$route.params.id,
+                        })
+                    }
+                }
+            })
+            this.data_start = new Date();
+        },
+    },
+    watch: {
+        notifications: function (newVal, oldVal) {
+            this.notifications_all = newVal
         }
     }
 };

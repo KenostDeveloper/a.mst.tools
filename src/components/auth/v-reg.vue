@@ -1,7 +1,7 @@
 <template>
     <div class="analytics_auth analytics_reg">
         <form class="form-signup" @submit.prevent="formSubmit" autocomplete="false">
-            <Toast />
+            <!-- <Toast /> -->
             <div class="logo text-center">
                 <img src="../../assets/images/logo.svg" alt="" width="200" />
             </div>

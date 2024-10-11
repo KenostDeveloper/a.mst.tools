@@ -1,5 +1,5 @@
 <template>
-    <Toast />
+    <!-- <Toast /> -->
     <form @submit.prevent="formSubmit">
       <div class="profile-content__title sticky-element">
           <span class="maintitle">Редактирование акции</span>

@@ -1,5 +1,5 @@
 <template>
-	<Toast />
+	<!-- <Toast /> -->
 	<ConfirmDialog></ConfirmDialog>
 	<!-- <Breadcrumbs class="std-breadcrumbs--margin" /> -->
 	<div class="to__up">

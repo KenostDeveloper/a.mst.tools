@@ -2,7 +2,7 @@
 	<section class="clients">
 		<Breadcrumbs />
 		<ConfirmDialog/>
-		<Toast />
+		<!-- <Toast /> -->
 		<v-clients
         :items_data="stores.items"
         :total="stores.total"

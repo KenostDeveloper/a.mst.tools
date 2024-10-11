@@ -2,7 +2,7 @@
 <template>
     <div class="std-profile std-create-clients">
         <Breadcrumbs class="std-breadcrumbs--margin" />
-        <Toast />
+        <!-- <Toast /> -->
         <div class="profile-content__title sticky-element">
             <!-- <span class="maintitle hidden-mobile-l">Организация {{ this.orgprofile?.name }}</span> -->
             <div class="title-h1 hidden-mobile-l">О клиенте</div>
