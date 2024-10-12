@@ -1,37 +1,35 @@
 <template>
-    <Teleport to="body">
-        <Toast>
-            <template #message="slotProps">
-                <div v-if="slotProps.message.severity === 'secondary'" class="std-notification">
-                    <div class="custom-toast">
-                        <div class="std-notification__header">
-                            <div class="std-notification__header-content">
-                                <i class="std_icon std_icon-notification std-notification__icon"></i>
-                                <span class="std-notification__span">12.10.2024</span>
-                                <span class="std-notification__span">12:00</span>
-                            </div>
-                        </div>
-                        <div class="std-notification__main">
-                            <h6 class="std-notification__title">{{ slotProps.message.summary }}</h6>
-                            <p class="std-notification__text">{{ slotProps.message.detail }}</p>
-                            <span class="std-notification__span">
-                                Просмотреть детали заказа, нажав
-                                <router-link class="std-notification__link" to="/" @click.stop>здесь</router-link>
-                            </span>
+    <Toast>
+        <template #message="slotProps">
+            <div v-if="slotProps.message.severity === 'secondary'" class="std-notification">
+                <div class="custom-toast">
+                    <div class="std-notification__header">
+                        <div class="std-notification__header-content">
+                            <i class="std_icon std_icon-notification std-notification__icon"></i>
+                            <span class="std-notification__span">12.10.2024</span>
+                            <span class="std-notification__span">12:00</span>
                         </div>
                     </div>
-                </div>
-    
-                <div v-else>
-                    <!-- <i class="pi pi-cloud-upload text-primary-500 text-2xl"></i> -->
-                    <div class="p-toast-message-text" data-pc-section="text">
-                        <span class="p-toast-summary" data-pc-section="summary">{{ slotProps.message.summary }}</span>
-                        <div class="p-toast-detail" data-pc-section="detail">{{ slotProps.message.detail }}</div>
+                    <div class="std-notification__main">
+                        <h6 class="std-notification__title">{{ slotProps.message.summary }}</h6>
+                        <p class="std-notification__text">{{ slotProps.message.detail }}</p>
+                        <span class="std-notification__span">
+                            Просмотреть детали заказа, нажав
+                            <router-link class="std-notification__link" to="/" @click.stop>здесь</router-link>
+                        </span>
                     </div>
                 </div>
-            </template>
-        </Toast>
-    </Teleport>
+            </div>
+
+            <div v-else>
+                <!-- <i class="pi pi-cloud-upload text-primary-500 text-2xl"></i> -->
+                <div class="p-toast-message-text" data-pc-section="text">
+                    <span class="p-toast-summary" data-pc-section="summary">{{ slotProps.message.summary }}</span>
+                    <div class="p-toast-detail" data-pc-section="detail">{{ slotProps.message.detail }}</div>
+                </div>
+            </div>
+        </template>
+    </Toast>
 
     <Sitebar v-if="this.getUser" :active="this.sitebar" />
     <div class="content" :class="{ white: this.namePathIsNav == 'purchases' }">
@@ -47,12 +45,12 @@
                         @delete="deleteNotification(index)" /> -->
                 <!-- </div> -->
 
-                <router-link
-                    v-if="this.$route.params.id"
+                <router-link v-if="this.$route.params.id"
                     :to="{ name: 'purchases_notifications', params: { id: this.$route.params.id } }"
                     class="std-notification-button absolute">
                     <i class="std_icon std_icon-notification"></i>
-                    <div v-if="this.notifications_all.no_read > 0" class="std-notification-button__badge">+{{ this.notifications_all.no_read }}</div>
+                    <div v-if="this.notifications_all.no_read > 0" class="std-notification-button__badge">+{{
+                        this.notifications_all.no_read }}</div>
                 </router-link>
                 <router-view> </router-view>
             </div>
@@ -67,7 +65,6 @@ import Nav from '../components/opt/Nav.vue';
 import router from '../router';
 import Notification from '../components/opt/Notification.vue';
 import Toast from 'primevue/toast';
-import { Teleport } from 'vue';
 
 export default {
     name: 'MainLoyout',
@@ -80,7 +77,7 @@ export default {
             notifications_all: []
         };
     },
-    components: { Sitebar, Nav, Notification, Toast, Teleport },
+    components: { Sitebar, Nav, Notification, Toast },
     computed: {
         ...mapGetters({
             getUser: 'user/getUser',
