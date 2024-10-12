@@ -1,35 +1,37 @@
 <template>
-    <Toast>
-        <template #message="slotProps">
-            <div v-if="slotProps.message.severity === 'secondary'" class="std-notification">
-                <div class="custom-toast">
-                    <div class="std-notification__header">
-                        <div class="std-notification__header-content">
-                            <i class="std_icon std_icon-notification std-notification__icon"></i>
-                            <span class="std-notification__span">12.10.2024</span>
-                            <span class="std-notification__span">12:00</span>
+    <Teleport to="body">
+        <Toast>
+            <template #message="slotProps">
+                <div v-if="slotProps.message.severity === 'secondary'" class="std-notification">
+                    <div class="custom-toast">
+                        <div class="std-notification__header">
+                            <div class="std-notification__header-content">
+                                <i class="std_icon std_icon-notification std-notification__icon"></i>
+                                <span class="std-notification__span">12.10.2024</span>
+                                <span class="std-notification__span">12:00</span>
+                            </div>
+                        </div>
+                        <div class="std-notification__main">
+                            <h6 class="std-notification__title">{{ slotProps.message.summary }}</h6>
+                            <p class="std-notification__text">{{ slotProps.message.detail }}</p>
+                            <span class="std-notification__span">
+                                Просмотреть детали заказа, нажав
+                                <router-link class="std-notification__link" to="/" @click.stop>здесь</router-link>
+                            </span>
                         </div>
                     </div>
-                    <div class="std-notification__main">
-                        <h6 class="std-notification__title">{{ slotProps.message.summary }}</h6>
-                        <p class="std-notification__text">{{ slotProps.message.detail }}</p>
-                        <span class="std-notification__span">
-                            Просмотреть детали заказа, нажав
-                            <router-link class="std-notification__link" to="/" @click.stop>здесь</router-link>
-                        </span>
+                </div>
+    
+                <div v-else>
+                    <!-- <i class="pi pi-cloud-upload text-primary-500 text-2xl"></i> -->
+                    <div class="p-toast-message-text" data-pc-section="text">
+                        <span class="p-toast-summary" data-pc-section="summary">{{ slotProps.message.summary }}</span>
+                        <div class="p-toast-detail" data-pc-section="detail">{{ slotProps.message.detail }}</div>
                     </div>
                 </div>
-            </div>
-
-            <div v-else>
-                <!-- <i class="pi pi-cloud-upload text-primary-500 text-2xl"></i> -->
-                <div class="p-toast-message-text" data-pc-section="text">
-                    <span class="p-toast-summary" data-pc-section="summary">{{ slotProps.message.summary }}</span>
-                    <div class="p-toast-detail" data-pc-section="detail">{{ slotProps.message.detail }}</div>
-                </div>
-            </div>
-        </template>
-    </Toast>
+            </template>
+        </Toast>
+    </Teleport>
 
     <Sitebar v-if="this.getUser" :active="this.sitebar" />
     <div class="content" :class="{ white: this.namePathIsNav == 'purchases' }">
@@ -65,6 +67,7 @@ import Nav from '../components/opt/Nav.vue';
 import router from '../router';
 import Notification from '../components/opt/Notification.vue';
 import Toast from 'primevue/toast';
+import { Teleport } from 'vue';
 
 export default {
     name: 'MainLoyout',
@@ -77,7 +80,7 @@ export default {
             notifications_all: []
         };
     },
-    components: { Sitebar, Nav, Notification, Toast },
+    components: { Sitebar, Nav, Notification, Toast, Teleport },
     computed: {
         ...mapGetters({
             getUser: 'user/getUser',
@@ -109,6 +112,20 @@ export default {
             this.fetchNotification();
         }
 
+        this.$toast.add({
+            severity: 'secondary',
+            summary: 'Добро пожаловать!',
+            detail: 'Вы вошли в панель управления',
+            life: 1000000,
+            styleClass: 'std-toast'
+        });
+        this.$toast.add({
+            severity: 'secondary',
+            summary: 'Добро пожаловать!',
+            detail: 'Вы вошли в панель управления',
+            life: 1000000,
+            styleClass: 'std-toast'
+        });
         this.$toast.add({
             severity: 'secondary',
             summary: 'Добро пожаловать!',
