@@ -108,28 +108,6 @@ export default {
 
             this.fetchNotification();
         }
-
-        this.$toast.add({
-            severity: 'secondary',
-            summary: 'Добро пожаловать!',
-            detail: 'Вы вошли в панель управления',
-            life: 1000000,
-            styleClass: 'std-toast'
-        });
-        this.$toast.add({
-            severity: 'secondary',
-            summary: 'Добро пожаловать!',
-            detail: 'Вы вошли в панель управления',
-            life: 1000000,
-            styleClass: 'std-toast'
-        });
-        this.$toast.add({
-            severity: 'secondary',
-            summary: 'Добро пожаловать!',
-            detail: 'Вы вошли в панель управления',
-            life: 1000000,
-            styleClass: 'std-toast'
-        });
     },
     updated() {
         // this.setUser(JSON.parse(localStorage.getItem('user')))
