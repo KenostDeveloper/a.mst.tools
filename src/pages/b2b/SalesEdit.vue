@@ -63,7 +63,7 @@
                     class="dart-form-group kenost-action-page pt-3"
                     :class="{ error: v$.place_action.$errors.length }"
                     v-if="this.create_page_action.length != 0">
-                    <span class="ktitle">Место размещение баннера/товара</span>
+                    <span class="ktitle">Место размещения баннера/товара</span>
                     <MultiSelect
                         v-model="this.place_action"
                         :options="this.place"
@@ -1667,7 +1667,6 @@ export default {
                     this.selected = {};
                     for (let i = 1; i < Object.keys(productsList).length; i++) {
                         const tempProduct = productsList[Object.keys(productsList)[i]];
-
                         if (!tempProduct.error) {
                             const product = {};
                             product.article = tempProduct.A;

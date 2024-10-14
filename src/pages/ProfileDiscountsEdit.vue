@@ -624,6 +624,7 @@
         name: 'ProfileDiscountsEdit',
         data () {
             return {
+                loading: false,
                 form: {
                     store_id: [],
                     comment: "",
@@ -1078,39 +1079,25 @@
                     this.kenostTableCheckedAllCheck()
                 })
             },
-            // setFilterGift () {
-            //     this.pageGift = 1
-            //     const data = {
-            //         storeid: this.form.store_id,
-            //         filter: this.filterGift,
-            //         filterselected: this.filter_table,
-            //         pageselected: this.page_selected,
-            //         page: this.pageGift,
-            //         perpage: this.per_page,
-            //         selected: Object.keys(this.selectedGift),
-            //         type: 'gift'
-            //     }
-            //     this.get_available_products_from_api(data).then((res) => {
-            //         this.kenostTableCheckedAllCheck()
-            //     })
-            //     },
-            //     setAllProducts (is) {
-            //     const data = {
-            //         storeid: this.form.store_id,
-            //         filter: this.filter,
-            //         filterselected: this.filter_table,
-            //         pageselected: this.page_selected,
-            //         page: this.page,
-            //         perpage: this.per_page,
-            //         isallproducts: is ? 'all' : 'null'
-            //     }
-            //     if (is) {
-            //         data.selected = Object.keys(this.selected)
-            //     }
-            //     this.get_available_products_from_api(data).then((res) => {
-            //         this.kenostTableCheckedAllCheck()
-            //     })
-            // },
+            setAllProducts(is) {
+                this.loading = true
+                const data = {
+                    storeid: this.form.store_id,
+                    filter: this.filter,
+                    filterselected: this.filter_table,
+                    pageselected: this.page_selected,
+                    page: this.page,
+                    perpage: this.per_page,
+                    isallproducts: is ? 'all' : 'null'
+                };
+                if (is) {
+                    data.selected = Object.keys(this.selected);
+                }
+                this.get_available_products_from_api(data).then((res) => {
+                    this.kenostTableCheckedAllCheck();
+                    this.loading = false
+                });
+            },
             select (id) {
                 const product = this.products.find(r => r.id === id)
                 product.discountInterest = 0

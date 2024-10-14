@@ -67,7 +67,7 @@ import Breadcrumbs from '../components/Breadcrumbs.vue'
     props: {
       pagination_items_per_page: {
         type: Number,
-        default: 25
+        default: 24
       },
       pagination_offset: {
         type: Number,
