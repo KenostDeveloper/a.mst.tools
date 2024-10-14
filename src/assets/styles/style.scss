@@ -7607,3 +7607,10 @@ button.std-icon__wrapper {
 .b24-widget-button-wrapper{
 	bottom: 115px !important;
 }
+
+.std-nav__address-text{
+	display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}

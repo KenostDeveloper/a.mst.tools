@@ -906,7 +906,16 @@
                                 inputId="global_kenost_table-1"
                                 name="global_kenost_table-1"
                                 value="true" />
-                            <label for="global_kenost_table-1" class="ml-2 mb-0">Все</label>
+                            <label for="global_kenost_table-1" class="ml-1 mb-0">Все</label>
+                        </div>
+                        <div v-if="filter_table.name != ''" class="flex align-items-center gap-1">
+                            <Checkbox
+                                @change="filterglobalTable"
+                                v-model="this.form.filter_kenost_table"
+                                inputId="global_kenost_table-2"
+                                name="global_kenost_table-2"
+                                value="true" />
+                            <label for="global_kenost_table-2" class="ml-1 mb-0">Отметить подходящие по фильтру</label>
                         </div>
                     </div>
                 </div>
@@ -1423,9 +1432,11 @@ export default {
             regions_all: [],
             regions_select: [],
             complects_ids: [],
+            ids_visible: [],
             form: {
                 actionLast: [],
                 global_kenost_table: [],
+                filter_kenost_table: [],
                 name: '',
                 description: '',
                 award: '',
@@ -1724,6 +1735,15 @@ export default {
                 }
             };
         },
+        filterglobalTable(){
+            if (this.form.filter_kenost_table.length === 0) {
+                // this.kenost_table = [];
+                this.kenost_table = kenost_table.filter(id => !ids_visible.includes(id));
+            } else {
+                this.kenost_table = [...new Set([...this.kenost_table, ...this.ids_visible])];
+            }
+            this.kenostTableCheckedAllCheck();
+        },
         globalTable() {
             if (this.form.global_kenost_table.length === 0) {
                 this.kenost_table = [];
@@ -1731,6 +1751,14 @@ export default {
                 this.kenost_table = Object.keys(this.selected);
             }
             this.kenostTableCheckedAllCheck();
+
+            // if (this.form.filter_kenost_table.length === 0) {
+            //     // this.kenost_table = [];
+            //     this.kenost_table = kenost_table.filter(id => !ids_visible.includes(id));
+            // } else {
+            //     this.kenost_table = [...new Set([...this.kenost_table, ...this.ids_visible])];
+            // }
+            // this.kenostTableCheckedAllCheck();
         },
         massActionTable() {
             for (let i = 0; i < this.kenost_table.length; i++) {
@@ -2235,6 +2263,21 @@ export default {
             } else {
                 this.form.global_kenost_table = [];
             }
+
+            let isPageSelectFilter = false;
+
+            for(let i = 0; i < this.ids_visible.length; i++){
+                if(this.kenost_table.indexOf(this.ids_visible[i]) == -1){
+                    isPageSelectFilter = true;
+                    break
+                }
+            }
+
+            if (!isPageSelectFilter) {
+                this.form.filter_kenost_table = ['true'];
+            } else {
+                this.form.filter_kenost_table = [];
+            }
         },
         kenostTableCheckedAll() {
             if (this.kenost_table_all.length === 0) {
@@ -2461,6 +2504,7 @@ export default {
                     }
                     if (newVal.visible) {
                         this.selected_visible = newVal.visible;
+                        this.ids_visible = newVal.ids_selected;
                     }
                     this.total_products = newVal.total;
                     this.total_selected = newVal.total_selected;
@@ -2520,6 +2564,10 @@ export default {
 
                 if (newVal.gift) {
                     this.selectedGift = newVal.gift;
+                }
+
+                if(newVal.big_post_actions){
+                    this.form.bigPost = newVal.big_post_actions
                 }
 
                 if (newVal.compatibility_discount_mode) {
