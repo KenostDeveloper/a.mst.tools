@@ -99,7 +99,7 @@ export default {
                             action: 'get/orgs'
                         });
 
-                        if (orgs) {
+                        if (orgs != undefined) {
                             // console.log(orgs.data.data)
                             let role = localStorage.getItem('role');
                             //const res = await this.$router.push({ name: 'org', params: { id: orgs.data.data[0].id } })
@@ -111,8 +111,9 @@ export default {
                             } else {
                                 const res = await this.$router.push({ name: 'purchases_home', params: { id: orgs.data.data[0].id } });
                             }
-
-                            location.reload();
+                        }else{
+                            this.deleteUser();
+                            this.$router.push({ name: 'home'})
                         }
                     }
                 } else {

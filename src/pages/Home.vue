@@ -1,5 +1,4 @@
 <template>
-    <div v-if="this.getUser"></div>
     <auth-form v-if="!this.getUser && !this.isRegForm" @setRegForm="setRegForm" />
     <reg-form v-if="this.isRegForm" @setRegForm="setRegForm" />
 </template>
@@ -25,17 +24,14 @@ export default {
         })
     },
     async mounted() {
-        // if (localStorage.getItem("user") !== null) {
-        this.setUser(JSON.parse(localStorage.getItem('user')));
-        // }else{
-        // location.reload();
-        // }
+        if (localStorage.getItem("user") !== null) {
+            this.setUser(JSON.parse(localStorage.getItem('user')));
+        }
         if (this.getUser) {
             const orgs = await this.org_get_from_api({
                 action: 'get/orgs'
             });
-
-            if (orgs) {
+            if (orgs !== undefined) {
                 // console.log(orgs.data.data)
                 let role = localStorage.getItem('role');
                 //const res = await this.$router.push({ name: 'org', params: { id: orgs.data.data[0].id } })
@@ -48,12 +44,16 @@ export default {
                     const res = await this.$router.push({ name: 'purchases_home', params: { id: orgs.data.data[0].id } });
                 }
 
-                location.reload();
+                // location.reload();
+            }else{
+                this.deleteUser();
             }
         }
     },
     updated() {
-        this.setUser(JSON.parse(localStorage.getItem('user')));
+        //if (localStorage.getItem("user") !== null) {
+        //    this.setUser(JSON.parse(localStorage.getItem('user')));
+        //}
     },
     methods: {
         ...mapActions({

@@ -43,10 +43,12 @@ export default {
       })
         .then((response) => {
           commit('SET_ORG_PROFILE_TO_VUEX', response.data)
-          // console.log(response)
+          console.log(response)
+          // router.push({ name: 'preenter' })
           return response
         })
         .catch(error => {
+          console.log(error)
           if (error.response.status === 403) {
             localStorage.removeItem('user')
             router.push({ name: 'main' })
