@@ -1003,7 +1003,7 @@
 
                 this.opt_get_prices({
                     action: 'get/type/prices',
-                    store_id: router.currentRoute._value.params.store_id
+                    store_id: this.form.store_id
                 })
             },
             parseFile (files, xhr, formData) {
@@ -1014,7 +1014,7 @@
 
                     const data = {
                         action: 'upload/products/file',
-                        store_id: router.currentRoute._value.params.store_id,
+                        store_id: this.form.store_id,
                         file: res.data.files[0].original,
                         type: 'b2b'
                     }
