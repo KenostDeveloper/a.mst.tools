@@ -1738,7 +1738,7 @@ export default {
         filterglobalTable(){
             if (this.form.filter_kenost_table.length === 0) {
                 // this.kenost_table = [];
-                this.kenost_table = kenost_table.filter(id => !ids_visible.includes(id));
+                this.kenost_table = this.kenost_table.filter(id => !this.ids_visible.includes(id));
             } else {
                 this.kenost_table = [...new Set([...this.kenost_table, ...this.ids_visible])];
             }
@@ -1804,7 +1804,7 @@ export default {
                             this.selected_data[this.kenost_table[i]].discountInRubles =
                                 Number(this.selected_data[this.kenost_table[i]].price) - this.selected_data[this.kenost_table[i]].finalPrice;
                             this.selected_data[this.kenost_table[i]].discountInterest =
-                                isPrice.price / (Number(this.selected_data[this.kenost_table[i]].price) / 100);
+                                100 - (isPrice.price / (Number(this.selected_data[this.kenost_table[i]].price) / 100));
                         }
                         break;
                     case 3:
