@@ -1462,7 +1462,11 @@
                         this.products = newVal.products
                         // this.selected = newVal.selected
                         if (newVal.selected) {
-                            this.selected = newVal.selected
+                            if(newVal.isallproducts){
+                                this.selected = { ...this.selected, ...newVal.selected };
+                            } else{
+                                this.selected = newVal.selected
+                            }
                         }
                         if (newVal.visible) {
                             this.selected_visible = newVal.visible
