@@ -2,21 +2,21 @@
     <!-- <Toast /> -->
     <ConfirmDialog></ConfirmDialog>
 
-    <div class="std-discounts">
+    <div class="std-discounts" :class="{loading: loading}">
       <Breadcrumbs class="std-breadcrumbs--margin" />
 
       <div class="title-h1 mb-4 std-discounts__title">Индивидуальные скидки</div>
       <v-table
           :items_data="individual_discount.items"
           :total="individual_discount.total"
-          :pagination_items_per_page="this.pagination_items_per_page_dilers"
-          :pagination_offset="this.pagination_offset_dilers"
-          :page="this.page_dilers"
-          :table_data="this.table_data_dilers"
+          :pagination_items_per_page="this.pagination_items_per_page"
+          :pagination_offset="this.pagination_offset"
+          :page="this.page"
+          :table_data="this.table_data"
           :filters="this.filters"
           @filter="filter"
           title=""
-          @paginate="paginateDilers"
+          @paginate="paginate"
           @editElem="editDiler"
       />
     </div>
@@ -48,7 +48,7 @@
     </Dialog>
   </template>
   
-  <script>
+<script>
   import { mapActions, mapGetters } from 'vuex'
   import vTable from '../components/table/v-table.vue'
   import { RouterLink } from 'vue-router'
@@ -60,40 +60,16 @@
   import Toast from 'primevue/toast'
   import vOpts from '../components/table/v-opts.vue'
   import router from '../router'
-import Breadcrumbs from '../components/Breadcrumbs.vue'
+  import Breadcrumbs from '../components/Breadcrumbs.vue'
   
   export default {
     name: 'ProfileSales',
     props: {
       pagination_items_per_page: {
         type: Number,
-        default: 25
+        default: 24
       },
       pagination_offset: {
-        type: Number,
-        default: 0
-      },
-      pagination_items_per_page_complects: {
-        type: Number,
-        default: 25
-      },
-      pagination_offset_complects: {
-        type: Number,
-        default: 0
-      },
-      pagination_items_per_page_dilers: {
-        type: Number,
-        default: 25
-      },
-      pagination_offset_dilers: {
-        type: Number,
-        default: 0
-      },
-      pagination_items_per_page_dilers_opts: {
-        type: Number,
-        default: 25
-      },
-      pagination_offset_dilers_opts: {
         type: Number,
         default: 0
       }
@@ -115,11 +91,8 @@ import Breadcrumbs from '../components/Breadcrumbs.vue'
           items: [],
           total: -1
         },
-        diler_loading: false,
+        loading: true,
         page: 1,
-        page_complects: 1,
-        page_dilers: 1,
-        optpage: 1,
         filters: {
           name: {
             name: "Наименование",
@@ -127,7 +100,7 @@ import Breadcrumbs from '../components/Breadcrumbs.vue'
             type: "text",
           },
         },
-        table_data_dilers: {
+        table_data: {
           image: {
             label: "Логотип",
             type: "image",
@@ -185,22 +158,31 @@ import Breadcrumbs from '../components/Breadcrumbs.vue'
         'org_get_discount_individual_api'
       ]),
       filter(data) {
-          this.org_get_discount_individual_api({
-            page: this.page_dilers,
-            id: router.currentRoute._value.params.id,
-            perpage: this.pagination_items_per_page_dilers,
-            action: 'get/individual/discount',
-            filter: data
-          })
-        // data.type = "b2b";
-        // this.get_sales_to_api(data);
+        this.loading = true
+        this.org_get_discount_individual_api({
+          page: this.page,
+          id: router.currentRoute._value.params.id,
+          perpage: this.pagination_items_per_page,
+          action: 'get/individual/discount',
+          filter: data
+        }).then(() => {
+          this.loading = false
+        })
+      },
+      paginate(data) {
+        this.loading = true
+        this.page = data.page
+        this.org_get_discount_individual_api({
+          page: this.page,
+          id: router.currentRoute._value.params.id,
+          perpage: this.pagination_items_per_page,
+          action: 'get/individual/discount',
+          filter: data
+        }).then(() => {
+          this.loading = false
+        })
       },
       editDiler (value) {
-        // this.form.diler.name = value.name
-        // this.form.diler.warehouse_id = value.warehouse_id
-        // this.form.diler.id = value.obj_id
-        // this.form.diler.base_sale = value.base_sale
-        // this.modals.diler = !this.modals.diler
         router.push({
           name: "discounts_edit",
           params: { id: this.$route.params.id, client_id: value.client_id, store_id: value.store_id },
@@ -218,7 +200,7 @@ import Breadcrumbs from '../components/Breadcrumbs.vue'
               this.get_dilers_from_api({
                 type: 1,
                 page: this.page_dilers,
-                perpage: this.pagination_items_per_page_dilers
+                perpage: this.pagination_items_per_page
               })
             })
             .catch((result) => {
@@ -247,10 +229,12 @@ import Breadcrumbs from '../components/Breadcrumbs.vue'
       //   }
       // })
       this.org_get_discount_individual_api({
-        page: this.page_dilers,
+        page: this.page,
         id: router.currentRoute._value.params.id,
-        perpage: this.pagination_items_per_page_dilers,
+        perpage: this.pagination_items_per_page,
         action: 'get/individual/discount'
+      }).then(() => {
+        this.loading = false
       })
     },
     components: { vTable, vOpts, Toast, ConfirmDialog, RouterLink, TabView, TabPanel, Dialog, InputNumber, Breadcrumbs },

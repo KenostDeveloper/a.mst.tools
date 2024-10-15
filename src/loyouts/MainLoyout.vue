@@ -31,7 +31,7 @@
         </template>
     </Toast>
 
-    <Sitebar v-if="this.getUser" :active="this.sitebar" />
+    <Sitebar v-if="this.$route.params.id" :active="this.sitebar" />
     <div class="content" :class="{ white: this.namePathIsNav == 'purchases' }">
         <div class="dart_container_wrap">
             <Nav v-if="namePathIsNav == 'purchases'" />
@@ -108,28 +108,6 @@ export default {
 
             this.fetchNotification();
         }
-
-        this.$toast.add({
-            severity: 'secondary',
-            summary: 'Добро пожаловать!',
-            detail: 'Вы вошли в панель управления',
-            life: 1000000,
-            styleClass: 'std-toast'
-        });
-        this.$toast.add({
-            severity: 'secondary',
-            summary: 'Добро пожаловать!',
-            detail: 'Вы вошли в панель управления',
-            life: 1000000,
-            styleClass: 'std-toast'
-        });
-        this.$toast.add({
-            severity: 'secondary',
-            summary: 'Добро пожаловать!',
-            detail: 'Вы вошли в панель управления',
-            life: 1000000,
-            styleClass: 'std-toast'
-        });
     },
     updated() {
         // this.setUser(JSON.parse(localStorage.getItem('user')))

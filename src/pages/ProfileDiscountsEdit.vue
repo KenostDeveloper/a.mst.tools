@@ -393,6 +393,15 @@
                 <Checkbox @change="globalTable" v-model="this.form.global_kenost_table" inputId="global_kenost_table-1" name="global_kenost_table-1" value="true" />
                 <label for="global_kenost_table-1" class="ml-2 mb-0">Все</label>
                 </div>
+                <div v-if="filter_table.name != ''" class="flex align-items-center gap-1">
+                    <Checkbox
+                        @change="filterglobalTable"
+                        v-model="this.filter_kenost_table"
+                        inputId="global_kenost_table-2"
+                        name="global_kenost_table-2"
+                        value="true" />
+                    <label for="global_kenost_table-2" class="ml-1 mb-0">Отметить подходящие по фильтру</label>
+                </div>
             </div>
             </div>
 
@@ -624,6 +633,7 @@
         name: 'ProfileDiscountsEdit',
         data () {
             return {
+                loading: false,
                 form: {
                     store_id: [],
                     comment: "",
@@ -642,6 +652,8 @@
                 files: {
                     xlsx: {}
                 },
+                filter_kenost_table: [],
+                ids_visible: [],
                 error_product: [],
                 modals: {
                     delay: false,
@@ -768,25 +780,30 @@
                 perpage: this.pagination_items_per_page_complects,
                 store_id: router.currentRoute._value.params.id
             })
-            this.get_actions_discount_api({
-                action: 'get/individual',
-                id: router.currentRoute._value.params.id,
-                store_id: router.currentRoute._value.params.store_id,
-                client_id: router.currentRoute._value.params.client_id
-            }).then(() => {
-                const data = {
-                    storeid: this.form.store_id,
-                    filter: this.filter,
-                    filterselected: this.filter_table,
-                    selected: Object.keys(this.selected),
-                    pageselected: this.page_selected,
-                    page: this.page,
-                    perpage: this.per_page
-                }
-                this.get_available_products_from_api(data).then((res) => {
-                    this.kenostTableCheckedAllCheck()
+            this.opt_get_prices({
+                    action: 'get/type/prices',
+                    store_id: this.form.store_id
+                }).then(() => {
+                    this.get_actions_discount_api({
+                    action: 'get/individual',
+                    id: router.currentRoute._value.params.id,
+                    store_id: router.currentRoute._value.params.store_id,
+                    client_id: router.currentRoute._value.params.client_id
+                    }).then(() => {
+                        const data = {
+                            storeid: this.form.store_id,
+                            filter: this.filter,
+                            filterselected: this.filter_table,
+                            selected: Object.keys(this.selected),
+                            pageselected: this.page_selected,
+                            page: this.page,
+                            perpage: this.per_page
+                        }
+                        this.get_available_products_from_api(data).then((res) => {
+                            this.kenostTableCheckedAllCheck()
+                        })
+                    })
                 })
-            })
         },
         updated () {
             
@@ -824,6 +841,14 @@
                         router.push({ name: 'discounts', params: { id: router.currentRoute._value.params.id } })
                     })
                 })
+            },
+            filterglobalTable(){
+                if (this.filter_kenost_table.length === 0) {
+                    this.kenost_table = this.kenost_table.filter(id => !this.ids_visible.includes(id));
+                } else {
+                    this.kenost_table = [...new Set([...this.kenost_table, ...this.ids_visible])];
+                }
+                this.kenostTableCheckedAllCheck();
             },
             massActionTable () {
                 for (let i = 0; i < this.kenost_table.length; i++) {
@@ -863,7 +888,7 @@
                             this.selected_data[this.kenost_table[i]].typePrice = this.kenostActivityAll.typePrice
                             this.selected_data[this.kenost_table[i]].finalPrice = isPrice.price
                             this.selected_data[this.kenost_table[i]].discountInRubles = Number(this.selected_data[this.kenost_table[i]].price) - this.selected_data[this.kenost_table[i]].finalPrice
-                            this.selected_data[this.kenost_table[i]].discountInterest = isPrice.price / (Number(this.selected_data[this.kenost_table[i]].price) / 100)
+                            this.selected_data[this.kenost_table[i]].discountInterest = 100 - (isPrice.price / (Number(this.selected_data[this.kenost_table[i]].price) / 100))
                             }
                             break
                         case 3:
@@ -965,24 +990,9 @@
                     this.kenostTableCheckedAllCheck()
                 )
 
-                // this.selectedGift = {}
-
-                // const dataGift = {
-                //     storeid: this.form.store_id,
-                //     filter: this.filterGift,
-                //     filterselected: this.filter_table,
-                //     selected: Object.keys(this.selected),
-                //     pageselected: this.page_selected,
-                //     page: this.page,
-                //     perpage: this.per_page,
-                //     type: 'gift'
-                // }
-
-                // this.get_available_products_from_api(dataGift).then()
-
                 this.opt_get_prices({
                     action: 'get/type/prices',
-                    store_id: router.currentRoute._value.params.store_id
+                    store_id: this.form.store_id
                 })
             },
             parseFile (files, xhr, formData) {
@@ -993,14 +1003,14 @@
 
                     const data = {
                         action: 'upload/products/file',
-                        store_id: router.currentRoute._value.params.store_id,
+                        store_id: this.form.store_id,
                         file: res.data.files[0].original,
                         type: 'b2b'
                     }
                     this.opt_upload_products_file(data).then((response) => {
                         const productsList = response.data.data.data
                         // Бежим по всем элементам и добавляем их в select
-                        this.selected = {}
+                        // this.selected = {}
                         for (let i = 1; i < Object.keys(productsList).length; i++) {
 
                             const tempProduct = productsList[Object.keys(productsList)[i]]
@@ -1078,39 +1088,25 @@
                     this.kenostTableCheckedAllCheck()
                 })
             },
-            // setFilterGift () {
-            //     this.pageGift = 1
-            //     const data = {
-            //         storeid: this.form.store_id,
-            //         filter: this.filterGift,
-            //         filterselected: this.filter_table,
-            //         pageselected: this.page_selected,
-            //         page: this.pageGift,
-            //         perpage: this.per_page,
-            //         selected: Object.keys(this.selectedGift),
-            //         type: 'gift'
-            //     }
-            //     this.get_available_products_from_api(data).then((res) => {
-            //         this.kenostTableCheckedAllCheck()
-            //     })
-            //     },
-            //     setAllProducts (is) {
-            //     const data = {
-            //         storeid: this.form.store_id,
-            //         filter: this.filter,
-            //         filterselected: this.filter_table,
-            //         pageselected: this.page_selected,
-            //         page: this.page,
-            //         perpage: this.per_page,
-            //         isallproducts: is ? 'all' : 'null'
-            //     }
-            //     if (is) {
-            //         data.selected = Object.keys(this.selected)
-            //     }
-            //     this.get_available_products_from_api(data).then((res) => {
-            //         this.kenostTableCheckedAllCheck()
-            //     })
-            // },
+            setAllProducts(is) {
+                this.loading = true
+                const data = {
+                    storeid: this.form.store_id,
+                    filter: this.filter,
+                    filterselected: this.filter_table,
+                    pageselected: this.page_selected,
+                    page: this.page,
+                    perpage: this.per_page,
+                    isallproducts: is ? 'all' : 'null'
+                };
+                if (is) {
+                    data.selected = Object.keys(this.selected);
+                }
+                this.get_available_products_from_api(data).then((res) => {
+                    this.kenostTableCheckedAllCheck();
+                    this.loading = false
+                });
+            },
             select (id) {
                 const product = this.products.find(r => r.id === id)
                 product.discountInterest = 0
@@ -1304,6 +1300,21 @@
                 } else {
                     this.form.global_kenost_table = []
                 }
+
+                let isPageSelectFilter = false;
+
+                for(let i = 0; i < this.ids_visible.length; i++){
+                    if(this.kenost_table.indexOf(this.ids_visible[i]) == -1){
+                        isPageSelectFilter = true;
+                        break
+                    }
+                }
+
+                if (!isPageSelectFilter) {
+                    this.form.filter_kenost_table = ['true'];
+                } else {
+                    this.form.filter_kenost_table = [];
+                }
             },
             kenostTableCheckedAll () {
                 if (this.kenost_table_all.length === 0) {
@@ -1441,10 +1452,15 @@
                         this.products = newVal.products
                         // this.selected = newVal.selected
                         if (newVal.selected) {
-                            this.selected = newVal.selected
+                            if(newVal.isallproducts){
+                                this.selected = { ...this.selected, ...newVal.selected };
+                            } else{
+                                this.selected = newVal.selected
+                            }
                         }
                         if (newVal.visible) {
                             this.selected_visible = newVal.visible
+                            this.ids_visible = newVal.ids_selected;
                         }
                         this.total_products = newVal.total
                         this.total_selected = newVal.total_selected
@@ -1463,13 +1479,18 @@
                     this.selected_data = newVal.products_data
                     this.total_selected = newVal.total_products
 
+                    console.log("ddd", newVal.type_all_sale)
                     if(newVal.type_all_sale != null){
                         this.kenostActivity = {
                             type: this.massActionAll[newVal.type_all_sale],
-                            typePrice: this.typePrice[newVal.type_price],
+                            typePrice: this.typePrice[(newVal.type_price).toString()],
                             value: newVal.all_sale_value,
                             typeFormul: this.typeFormul[newVal.type_all_sale_symbol]
                         }
+
+                        console.log("ddd", newVal.type_all_sale)
+
+                        console.log(this.kenostActivity)
                     }
                     
                         const data = {
