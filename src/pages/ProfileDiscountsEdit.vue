@@ -1021,7 +1021,7 @@
                     this.opt_upload_products_file(data).then((response) => {
                         const productsList = response.data.data.data
                         // Бежим по всем элементам и добавляем их в select
-                        this.selected = {}
+                        // this.selected = {}
                         for (let i = 1; i < Object.keys(productsList).length; i++) {
 
                             const tempProduct = productsList[Object.keys(productsList)[i]]
