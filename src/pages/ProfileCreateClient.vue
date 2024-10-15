@@ -335,7 +335,8 @@ export default {
         if(router.currentRoute._value.params.client_id){
             this.org_profile_from_api({
                 action: 'get/org/profile',
-                id: router.currentRoute._value.params.client_id
+                id: router.currentRoute._value.params.client_id,
+                owner_id: router.currentRoute._value.params.id
             });
         }        
     },
