@@ -1973,7 +1973,7 @@ export default {
 			);
 			this.opt_get_prices({
 				action: "get/type/prices",
-				store_id: router.currentRoute._value.params.store_id,
+				store_id: [router.currentRoute._value.params.store_id],
 			});
 		});		
 	},
