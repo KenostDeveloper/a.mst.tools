@@ -2755,13 +2755,11 @@ p {
 	}
 
 	&__hcol {
-		font-size: 14px;
-		font-weight: 500;
-		line-height: 1;
-		letter-spacing: 0.25px;
+		text-align: center;
 		color: #B4B4B4;
-
-		padding-block: 9px;
+		font-size: 16px;
+		padding: 10px 0;
+		font-weight: normal;
 	}
 
 	&__col {

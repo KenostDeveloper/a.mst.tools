@@ -1,5 +1,5 @@
 <template>
-	<div class="std-display-contents">
+	<div class="std-display-contents" :class="{loading: loading}">
 		<ConfirmDialog />
 		<!-- <Toast /> -->
 		<div
@@ -634,7 +634,7 @@ export default {
 	props: {
 		pagination_items_per_page: {
 			type: Number,
-			default: 25,
+			default: 24,
 		},
 		pagination_offset: {
 			type: Number,
@@ -646,6 +646,7 @@ export default {
 			windowWidth: 1920,
 			calendarIsExpanded: false,
 			loading_page: true,
+			loading: false,
 			editWindow: false,
 			editMode: false,
 			showShipModal: false,
@@ -949,7 +950,7 @@ export default {
 						id: router.currentRoute._value.params.id,
 						data: data,
 					});
-					await this.get_shipping_from_api({ filter: [] });
+					await this.get_shipping_from_api({ filter: [], page: this.page, perpage: this.pagination_items_per_page });
 					this.attributes.push(this.shipping.dates);
 					this.form.loading = false;
 					this.formReset();
@@ -1133,7 +1134,7 @@ export default {
 		}).then(() => (this.loading_page = false));
 
 		this.$load(async () => {
-			await this.get_shipping_from_api({ filter: [] });
+			await this.get_shipping_from_api({ filter: [], page: 1, perpage: this.pagination_items_per_page });
 			this.attributes.push(this.shipping.dates);
 		});
 		this.$load(async () => {
