@@ -2958,7 +2958,7 @@ p {
 .clients {
 	display: flex;
 	flex-direction: column;
-	gap: 32px;
+	// gap: 32px;
 
 	&__card-container {
 		// display: flex;
@@ -5738,8 +5738,9 @@ button.std-icon__wrapper {
 	.table-actions {
 
 		&__content {
-			width: 435px;
+			left: 50%;
 			bottom: 10px;
+			// translate: -50% 0;
 		}
 
 		&__el {
@@ -5748,6 +5749,8 @@ button.std-icon__wrapper {
 			}
 		}
 		&__help {
+			position: static;
+
 			& > p {
 				margin: 0 !important;
 			}
@@ -5761,9 +5764,12 @@ button.std-icon__wrapper {
 			padding: 0;
 			position: relative;
 
-			&::before {
-				display: none;
-			}
+			padding: 12px 25px;
+			max-width: 450px;
+
+			// &::before {
+			// 	display: none;
+			// }
 		}
 		&__modal-banner {
 			height: 130px;
@@ -5777,11 +5783,8 @@ button.std-icon__wrapper {
 		}
 		&__modal-content {
 			display: flex;
-			flex-direction: column;
-			gap: 17px;
-
-			padding: 20px;
-			padding-top: 14px;
+			flex-direction: row;
+			gap: 22px;
 		}
 		&__modal-title {
 			font-size: 14px !important;
@@ -5791,21 +5794,23 @@ button.std-icon__wrapper {
 			margin: 0 auto !important;
 			text-align: center;
 		}
+		&__modal-elems-container {
+			display: flex;
+			flex-direction: column;
+			gap: 34px;
+		}
 		&__modal-elems {
 			display: flex;
-			justify-content: center;
-			align-items: center;
-			gap: 14px;
-			flex-wrap: wrap;
+			flex-direction: column;
+			gap: 13px;
 		}
 		&__modal-el {
 			display: flex;
-			justify-content: center;
 			align-items: center;
 			gap: 11px;
 
-			flex-basis: 0;
-			flex-grow: 1;
+			width: max-content;
+			max-width: 180px;
 
 			:is(p, span) {
 				font-size: 13px !important;
@@ -5815,6 +5820,11 @@ button.std-icon__wrapper {
 				margin: 0 !important;
 				padding: 0 !important;
 			}
+
+			img {
+				height: 15px !important;
+				width: 15px !important;
+			}
 		}
 
 		.table-actions__modal-el p {
@@ -5822,15 +5832,16 @@ button.std-icon__wrapper {
 		}
 
 		&__modal-btn-container {
-			margin: 0 auto;
-			padding-top: 4px;
+			margin: 0;
 		}
 		&__modal-btn {
 			color: #fff !important;
 			font-size: 12px;
 			font-weight: 500;
 
+			padding-block: 6px;
 			height: 25px;
+			width: max-content;
 		}
 		&__modal-close {
 			cursor: pointer;
@@ -7112,7 +7123,7 @@ button.std-icon__wrapper {
 
 				img {
 					width: 13px;
-					height: 13px !important;
+					height: 13px;
 				}
 
 				p {
@@ -7612,4 +7623,13 @@ button.std-icon__wrapper {
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+}
+
+.vendors_selected__row .image img{
+	object-fit: contain;
+}
+
+.vendors_selected__row .image{
+	width: 40px !important;
+    height: 40px !important;
 }

@@ -222,8 +222,45 @@ export default {
                 delivery_day: minDeliveryDate
             };
         },
+        clearBasketProduct(storeid, productid) {
+			this.$emit("catalogUpdate");
+			this.$emit("actionUpdate");
+			const data = {
+				action: "basket/clear",
+				id: router.currentRoute._value.params.id,
+				store_id: storeid,
+				id_remain: productid,
+			};
+			this.busket_from_api(data).then((response) => {});
+			this.busket_from_api({
+				action: 'basket/get',
+				id: router.currentRoute._value.params.id,
+				warehouse: 'all'
+			})
+		},
+		clearBasketComplect(storeid, complectid) {
+			this.$emit("catalogUpdate");
+			this.$emit("actionUpdate");
+			const data = {
+				action: "basket/clear",
+				id: router.currentRoute._value.params.id,
+				store_id: storeid,
+				id_complect: complectid,
+			};
+			this.busket_from_api(data).then((response) => {});
+			this.busket_from_api({
+				action: 'basket/get',
+				id: router.currentRoute._value.params.id,
+				warehouse: 'all'
+			})
+		},
         ElemCount(object) {
             // console.log(object)
+            if (object.value == object.min) {
+                this.clearBasketProduct(object.store_id, object.id)
+                return;
+            };
+
             if (object.value > Number(object.max)) {
                 this.modal_remain = true;
             } else {
@@ -243,7 +280,10 @@ export default {
         },
         ElemCountComplect(object) {
             // console.log(object)
-            if (object.value == object.min) return;
+            if (object.value == object.min) {
+                this.clearBasketComplect(object.store_id, object.id)
+                return;
+            }
 
             if (object.value > Number(object.max)) {
                 this.modal_remain = true;

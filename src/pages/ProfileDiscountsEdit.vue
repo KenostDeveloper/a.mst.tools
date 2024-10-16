@@ -780,25 +780,30 @@
                 perpage: this.pagination_items_per_page_complects,
                 store_id: router.currentRoute._value.params.id
             })
-            this.get_actions_discount_api({
-                action: 'get/individual',
-                id: router.currentRoute._value.params.id,
-                store_id: router.currentRoute._value.params.store_id,
-                client_id: router.currentRoute._value.params.client_id
-            }).then(() => {
-                const data = {
-                    storeid: this.form.store_id,
-                    filter: this.filter,
-                    filterselected: this.filter_table,
-                    selected: Object.keys(this.selected),
-                    pageselected: this.page_selected,
-                    page: this.page,
-                    perpage: this.per_page
-                }
-                this.get_available_products_from_api(data).then((res) => {
-                    this.kenostTableCheckedAllCheck()
+            this.opt_get_prices({
+                    action: 'get/type/prices',
+                    store_id: this.form.store_id
+                }).then(() => {
+                    this.get_actions_discount_api({
+                    action: 'get/individual',
+                    id: router.currentRoute._value.params.id,
+                    store_id: router.currentRoute._value.params.store_id,
+                    client_id: router.currentRoute._value.params.client_id
+                    }).then(() => {
+                        const data = {
+                            storeid: this.form.store_id,
+                            filter: this.filter,
+                            filterselected: this.filter_table,
+                            selected: Object.keys(this.selected),
+                            pageselected: this.page_selected,
+                            page: this.page,
+                            perpage: this.per_page
+                        }
+                        this.get_available_products_from_api(data).then((res) => {
+                            this.kenostTableCheckedAllCheck()
+                        })
+                    })
                 })
-            })
         },
         updated () {
             
@@ -984,21 +989,6 @@
                 this.get_available_products_from_api(data).then(
                     this.kenostTableCheckedAllCheck()
                 )
-
-                // this.selectedGift = {}
-
-                // const dataGift = {
-                //     storeid: this.form.store_id,
-                //     filter: this.filterGift,
-                //     filterselected: this.filter_table,
-                //     selected: Object.keys(this.selected),
-                //     pageselected: this.page_selected,
-                //     page: this.page,
-                //     perpage: this.per_page,
-                //     type: 'gift'
-                // }
-
-                // this.get_available_products_from_api(dataGift).then()
 
                 this.opt_get_prices({
                     action: 'get/type/prices',
@@ -1462,7 +1452,11 @@
                         this.products = newVal.products
                         // this.selected = newVal.selected
                         if (newVal.selected) {
-                            this.selected = newVal.selected
+                            if(newVal.isallproducts){
+                                this.selected = { ...this.selected, ...newVal.selected };
+                            } else{
+                                this.selected = newVal.selected
+                            }
                         }
                         if (newVal.visible) {
                             this.selected_visible = newVal.visible
@@ -1485,13 +1479,18 @@
                     this.selected_data = newVal.products_data
                     this.total_selected = newVal.total_products
 
+                    console.log("ddd", newVal.type_all_sale)
                     if(newVal.type_all_sale != null){
                         this.kenostActivity = {
                             type: this.massActionAll[newVal.type_all_sale],
-                            typePrice: this.typePrice[newVal.type_price],
+                            typePrice: this.typePrice[(newVal.type_price).toString()],
                             value: newVal.all_sale_value,
                             typeFormul: this.typeFormul[newVal.type_all_sale_symbol]
                         }
+
+                        console.log("ddd", newVal.type_all_sale)
+
+                        console.log(this.kenostActivity)
                     }
                     
                         const data = {
