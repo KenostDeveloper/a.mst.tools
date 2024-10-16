@@ -1875,7 +1875,7 @@ img {
 }
 
 .dart-btn {
-	display: inline-block;
+	display: flex;
 	align-items: center;
 	font-style: normal;
 	font-weight: 500;
@@ -1890,7 +1890,12 @@ img {
 	text-decoration: none;
 	text-align: center;
 	position: relative;
-
+	& i{
+		margin-right: 5px;
+		& + span{
+			margin-left: 5px;
+		}
+	}
 	span {
 		line-height: 1;
 	}

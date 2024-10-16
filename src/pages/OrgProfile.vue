@@ -343,7 +343,7 @@
     </Dialog> -->
 		<Dialog
 			v-model:visible="this.modals.requisit"
-			header="Запрос на добавление банковских реквизитов"
+			header="Запрос на добавление реквизитов"
 			:style="{ width: '740px' }"
 		>
 			<div>
@@ -400,7 +400,7 @@
 				</div>
 				<div class="flex-left mt-2">
 					<div
-						class="dart-btn dart-btn-secondary flex align-items-center kenost-add-button"
+						class="dart-btn dart-btn-secondary flex align-items-center"
 						@click="addBankRequisit()"
 					>
 						<i class="pi pi-plus"></i> Добавить банковские реквизиты
