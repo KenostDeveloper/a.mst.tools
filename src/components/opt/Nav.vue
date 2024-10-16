@@ -291,7 +291,7 @@
             <button class="std-nav__address" @click.stop="() => (this.showWarehouseList = !this.showWarehouseList)">
                 <img class="std-nav__address-icon" src="/images/icons/map_marker.svg" />
                 <span class="std-nav__address-text">
-                    <span>Склад доставки:</span><br />
+                    <span>Адрес доставки:</span><br />
                     «{{ org_stores?.items?.find((el) => el.id == warehouse_basket)?.name_short }}»,
                     {{ org_stores?.items?.find((el) => el.id == warehouse_basket)?.address_short }}
                 </span>
