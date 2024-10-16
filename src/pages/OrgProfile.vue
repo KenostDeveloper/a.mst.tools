@@ -15,303 +15,209 @@
 		<!-- <div class="profile-content b-wrap" :class="{ loading: loading }"> -->
 		<!-- <TabView class="tab-custom">
 			<TabPanel header="О компании"> -->
-				<!-- <div class="profile-content__title">
+		<!-- <div class="profile-content__title">
             <span class="title">О компании</span>
             <div class="info info-default">
               <i class="d_icon d_icon-clock"></i>
               <span>Подана заявка на изменение реквизитов</span>
             </div>
           </div> -->
-				<form action="#" @submit.prevent="formChangeSimple">
-					<!-- <div class="dart-alert dart-alert-info">Вы можете изменить только данные контактного лица и логотип организации.</div> -->
-					<div class="dart-form-group mb-5">
-						<span class="ktitle">Логотип</span>
-						<DropZone
-							v-if="!this.orgprofile.image"
-							class="kenost-dropzone"
-							:maxFiles="Number(1)"
-							url="/rest/file_upload.php?upload_org_avatar=avatar"
-							:uploadOnDrop="true"
-							:multipleUpload="true"
-							:acceptedFiles="['image/*']"
-							:parallelUpload="1"
-							@sending="parseFile"
-							v-bind="args"
-						>
-							<template v-slot:message>
-								<div class="kenost-dropzone__custom hidden-mobile-l">
-									<i class="pi pi-cloud-upload"></i>
-									<b>Перетащите файл в эту область</b>
-									<p>Вы также можете загрузить файл, <span>нажав сюда</span></p>
-								</div>
+		<form action="#" @submit.prevent="formChangeSimple">
+			<!-- <div class="dart-alert dart-alert-info">Вы можете изменить только данные контактного лица и логотип организации.</div> -->
+			<div class="dart-form-group mb-5">
+				<span class="ktitle">Логотип</span>
+				<DropZone v-if="!this.orgprofile.image" class="kenost-dropzone" :maxFiles="Number(1)"
+					url="/rest/file_upload.php?upload_org_avatar=avatar" :uploadOnDrop="true" :multipleUpload="true"
+					:acceptedFiles="['image/*']" :parallelUpload="1" @sending="parseFile" v-bind="args">
+					<template v-slot:message>
+						<div class="kenost-dropzone__custom hidden-mobile-l">
+							<i class="pi pi-cloud-upload"></i>
+							<b>Перетащите файл в эту область</b>
+							<p>Вы также можете загрузить файл, <span>нажав сюда</span></p>
+						</div>
 
-								<div class="kenost-dropzone__custom visible-mobile-l">
-									<i class="pi pi-cloud-upload"></i>
-									<b>Загрузите файл сюда</b>
-									<span class="kenost-dropzone__link">Открыть</span>
-								</div>
-							</template>
-						</DropZone>
-						<div class="avatar-org" v-if="this.orgprofile.image">
-							<FileUpload
-								name="avatar[]"
-								url="/rest/file_upload.php?upload_org_avatar=avatar"
-								@upload="onUpload"
-								:auto="true"
-								:multiple="false"
-								accept="image/*"
-								:maxFileSize="1000000"
-							>
-								<template
-									#header="{
-										chooseCallback,
-										uploadCallback,
-										clearCallback,
-										files,
-									}"
-								>
-									<img
-										@click="chooseCallback()"
-										class="org-upload-img"
-										:src="
-											orgprofile.upload_image
-												? this.orgprofile.image.original_href
-												: this.orgprofile.image
-										"
-										alt=""
-									/>
-									<i class="pi pi-upload"></i>
-								</template>
-							</FileUpload>
+						<div class="kenost-dropzone__custom visible-mobile-l">
+							<i class="pi pi-cloud-upload"></i>
+							<b>Загрузите файл сюда</b>
+							<span class="kenost-dropzone__link">Открыть</span>
+						</div>
+					</template>
+				</DropZone>
+				<div class="avatar-org" v-if="this.orgprofile.image">
+					<FileUpload name="avatar[]" url="/rest/file_upload.php?upload_org_avatar=avatar" @upload="onUpload"
+						:auto="true" :multiple="false" accept="image/*" :maxFileSize="1000000">
+						<template #header="{
+							chooseCallback,
+							uploadCallback,
+							clearCallback,
+							files,
+						}">
+							<img @click="chooseCallback()" class="org-upload-img" :src="orgprofile.upload_image
+									? this.orgprofile.image.original_href
+									: this.orgprofile.image
+								" alt="" />
+							<i class="pi pi-upload"></i>
+						</template>
+					</FileUpload>
+				</div>
+			</div>
+			<div class="dart-form-group mb-4">
+				<span class="ktitle mb-3">Данные контактного лица</span>
+				<div class="kenost-form-grid">
+					<div class="form_input_group w-50" v-for="(field, index) in form.fields.contacts" :key="index">
+						<label for="">{{ field.label }}</label>
+						<input type="text" v-model="this.orgprofile[field.name]" class="dart-form-control"
+							:name="field.name" :placeholder="field.placeholder" />
+					</div>
+				</div>
+			</div>
+			<div class="dart-form-group mb-5 requisites">
+				<div class="upload-banner mb-3 hidden-mobile-l">
+					<div class="upload-banner__text">
+						<span class="ktitle">Реквизиты</span>
+						<span>Вы можете подать запрос на изменение или добавление реквизитов.
+							Самостоятельно изменить их нельзя.</span>
+					</div>
+					<!-- <div class="flex align-items-center gap-2"><i class="pi pi-spin pi-cog" style="font-size: 18px"></i> <span>Ваша заявка на рассмотрении</span></div> -->
+					<!-- <div class="dart-btn dart-btn-secondary btn-padding">Загрузить</div> -->
+					<div class="dart-btn dart-btn-secondary btn-padding hidden-mobile-l"
+						@click="this.modals.requisit = true">
+						Подать запрос
+					</div>
+				</div>
+
+				<div class="upload-banner mb-3 visible-mobile-l">
+					<div class="upload-banner__text">
+						<span class="ktitle">Реквизиты</span>
+						<div class="dart-btn dart-btn-secondary btn-padding visible-mobile-l"
+							@click="this.modals.requisit = true">
+							<img src="../assets/images/icons/edit.svg" alt="" />
 						</div>
 					</div>
-					<div class="dart-form-group mb-4">
-						<span class="ktitle mb-3">Данные контактного лица</span>
+					<!-- <div class="flex align-items-center gap-2"><i class="pi pi-spin pi-cog" style="font-size: 18px"></i> <span>Ваша заявка на рассмотрении</span></div> -->
+					<!-- <div class="dart-btn dart-btn-secondary btn-padding">Загрузить</div> -->
+					<span>Вы можете подать запрос на изменение или добавление реквизитов.
+						Самостоятельно изменить их нельзя.</span>
+				</div>
+
+				<div class="kenost-form-for" v-for="(requisit, index) in this.orgprofile.requisites" :key="requisit.id">
+					<div class="std-display-contents hidden-mobile-l">
+						<div class="name-requisit">
+							<p class="text-m">Реквизиты {{ requisit.name }}</p>
+							<button v-if="requisit.send_request == '0'" class="name-requisit-edit std-icon__wrapper"
+								@click="
+									(this.modals.requisitedit = true),
+									(this.modals.requisitedit_index = index)
+									">
+								<i class="pi pi-pencil"></i>
+							</button>
+							<div v-if="requisit.send_request == '1'" class="flex align-items-center gap-2">
+								<i class="pi pi-spin pi-cog" style="font-size: 18px"></i>
+								<span>Ваша заявка на рассмотрении</span>
+							</div>
+						</div>
 						<div class="kenost-form-grid">
-							<div
-								class="form_input_group w-50"
-								v-for="(field, index) in form.fields.contacts"
-								:key="index"
-							>
+							<div class="form_input_group w-50" v-for="(field, index_field) in this.form.requisit"
+								:key="index + '_' + index_field">
 								<label for="">{{ field.label }}</label>
-								<input	
-									type="text"
-									v-model="this.orgprofile[field.name]"
-									class="dart-form-control"
-									:name="field.name"
-									:placeholder="field.placeholder"
-								/>
+								<input :readonly="field.readonly" type="text" v-model="requisit[field.name]"
+									class="dart-form-control" :name="field.name" :placeholder="field.placeholder" />
+							</div>
+							<div class="flex justify-between align-items-center w-full">
+								<div class="flex align-items-center">
+									<img src="../assets/images/icons/cheked.svg" alt=""
+										v-if="requisit.marketplace == '1'">
+									<label :for="'create-page-action' + index" class="ml-2 mb-0"
+										v-if="requisit.marketplace == '1'">
+										Реквизиты для маркетплейса
+									</label>
+								</div>
+								<div>
+									<p class="m-0 text-sm cursor-pointer" @click="
+										requisit.hide == null
+											? (requisit.hide = true)
+											: (requisit.hide = !requisit.hide)
+										">
+										{{
+											requisit.hide
+												? "— Скрыть банковские реквизиты"
+												: "— Показать банковские реквизиты"
+										}}
+									</p>
+								</div>
+							</div>
+							<!-- dart-form-group mt-4 mb-0 -->
+							<div class="dart-form-group mt-4 mb-0" v-if="requisit.hide">
+								<div v-for="(bank, index) in requisit.banks" :key="index">
+									<p class="text-s">Банковские реквизиты ({{ index + 1 }})</p>
+									<div class="kenost-form-grid mb-3">
+										<div class="form_input_group w-50"
+											v-for="(field, index_field) in this.form.bank"
+											:key="index + '_' + index_field">
+											<label for="">{{ field.label }}</label>
+											<input :readonly="field.readonly" type="text" v-model="bank[field.name]"
+												class="dart-form-control" :name="field.name"
+												:placeholder="field.placeholder" />
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
-					<div class="dart-form-group mb-5 requisites">
-						<div class="upload-banner mb-3 hidden-mobile-l">
-							<div class="upload-banner__text">
-								<span class="ktitle">Реквизиты</span>
-								<span
-									>Вы можете подать запрос на изменение или добавление реквизитов.
-									Самостоятельно изменить их нельзя.</span
-								>
+
+
+					<Accordion class="std-profile__accordion visible-mobile-l" :title="`Реквизиты ${index + 1}`">
+						<div class="kenost-form-grid">
+							<div class="form_input_group w-50" v-for="(field, index_field) in this.form.requisit"
+								:key="index + '_' + index_field">
+								<label for="">{{ field.label }}</label>
+								<input :readonly="field.readonly" type="text" v-model="requisit[field.name]"
+									class="dart-form-control" :name="field.name" :placeholder="field.placeholder" />
 							</div>
-							<!-- <div class="flex align-items-center gap-2"><i class="pi pi-spin pi-cog" style="font-size: 18px"></i> <span>Ваша заявка на рассмотрении</span></div> -->
-							<!-- <div class="dart-btn dart-btn-secondary btn-padding">Загрузить</div> -->
-							<div
-								class="dart-btn dart-btn-secondary btn-padding hidden-mobile-l"
-								@click="this.modals.requisit = true"
-							>
-								Подать запрос
+							<div class="std-profile__options flex w-full">
+								<div v-if="requisit.marketplace == '1'" class="flex align-items-center">
+									<img src="../assets/images/icons/cheked.svg" alt="">
+									<label :for="'create-page-action' + index" class="ml-2 mb-0">
+										Реквизиты для маркетплейса
+									</label>
+								</div>
+								<div>
+									<p class="m-0 text-sm cursor-pointer" @click="
+										requisit.hide == null
+											? (requisit.hide = true)
+											: (requisit.hide = !requisit.hide)
+										">
+										{{
+											requisit.hide
+												? "— Скрыть банковские реквизиты"
+												: "— Показать банковские реквизиты"
+										}}
+									</p>
+								</div>
+							</div>
+							<!-- dart-form-group mt-4 mb-0 -->
+							<div class="std-profile__bank-requisites dart-form-group mt-4 mb-0" v-if="requisit.hide">
+								<div v-for="(bank, index) in requisit.banks" :key="index">
+									<p class="text-s">Банковские реквизиты ({{ index + 1 }})</p>
+									<div class="kenost-form-grid mb-3">
+										<div class="form_input_group w-50"
+											v-for="(field, index_field) in this.form.bank"
+											:key="index + '_' + index_field">
+											<label for="">{{ field.label }}</label>
+											<input :readonly="field.readonly" type="text" v-model="bank[field.name]"
+												class="dart-form-control" :name="field.name"
+												:placeholder="field.placeholder" />
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
-
-						<div class="upload-banner mb-3 visible-mobile-l">
-							<div class="upload-banner__text">
-								<span class="ktitle">Реквизиты</span>
-								<div
-									class="dart-btn dart-btn-secondary btn-padding visible-mobile-l"
-									@click="this.modals.requisit = true"
-								>
-									<img src="../assets/images/icons/edit.svg" alt="" />
-								</div>
-							</div>
-							<!-- <div class="flex align-items-center gap-2"><i class="pi pi-spin pi-cog" style="font-size: 18px"></i> <span>Ваша заявка на рассмотрении</span></div> -->
-							<!-- <div class="dart-btn dart-btn-secondary btn-padding">Загрузить</div> -->
-							<span
-								>Вы можете подать запрос на изменение или добавление реквизитов.
-								Самостоятельно изменить их нельзя.</span
-							>
-						</div>
-
-						<div
-							class="kenost-form-for"
-							v-for="(requisit, index) in this.orgprofile.requisites"
-							:key="requisit.id"
-						>
-							<div class="std-display-contents hidden-mobile-l">
-								<div class="name-requisit">
-									<p class="text-m">Реквизиты {{ requisit.name }}</p>
-									<button
-										v-if="requisit.send_request == '0'"
-										class="name-requisit-edit std-icon__wrapper"
-										@click="
-											(this.modals.requisitedit = true),
-												(this.modals.requisitedit_index = index)
-										"
-									>
-										<i class="pi pi-pencil"></i>
-									</button>
-									<div
-										v-if="requisit.send_request == '1'"
-										class="flex align-items-center gap-2"
-									>
-										<i class="pi pi-spin pi-cog" style="font-size: 18px"></i>
-										<span>Ваша заявка на рассмотрении</span>
-									</div>
-								</div>
-								<div class="kenost-form-grid">
-									<div
-										class="form_input_group w-50"
-										v-for="(field, index_field) in this.form.requisit"
-										:key="index + '_' + index_field"
-									>
-										<label for="">{{ field.label }}</label>
-										<input
-											:readonly="field.readonly"
-											type="text"
-											v-model="requisit[field.name]"
-											class="dart-form-control"
-											:name="field.name"
-											:placeholder="field.placeholder"
-										/>
-									</div>
-									<div class="flex justify-between align-items-center w-full">
-										<div class="flex align-items-center">
-											<img src="../assets/images/icons/cheked.svg" alt="" v-if="requisit.marketplace == '1'">
-											<label
-												:for="'create-page-action' + index"
-												class="ml-2 mb-0"
-												v-if="requisit.marketplace == '1'"
-											>
-												Реквизиты для маркетплейса
-											</label>
-										</div>
-										<div>
-											<p
-												class="m-0 text-sm cursor-pointer"
-												@click="
-													requisit.hide == null
-														? (requisit.hide = true)
-														: (requisit.hide = !requisit.hide)
-												"
-											>
-												{{
-													requisit.hide
-														? "— Скрыть банковские реквизиты"
-														: "— Показать банковские реквизиты"
-												}}
-											</p>
-										</div>
-									</div>
-									<!-- dart-form-group mt-4 mb-0 -->
-									<div class="dart-form-group mt-4 mb-0" v-if="requisit.hide">
-										<div v-for="(bank, index) in requisit.banks" :key="index">
-											<p class="text-s">Банковские реквизиты ({{ index + 1 }})</p>
-											<div class="kenost-form-grid mb-3">
-												<div
-													class="form_input_group w-50"
-													v-for="(field, index_field) in this.form.bank"
-													:key="index + '_' + index_field"
-												>
-													<label for="">{{ field.label }}</label>
-													<input
-														:readonly="field.readonly"
-														type="text"
-														v-model="bank[field.name]"
-														class="dart-form-control"
-														:name="field.name"
-														:placeholder="field.placeholder"
-													/>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-
-
-							<Accordion class="std-profile__accordion visible-mobile-l" :title="`Реквизиты ${index + 1}`">
-								<div class="kenost-form-grid">
-									<div
-										class="form_input_group w-50"
-										v-for="(field, index_field) in this.form.requisit"
-										:key="index + '_' + index_field"
-									>
-										<label for="">{{ field.label }}</label>
-										<input
-											:readonly="field.readonly"
-											type="text"
-											v-model="requisit[field.name]"
-											class="dart-form-control"
-											:name="field.name"
-											:placeholder="field.placeholder"
-										/>
-									</div>
-									<div class="std-profile__options flex w-full">
-										<div v-if="requisit.marketplace == '1'" class="flex align-items-center">
-											<img src="../assets/images/icons/cheked.svg" alt="">
-											<label
-												:for="'create-page-action' + index"
-												class="ml-2 mb-0"
-											>
-												Реквизиты для маркетплейса
-											</label>
-										</div>
-										<div>
-											<p
-												class="m-0 text-sm cursor-pointer"
-												@click="
-													requisit.hide == null
-														? (requisit.hide = true)
-														: (requisit.hide = !requisit.hide)
-												"
-											>
-												{{
-													requisit.hide
-														? "— Скрыть банковские реквизиты"
-														: "— Показать банковские реквизиты"
-												}}
-											</p>
-										</div>
-									</div>
-									<!-- dart-form-group mt-4 mb-0 -->
-									<div class="std-profile__bank-requisites dart-form-group mt-4 mb-0" v-if="requisit.hide">
-										<div v-for="(bank, index) in requisit.banks" :key="index">
-											<p class="text-s">Банковские реквизиты ({{ index + 1 }})</p>
-											<div class="kenost-form-grid mb-3">
-												<div
-													class="form_input_group w-50"
-													v-for="(field, index_field) in this.form.bank"
-													:key="index + '_' + index_field"
-												>
-													<label for="">{{ field.label }}</label>
-													<input
-														:readonly="field.readonly"
-														type="text"
-														v-model="bank[field.name]"
-														class="dart-form-control"
-														:name="field.name"
-														:placeholder="field.placeholder"
-													/>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</Accordion>
-						</div>
-					</div>
-				</form>
-			<!-- </TabPanel> -->
-			<!-- <TabPanel header="Настройки" v-if="organization.settings">
+					</Accordion>
+				</div>
+			</div>
+		</form>
+		<!-- </TabPanel> -->
+		<!-- <TabPanel header="Настройки" v-if="organization.settings">
         </TabPanel> -->
 		<!-- </TabView> -->
 		<!-- </div> -->
@@ -341,163 +247,109 @@
         <div class="dart-btn dart-btn-primary btn-padding">Отправить</div>
       </div>
     </Dialog> -->
-		<Dialog
-			v-model:visible="this.modals.requisit"
-			header="Запрос на добавление реквизитов"
-			:style="{ width: '740px' }"
-		>
-			<div>
-				<div class="kenost-form-grid">
-					<div
-						class="form_input_group w-50"
-						v-for="(field, index) in form.requisit"
-						:key="index"
-					>
-						<label for="">{{ field.label }}</label>
-						<input
-							type="text"
-							v-model="this.new_requisit[field.name]"
-							class="dart-form-control"
-							:name="field.name"
-							:placeholder="field.placeholder"
-						/>
-					</div>
-				</div>
-				<div class="flex align-items-center mb-3 gap-1">
-					<Checkbox
-						v-model="this.new_requisit.marketplace"
-						inputId="new-requisit-market"
-						name="new-requisit-market"
-						value="1"
-					/>
-					<label for="new-requisit-market" class="ml-2 mb-0">
-						Реквизиты для маркетплейса
-					</label>
-				</div>
-				<div v-for="(bank, index_req) in this.new_requisit.banks" :key="index_req">
-					<div class="flex align-items-center">
-						<p class="text-s mb-0">Банковские реквизиты ({{ index_req + 1 }})</p>
-						<div class="name-requisit-delete" @click="deleteBankRequisit(index_req)">
-							<i class="pi pi-trash"></i>
-						</div>
-					</div>
-					<div class="kenost-form-grid mb-3">
-						<div
-							class="form_input_group w-50"
-							v-for="(field, index_field) in this.form.bank"
-							:key="index_req + '_' + index_field"
-						>
+		<Dialog v-model:visible="this.modals.requisit" header="Запрос на добавление реквизитов"
+			:style="{ width: '740px' }">
+			<form @submit.prevent="addRequisit">
+				<div>
+					<div class="kenost-form-grid">
+						<div class="form_input_group w-50" :class="{ error: v$.new_requisit[field.name].$invalid }"
+							v-for="(field, index) in form.requisit" :key="index">
 							<label for="">{{ field.label }}</label>
-							<input
-								type="text"
-								v-model="bank[field.name]"
-								class="dart-form-control"
-								:name="field.name"
-								:placeholder="field.placeholder"
-							/>
+							<input type="text" v-model="this.new_requisit[field.name]" class="dart-form-control"
+								:name="field.name" :placeholder="field.placeholder" />
+
+							<span v-for="error of v$.new_requisit[field.name].$silentErrors" class="error_desc">
+								{{ error.$message }}
+							</span>
+						</div>
+					</div>
+					<div class="flex align-items-center mb-3 gap-1">
+						<Checkbox v-model="this.new_requisit.marketplace" inputId="new-requisit-market"
+							name="new-requisit-market" value="1" />
+						<label for="new-requisit-market" class="ml-2 mb-0">
+							Реквизиты для маркетплейса
+						</label>
+					</div>
+					<div v-for="(bank, index_req) in this.new_requisit.banks" :key="index_req">
+						<div class="flex align-items-center">
+							<p class="text-s mb-0">Банковские реквизиты ({{ index_req + 1 }})</p>
+							<div class="name-requisit-delete" @click="deleteBankRequisit(index_req)">
+								<i class="pi pi-trash"></i>
+							</div>
+						</div>
+						<div class="kenost-form-grid mb-3">
+							<div class="form_input_group w-50" v-for="(field, index_field) in this.form.bank"
+								:key="index_req + '_' + index_field">
+								<label for="">{{ field.label }}</label>
+								<input type="text" v-model="bank[field.name]" class="dart-form-control"
+									:name="field.name" :placeholder="field.placeholder" />
+							</div>
+						</div>
+					</div>
+					<div class="flex-left mt-2">
+						<div class="dart-btn dart-btn-secondary flex align-items-center" @click="addBankRequisit()">
+							<i class="pi pi-plus"></i> Добавить банковские реквизиты
 						</div>
 					</div>
 				</div>
-				<div class="flex-left mt-2">
-					<div
-						class="dart-btn dart-btn-secondary flex align-items-center"
-						@click="addBankRequisit()"
-					>
-						<i class="pi pi-plus"></i> Добавить банковские реквизиты
+				<div class="flex-right mt-2">
+					<div class="dart-btn dart-btn-primary btn-padding">
+						Отправить
 					</div>
 				</div>
-			</div>
-			<div class="flex-right mt-2">
-				<div class="dart-btn dart-btn-primary btn-padding" @click="addRequisit()">
-					Отправить
-				</div>
-			</div>
+			</form>
 		</Dialog>
-		<Dialog
-			v-model:visible="this.modals.requisitedit"
-			header="Запрос на редактирование банковских реквизитов"
-			:style="{ width: '740px' }"
-		>
-			<div>
-				<div class="kenost-form-grid">
-					<div
-						class="form_input_group w-50"
-						v-for="(field, index) in form.requisit"
-						:key="index"
-					>
-						<label for="">{{ field.label }}</label>
-						<input
-							type="text"
-							v-model="
-								this.orgprofile.requisites[this.modals.requisitedit_index][
-									field.name
-								]
-							"
-							class="dart-form-control"
-							:name="field.name"
-							:placeholder="field.placeholder"
-						/>
-					</div>
-				</div>
-				<div class="flex align-items-center mb-3 gap-1">
-					<Checkbox
-						v-model="
-							this.orgprofile.requisites[this.modals.requisitedit_index].marketplace
-						"
-						inputId="requisit-market"
-						name="requisit-market"
-						value="1"
-					/>
-					<label for="requisit-market" class="ml-2 mb-0">
-						Реквизиты для маркетплейса
-					</label>
-				</div>
-				<div
-					v-for="(bank, index_req) in this.orgprofile.requisites[
-						this.modals.requisitedit_index
-					].banks"
-					:key="index_req"
-				>
-					<div class="flex align-items-center">
-						<p class="text-s mb-0">Банковские реквизиты ({{ index_req + 1 }})</p>
-						<div
-							class="name-requisit-delete"
-							@click="deleteBankRequisitEdit(index_req)"
-						>
-							<i class="pi pi-trash"></i>
-						</div>
-					</div>
-					<div class="kenost-form-grid mb-3">
-						<div
-							class="form_input_group w-50"
-							v-for="(field, index_field) in this.form.bank"
-							:key="index_req + '_' + index_field"
-						>
+		<Dialog v-model:visible="this.modals.requisitedit" header="Запрос на редактирование банковских реквизитов"
+			:style="{ width: '740px' }">
+			<form @submit.prevent="editRequisit">
+				<div>
+					<div class="kenost-form-grid">
+						<div class="form_input_group w-50" v-for="(field, index) in form.requisit" :key="index">
 							<label for="">{{ field.label }}</label>
-							<input
-								type="text"
-								v-model="bank[field.name]"
-								class="dart-form-control"
-								:name="field.name"
-								:placeholder="field.placeholder"
-							/>
+							<input type="text" v-model="this.orgprofile.requisites[this.modals.requisitedit_index][
+								field.name
+								]
+								" class="dart-form-control" :name="field.name" :placeholder="field.placeholder" />
+						</div>
+					</div>
+					<div class="flex align-items-center mb-3 gap-1">
+						<Checkbox v-model="this.orgprofile.requisites[this.modals.requisitedit_index].marketplace
+							" inputId="requisit-market" name="requisit-market" value="1" />
+						<label for="requisit-market" class="ml-2 mb-0">
+							Реквизиты для маркетплейса
+						</label>
+					</div>
+					<div v-for="(bank, index_req) in this.orgprofile.requisites[
+						this.modals.requisitedit_index
+					].banks" :key="index_req">
+						<div class="flex align-items-center">
+							<p class="text-s mb-0">Банковские реквизиты ({{ index_req + 1 }})</p>
+							<div class="name-requisit-delete" @click="deleteBankRequisitEdit(index_req)">
+								<i class="pi pi-trash"></i>
+							</div>
+						</div>
+						<div class="kenost-form-grid mb-3">
+							<div class="form_input_group w-50" v-for="(field, index_field) in this.form.bank"
+								:key="index_req + '_' + index_field">
+								<label for="">{{ field.label }}</label>
+								<input type="text" v-model="bank[field.name]" class="dart-form-control"
+									:name="field.name" :placeholder="field.placeholder" />
+							</div>
+						</div>
+					</div>
+					<div class="flex-left mt-2">
+						<div class="dart-btn dart-btn-secondary flex align-items-center kenost-add-button"
+							@click="addBankRequisitEdit()">
+							<i class="pi pi-plus"></i> Добавить банковские реквизиты
 						</div>
 					</div>
 				</div>
-				<div class="flex-left mt-2">
-					<div
-						class="dart-btn dart-btn-secondary flex align-items-center kenost-add-button"
-						@click="addBankRequisitEdit()"
-					>
-						<i class="pi pi-plus"></i> Добавить банковские реквизиты
+				<div class="flex-right mt-2">
+					<div class="dart-btn dart-btn-primary btn-padding">
+						Отправить
 					</div>
 				</div>
-			</div>
-			<div class="flex-right mt-2">
-				<div class="dart-btn dart-btn-primary btn-padding" @click="editRequisit()">
-					Отправить
-				</div>
-			</div>
+			</form>
 		</Dialog>
 		<!-- <Dialog v-model:visible="this.modals.requisitedit" header="Запрос на изменение банковских реквизитов" :style="{ width: '740px' }">
       <div>
@@ -532,6 +384,8 @@ import Checkbox from "primevue/checkbox";
 import DropZone from "dropzone-vue";
 import Dialog from "primevue/dialog";
 import Accordion from "../components/Accordion.vue";
+import useVuelidate from "@vuelidate/core";
+import { helpers, required } from "@vuelidate/validators";
 // import Accordion from 'primevue/accordion'
 // import AccordionTab from 'primevue/accordiontab'
 
@@ -675,6 +529,11 @@ export default {
 			},
 		};
 	},
+	setup() {
+		return {
+			v$: useVuelidate(),
+		}
+	},
 	methods: {
 		...mapActions([
 			"get_organization_from_api",
@@ -797,6 +656,12 @@ export default {
 			});
 		},
 		addRequisit() {
+			const validationResult = this.v$.validate();
+			if (!validationResult) {
+				console.log("Validation falied");
+				return;
+			}
+
 			const data = this.new_requisit;
 			data.org_name = this.orgprofile.name;
 			if (data.marketplace.length > 0) {
@@ -924,16 +789,54 @@ export default {
 			this.orgprofile = newVal;
 		},
 	},
+	validations() {
+		return {
+			new_requisit: {
+				name: helpers.withMessage("Заполните наименование юр. лица", () => this.new_requisit.name != ""),
+				inn: {
+					required: helpers.withMessage("Заполните ИНН", () => this.new_requisit.inn != ""),
+					pattern: helpers.withMessage("Некорректный ИНН", () => this.new_requisit.inn.match(/^[0-9]{10,12}$/)),
+				},
+				ogrn: {
+					required: helpers.withMessage("Заполните ОГРН", () => this.new_requisit.ogrn != ""),
+					pattern: helpers.withMessage("Некорректный ОГРН", () => this.new_requisit.ogrn.match(/^[0-9]{13}$/)),
+				},
+				kpp: {
+					required: helpers.withMessage("Заполните КПП", () => this.new_requisit.kpp != ""),
+					pattern: helpers.withMessage("Некорректный КПП", () => this.new_requisit.kpp.match(/^[0-9]{9}$/)),
+				},
+				ur_address: helpers.withMessage("Заполните юридический адрес", () => this.new_requisit.ur_address != ""),
+				fact_address: helpers.withMessage("Заполните фактический адрес", () => this.new_requisit.fact_address != ""),
+				banks: {
+					bank_bik: {
+						required: helpers.withMessage("Заполните БИК", () => this.new_requisit.banks.bank_bik != ""),
+						pattern: helpers.withMessage("Некорректный БИК", () => this.new_requisit.banks.bank_bik.match(/^[0-9]{9}$/)),
+					},
+					bank_name: helpers.withMessage("Заполните название банка", () => this.new_requisit.banks.bank_name != ""),
+					bank_number: {
+						required: helpers.withMessage("Заполните расчетный счета", () => this.new_requisit.banks.bank_number != ""),
+						pattern: helpers.withMessage("Некорректный расчетный счета", () => this.new_requisit.banks.bank_number.match(/^[0-9]{20}$/)),
+					},
+					bank_knumber: {
+						required: helpers.withMessage("Заполните К/С", () => this.new_requisit.banks.bank_knumber != ""),
+						pattern: helpers.withMessage("Некорректный К/С", () => this.new_requisit.banks.bank_knumber.match(/^[0-9]{20}$/)),
+					}
+				}
+			},
+		}
+	}
 };
 </script>
 
 <style lang="scss">
-.m-0{
-  margin: 0;
+.m-0 {
+	margin: 0;
 }
-.ml-2{
-  margin-left: 10px;
+
+.ml-2 {
+	margin-left: 10px;
 }
+
 .flex-left {
 	display: flex;
 	justify-content: flex-start;
@@ -943,6 +846,7 @@ export default {
 	&:hover {
 		color: #fff;
 	}
+
 	.pi {
 		font-size: 16px;
 	}
@@ -992,7 +896,7 @@ export default {
 	text-decoration: none !important;
 }
 
-.kenost-form-for + .kenost-form-for {
+.kenost-form-for+.kenost-form-for {
 	border-top: 1px solid var(--grey-stroke, #e2e2e2);
 	margin-top: 20px;
 	padding-top: 20px;
@@ -1071,28 +975,34 @@ export default {
 }
 
 .buttons_container {
-	.dart-btn + .dart-btn {
+	.dart-btn+.dart-btn {
 		margin-left: 5px;
 	}
 }
+
 .dart-upload_files .item img {
 	max-width: 52px;
 	width: 100%;
 }
+
 .dart-form-block {
 	display: block;
+
 	span.title {
 		display: block;
 		font-size: 24px;
 		line-height: 1.3;
 		font-weight: 500;
 	}
+
 	&__content {
 		padding: 15px 0;
+
 		.dart-form-group {
 			padding-top: 15px;
 		}
 	}
+
 	.p-float-label {
 		label {
 			margin-top: -0.5rem;
