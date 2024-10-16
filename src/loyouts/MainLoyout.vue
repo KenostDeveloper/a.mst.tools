@@ -44,11 +44,12 @@
                         :lifetime="10000"
                         @delete="deleteNotification(index)" /> -->
                 <!-- </div> -->
-                <router-link v-if="this.$route.params.id"
+                <router-link v-if="this.$route.params.id && pageIsAvailable()"
                     :to="{ name: 'purchases_notifications', params: { id: this.$route.params.id } }"
                     class="std-notification-button absolute">
                     <i class="std_icon std_icon-notification"></i>
-                    <div v-if="this.notifications_all.no_read > 0" class="std-notification-button__badge">+{{this.notifications_all.no_read }}</div>
+                    <div v-if="this.notifications_all.no_read > 0" class="std-notification-button__badge">
+                        +{{ this.notifications_all.no_read }}</div>
                     <!-- {{ this.$route.params }} -->
                 </router-link>
                 <router-view> </router-view>
@@ -177,6 +178,17 @@ export default {
                 }
             });
             this.data_start = new Date();
+        },
+        pageIsAvailable() {
+            const routeName = this.$route.name;
+            if (routeName == 'shipments' || routeName == 'org_settings' || 
+                routeName == 'org_action_add' || routeName == 'org_sales_add' ||
+                routeName == 'discounts_edit' || routeName == 'org_sales_edit' ||
+                routeName == 'org_action_edit' || routeName == 'complect_add' ||
+                routeName == 'complect_edit') {
+                return false;
+            }
+            return true;
         }
     },
     watch: {

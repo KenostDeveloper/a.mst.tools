@@ -6238,6 +6238,10 @@ button.std-icon__wrapper {
 }
 
 .kenost-add-button {
+	&.dart-btn-secondary {
+		color: #fff;
+	}
+
 	&:hover {
 		color: #fff;
 	}

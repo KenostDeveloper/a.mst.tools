@@ -25,7 +25,6 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import router from "../router";
-import { mdiConsoleLine } from "@mdi/js";
 
 export default {
 	name: "Breadcrumbs",

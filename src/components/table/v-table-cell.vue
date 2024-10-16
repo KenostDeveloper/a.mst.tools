@@ -321,7 +321,9 @@ export default {
 .img_abs{
   img{
     max-width: 100px;
+    // width: 100px;
     max-height: 70px;
+    // object-fit: contain;
   }
 }
 .p-button{

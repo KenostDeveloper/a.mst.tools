@@ -126,12 +126,12 @@ export default {
 </script>
 
 <style lang="scss">
-.img_abs{
-  img{
-    max-width: 100px;
-    max-height: 70px;
-  }
-}
+// .img_abs{
+//   img{
+//     max-width: 100px;
+//     max-height: 70px;
+//   }
+// }
 .name{
   text-align: left;
 }

@@ -1,6 +1,6 @@
 <template>
 	<section class="clients">
-		<Breadcrumbs />
+		<Breadcrumbs class="std-breadcrumbs--margin" />
 		<ConfirmDialog/>
 		<!-- <Toast /> -->
 		<v-clients
