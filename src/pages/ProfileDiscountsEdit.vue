@@ -330,8 +330,11 @@
                     </tr>
                 </thead>
                 <!-- Вывод комплектов -->
-                <tbody v-for="item in this.selected_visible" :key="item.id">
-                <tr v-if="this.complects_ids.indexOf(item.id) === -1">
+                <tbody>
+                <tr 
+                    v-for="item in this.selected_visible" :key="item?.id"
+                    v-if="this.complects_ids.indexOf(item?.id) === -1"
+                >
                     <td class="table-kenost__checkbox">
                     <Checkbox @change="kenostTableCheckedAllCheck" v-model="this.kenost_table" inputId="kenost_table" :value="item.id" />
                     </td>
@@ -1204,19 +1207,8 @@
             deleteSelect (id) {
                 this.products.push(this.selected[id])
 
-                // eslint-disable-next-line camelcase
-                const new_selected = {}
+                delete this.selected[id]
 
-                for (let i = 0; i < Object.keys(this.selected).length; i++) {
-                    if ((this.selected[Object.keys(this.selected)[i]].id).toString() !== id.toString()) {
-                    new_selected[Object.keys(this.selected)[i]] = this.selected[Object.keys(this.selected)[i]]
-                    }
-                }
-
-                // eslint-disable-next-line camelcase
-                this.selected = new_selected
-
-                // this.selected = this.selected.filter((r) => r.id !== id)
                 const data = {
                     storeid: this.form.store_id,
                     filter: this.filter,
@@ -1461,6 +1453,10 @@
                         if (newVal.visible) {
                             this.selected_visible = newVal.visible
                             this.ids_visible = newVal.ids_selected;
+                        }
+                        else {
+                            this.selected_visible = []
+                            this.ids_visible = [];
                         }
                         this.total_products = newVal.total
                         this.total_selected = newVal.total_selected
