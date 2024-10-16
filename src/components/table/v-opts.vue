@@ -60,7 +60,11 @@
 						<img :src="row.image" alt="" class="client-card__img" />
 						<div class="client-card__info">
 							<h2 class="client-card__title">{{ row.name }}</h2>
-							<p class="client-card__address" v-if="row.address">{{ row.address }}</p>
+							<!-- <p class="client-card__address" v-if="row.address">{{ row.address }}</p> -->
+							<p class="client-card__address"><span class="d-client-card__data-label" v-if="row.req">Адрес:</span> {{ row.req?.fact_address}}</p>
+							<p class="client-card__address"><span class="d-client-card__data-label" v-if="row.req">ИНН:</span> {{ row.req?.inn }}</p>
+							<p class="client-card__address"><span class="d-client-card__data-label" v-if="row.phone">Телефон:</span> {{ row.phone }}</p>
+							<p class="client-card__address"><span class="d-client-card__data-label" v-if="row.email">Email:</span> {{ row.email }}</p>
 						</div>
 					</div>
 					<div class="participation-block">

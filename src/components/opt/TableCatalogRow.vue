@@ -54,7 +54,7 @@
         <td class="k-table__busket">
             <!-- {{item}} -->
             <form class="k-table__form" action="" :class="{ 'basket-true': item?.basket?.availability }">
-                <Counter :item="item" :key="new Date().getMilliseconds() + item.id" @ElemCount="ElemCount" :min="1"
+                <Counter :item="item" :key="new Date().getMilliseconds() + item.id" @ElemCount="ElemCount" :min="0"
                     :max="item.max" :id="item.remain_id" :store_id="item.store_id" :index="index"
                     :value="item?.basket?.count" :step="item?.action?.multiplicity ? item?.action?.multiplicity : 1" />
                 <div @click="
@@ -355,7 +355,7 @@
                 <!-- {{item.multiplicity}} -->
                 <form class="k-table__form" :class="{ 'basket-true': item?.basket?.availability }" action="">
                     <Counter :key="new Date().getMilliseconds() + item.id" @ElemCount="ElemCountComplect"
-                        :step="item.multiplicity" :min="1" :item="item" :max="item.remain_complect * item.multiplicity"
+                        :step="item.multiplicity" :min="0" :item="item" :max="item.remain_complect * item.multiplicity"
                         :id="item.complect_id" :store_id="item.store_id" :index="index"
                         :value="item?.basket?.count * item.multiplicity" />
                     <div @click="addBasketComplect(item.complect_id, item?.basket?.count, item.store_id, index)"
@@ -719,10 +719,45 @@ export default {
             this.items.complects[index][0].basket.availability = true;
             this.$emit('updateBasket');
         },
+        clearBasketProduct(storeid, productid) {
+			this.$emit("catalogUpdate");
+			this.$emit("actionUpdate");
+			const data = {
+				action: "basket/clear",
+				id: router.currentRoute._value.params.id,
+				store_id: storeid,
+				id_remain: productid,
+			};
+			this.busket_from_api(data).then((response) => {});
+			this.busket_from_api({
+				action: 'basket/get',
+				id: router.currentRoute._value.params.id,
+				warehouse: 'all'
+			})
+		},
+		clearBasketComplect(storeid, complectid) {
+			this.$emit("catalogUpdate");
+			this.$emit("actionUpdate");
+			const data = {
+				action: "basket/clear",
+				id: router.currentRoute._value.params.id,
+				store_id: storeid,
+				id_complect: complectid,
+			};
+			this.busket_from_api(data).then((response) => {});
+			this.busket_from_api({
+				action: 'basket/get',
+				id: router.currentRoute._value.params.id,
+				warehouse: 'all'
+			})
+		},
         ElemCount(object) {
-            console.log(object);
+            // console.log(object);
             // debounce(() => {
-            if (object.value == object.min) return;
+            if (object.value == object.min) {
+                this.clearBasketProduct(object.store_id, object.id)
+                return;
+            };
 
             if (object.value > Number(object.max)) {
                 this.modal_remain = true;
@@ -750,8 +785,10 @@ export default {
             // }, 300);
         },
         ElemCountComplect(object) {
-            // console.log(object)
-            if (object.value == object.min) return;
+            if (object.value == object.min) {
+                this.clearBasketComplect(object.store_id, object.id)
+                return;
+            }
 
             if (object.value > Number(object.max)) {
                 this.modal_remain = true;
