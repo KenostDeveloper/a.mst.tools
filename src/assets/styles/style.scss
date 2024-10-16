@@ -7630,3 +7630,8 @@ button.std-icon__wrapper {
 .vendors_selected__row .image img{
 	object-fit: cover;
 }
+
+.vendors_selected__row .image{
+	width: 40px !important;
+    height: 40px !important;
+}
