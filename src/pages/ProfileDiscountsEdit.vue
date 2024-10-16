@@ -835,7 +835,7 @@
                         delay_graph: this.form.delay, //График отсрочки
                         sale_all: this.kenostActivity, //Скидка на все товары
                         products: Object.keys(this.selected), //Товары
-                        products_data: this.selected_data,
+                        products_data: this.selected,
                         complects: this.selected_complects,
                         method_adding_products: this.form.addProductType, //Метод добавления товаров
                         id: router.currentRoute._value.params.id,
