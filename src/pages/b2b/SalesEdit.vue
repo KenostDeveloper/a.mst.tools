@@ -309,10 +309,15 @@
                             <p v-if="this.form.conditionPaymentDelivery.key == 1">Минимальная общая сумма заказа в ₽</p>
                             <p v-if="this.form.conditionPaymentDelivery.key == 2">Минимальное количество товаров в шт
                             </p>
-                            <input
+                            <!-- <input
                                 v-if="this.form.conditionPaymentDelivery.key == 1 || this.form.conditionPaymentDelivery.key == 2"
                                 v-model="this.form.conditionPaymentDeliveryValue" type="text" name="description"
-                                class="dart-form-control" />
+                                class="dart-form-control" /> -->
+
+                            <InputNumber 
+                                v-if="this.form.conditionPaymentDelivery.key == 1 || this.form.conditionPaymentDelivery.key == 2"
+                                v-model="this.form.conditionPaymentDeliveryValue" inputId="horizontal-buttons" :step="0.1"
+                                min="0" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" />
                         </div>
                     </div>
                 </div>
@@ -338,10 +343,14 @@
                         <div class="kenost-wiget">
                             <p v-if="this.form.postponementConditions.key == 1">Минимальная общая сумма заказа в ₽</p>
                             <p v-if="this.form.postponementConditions.key == 2">Минимальное количество товаров в шт</p>
-                            <input
+                            <!-- <input
                                 v-if="this.form.postponementConditions.key == 1 || this.form.postponementConditions.key == 2"
                                 v-model="this.form.postponementConditionsValue" type="text" name="description"
-                                class="dart-form-control" />
+                                class="dart-form-control" /> -->
+                            <InputNumber 
+                                v-if="this.form.postponementConditions.key == 1 || this.form.postponementConditions.key == 2"
+                                v-model="this.form.postponementConditionsValue" inputId="horizontal-buttons" :step="0.1"
+                                min="0" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" />
                         </div>
                     </div>
                 </div>
