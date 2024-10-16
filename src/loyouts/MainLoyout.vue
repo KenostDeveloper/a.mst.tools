@@ -44,13 +44,12 @@
                         :lifetime="10000"
                         @delete="deleteNotification(index)" /> -->
                 <!-- </div> -->
-
                 <router-link v-if="this.$route.params.id"
                     :to="{ name: 'purchases_notifications', params: { id: this.$route.params.id } }"
                     class="std-notification-button absolute">
                     <i class="std_icon std_icon-notification"></i>
-                    <div v-if="this.notifications_all.no_read > 0" class="std-notification-button__badge">+{{
-                        this.notifications_all.no_read }}</div>
+                    <div v-if="this.notifications_all.no_read > 0" class="std-notification-button__badge">+{{this.notifications_all.no_read }}</div>
+                    <!-- {{ this.$route.params }} -->
                 </router-link>
                 <router-view> </router-view>
             </div>
