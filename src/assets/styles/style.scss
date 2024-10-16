@@ -6191,6 +6191,79 @@ button.std-icon__wrapper {
 		}
 	}
 }
+
+.std-statistics-table {
+	&--align {
+		:is(th, td) {
+			&:nth-child(1) {
+				&,
+				& > div {
+					width: 75px;
+				}
+			}
+			&:nth-child(2) {
+				&,
+				& > div {
+					width: 120px;
+				}
+			}
+			&:nth-child(3) {
+				&,
+				& > div {
+					width: 200px;
+				}
+			}
+			&:nth-child(4) {
+				&,
+				& > div {
+					width: 110px;
+				}
+			}
+			&:nth-child(5) {
+				&,
+                & > div {
+                    width: 110px;
+                }
+			}
+			&:nth-child(6) {
+				&,
+				& > div {
+					width: 110px;
+				}
+			}
+			&:nth-child(7) {
+				&,
+				& > div {
+					width: 180px;
+				}
+			}
+			&:nth-child(8) {
+				&,
+				& > div {
+					width: 160px;
+				}
+			}
+			&:nth-child(9) {
+				&,
+				& > div {
+					width: 220px;
+				}
+			}
+			&:nth-child(10) {
+				&,
+				& > div {
+					width: 130px;
+				}
+			}
+			&:nth-child(11) {
+				&,
+				& > div {
+					width: 180px;
+				}
+			}
+		}
+	}
+}
 // /Steiden
 
 .p-fileupload-buttonbar {

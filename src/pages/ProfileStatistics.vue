@@ -32,7 +32,7 @@
 				@sort="filter"
 				@paginate="paginate"
 				title="Статистика"
-				class="widget_table std-statistics__table"
+				class="widget_table std-statistics__table std-statistics-table--align"
 			>
 				<template v-slot:desc>
 					<div class="mst-alert mst-alert-info mb-2 mt-2">

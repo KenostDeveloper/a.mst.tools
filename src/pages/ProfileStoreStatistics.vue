@@ -19,7 +19,7 @@
                 @sort="filter"
                 @paginate="paginate"
                 title="Статистика"
-                class="widget_table"
+                class="widget_table std-statistics-table--align"
             >
                 <template v-slot:desc>
                 <div class="mst-alert mst-alert-info mb-2 mt-3">Параметр <b>«Дней с Out Of Stock»</b> расчитывается за последний календарный месяц.<br/>Фильтры <b>«Категория товара»</b> и <b>«Производитель»</b> работает только с теми остатками, с которыми произошло сопоставление с карточками товаров из нашего справочника.</div>
