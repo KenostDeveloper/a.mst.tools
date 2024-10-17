@@ -338,9 +338,9 @@
 						</div>
 					</div>
 					<div class="flex-left mt-2">
-						<div class="dart-btn dart-btn-secondary flex align-items-center kenost-add-button"
+						<div class="dart-btn dart-btn-secondary"
 							@click="addBankRequisitEdit()">
-							<i class="pi pi-plus"></i> Добавить банковские реквизиты
+							<i class="pi pi-plus"></i> <span>Добавить банковские реквизиты</span>
 						</div>
 					</div>
 				</div>

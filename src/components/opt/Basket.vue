@@ -19,7 +19,7 @@
 				</div>
 
 				<div class="std-basket__warehouse-wrapper" v-if="this.basket?.warehouses?.length > 0">
-					<span class="std-basket__warehouse-title">Склад для доставки заказа:</span>
+					<span class="std-basket__warehouse-title">Адрес доставки заказа:</span>
 					<div class="std-basket__warehouse-container">
 						<div @click="setWarehouse(warehous.id)" v-for="warehous in this.basket?.warehouses" v-bind:key="warehous.id" class="std-basket__warehouse" :class="{'std-basket__warehouse--active' : warehouse_basket == warehous.id}">
 							«{{warehous.name_short}}», {{ warehous.address_short }}
