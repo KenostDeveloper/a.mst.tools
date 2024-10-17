@@ -245,30 +245,31 @@
             </div>
         </div>
 
-        <button class="std-nav__button std-catalog-button" @click="() => toggleCatalogVisibilityAd(true)">
-            Каталог
-            <!-- <i class="pi pi-bars std-catalog-button__icon hidden-mobile-l"></i> -->
-            <!-- <i class="pi pi-angle-down std-catalog-button__icon visible-mobile-l"></i> -->
-            <img src="/images/icons/menu.svg" alt="" class="hidden-tablet-l" />
-            <img src="/images/icons/arrow-rounded.svg" alt="" class="visible-tablet-l" />
-        </button>
-
-        <div class="std-nav__address-wrapper" v-if="opt_vendors.selected_count > 0">
-            <button class="std-nav__address" @click.stop="() => (this.showWarehouseList = !this.showWarehouseList)">
-                <img class="std-nav__address-icon" src="/images/icons/map_marker.svg" />
-                <span class="std-nav__address-text">
-                    <span>Адрес доставки:</span><br />
-                    «{{ org_stores?.items?.find((el) => el.id == warehouse_basket)?.name_short }}»,
-                    {{ org_stores?.items?.find((el) => el.id == warehouse_basket)?.address_short }}
-                </span>
+        <div class="std-nav__left">
+            <button class="std-nav__button std-catalog-button" @click="() => toggleCatalogVisibilityAd(true)">
+                Каталог
+                <!-- <i class="pi pi-bars std-catalog-button__icon hidden-mobile-l"></i> -->
+                <!-- <i class="pi pi-angle-down std-catalog-button__icon visible-mobile-l"></i> -->
+                <img src="/images/icons/menu.svg" alt="" class="hidden-tablet-l" />
+                <img src="/images/icons/arrow-rounded.svg" alt="" class="visible-tablet-l" />
             </button>
-            <ul class="std-nav__warehouse-list" :class="{ ['std-nav__warehouse-list--active']: this.showWarehouseList }"
-                @click.stop>
-                <li v-for="warehous in org_stores.items" v-bind:key="warehous.id" @click="setWarehouse(warehous.id)"
-                    class="std-nav__warehouse-item">
-                    «{{ warehous.name_short }}», {{ warehous.address_short }}
-                </li>
-            </ul>
+            <div class="std-nav__address-wrapper" v-if="opt_vendors.selected_count > 0">
+                <button class="std-nav__address" @click.stop="() => (this.showWarehouseList = !this.showWarehouseList)">
+                    <img class="std-nav__address-icon" src="/images/icons/map_marker.svg" />
+                    <span class="std-nav__address-text">
+                        <span>Адрес доставки:</span><br />
+                        «{{ org_stores?.items?.find((el) => el.id == warehouse_basket)?.name_short }}»,
+                        {{ org_stores?.items?.find((el) => el.id == warehouse_basket)?.address_short }}
+                    </span>
+                </button>
+                <ul class="std-nav__warehouse-list" :class="{ ['std-nav__warehouse-list--active']: this.showWarehouseList }"
+                    @click.stop>
+                    <li v-for="warehous in org_stores.items" v-bind:key="warehous.id" @click="setWarehouse(warehous.id)"
+                        class="std-nav__warehouse-item">
+                        «{{ warehous.name_short }}», {{ warehous.address_short }}
+                    </li>
+                </ul>
+            </div>
         </div>
 
         <div v-if="opt_vendors.selected_count > 0"
@@ -319,50 +320,51 @@
 			Потребности
 		</button> -->
 
-        <button class="a-dart-btn a-dart-btn-secondary kenost-vendors" @click="changeActive">
-            <!-- <i class="mst-icon mst-icon-my_vendors kenost-vendors__icon"></i> -->
-            <span class="std-icon">
-                <svg width="24" height="21" viewBox="0 0 24 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M21.4605 9.09682L14.3999 13.1721C14.3061 13.2263 14.2025 13.2613 14.095 13.2753C13.9876 13.2892 13.8785 13.2818 13.7739 13.2535C13.6694 13.2251 13.5715 13.1764 13.4858 13.1101C13.4002 13.0438 13.3284 12.9612 13.2748 12.8671L9.19447 5.81155C9.08625 5.62097 9.05758 5.39539 9.11469 5.1838C9.1718 4.97221 9.31008 4.7917 9.49949 4.68146L16.5601 0.606125C16.7499 0.498226 16.9747 0.469741 17.1854 0.526878C17.3962 0.584014 17.5758 0.722141 17.6852 0.91115L21.7605 7.96672C21.8151 8.0606 21.8506 8.16433 21.8651 8.27196C21.8795 8.37959 21.8727 8.48901 21.8448 8.59397C21.8169 8.69894 21.7686 8.79737 21.7027 8.88366C21.6367 8.96994 21.5544 9.04237 21.4605 9.09682Z"
-                        fill="#282828" />
-                    <path
-                        d="M23.8579 9.71578C23.7173 9.47211 23.4855 9.2943 23.2138 9.22147C22.942 9.14864 22.6524 9.18675 22.4087 9.32742L13.5472 14.4438L5.61443 0.70349C5.52557 0.549621 5.39949 0.420528 5.24777 0.328056C5.09605 0.235583 4.92353 0.182691 4.74605 0.174232L1.10956 0.00111809C0.828791 -0.0117759 0.554383 0.0872713 0.346578 0.276514C0.138773 0.465756 0.0145568 0.729727 0.00119985 1.01047C-0.0121571 1.29121 0.0864374 1.56579 0.275337 1.7739C0.464237 1.98202 0.728002 2.10667 1.00872 2.12049L4.06647 2.266L11.6159 15.3424C12.1989 14.9012 12.9275 14.6975 13.6547 14.7725C14.3819 14.8476 15.0536 15.1957 15.5342 15.7466L23.4696 11.165C23.7132 11.0243 23.891 10.7926 23.9638 10.5208C24.0367 10.249 23.9986 9.95947 23.8579 9.71578Z"
-                        fill="#282828" />
-                    <path
-                        d="M13.3541 20.093C14.6974 20.093 15.7864 19.0041 15.7864 17.6608C15.7864 16.3175 14.6974 15.2285 13.3541 15.2285C12.0108 15.2285 10.9219 16.3175 10.9219 17.6608C10.9219 19.0041 12.0108 20.093 13.3541 20.093Z"
-                        fill="#282828" />
-                </svg>
-            </span>
-            <span class="kenost-vendors__span">{{ this.opt_vendors.selected_count }} из {{
-                this.opt_vendors.available_count
-                }}</span>
-            <i class="pi pi-angle-down"></i>
-            <div class="kenost-vendors__list">
-                <span>Выбранные поставщики</span>
-                <div class="kenost-vendors__images">
-                    <div class="k-order__actions" v-if="this.opt_vendors.selected_count > 0">
-                        <div class="k-actions" v-for="action in this.opt_vendors.selected" v-bind:key="action.id">
-                            <img class="k-order__actions-el" :src="action.image" />
+        <div class="std-nav__right">
+            <button class="a-dart-btn a-dart-btn-secondary kenost-vendors" @click="changeActive">
+                <!-- <i class="mst-icon mst-icon-my_vendors kenost-vendors__icon"></i> -->
+                <span class="std-icon">
+                    <svg width="24" height="21" viewBox="0 0 24 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M21.4605 9.09682L14.3999 13.1721C14.3061 13.2263 14.2025 13.2613 14.095 13.2753C13.9876 13.2892 13.8785 13.2818 13.7739 13.2535C13.6694 13.2251 13.5715 13.1764 13.4858 13.1101C13.4002 13.0438 13.3284 12.9612 13.2748 12.8671L9.19447 5.81155C9.08625 5.62097 9.05758 5.39539 9.11469 5.1838C9.1718 4.97221 9.31008 4.7917 9.49949 4.68146L16.5601 0.606125C16.7499 0.498226 16.9747 0.469741 17.1854 0.526878C17.3962 0.584014 17.5758 0.722141 17.6852 0.91115L21.7605 7.96672C21.8151 8.0606 21.8506 8.16433 21.8651 8.27196C21.8795 8.37959 21.8727 8.48901 21.8448 8.59397C21.8169 8.69894 21.7686 8.79737 21.7027 8.88366C21.6367 8.96994 21.5544 9.04237 21.4605 9.09682Z"
+                            fill="#282828" />
+                        <path
+                            d="M23.8579 9.71578C23.7173 9.47211 23.4855 9.2943 23.2138 9.22147C22.942 9.14864 22.6524 9.18675 22.4087 9.32742L13.5472 14.4438L5.61443 0.70349C5.52557 0.549621 5.39949 0.420528 5.24777 0.328056C5.09605 0.235583 4.92353 0.182691 4.74605 0.174232L1.10956 0.00111809C0.828791 -0.0117759 0.554383 0.0872713 0.346578 0.276514C0.138773 0.465756 0.0145568 0.729727 0.00119985 1.01047C-0.0121571 1.29121 0.0864374 1.56579 0.275337 1.7739C0.464237 1.98202 0.728002 2.10667 1.00872 2.12049L4.06647 2.266L11.6159 15.3424C12.1989 14.9012 12.9275 14.6975 13.6547 14.7725C14.3819 14.8476 15.0536 15.1957 15.5342 15.7466L23.4696 11.165C23.7132 11.0243 23.891 10.7926 23.9638 10.5208C24.0367 10.249 23.9986 9.95947 23.8579 9.71578Z"
+                            fill="#282828" />
+                        <path
+                            d="M13.3541 20.093C14.6974 20.093 15.7864 19.0041 15.7864 17.6608C15.7864 16.3175 14.6974 15.2285 13.3541 15.2285C12.0108 15.2285 10.9219 16.3175 10.9219 17.6608C10.9219 19.0041 12.0108 20.093 13.3541 20.093Z"
+                            fill="#282828" />
+                    </svg>
+                </span>
+                <span class="kenost-vendors__span">{{ this.opt_vendors.selected_count }} из {{
+                    this.opt_vendors.available_count
+                    }}</span>
+                <i class="pi pi-angle-down"></i>
+                <div class="kenost-vendors__list">
+                    <span>Выбранные поставщики</span>
+                    <div class="kenost-vendors__images">
+                        <div class="k-order__actions" v-if="this.opt_vendors.selected_count > 0">
+                            <div class="k-actions" v-for="action in this.opt_vendors.selected" v-bind:key="action.id">
+                                <img class="k-order__actions-el" :src="action.image" />
+                            </div>
                         </div>
-                    </div>
-                    <div class="k-order__actions" v-if="this.opt_vendors.selected_count > 6">
-                        <div class="k-actions" v-for="(action, index) in opt_vendors.selected" v-bind:key="action.id">
-                            <img v-if="index > 6 && index < 12" class="k-order__actions-el" :src="action.image" />
+                        <div class="k-order__actions" v-if="this.opt_vendors.selected_count > 6">
+                            <div class="k-actions" v-for="(action, index) in opt_vendors.selected" v-bind:key="action.id">
+                                <img v-if="index > 6 && index < 12" class="k-order__actions-el" :src="action.image" />
+                            </div>
                         </div>
-                    </div>
-                    <div class="k-order__actions" v-if="this.opt_vendors.selected_count > 12">
-                        <div class="k-actions" v-for="(action, index) in opt_vendors.selected" v-bind:key="action.id">
-                            <img v-if="index > 12 && index < 18" class="k-order__actions-el" :src="action.image" />
+                        <div class="k-order__actions" v-if="this.opt_vendors.selected_count > 12">
+                            <div class="k-actions" v-for="(action, index) in opt_vendors.selected" v-bind:key="action.id">
+                                <img v-if="index > 12 && index < 18" class="k-order__actions-el" :src="action.image" />
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </button>
-        <Vendors @changeActive="changeActive" @vendorCheck="vendorCheck" :vendorModal="this.vendorModal"
-            :items="this.opt_vendors" />
-
-        <NotificationButton />
+            </button>
+            <Vendors @changeActive="changeActive" @vendorCheck="vendorCheck" :vendorModal="this.vendorModal"
+                :items="this.opt_vendors" />
+            <NotificationButton />
+        </div>
 
         <!-- <a href="#" class="navmain__components_desctop a-dart-btn">
             <i class="pi pi-sliders-h"></i>

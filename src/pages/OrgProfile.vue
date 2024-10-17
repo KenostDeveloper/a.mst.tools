@@ -53,8 +53,8 @@
 							files,
 						}">
 							<img @click="chooseCallback()" class="org-upload-img" :src="orgprofile.upload_image
-									? this.orgprofile.image.original_href
-									: this.orgprofile.image
+								? this.orgprofile.image.original_href
+								: this.orgprofile.image
 								" alt="" />
 							<i class="pi pi-upload"></i>
 						</template>
@@ -252,15 +252,17 @@
 			<form @submit.prevent="addRequisit">
 				<div>
 					<div class="kenost-form-grid">
-						<div class="form_input_group w-50" :class="{ error: v$.new_requisit[field.name].$invalid }"
-							v-for="(field, index) in form.requisit" :key="index">
+						<div class="form_input_group w-50" :class="{ error: v$.new_requisit[field.name].$errors.length }"
+							:name="field.name" v-for="(field, index) in form.requisit" :key="index">
 							<label for="">{{ field.label }}</label>
 							<input type="text" v-model="this.new_requisit[field.name]" class="dart-form-control"
-								:name="field.name" :placeholder="field.placeholder" />
+								:placeholder="field.placeholder" />
 
-							<span v-for="error of v$.new_requisit[field.name].$silentErrors" class="error_desc">
-								{{ error.$message }}
-							</span>
+							<div class="error__desc">
+								<span v-for="error of v$.new_requisit[field.name].$errors">
+									{{ error.$message }}
+								</span>
+							</div>
 						</div>
 					</div>
 					<div class="flex align-items-center mb-3 gap-1">
@@ -278,24 +280,33 @@
 							</div>
 						</div>
 						<div class="kenost-form-grid mb-3">
-							<div class="form_input_group w-50" v-for="(field, index_field) in this.form.bank"
-								:key="index_req + '_' + index_field">
+							<div class="form_input_group w-50"
+								v-for="(field, index_field) in this.form.bank" :key="index_req + '_' + index_field"
+								:class="{ error: v$.new_requisit.banks.$each.$response.$errors[index_field]?.[field.name].length }">
 								<label for="">{{ field.label }}</label>
 								<input type="text" v-model="bank[field.name]" class="dart-form-control"
 									:name="field.name" :placeholder="field.placeholder" />
+								{{ console.log(v$.new_requisit.banks.$each.$response.$errors[index_field], v$.new_requisit.banks.$each.$response.$errors[index_field]?.[field.name], field.name) }}
+
+								<div class="error__desc">
+									<span v-for="error of v$.new_requisit.banks.$each.$response.$errors[index_field]?.[field.name]">
+										{{ error.$message }}
+									</span>
+								</div>
 							</div>
 						</div>
 					</div>
 					<div class="flex-left mt-2">
-						<div class="dart-btn dart-btn-secondary flex align-items-center" @click="addBankRequisit()">
+						<div class="dart-btn dart-btn-secondary flex align-items-center gap-2"
+							@click="addBankRequisit()">
 							<i class="pi pi-plus"></i> Добавить банковские реквизиты
 						</div>
 					</div>
 				</div>
 				<div class="flex-right mt-2">
-					<div class="dart-btn dart-btn-primary btn-padding">
+					<button type="submit" class="dart-btn dart-btn-primary btn-padding">
 						Отправить
-					</div>
+					</button>
 				</div>
 			</form>
 		</Dialog>
@@ -308,7 +319,7 @@
 							<label for="">{{ field.label }}</label>
 							<input type="text" v-model="this.orgprofile.requisites[this.modals.requisitedit_index][
 								field.name
-								]
+							]
 								" class="dart-form-control" :name="field.name" :placeholder="field.placeholder" />
 						</div>
 					</div>
@@ -338,8 +349,7 @@
 						</div>
 					</div>
 					<div class="flex-left mt-2">
-						<div class="dart-btn dart-btn-secondary"
-							@click="addBankRequisitEdit()">
+						<div class="dart-btn dart-btn-secondary" @click="addBankRequisitEdit()">
 							<i class="pi pi-plus"></i> <span>Добавить банковские реквизиты</span>
 						</div>
 					</div>
@@ -655,10 +665,10 @@ export default {
 				});
 			});
 		},
-		addRequisit() {
-			const validationResult = this.v$.validate();
+		async addRequisit() {
+			const validationResult = await this.v$.$validate();
+			console.log("Validation result", validationResult);
 			if (!validationResult) {
-				console.log("Validation falied");
 				return;
 			}
 
@@ -792,35 +802,39 @@ export default {
 	validations() {
 		return {
 			new_requisit: {
-				name: helpers.withMessage("Заполните наименование юр. лица", () => this.new_requisit.name != ""),
+				name: {
+					required: helpers.withMessage("Заполните наименование юр. лица", required),
+				},
 				inn: {
-					required: helpers.withMessage("Заполните ИНН", () => this.new_requisit.inn != ""),
-					pattern: helpers.withMessage("Некорректный ИНН", () => this.new_requisit.inn.match(/^[0-9]{10,12}$/)),
+					pattern: helpers.withMessage("ИНН должен содержать 10 или 12 цифр", (value) => /^[0-9]{10}$|^[0-9]{12}$/.test(value)),
 				},
 				ogrn: {
-					required: helpers.withMessage("Заполните ОГРН", () => this.new_requisit.ogrn != ""),
-					pattern: helpers.withMessage("Некорректный ОГРН", () => this.new_requisit.ogrn.match(/^[0-9]{13}$/)),
+					pattern: helpers.withMessage("ОГРН должен содержать 13 цифр", (value) => /^[0-9]{13}$/.test(value)),
 				},
 				kpp: {
-					required: helpers.withMessage("Заполните КПП", () => this.new_requisit.kpp != ""),
-					pattern: helpers.withMessage("Некорректный КПП", () => this.new_requisit.kpp.match(/^[0-9]{9}$/)),
+					pattern: helpers.withMessage("КПП должен содержать 9 цифр", (value) => /^[0-9]{9}$/.test(value)),
 				},
-				ur_address: helpers.withMessage("Заполните юридический адрес", () => this.new_requisit.ur_address != ""),
-				fact_address: helpers.withMessage("Заполните фактический адрес", () => this.new_requisit.fact_address != ""),
+				ur_address: {
+					required: helpers.withMessage("Заполните юридический адрес", required),
+				},
+				fact_address: {
+					required: helpers.withMessage("Заполните фактический адрес", required),
+				},
 				banks: {
-					bank_bik: {
-						required: helpers.withMessage("Заполните БИК", () => this.new_requisit.banks.bank_bik != ""),
-						pattern: helpers.withMessage("Некорректный БИК", () => this.new_requisit.banks.bank_bik.match(/^[0-9]{9}$/)),
-					},
-					bank_name: helpers.withMessage("Заполните название банка", () => this.new_requisit.banks.bank_name != ""),
-					bank_number: {
-						required: helpers.withMessage("Заполните расчетный счета", () => this.new_requisit.banks.bank_number != ""),
-						pattern: helpers.withMessage("Некорректный расчетный счета", () => this.new_requisit.banks.bank_number.match(/^[0-9]{20}$/)),
-					},
-					bank_knumber: {
-						required: helpers.withMessage("Заполните К/С", () => this.new_requisit.banks.bank_knumber != ""),
-						pattern: helpers.withMessage("Некорректный К/С", () => this.new_requisit.banks.bank_knumber.match(/^[0-9]{20}$/)),
-					}
+					$each: helpers.forEach({
+						bank_bik: {
+							pattern: helpers.withMessage("БИК должен содержать 9 цифр", (value) => /^[0-9]{9}$/.test(value)),
+						},
+						bank_name: {
+							required: helpers.withMessage("Заполните название банка", required),
+						},
+						bank_number: {
+							pattern: helpers.withMessage("Расчетный счет должен содержать 20 цифр", (value) => /^[0-9]{20}$/.test(value)),
+						},
+						bank_knumber: {
+							pattern: helpers.withMessage("К/С должен содержать 20 цифр", (value) => /^[0-9]{20}$/.test(value)),
+						}
+					})
 				}
 			},
 		}

@@ -2175,7 +2175,7 @@ img {
 }
 
 .form_input_group.error label {
-	color: #f00;
+	// color: #f00;
 }
 
 .form_input_group.error .error-desc {
@@ -3812,6 +3812,24 @@ p {
 		font-size: 20px;
 		font-weight: 500;
 		line-height: 1;
+	}
+
+	&__left {
+		display: flex;
+		align-items: center;
+
+		.std-catalog-button {
+			margin-right: 25px;
+		}
+	}
+
+	&__right {
+		display: flex;
+		align-items: center;
+
+		.kenost-vendors {
+			margin-right: 28px;
+		}
 	}
 }
 
@@ -5734,6 +5752,27 @@ button.std-icon__wrapper {
 
 		:is(.p-inputtext) {
 			border: none;
+		}
+	}
+
+	&--input {
+		border: 1px solid #f00 !important;
+	}
+
+	&__desc {
+		display: flex;
+		flex-direction: column;
+		gap: 3px;
+
+		margin-top: 4px;
+		height: 14px;
+
+		// position: absolute;
+		// top: 100%;
+		
+		span {
+			color: #f00;
+			font-size: 13px !important;
 		}
 	}
 }
