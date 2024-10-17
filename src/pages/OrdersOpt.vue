@@ -94,7 +94,7 @@ export default {
           },
           sort: true
         },
-        customer: {
+        buyer: {
           label: 'Покупатель',
           type: 'link',
           link_to: 'my_orders_opt_id',
@@ -145,7 +145,7 @@ export default {
             order_id: 'id'
           }
         },
-				buyer_name: {
+				seller: {
           label: 'Магазин/Склад',
           type: 'link',
           link_to: 'my_orders_opt_id',
