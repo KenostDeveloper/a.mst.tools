@@ -5826,6 +5826,11 @@ button.std-icon__wrapper {
 		}
 		&__modal-content {
 		}
+		&__modal-content-inner {
+			display: flex;
+			flex-direction: column;
+			padding: 12px 25px;
+		}
 		&__modal-title {
 			font-size: 14px !important;
 			font-weight: 500 !important;
@@ -5837,12 +5842,12 @@ button.std-icon__wrapper {
 		&__modal-elems-container {
 			display: flex;
 			flex-direction: column;
-			// gap: 34px;
+			gap: 34px;
+			width: 100%;
 		}
 		&__modal-elems-wrapper {
 			display: flex;
-			flex-direction: column;
-			padding: 12px 25px;
+			gap: 16px;
 		}
 		&__modal-img {
 			width: 100%;
@@ -5899,7 +5904,8 @@ button.std-icon__wrapper {
 
 		&__modal-btn-container {
 			margin: 0;
-			margin-top: 34px;
+			margin-inline: auto;
+			// margin-top: 34px;
 		}
 		&__modal-btn {
 			color: #fff !important;
