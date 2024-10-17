@@ -22,7 +22,7 @@
                 <div class="k-order__orders" v-if="this.basket.basket">
                     <div v-for="(warehouse, key) in this.basket.basket" v-bind:key="warehouse.id">
                         <div class="k-order__order" v-for="store in warehouse.stores" v-bind:key="store.id">
-                            <h3>Склад: «{{ this.basket.warehouses.find((el) => el.id == key).name_short }}», {{ this.basket.warehouses.find((el) => el.id == key).address_short }}</h3>
+                            <h3>Адрес доставки: «{{ this.basket.warehouses.find((el) => el.id == key).name_short }}», {{ this.basket.warehouses.find((el) => el.id == key).address_short }}</h3>
                             <div class="k-order__shop">
                                 <!-- <img src="../../assets/img/ava.png" alt=""> -->
                                 <p :style="{'background': store.color}">{{store.name}}</p>
