@@ -252,14 +252,15 @@
 			<form @submit.prevent="addRequisit">
 				<div>
 					<div class="kenost-form-grid">
-						<div class="form_input_group w-50" :class="{ error: v$.new_requisit[field.name].$errors.length }"
-							:name="field.name" v-for="(field, index) in form.requisit" :key="index">
+						<div class="form_input_group w-50"
+							:class="{ error: vAddRequisites.new_requisit[field.name].$errors.length }" :name="field.name"
+							v-for="(field, index) in form.requisit" :key="index">
 							<label for="">{{ field.label }}</label>
 							<input type="text" v-model="this.new_requisit[field.name]" class="dart-form-control"
 								:placeholder="field.placeholder" />
 
 							<div class="error__desc">
-								<span v-for="error of v$.new_requisit[field.name].$errors">
+								<span v-for="error of vAddRequisites.new_requisit[field.name].$errors">
 									{{ error.$message }}
 								</span>
 							</div>
@@ -280,16 +281,16 @@
 							</div>
 						</div>
 						<div class="kenost-form-grid mb-3">
-							<div class="form_input_group w-50"
-								v-for="(field, index_field) in this.form.bank" :key="index_req + '_' + index_field"
-								:class="{ error: v$.new_requisit.banks.$each.$response.$errors[index_field]?.[field.name].length }">
+							<div class="form_input_group w-50" v-for="(field, index_field) in this.form.bank"
+								:key="index_req + '_' + index_field"
+								:class="{ error: vAddRequisites.new_requisit.banks.$each.$response.$errors?.[index_req]?.[field.name].length }">
 								<label for="">{{ field.label }}</label>
 								<input type="text" v-model="bank[field.name]" class="dart-form-control"
 									:name="field.name" :placeholder="field.placeholder" />
-								{{ console.log(v$.new_requisit.banks.$each.$response.$errors[index_field], v$.new_requisit.banks.$each.$response.$errors[index_field]?.[field.name], field.name) }}
 
 								<div class="error__desc">
-									<span v-for="error of v$.new_requisit.banks.$each.$response.$errors[index_field]?.[field.name]">
+									<span
+										v-for="error of vAddRequisites.new_requisit.banks.$each.$response.$errors?.[index_req]?.[field.name]">
 										{{ error.$message }}
 									</span>
 								</div>
@@ -297,10 +298,10 @@
 						</div>
 					</div>
 					<div class="flex-left mt-2">
-						<div class="dart-btn dart-btn-secondary flex align-items-center gap-2"
+						<button type="button" class="dart-btn dart-btn-secondary flex align-items-center gap-2"
 							@click="addBankRequisit()">
 							<i class="pi pi-plus"></i> Добавить банковские реквизиты
-						</div>
+						</button>
 					</div>
 				</div>
 				<div class="flex-right mt-2">
@@ -315,12 +316,21 @@
 			<form @submit.prevent="editRequisit">
 				<div>
 					<div class="kenost-form-grid">
-						<div class="form_input_group w-50" v-for="(field, index) in form.requisit" :key="index">
+						<div class="form_input_group w-50" v-for="(field, index) in form.requisit"
+							:class="{ error: vEditRequisites.orgprofile.requisites.$each.$response.$errors[this.modals.requisitedit_index]?.[field.name]?.length }"
+							:key="index">
 							<label for="">{{ field.label }}</label>
 							<input type="text" v-model="this.orgprofile.requisites[this.modals.requisitedit_index][
 								field.name
 							]
 								" class="dart-form-control" :name="field.name" :placeholder="field.placeholder" />
+
+							<div class="error__desc">
+								<span
+									v-for="error of vEditRequisites.orgprofile.requisites.$each.$response.$errors[this.modals.requisitedit_index]?.[field.name]">
+									{{ error.$message }}
+								</span>
+							</div>
 						</div>
 					</div>
 					<div class="flex align-items-center mb-3 gap-1">
@@ -341,23 +351,32 @@
 						</div>
 						<div class="kenost-form-grid mb-3">
 							<div class="form_input_group w-50" v-for="(field, index_field) in this.form.bank"
+								:class="{ error: vEditRequisites.orgprofile.requisites.$each.$response.$errors[this.modals.requisitedit_index]?.banks[this.modals.requisitedit_index]?.$response.$errors[index_req][field.name]?.length }"
 								:key="index_req + '_' + index_field">
 								<label for="">{{ field.label }}</label>
 								<input type="text" v-model="bank[field.name]" class="dart-form-control"
 									:name="field.name" :placeholder="field.placeholder" />
+
+
+								<div class="error__desc">
+									<span
+										v-for="error of vEditRequisites.orgprofile.requisites.$each.$response.$errors[this.modals.requisitedit_index]?.banks[this.modals.requisitedit_index]?.$response.$errors[index_req][field.name]">
+										{{ error.$message }}
+									</span>
+								</div>
 							</div>
 						</div>
 					</div>
 					<div class="flex-left mt-2">
-						<div class="dart-btn dart-btn-secondary" @click="addBankRequisitEdit()">
+						<button type="button" class="dart-btn dart-btn-secondary" @click="addBankRequisitEdit()">
 							<i class="pi pi-plus"></i> <span>Добавить банковские реквизиты</span>
-						</div>
+						</button>
 					</div>
 				</div>
 				<div class="flex-right mt-2">
-					<div class="dart-btn dart-btn-primary btn-padding">
+					<button type="submit" class="dart-btn dart-btn-primary btn-padding">
 						Отправить
-					</div>
+					</button>
 				</div>
 			</form>
 		</Dialog>
@@ -396,6 +415,7 @@ import Dialog from "primevue/dialog";
 import Accordion from "../components/Accordion.vue";
 import useVuelidate from "@vuelidate/core";
 import { helpers, required } from "@vuelidate/validators";
+import { ref } from "vue";
 // import Accordion from 'primevue/accordion'
 // import AccordionTab from 'primevue/accordiontab'
 
@@ -407,7 +427,6 @@ export default {
 			loading: false,
 			showFormModal: false,
 			typePrice: [],
-			orgprofile: [],
 			booleanValue: [
 				{
 					name: "Да",
@@ -527,21 +546,113 @@ export default {
 					],
 				},
 			},
-			new_requisit: {
-				name: "",
-				inn: "",
-				ogrn: "",
-				kpp: "",
-				ur_address: "",
-				fact_address: "",
-				marketplace: [],
-				banks: [],
-			},
+
 		};
 	},
 	setup() {
+		const addRequisitesRules = {
+			new_requisit: {
+				name: {
+					required: helpers.withMessage("Заполните наименование юр. лица", required),
+				},
+				inn: {
+					pattern: helpers.withMessage("ИНН должен содержать 10 или 12 цифр", (value) => /^[0-9]{10}$|^[0-9]{12}$/.test(value)),
+				},
+				ogrn: {
+					pattern: helpers.withMessage("ОГРН должен содержать 13 цифр", (value) => /^[0-9]{13}$/.test(value)),
+				},
+				kpp: {
+					pattern: helpers.withMessage("КПП должен содержать 9 цифр", (value) => /^[0-9]{9}$/.test(value)),
+				},
+				ur_address: {
+					required: helpers.withMessage("Заполните юридический адрес", required),
+				},
+				fact_address: {
+					required: helpers.withMessage("Заполните фактический адрес", required),
+				},
+				banks: {
+					$each: helpers.forEach({
+						bank_bik: {
+							pattern: helpers.withMessage("БИК должен содержать 9 цифр", (value) => /^[0-9]{9}$/.test(value)),
+						},
+						bank_name: {
+							required: helpers.withMessage("Заполните название банка", required),
+						},
+						bank_number: {
+							pattern: helpers.withMessage("Расчетный счет должен содержать 20 цифр", (value) => /^[0-9]{20}$/.test(value)),
+						},
+						bank_knumber: {
+							pattern: helpers.withMessage("К/С должен содержать 20 цифр", (value) => /^[0-9]{20}$/.test(value)),
+						}
+					})
+				}
+			},
+		}
+
+		const editRequisitesRules = {
+			orgprofile: {
+				requisites: {
+					$each: helpers.forEach({
+						name: {
+							required: helpers.withMessage("Заполните наименование юр. лица", required),
+						},
+						inn: {
+							pattern: helpers.withMessage("ИНН должен содержать 10 или 12 цифр", (value) => /^[0-9]{10}$|^[0-9]{12}$/.test(value)),
+						},
+						ogrn: {
+							pattern: helpers.withMessage("ОГРН должен содержать 13 цифр", (value) => /^[0-9]{13}$/.test(value)),
+						},
+						kpp: {
+							pattern: helpers.withMessage("КПП должен содержать 9 цифр", (value) => /^[0-9]{9}$/.test(value)),
+						},
+						ur_address: {
+							required: helpers.withMessage("Заполните юридический адрес", required),
+						},
+						fact_address: {
+							required: helpers.withMessage("Заполните фактический адрес", required),
+						},
+						banks: {
+							$each: helpers.forEach({
+								bank_bik: {
+									pattern: helpers.withMessage("БИК должен содержать 9 цифр", (value) => /^[0-9]{9}$/.test(value)),
+								},
+								bank_name: {
+									required: helpers.withMessage("Заполните название банка", required),
+								},
+								bank_number: {
+									pattern: helpers.withMessage("Расчетный счет должен содержать 20 цифр", (value) => /^[0-9]{20}$/.test(value)),
+								},
+								bank_knumber: {
+									pattern: helpers.withMessage("К/С должен содержать 20 цифр", (value) => /^[0-9]{20}$/.test(value)),
+								}
+							})
+						}
+					})
+				}
+			}
+		}
+
+		const new_requisit = ref({
+			name: "",
+			inn: "",
+			ogrn: "",
+			kpp: "",
+			ur_address: "",
+			fact_address: "",
+			marketplace: [],
+			banks: [],
+		});
+
+		const orgprofile = ref([]);
+
+		const vAddRequisites = useVuelidate(addRequisitesRules, new_requisit);
+		const vEditRequisites = useVuelidate(editRequisitesRules, orgprofile);
+
 		return {
-			v$: useVuelidate(),
+			vAddRequisites,
+			vEditRequisites,
+			new_requisit,
+			orgprofile
 		}
 	},
 	methods: {
@@ -637,7 +748,13 @@ export default {
 			}
 			this.orgprofile.requisites[this.modals.requisitedit_index].banks = newArray;
 		},
-		editRequisit() {
+		async editRequisit() {
+			const validationResult = await this.vEditRequisites.$validate();
+			console.log("Validation result", validationResult);
+			if (!validationResult) {
+				return;
+			}
+
 			const data = this.orgprofile.requisites[this.modals.requisitedit_index];
 			data.org_name = this.orgprofile.name;
 			if (data.marketplace.length > 0 && data.marketplace !== false) {
@@ -666,7 +783,7 @@ export default {
 			});
 		},
 		async addRequisit() {
-			const validationResult = await this.v$.$validate();
+			const validationResult = await this.vAddRequisites.$validate();
 			console.log("Validation result", validationResult);
 			if (!validationResult) {
 				return;
@@ -799,46 +916,6 @@ export default {
 			this.orgprofile = newVal;
 		},
 	},
-	validations() {
-		return {
-			new_requisit: {
-				name: {
-					required: helpers.withMessage("Заполните наименование юр. лица", required),
-				},
-				inn: {
-					pattern: helpers.withMessage("ИНН должен содержать 10 или 12 цифр", (value) => /^[0-9]{10}$|^[0-9]{12}$/.test(value)),
-				},
-				ogrn: {
-					pattern: helpers.withMessage("ОГРН должен содержать 13 цифр", (value) => /^[0-9]{13}$/.test(value)),
-				},
-				kpp: {
-					pattern: helpers.withMessage("КПП должен содержать 9 цифр", (value) => /^[0-9]{9}$/.test(value)),
-				},
-				ur_address: {
-					required: helpers.withMessage("Заполните юридический адрес", required),
-				},
-				fact_address: {
-					required: helpers.withMessage("Заполните фактический адрес", required),
-				},
-				banks: {
-					$each: helpers.forEach({
-						bank_bik: {
-							pattern: helpers.withMessage("БИК должен содержать 9 цифр", (value) => /^[0-9]{9}$/.test(value)),
-						},
-						bank_name: {
-							required: helpers.withMessage("Заполните название банка", required),
-						},
-						bank_number: {
-							pattern: helpers.withMessage("Расчетный счет должен содержать 20 цифр", (value) => /^[0-9]{20}$/.test(value)),
-						},
-						bank_knumber: {
-							pattern: helpers.withMessage("К/С должен содержать 20 цифр", (value) => /^[0-9]{20}$/.test(value)),
-						}
-					})
-				}
-			},
-		}
-	}
 };
 </script>
 

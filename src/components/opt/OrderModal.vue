@@ -309,9 +309,9 @@ export default {
       this.order = false
       this.$emit('fromOrder')
     },
-    orderSubmit ($storeId) {
+    async orderSubmit ($storeId) {
       const data = { action: 'order/opt/submit', id: router.currentRoute._value.params.id, store_id: $storeId }
-      this.order = this.opt_order_api(data).then((response) => {
+      this.order = await this.opt_order_api(data).then((response) => {
         this.$emit('orderSubmit', response.data?.data?.data[0]?.id)
 
         

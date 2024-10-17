@@ -6302,6 +6302,22 @@ button.std-icon__wrapper {
 		}
 	}
 }
+
+.k-order {
+	&__content {
+		position: relative;
+	}
+
+	&__title {
+		padding-right: 30px;
+	}
+
+	&__close {
+		position: absolute;
+		top: 60px;
+		right: 32px;
+	}
+}
 // /Steiden
 
 .p-fileupload-buttonbar {
