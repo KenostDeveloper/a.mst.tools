@@ -747,7 +747,7 @@ export default {
         })
         this.opt_get_prices({
             action: 'get/type/prices',
-            store_id: this.form.store_id
+            store_id: [router.currentRoute._value.params.store_id]
         }).then(() => {
             this.get_actions_discount_api({
                 action: 'get/individual',
@@ -1443,14 +1443,15 @@ export default {
                 if (newVal.type_all_sale != null) {
                     this.kenostActivity = {
                         type: this.massActionAll[newVal.type_all_sale],
-                        typePrice: this.typePrice[(newVal.type_price).toString()],
+
+                        typePrice: this.typePrice.find(item => item.key === newVal.type_price),
                         value: newVal.all_sale_value,
                         typeFormul: this.typeFormul[newVal.type_all_sale_symbol]
                     }
 
-                    console.log("ddd", newVal.type_all_sale)
+                    console.log("type_price", newVal.type_price)
 
-                    console.log(this.kenostActivity)
+                    console.log(this.typePrice)
                 }
 
                 const data = {
