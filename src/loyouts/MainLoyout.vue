@@ -185,7 +185,8 @@ export default {
                 routeName == 'org_action_add' || routeName == 'org_sales_add' ||
                 routeName == 'discounts_edit' || routeName == 'org_sales_edit' ||
                 routeName == 'org_action_edit' || routeName == 'complect_add' ||
-                routeName == 'complect_edit') {
+                routeName == 'complect_edit' || this.namePathIsNav == 'purchases' ||
+                routeName == 'purchases_notifications') {
                 return false;
             }
             return true;
