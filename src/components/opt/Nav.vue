@@ -6,11 +6,8 @@
 
             <div class="std-catalog__primary-tabs-container">
                 <div class="std-catalog__tabs">
-                    <button
-                        :class="`std-catalog__tab-item std-tab-item ${
-                            this.organizationsOrCategories === 'organizations' ? 'std-tab-item--active' : ''
-                        }`"
-                        @click="setOrganizationsOrCategories('organizations')">
+                    <button :class="`std-catalog__tab-item std-tab-item ${this.organizationsOrCategories === 'organizations' ? 'std-tab-item--active' : ''
+                        }`" @click="setOrganizationsOrCategories('organizations')">
                         <div class="std-tab-item__img-container">
                             <img src="../../assets/images/icons/org-catalog.svg" alt="" />
                         </div>
@@ -29,28 +26,20 @@
                 <hr class="std-catalog__line" />
 
                 <div class="std-catalog__nav std-catalog__nav--primary">
-                    <div
-                        v-if="this.organizationsOrCategories === 'organizations'"
-                        v-for="level1 in this.catalog_warehouse"
-                        :key="level1"
-                        @mouseenter="
-                            () => {
+                    <div v-if="this.organizationsOrCategories === 'organizations'"
+                        v-for="level1 in this.catalog_warehouse" :key="level1" @mouseenter="() => {
                                 this.catalogWarehouseParent = level1.id;
                                 setActualCatalog(level1);
                             }
-                        "
-                        class="std-catalog__tab-item std-tab-item std-tab-item--alt">
+                            " class="std-catalog__tab-item std-tab-item std-tab-item--alt">
                         <div class="std-tab-item__img-container">
                             <img :src="this.getImageSrc(level1.image)" />
                         </div>
                         <span class="std-tab-item__text">{{ level1.pagetitle }}</span>
                         <i class="d_icon d_icon-arrow std-tab-item__icon"></i>
                     </div>
-                    <div
-                        v-if="this.organizationsOrCategories === 'categories'"
-                        v-for="level1 in this.catalog"
-                        :key="level1"
-                        @mouseenter="setActualCatalog(level1)"
+                    <div v-if="this.organizationsOrCategories === 'categories'" v-for="level1 in this.catalog"
+                        :key="level1" @mouseenter="setActualCatalog(level1)"
                         class="std-catalog__tab-item std-tab-item std-tab-item--alt">
                         <div class="std-tab-item__img-container">
                             <img :src="this.getImageSrc(level1.menu_image)" />
@@ -68,71 +57,56 @@
                 </button>
 
                 <div class="std-catalog__nav std-catalog__nav--secondary">
-                    <router-link
-                        v-if="this.organizationsOrCategories === 'organizations'"
-                        :to="warehouseLink"
-                        class="std-catalog__link"
-                        @click="toggleCatalogVisibilityAd()">
+                    <router-link v-if="this.organizationsOrCategories === 'organizations'" :to="warehouseLink"
+                        class="std-catalog__link" @click="toggleCatalogVisibilityAd()">
                         <img src="/images/icons/all_products.svg" alt="" />
                         <span class="std-tab-item__text">Все товары</span>
                     </router-link>
-                    <router-link
-                        v-if="this.organizationsOrCategories === 'categories'"
-                        :to="{
-                            name: 'purchases_catalog',
-                            params: {
-                                id: this.$route.params.id,
-                                category_id: this.actualCatalog.id
-                            }
-                        }"
-                        class="std-catalog__link"
-                        @click="toggleCatalogVisibilityAd()">
+                    <router-link v-if="this.organizationsOrCategories === 'categories'" :to="{
+                        name: 'purchases_catalog',
+                        params: {
+                            id: this.$route.params.id,
+                            category_id: this.actualCatalog.id
+                        }
+                    }" class="std-catalog__link" @click="toggleCatalogVisibilityAd()">
                         <img src="/images/icons/all_products.svg" alt="" />
                         <span class="std-tab-item__text">Все товары</span>
                     </router-link>
 
-                    <template v-if="this.organizationsOrCategories === 'organizations'" v-for="catItem in this.actualCatalog.children" :key="catItem">
-                        <div
-                            v-if="catItem.children"
-                            class="std-catalog__tab-item std-tab-item std-tab-item--alt2"
+                    <template v-if="this.organizationsOrCategories === 'organizations'"
+                        v-for="catItem in this.actualCatalog.children" :key="catItem">
+                        <div v-if="catItem.children" class="std-catalog__tab-item std-tab-item std-tab-item--alt2"
                             @click.stop="setActualCatalog(catItem)">
                             <span class="std-tab-item__text">{{ catItem.pagetitle }}</span>
                             <i class="d_icon d_icon-arrow std-tab-item__icon"></i>
                         </div>
 
-                        <router-link
-                            v-else
-                            :to="{
-                                name: 'org_opt_waregouse_category',
-                                params: {
-                                    id: this.$route.params.id,
-                                    warehouse_id: this.catalogWarehouseParent,
-                                    warehouse_cat_id: catItem.id
-                                }
-                            }"
-                            class="std-catalog__tab-item std-tab-item std-tab-item--none"
+                        <router-link v-else :to="{
+                            name: 'org_opt_waregouse_category',
+                            params: {
+                                id: this.$route.params.id,
+                                warehouse_id: this.catalogWarehouseParent,
+                                warehouse_cat_id: catItem.id
+                            }
+                        }" class="std-catalog__tab-item std-tab-item std-tab-item--none"
                             @click="toggleCatalogVisibilityAd()">
                             <span class="std-tab-item__text">{{ catItem.pagetitle }}</span>
                         </router-link>
                     </template>
-                    <template v-if="this.organizationsOrCategories === 'categories'" v-for="catItem in this.actualCatalog.children" :key="catItem">
-                        <div
-                            v-if="catItem.children"
-                            class="std-catalog__tab-item std-tab-item std-tab-item--alt2"
+                    <template v-if="this.organizationsOrCategories === 'categories'"
+                        v-for="catItem in this.actualCatalog.children" :key="catItem">
+                        <div v-if="catItem.children" class="std-catalog__tab-item std-tab-item std-tab-item--alt2"
                             @click.stop="setActualCatalog(catItem)">
                             <span class="std-tab-item__text">{{ catItem.pagetitle }}</span>
                             <i class="d_icon d_icon-arrow std-tab-item__icon"></i>
                         </div>
-                        <router-link
-                            v-else
-                            :to="{
-                                name: 'purchases_catalog',
-                                params: {
-                                    id: this.$route.params.id,
-                                    category_id: catItem.id
-                                }
-                            }"
-                            class="std-catalog__tab-item std-tab-item std-tab-item--none"
+                        <router-link v-else :to="{
+                            name: 'purchases_catalog',
+                            params: {
+                                id: this.$route.params.id,
+                                category_id: catItem.id
+                            }
+                        }" class="std-catalog__tab-item std-tab-item std-tab-item--none"
                             @click="toggleCatalogVisibilityAd()">
                             <span class="std-tab-item__text">{{ catItem.pagetitle }}</span>
                         </router-link>
@@ -185,66 +159,64 @@
                             </template>
 
                             <template v-slot:default>
-                                <div class="std-catalog__nav std-catalog__nav--primary std-catalog__tabs std-catalo__tabs--vertical">
+                                <div
+                                    class="std-catalog__nav std-catalog__nav--primary std-catalog__tabs std-catalo__tabs--vertical">
                                     <template v-for="level2 in level1.children">
                                         <!-- If second link has subbed links -->
                                         <Accordion v-if="level2.children">
                                             <template v-slot:header>
-                                                <div :key="level2.id" class="std-catalog__tab-item std-tab-item std-tab-item--alt2">
+                                                <div :key="level2.id"
+                                                    class="std-catalog__tab-item std-tab-item std-tab-item--alt2">
                                                     <!-- <div class="std-tab-item__img-container">
 														<img
 															:src="getImageSrc(level2.image || level2.menu_image)"
 														/>
 													</div> -->
-                                                    <span class="std-tab-item__text">{{ level2.name || level2.pagetitle }}</span>
+                                                    <span class="std-tab-item__text">{{ level2.name || level2.pagetitle
+                                                        }}</span>
                                                     <i class="d_icon d_icon-arrow std-tab-item__icon"></i>
                                                 </div>
                                             </template>
 
                                             <template v-slot:default>
-                                                <div class="std-catalog__nav std-catalog__nav--primary std-catalog__tabs std-catalo__tabs--vertical">
-                                                    <router-link
-                                                        v-for="level3 in level2.children"
-                                                        :to="{
-                                                            name: 'purchases_catalog',
-                                                            params: {
-                                                                id: this.$route.params.id,
-                                                                category_id: level3.id
-                                                            }
-                                                        }"
-                                                        :key="level3"
-                                                        @click="toggleCatalogVisibilityAd()"
+                                                <div
+                                                    class="std-catalog__nav std-catalog__nav--primary std-catalog__tabs std-catalo__tabs--vertical">
+                                                    <router-link v-for="level3 in level2.children" :to="{
+                                                        name: 'purchases_catalog',
+                                                        params: {
+                                                            id: this.$route.params.id,
+                                                            category_id: level3.id
+                                                        }
+                                                    }" :key="level3" @click="toggleCatalogVisibilityAd()"
                                                         class="std-catalog__tab-item std-tab-item std-tab-item--alt2 std-tab-item--alt3">
                                                         <!-- <div class="std-tab-item__img-container">
 															<img
 																:src="getImageSrc(level3.image || level3.menu_image)"
 															/>
 														</div> -->
-                                                        <span class="std-tab-item__text">{{ level3.name || level3.pagetitle }}</span>
+                                                        <span class="std-tab-item__text">{{ level3.name ||
+                                                            level3.pagetitle }}</span>
                                                     </router-link>
                                                 </div>
                                             </template>
                                         </Accordion>
 
                                         <!-- If second link has no subbed links -->
-                                        <router-link
-                                            v-else
-                                            :to="{
-                                                name: 'purchases_catalog',
-                                                params: {
-                                                    id: this.$route.params.id,
-                                                    category_id: level2.id
-                                                }
-                                            }"
-                                            :key="level2"
-                                            @click="toggleCatalogVisibilityAd()"
+                                        <router-link v-else :to="{
+                                            name: 'purchases_catalog',
+                                            params: {
+                                                id: this.$route.params.id,
+                                                category_id: level2.id
+                                            }
+                                        }" :key="level2" @click="toggleCatalogVisibilityAd()"
                                             class="std-catalog__tab-item std-tab-item std-tab-item--alt2">
                                             <!-- <div class="std-tab-item__img-container">
 												<img
 													:src="getImageSrc(level2.image || level2.menu_image)"
 												/>
 											</div> -->
-                                            <span class="std-tab-item__text">{{ level2.name || level2.pagetitle }}</span>
+                                            <span class="std-tab-item__text">{{ level2.name || level2.pagetitle
+                                                }}</span>
                                         </router-link>
                                     </template>
                                 </div>
@@ -252,21 +224,15 @@
                         </Accordion>
 
                         <!-- If first link has no subbed links -->
-                        <router-link
-                            v-else
-                            :to="{
-                                name: 'purchases_catalog',
-                                params: { id: this.$route.params.id, category_id: level1.id }
-                            }"
-                            :key="level1"
-                            @mouseenter="
-                                () => {
+                        <router-link v-else :to="{
+                            name: 'purchases_catalog',
+                            params: { id: this.$route.params.id, category_id: level1.id }
+                        }" :key="level1" @mouseenter="() => {
                                     this.actualNav.secondLevel = level1.children;
                                     this.actualNav.thirdLevel = [];
                                     this.actualImageSrc = '';
                                 }
-                            "
-                            @click="toggleCatalogVisibilityAd()"
+                                " @click="toggleCatalogVisibilityAd()"
                             class="std-catalog__tab-item std-tab-item std-tab-item--alt"
                             v-for="level1 in this.organizationsOrCategories === 'organizations' ? this.catalog_warehouse : this.catalog">
                             <div class="std-tab-item__img-container">
@@ -296,49 +262,43 @@
                     {{ org_stores?.items?.find((el) => el.id == warehouse_basket)?.address_short }}
                 </span>
             </button>
-            <ul class="std-nav__warehouse-list" :class="{ ['std-nav__warehouse-list--active']: this.showWarehouseList }" @click.stop>
-                <li v-for="warehous in org_stores.items" v-bind:key="warehous.id" @click="setWarehouse(warehous.id)" class="std-nav__warehouse-item">
+            <ul class="std-nav__warehouse-list" :class="{ ['std-nav__warehouse-list--active']: this.showWarehouseList }"
+                @click.stop>
+                <li v-for="warehous in org_stores.items" v-bind:key="warehous.id" @click="setWarehouse(warehous.id)"
+                    class="std-nav__warehouse-item">
                     «{{ warehous.name_short }}», {{ warehous.address_short }}
                 </li>
             </ul>
         </div>
 
-        <div v-if="opt_vendors.selected_count > 0" class="navmain__search a-dart-input a-dart-input-search std-search-field__wrapper" @click.stop>
+        <div v-if="opt_vendors.selected_count > 0"
+            class="navmain__search a-dart-input a-dart-input-search std-search-field__wrapper" @click.stop>
             <form action="#" method="post" @submit.prevent="toSearch()">
                 <div class="navmain__search_btn std-search-field">
                     <div class="std-search-field__block">
                         <!-- <i class="pi pi-search std-search-field__icon"></i> -->
                         <img src="../../assets/images/icons/search.svg" alt="" class="std-search-field__icon" />
-                        <input class="std-search-field__input" type="text" placeholder="Найти у выбранных поставщиков" v-model="search" />
+                        <input class="std-search-field__input" type="text" placeholder="Найти у выбранных поставщиков"
+                            v-model="search" />
                     </div>
-                    <button
-                        v-if="this.search"
-                        class="std-search-field__delete"
-                        @click="
-                            () => {
-                                this.search = '';
-                                this.searchSuggestions = [];
-                            }
-                        "
-                        type="button">
+                    <button v-if="this.search" class="std-search-field__delete" @click="() => {
+                            this.search = '';
+                            this.searchSuggestions = [];
+                        }
+                        " type="button">
                         <i class="pi pi-times"></i>
                     </button>
-                    <button type="submit" class="navmain__dart_btn a-dart-btn a-dart-btn-primary std-search-field__button">Найти</button>
+                    <button type="submit"
+                        class="navmain__dart_btn a-dart-btn a-dart-btn-primary std-search-field__button">Найти</button>
                 </div>
 
-                <ul
-                    class="std-search-field__suggestions"
-                    :class="{
-                        ['std-search-field__suggestions--active']: this.showSearchSuggestions
-                    }">
-                    <li
-                        v-for="suggestion in searchSuggestions"
-                        class="std-search-field__suggestion"
-                        @click="
-                            () => {
-                                this.search = suggestion.name;
-                                this.toSearch();
-                            }
+                <ul class="std-search-field__suggestions" :class="{
+                    ['std-search-field__suggestions--active']: this.showSearchSuggestions
+                }">
+                    <li v-for="suggestion in searchSuggestions" class="std-search-field__suggestion" @click="() => {
+                            this.search = suggestion.name;
+                            this.toSearch();
+                        }
                         ">
                         <div class="std-product-card-s">
                             <img :src="suggestion.image" alt="" class="std-product-card-s__img" />
@@ -374,7 +334,9 @@
                         fill="#282828" />
                 </svg>
             </span>
-            <span class="kenost-vendors__span">{{ this.opt_vendors.selected_count }} из {{ this.opt_vendors.available_count }}</span>
+            <span class="kenost-vendors__span">{{ this.opt_vendors.selected_count }} из {{
+                this.opt_vendors.available_count
+                }}</span>
             <i class="pi pi-angle-down"></i>
             <div class="kenost-vendors__list">
                 <span>Выбранные поставщики</span>
@@ -397,12 +359,10 @@
                 </div>
             </div>
         </button>
-        <Vendors @changeActive="changeActive" @vendorCheck="vendorCheck" :vendorModal="this.vendorModal" :items="this.opt_vendors" />
+        <Vendors @changeActive="changeActive" @vendorCheck="vendorCheck" :vendorModal="this.vendorModal"
+            :items="this.opt_vendors" />
 
-        <!-- <router-link :to="{ name: 'purchases_notifications' }" class="std-notification-button">
-            <i class="std_icon std_icon-notification"></i>
-            <div v-if="notifications.length > 0" class="std-notification-button__badge">+{{ notifications.length }}</div>
-        </router-link> -->
+        <NotificationButton />
 
         <!-- <a href="#" class="navmain__components_desctop a-dart-btn">
             <i class="pi pi-sliders-h"></i>
@@ -417,6 +377,7 @@ import Vendors from './Vendors.vue';
 import Accordion from '../Accordion.vue';
 import axios from 'axios';
 import Notification from './Notification.vue';
+import NotificationButton from '../NotificationButton.vue';
 
 export default {
     name: 'Nav',
@@ -633,7 +594,7 @@ export default {
             });
         });
     },
-    components: { Vendors, Accordion, Notification },
+    components: { Vendors, Accordion, Notification, NotificationButton },
     computed: {
         ...mapGetters(['optvendors', 'salesbanners', 'optcatalog', 'optcatalogwarehouse', 'org_stores', 'warehouse_basket', 'optproducts']),
 
@@ -683,6 +644,7 @@ export default {
 <style lang="scss">
 .kenost-vendors {
     position: relative;
+
     &__icon {
         font-size: 24px;
     }
@@ -724,6 +686,7 @@ export default {
         gap: 8px;
     }
 }
+
 .navmain {
     width: 100%;
     height: 80px;
@@ -744,6 +707,7 @@ export default {
             height: 80px;
             display: block;
         }
+
         span {
             color: #8a8a8a;
             font-size: 16px;
@@ -759,14 +723,17 @@ export default {
     &__components_desctop {
         color: #282828;
     }
+
     &__search {
         display: flex;
         align-items: center;
         // min-width: 400px;
         margin-left: 32px;
+
         input {
             border-radius: 5px 0 0 5px;
             padding: 13px 44px;
+
             &:focus {
                 border-right: 0px;
             }
@@ -808,6 +775,7 @@ export default {
     gap: 8px;
     cursor: pointer;
     border: none;
+
     .d_icon {
         font-size: 18px;
     }
@@ -878,6 +846,7 @@ export default {
         font-size: 16px;
         line-height: 16px;
     }
+
     i {
         color: var(--secondary-color);
         font-size: 24px;
@@ -936,6 +905,7 @@ export default {
 
 .a-dart-btn-radio {
     padding: 0;
+
     input {
         display: none;
     }
@@ -952,7 +922,7 @@ export default {
         }
     }
 
-    input:checked + label {
+    input:checked+label {
         background-color: var(--secondary-color);
         color: var(--white-color);
     }
@@ -960,6 +930,7 @@ export default {
 
 .a-dart-btn-radio-mini {
     padding: 0 !important;
+
     input {
         display: none;
     }
@@ -977,7 +948,7 @@ export default {
         }
     }
 
-    input:checked + label {
+    input:checked+label {
         background-color: var(--secondary-color);
         color: var(--white-color);
     }
@@ -1007,6 +978,7 @@ export default {
 
 .a-dart-input-search {
     position: relative;
+
     &::before {
         content: '\e908';
         position: absolute;
