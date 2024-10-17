@@ -253,8 +253,8 @@
 				<div>
 					<div class="kenost-form-grid">
 						<div class="form_input_group w-50"
-							:class="{ error: vAddRequisites.new_requisit[field.name].$errors.length }" :name="field.name"
-							v-for="(field, index) in form.requisit" :key="index">
+							:class="{ error: vAddRequisites.new_requisit[field.name].$errors.length }"
+							:name="field.name" v-for="(field, index) in form.requisit" :key="index">
 							<label for="">{{ field.label }}</label>
 							<input type="text" v-model="this.new_requisit[field.name]" class="dart-form-control"
 								:placeholder="field.placeholder" />
@@ -641,16 +641,25 @@ export default {
 			fact_address: "",
 			marketplace: [],
 			banks: [],
+		})
+
+		const addRequisitesData = ref({
+			new_requisit: new_requisit
 		});
 
 		const orgprofile = ref([]);
 
-		const vAddRequisites = useVuelidate(addRequisitesRules, new_requisit);
-		const vEditRequisites = useVuelidate(editRequisitesRules, orgprofile);
+		const editRequisitesData = ref({
+			orgprofile: orgprofile
+		});
+
+		const vAddRequisites = useVuelidate(addRequisitesRules, addRequisitesData);
+		const vEditRequisites = useVuelidate(editRequisitesRules, editRequisitesData);
 
 		return {
 			vAddRequisites,
 			vEditRequisites,
+
 			new_requisit,
 			orgprofile
 		}
