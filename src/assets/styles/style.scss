@@ -6318,6 +6318,18 @@ button.std-icon__wrapper {
 		right: 32px;
 	}
 }
+
+.sitebar {
+	&.hide {
+		& + .std-empty-dialog__overlay + .content {
+			max-width: calc(100vw - 80px);
+		}
+	}
+
+	& + .std-empty-dialog__overlay + .content {
+		max-width: calc(100vw - 350px);
+	}
+}
 // /Steiden
 
 .p-fileupload-buttonbar {
