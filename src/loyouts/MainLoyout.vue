@@ -44,14 +44,14 @@
                         :lifetime="10000"
                         @delete="deleteNotification(index)" /> -->
                 <!-- </div> -->
-                <router-link v-if="this.$route.params.id && pageIsAvailable()"
+                <!-- <router-link v-if="this.$route.params.id && pageIsAvailable()"
                     :to="{ name: 'purchases_notifications', params: { id: this.$route.params.id } }"
                     class="std-notification-button absolute">
                     <i class="std_icon std_icon-notification"></i>
                     <div v-if="this.notifications_all.no_read > 0" class="std-notification-button__badge">
                         +{{ this.notifications_all.no_read }}</div>
-                    <!-- {{ this.$route.params }} -->
-                </router-link>
+                </router-link> -->
+                <NotificationButton v-if="this.$route.params.id && pageIsAvailable()" class="absolute" />
                 <router-view> </router-view>
             </div>
         </div>
@@ -65,6 +65,7 @@ import Nav from '../components/opt/Nav.vue';
 import router from '../router';
 import Notification from '../components/opt/Notification.vue';
 import Toast from 'primevue/toast';
+import NotificationButton from '../components/NotificationButton.vue';
 
 export default {
     name: 'MainLoyout',
@@ -77,7 +78,7 @@ export default {
             notifications_all: []
         };
     },
-    components: { Sitebar, Nav, Notification, Toast },
+    components: { Sitebar, Nav, Notification, Toast, NotificationButton },
     computed: {
         ...mapGetters({
             getUser: 'user/getUser',
