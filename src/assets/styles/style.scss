@@ -5807,7 +5807,8 @@ button.std-icon__wrapper {
 			padding: 0;
 			position: relative;
 
-			max-width: 450px;
+			// max-width: 450px;
+			min-width: 430px;
 
 			// &::before {
 			// 	display: none;
@@ -5824,9 +5825,6 @@ button.std-icon__wrapper {
 			}
 		}
 		&__modal-content {
-			display: flex;
-			flex-direction: row;
-			gap: 22px;
 		}
 		&__modal-title {
 			font-size: 14px !important;
@@ -5849,7 +5847,10 @@ button.std-icon__wrapper {
 		&__modal-img {
 			width: 100%;
 			height: 130px !important;
-			object-fit: cover;
+			// max-height: 200px !important;
+			// min-width: 430px;
+
+			object-fit: contain;
 
 			margin-bottom: 14px;
 		}

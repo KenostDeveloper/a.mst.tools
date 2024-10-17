@@ -223,10 +223,10 @@
                                         </div>
                                     </div>
                                     <div class="table-actions__modal-elems-container">
-                                        <img v-if="action?.image" :src="action?.image" alt="promotion image" class="table-actions__modal-img">
+                                        <img v-if="action?.image && action?.type != 3" :src="action?.image" alt="promotion image" class="table-actions__modal-img">
 
                                         <div class="table-actions__modal-elems-wrapper">
-                                            <p class="table-actions__modal-title">{{ action?.name }}</p>
+                                            <p class="table-actions__modal-title">{{ action?.type == 3 ? "Индивидуальная акция" : action?.name }}</p>
                                             <div class="table-actions__modal-elems">
                                                 <div class="table-actions__modal-el" v-for="(tag, index) in action.tags.length > 2
                                                     ?
