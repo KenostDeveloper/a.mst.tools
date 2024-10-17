@@ -127,24 +127,6 @@ export default {
           },
           sort: true
         },
-        delivery: {
-          label: 'Доставка',
-          type: 'link',
-          link_to: 'my_orders_opt_id',
-          link_params: {
-            id: this.$route.params.id,
-            order_id: 'id'
-          }
-        },
-        payment: {
-          label: 'Оплата',
-          type: 'link',
-          link_to: 'my_orders_opt_id',
-          link_params: {
-            id: this.$route.params.id,
-            order_id: 'id'
-          }
-        },
 				seller: {
           label: 'Магазин/Склад',
           type: 'link',
