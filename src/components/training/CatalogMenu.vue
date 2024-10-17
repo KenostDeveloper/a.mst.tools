@@ -222,7 +222,7 @@ export default {
                 height: 100%;
                 position: absolute;
                 z-index: 1;
-                background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(243 243 243) 44%);
+                background: linear-gradient(90deg,#fff0,#efefef 44%);
                 right: -65px;
                 transform: translate(-50%, 0);
             }

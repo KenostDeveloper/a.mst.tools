@@ -125,6 +125,7 @@ export default {
     }
 
     .d-col-menu{
+        background: #efefef;
         max-width: 287px;
         min-width: 287px;
         height: 100%;
@@ -277,7 +278,7 @@ export default {
                 height: 100%;
                 position: absolute;
                 z-index: 1;
-                background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 44%);
+                background: linear-gradient(90deg,#fff0,#efefef 44%);
                 right: -65px;
                 transform: translate(-50%, 0);
             }
