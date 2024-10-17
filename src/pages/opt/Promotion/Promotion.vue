@@ -41,6 +41,11 @@
 
                             <TableCatalogAction @updateBasket="updateBasket" v-if="actions" :items="actions" />
                         </main>
+                        <paginate :page-count="pageCount" :click-handler="pagClickCallback"
+                            :prev-text="'Пред'" :next-text="'След'"
+                            :container-class="'pagination justify-content-center'" :initialPage="this.page"
+                            :forcePage="this.page">
+                        </paginate>
                     </section>
                 </div>
             </div>
@@ -65,6 +70,7 @@ import TableCatalogAction from '../../../components/opt/TableCatalogAction.vue';
 import Toast from 'primevue/toast';
 import Loading from '../../../components/Loading.vue';
 import Breadcrumbs from '../../../components/Breadcrumbs.vue';
+import Paginate from 'vuejs-paginate-next';
 
 export default {
     name: 'Promotion',
@@ -97,7 +103,8 @@ export default {
         TableCatalogAction,
         Toast,
         Loading,
-        Breadcrumbs
+        Breadcrumbs,
+        Paginate
     },
     mounted() {
         this.get_opt_catalog_from_api().then(() => {
@@ -112,7 +119,10 @@ export default {
         });
         this.get_sales_to_api({
             id: router.currentRoute._value.params.sales_id,
-            actionid: router.currentRoute._value.params.action
+            actionid: router.currentRoute._value.params.action,
+            page: this.page,
+            perpage: this.perpage,
+            isAction: true
         }).then((res) => {
             if (!res.data.success) {
                 this.$toast.add({
@@ -161,16 +171,46 @@ export default {
             this.show_order = false;
         },
         actionUpdate() {
+            setTimeout(() => {
+                this.get_sales_to_api({
+                    id: router.currentRoute._value.params.sales_id,
+                    actionid: router.currentRoute._value.params.action,
+                    page: this.page,
+                    perpage: this.perpage,
+                    isAction: true
+                });
+            }, 1000)
+            
+        },
+        pagClickCallback(pageNum) {
+            this.page = pageNum;
             this.get_sales_to_api({
                 id: router.currentRoute._value.params.sales_id,
-                actionid: router.currentRoute._value.params.action
+                actionid: router.currentRoute._value.params.action,
+                page: this.page,
+                perpage: this.perpage,
+                isAction: true
+            }).then((res) => {
+                if (!res.data.success) {
+                    this.$toast.add({
+                        severity: 'info',
+                        summary: 'Ошибка',
+                        detail: res.data.data.message,
+                        life: 3000
+                    });
+                    setTimeout(() => {
+                        this.$router.go(-1);
+                    }, 1000);
+                }
+                this.loading_elems.push('load');
+                this.loadingCheack(3);
             });
         }
     },
     computed: {
         ...mapGetters(['mainpage', 'optcatalog', 'optvendors', 'actions']),
         pageCount() {
-            return Math.ceil(this.opt_products.total / this.perpage);
+            return Math.ceil(this.actions.total / this.perpage);
         }
     },
     watch: {

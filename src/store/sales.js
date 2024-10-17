@@ -29,7 +29,7 @@ export default {
           }
         })
     },
-    get_sales_to_api ({ commit }, { filter, filtersdata, page, sort, perpage, actionid, type }) {
+    get_sales_to_api ({ commit }, { filter, filtersdata, page, sort, perpage, actionid, type, isAction }) {
       // console.log(filter)
       const data = {
         id: router.currentRoute._value.params.id,
@@ -40,7 +40,8 @@ export default {
         perpage: perpage,
         action: 'get',
         action_id: actionid,
-        type: type
+        type: type,
+        is_action: isAction ? true : false
       }
       return Axios('/rest/front_sales', {
         method: 'POST',
