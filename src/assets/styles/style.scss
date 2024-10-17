@@ -5807,7 +5807,6 @@ button.std-icon__wrapper {
 			padding: 0;
 			position: relative;
 
-			padding: 12px 25px;
 			max-width: 450px;
 
 			// &::before {
@@ -5840,7 +5839,30 @@ button.std-icon__wrapper {
 		&__modal-elems-container {
 			display: flex;
 			flex-direction: column;
-			gap: 34px;
+			// gap: 34px;
+		}
+		&__modal-elems-wrapper {
+			display: flex;
+			flex-direction: column;
+			padding: 12px 25px;
+		}
+		&__modal-img {
+			width: 100%;
+			height: 130px !important;
+			object-fit: cover;
+
+			margin-bottom: 14px;
+		}
+		&__modal-title {
+			color: #282828;
+			font-size: 14px;
+			font-weight: 400;
+			line-height: 1;
+
+			padding: 0 !important;
+			margin: 0 !important;
+			margin-inline: auto !important;
+			margin-bottom: 17px !important;
 		}
 		&__modal-elems {
 			display: flex;
@@ -5876,6 +5898,7 @@ button.std-icon__wrapper {
 
 		&__modal-btn-container {
 			margin: 0;
+			margin-top: 34px;
 		}
 		&__modal-btn {
 			color: #fff !important;
