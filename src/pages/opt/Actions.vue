@@ -17,12 +17,18 @@
                 </div>
             </router-link>
         </div>
+        <paginate :page-count="pageCount" :click-handler="pagClickCallback"
+          :prev-text="'Пред'" :next-text="'След'"
+          :container-class="'pagination justify-content-center'" :initialPage="this.page"
+          :forcePage="this.page">
+        </paginate>
     </div>
   </template>
   <script>
   import { mapActions, mapGetters } from 'vuex'
   import router from "../../router";
-import Breadcrumbs from '../../components/Breadcrumbs.vue';
+  import Breadcrumbs from '../../components/Breadcrumbs.vue';
+  import Paginate from 'vuejs-paginate-next';
   
   export default {
     name: 'OptsSearch',
@@ -30,16 +36,20 @@ import Breadcrumbs from '../../components/Breadcrumbs.vue';
     },
     data () {
       return {
-        
+        page: 1,
+        perpage: 24
       }
     },
     components: {
-      Breadcrumbs
+      Breadcrumbs,
+      Paginate
     },
     mounted () {
       this.get_actions_buyer_to_api({
         action: 'get/all/actions/buyer',
-        id: this.$route.params.id
+        id: this.$route.params.id,
+        page: this.page,
+        perpage: this.perpage
       })
     },
     updated () { },
@@ -49,12 +59,23 @@ import Breadcrumbs from '../../components/Breadcrumbs.vue';
       ...mapActions([
         'get_actions_buyer_to_api'
       ]),
-      
+      pagClickCallback(pageNum) {
+        this.page = pageNum;
+        this.get_actions_buyer_to_api({
+          action: 'get/all/actions/buyer',
+          id: this.$route.params.id,
+          page: this.page,
+          perpage: this.perpage
+        })
+      }
     },
     computed: {
       ...mapGetters([
         'action_buyer'
       ]),
+      pageCount() {
+        return Math.ceil(this.action_buyer.total / this.perpage);
+      }
     },
     watch: {
     }
