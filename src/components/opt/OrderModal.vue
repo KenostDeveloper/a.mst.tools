@@ -109,7 +109,7 @@
                                             </div>
                                             <div class="k-order__buttons">
                                                 <b>{{(product.count * product.price).toLocaleString('ru')}} ₽</b>
-                                                <Counter :item="{product: product, warehouse_id: this.basket.warehouses.find((el) => el.id == key)}" :key="new Date().getMilliseconds() + product.id_remain" @ElemCount="ElemCount" :min="1" :max="item.remains" :value="product.count" :id="item.id_remain" :store_id="item.store_id"/>
+                                                <Counter :item="{product: product, warehouse_id: this.basket.warehouses.find((el) => el.id == key)}" @ElemCount="ElemCount" :min="1" :max="item.remains" :value="product.count" :id="item.id_remain" :store_id="item.store_id"/>
                                             </div>
                                         </div>
                                         <div class="k-order__product-data">
@@ -156,7 +156,6 @@
                                             <div class="k-order__complect-data-items flex flex-col items-end">
                                                 <b>{{(Number(complect.info.count) * complect.info.price).toLocaleString('ru')}} ₽</b>
                                                 <Counter
-                                                    :key="new Date().getMilliseconds() + product.id_remain"
                                                     @ElemCount="ElemComplectCount"
                                                     :item="product"
                                                     :mini="true"
@@ -253,7 +252,7 @@
 
     <Dialog v-model:visible="this.modal_remain" header=" " :style="{ width: '340px' }">
 		<div class="kenost-not-produc">
-			<!-- <img src="../../../public/img/opt/not-products.png" alt="" /> -->
+			<img src="/images/icons_milen/outOfStock2.png" alt="" />
 			<b>У нас нет столько товаров :(</b>
 			<p>Извините, но количество данного товара ограничено</p>
 			<div class="a-dart-btn a-dart-btn-primary" @click="this.modal_remain = false">

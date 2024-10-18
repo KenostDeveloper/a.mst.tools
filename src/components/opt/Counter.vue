@@ -150,6 +150,11 @@ export default {
 	computed: {
 		...mapGetters([]),
 	},
+	watch: {
+		value(newValue) {
+			this.d_value = newValue;
+		}
+	}
 };
 </script>
 <style lang="scss">
