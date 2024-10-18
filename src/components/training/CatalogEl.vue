@@ -1,5 +1,5 @@
 <template>
-    <li class="dart-catalog-menu__category" :class="{'active' : this.active}">
+    <li class="dart-catalog-menu__category" :class="{'active' : items.index == this.active1 }">
       <!-- @click="clickMenu"  -->
         <div @click="!items.children? clickMenu(items.index, null) : setActive($event)"  class="dart-catalog-menu__el">
             <span :class="{'menuActive' : this.active1 == items.index && this.active2 == null}">{{ items.pagetitle }}</span>

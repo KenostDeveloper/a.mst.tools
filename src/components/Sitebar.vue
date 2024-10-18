@@ -128,8 +128,8 @@
 				<CatalogMenu :active1="this.index1" :active2="this.index2" @getMenuIndex="changeContentTraining" :items="training_catalog"/>
 				</div>
 				<div class="helpModal__text">
-				<p class="helpModal__title">{{ this.index2 == null? training_catalog[this.index1]?.pagetitle : training_catalog[this.index1].children[this.index2]?.pagetitle}}</p>
-				<div v-html="this.index2 == null? training_catalog[this.index1]?.content : training_catalog[this.index1].children[this.index2]?.content"></div>
+				<p class="helpModal__title">{{ this.index2 == null? training_catalog[this.index1]?.pagetitle : training_catalog[this.index1]?.children[this.index2]?.pagetitle}}</p>
+				<div v-html="this.index2 == null? training_catalog[this.index1]?.content : training_catalog[this.index1]?.children[this.index2]?.content"></div>
 				</div>
 			</div>
 		</div>
@@ -217,16 +217,24 @@
 			</div>
 		</div>
 	</EmptyDialog>
+
+	<div class="video-kenost" v-if="this.video">
+		<div class="video-kenost-container">
+			<iframe :src="this.video" width="1280" height="720" allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;" frameborder="0" allowfullscreen></iframe>
+			<i @click="closeVideo()" class="pi pi-times video-kenost-close"></i>
+		</div>
+		<!-- <div class="video-kenost-button">Больше не показывать</div> -->
+	</div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from "vuex";
 import PanelMenu from "primevue/panelmenu";
 import OverlayPanel from "primevue/overlaypanel";
-import Dialog from "primevue/dialog";
 import EmptyDialog from "./EmptyDialog.vue";
 import router from "../router";
 import CatalogMenu from './training/CatalogMenu.vue'
+import Dialog from 'primevue/dialog';
 
 export default {
 	name: "Sitebar",
@@ -249,6 +257,8 @@ export default {
 			index1: 0,
       		index2: null,
 			training_catalog: {},
+			is_video: true,
+			video: ""
 			//РОЛИ
 			// 0 - Закупки
 			// 1 - Маркетплейс
@@ -259,12 +269,7 @@ export default {
 		PanelMenu,
 		Dialog,
 		EmptyDialog,
-		CatalogMenu
-	},
-	mounted() {
-		this.get_training_catalog_from_api().then(
-			this.training_catalog = this.trainingcatalog
-		)
+		CatalogMenu,
 	},
 	computed: {
 		...mapGetters({
@@ -376,10 +381,7 @@ export default {
 		},
 	},
 	updated () {
-		// this.namePathIsNav = router?.currentRoute?._value.matched[3]?.name
-		this.get_training_catalog_from_api().then(
-			this.training_catalog = this.trainingcatalog
-		)
+		// this.get_training_catalog_from_api()
 	},
 	methods: {
 		...mapActions({
@@ -389,8 +391,14 @@ export default {
 			get_opt_vendors_from_api: "get_opt_vendors_from_api",
 			get_opt_warehouse_catalog_from_api: "get_opt_warehouse_catalog_from_api",
 			get_opt_catalog_from_api: "get_opt_catalog_from_api",
-			get_training_catalog_from_api: 'get_training_catalog_from_api'
+			get_training_catalog_from_api: 'get_training_catalog_from_api',
+			set_training_catalog_from_api: 'set_training_catalog_from_api'
 		}),
+		closeVideo(){
+			//Отправлять на сервер
+			this.video = null
+			this.set_training_catalog_from_api();
+		},
 		changeContentTraining (elem) {
 			// console.log(elem)
 			this.index1 = elem.index1
@@ -478,6 +486,12 @@ export default {
 			console.log(response)
 			this.getRole()
 		});
+
+		this.get_training_catalog_from_api()
+	},
+	beforeRouteUpdate(to, from, next) {
+		this.get_training_catalog_from_api();
+		next();
 	},
 	watch: {
 		orgs: function (newVal, oldVal) {
@@ -493,6 +507,34 @@ export default {
 				(org) => org.id === this.$route.params.id
 			);
 		},
+		trainingcatalog: function (newVal, oldVal) {
+			this.training_catalog = newVal.items
+
+			if(newVal.index1){
+				this.index1 = newVal.index1
+			} else{
+				this.index1 = 0
+			}
+
+			if(newVal.index2){
+				this.index2 = newVal.index2
+			} else{
+				this.index2 = null
+			}
+
+			if(newVal.video){
+				this.video = newVal.video
+			} else{
+				this.video = null
+			}
+		},
+		'$route': {
+			handler: function (newParams, oldParams) {
+				if (newParams.fullPath !== oldParams.fullPath) {
+					this.get_training_catalog_from_api();
+				}
+			},
+ 	 	}
 	},
 };
 </script>
