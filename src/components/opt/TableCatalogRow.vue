@@ -83,11 +83,8 @@
         <td>
             <div class="table-actions">
                 <!-- 'red': action?.conflicts?.items[action.action_id]?.sales_conflicts -->
-                <div class="table-actions__action" :class="{
-                    active: action.enabled,
-                    red: isConflict(item.conflicts.items, item.actions, action.action_id)
-                }" v-for="(action, indexactions) in item.actions" v-bind:key="action.id">
-                    <div v-if="action?.tags?.length > 0" class="table-actions__container" @click="
+                <div :data-test="(action?.tags?.length != 1 || (action?.tags?.length == 1 && action?.tags[0].type == 'sale' && action?.tags[0].value > 0) && action?.tags?.length != 0)" class="table-actions__action" :class="{active: action.enabled, red: isConflict(item.conflicts.items, item.actions, action.action_id), 'hidden': !(action?.tags?.length != 1 || (action?.tags?.length == 1 && action?.tags[0].type == 'sale' && action?.tags[0].value > 0) && action?.tags?.length != 0)}" v-for="(action, indexactions) in item.actions" v-bind:key="action.id">
+                    <div v-if="(action?.tags?.length != 1 || (action?.tags?.length == 1 && action?.tags[0].type == 'sale' && action?.tags[0].value > 0) && action?.tags?.length != 0)"  class="table-actions__container" @click="
                         updateAction(
                             item.id == 0 ? this.action.remain_id : item.remain_id,
                             item.id == 0 ? this.action.store_id : item.store_id,
@@ -97,6 +94,7 @@
                             item.conflicts
                         )
                         ">
+                        <!-- {{ action }} -->
                         <div class="table-actions__el" v-for="(tag, indextag) in action.tags" v-bind:key="tag.id">
                             <img v-if="tag.type == 'multiplicity'" :src="action.enabled
                                 ? '/images/icons/action/gray/box.svg'
@@ -151,7 +149,7 @@
               <p>Компл-т</p>
             </div> -->
                     </div>
-                    <div v-if="action?.tags?.length > 0" class="table-actions__help">
+                    <div v-if="(action?.tags?.length != 1 || (action?.tags?.length == 1 && action?.tags[0].type == 'sale' && action?.tags[0].value > 0) && action?.tags?.length != 0)" class="table-actions__help">
                         <p :class="{
                             active: action.enabled,
                             red: isConflict(item.conflicts.items, item.actions, action.action_id)
