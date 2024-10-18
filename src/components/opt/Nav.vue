@@ -371,6 +371,8 @@
             <b>Сравнение</b>
         </a> -->
     </div>
+
+    <Toast />
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';
@@ -380,6 +382,7 @@ import Accordion from '../Accordion.vue';
 import axios from 'axios';
 import Notification from './Notification.vue';
 import NotificationButton from '../NotificationButton.vue';
+import Toast from 'primevue/toast';
 
 export default {
     name: 'Nav',
@@ -428,6 +431,11 @@ export default {
             'get_opt_products_from_api'
         ]),
         toSearch() {
+            if(this.search.length < 3) {
+                this.$toast.add({ severity: 'warn', summary: 'Предупреждение поиска', detail: 'Длина поиска должна быть больше двух символов', life: 3000 });
+                return;
+            }
+
             this.showSearchSuggestions = false;
             router.push({ name: 'opt_search', params: { search: this.search } });
         },
@@ -525,6 +533,8 @@ export default {
         },
 
         async searchProducts() {
+            if(this.search.length < 3) return;
+
             this.searchSuggestions = [];
 
             let cat = 0;
@@ -633,6 +643,11 @@ export default {
             this.actualCatalog = {};
         },
         search: function (newVal, oldVal) {
+            if(newVal.length < 3) {
+                this.showSearchSuggestions = false;
+                return;
+            }
+
             this.showSearchSuggestions = !!newVal;
 
             this.debounce(async () => {
