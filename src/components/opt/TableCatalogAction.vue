@@ -39,7 +39,7 @@
                     <td class="k-table__busket complect-button__td">
                         <!-- {{ item?.basket?.count }} -->
                         <form class="k-table__form" :class="{ 'basket-true': item?.basket?.availability }" action="">
-                            <Counter :key="new Date().getMilliseconds() + item.id" @ElemCount="ElemCountComplect" :step="item.multiplicity" :min="1" :item="item" :max="item.remain.min_count * item.multiplicity" :id="item.complect_id" :store_id="complect.store_id" :index="index" :value="item?.basket?.count * item.multiplicity" />
+                            <Counter @ElemCount="ElemCountComplect" :step="item.multiplicity" :min="1" :item="item" :max="item.remain.min_count * item.multiplicity" :id="item.complect_id" :store_id="complect.store_id" :index="index" :value="item?.basket?.count * item.multiplicity" />
                             <div @click="addBasketComplect(item.complect_id, item?.basket?.count, complect.store_id, index)" class="dart-btn dart-btn-primary">
                                 <i class="d_icon d_icon-busket"></i>
                             </div>
@@ -80,7 +80,7 @@
                     </td>
                     <td class="k-table__busket">
                         <form class="k-table__form" action="" :class="{ 'basket-true': item?.basket?.availability }">
-                            <Counter :item="item" :key="new Date().getMilliseconds() + item.id" @ElemCount="ElemCount" :min="1" :max="item.max" :id="item.remain_id" :store_id="item.store_id" :index="index" :value="item?.basket?.count" :step="item?.action?.multiplicity ? item?.action?.multiplicity : 1" />
+                            <Counter @ElemCount="ElemCount" :min="1" :max="item.max" :id="item.remain_id" :store_id="item.store_id" :index="index" :value="item?.basket?.count" :step="item?.action?.multiplicity ? item?.action?.multiplicity : 1" />
                             <div @click="addBasket(item.remain_id, item?.action?.multiplicity > 1 ? item?.action?.multiplicity : item.basket.count, item.store_id, index)" class="dart-btn dart-btn-primary">
                                 <i class="d_icon d_icon-busket"></i>
                             </div>
@@ -109,7 +109,7 @@
     </div>
     <Dialog v-model:visible="this.modal_remain" header=" " :style="{ width: '340px' }">
         <div class="kenost-not-produc">
-            <!-- <img src="../../../public/img/opt/not-products.png" alt=""> -->
+            <img src="/images/icons_milen/outOfStock2.png" alt="">
             <b>У нас нет столько товаров :(</b>
             <p>Извините, но количество данного товара ограничено</p>
             <div class="a-dart-btn a-dart-btn-primary" @click="this.modal_remain = false">Понятно</div>

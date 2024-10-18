@@ -80,7 +80,6 @@
 									<span>{{ product.article }}</span>
 									<div class="kenost-basket__info-left">
 										<Counter
-											:key="new Date().getMilliseconds() + product.id_remain"
 											@ElemCount="ElemCount"
 											:item="basket"
 											:mini="true"
@@ -125,7 +124,6 @@
 									<span>{{ product.article }}</span>
 									<div class="kenost-basket__info-left">
 										<Counter
-											:key="new Date().getMilliseconds() + product.id_remain"
 											@ElemCount="ElemComplectCount"
 											:item="product"
 											:mini="true"
@@ -306,7 +304,7 @@
 	</div>
 	<Dialog v-model:visible="this.modal_remain" header=" " :style="{ width: '340px' }">
 		<div class="kenost-not-produc">
-			<!-- <img src="../../../public/img/opt/not-products.png" alt="" /> -->
+			<img src="/images/icons_milen/outOfStock2.png" alt="" />
 			<b>У нас нет столько товаров :(</b>
 			<p>Извините, но количество данного товара ограничено</p>
 			<div class="a-dart-btn a-dart-btn-primary" @click="this.modal_remain = false">
@@ -359,6 +357,7 @@ export default {
 			//   this.busket_from_api(data).then(
 			//     this.basket = this.optbasket
 			//   )
+			// console.log("iiii")
 		},
 		ElemComplectCount(object) {
 			console.log(object)

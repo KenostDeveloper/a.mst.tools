@@ -54,9 +54,16 @@
         <td class="k-table__busket">
             <!-- {{item}} -->
             <form class="k-table__form" action="" :class="{ 'basket-true': item?.basket?.availability }">
-                <Counter :item="item" :key="new Date().getMilliseconds() + item.id" @ElemCount="ElemCount" :min="0"
-                    :max="item.max" :id="item.remain_id" :store_id="item.store_id" :index="index"
-                    :value="item?.basket?.count" :step="item?.action?.multiplicity ? item?.action?.multiplicity : 1" />
+                <Counter
+                    @ElemCount="ElemCount"
+                    :min="0"
+                    :max="item.max"
+                    :id="item.remain_id"
+                    :store_id="item.store_id"
+                    :index="index"
+                    :value="item?.basket?.count" :step="item?.action?.multiplicity ? item?.action?.multiplicity : 1"
+                    :item="item"
+                />
                 <div @click="
                     addBasket(
                         item.remain_id,
@@ -357,7 +364,7 @@
             <td class="k-table__busket complect-button__td">
                 <!-- {{item.multiplicity}} -->
                 <form class="k-table__form" :class="{ 'basket-true': item?.basket?.availability }" action="">
-                    <Counter :key="new Date().getMilliseconds() + item.id" @ElemCount="ElemCountComplect"
+                    <Counter @ElemCount="ElemCountComplect"
                         :step="item.multiplicity" :min="0" :item="item" :max="item.remain_complect * item.multiplicity"
                         :id="item.complect_id" :store_id="item.store_id" :index="index"
                         :value="item?.basket?.count * item.multiplicity" />
@@ -505,7 +512,7 @@
     </tbody>
     <Dialog v-model:visible="this.modal_remain" header=" " :style="{ width: '340px' }">
         <div class="kenost-not-produc">
-            <!-- <img src="../../../public/img/opt/not-products.png" alt=""> -->
+            <img src="/images/icons_milen/outOfStock2.png" alt="">
             <b>У нас нет столько товаров :(</b>
             <p>Извините, но количество данного товара ограничено</p>
             <div class="a-dart-btn a-dart-btn-primary" @click="this.modal_remain = false">Понятно</div>
@@ -755,7 +762,7 @@ export default {
             })
         },
         ElemCount(object) {
-            // console.log(object);
+            console.log(object);
             // debounce(() => {
             if (object.value == object.min) {
                 this.clearBasketProduct(object.store_id, object.id)
