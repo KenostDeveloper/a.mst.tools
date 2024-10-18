@@ -2,9 +2,12 @@
 	<draggable
 		v-if="this.cities"
 		v-model="this.cities"
+		v-bind="{ animation: 200, group: 'description', disabled: false, ghostClass: 'ghost' }"
 		tag="transition-group"
-		:component-data="{ tag: 'ul', type: 'transition-group', name: 'flip-list' }"
+		:component-data="{ tag: 'ul', type: 'transition-group', name: drag ? null : 'flip-list' }"
 		item-key="id"
+		@start="drag = true"
+		@end="drag = false"
 		class="shopping-kenost__citys"
 	>
 		<template #item="{ element: item, index }">
@@ -66,6 +69,7 @@ export default {
 	emits: ["update:modelCities", "update:modelCitiesDates"],
 	data() {
 		return {
+			drag: false,
 			cities: this.modelCities,
 			citiesDates: this.modelCitiesDates,
 		};
@@ -96,4 +100,5 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+</style>

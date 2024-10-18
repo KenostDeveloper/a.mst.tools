@@ -5326,6 +5326,11 @@ button.std-icon__wrapper {
 
 .shopping-kenost__cityone {
 	transition: all 0.5s ease;
+	cursor: grab;
+
+	&:active {
+		cursor: grabbing
+	}
 
 	.p-calendar {
 		max-width: 50%;
