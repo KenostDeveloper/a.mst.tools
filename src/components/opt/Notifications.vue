@@ -1,10 +1,10 @@
 <template>
     <section class="notifications">
         <div class="notifications__header">
-            <h1 class="notifications__title">Уведомления ({{ this.notifications_all.total }})</h1>
+            <h1 class="notifications__title">Уведомления ({{ this.notifications_all.total || 0 }})</h1>
             <div class="notifications__header-actions">
                 <button class="dart-btn dart-btn-primary notifications__button" @click="readAllNotifications">Прочитать все</button>
-                <button class="button-none notifications__close" @click="deleteAllNotifications()">
+                <button class="button-none notifications__close" @click="$router.go(-1)">
                     <i class="std_icon std_icon-close"></i>
                 </button>
             </div>

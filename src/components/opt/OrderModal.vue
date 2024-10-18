@@ -187,18 +187,18 @@
                                         <p>Кол-во SKU с отсрочкой Х</p>
                                         <p>0</p>
                                     </div> -->
-                                    <div class="k-order__colums">
+                                    <!-- <div class="k-order__colums">
                                         <p>Вес заказа (кг)</p>
                                         <p>{{ Number(store?.weight).toFixed(2) }}</p>
-                                    </div>
+                                    </div> -->
                                     <div class="k-order__colums">
                                         <!-- <p>Кол-во SKU с отсрочкой Y</p>
                                         <p>0</p> -->
                                     </div>
-                                    <div class="k-order__colums">
+                                    <!-- <div class="k-order__colums">
                                         <p>Объем заказа </p>
                                         <p>{{store?.volume }}</p>
-                                    </div>
+                                    </div> -->
                                    
                                 </div>
                                 <div class="k-order__final-button">
@@ -226,18 +226,18 @@
                                 <p>Кол-во SKU с отсрочкой Х</p>
                                 <p>0</p>
                             </div> -->
-                            <div class="k-order__colums bold">
+                            <!-- <div class="k-order__colums bold">
                                 <p>Вес заказа (кг)</p>
                                 <p>{{ Number(this.basket?.weight).toFixed(2) }}</p>
-                            </div>
+                            </div> -->
                             <div class="k-order__colums bold">
                                 <!-- <p>Кол-во SKU с отсрочкой Y</p>
                                 <p>0</p> -->
                             </div>
-                            <div class="k-order__colums bold">
+                            <!-- <div class="k-order__colums bold">
                                 <p>Объем заказа</p>
                                 <p>{{ this.basket?.volume }}</p>
-                            </div>
+                            </div> -->
                            
                         </div>
                         <div class="k-order__final-button">
