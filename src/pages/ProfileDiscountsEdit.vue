@@ -1,5 +1,7 @@
 <template>
-    <form @submit.prevent="formSubmit" :class="{ loading: loading }">
+    <Loading v-if="loading" />
+
+    <form @submit.prevent="formSubmit">
         <div class="profile-content__title sticky-element">
             <span class="maintitle">Настройка индивидуальных условий</span>
             <div class="buttons_container">
@@ -593,12 +595,13 @@ import Checkbox from 'primevue/checkbox'
 import router from '../router'
 import Paginate from 'vuejs-paginate-next'
 import MultiSelect from 'primevue/multiselect'
+import Loading from '../components/Loading.vue'
 
 export default {
     name: 'ProfileDiscountsEdit',
     data() {
         return {
-            loading: false,
+            loading: true,
             form: {
                 store_id: [],
                 comment: "",
@@ -704,7 +707,8 @@ export default {
         Counter,
         Checkbox,
         Paginate,
-        MultiSelect
+        MultiSelect,
+        Loading
     },
     computed: {
         ...mapGetters([
@@ -765,7 +769,8 @@ export default {
                     perpage: this.per_page
                 }
                 this.get_available_products_from_api(data).then((res) => {
-                    this.kenostTableCheckedAllCheck()
+                    this.kenostTableCheckedAllCheck();
+                    this.loading = false;
                 })
             })
         })
@@ -1069,7 +1074,7 @@ export default {
             }
             this.get_available_products_from_api(data).then((res) => {
                 this.kenostTableCheckedAllCheck();
-                this.loading = false
+                this.loading = false;
             });
         },
         select(id) {
@@ -1107,7 +1112,8 @@ export default {
                 this.get_available_products_from_api(data).then((res) => {
                     this.kenostTableCheckedAllCheck()
                 })
-                this.total_selected++
+                this.total_selected++;
+                this.loading = false;
             })
         },
         // selectGift (id) {
@@ -1259,7 +1265,7 @@ export default {
 
             let isPageSelectFilter = false;
 
-            for (let i = 0; i < this.ids_visible.length; i++) {
+            for (let i = 0; i < this.ids_visible?.length; i++) {
                 if (this.kenost_table.indexOf(this.ids_visible[i]) == -1) {
                     isPageSelectFilter = true;
                     break
