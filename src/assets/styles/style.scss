@@ -1142,7 +1142,7 @@ img {
 	// background: #96ffa1;
 
 	&--fit {
-		min-width: fit-content !important;
+		// min-width: 100%;
 	}
 }
 
@@ -3721,7 +3721,6 @@ p {
 
 	height: 76px;
 	width: auto !important;
-	min-width: fit-content;
 
 	position: relative;
 
@@ -6374,21 +6373,75 @@ button.std-icon__wrapper {
 .sitebar {
 	&.hide {
 		& + .std-empty-dialog__overlay + .content {
-			max-width: calc(100vw - 80px);
-
-			.dart-home {
-				max-width: calc(100vw - 80px - 37px * 2);
-				min-width: 100%;
-			}
+			// max-width: calc(100vw - 80px);
 		}
 	}
 
 	& + .std-empty-dialog__overlay + .content {
-		max-width: calc(100vw - 350px);
+		// max-width: calc(100vw - 350px);
+	}
+}
 
-		.dart-home {
-			max-width: calc(100vw - 350px - 37px * 2);
-			min-width: 100%;
+.dart-btn {
+	justify-content: center;
+}
+.buttons_container {
+	justify-content: flex-end;
+	flex-wrap: wrap-reverse;
+	gap: 5px;
+
+	.dart-btn + .dart-btn {
+		margin-left: 0 !important;
+	}
+}
+.form_input_group {
+
+	&--fix {
+		background: #ffffff;
+		width: 100%;
+		border: 1px solid #e2e2e2;
+		border-radius: 5px;
+		font-style: normal;
+		font-weight: 400;
+		font-size: 14px;
+		line-height: 106%;
+		letter-spacing: 0.25px;
+		color: #282828;
+
+		display: flex;
+		gap: 5px;
+
+		.dart-form-control {
+			border: none;
+			padding-right: 0;
+
+			&:not(:placeholder-shown) {
+				& + label {
+					width: auto !important;
+				}
+
+				& ~ .form_input_group__icon {
+					align-items: flex-end;
+					padding-bottom: 5px !important;
+				}
+			}
+		}
+
+		& > label {
+			text-wrap: nowrap;
+			width: calc(100% - (40px + 15px - 2px)) !important;	// 40px - icon width, 15px - icon margin-right, 2px - запас
+			max-width: calc(100% - 15px - 2px);
+		}
+
+		.form_input_group__icon {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+
+			position: static;
+			padding: 0 !important;
+			margin-right: 15px;
+			transform: translate(0);
 		}
 	}
 }

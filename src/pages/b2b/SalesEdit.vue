@@ -385,7 +385,7 @@
                     <div class="PickList__product" :style="{ width: '40%' }">
                         <b class="PickList__title">Доступные товары</b>
                         <div class="PickList__filters">
-                            <div class="form_input_group input_pl input-parent required">
+                            <div class="form_input_group form_input_group--fix input_pl input-parent required">
                                 <input type="text" id="filter_name" placeholder="Введите артикул или название"
                                     class="dart-form-control" v-model="filterGift.name"
                                     @input="setFilterGift('filter')" />
@@ -475,7 +475,7 @@
                     <div class="PickList__product" :style="{ width: '40%' }">
                         <b class="PickList__title">Доступные товары</b>
                         <div class="PickList__filters">
-                            <div class="form_input_group input_pl input-parent required">
+                            <div class="form_input_group form_input_group--fix input_pl input-parent required">
                                 <input type="text" id="filter_name" placeholder="Введите артикул или название"
                                     class="dart-form-control" v-model="filter.name" @input="setFilter('filter')" />
                                 <label for="product_filter_name" class="s-complex-input__label">Введите артикул или
@@ -637,7 +637,7 @@
                     <p class="table-kenost__title">Таблица добавленных товаров</p>
                     <div class="table-kenost__filters">
                         <div class="table-kenost__filters-left">
-                            <div class="form_input_group input_pl input-parent required">
+                            <div class="form_input_group form_input_group--fix input_pl input-parent required">
                                 <input type="text" id="filter_table" placeholder="Введите артикул или название"
                                     class="dart-form-control" v-model="filter_table.name"
                                     @input="setFilter('filter')" />
@@ -3024,7 +3024,7 @@ export default {
     }
 
     &__selected {
-        width: auto;
+        // width: auto;
     }
 }
 

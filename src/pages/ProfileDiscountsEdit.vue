@@ -147,10 +147,10 @@
             </div>
 
             <div v-if="this.form.addProductType == '1'" class="PickList mt-3">
-                <div class="PickList__product" :style="{ width: '40%' }">
+                <div class="PickList__product d-col-5">
                     <b class="PickList__title">Доступные товары</b>
                     <div class="PickList__filters">
-                        <div class="form_input_group input_pl input-parent required">
+                        <div class="form_input_group form_input_group--fix input_pl input-parent required">
                             <input type="text" id="filter_name" placeholder="Введите артикул или название"
                                 class="dart-form-control" v-model="filter.name" @input="setFilter('filter')" />
                             <label for="product_filter_name" class="s-complex-input__label">Введите артикул или
@@ -190,7 +190,7 @@
                             class="pi pi-angle-double-left"></i></div>
                 </div>
 
-                <div class="PickList__selected" :style="{ width: '40%' }">
+                <div class="PickList__selected d-col-5">
                     <div class="PickList__title mb-4">
                         <b>Добавленные товары</b>
                     </div>
@@ -273,7 +273,7 @@
                 <p class="table-kenost__title">Таблица добавленных товаров</p>
                 <div class="table-kenost__filters">
                     <div class="table-kenost__filters-left">
-                        <div class="form_input_group input_pl input-parent required">
+                        <div class="form_input_group form_input_group--fix input_pl input-parent required">
                             <input type="text" id="filter_table" placeholder="Введите артикул или название"
                                 class="dart-form-control" v-model="filter_table.name" @input="setFilter('filter')" />
                             <label for="product_filter_name" class="s-complex-input__label">Введите артикул или

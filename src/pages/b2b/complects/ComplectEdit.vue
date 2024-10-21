@@ -38,7 +38,7 @@
               <div class="PickList__product" :style="{ width: '40%' }">
                   <b class="PickList__title">Доступные товары</b>
                   <div class="PickList__filters">
-                  <div class="form_input_group input_pl input-parent required">
+                  <div class="form_input_group form_input_group--fix input_pl input-parent required">
                       <input
                       type="text"
                       id="filter_name"
