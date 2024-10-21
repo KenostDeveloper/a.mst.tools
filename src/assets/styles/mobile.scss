@@ -148,6 +148,10 @@
 			}
 		}
 	}
+
+	.std-nav {
+		padding-inline: 20px !important;
+	}
 }
 @include desktop-s-plus {
 	.clients {
@@ -165,9 +169,9 @@
 	}
 
 	.std-nav {
-		flex-wrap: wrap;
-		min-height: 76px;
-		height: fit-content !important;
+		// flex-wrap: wrap;
+		// min-height: 76px;
+		// height: fit-content !important;
 	}
 
 	.purchases {
