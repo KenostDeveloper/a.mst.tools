@@ -348,6 +348,7 @@ export default {
 			loading: true,
 			basket: {},
 			modal_remain: false,
+			timeOut: null
 		};
 	},
 	methods: {
@@ -360,61 +361,77 @@ export default {
 			// console.log("iiii")
 		},
 		ElemComplectCount(object) {
-			console.log(object)
+			// console.log(object)
 			if (object.value > Number(object.max)) {
 				this.modal_remain = true;
 			} else {
-				this.$emit("catalogUpdate");
-				const data = {
-					action: "basket/update",
-					id: router.currentRoute._value.params.id,
-					id_complect: object.item.complect_id,
-					value: object.value / object.item.multiplicity,
-					store_id: object.store_id,
-				};
-				this.busket_from_api(data).then((response) => {
-					const datainfo = {
-						complect_id: object.item.complect_id,
+				if(this.timeOut){
+                    clearTimeout(this.timeOut);
+                }
+
+                this.timeOut = setTimeout(() => {
+                    // Ваш запрос на сервер
+                    this.$emit("catalogUpdate");
+					const data = {
+						action: "basket/update",
+						id: router.currentRoute._value.params.id,
+						id_complect: object.item.complect_id,
+						value: object.value / object.item.multiplicity,
 						store_id: object.store_id,
-						count: object.value / object.item.multiplicity,
 					};
-					this.$store.commit("SET_OPT_COMPLECT_MUTATION_TO_VUEX", datainfo);
-					this.$store.commit("SET_SALES_COMPLECT_MUTATION_TO_VUEX", datainfo);
-				});
-				this.busket_from_api({
-					action: 'basket/get',
-					id: router.currentRoute._value.params.id,
-					warehouse: 'all'
-				})
+					this.busket_from_api(data).then((response) => {
+						const datainfo = {
+							complect_id: object.item.complect_id,
+							store_id: object.store_id,
+							count: object.value / object.item.multiplicity,
+						};
+						this.$store.commit("SET_OPT_COMPLECT_MUTATION_TO_VUEX", datainfo);
+						this.$store.commit("SET_SALES_COMPLECT_MUTATION_TO_VUEX", datainfo);
+					});
+					this.busket_from_api({
+						action: 'basket/get',
+						id: router.currentRoute._value.params.id,
+						warehouse: 'all'
+					})
+                }, 1000);
+				
 			}
 		},
 		ElemCount(object) {
 			if (object.value > Number(object.max)) {
 				this.modal_remain = true;
 			} else {
-				this.$emit("catalogUpdate");
-				const data = {
-					action: "basket/update",
-					id: router.currentRoute._value.params.id,
-					id_remain: object.id,
-					value: object.value,
-					store_id: object.store_id,
-					actions: object.item.actions_ids,
-				};
-				this.busket_from_api(data).then((response) => {
-					const datainfo = {
-						remain_id: object.id,
+				if(this.timeOut){
+                    clearTimeout(this.timeOut);
+                }
+
+                this.timeOut = setTimeout(() => {
+                    // Ваш запрос на сервер
+                    this.$emit("catalogUpdate");
+					const data = {
+						action: "basket/update",
+						id: router.currentRoute._value.params.id,
+						id_remain: object.id,
+						value: object.value,
 						store_id: object.store_id,
-						count: object.value,
+						actions: object.item.actions_ids,
 					};
-					this.$store.commit("SET_OPT_PRODUCTS_MUTATION_TO_VUEX", datainfo);
-					this.$store.commit("SET_SALES_PRODUCTS_MUTATION_TO_VUEX", datainfo);
-				});
-				this.busket_from_api({
-					action: 'basket/get',
-					id: router.currentRoute._value.params.id,
-					warehouse: 'all'
-				})
+					this.busket_from_api(data).then((response) => {
+						const datainfo = {
+							remain_id: object.id,
+							store_id: object.store_id,
+							count: object.value,
+						};
+						this.$store.commit("SET_OPT_PRODUCTS_MUTATION_TO_VUEX", datainfo);
+						this.$store.commit("SET_SALES_PRODUCTS_MUTATION_TO_VUEX", datainfo);
+					});
+					this.busket_from_api({
+						action: 'basket/get',
+						id: router.currentRoute._value.params.id,
+						warehouse: 'all'
+					})
+                }, 1000);
+				
 			}
 		},
 		clearBasket() {

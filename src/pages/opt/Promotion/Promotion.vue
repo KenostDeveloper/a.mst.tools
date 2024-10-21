@@ -124,11 +124,12 @@ export default {
             perpage: this.perpage,
             isAction: true
         }).then((res) => {
+            console.log("res", res)
             if (!res.data.success) {
                 this.$toast.add({
                     severity: 'info',
                     summary: 'Ошибка',
-                    detail: res.data.data.message,
+                    detail: "У вас нет доступа к этой акции",
                     life: 3000
                 });
                 setTimeout(() => {
@@ -195,7 +196,7 @@ export default {
                     this.$toast.add({
                         severity: 'info',
                         summary: 'Ошибка',
-                        detail: res.data.data.message,
+                        detail: "У вас нет доступа к этой акции",
                         life: 3000
                     });
                     setTimeout(() => {
@@ -210,7 +211,7 @@ export default {
     computed: {
         ...mapGetters(['mainpage', 'optcatalog', 'optvendors', 'actions']),
         pageCount() {
-            return Math.ceil(this.actions.total / this.perpage);
+            return Math.ceil(this.actions?.total / this.perpage);
         }
     },
     watch: {

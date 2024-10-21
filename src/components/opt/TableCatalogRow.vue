@@ -548,7 +548,8 @@ export default {
             loading: true,
             active: false,
             value: 1,
-            modal_remain: false
+            modal_remain: false,
+            timeOut: null
         };
     },
     methods: {
@@ -773,22 +774,30 @@ export default {
             } else {
                 // eslint-disable-next-line vue/no-mutating-props
                 this.items.stores[object.index].basket.count = object.value;
-                const data = {
-                    action: 'basket/update',
-                    id: router.currentRoute._value.params.id,
-                    id_remain: object.id,
-                    value: object.value,
-                    store_id: object.store_id,
-                    actions: object.item.basket.ids_actions
-                };
-                this.busket_from_api(data).then(() => {
-                    this.busket_from_api({
-                        action: 'basket/get',
+
+                if(this.timeOut){
+                    clearTimeout(this.timeOut);
+                }
+
+                this.timeOut = setTimeout(() => {
+                    // Ваш запрос на сервер
+                    const data = {
+                        action: 'basket/update',
                         id: router.currentRoute._value.params.id,
-                        warehouse: 'all'
+                        id_remain: object.id,
+                        value: object.value,
+                        store_id: object.store_id,
+                        actions: object.item.basket.ids_actions
+                    };
+                    this.busket_from_api(data).then(() => {
+                        this.busket_from_api({
+                            action: 'basket/get',
+                            id: router.currentRoute._value.params.id,
+                            warehouse: 'all'
+                        });
                     });
-                });
-                this.$emit('updateBasket');
+                    this.$emit('updateBasket');
+                }, 1000);
             }
             // }, 300);
         },
@@ -804,16 +813,24 @@ export default {
             } else {
                 // eslint-disable-next-line vue/no-mutating-props
                 //this.items.stores[object.index].basket.count = object.value;
-                const data = {
-                    action: 'basket/update',
-                    id: router.currentRoute._value.params.id,
-                    id_complect: object.id,
-                    value: object.value / object.item.multiplicity,
-                    store_id: object.store_id
-                };
-                // console.log(data)
-                this.busket_from_api(data).then();
-                this.$emit('updateBasket');
+                if(this.timeOut){
+                    clearTimeout(this.timeOut);
+                }
+
+                this.timeOut = setTimeout(() => {
+                    // Ваш запрос на сервер
+                    const data = {
+                        action: 'basket/update',
+                        id: router.currentRoute._value.params.id,
+                        id_complect: object.id,
+                        value: object.value / object.item.multiplicity,
+                        store_id: object.store_id
+                    };
+                    // console.log(data)
+                    this.busket_from_api(data).then();
+                    this.$emit('updateBasket');
+                }, 1000);
+                
             }
         },
         isConflict(conflicts, actions, action_id) {

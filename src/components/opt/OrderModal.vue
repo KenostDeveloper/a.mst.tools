@@ -294,7 +294,8 @@ export default {
       basket: {},
       order: 0,
       value: 1,
-      modal_remain: false
+      modal_remain: false,
+      timeOut: null
     }
   },
   emits: ['fromOrder', 'orderSubmit'],
@@ -325,51 +326,70 @@ export default {
       })
     },
     ElemCount (object) {
-      const data = {
-        action: 'basket/update',
-        id: router.currentRoute._value.params.id,
-        id_remain: object.id,
-        value: object.value,
-        store_id: object.store_id,
-        actions: object.item.product.actions_ids,
-        id_warehouse: object.item.warehouse_id.id
-    }
-      this.busket_from_api(data).then(() => {
-        this.busket_from_api({
-            action: 'basket/get',
-            id: router.currentRoute._value.params.id,
-            warehouse: 'all'
-        })
-      })
-      
+        if (object.value > Number(object.max)) {
+				this.modal_remain = true;
+		} else {
+            if(this.timeOut){
+                clearTimeout(this.timeOut);
+            }
+
+            this.timeOut = setTimeout(() => {
+                // Ваш запрос на сервер
+                const data = {
+                    action: 'basket/update',
+                    id: router.currentRoute._value.params.id,
+                    id_remain: object.id,
+                    value: object.value,
+                    store_id: object.store_id,
+                    actions: object.item.product.actions_ids,
+                    id_warehouse: object.item.warehouse_id.id
+                }
+                this.busket_from_api(data).then(() => {
+                    this.busket_from_api({
+                        action: 'basket/get',
+                        id: router.currentRoute._value.params.id,
+                        warehouse: 'all'
+                    })
+                })
+            }, 1000);
+        }
+        
     },
     ElemComplectCount(object) {
         console.log(object)
         if (object.value > Number(object.max)) {
             this.modal_remain = true;
         } else {
-            this.$emit("catalogUpdate");
-            const data = {
-                action: "basket/update",
-                id: router.currentRoute._value.params.id,
-                id_complect: object.item.complect_id,
-                value: object.value / object.item.multiplicity,
-                store_id: object.store_id,
-            };
-            this.busket_from_api(data).then((response) => {
-                const datainfo = {
-                    complect_id: object.item.complect_id,
+            if(this.timeOut){
+                clearTimeout(this.timeOut);
+            }
+
+            this.timeOut = setTimeout(() => {
+                // Ваш запрос на сервер
+                this.$emit("catalogUpdate");
+                const data = {
+                    action: "basket/update",
+                    id: router.currentRoute._value.params.id,
+                    id_complect: object.item.complect_id,
+                    value: object.value / object.item.multiplicity,
                     store_id: object.store_id,
-                    count: object.value / object.item.multiplicity,
                 };
-                this.$store.commit("SET_OPT_COMPLECT_MUTATION_TO_VUEX", datainfo);
-                this.$store.commit("SET_SALES_COMPLECT_MUTATION_TO_VUEX", datainfo);
-            });
-            this.busket_from_api({
-                action: 'basket/get',
-                id: router.currentRoute._value.params.id,
-                warehouse: 'all'
-            })
+                this.busket_from_api(data).then((response) => {
+                    const datainfo = {
+                        complect_id: object.item.complect_id,
+                        store_id: object.store_id,
+                        count: object.value / object.item.multiplicity,
+                    };
+                    this.$store.commit("SET_OPT_COMPLECT_MUTATION_TO_VUEX", datainfo);
+                    this.$store.commit("SET_SALES_COMPLECT_MUTATION_TO_VUEX", datainfo);
+                });
+                this.busket_from_api({
+                    action: 'basket/get',
+                    id: router.currentRoute._value.params.id,
+                    warehouse: 'all'
+                })
+            }, 1000);
+            
         }
     },
     clearBasket () {

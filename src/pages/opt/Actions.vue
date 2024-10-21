@@ -3,7 +3,7 @@
         <Breadcrumbs class="std-breadcrumbs--margin" />
         <h1 class="title-h1">Оптовые акции</h1>
         <div class="dart-row">
-            <router-link :to="{ name: 'promotion', params: { id: this.$route.params.id, action: item.id } }" v-for="item in action_buyer.items" v-bind:key="item.id" class="d-col-lg-4 d-col-sm-6 d-col-12 link-no-style mb-3">
+            <router-link :to="{ name: 'promotion', params: { id: this.$route.params.id, action: item.action_id } }" v-for="item in action_buyer.items" v-bind:key="item.id" class="d-col-lg-4 d-col-sm-6 d-col-12 link-no-style mb-3">
                 <div class="kenost-action-opt">
                     <!-- <img class="kenost-action-opt__image" src="https://mst.tools/assets/images/templates/action-imge-base.png" alt=""> -->
                     <img class="kenost-action-opt__image" :src="item.image" alt="">

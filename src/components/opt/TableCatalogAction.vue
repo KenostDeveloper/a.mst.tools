@@ -148,7 +148,8 @@ export default {
             modal_actions: false,
             actions_item: null,
             value: 1,
-            modal_remain: false
+            modal_remain: false,
+            timeOut: null
         };
     },
     methods: {
@@ -266,16 +267,25 @@ export default {
             } else {
                 // eslint-disable-next-line vue/no-mutating-props
                 this.items.products[object.id].basket.count = object.value;
-                const data = {
-                    action: 'basket/update',
-                    id: router.currentRoute._value.params.id,
-                    id_remain: object.id,
-                    value: object.value,
-                    store_id: object.store_id,
-                    actions: [router.currentRoute._value.params.action]
-                };
-                this.busket_from_api(data).then();
-                this.$emit('updateBasket');
+
+                if(this.timeOut){
+                    clearTimeout(this.timeOut);
+                }
+
+                this.timeOut = setTimeout(() => {
+                    // Ваш запрос на сервер
+                    const data = {
+                        action: 'basket/update',
+                        id: router.currentRoute._value.params.id,
+                        id_remain: object.id,
+                        value: object.value,
+                        store_id: object.store_id,
+                        actions: [router.currentRoute._value.params.action]
+                    };
+                    this.busket_from_api(data).then();
+                    this.$emit('updateBasket');
+                }, 1000);
+                
             }
         },
         ElemCountComplect(object) {
@@ -291,29 +301,37 @@ export default {
             } else {
                 // eslint-disable-next-line vue/no-mutating-props
 
-                this.$emit("catalogUpdate");
-				const data = {
-					action: 'basket/update',
-                    id: router.currentRoute._value.params.id,
-                    id_complect: object.id,
-                    value: object.value / Number(object.item.multiplicity),
-                    store_id: object.store_id
-				};
-                // console.log(data)
-				this.busket_from_api(data).then((response) => {
-					const datainfo = {
-						complect_id: object.id,
-						store_id: object.store_id,
-						count: object.value / Number(object.item.multiplicity),
-					};
-					// this.$store.commit("SET_OPT_COMPLECT_MUTATION_TO_VUEX", datainfo);
-					this.$store.commit("SET_SALES_COMPLECT_MUTATION_TO_VUEX", datainfo);
-				});
-				this.busket_from_api({
-					action: 'basket/get',
-					id: router.currentRoute._value.params.id,
-					warehouse: 'all'
-				})
+                if(this.timeOut){
+                    clearTimeout(this.timeOut);
+                }
+
+                this.timeOut = setTimeout(() => {
+                    // Ваш запрос на сервер
+                    this.$emit("catalogUpdate");
+                    const data = {
+                        action: 'basket/update',
+                        id: router.currentRoute._value.params.id,
+                        id_complect: object.id,
+                        value: object.value / Number(object.item.multiplicity),
+                        store_id: object.store_id
+                    };
+                    // console.log(data)
+                    this.busket_from_api(data).then((response) => {
+                        const datainfo = {
+                            complect_id: object.id,
+                            store_id: object.store_id,
+                            count: object.value / Number(object.item.multiplicity),
+                        };
+                        // this.$store.commit("SET_OPT_COMPLECT_MUTATION_TO_VUEX", datainfo);
+                        this.$store.commit("SET_SALES_COMPLECT_MUTATION_TO_VUEX", datainfo);
+                    });
+                    this.busket_from_api({
+                        action: 'basket/get',
+                        id: router.currentRoute._value.params.id,
+                        warehouse: 'all'
+                    })
+                }, 1000);
+                
             }
         },
         leftScroll(event) {
