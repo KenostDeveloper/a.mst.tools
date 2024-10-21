@@ -1142,7 +1142,7 @@ img {
 	// background: #96ffa1;
 
 	&--fit {
-		// min-width: fit-content;
+		min-width: fit-content !important;
 	}
 }
 
@@ -3721,6 +3721,7 @@ p {
 
 	height: 76px;
 	width: auto !important;
+	min-width: fit-content;
 
 	position: relative;
 
@@ -6377,7 +6378,7 @@ button.std-icon__wrapper {
 
 			.dart-home {
 				max-width: calc(100vw - 80px - 37px * 2);
-				// min-width: 100vw;
+				min-width: 100%;
 			}
 		}
 	}
@@ -6387,7 +6388,7 @@ button.std-icon__wrapper {
 
 		.dart-home {
 			max-width: calc(100vw - 350px - 37px * 2);
-			// min-width: 100vw;
+			min-width: 100%;
 		}
 	}
 }
