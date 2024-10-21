@@ -1137,10 +1137,13 @@ img {
 }
 
 .content {
-	min-width: fit-content;
-	// width: 100%;
+	width: 100%;
 	position: relative;
 	// background: #96ffa1;
+
+	&--fit {
+		// min-width: fit-content;
+	}
 }
 
 .sitebar {
@@ -6374,7 +6377,7 @@ button.std-icon__wrapper {
 
 			.dart-home {
 				max-width: calc(100vw - 80px - 37px * 2);
-				min-width: 100%;
+				// min-width: 100vw;
 			}
 		}
 	}
@@ -6384,7 +6387,7 @@ button.std-icon__wrapper {
 
 		.dart-home {
 			max-width: calc(100vw - 350px - 37px * 2);
-			min-width: 100%;
+			// min-width: 100vw;
 		}
 	}
 }
