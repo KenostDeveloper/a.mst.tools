@@ -31,6 +31,7 @@
         </template>
     </Toast>
 
+    {{ console.log(this.$route, this.$route.params.id) }}
     <Sitebar v-if="this.$route.params.id" :active="this.sitebar" />
     <div class="content" :class="{ white: this.namePathIsNav == 'purchases', 'content--fit':  this.namePathIsNav == 'purchases' }">
         <div class="dart_container_wrap">

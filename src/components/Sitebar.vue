@@ -128,8 +128,8 @@
 				<CatalogMenu :active1="this.index1" :active2="this.index2" @getMenuIndex="changeContentTraining" :items="training_catalog"/>
 				</div>
 				<div class="helpModal__text">
-				<p class="helpModal__title">{{ this.index2 == null? training_catalog[this.index1]?.pagetitle : training_catalog[this.index1]?.children[this.index2]?.pagetitle}}</p>
-				<div v-html="this.index2 == null? training_catalog[this.index1]?.content : training_catalog[this.index1]?.children[this.index2]?.content"></div>
+				<p class="helpModal__title">{{ this.index2 == null? training_catalog?.[this.index1]?.pagetitle : training_catalog?.[this.index1]?.children[this.index2]?.pagetitle}}</p>
+				<div v-html="this.index2 == null? training_catalog?.[this.index1]?.content : training_catalog?.[this.index1]?.children[this.index2]?.content"></div>
 				</div>
 			</div>
 		</div>
