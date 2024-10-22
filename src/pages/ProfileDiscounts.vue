@@ -7,17 +7,17 @@
 
       <div class="title-h1 mb-4 std-discounts__title">Индивидуальные скидки</div>
       <v-table
-          :items_data="individual_discount.items"
-          :total="individual_discount.total"
-          :pagination_items_per_page="this.pagination_items_per_page"
-          :pagination_offset="this.pagination_offset"
-          :page="this.page"
-          :table_data="this.table_data"
-          :filters="this.filters"
-          @filter="filter"
-          title=""
-          @paginate="paginate"
-          @editElem="editDiler"
+        :items_data="individual_discount.items"
+        :total="individual_discount.total"
+        :pagination_items_per_page="this.pagination_items_per_page"
+        :pagination_offset="this.pagination_offset"
+        :page="this.page"
+        :table_data="this.table_data"
+        :filters="this.filters"
+        @filter="filter"
+        title=""
+        @paginate="paginate"
+        @editElem="editDiler"
       />
     </div>
 
@@ -76,6 +76,7 @@
     },
     data () {
       return {
+        storesall: [],
         modals: {
           diler: false
         },
@@ -98,6 +99,12 @@
             name: "Наименование",
             placeholder: "Наименование",
             type: "text",
+          },
+          store: {
+            name: 'Склады',
+            placeholder: 'Выберите склады',
+            type: 'dropdown',
+            values: this.storesall
           },
         },
         table_data: {
@@ -155,7 +162,8 @@
     methods: {
       ...mapActions([
         'get_dilers_from_api',
-        'org_get_discount_individual_api'
+        'org_get_discount_individual_api',
+        'org_get_stores_from_api'
       ]),
       filter(data) {
         this.loading = true
@@ -210,24 +218,10 @@
       }
     },
     mounted () {
-      // this.get_dilers_from_api({
-      //   type: 1,
-      //   page: this.page_dilers,
-      //   perpage: this.pagination_items_per_page_dilers
-      // }).then(() => {
-      //   if (this.dilers) {
-      //     if (Object.prototype.hasOwnProperty.call(this.dilers, 'items')) {
-      //       this.stores.items = this.dilers.items
-      //     } else {
-      //       this.stores.items = []
-      //     }
-      //     if (Object.prototype.hasOwnProperty.call(this.dilers, 'total')) {
-      //       this.stores.total = this.dilers.total
-      //     } else {
-      //       this.stores.total = 0
-      //     }
-      //   }
-      // })
+      this.org_get_stores_from_api({
+          action: 'get/stores',
+          id: this.$route.params.id
+      })
       this.org_get_discount_individual_api({
         page: this.page,
         id: router.currentRoute._value.params.id,
@@ -240,11 +234,19 @@
     components: { vTable, vOpts, Toast, ConfirmDialog, RouterLink, TabView, TabPanel, Dialog, InputNumber, Breadcrumbs },
     computed: {
       ...mapGetters([
-        'individual_discount'
+        'individual_discount',
+        'org_stores'
       ])
     },
     watch: {
-      
+      org_stores: function (newVal, oldVal) {
+        // console.log(newVal)
+        this.storesall = []
+        for (let i = 0; i < newVal.items.length; i++) {
+          this.storesall.push({ name: newVal.items[i].name, id: newVal.items[i].id })
+        }
+        console.log(this.storesall)
+      },
     }
   }
   </script>

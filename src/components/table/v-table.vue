@@ -343,7 +343,7 @@ export default {
 		},
 	},
 	methods: {
-		...mapActions(["get_vendors_from_api"]),
+		...mapActions(["get_vendors_from_api", 'org_get_stores_from_api']),
 		checkElem(data) {
 			this.$emit("checkElem", data);
 		},
@@ -373,7 +373,7 @@ export default {
 			this.$emit("editNumber", object);
 		},
 		setFilter(type = "0") {
-      console.log(type);
+      	console.log(type);
 			if (type === "filter") {
 				if (this.filter.length >= 3 || this.filter.length === 0) {
 					setTimeout(() => {
@@ -477,6 +477,31 @@ export default {
 				this.$emit("setAllCheck", [this.all_check]);
 			}
 		},
+		filters: {
+			handler(newVal, oldVal) {
+				// console.log('Filters updated:', newVal, oldVal);
+				if(newVal.store && newVal.store.values == undefined){
+					this.org_get_stores_from_api({
+						action: 'get/stores',
+						id: this.$route.params.id
+					}).then((res) => {
+						const stores = res.data.data;
+
+						let storesall = []
+						for (let i = 0; i < stores?.items?.length; i++) {
+							storesall.push({ name: stores.items[i].name, id: stores.items[i].id })
+						}
+						
+						this.filters.store.values = storesall
+					})
+				}
+				if (newVal !== oldVal) {
+					// Выполните нужные действия
+				}
+			},
+			deep: true,
+			immediate: true, // Сразу выполнить при создании компонента
+		}
 	},
 };
 </script>
