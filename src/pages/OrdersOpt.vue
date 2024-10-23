@@ -113,10 +113,10 @@ export default {
           },
           sort: true
         },
-        status: {
-          label: 'Статус',
-          type: 'status'
-        },
+        // status: {
+        //   label: 'Статус',
+        //   type: 'status'
+        // },
         cost: {
           label: 'Сумма',
           type: 'link',
