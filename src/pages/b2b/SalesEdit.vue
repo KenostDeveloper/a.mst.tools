@@ -67,8 +67,8 @@
                     <div class="dart-form-group kenost-action-page pt-3" v-if="this.create_page_action.length != 0">
                         <div class="upload-banner">
                             <div class="upload-banner__text">
-                                <span class="ktitle">Большой баннер</span>
-                                <span>Загрузить изображение нужно размером не менее 1108х332, соблюдая пропорции. Чтобы не
+                                <span class="ktitle">Баннер</span>
+                                <span>Загрузить изображение нужно размером не менее 1684х492, соблюдая пропорции. Чтобы не
                                     потерялось качество, желательно
                                     загружать изображение в два раза больше указанного размера.</span>
                             </div>
@@ -81,7 +81,7 @@
                             <img :src="files?.max?.original_href" v-if="files?.max?.original_href" />
                         </div>
                     </div>
-                    <div class="dart-form-group kenost-action-page pt-3" v-if="this.create_page_action.length != 0">
+                    <!-- <div class="dart-form-group kenost-action-page pt-3" v-if="this.create_page_action.length != 0">
                         <div class="upload-banner">
                             <div class="upload-banner__text">
                                 <span class="ktitle">Средний баннер</span>
@@ -89,7 +89,6 @@
                                     потерялось качество, желательно
                                     загружать изображение в три раза больше указанного размера.</span>
                             </div>
-                            <!-- <div class="dart-btn dart-btn-secondary btn-padding">Загрузить</div> -->
                             <FileUpload class="kenost-upload-button" mode="basic" name="banner_small[]"
                                 :url="'/rest/file_upload.php?banner=min'" accept="image/*" :maxFileSize="2000000"
                                 @upload="onUpload" :auto="true" chooseLabel="Загрузить" />
@@ -106,7 +105,6 @@
                                     потерялось качество, желательно
                                     загружать изображение в три раза больше указанного размера.</span>
                             </div>
-                            <!-- <div class="dart-btn dart-btn-secondary btn-padding">Загрузить</div> -->
                             <FileUpload class="kenost-upload-button" mode="basic" name="small[]"
                                 :url="'/rest/file_upload.php?banner=small'" accept="image/*" :maxFileSize="2000000"
                                 @upload="onUpload" :auto="true" chooseLabel="Загрузить" />
@@ -114,7 +112,7 @@
                         <div class="upload-banner__image">
                             <img :src="files?.small?.original_href" v-if="files?.small?.original_href" />
                         </div>
-                    </div>
+                    </div> -->
                     <div class="dart-form-group kenost-action-page pt-3" v-if="this.create_page_action.length != 0">
                         <span class="ktitle">География показа</span>
                         <Dropdown v-model="this.geo_action" :options="this.geo" optionLabel="name"

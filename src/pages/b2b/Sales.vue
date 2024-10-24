@@ -263,7 +263,7 @@ export default {
 				},
 			},
 			table_data: {
-				image_inner: {
+				image: {
 					label: "Баннер",
 					type: "image",
 					baseurl: false,
