@@ -1673,8 +1673,8 @@ export default {
       }
 
       &__image{
-        width: 287px !important;
-        height: 160px !important;
+        width: 100% !important;
+        height: 137 !important;
         background: #D9D9D9;
         margin-top: 16px;
         overflow: hidden;

@@ -2322,15 +2322,15 @@ export default {
             if (router.currentRoute._value.params.sales_id) {
                 this.form.name = newVal.name;
                 if (newVal.image) {
-                    this.files.max.original_href = this.site_url_prefix + newVal.image;
+                    this.files.max.original_href = newVal.image.image;
                 }
-                if (newVal.image_inner) {
-                    this.files.min.original_href = this.site_url_prefix + newVal.image_inner;
-                }
+                // if (newVal.image_inner) {
+                //     this.files.min.original_href = this.site_url_prefix + newVal.image_inner;
+                // }
 
-                if (newVal.image_small) {
-                    this.files.small.original_href = this.site_url_prefix + newVal.image_small;
-                }
+                // if (newVal.image_small) {
+                //     this.files.small.original_href = this.site_url_prefix + newVal.image_small;
+                // }
 
                 if (newVal.page_create) {
                     this.create_page_action = ['true'];

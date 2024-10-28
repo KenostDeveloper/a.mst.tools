@@ -165,7 +165,8 @@
                                     <!-- <p class="table-actions__modal-title">
                                         {{ action?.name }}
                                     </p> -->
-                                    <img v-if="action?.image && action?.type != 3" :src="action?.image" alt="promotion image" class="table-actions__modal-img">
+                                    <img v-if="action?.image && action?.type != 3" :src="action?.image.thumb_medium"
+                                    :srcset="action?.image.image +' 2x, ' + action?.image.thumb_medium + ' 1x'" :alt="action?.name" class="table-actions__modal-img">
 
                                     <div class="table-actions__modal-content-inner">
                                         <p class="table-actions__modal-title">{{ action?.type == 3 ? "Индивидуальная акция" : action?.name }}</p>

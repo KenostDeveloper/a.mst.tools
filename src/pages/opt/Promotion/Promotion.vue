@@ -12,7 +12,7 @@
                                 Назад
                             </button>
                             <div class="promotion-header__content">
-                                <img :src="site_url_prefix + actions?.image" class="promotion-header__img" />
+                                <img :src="actions?.image?.image" :srcset="actions?.image?.image +' 2x, ' + actions?.image?.image + ' 1x'" class="promotion-header__img" />
                             </div>
                         </header>
                         <main class="promotion__main promotion-main">

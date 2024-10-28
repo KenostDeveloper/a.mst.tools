@@ -6,7 +6,7 @@
             <router-link :to="{ name: 'promotion', params: { id: this.$route.params.id, action: item.action_id } }" v-for="item in action_buyer.items" v-bind:key="item.id" class="d-col-lg-4 d-col-sm-6 d-col-12 link-no-style mb-3">
                 <div class="kenost-action-opt">
                     <!-- <img class="kenost-action-opt__image" src="https://mst.tools/assets/images/templates/action-imge-base.png" alt=""> -->
-                    <img class="kenost-action-opt__image" :src="item.image" alt="">
+                    <img class="kenost-action-opt__image" :src="item?.image?.thumb_medium" :srcset="item?.image?.thumb_medium +' 2x, ' + item?.image?.thumb_small + ' 1x'" :alt="item.action_name">
                     <div class="kenost-action-opt__name">{{ item.action_name }}</div>
                     <!-- {{ item }} -->
                     <div class="kenost-action-opt__params">
