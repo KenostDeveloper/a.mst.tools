@@ -311,8 +311,8 @@
         </td>
         <td>
             {{ item.payer === '1' ? 'Поставщик' : 'Покупатель' }} / <br />
-            ~ {{ getMinDelivery(items.stores).delivery }} дней ({{
-                new Date(getMinDelivery(items.stores).delivery_day).toLocaleString('ru', {
+            ~ {{ item.delivery }} дней ({{
+                new Date(item.delivery_day).toLocaleString('ru', {
                     month: '2-digit',
                     day: '2-digit',
                     year: '2-digit'
