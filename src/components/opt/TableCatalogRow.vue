@@ -126,13 +126,13 @@
                                 " alt="" />
                             <p v-if="tag.type == 'delay'">Отсроч. {{ tag.value }} дн.</p>
 
-                            <img v-if="tag.type == 'sale'" :src="action.enabled
+                            <img v-if="tag.type == 'sale' && tag.value > 0" :src="action.enabled
                                 ? '/images/icons/action/gray/sale.svg'
                                 : isConflict(item.conflicts.items, item.actions, action.action_id)
                                     ? '/images/icons/action/red/sale.svg'
                                     : '/images/icons/action/black/sale.svg'
                                 " alt="" />
-                            <p v-if="tag.type == 'sale'">Скидка {{ Number(tag.value).toFixed(0) }}%</p>
+                            <p v-if="tag.type == 'sale' && tag.value > 0">Скидка {{ Number(tag.value).toFixed(0) }}%</p>
 
                             <img v-if="tag.type == 'free_delivery'" :src="action.enabled
                                 ? '/images/icons/action/gray/delivery.svg'
@@ -215,14 +215,14 @@
                                                     </p>
                                                     <img v-if="tag.type == 'sale'"
                                                         src="../../assets/images/icons/action/sale.svg" alt="" />
-                                                    <p v-if="tag.type == 'sale'">
+                                                    <p v-if="tag.type == 'sale' && tag.value > 0">
                                                         Скидка
                                                         {{ tag.value.toLocaleString('ru') }}%
                                                         <!-- <span v-if="tag.condition == '2'">
                                                                                             при покупке от
                                                                                             {{ tag.value.toLocaleString("ru") }} ₽</span
                                                                                         > -->
-                                                        <span v-if="tag.min_count > 1">
+                                                        <span v-if="tag.min_count > 1 && tag.value > 0">
                                                             при покупке от
                                                             {{ tag.min_count.toLocaleString('ru') }}
                                                             шт.</span>

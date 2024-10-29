@@ -52,7 +52,7 @@
                                                                 <img v-if="tag.type == 'delay'" src="/images/icons/action/gray/time.svg" alt="">
                                                                 <p class="w-fit" v-if="tag.type == 'delay'">Отсроч. {{ tag.value }} дн.</p>
     
-                                                                <img v-if="tag.type == 'sale'" src="/images/icons/action/gray/sale.svg" alt="">
+                                                                <img v-if="tag.type == 'sale' && tag.value > 0" src="/images/icons/action/gray/sale.svg" alt="">
                                                                 <p class="w-fit" v-if="tag.type == 'sale'">Скидка {{ Number(tag.value).toFixed(0) }}%</p>
     
                                                                 <img v-if="tag.type == 'free_delivery'" src="/images/icons/action/gray/delivery.svg" alt="">
@@ -81,7 +81,7 @@
                                                                         <img v-if="tag.type == 'multiplicity'" src="../../assets/images/icons/action/box.svg" alt="">
                                                                         <p v-if="tag.type == 'multiplicity'">Кратность упаковки {{ (tag.value).toLocaleString('ru') }} шт.</p>
     
-                                                                        <img v-if="tag.type == 'sale'" src="../../assets/images/icons/action/sale.svg" alt="">
+                                                                        <img v-if="tag.type == 'sale' && tag.value > 0" src="../../assets/images/icons/action/sale.svg" alt="">
                                                                         <p v-if="tag.type == 'sale'">
                                                                             Скидка {{ (tag.value).toLocaleString('ru') }}%
                                                                             <span v-if="tag.min_count > 1">

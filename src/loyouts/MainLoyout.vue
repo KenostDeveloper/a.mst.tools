@@ -30,29 +30,28 @@
             </div>
         </template>
     </Toast>
-
-    <Sitebar v-if="this.$route.params.id" :active="this.sitebar" />
-    <div class="content" :class="{ white: this.namePathIsNav == 'purchases', 'content--fit':  this.namePathIsNav == 'purchases' }">
+    <div class="kenost-small-window" v-if="isSmallScreen">
+        <div class="kenost-small-window__logo">
+            <img src="../../public/images/logo_small.svg" alt="">
+            <span>МСТ Закупки</span>
+        </div>
+        <div class="kenost-small-window__desc">Доступно только на ПК</div>
+        <div class="kenost-small-window__buttons">
+            <div class="kenost-small-window__role active">Закупщик</div>
+            <div class="kenost-small-window__role">Маркетплейс</div>
+            <div class="kenost-small-window__role">Поставщик</div>
+        </div>
+        <div>
+            <img src="../../public/images/small-window.png" alt="">
+        </div>
+    </div>
+    <Sitebar v-if="this.$route.params.id && !isSmallScreen" :active="this.sitebar" />
+    <div v-if="!isSmallScreen" class="content" :class="{ white: this.namePathIsNav == 'purchases', 'content--fit':  this.namePathIsNav == 'purchases' }">
         <div class="dart_container_wrap">
             <Nav v-if="namePathIsNav == 'purchases'" />
             <div class="dart_wrapper">
-                <!-- <div class="std-notification__list"> -->
-                <!-- <Notification
-                        v-for="(notification, index) in notifications"
-                        :key="notification.id"
-                        :data="notification"
-                        :lifetime="10000"
-                        @delete="deleteNotification(index)" /> -->
-                <!-- </div> -->
-                <!-- <router-link v-if="this.$route.params.id && pageIsAvailable()"
-                    :to="{ name: 'purchases_notifications', params: { id: this.$route.params.id } }"
-                    class="std-notification-button absolute">
-                    <i class="std_icon std_icon-notification"></i>
-                    <div v-if="this.notifications_all.no_read > 0" class="std-notification-button__badge">
-                        +{{ this.notifications_all.no_read }}</div>
-                </router-link> -->
-                <NotificationButton v-if="this.$route.params.id && pageIsAvailable()" class="absolute" />
-                <router-view> </router-view>
+                <NotificationButton v-if="this.$route.params.id && pageIsAvailable() && !isSmallScreen" class="absolute" />
+                <router-view > </router-view>
             </div>
         </div>
     </div>
@@ -75,7 +74,8 @@ export default {
             sitebar: false,
             namePathIsNav: null,
             data_start: new Date(),
-            notifications_all: []
+            notifications_all: [],
+            screenWidth: window.innerWidth, // Сохраняем начальную ширину
         };
     },
     components: { Sitebar, Nav, Notification, Toast, NotificationButton },
@@ -84,14 +84,22 @@ export default {
             getUser: 'user/getUser',
             new_notifications: 'new_notifications',
             notifications: 'notifications'
-        })
+        }),
+        isSmallScreen() {
+            return this.screenWidth < 1200; // Проверяем ширину экрана
+        },
     },
     mounted() {
+
+        window.addEventListener('resize', this.updateScreenWidth); // Слушаем изменение размера
+
+
         this.setUser(JSON.parse(localStorage.getItem('user')));
         const sidebarCookie = Number(this.$cookies.get('sidebar_active'));
         if (sidebarCookie === 1) {
             this.sitebar = true;
         }
+        
 
         this.namePathIsNav = router?.currentRoute?._value.matched[4]?.name;
 
@@ -110,6 +118,9 @@ export default {
             this.fetchNotification();
         }
     },
+    beforeDestroy() {
+        window.removeEventListener('resize', this.updateScreenWidth); // Очищаем слушатель
+    },
     updated() {
         // this.setUser(JSON.parse(localStorage.getItem('user')))
         this.namePathIsNav = router?.currentRoute?._value.matched[4]?.name;
@@ -121,6 +132,9 @@ export default {
             get_new_notification_api: 'get_new_notification_api',
             get_notification_api: 'get_notification_api'
         }),
+        updateScreenWidth() {
+            this.screenWidth = window.innerWidth; // Обновляем ширину экрана
+        },
         deleteNotification(index) {
             this.notifications.splice(index, 1);
         },
