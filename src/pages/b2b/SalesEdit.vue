@@ -74,7 +74,7 @@
                             </div>
                             <!-- <div class="dart-btn dart-btn-secondary btn-padding">Загрузить</div> -->
                             <FileUpload class="kenost-upload-button" mode="basic" name="banner[]"
-                                :url="'/rest/file_upload.php?banner=max'" accept="image/*" :maxFileSize="2000000"
+                                :url="'/rest/file_upload.php?banner=max'" accept="image/*" :maxFileSize="100000000"
                                 @upload="onUpload" :auto="true" chooseLabel="Загрузить" />
                         </div>
                         <div class="upload-banner__image">
