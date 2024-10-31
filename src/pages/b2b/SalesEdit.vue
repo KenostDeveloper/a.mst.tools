@@ -68,13 +68,13 @@
                         <div class="upload-banner">
                             <div class="upload-banner__text">
                                 <span class="ktitle">Баннер</span>
-                                <span>Загрузить изображение нужно размером не менее 1684х492, соблюдая пропорции. Чтобы не
+                                <span>Загрузить изображение нужно размером не менее 6824х1996, соблюдая пропорции. Чтобы не
                                     потерялось качество, желательно
                                     загружать изображение в два раза больше указанного размера.</span>
                             </div>
                             <!-- <div class="dart-btn dart-btn-secondary btn-padding">Загрузить</div> -->
                             <FileUpload class="kenost-upload-button" mode="basic" name="banner[]"
-                                :url="'/rest/file_upload.php?banner=max'" accept="image/*" :maxFileSize="100000000"
+                                :url="'/rest/file_upload.php?banner=max'" accept="image/*" :maxFileSize="10000000"
                                 @upload="onUpload" :auto="true" chooseLabel="Загрузить" />
                         </div>
                         <div class="upload-banner__image">
