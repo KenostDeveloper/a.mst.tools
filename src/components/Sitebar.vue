@@ -142,7 +142,7 @@
 				<i class="pi pi-sign-out"></i>
 			</div>
 		</div>
-		<div class="sitebar-version">v. {{ version }}</div>
+		<div class="sitebar-version" id="version" @click="copyVersion()">v. {{ version }}</div>
 	</div>
 
 	<!-- <Dialog
@@ -394,6 +394,14 @@ export default {
 			get_training_catalog_from_api: 'get_training_catalog_from_api',
 			set_training_catalog_from_api: 'set_training_catalog_from_api'
 		}),
+		copyVersion(){
+			var range = document.createRange();
+			range.selectNode(document.getElementById("version"));
+			window.getSelection().removeAllRanges(); // clear current selection
+			window.getSelection().addRange(range); // to select text
+			document.execCommand("copy");
+			window.getSelection().removeAllRanges();// to deselect
+		},
 		closeVideo(){
 			//Отправлять на сервер
 			this.video = null
