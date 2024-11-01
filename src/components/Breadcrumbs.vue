@@ -38,6 +38,7 @@ export default {
 		...mapGetters([
 			"optcatalog",
 			"orgs",
+			"order",
 			"org_store",
 			"product",
 			"actions",
@@ -139,7 +140,7 @@ export default {
 					return this.getCatItem(currentRoute.params[param.slice(1)], this.optcatalog)?.pagetitle;
 				}
 				case ":order_id": {
-					return `Заказ № ${currentRoute.params[param.slice(1)]}`;
+					return `Заказ № ${this.order?.num}`;
 				}
 				case ":search": {
 					return currentRoute.params[param.slice(1)];

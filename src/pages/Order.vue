@@ -4,7 +4,7 @@
 
 		<div class="order__header">
 			<div class="std-title__container order__title-container">
-				<h1 class="std-title">Заказ № {{ this.$route.params.order_id }} от {{ this.orderData?.createdon }}</h1>
+				<h1 class="std-title">Заказ № {{ this.orderData?.num }} от {{ this.orderData?.createdon }}</h1>
 				<div class="std-title__description" v-if="this.orderData?.status_name">
           <b>{{ this.orderData?.status_name }}</b>
 					<!-- {{ this.orderData }} <br/>
@@ -35,7 +35,7 @@
 					<article v-if="this.orderData?.delivery !== 'Самовывоз'" class="order-info__row">
 						<span class="order-info__label">Адрес доставки</span>
 						<span class="order-info__value"
-							>{{ this.orderData?.address || '???' }}
+							>{{ this.orderData?.user_address || 'Не заполнено' }}
 						</span>
 					</article>
 				<!-- </div> -->
@@ -52,7 +52,7 @@
 				<!-- <div class="order-info__col"> -->
 					<article  v-if="this.orderData?.delivery !== 'Самовывоз'" class="order-info__row">
 						<span class="order-info__label">Транспортная компания</span>
-						<span class="order-info__value">{{ this.orderData?.delivery_company || '???' }}</span>
+						<span class="order-info__value">{{ this.orderData?.tk || "Не заполнено" }}</span>
 					</article>
 					<article class="order-info__row">
 						<span class="order-info__label">Тип доставки</span>

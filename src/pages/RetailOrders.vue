@@ -50,7 +50,7 @@ export default {
         }
       },
       table_data: {
-        id: {
+        num: {
           label: 'Номер',
           type: 'link',
           link_to: 'retail_orders_id',
