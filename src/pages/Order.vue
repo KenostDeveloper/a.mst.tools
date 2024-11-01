@@ -11,7 +11,7 @@
 					{{ this.organization }} -->
         </div>
 			</div>
-			<div class="order-confirm" v-if="this.orderData?.stores_available != 0 && this.organization?.store">
+			<div class="order-confirm" v-if="this.orderData?.stores_available != 0">
 				<p class="order-confirm__text" v-if="this.orderData?.stage_description">{{ this.orderData?.stage_description }}</p>
 				<button
 					:disabled="isLoading == true" :class="{ 'dart-btn-loading': isLoading }" 
