@@ -1376,8 +1376,8 @@ export default {
     },
     actions: async function (newVal, oldVal) {
       this.form.name = newVal.name
-      if (newVal.image) {
-        this.files.max.original_href = this.site_url_prefix + 'assets/content/' + newVal.image
+      if (newVal.image_big) {
+        this.files.max.original_href = this.site_url_prefix + 'assets/content/' + newVal.image_big
       }
       if (newVal.image_inner) {
         this.files.min.original_href = this.site_url_prefix + 'assets/content/' + newVal.image_inner
