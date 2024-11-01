@@ -1377,19 +1377,19 @@ export default {
     actions: async function (newVal, oldVal) {
       this.form.name = newVal.name
       if (newVal.image) {
-        this.files.max.original_href = this.site_url_prefix + newVal.image
+        this.files.max.original_href = this.site_url_prefix + 'assets/content/' + newVal.image
       }
       if (newVal.image_inner) {
-        this.files.min.original_href = this.site_url_prefix + newVal.image_inner
+        this.files.min.original_href = this.site_url_prefix + 'assets/content/' + newVal.image_inner
       }
       if (newVal.icon) {
-        this.files.icon.original_href = this.site_url_prefix + newVal.icon
+        this.files.icon.original_href = this.site_url_prefix + 'assets/content/' + newVal.icon
       }
       if (newVal.image_small) {
-        this.files.small.original_href = this.site_url_prefix + newVal.image_small
+        this.files.small.original_href = this.site_url_prefix + 'assets/content/' + newVal.image_small
       }
       if (newVal.rules_file) {
-        this.files.file.original_href = this.site_url_prefix + newVal.rules_file
+        this.files.file.original_href = this.site_url_prefix + 'assets/content/' + newVal.rules_file
       }
 
       if (newVal.products_data) {
