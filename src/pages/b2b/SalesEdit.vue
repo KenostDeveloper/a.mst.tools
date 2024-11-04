@@ -842,6 +842,16 @@
                         <label for="participantsType-2" class="ml-2 radioLabel">Выбрать отдельные компании</label>
                     </div>
                     <div class="flex align-items-center gap-1 mt-3">
+                        <RadioButton v-model="this.form.participantsType" inputId="participantsType-4"
+                            name="participantsType" value="4" />
+                        <label for="participantsType-4" class="ml-2 radioLabel">Исключить регионы</label>
+                    </div>
+                    <div class="flex align-items-center gap-1 mt-3">
+                        <RadioButton v-model="this.form.participantsType" inputId="participantsType-5"
+                            name="participantsType" value="5" />
+                        <label for="participantsType-5" class="ml-2 radioLabel">Исключить отдельные компании</label>
+                    </div>
+                    <div class="flex align-items-center gap-1 mt-3">
                         <RadioButton v-model="this.form.participantsType" inputId="participantsType-3"
                             name="participantsType" value="3" />
                         <label for="participantsType-3" class="ml-2 radioLabel">Неограниченный круг участников</label>
@@ -849,12 +859,13 @@
                 </div>
 
                 <div class="dart-form-group" :class="{ error: v$.regions_select.$errors.length }">
-                    <div v-if="this.form.participantsType == '1'" class="kenost-select-reginos">
-                        <p class="kenost-select-reginos__title">Выбор участников по регионам</p>
-                        <p class="kenost-select-reginos__gray">Акция будет доступна в том числе для новых компаний из
-                            выбранного региона
+                    <div v-if="this.form.participantsType == '1' || this.form.participantsType == '4'" class="kenost-select-reginos">
+                        <p class="kenost-select-reginos__title" v-if="this.form.participantsType == '1'">Выбор участников по регионам</p>
+                        <p class="kenost-select-reginos__title" v-else>Выбор исключения по регионам</p>
+                        <p class="kenost-select-reginos__gray">Акция не будет доступна в том числе для новых компаний из
+                            выбранных регионов
                         </p>
-                        <div class="kenost-select-reginos__checkboxs">
+                        <div class="kenost-select-reginos__checkboxs" v-if="this.form.participantsType == '1'">
                             <div class="flex align-items-center gap-1">
                                 <Checkbox v-model="this.form.available_stores" inputId="access-1" name="access-1"
                                     value="true" />
@@ -871,6 +882,24 @@
                                 <label for="access-3" class="ml-2"> Доступно для производителей </label>
                             </div>
                         </div>
+
+                        <div class="kenost-select-reginos__checkboxs" v-else>
+                            <div class="flex align-items-center gap-1">
+                                <Checkbox v-model="this.form.available_stores" inputId="access-1" name="access-1"
+                                    value="true" />
+                                <label for="access-1" class="ml-2"> Исключить магазины </label>
+                            </div>
+                            <div class="flex align-items-center gap-1">
+                                <Checkbox v-model="this.form.available_opt" inputId="access-2" name="access-1"
+                                    value="true" />
+                                <label for="access-2" class="ml-2"> Исключить оптовые компании </label>
+                            </div>
+                            <div class="flex align-items-center gap-1">
+                                <Checkbox v-model="this.form.available_vendors" inputId="access-3" name="access-1"
+                                    value="true" />
+                                <label for="access-3" class="ml-2"> Исключить производителей </label>
+                            </div>
+                        </div>
                         <MultiSelect filter v-model="this.regions_select" display="chip" :options="this.regions_all"
                             optionLabel="name" placeholder="Выберите регионы"
                             class="w-full md:w-20rem kenost-multiselect mt-2" />
@@ -881,9 +910,10 @@
                     </span>
                 </div>
 
-                <div class="PickList" v-if="this.form.participantsType == '2'">
+                <div class="PickList" v-if="this.form.participantsType == '2' || this.form.participantsType == '5'">
                     <div class="PickList__product" :style="{ width: '40%' }">
-                        <b class="PickList__title">Добавление отдельных организаций</b>
+                        <b class="PickList__title" v-if="this.form.participantsType == '2'">Добавление отдельных организаций</b>
+                        <b class="PickList__title" v-else>Исключение отдельных организаций</b>
                         <div class="PickList__filters">
                             <div class="form_input_group input_pl input-parent required">
                                 <input type="text" id="filter_name" placeholder="Введите артикул или название"
@@ -912,7 +942,8 @@
                     <div class="PickList__selected" :class="{ error: v$.all_organizations_selected.$errors.length }"
                         :style="{ width: '40%' }">
                         <div class="PickList__title mb-4">
-                            <b>Добавленные организации</b>
+                            <b v-if="this.form.participantsType == '2'">Добавленные организации</b>
+                            <b v-else>Исключенные организации</b>
                         </div>
                         <div class="PickList__products PickList__products-selected">
                             <div class="PickList__el center" v-for="item in this.all_organizations_selected"

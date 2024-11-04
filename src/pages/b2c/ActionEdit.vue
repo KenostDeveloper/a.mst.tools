@@ -952,11 +952,12 @@ export default {
         this.files.xlsx = res.data.files[0]
         const data = {
           action: 'upload/products/file',
-          store_id: this.form.store_id,
+          store_id: [this.form.store_id],
           file: res.data.files[0].original,
           type: 'b2c'
         }
         this.opt_upload_products_file(data).then((response) => {
+          
           const productsList = response.data.data.data
           this.selected = {}
           // Бежим по всем элементам и добавляем их в select
@@ -972,6 +973,7 @@ export default {
                 product.discountInRubles = tempProduct.E - tempProduct.D
                 product.discountInterest = (tempProduct.E - tempProduct.D) / (tempProduct.E / 100)
               }
+              console.log(tempProduct)
               product.finalPrice = tempProduct.D
               product.price = tempProduct.E
               product.id = tempProduct.remain.id
@@ -1000,6 +1002,7 @@ export default {
               this.error_product.push(tempProduct.A)
             }
           }
+          
           const data = {
             storeid: [this.form.store_id],
             filter: this.filter,
