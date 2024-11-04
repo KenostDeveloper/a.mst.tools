@@ -7961,3 +7961,37 @@ button.std-icon__wrapper {
 .std-nav__address-text{
 	max-width: 220px;
 }
+
+.vendors_selected__rows{
+	height: calc(100vh - calc(120px + 60vh));
+    overflow-y: auto;
+
+	&::-webkit-scrollbar {
+		width: 8px;
+		height: 8px;
+		background-color: #e0e0e0; /* blue */
+		border-radius: 9em;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		background-color: #b4b4b4; /* green */
+		border-radius: 9em;
+	}
+}
+
+.vendor_select__rows{
+	height: calc(100vh - calc(120px + 40vh));
+    overflow-y: auto;
+
+	&::-webkit-scrollbar {
+		width: 8px;
+		height: 8px;
+		background-color: #e0e0e0; /* blue */
+		border-radius: 9em;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		background-color: #b4b4b4; /* green */
+		border-radius: 9em;
+	}
+}
