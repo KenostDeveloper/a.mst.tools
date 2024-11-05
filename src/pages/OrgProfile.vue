@@ -61,7 +61,10 @@
 					</FileUpload>
 				</div>
 			</div>
-			<div class="dart-form-group mb-4">
+
+
+			<!-- Данные контактного лица -->
+			<!-- <div class="dart-form-group mb-4">
 				<span class="ktitle mb-3">Данные контактного лица</span>
 				<div class="kenost-form-grid">
 					<div class="form_input_group w-50" v-for="(field, index) in form.fields.contacts" :key="index">
@@ -70,7 +73,11 @@
 							:name="field.name" :placeholder="field.placeholder" />
 					</div>
 				</div>
-			</div>
+			</div> -->
+
+			<ManagerList v-model:items="managers" class="std-profile__managers" />
+
+
 			<div class="dart-form-group mb-5 requisites">
 				<div class="upload-banner mb-3 hidden-mobile-l">
 					<div class="upload-banner__text">
@@ -416,6 +423,7 @@ import Accordion from "../components/Accordion.vue";
 import useVuelidate from "@vuelidate/core";
 import { helpers, required } from "@vuelidate/validators";
 import { ref } from "vue";
+import ManagerList from "../components/settings/ManagerList.vue";
 // import Accordion from 'primevue/accordion'
 // import AccordionTab from 'primevue/accordiontab'
 
@@ -546,7 +554,34 @@ export default {
 					],
 				},
 			},
+			managers: [
+				{
+					id: 1,
+					name: '',
+					email: '',
+					phone: '',
 
+					unlimitied_clients: true,
+					clients: [
+						{
+							name: "МСТ"
+						},
+						{
+							name: "Челябинская область"
+						}
+					],
+
+					notifications: {
+						order_status_changes: true,
+						new_opt_order: true,
+						company_enabled: true,
+						company_connected: true,
+						new_vendor: true,
+						added_to_my_vendors: true,
+						deleted_from_my_vendors: true
+					},
+				}
+			],
 		};
 	},
 	setup() {
@@ -916,6 +951,7 @@ export default {
 		Checkbox,
 		DropZone,
 		Accordion,
+		ManagerList,
 	},
 	computed: {
 		...mapGetters(["org_profile"]),
