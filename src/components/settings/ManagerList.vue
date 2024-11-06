@@ -31,7 +31,12 @@
                         <label class="manager-list__checkbox-label" for="unlimitied-clients">Неограниченный круг
                             клиентов</label>
                     </div>
-                    <ClientList v-model:clients="manager.clients" />
+
+                    <!-- <ClientList v-model:clients="manager.clients" /> -->
+                    <MultiSelect filter v-model="manager.clients" display="chip" :options="manager.clients"
+                            optionLabel="name" placeholder="Выберите клиентов"
+                            class="" />
+
                 </div>
 
                 <div class="manager-list__block manager-list__notifications">
@@ -58,6 +63,7 @@
 
 <script>
 import Checkbox from 'primevue/checkbox'
+import MultiSelect from 'primevue/multiselect'
 import useVuelidate from '@vuelidate/core';
 import ClientList from './ClientList.vue';
 
@@ -71,6 +77,7 @@ export default {
     },
     components: {
         Checkbox,
+        MultiSelect,
         ClientList
     },
     setup() {
