@@ -36,6 +36,7 @@
                     <MultiSelect filter v-model="manager.clients" display="chip" :options="manager.clients"
                             optionLabel="name" placeholder="Выберите клиентов"
                             class="" />
+                            
 
                 </div>
 
