@@ -31,9 +31,8 @@
                         <label class="manager-list__checkbox-label" for="unlimitied-clients">Неограниченный круг
                             клиентов</label>
                     </div>
-
                     <!-- <ClientList v-model:clients="manager.clients" /> -->
-                    <MultiSelect filter v-model="manager.clients" display="chip" :options="manager.clients"
+                    <MultiSelect v-if="!manager.unlimitied_clients" filter v-model="manager.clients" display="chip" :options="regions_and_stores"
                             optionLabel="name" placeholder="Выберите клиентов"
                             class="" />
                             
@@ -63,6 +62,7 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
 import Checkbox from 'primevue/checkbox'
 import MultiSelect from 'primevue/multiselect'
 import useVuelidate from '@vuelidate/core';
@@ -143,6 +143,7 @@ export default {
         }
     },
     methods: {
+        ...mapActions(["get_stores_and_regions"]),
         addItem() {
             this.$emit('update:items', [...this.items, {
                 id: 1,
@@ -151,14 +152,7 @@ export default {
                 phone: '',
 
                 unlimitied_clients: true,
-                clients: [
-                    {
-                        name: "МСТ"
-                    },
-                    {
-                        name: "Челябинская область"
-                    }
-                ],
+                clients: [],
 
                 notifications: {
                     order_status_changes: true,
@@ -174,6 +168,12 @@ export default {
         deleteItem(index) {
             this.$emit('update:items', [...this.items.slice(0, index), ...this.items.slice(index + 1)]);
         }
+    },
+    computed: {
+		...mapGetters(["regions_and_stores"]),
+	},
+    mounted () {
+        this.get_stores_and_regions({action: "get/regions/stores"})
     }
 }
 </script>

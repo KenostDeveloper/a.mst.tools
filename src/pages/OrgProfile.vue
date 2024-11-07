@@ -562,15 +562,7 @@ export default {
 					phone: '',
 
 					unlimitied_clients: true,
-					clients: [
-						{
-							name: "МСТ"
-						},
-						{
-							name: "Челябинская область"
-						}
-					],
-
+					clients: [],
 					notifications: {
 						order_status_changes: true,
 						new_opt_order: true,
@@ -871,9 +863,7 @@ export default {
 				action: "set/org/profile",
 				id: router.currentRoute._value.params.id,
 				data: {
-					contact: this.orgprofile.contact,
-					email: this.orgprofile.email,
-					phone: this.orgprofile.phone,
+					managers: this.managers,
 					image: this.orgprofile.image,
 					upload_image: this.orgprofile.upload_image,
 				},
@@ -959,6 +949,10 @@ export default {
 	watch: {
 		org_profile: function (newVal, oldVal) {
 			this.orgprofile = newVal;
+
+			if(newVal.managers){
+				this.managers = newVal.managers
+			}
 		},
 	},
 };
