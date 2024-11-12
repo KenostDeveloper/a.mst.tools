@@ -35,8 +35,8 @@
                             клиентов</label>
                     </div>
                     <!-- <ClientList v-model:clients="manager.clients" /> -->
-                    <MultiSelect v-if="!manager.unlimitied_clients" filter v-model="manager.clients" display="chip"
-                        :options="regions_and_stores" optionLabel="name" placeholder="Выберите клиентов" class="" />
+                    <MultiSelect v-if="!manager.unlimitied_clients" class="w-full md:w-20rem kenost-multiselect mt-2" filter v-model="manager.clients" display="chip"
+                        :options="regions_and_stores" optionLabel="name" placeholder="Выберите клиентов" />
 
 
                 </div>
@@ -70,6 +70,7 @@ import MultiSelect from 'primevue/multiselect'
 import useVuelidate from '@vuelidate/core';
 import ClientList from './ClientList.vue';
 import { IMaskDirective } from 'vue-imask';
+import router from "../../router";
 
 export default {
     name: 'ManagerList',
@@ -182,7 +183,10 @@ export default {
         ...mapGetters(["regions_and_stores"]),
     },
     mounted() {
-        this.get_stores_and_regions({ action: "get/regions/stores" })
+        this.get_stores_and_regions({
+            action: "get/regions/stores",
+            id: router.currentRoute._value.params.id
+        })
     },
 }
 </script>

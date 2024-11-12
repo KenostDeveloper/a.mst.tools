@@ -74,8 +74,7 @@
 					</div>
 				</div>
 			</div> -->
-
-			<!-- <ManagerList v-model:items="managers" class="std-profile__managers" /> -->
+			<ManagerList v-model:items="managers" class="std-profile__managers" />
 
 
 			<div class="dart-form-group mb-5 requisites">
