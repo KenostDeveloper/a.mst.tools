@@ -11,9 +11,12 @@
             <div class="manager-list__content">
                 <div class="manager-list__input-list">
                     <div v-for="(input) in form.info" class="form_input_group manager-list__input-container">
-                        <input :type="input.type" v-model="manager[input.name]"
+                        <input v-if="input.type !== 'tel'" :type="input.type" v-model="manager[input.name]"
                             class="dart-form-control manager-list__input" :class="{ error: v$.items }"
                             :name="input.name" :placeholder="input.placeholder" />
+                        <input v-else :type="input.type" v-imask="mask" :value="manager[input.name]"
+                            class="dart-form-control manager-list__input" :class="{ error: v$.items }"
+                            :name="input.name" :placeholder="input.placeholder" @accept="(e) => manager[input.name] = e.detail.unmaskedValue" />
 
                         <div v-if="v$.items" class="error__desc">
                             <span v-for="error of v$.items">
@@ -32,10 +35,9 @@
                             клиентов</label>
                     </div>
                     <!-- <ClientList v-model:clients="manager.clients" /> -->
-                    <MultiSelect v-if="!manager.unlimitied_clients" filter v-model="manager.clients" display="chip" :options="regions_and_stores"
-                            optionLabel="name" placeholder="Выберите клиентов"
-                            class="" />
-                            
+                    <MultiSelect v-if="!manager.unlimitied_clients" filter v-model="manager.clients" display="chip"
+                        :options="regions_and_stores" optionLabel="name" placeholder="Выберите клиентов" class="" />
+
 
                 </div>
 
@@ -67,6 +69,7 @@ import Checkbox from 'primevue/checkbox'
 import MultiSelect from 'primevue/multiselect'
 import useVuelidate from '@vuelidate/core';
 import ClientList from './ClientList.vue';
+import { IMaskDirective } from 'vue-imask';
 
 export default {
     name: 'ManagerList',
@@ -80,6 +83,9 @@ export default {
         Checkbox,
         MultiSelect,
         ClientList
+    },
+    directives: {
+        imask: IMaskDirective
     },
     setup() {
         return {
@@ -139,6 +145,9 @@ export default {
                         label: "Вас удалили из моих поставщиков",
                     },
                 ],
+            },
+            mask: {
+                mask: '+{7} (000) 000-00-00',
             }
         }
     },
@@ -170,11 +179,11 @@ export default {
         }
     },
     computed: {
-		...mapGetters(["regions_and_stores"]),
-	},
-    mounted () {
-        this.get_stores_and_regions({action: "get/regions/stores"})
-    }
+        ...mapGetters(["regions_and_stores"]),
+    },
+    mounted() {
+        this.get_stores_and_regions({ action: "get/regions/stores" })
+    },
 }
 </script>
 
