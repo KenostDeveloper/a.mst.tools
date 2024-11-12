@@ -78,7 +78,11 @@
                         id="name"
                         placeholder="ФИО контактного лица"
                         class="dart-form-control std-auth__input"
+                        type="fio"
+                        selectionType="single"
+                        required
                         v-model="form.name"
+                        @setSelection="setName"
                         autocomplete="off" />
                     <div v-if="v$.form.name.$error" class="error-message">
                         <span v-if="!v$.form.name.required">Пожалуйста, введите ФИО.</span>
@@ -243,8 +247,7 @@ export default {
                     minLength: minLength(6)
                 },
                 passwordConfirm: {
-                    required,
-                    sameAsPassword: sameAs(() => this.form.password) // Проверка на совпадение паролей
+                    required
                 },
                 telephone: {
                     required,
