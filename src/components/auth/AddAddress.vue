@@ -8,7 +8,6 @@
             :class="inputClasses"
             type="address"
             selectionType="single"
-            required
             @setSelection="setSelection" />
         <Map ref="mapRef" class="std-auth__map" v-model="this.address.value" :coordinates="coordinates" @setMapAddress="mapAddress = $event" />
     </div>

@@ -7,13 +7,18 @@
             </div>
             <div class="std-auth__input-container">
                 <input type="text" name="username" class="dart-form-control std-auth__input" placeholder="Логин" required="" v-model="form.email" />
-                <input
-                    type="password"
+                <div class="relative">
+                    <input
+                    :type="showPassword ? 'text' : 'password'"
                     name="password"
                     class="dart-form-control std-auth__input"
                     placeholder="Пароль"
                     required=""
                     v-model="form.password" />
+                    <button type="button" @click="togglePasswordVisibility" class="password-toggle">
+                        <i :class="showPassword ? 'pi pi-eye-slash' : 'pi pi-eye'"></i>
+                    </button>
+                </div>
             </div>
             <div class="std-auth__button-container">
                 <button
@@ -58,6 +63,7 @@ export default {
         return {
             mode: 'signIn',
             loading: false,
+            showPassword: false, // Флаг для видимости пароля
             showForgotModal: false,
             form: {
                 email: '',
@@ -76,6 +82,9 @@ export default {
         ...mapActions(['org_get_from_api']),
         formSubmit() {
             this.signIn();
+        },
+        togglePasswordVisibility() {
+            this.showPassword = !this.showPassword;
         },
         signIn() {
             this.loading = true;
