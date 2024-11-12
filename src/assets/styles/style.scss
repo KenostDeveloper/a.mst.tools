@@ -6373,12 +6373,12 @@ button.std-icon__wrapper {
 .sitebar {
 	&.hide {
 		& + .std-empty-dialog__overlay + .content {
-			// max-width: calc(100vw - 80px);
+			max-width: calc(100vw - 80px);
 		}
 	}
 
 	& + .std-empty-dialog__overlay + .content {
-		// max-width: calc(100vw - 350px);
+		max-width: calc(100vw - 350px);
 	}
 }
 
