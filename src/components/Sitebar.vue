@@ -40,7 +40,7 @@
 					<div class="sitebar-profile__icon">
 						<img :src="this.organozation?.image" alt="" />
 					</div>
-					<button class="sitebar-profile__change" @click="this.changeOrgModal = true">
+					<button v-if="this.organizations.length > 1" class="sitebar-profile__change" @click="this.changeOrgModal = true">
 						<!-- <img src="../assets/images/icons/change.svg" /> -->
 					</button>
 				</div>
