@@ -47,6 +47,7 @@
     </div>
     <Sitebar v-if="this.$route.params.id && !isSmallScreen" :active="this.sitebar" />
     <div v-if="!isSmallScreen" class="content" :class="{ white: this.namePathIsNav == 'purchases', 'content--fit':  this.namePathIsNav == 'purchases' }">
+        <CookieConsent />
         <div class="dart_container_wrap">
             <Nav v-if="namePathIsNav == 'purchases'" />
             <div class="dart_wrapper">
@@ -65,6 +66,7 @@ import router from '../router';
 import Notification from '../components/opt/Notification.vue';
 import Toast from 'primevue/toast';
 import NotificationButton from '../components/NotificationButton.vue';
+import CookieConsent from '../components/CookieConsent.vue';
 
 export default {
     name: 'MainLoyout',
@@ -78,7 +80,7 @@ export default {
             screenWidth: window.innerWidth, // Сохраняем начальную ширину
         };
     },
-    components: { Sitebar, Nav, Notification, Toast, NotificationButton },
+    components: { Sitebar, Nav, Notification, Toast, NotificationButton, CookieConsent },
     computed: {
         ...mapGetters({
             getUser: 'user/getUser',

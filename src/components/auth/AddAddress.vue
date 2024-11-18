@@ -1,15 +1,18 @@
 <template>
-    <div class="std-auth__input-container">
+    <div class="std-auth__input-container" :class="{ 'has-error': $v.address.value.$error }">
         <Autocomplete
-            v-model="this.address.value"
+            v-model="address.value"
             placeholder="Адрес доставки"
             name="address"
             class="dart-form-control std-auth__input"
-            :class="inputClasses"
             type="address"
             selectionType="single"
             @setSelection="setSelection" />
-        <Map ref="mapRef" class="std-auth__map" v-model="this.address.value" :coordinates="coordinates" @setMapAddress="mapAddress = $event" />
+        <div v-if="$v.address.value.$error" class="error-message">
+            <span v-if="!$v.address.value.required">Пожалуйста, введите адрес.</span>
+            <span v-else-if="$v.address.value.minLength">Пожалуйста, введите адрес.</span>
+        </div>
+        <Map ref="mapRef" class="std-auth__map" v-model="address.value" :coordinates="coordinates" @setMapAddress="mapAddress = $event" />
     </div>
 </template>
 
@@ -17,6 +20,8 @@
 import axios from 'axios';
 import Autocomplete from '../Autocomplete.vue';
 import Map from '../Map/Map.vue';
+import { required, minLength } from '@vuelidate/validators';
+import useVuelidate from '@vuelidate/core';
 
 export default {
     name: 'AddAddress',
@@ -35,9 +40,22 @@ export default {
     },
     data() {
         return {
-            address: this.modelValue,
-            mapAddress: this.modelValue,
-            coordindates: ''
+            address: this.modelValue || { value: '' }, // Инициализация, если modelValue отсутствует
+            mapAddress: this.modelValue || { value: '' },
+            coordinates: '' // Исправлена опечатка (coordindates -> coordinates)
+        };
+    },
+    setup() {
+        return { $v: useVuelidate() };
+    },
+    validations() {
+        return {
+            address: {
+                value: {
+                    required,
+                    minLength: minLength(5)
+                }
+            }
         };
     },
     components: {
@@ -90,13 +108,14 @@ export default {
     watch: {
         value: {
             handler(newVal) {
-                console.log(newVal)
-            }
+                console.log(newVal); // Добавьте проверку newVal, чтобы избежать ошибок
+            },
+            immediate: true // Убедитесь, что обработчик запускается при первом рендере
         },
         mapAddress: {
             handler(newVal) {
-                this.getAddress(newVal);
-            },
+                if (newVal) this.getAddress(newVal);
+            }
         }
     }
 };

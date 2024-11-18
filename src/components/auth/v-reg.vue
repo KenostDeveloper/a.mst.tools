@@ -61,8 +61,7 @@
                             </button>
                         </div>
                         <div v-if="v$.form.passwordConfirm.$error" class="error-message">
-                            <span v-if="!v$.form.passwordConfirm.required">Пожалуйста, подтвердите пароль.</span>
-                            <span v-else-if="v$.form.passwordConfirm.sameAsPassword">Пароли должны совпадать.</span>
+                            <span>Пожалуйста, подтвердите пароль. Пароли должны совпадать.</span>
                         </div>
                     </FloatLabel>
                 </div>
@@ -80,7 +79,6 @@
                         class="dart-form-control std-auth__input"
                         type="fio"
                         selectionType="single"
-                        required
                         v-model="form.name"
                         @setSelection="setName"
                         autocomplete="off" />
@@ -98,6 +96,7 @@
                         placeholder="Телефон"
                         class="dart-form-control std-auth__input"
                         v-model="form.telephone"
+                        @input="form.telephone = normalizePhone(form.telephone)"
                         autocomplete="off" />
                     <div v-if="v$.form.telephone.$error" class="error-message">
                         <span v-if="!v$.form.telephone.required">Пожалуйста, введите номер телефона.</span>
@@ -123,17 +122,19 @@
             <div v-if="!this.regIsSuccess" class="std-auth__input-container-wrapper">
                 <span class="std-auth__input-label">Данные компании</span>
 
-                <div :class="{ 'has-error': v$.form.org.inn.$error }">
-                    <Autocomplete
+                <div :class="{ 'has-error': v$.form.org.inn.validInn.$response != true && v$.form.org.inn.$dirty }">
+                    <input
+                        maxlength="12"
                         ref="innInput"
                         name="inn"
                         id="inn"
                         placeholder="ИНН"
                         class="dart-form-control std-auth__input"
-                        v-model="form.org.inn" />
-                    <div v-if="v$.form.org.inn.$error" class="error-message">
-                        <span v-if="!v$.form.org.inn.required">Пожалуйста, введите ИНН.</span>
-                        <span v-else-if="v$.form.org.inn.minLength || v$.form.org.inn.maxLength">ИНН должен содержать 10 или 12 символов.</span>
+                        v-model="form.org.inn"
+                    />
+                    <!-- {{ v$.form.org.inn.validInn.$response }} -->
+                    <div v-if="v$.form.org.inn.validInn.$response != true && v$.form.org.inn.$dirty" class="error-message">
+                        <span>{{ v$.form.org.inn.validInn.$response || 'Некорректный ИНН' }}</span>
                     </div>
                 </div>
 
@@ -144,7 +145,8 @@
                         placeholder="Наименование организации"
                         class="dart-form-control std-auth__input"
                         v-model="form.org.name"
-                        autocomplete="off" />
+                        autocomplete="off"
+                    />
                     <div v-if="v$.form.org.name.$error" class="error-message">
                         <span v-if="!v$.form.org.name.required">Пожалуйста, введите наименование организации.</span>
                         <span v-else-if="v$.form.org.name.minLength">Наименование должно содержать минимум 3 символа.</span>
@@ -157,7 +159,8 @@
                         v-for="(address, index) in form.delivery_addresses"
                         :key="index"
                         :index="index"
-                        v-model="form.delivery_addresses[index]" />
+                        v-model="form.delivery_addresses[index]"
+                    />
                     <div class="std-auth__actions-container">
                         <button
                             v-if="form.delivery_addresses.length > 1"
@@ -181,10 +184,15 @@
                     <i v-if="this.loading" class="pi pi-spin pi-spinner" style="font-size: 14px"></i>
                     <span>Зарегистрироваться</span>
                 </button>
+                
+                <!-- {{ this.form.telephone }} -->
+
                 <span v-if="this.regIsSuccess" class="std-auth__span">Регистрация прошла успешно!</span>
                 <button @click="() => { this.setRegForm(); this.regIsSuccess = false; }" class="dart-btn dart-btn-secondary-outline dart-btn-block align-items-center flex justify-content-center std-auth__button std-auth__button--secondary" type="button">
                     <span>Войти</span>
                 </button>
+                <p class="kenost-policy">Нажимая кнопку "Зарегистрироваться", Вы соглашаетесь с <a targer="_blank" href="https://mst.tools/politika-konfidenczialnosti.html">Политика конфиденциальности</a> и обработкой персональных данных</p>
+
             </div>
         </form>
     </div>
@@ -199,7 +207,7 @@ import { IMaskDirective } from 'vue-imask';
 import Toast from 'primevue/toast';
 import { sendMetrik } from '../../utils/metrika';
 import FloatLabel from '../FloatLabel.vue';
-import { required, minLength, maxLength, email, sameAs } from '@vuelidate/validators';
+import { required, minLength, maxLength, helpers, email } from '@vuelidate/validators';
 import useVuelidate from '@vuelidate/core';
 
 export default {
@@ -235,6 +243,62 @@ export default {
         return { v$: useVuelidate() };
     },
     validations() {
+        // Функция валидации ИНН
+        function validateInn(inn) {
+            const error = { code: null, message: '' };
+            let result = false;
+
+            if (typeof inn === 'number') {
+                inn = inn.toString();
+            } else if (typeof inn !== 'string') {
+                inn = '';
+            }
+
+            if (!inn.length) {
+                error.code = 1;
+                error.message = 'Пожалуйста, заполните ИНН';
+            } else if (/[^0-9]/.test(inn)) {
+                error.code = 2;
+                error.message = 'ИНН может состоять только из цифр';
+            } else if ([10, 12].indexOf(inn.length) === -1) {
+                error.code = 3;
+                error.message = 'ИНН может состоять только из 10 или 12 цифр';
+            } else {
+                const checkDigit = function (inn, coefficients) {
+                    let n = 0;
+                    for (let i in coefficients) {
+                        n += coefficients[i] * inn[i];
+                    }
+                    return parseInt(n % 11 % 10);
+                };
+
+                switch (inn.length) {
+                    case 10:
+                        const n10 = checkDigit(inn, [2, 4, 10, 3, 5, 9, 4, 6, 8]);
+                        if (n10 === parseInt(inn[9])) {
+                            result = true;
+                        }
+                        break;
+                    case 12:
+                        const n11 = checkDigit(inn, [7, 2, 4, 10, 3, 5, 9, 4, 6, 8]);
+                        const n12 = checkDigit(inn, [3, 7, 2, 4, 10, 3, 5, 9, 4, 6, 8]);
+                        if (n11 === parseInt(inn[10]) && n12 === parseInt(inn[11])) {
+                            result = true;
+                        }
+                        break;
+                }
+            }
+            console.log({ valid: result, message: error.message })
+            return { valid: result, message: error.message };
+        }
+
+        const validInn = helpers.withMessage(
+            message => message || 'Некорректный ИНН',
+            value => {
+                const { valid, message } = validateInn(value);
+                return valid || message;
+            }
+        );
         return {
             form: {
                 login: {
@@ -251,7 +315,7 @@ export default {
                 },
                 telephone: {
                     required,
-                    minLength: minLength(16), // Длина с кодом +7 (XXX) XXX-XX-XX
+                    minLength: minLength(11), // Длина с кодом +7 (XXX) XXX-XX-XX
                 },
                 email: {
                     required,
@@ -268,8 +332,15 @@ export default {
                     },
                     inn: {
                         required,
-                        minLength: minLength(10),
-                        maxLength: maxLength(12)
+                        validInn
+                    }
+                },
+                delivery_addresses: {
+                    $each: {
+                        value: { 
+                            required,
+                            minLength: minLength(5) // Минимальная длина адреса (пример)
+                        }
                     }
                 }
             }
@@ -303,10 +374,12 @@ export default {
                     if (data) {
                         if (data === 'technical error') {
                             this.$toast.add({ severity: 'error', summary: 'Техническая ошибка', detail: 'Попробуйте позже.', life: 3000 });
+                            this.loading = false;
                             return;
                         }
                         if (!data.data.success) {
                             this.$toast.add({ severity: 'error', summary: 'Ошибка!', detail: data.data.message, life: 3000 });
+                            this.loading = false;
                             this.goToErrorInput(data.data.message);
                         } else {
                             this.sendMetrik('register');
@@ -316,9 +389,12 @@ export default {
                     }
                 });
             } else {
-                this.$toast.add({ severity: 'info', summary: 'Пароли не совпадают', detail: 'Проверьте правильно ли введен пароль', life: 3000 });
+                this.$toast.add({ severity: 'error', summary: 'Ошибка!', detail: 'Пароли не совпадают. Пожалуйста, убедитесь, что вы ввели их правильно.', life: 3000 });
                 this.goToErrorInput('пароль');
             }
+        },
+        normalizePhone(phone) {
+            return phone.replace(/[^0-9]/g, ''); // Удалить все, кроме цифр
         },
         getErrorMessages() {
             if (this.v$.form.login.$error) {
@@ -331,8 +407,7 @@ export default {
                 if (this.v$.form.password.minLength) return 'Пароль должен содержать минимум 6 символов.';
             }
             if (this.v$.form.passwordConfirm.$error) {
-                if (!this.v$.form.passwordConfirm.required) return 'Пожалуйста, подтвердите пароль.';
-                if (this.v$.form.passwordConfirm.sameAsPassword) return 'Пароли должны совпадать.';
+                return 'Пожалуйста, подтвердите пароль. Пароли должны совпадать.';
             }
             if (this.v$.form.telephone.$error) {
                 if (!this.v$.form.telephone.required) return 'Пожалуйста, введите номер телефона.';
@@ -350,11 +425,17 @@ export default {
                 if (!this.v$.form.org.name.required) return 'Пожалуйста, введите наименование организации.';
                 if (this.v$.form.org.name.minLength) return 'Наименование организации должно содержать минимум 3 символа.';
             }
+
             if (this.v$.form.org.inn.$error) {
                 if (!this.v$.form.org.inn.required) return 'Пожалуйста, введите ИНН.';
-                if (this.v$.form.org.inn.minLength || this.v$.form.org.inn.maxLength) return 'ИНН должен содержать 10 или 12 символов.';
+                if (this.v$.form.org.inn.$params.innLength && !this.v$.form.org.inn.$params.innLength(value)) {
+                    return 'ИНН должен содержать 10 или 12 символов.';
+                }
             }
-                        
+            if (this.v$.form.delivery_addresses.$error) {
+                return 'Пожалуйста, заполните все адреса корректно.';
+            }
+
             return ''; // Если ошибок нет, возвращаем пустую строку
         },
         togglePasswordVisibility1() {

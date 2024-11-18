@@ -8326,3 +8326,20 @@ button.std-icon__wrapper {
 // .password-toggle:focus {
 //     outline: none;
 // }
+
+.std-auth__input-container .std-auth__input-container{
+	gap: 0;
+}
+
+.std-auth__map{
+	margin-top: 10px;
+}
+
+.kenost-policy{
+	color: #A0A0A0;
+	font-size: 12px;
+
+	a{
+		color: #A0A0A0;
+	}
+}
