@@ -39,6 +39,7 @@ export default {
 			"optcatalog",
 			"orgs",
 			"order",
+			"optorder",
 			"org_store",
 			"product",
 			"actions",
@@ -130,6 +131,7 @@ export default {
 			"org_profile_from_api",
 		]),
 		getRouteName(currentRoute, param) {
+			console.log("Current route: ", currentRoute);
 			switch (param) {
 				case ":id": {
 					return this.getOrgNameById(currentRoute.params[param.slice(1)]);
@@ -140,7 +142,14 @@ export default {
 					return this.getCatItem(currentRoute.params[param.slice(1)], this.optcatalog)?.pagetitle;
 				}
 				case ":order_id": {
-					return `Заказ № ${this.order?.num}`;
+					switch(currentRoute?.meta?.breadcrumb?.path) {
+						case "order_id":
+						case "opt_order_id":
+							return `Заказ № ${this.optorder?.order?.id}`;
+						case "retail_order_id":
+						default:
+							return `Заказ № ${this.order?.id || "-"}`;
+					}
 				}
 				case ":search": {
 					return currentRoute.params[param.slice(1)];

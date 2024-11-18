@@ -599,6 +599,7 @@ const routes = [
 														meta: {
 															breadcrumb: {
 																label: "Розничный заказ",
+																path: "retail_order_id",
 															},
 														},
 														component: Order,
@@ -629,6 +630,7 @@ const routes = [
 														meta: {
 															breadcrumb: {
 																label: "Мой заказ",
+																path: "order_id",
 															},
 														},
 														component: MyOrder,
@@ -659,6 +661,7 @@ const routes = [
 														meta: {
 															breadcrumb: {
 																label: "Мой оптовый заказ",
+																path: "opt_order_id"
 															},
 														},
 														component: OrderOpt,
