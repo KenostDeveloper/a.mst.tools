@@ -101,11 +101,13 @@
             <table>
                 <tr>
                     <th>Артикул</th>
+					<th>Наименование</th>
 					<th>Желаемое количество</th>
 					<th>Остаток у продавца</th>
                 </tr>
                 <tr v-for="(item, index) in this.list" :key="item.id">
                     <td class="text-center">{{ item.article }}</td>
+					<td class="text-center">{{ item.name }}</td>
                     <td class="text-center">{{ item.value }}</td>
 					<td class="text-center">{{ item.available }}</td>
                 </tr>
