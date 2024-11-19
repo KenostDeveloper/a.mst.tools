@@ -82,46 +82,14 @@ export default {
 			if (this.d_value > this.d_min) {
 				this.d_value = this.d_value - (1 * this.d_step);
 			}
-			const data = {
-				value: this.d_value,
-				id: this.id,
-				store_id: this.store_id,
-				max: this.d_max,
-				min: this.d_min,
-				index: this.index,
-				item: this.item,
-			};
-			this.$emit("ElemCount", data);
+			this.debouncedSend()
 		},
 		onPlus() {
 			if (this.d_value <= this.d_max) {
 				this.d_value = Number(this.d_value) + (1 * this.d_step);
 			}
-			const data = {
-				value: this.d_value,
-				id: this.id,
-				store_id: this.store_id,
-				max: this.d_max,
-				min: this.d_min,
-				index: this.index,
-				item: this.item,
-			};
-			this.$emit("ElemCount", data);
+			this.debouncedSend()
 		},
-		// onPlus() {
-		// 	if (this.d_value < this.d_max) {
-		// 		this.d_value = Number(this.d_value) + (1 * this.d_step);
-		// 	}
-		// 	const data = {
-		// 		value: this.d_value,
-		// 		id: this.id,
-		// 		store_id: this.store_id,
-		// 		max: this.d_max,
-		// 		index: this.index,
-		// 		item: this.item,
-		// 	};
-		// 	this.$emit("ElemCount", data);
-		// },
 		onEmit(e) {
 			if (!this.d_value || this.d_value < 0) {
 				this.d_value = this.d_min;
@@ -131,17 +99,20 @@ export default {
 				const remains = this.d_value % this.d_step;
 				this.d_value = this.d_value - remains;
 			}
-
+			this.debouncedSend()
+		},
+		send(){
 			const data = {
 				value: this.d_value,
 				id: this.id,
 				store_id: this.store_id,
 				max: this.d_max,
+				min: this.d_min,
 				index: this.index,
 				item: this.item,
 			};
 			this.$emit("ElemCount", data);
-		},
+		}
 	},
 	mounted() {},
 	components: {
@@ -149,6 +120,9 @@ export default {
 	},
 	computed: {
 		...mapGetters([]),
+		debouncedSend: function () {
+			return _.debounce(this.send, 500)
+		}
 	},
 	watch: {
 		value(newValue) {
