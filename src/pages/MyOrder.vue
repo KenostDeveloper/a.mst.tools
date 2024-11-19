@@ -92,6 +92,26 @@
 			</div>
 		</div>
 	</div>
+	<Basket @actionUpdate="actionUpdate" ref="childComponent" @toOrder="toOrder" />
+	<OrderModal :show="show_order" @fromOrder="fromOrder" />
+
+	<Dialog v-model:visible="this.modal_products" header="Список товаров, которых не хватает у продавца на складе!"
+        :style="{ width: '640px' }">
+        <div class="kenost-list-error">
+            <table>
+                <tr>
+                    <th>Артикул</th>
+					<th>Желаемое количество</th>
+					<th>Остаток у продавца</th>
+                </tr>
+                <tr v-for="(item, index) in this.list" :key="item.id">
+                    <td class="text-center">{{ item.article }}</td>
+                    <td class="text-center">{{ item.value }}</td>
+					<td class="text-center">{{ item.available }}</td>
+                </tr>
+            </table>
+        </div>
+    </Dialog>
 </template>
 
 <script>
@@ -106,6 +126,9 @@ import vTable from "../components/table/v-table.vue";
 import "v-calendar/style.css";
 import Dialog from "primevue/dialog";
 import Breadcrumbs from "../components/Breadcrumbs.vue";
+import OrderModal from '../components/opt/OrderModal.vue';
+import Basket from '../components/opt/Basket.vue';
+
 
 export default {
 	name: "MyOrders",
@@ -113,13 +136,17 @@ export default {
 	},
 	data() {
 		return {
-			order: []
+			order: [],
+			show_order: false,
+			modal_products: false,
+			list: []
 		};
 	},
 	methods: {
 		...mapActions([
             'get_opt_order_api',
-			'opt_api'
+			'opt_api',
+			'busket_from_api'
 		]),
 		repeat_order(){
 			this.opt_api({
@@ -127,9 +154,40 @@ export default {
 				id: router.currentRoute._value.params.id,
 				order_id: router.currentRoute._value.params.order_id,
 			}).then((res) => {
-				console.log(res.data.data)
+				this.show_order = true
+				if(res.data.data.list.length > 0){
+					this.modal_products = true
+					this.list = res.data.data.list
+				}
+				this.busket_from_api({
+					action: 'basket/get',
+					id: router.currentRoute._value.params.id,
+					warehouse: 'all'
+				})
+				this.busket_from_api({
+					action: 'basket/get',
+					id: router.currentRoute._value.params.id,
+				})
 			})
-		} 
+		},
+		actionUpdate() {
+            setTimeout(() => {
+                this.get_sales_to_api({
+                    id: router.currentRoute._value.params.sales_id,
+                    actionid: router.currentRoute._value.params.action,
+                    page: this.page,
+                    perpage: this.perpage,
+                    isAction: true
+                });
+            }, 1000)
+            
+        },
+		toOrder() {
+            this.show_order = true;
+        },
+		fromOrder() {
+            this.show_order = false;
+        },
 	},
 	mounted() {
 		this.get_opt_order_api({
@@ -151,6 +209,8 @@ export default {
 		// Checkbox,
 		// Swiper,
 		// SwiperSlide
+		OrderModal,
+		Basket,
 		Breadcrumbs
 	},
 	computed: {
