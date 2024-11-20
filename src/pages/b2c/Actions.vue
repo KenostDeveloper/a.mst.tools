@@ -86,6 +86,10 @@ export default {
         }
       },
       table_data: {
+        id: {
+					label: "Номер",
+					type: "text"
+				},
         image_small: {
           label: 'Баннер',
           type: 'image',

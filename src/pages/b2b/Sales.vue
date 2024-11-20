@@ -263,6 +263,10 @@ export default {
 				},
 			},
 			table_data: {
+				id: {
+					label: "Номер",
+					type: "text"
+				},
 				image: {
 					label: "Баннер",
 					type: "image",

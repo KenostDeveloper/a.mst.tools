@@ -293,6 +293,9 @@
                         class="navmain__dart_btn a-dart-btn a-dart-btn-primary std-search-field__button">Найти</button>
                 </div>
 
+
+
+
                 <ul class="std-search-field__suggestions" :class="{
                     ['std-search-field__suggestions--active']: this.showSearchSuggestions
                 }">
@@ -312,6 +315,8 @@
                 </ul>
             </form>
         </div>
+        <button @click="requirement()" class="navmain__dart_btn a-dart-btn a-dart-btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package-search"><path d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14"/><path d="m7.5 4.27 9 5.15"/><polyline points="3.29 7 12 12 20.71 7"/><line x1="12" x2="12" y1="22" y2="12"/><circle cx="18.5" cy="15.5" r="2.5"/><path d="M20.27 17.27 22 19"/></svg></button>
+
         <!-- </div> -->
 
         <!-- <button
@@ -372,6 +377,40 @@
         </a> -->
     </div>
 
+    <Dialog v-model:visible="this.modal_requirement" header="Загрузка потребности"
+        :style="{ width: '640px' }">
+        <div class="kenost-list-error">
+            <div class="dart-form-group mb-4">
+                <DropZone v-if="!this.upload_product" class="kenost-dropzone" :maxFiles="Number(1)"
+                    url="/rest/file_upload.php?upload_products=xlsx" :uploadOnDrop="true" :multipleUpload="true"
+                    :acceptedFiles="['xlsx', 'xlsx']" :parallelUpload="1" @sending="parseFile" v-bind="args">
+                    <template v-slot:message>
+                        <div class="kenost-dropzone__custom">
+                            <i class="pi pi-cloud-upload"></i>
+                            <b>Перетащите файл в эту область</b>
+                            <p>Вы также можете загрузить файл, <span>нажав сюда</span></p>
+                        </div>
+                    </template>
+                </DropZone>
+
+                <!-- <div class="kenost-upload-xlsx" v-if="this.upload_product">
+                    <div class="kenost-upload-xlsx__file">
+                        <a targer="_blank" :href="files?.xlsx?.original_href">{{ files?.xlsx?.name }}</a>
+                    </div>
+                    <div class="kenost-upload-xlsx__info">
+                        <p>Загружено товаров: {{ Object.keys(this.selected).length }} шт</p>
+                        <p>Всего товаров: {{ Object.keys(this.selected).length + error_product.length }} шт</p>
+                        <div class="kenost-link-blue" @click="this.modals.error_product = true">Список незагруженных
+                            товаров</div>
+                    </div>
+                </div> -->
+
+                <a :href="site_url_prefix + '/assets/files/files/examples/ExampleLoadingRequirement.xlsx'"
+                    class="kenost-link-blue mt-2">Скачать шаблон файла</a>
+            </div>
+        </div>
+    </Dialog>
+
     <Toast />
 </template>
 <script>
@@ -383,6 +422,9 @@ import axios from 'axios';
 import Notification from './Notification.vue';
 import NotificationButton from '../NotificationButton.vue';
 import Toast from 'primevue/toast';
+import Dialog from "primevue/dialog";
+import DropZone from 'dropzone-vue';
+
 
 export default {
     name: 'Nav',
@@ -415,7 +457,8 @@ export default {
             actualCatalog: {},
             actualImageSrc: '',
             showWarehouseList: false,
-            active_warehouse: []
+            active_warehouse: [],
+            modal_requirement: false
         };
     },
     methods: {
@@ -438,6 +481,29 @@ export default {
 
             this.showSearchSuggestions = false;
             router.push({ name: 'opt_search', params: { search: this.search } });
+        },
+        parseFile(files, xhr, formData) {
+            const callback = (e) => {
+                const res = JSON.parse(e);
+                console.log(res)
+
+                if(res.data.files[0].name){
+                    router.push({ name: 'opt_req', params: { req: res.data.files[0].name } });
+                    this.modal_requirement = false;
+
+                }
+                //this.files.xlsx = res.data.files[0];
+                
+            };
+
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState === 4) {
+                    callback(xhr.response);
+                }
+            };
+        },
+        requirement(){
+            this.modal_requirement = true
         },
         changeActive() {
             this.vendorModal = !this.vendorModal;
@@ -606,7 +672,7 @@ export default {
             });
         });
     },
-    components: { Vendors, Accordion, Notification, NotificationButton },
+    components: { Vendors, Accordion, Notification, NotificationButton, Dialog, DropZone },
     computed: {
         ...mapGetters(['optvendors', 'salesbanners', 'optcatalog', 'optcatalogwarehouse', 'org_stores', 'warehouse_basket', 'optproducts']),
 
@@ -651,7 +717,7 @@ export default {
             this.showSearchSuggestions = !!newVal;
 
             this.debounce(async () => {
-                console.log(await this.searchProducts());
+                // console.log(await this.searchProducts());
                 this.searchSuggestions = await this.searchProducts();
             }, 300);
         }

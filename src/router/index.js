@@ -21,6 +21,7 @@ import ComplectEdit from "../pages/b2b/complects/ComplectEdit.vue";
 import ProfilePurchases from "../pages/opt/ProfilePurchases.vue";
 import PurchasesCatalog from "../pages/opt/PurchasesCatalog.vue";
 import PurchasesSearch from "../pages/opt/Search.vue";
+import Requirement from '../pages/opt/Requirement.vue'
 import Promotion from "../pages/opt/Promotion/Promotion.vue";
 import ProfileClients from "../pages/ProfileClients.vue";
 import ProfileVendors from "../pages/ProfileVendors.vue";
@@ -449,6 +450,27 @@ const routes = [
 															}
 														},
 														component: PurchasesSearch,
+													},
+												],
+											},
+											{
+												path: "req",
+												meta: {
+													breadcrumb: {
+														label: "Потребность",
+													},
+												},
+												children: [
+													{
+														path: ":req",
+														name: "opt_req",
+														props: true,
+														meta: {
+															breadcrumb: {
+																label: "Потребность"
+															}
+														},
+														component: Requirement,
 													},
 												],
 											}

@@ -30,7 +30,7 @@
             </div>
         </template>
     </Toast>
-    <div class="kenost-small-window" v-if="isSmallScreen">
+    <div class="kenost-small-window">
         <div class="kenost-small-window__logo">
             <img src="../../public/images/logo_small.svg" alt="">
             <span>МСТ Закупки</span>
@@ -45,13 +45,13 @@
             <img src="../../public/images/small-window.png" alt="">
         </div>
     </div>
-    <Sitebar v-if="this.$route.params.id && !isSmallScreen" :active="this.sitebar" />
-    <div v-if="!isSmallScreen" class="content" :class="{ white: this.namePathIsNav == 'purchases', 'content--fit':  this.namePathIsNav == 'purchases' }">
+    <Sitebar v-if="this.$route.params.id" :active="this.sitebar" />
+    <div class="content" :class="{ white: this.namePathIsNav == 'purchases', 'content--fit':  this.namePathIsNav == 'purchases' }">
         <CookieConsent />
         <div class="dart_container_wrap">
             <Nav v-if="namePathIsNav == 'purchases'" />
             <div class="dart_wrapper">
-                <NotificationButton v-if="this.$route.params.id && pageIsAvailable() && !isSmallScreen" class="absolute" />
+                <NotificationButton v-if="this.$route.params.id && pageIsAvailable()" class="absolute" />
                 <router-view > </router-view>
             </div>
         </div>
@@ -77,7 +77,6 @@ export default {
             namePathIsNav: null,
             data_start: new Date(),
             notifications_all: [],
-            screenWidth: window.innerWidth, // Сохраняем начальную ширину
         };
     },
     components: { Sitebar, Nav, Notification, Toast, NotificationButton, CookieConsent },
@@ -87,15 +86,8 @@ export default {
             new_notifications: 'new_notifications',
             notifications: 'notifications'
         }),
-        isSmallScreen() {
-            return this.screenWidth < 1200; // Проверяем ширину экрана
-        },
     },
     mounted() {
-
-        window.addEventListener('resize', this.updateScreenWidth); // Слушаем изменение размера
-
-
         this.setUser(JSON.parse(localStorage.getItem('user')));
         const sidebarCookie = Number(this.$cookies.get('sidebar_active'));
         if (sidebarCookie === 1) {
@@ -120,9 +112,6 @@ export default {
             this.fetchNotification();
         }
     },
-    beforeDestroy() {
-        window.removeEventListener('resize', this.updateScreenWidth); // Очищаем слушатель
-    },
     updated() {
         // this.setUser(JSON.parse(localStorage.getItem('user')))
         this.namePathIsNav = router?.currentRoute?._value.matched[4]?.name;
@@ -134,9 +123,6 @@ export default {
             get_new_notification_api: 'get_new_notification_api',
             get_notification_api: 'get_notification_api'
         }),
-        updateScreenWidth() {
-            this.screenWidth = window.innerWidth; // Обновляем ширину экрана
-        },
         deleteNotification(index) {
             this.notifications.splice(index, 1);
         },

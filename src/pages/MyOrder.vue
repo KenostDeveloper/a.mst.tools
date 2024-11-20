@@ -172,18 +172,18 @@ export default {
 				})
 			})
 		},
-		actionUpdate() {
-            setTimeout(() => {
-                this.get_sales_to_api({
-                    id: router.currentRoute._value.params.sales_id,
-                    actionid: router.currentRoute._value.params.action,
-                    page: this.page,
-                    perpage: this.perpage,
-                    isAction: true
-                });
-            }, 1000)
+		// actionUpdate() {
+        //     setTimeout(() => {
+        //         this.get_sales_to_api({
+        //             id: router.currentRoute._value.params.sales_id,
+        //             actionid: router.currentRoute._value.params.action,
+        //             page: this.page,
+        //             perpage: this.perpage,
+        //             isAction: true
+        //         });
+        //     }, 1000)
             
-        },
+        // },
 		toOrder() {
             this.show_order = true;
         },

@@ -6004,6 +6004,10 @@ button.std-icon__wrapper {
 	}
 }
 
+.table-actions__modal-el{
+	width: 100%;
+}
+
 .std-notification {
 	// border-radius: 4px;
 	// border: 0.5px solid #B4B4B4;
@@ -6737,19 +6741,23 @@ button.std-icon__wrapper {
 }
 
 .kenost-add-button {
-	&.dart-btn-secondary {
-		color: #fff;
-	}
+	// &.dart-btn-secondary {
+	// 	color: #fff;
+	// }
 
-	&:hover {
-		color: #fff;
-	}
+	// &:hover {
+	// 	color: #fff;
+	// }
 	.pi {
 		font-size: 16px;
 	}
 }
 
 .link-no-style {
+	text-decoration: none;
+}
+
+.text-decoration-none{
 	text-decoration: none;
 }
 
@@ -8183,10 +8191,14 @@ button.std-icon__wrapper {
 }
 
 .kenost-small-window{
+	position: fixed;
+	z-index: 9999;
+	top: 0;
+	left: 0;
+	display: none;
 	width: 100vw;
 	height: 100dvh;
 	background: #282828;
-	display: flex;
 	flex-direction: column;
 	align-items: center;
     justify-content: center;
@@ -8341,5 +8353,11 @@ button.std-icon__wrapper {
 
 	a{
 		color: #A0A0A0;
+	}
+}
+
+@media (max-width: 1200px){
+	.kenost-small-window{
+		display: flex;
 	}
 }

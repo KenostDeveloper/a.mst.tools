@@ -290,7 +290,7 @@
                 </div>
 
                 <div class="dart-form-group mb-4">
-                    <span class="ktitle">Условия отплаты доставки</span>
+                    <span class="ktitle">Условия оплаты доставки</span>
                     <div class="kenost-wiget">
                         <p>Плательщик</p>
                         <Dropdown v-model="this.form.paymentDelivery" :options="this.paymentDelivery" optionLabel="name"
@@ -3026,7 +3026,7 @@ export default {
     padding: 24px;
 
     i {
-        font-size: 72px;
+        font-size: 72px !important;
         color: #e2e2e2;
     }
 
