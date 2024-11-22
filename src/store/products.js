@@ -7,7 +7,7 @@ export default {
     diler_products: []
   },
   actions: {
-    get_data_from_api ({ commit }, { filter, filtersdata, page, sort, perpage, id }) {
+    get_data_from_api ({ commit }, { filter, filtersdata, page, sort, perpage, id, owner_id }) {
       // console.log(filter)
       const data = {
         store_id: router.currentRoute._value.params.store_id,
@@ -21,6 +21,11 @@ export default {
         data.id = id
       } else{
         data.id = router.currentRoute._value.params.id
+      }
+      if(owner_id) {
+        data.owner_id = owner_id
+      } else{
+        data.owner_id = router.currentRoute._value.params.id
       }
       if (router.currentRoute._value.params.store_id) {
         data.store_id = router.currentRoute._value.params.store_id

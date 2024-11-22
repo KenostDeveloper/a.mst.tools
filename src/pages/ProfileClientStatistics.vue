@@ -215,6 +215,7 @@ import Breadcrumbs from '../components/Breadcrumbs.vue'
      ]),
      filter (data) {
         this.page = 1
+        data.owner_id = router.currentRoute._value.params.id
         data.id = router.currentRoute._value.params.client_id
         this.loading_products = true
         this.get_data_from_api(data).then(() => {
@@ -226,6 +227,7 @@ import Breadcrumbs from '../components/Breadcrumbs.vue'
       },
       paginate (data) {
         this.page = data.page
+        data.owner_id = router.currentRoute._value.params.id
         data.id = router.currentRoute._value.params.client_id
         this.loading_products = true
         this.get_data_from_api(data).then(() => {
@@ -239,16 +241,19 @@ import Breadcrumbs from '../components/Breadcrumbs.vue'
    mounted () {
         this.org_get_stores_from_api({
             action: 'get/stores',
-            id: this.$route.params.client_id
+            id: this.$route.params.client_id,
+            owner_id: router.currentRoute._value.params.id
         })
         this.org_profile_from_api({
             action: 'get/org/profile',
-            id: router.currentRoute._value.params.client_id
+            id: router.currentRoute._value.params.client_id,
+            owner_id: router.currentRoute._value.params.id
         })
         this.get_data_from_api({
           page: this.page,
           perpage: this.pagination_items_per_page,
-          id: router.currentRoute._value.params.client_id
+          id: router.currentRoute._value.params.client_id,
+          owner_id: router.currentRoute._value.params.id
         }).then(() => { 
           this.get_vendors_from_api()
           this.get_catalog_from_api()

@@ -1,7 +1,6 @@
 <template>
 	<div class="k-quantity" :class="{ mini: mini }">
-		<form method="post" class="ms2_form form-inline" role="form">
-			<input type="hidden" name="key" />
+		<form class="k-quantity__wrap" @submit.prevent="submit">
 			<div class="k-quantity__btn" @click="onMinus">
 				<i class="pi pi-minus"></i>
 			</div>
@@ -78,6 +77,9 @@ export default {
 	},
 	methods: {
 		...mapActions([]),
+		submit(){
+
+		},
 		onMinus() {
 			if (this.d_value > this.d_min) {
 				this.d_value = this.d_value - (1 * this.d_step);
@@ -151,7 +153,7 @@ export default {
 		}
 	}
 
-	form {
+	&__wrap {
 		display: flex;
 		align-items: center;
 		height: 100%;

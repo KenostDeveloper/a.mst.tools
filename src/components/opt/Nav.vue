@@ -279,10 +279,13 @@
                     <div class="std-search-field__block">
                         <!-- <i class="pi pi-search std-search-field__icon"></i> -->
                         <img src="../../assets/images/icons/search.svg" alt="" class="std-search-field__icon" />
-                        <input class="std-search-field__input" type="text" placeholder="Найти у выбранных поставщиков"
+                        <input class="std-search-field__input" type="text" placeholder="Найти у выбранных поставщиков" @focus="(event) => {
+                            console.log(event)
+                            event.target.select()
+                        }"
                             v-model="search" />
                     </div>
-                    <button v-if="this.search" class="std-search-field__delete" @click="() => {
+                    <button v-if="this.search" class="std-search-field__delete" @click="(event) => {                            
                             this.search = '';
                             this.searchSuggestions = [];
                         }
@@ -315,8 +318,9 @@
                 </ul>
             </form>
         </div>
+        <!--        
         <button @click="requirement()" class="navmain__dart_btn a-dart-btn a-dart-btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package-search"><path d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14"/><path d="m7.5 4.27 9 5.15"/><polyline points="3.29 7 12 12 20.71 7"/><line x1="12" x2="12" y1="22" y2="12"/><circle cx="18.5" cy="15.5" r="2.5"/><path d="M20.27 17.27 22 19"/></svg></button>
-
+        -->
         <!-- </div> -->
 
         <!-- <button
