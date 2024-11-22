@@ -319,7 +319,7 @@
                 })
             }})
         </td>
-        <td>{{ item.remains }} шт. <span v-if="item.req"><br>Не удовлетворяет потребность</span></td>
+        <td>{{ item.remains }} шт. <span v-if="item.req" class="kenost-err-min"><br>Не удовлетворяет потребность</span></td>
         <td>
             <span class="flex align-items-center justify-content-center gap-1 mb-1"><img :src="item.store_image"
                     class="kenost-table-elem__logo" alt="" /> {{ item.store_name }}</span>
