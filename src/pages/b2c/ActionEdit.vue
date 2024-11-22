@@ -255,7 +255,7 @@
                     </div>
                   </div>
                   <div class="dart-form-group">
-                    <TreeSelect v-model="this.filter.category" :options="this.opt_catalog_tree" selectionMode="checkbox" placeholder="Выберите категорию" class="w-full" @change="setFilter"/>
+                    <TreeSelect v-model="this.filter.category" :fieldNames="{ value: 'id', label: 'pagetitle' }" :options="this.opt_catalog_tree" selectionMode="checkbox" placeholder="Выберите категорию" class="w-full" @change="setFilter"/>
                   </div>
                 </div>
                 <div class="PickList__products">
@@ -1251,7 +1251,18 @@ export default {
         })
         this.loading = true
       }
-    }
+    },
+    transformCategories(data) {
+        console.log(data)
+        if (!Array.isArray(data)) {
+          data = Object.values(data)
+        }
+        return data.map(item => ({
+            label: item.pagetitle, // Название категории
+            key: item.id, // ID категории
+            children: item.children ? this.transformCategories(item.children) : [], // Рекурсивно преобразуем дочерние элементы
+        }));
+    },
     // updateEditorContent (content) {
     //   if (this.$refs.editorRef.quill && content) {
     //     console.log('content', content)
@@ -1366,7 +1377,7 @@ export default {
       this.place = newVal
     },
     optcatalogtree: function (newVal, oldVal) {
-      this.opt_catalog_tree = newVal
+      this.opt_catalog_tree = this.transformCategories(newVal);
     },
     getregions: function (newVal, oldVal) {
       this.regions = this.getregions

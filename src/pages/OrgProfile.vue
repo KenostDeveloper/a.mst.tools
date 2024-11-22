@@ -972,9 +972,9 @@ export default {
 }
 
 .kenost-add-button {
-	&:hover {
-		color: #fff;
-	}
+	// &:hover {
+	// 	color: #fff;
+	// }
 
 	.pi {
 		font-size: 16px;

@@ -165,7 +165,7 @@
                                     <!-- <p class="table-actions__modal-title">
                                         {{ action?.name }}
                                     </p> -->
-                                    <img v-if="action?.image && action?.type != 3" :src="action?.image.thumb_medium"
+                                    <img v-if="action?.image.image && action?.type != 3 && action?.image.thumb_medium" :src="action?.image.thumb_medium"
                                     :srcset="action?.image.image +' 2x, ' + action?.image.thumb_medium + ' 1x'" :alt="action?.name" class="table-actions__modal-img">
 
                                     <div class="table-actions__modal-content-inner">
@@ -319,7 +319,7 @@
                 })
             }})
         </td>
-        <td>{{ item.remains }} шт.</td>
+        <td>{{ item.remains }} шт. <span v-if="item.req"><br>Не удовлетворяет потребность</span></td>
         <td>
             <span class="flex align-items-center justify-content-center gap-1 mb-1"><img :src="item.store_image"
                     class="kenost-table-elem__logo" alt="" /> {{ item.store_name }}</span>

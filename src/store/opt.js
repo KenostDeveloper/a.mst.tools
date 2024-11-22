@@ -291,6 +291,11 @@ export default {
       if (!router.currentRoute._value.params.warehouse_id && !router.currentRoute._value.params.warehouse_cat_id) {
         cat = router.currentRoute._value.params.category_id
       }
+      let req = null;
+      if(router.currentRoute._value.params.req){
+        req = router.currentRoute._value.params.req;
+        cat = 'all'
+      }
       return Axios('/rest/front_opt', {
         method: 'POST',
         data: {
@@ -301,6 +306,7 @@ export default {
           warehouse_cat_id: router.currentRoute._value.params.warehouse_cat_id,
           search: router.currentRoute._value.params.search,
           page: page,
+          req: req,
           perpage: perpage,
           action: 'get/products'
         },
