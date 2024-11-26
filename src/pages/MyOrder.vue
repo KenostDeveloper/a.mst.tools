@@ -95,14 +95,14 @@
 	<Basket @actionUpdate="actionUpdate" ref="childComponent" @toOrder="toOrder" />
 	<OrderModal :show="show_order" @fromOrder="fromOrder" />
 
-	<Dialog v-model:visible="this.modal_products" header="Список товаров, которых не хватает у продавца на складе!"
+	<Dialog v-model:visible="this.modal_products" header="Список товаров, которых не хватает у продавца на складе"
         :style="{ width: '640px' }">
         <div class="kenost-list-error">
             <table>
                 <tr>
                     <th>Артикул</th>
 					<th>Наименование</th>
-					<th>Желаемое количество</th>
+					<th>Необходимое количество</th>
 					<th>Остаток у продавца</th>
                 </tr>
                 <tr v-for="(item, index) in this.list" :key="item.id">

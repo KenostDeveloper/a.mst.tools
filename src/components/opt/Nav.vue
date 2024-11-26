@@ -352,19 +352,9 @@
                 <div class="kenost-vendors__list">
                     <span>Выбранные поставщики</span>
                     <div class="kenost-vendors__images">
-                        <div class="k-order__actions" v-if="this.opt_vendors.selected_count > 0">
+                        <div class="k-order__actions">
                             <div class="k-actions" v-for="action in this.opt_vendors.selected" v-bind:key="action.id">
                                 <img class="k-order__actions-el" :src="action.image" />
-                            </div>
-                        </div>
-                        <div class="k-order__actions" v-if="this.opt_vendors.selected_count > 6">
-                            <div class="k-actions" v-for="(action, index) in opt_vendors.selected" v-bind:key="action.id">
-                                <img v-if="index > 6 && index < 12" class="k-order__actions-el" :src="action.image" />
-                            </div>
-                        </div>
-                        <div class="k-order__actions" v-if="this.opt_vendors.selected_count > 12">
-                            <div class="k-actions" v-for="(action, index) in opt_vendors.selected" v-bind:key="action.id">
-                                <img v-if="index > 12 && index < 18" class="k-order__actions-el" :src="action.image" />
                             </div>
                         </div>
                     </div>
@@ -1150,6 +1140,16 @@ export default {
 
     &:focus {
         border: 1px solid var(--border-color);
+    }
+}
+
+.kenost-vendors__list {
+    .k-order__actions{
+        display: flex;
+        flex-wrap: wrap;
+        & .k-actions:nth-child(6n + 1){
+            margin-left: 0;
+        }
     }
 }
 </style>
