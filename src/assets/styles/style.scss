@@ -1146,6 +1146,13 @@ img {
 	}
 }
 
+.p-dialog .p-dialog-header .p-dialog-header-icon:focus {
+	outline: 0 none;
+	outline-offset: 0;
+	-webkit-box-shadow: none !important;
+	box-shadow: none !important;
+}
+
 .sitebar {
 	height: 100vh;
 	min-width: 327px;
@@ -5970,8 +5977,8 @@ button.std-icon__wrapper {
 
 	padding: 7px;
 
-	height: 40px;
-	width: 40px;
+	height: 48px;
+	width: 48px;
 
 	&.absolute{
 		position: absolute;
@@ -8360,4 +8367,10 @@ button.std-icon__wrapper {
 	.kenost-small-window{
 		display: flex;
 	}
+}
+
+.kenost-err-min{
+	color: #FF0000;
+	font-size: 12px;
+	line-height: 1;
 }
