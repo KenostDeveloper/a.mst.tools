@@ -11,7 +11,7 @@
                                 <i class="pi pi-angle-left"></i>
                                 Назад
                             </button>
-                            <div class="promotion-header__content">
+                            <div class="promotion-header__content" v-if="actions?.image?.image">
                                 <img :src="actions?.image?.image" :srcset="actions?.image?.image +' 2x, ' + actions?.image?.image + ' 1x'" class="promotion-header__img" />
                             </div>
                         </header>
