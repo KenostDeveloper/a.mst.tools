@@ -188,6 +188,7 @@
 						:editMode="editMode"
 						@deleteElem="deleteElem"
 						@updateElem="updateElem"
+						@viewElem="viewElem"
 						@editElem="editElem"
 						@clickElem="clickElem"
 						@checkElem="checkElem"
@@ -219,7 +220,7 @@
 			</div>
 		</div>
 		<div class="profile-products__products" v-else>
-			<div class="dart-alert dart alert-info">Ничего не найдено</div>
+			<div class="dart-alert dart-alert-info">Ничего не найдено</div>
 		</div>
 	</div>
 </template>
@@ -242,6 +243,7 @@ export default {
 	name: "v-table",
 	emits: [
 		"deleteElem",
+		"viewElem",
 		"updateElem",
 		"editElem",
 		"clickElem",
@@ -347,6 +349,9 @@ export default {
 		checkElem(data) {
 			this.$emit("checkElem", data);
 		},
+		viewElem (data) {
+      this.$emit('viewElem', data)
+    },
 		setAllCheck(event) {
 			this.$emit("setAllCheck", event);
 		},

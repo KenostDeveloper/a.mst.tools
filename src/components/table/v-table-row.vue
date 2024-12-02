@@ -9,6 +9,7 @@
       :editMode="editMode"
       @deleteElem="deleteElem"
       @updateElem="updateElem"
+      @viewElem="viewElem"
       @editElem="editElem"
       @clickElem="clickElem"
       @checkElem="checkElem"
@@ -28,6 +29,7 @@
       @deleteElem="deleteElem"
       @updateElem="updateElem"
       @editElem="editElem"
+      @viewElem="viewElem"
       @clickElem="clickElem"
       @checkElem="checkElem"
       @approveElem="approveElem"
@@ -45,7 +47,7 @@ import vTableCell from './v-table-cell.vue'
 
 export default {
   name: 'v-table-row',
-  emits: ['deleteElem', 'updateElem', 'editElem', 'clickElem', 'checkElem', 'approveElem', 'disapproveElem', 'editNumber'],
+  emits: ['deleteElem', 'updateElem', 'viewElem', 'editElem', 'clickElem', 'checkElem', 'approveElem', 'disapproveElem', 'editNumber'],
   props: {
     editMode: {
       type: Boolean,
@@ -78,6 +80,10 @@ export default {
   methods: {
     deleteElem (data) {
       this.$emit('deleteElem', data)
+    },
+    viewElem (data) {
+      // console.log(data)
+      this.$emit('viewElem', data)
     },
     updateElem (data) {
       this.$emit('updateElem', data)

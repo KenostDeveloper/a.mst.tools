@@ -57,7 +57,8 @@
     },
     methods: {
       ...mapActions([
-        'get_actions_buyer_to_api'
+        'get_actions_buyer_to_api',
+        'unset_actions_buyer'
       ]),
       pagClickCallback(pageNum) {
         this.page = pageNum;

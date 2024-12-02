@@ -46,7 +46,7 @@
         </div>
     </div>
     <Sitebar v-if="this.$route.params.id" :active="this.sitebar" />
-    <div class="content" :class="{ white: this.namePathIsNav == 'purchases', 'content--fit':  this.namePathIsNav == 'purchases' }">
+    <div class="content" :class="{ white: this.namePathIsNav == 'purchases' }">
         <CookieConsent />
         <div class="dart_container_wrap">
             <Nav v-if="namePathIsNav == 'purchases'" />

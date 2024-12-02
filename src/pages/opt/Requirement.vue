@@ -5,8 +5,8 @@
       <div class="dart-home dart-window">
           <!-- <Breadcrumbs/> -->
           <div>
-            <h1 class="h1-mini">Поиск по потребности <a class="text-decoration-none" :href="'https://mst.tools/assets/components/shoplogistic/tmp/b2b_products/' + $route.params.req" target="_blank">"{{ $route.params.req }}"</a></h1>
-            <div class="dart-alert dart-alert-info">В данном разделе перечислены все товары поставщиков, в том числе и не сопоставленные со справочником системы.</div>
+            <h1 class="h1-mini">Поиск по Потребности с №{{ $route.params.req }}</h1>
+            <div class="dart-alert dart-alert-info">В данном разделе перечислены только те товары Поставщиков, которые мы нашли согласно Потребности.</div>
           </div>
           <TableCatalog @updateBasket="updateBasket" v-if="opt_products.total !== 0" :items="opt_products"/>
           <div v-else>

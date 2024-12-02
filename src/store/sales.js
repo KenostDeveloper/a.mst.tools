@@ -97,6 +97,9 @@ export default {
           }
         })
     },
+    unset_actions_buyer ({ commit }) {
+      commit('UNSET_ACTIONS_BUYER')
+    },
     get_sales_adv_pages_to_api ({ commit }, data) {
       return Axios('/rest/front_sales', {
         method: 'POST',
@@ -167,6 +170,9 @@ export default {
     },
     SET_ACTIONS_BUYER_TO_VUEX: (state, data) => {
       state.action_buyer = data.data
+    },
+    UNSET_ACTIONS_BUYER: (state, data) => {
+      state.action_buyer = []
     },
     SET_ACTION_DISCOUNT_VUEX: (state, data) => {
       state.action_discount = data.data

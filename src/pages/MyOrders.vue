@@ -464,6 +464,9 @@ export default {
 				border: none;
 			}
 		}
+		.kenost-dropzone{
+			border-color: #f00;
+		}
 		span.error_desc {
 			color: #e24c4c;
 			font-size: 12px;
@@ -481,6 +484,9 @@ export default {
 			.p-inputtext {
 				border: none;
 			}
+		}
+		.kenost-dropzone{
+			border-color: #f00;
 		}
 		span.error_desc {
 			color: #e24c4c;

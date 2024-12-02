@@ -276,7 +276,7 @@
                                                         </p>
                                                         <img v-if="tag.type == 'sale'"
                                                             src="../../assets/images/icons/action/sale.svg" alt="" />
-                                                        <p v-if="tag.type == 'sale'">
+                                                        <p v-if="tag.type == 'sale' && tag.value > 0" >
                                                             Скидка
                                                             {{ tag.value.toLocaleString('ru') }}%
                                                             <!-- <span v-if="tag.condition == '2'">
@@ -319,7 +319,7 @@
                 })
             }})
         </td>
-        <td>{{ item.remains }} шт. <span v-if="item.req" class="kenost-err-min"><br>Не удовлетворяет потребность</span></td>
+        <td>{{ item.remains }} шт. <span v-if="item.req" class="kenost-err-min"><br>Не удовлетворяет Потребности</span></td>
         <td>
             <span class="flex align-items-center justify-content-center gap-1 mb-1"><img :src="item.store_image"
                     class="kenost-table-elem__logo" alt="" /> {{ item.store_name }}</span>

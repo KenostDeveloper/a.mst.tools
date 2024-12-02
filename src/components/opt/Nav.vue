@@ -1,4 +1,5 @@
 <template>
+    <ConfirmDialog />
     <div :class="`navmain std-nav ${catalogIsOpened ? 'std-nav--active' : ''}`">
         <!-- Каталог десктоп -->
         <div :class="`std-catalog ${catalogIsOpened ? 'std-catalog--active' : ''} hidden-desktop-s-minus`">
@@ -318,17 +319,9 @@
                 </ul>
             </form>
         </div>
-               
-        <button @click="requirement()" class="navmain__dart_btn a-dart-btn a-dart-btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package-search"><path d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14"/><path d="m7.5 4.27 9 5.15"/><polyline points="3.29 7 12 12 20.71 7"/><line x1="12" x2="12" y1="22" y2="12"/><circle cx="18.5" cy="15.5" r="2.5"/><path d="M20.27 17.27 22 19"/></svg></button>
-       
-        <!-- </div> -->
-
-        <!-- <button
-			class="std-nav__button std-catalog-button std-nav__needs-button"
-		>
-			Потребности
-		</button> -->
-
+        
+        <button @click="requirement()" class="navmain__dart_btn a-dart-btn a-dart-btn-primary requirement-btn" title="Загрузить Потребность"><svg xmlns="http://www.w3.org/2000/svg" title="Загрузить Потребность" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package-search"><path d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14"/><path d="m7.5 4.27 9 5.15"/><polyline points="3.29 7 12 12 20.71 7"/><line x1="12" x2="12" y1="22" y2="12"/><circle cx="18.5" cy="15.5" r="2.5"/><path d="M20.27 17.27 22 19"/></svg></button>
+        
         <div class="std-nav__right">
             <button class="a-dart-btn a-dart-btn-secondary kenost-vendors" @click="changeActive">
                 <!-- <i class="mst-icon mst-icon-my_vendors kenost-vendors__icon"></i> -->
@@ -374,50 +367,100 @@
     <Dialog v-model:visible="this.modal_requirement" header="Загрузка потребности"
         :style="{ width: '640px' }">
         <div class="kenost-list-error">
-            <div class="dart-form-group mb-4">
-                <DropZone v-if="!this.upload_product" class="kenost-dropzone" :maxFiles="Number(1)"
-                    url="/rest/file_upload.php?upload_products=xlsx" :uploadOnDrop="true" :multipleUpload="true"
-                    :acceptedFiles="['xlsx', 'xlsx']" :parallelUpload="1" @sending="parseFile" v-bind="args">
-                    <template v-slot:message>
-                        <div class="kenost-dropzone__custom">
-                            <i class="pi pi-cloud-upload"></i>
-                            <b>Перетащите файл в эту область</b>
-                            <p>Вы также можете загрузить файл, <span>нажав сюда</span></p>
+            <form @submit.prevent="formRequirementsSubmit" :class="{ loading: requirements_loading }">
+                <div class="dart-alert dart-alert-info">Обратите внимание! Данная потребность будет привязана к складу доставки.</div>
+                <div class="dart-form-group mb-4" :class="{
+                    error: v$.form_requirements.name.$errors.length
+                }">
+                    <span class="ktitle">Наименование Потребности</span>
+                    <label for="name">Введите наименование, которое будет отражать смысл вашей Потребности.</label>
+                    <input v-model="this.form_requirements.name" type="text" name="name" placeholder="Укажите наименование Потребности"
+                        class="dart-form-control mt-2" />
+
+                    <span class="error_desc" v-for="error of v$.form_requirements.name.$errors" :key="error.$uid">
+                        {{ error.$message }}
+                    </span>
+                </div>
+                <div class="dart-form-group mb-4" :class="{
+                    error: v$.form_requirements.file.$errors.length
+                }">
+                    <DropZone v-if="!this.upload_product" class="kenost-dropzone" :maxFiles="Number(1)"
+                        url="/rest/file_upload.php?upload_products=xlsx" :uploadOnDrop="true" :multipleUpload="true"
+                        :acceptedFiles="['xlsx', 'xlsx']" :parallelUpload="1" @sending="parseFile" v-bind="args">
+                        <template v-slot:message>
+                            <div class="kenost-dropzone__custom">
+                                <i class="pi pi-cloud-upload"></i>
+                                <b>Перетащите файл в эту область</b>
+                                <p>Вы также можете загрузить файл, <span>нажав сюда</span></p>
+                            </div>
+                        </template>
+                    </DropZone>
+
+                    <!-- <div class="kenost-upload-xlsx" v-if="this.upload_product">
+                        <div class="kenost-upload-xlsx__file">
+                            <a targer="_blank" :href="files?.xlsx?.original_href">{{ files?.xlsx?.name }}</a>
                         </div>
-                    </template>
-                </DropZone>
+                        <div class="kenost-upload-xlsx__info">
+                            <p>Загружено товаров: {{ Object.keys(this.selected).length }} шт</p>
+                            <p>Всего товаров: {{ Object.keys(this.selected).length + error_product.length }} шт</p>
+                            <div class="kenost-link-blue" @click="this.modals.error_product = true">Список незагруженных
+                                товаров</div>
+                        </div>
+                    </div> -->
 
-                <!-- <div class="kenost-upload-xlsx" v-if="this.upload_product">
-                    <div class="kenost-upload-xlsx__file">
-                        <a targer="_blank" :href="files?.xlsx?.original_href">{{ files?.xlsx?.name }}</a>
-                    </div>
-                    <div class="kenost-upload-xlsx__info">
-                        <p>Загружено товаров: {{ Object.keys(this.selected).length }} шт</p>
-                        <p>Всего товаров: {{ Object.keys(this.selected).length + error_product.length }} шт</p>
-                        <div class="kenost-link-blue" @click="this.modals.error_product = true">Список незагруженных
-                            товаров</div>
-                    </div>
-                </div> -->
-
-                <a :href="site_url_prefix + '/assets/files/files/examples/ExampleLoadingRequirement.xlsx'"
-                    class="kenost-link-blue mt-2">Скачать шаблон файла</a>
-            </div>
+                    <a :href="site_url_prefix + '/assets/files/files/examples/ExampleLoadingRequirement.xlsx'"
+                        class="kenost-link-blue mt-2">Скачать шаблон файла</a>
+                    <span class="error_desc" v-for="error of v$.form_requirements.file.$errors" :key="error.$uid">
+                        {{ error.$message }}
+                    </span>
+                </div>
+                <button class="dart-btn dart-btn-primary dart-btn-block" type="submit">Создать потребность</button>
+            </form>
         </div>
+    </Dialog>
+
+    <Dialog v-model:visible="this.modal_requirements" header="Потребности"
+        :style="{ width: '940px' }">
+        <div class="dart-alert dart-alert-info">Обратите внимание! Здесь отображаются только те потребности, которые привязаны к Складу доставки.</div>
+        <v-table
+            class="std-table__wrapper"
+            :filters="this.filters"
+            :items_data="requirements.items"
+            :total="requirements.total"
+            :pagination_items_per_page="this.pagination_items_per_page"
+            :pagination_offset="this.pagination_offset"
+            :page="this.requirements_page"
+            :table_data="this.table_data"
+            title="Потребности организации"
+            @filter="filterRequirements"
+            @sort="filterRequirements"
+            @paginate="paginateRequirements"
+            @viewElem="viewReq"
+			@deleteElem="deleteReq"
+        >
+            <template v-slot:button>
+                <a href="#" class="dart-btn dart-btn-primary" @click.prevent="() => {this.modal_requirement = !this.modal_requirement}">Создать</a>
+            </template>
+        </v-table>
     </Dialog>
 
     <Toast />
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import { useVuelidate } from '@vuelidate/core';
 import router from '../../router';
 import Vendors from './Vendors.vue';
 import Accordion from '../Accordion.vue';
 import axios from 'axios';
 import Notification from './Notification.vue';
 import NotificationButton from '../NotificationButton.vue';
+import ConfirmDialog from "primevue/confirmdialog";
 import Toast from 'primevue/toast';
 import Dialog from "primevue/dialog";
 import DropZone from 'dropzone-vue';
+import vTable from "../table/v-table.vue";
+import { helpers, required } from '@vuelidate/validators';
 
 
 export default {
@@ -425,7 +468,7 @@ export default {
     props: {
         pagination_items_per_page: {
             type: Number,
-            default: 25
+            default: 24
         },
         pagination_offset: {
             type: Number,
@@ -452,7 +495,53 @@ export default {
             actualImageSrc: '',
             showWarehouseList: false,
             active_warehouse: [],
-            modal_requirement: false
+            requirements_loading: false,
+            modal_requirement: false,
+            modal_requirements: false,
+            requirements_page: 1,
+            form_requirements: {
+                name: "",
+                file: ""
+            },
+            table_data: {
+				id: {
+					label: "№",
+					type: "text",
+					sort: true,
+				},
+				name: {
+					label: "Наименование",
+					type: "text",
+					sort: true,
+				},
+				type: {
+					label: "Тип",
+					type: "text",
+					sort: true,
+				},
+				actions: {
+					label: "Действия",
+					type: "actions",
+					sort: false,
+					available: {
+						view: {
+							icon: "pi pi-eye",
+							label: "Просмотреть",
+						},
+                        delete: {
+							icon: "pi pi-trash",
+							label: "Удалить",
+						}
+					},
+				},
+			},
+			filters: {
+				name: {
+					name: "Наименование",
+					placeholder: "Наименование",
+					type: "text",
+				}
+			},
         };
     },
     methods: {
@@ -465,8 +554,24 @@ export default {
             'org_get_stores_from_api',
             'opt_warehouse_basket',
             'busket_from_api',
-            'get_opt_products_from_api'
+            'get_opt_products_from_api',
+            'get_requirements_api',
+            'set_requirements_api',
+            'unset_requirements'
         ]),
+		filterRequirements(data) {
+            const senddata = {
+                action: 'get',
+                id: this.$route.params.id,
+                filter: data.filter,
+                page: 1,
+                perpage: this.pagination_items_per_page
+            }
+			this.get_requirements_api(senddata);
+		},
+        paginateRequirements(data) {
+			this.get_requirements_api(data);
+		},
         toSearch() {
             if(this.search.length < 3) {
                 this.$toast.add({ severity: 'warn', summary: 'Предупреждение поиска', detail: 'Длина поиска должна быть больше двух символов', life: 3000 });
@@ -476,20 +581,106 @@ export default {
             this.showSearchSuggestions = false;
             router.push({ name: 'opt_search', params: { search: this.search } });
         },
+        viewReq(data){
+            console.log(data)
+            this.modal_requirements = false
+            router.push({ name: 'opt_req', params: { req: data.id } });
+        },
+        deleteReq(data){
+            this.$confirm.require({
+				message: "Вы уверены, что хотите удалить Потребность с ID " + data.id + "?",
+				header: "Подтверждение удаления",
+				icon: "pi pi-exclamation-triangle",
+				accept: () => {
+					this.requirements_loading = true;
+					this.unset_requirements();
+					this.$load(async () => {
+						await this.set_requirements_api({
+							action: "delete",
+							id: router.currentRoute._value.params.id,
+							requirements: data,
+						})
+							.then((response) => {
+                                if(response.data.success){
+                                    this.$toast.add({
+                                        severity: "success",
+                                        summary: "Потребность удалена",
+                                        detail:
+                                            "Удаление Потребности ID " + data.id + " произошло успешно!",
+                                        life: 3000,
+                                    });
+                                    this.unset_requirements()
+                                    this.get_requirements_api({
+                                        action: 'get',
+                                        id: this.$route.params.id,
+                                        page: 1,
+                                        perpage: this.pagination_items_per_page
+                                    });
+                                }else{
+                                    this.$toast.add({
+                                        severity: "error",
+                                        summary: "Ошибка удаления Потребности",
+                                        detail:
+                                            "При удаление Потребности ID " + data.id + " произошла ошибка! " + response.data.message,
+                                        life: 3000,
+                                    });
+                                }
+							})
+							.catch((result) => {
+								console.log(result);
+							});
+					});
+					this.requirements_loading = false;
+				},
+				reject: () => {
+					this.$toast.add({
+						severity: "error",
+						summary: "Удаление Потребности",
+						detail: "Удаление Потребности отклонено",
+						life: 3000,
+					});
+				},
+			});
+        },
+        async formRequirementsSubmit(event){
+            const validationResult = await this.v$.$validate();
+            if (!validationResult) {
+                console.log('validation failed');
+                return;
+            }
+            this.$load(async () => {
+                this.requirements_loading = true;
+                let data = this.form_requirements;
+                await this.set_requirements_api({
+                    action: "set",
+                    id: router.currentRoute._value.params.id,
+                    data: data,
+                }).then((response) => {
+                    if(response.data.success){
+                        this.$toast.add({ severity: 'success', summary: 'Потребность успешно создана!', detail: response.data.message, life: 3000 });
+                        this.modal_requirement = false
+                        this.requirements_loading = false;
+                        this.unset_requirements()
+                        this.get_requirements_api({
+                            action: 'get',
+                            id: this.$route.params.id,
+                            page: 1,
+                            perpage: this.pagination_items_per_page
+                        });
+                    }else{
+                        this.$toast.add({ severity: 'error', summary: 'Ошибка создания потребности', detail: response.data.message, life: 3000 });
+                    }
+                })
+                                
+            })
+        },
         parseFile(files, xhr, formData) {
             const callback = (e) => {
                 const res = JSON.parse(e);
-                console.log(res)
-
                 if(res.data.files[0].name){
-                    router.push({ name: 'opt_req', params: { req: res.data.files[0].name } });
-                    this.modal_requirement = false;
-
-                }
-                //this.files.xlsx = res.data.files[0];
-                
+                    this.form_requirements.file = res.data.files[0]
+                }                
             };
-
             xhr.onreadystatechange = () => {
                 if (xhr.readyState === 4) {
                     callback(xhr.response);
@@ -497,7 +688,7 @@ export default {
             };
         },
         requirement(){
-            this.modal_requirement = true
+            this.modal_requirements = true
         },
         changeActive() {
             this.vendorModal = !this.vendorModal;
@@ -636,7 +827,12 @@ export default {
         this.get_opt_warehouse_catalog_from_api();
         this.get_opt_catalog_from_api();
         this.get_opt_vendors_from_api().then((this.opt_vendors = this.optvendors));
-
+        this.get_requirements_api({
+            action: 'get',
+            id: this.$route.params.id,
+			page: this.requirements_page,
+			perpage: this.pagination_items_per_page
+        });
         const getOrganizationss = async () => {
             this.organizations = (await this.org_get_from_api({ action: 'get/orgs' })).data.data;
         };
@@ -666,9 +862,18 @@ export default {
             });
         });
     },
-    components: { Vendors, Accordion, Notification, NotificationButton, Dialog, DropZone },
+    components: { Vendors, Accordion, Notification, NotificationButton, Dialog, DropZone, vTable, ConfirmDialog },
     computed: {
-        ...mapGetters(['optvendors', 'salesbanners', 'optcatalog', 'optcatalogwarehouse', 'org_stores', 'warehouse_basket', 'optproducts']),
+        ...mapGetters([
+            'optvendors', 
+            'salesbanners', 
+            'optcatalog', 
+            'optcatalogwarehouse', 
+            'org_stores', 
+            'warehouse_basket', 
+            'optproducts',
+            'requirements'
+        ]),
 
         warehouseLink() {
             if (this.catalogWarehouseParent == this.actualCatalog.id) {
@@ -714,6 +919,21 @@ export default {
                 // console.log(await this.searchProducts());
                 this.searchSuggestions = await this.searchProducts();
             }, 300);
+        }
+    },
+    setup() {
+        return { v$: useVuelidate() };
+    },
+    validations() {
+        return {
+            form_requirements: {
+                name: {
+                    required: helpers.withMessage('Заполните наименование', required)
+                },
+                file: {
+                    required: helpers.withMessage('Файл обязателен для заполнения', required)
+                }
+            }
         }
     }
 };
@@ -1152,5 +1372,9 @@ export default {
             margin-left: 0;
         }
     }
+}
+
+.a-dart-btn.requirement-btn{
+    padding: 12px 24px;
 }
 </style>

@@ -55,9 +55,10 @@
       </a>
     </div>
     <div class="cell_value" :class="cell_key == 'name' ? 'name' : ''" v-else-if="cell_data.type == 'downloadhref'">
-      <a :href="value[cell_key]" download target="_blank">
+      <a :href="value[cell_key]" download target="_blank" v-if="value[cell_key]">
         Скачать
       </a>
+      <span v-else>-</span>
     </div>
     <div class="cell_value" :class="cell_key == 'status' ? 'status' : ''" v-else-if="cell_data.type == 'status'">
       <span :style="'font-size: 12px;padding: 3px 5px;border-radius: 3px;white-space: nowrap;color: #fff;background-color: #' + value.status_color">
@@ -150,7 +151,7 @@ import Chart from 'primevue/chart'
 
 export default {
   name: 'v-table-cell',
-  emits: ['deleteElem', 'updateElem', 'editElem', 'clickElem', 'checkElem', 'approveElem', 'disapproveElem', 'editNumber'],
+  emits: ['deleteElem', 'updateElem', 'editElem', 'clickElem', 'viewElem', 'checkElem', 'approveElem', 'disapproveElem', 'editNumber'],
   props: {
     editMode: {
       type: Boolean,
@@ -237,6 +238,9 @@ export default {
       }
       if (action === 'disapprove') {
         this.$emit('disapproveElem', this.value)
+      }
+      if (action === 'view') {
+        this.$emit('viewElem', this.value)
       }
     },
     editValue (number, name) {
