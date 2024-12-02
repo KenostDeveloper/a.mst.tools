@@ -123,7 +123,7 @@
                 <span class="std-auth__input-label">Данные компании</span>
 
                 <div :class="{ 'has-error': v$.form.org.inn.validInn.$response != true && v$.form.org.inn.$dirty }">
-                    <input
+                    <!-- <input
                         maxlength="12"
                         ref="innInput"
                         name="inn"
@@ -131,6 +131,17 @@
                         placeholder="ИНН"
                         class="dart-form-control std-auth__input"
                         v-model="form.org.inn"
+                    /> -->
+                    <Autocomplete
+                        ref="innInput"
+                        name="inn"
+                        id="inn"
+                        placeholder="ИНН"
+                        class="dart-form-control std-auth__input"
+                        type="company"
+                        selectionType="single"
+                        v-model="form.org.inn"
+                        @setSelection="setCompany"
                     />
                     <!-- {{ v$.form.org.inn.validInn.$response }} -->
                     <div v-if="v$.form.org.inn.validInn.$response != true && v$.form.org.inn.$dirty" class="error-message">

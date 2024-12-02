@@ -1612,8 +1612,19 @@ export default {
                             this.selected_data[this.kenost_table[i]].finalPrice = isPrice.price;
                             this.selected_data[this.kenost_table[i]].discountInRubles =
                                 Number(this.selected_data[this.kenost_table[i]].price) - this.selected_data[this.kenost_table[i]].finalPrice;
-                            this.selected_data[this.kenost_table[i]].discountInterest =
-                                100 - (isPrice.price / (Number(this.selected_data[this.kenost_table[i]].price) / 100));
+                            // this.selected_data[this.kenost_table[i]].discountInterest =
+                            //     100 - (isPrice.price / (Number(this.selected_data[this.kenost_table[i]].price) / 100));
+
+                            const price = Number(this.selected_data[this.kenost_table[i]].price);
+
+                            // Проверка на 0 или NaN
+                            if (price === 0 || isNaN(price)) {
+                            // Обработка случая, если цена некорректна (например, возврат 0 или другого значения по умолчанию)
+                            this.selected_data[this.kenost_table[i]].discountInterest = 0; // или любое другое значение
+                            } else {
+                            this.selected_data[this.kenost_table[i]].discountInterest = 
+                                100 - (isPrice.price / (price / 100));
+                            }
                         }
                         break;
                     case 3:
