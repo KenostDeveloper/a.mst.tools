@@ -7,9 +7,33 @@ export default {
     orgs: [],
     org_stores: [],
     org_store: [],
-    individual_discount: []
+    individual_discount: [],
+    available_warehouses: []
   },
   actions: {
+    get_available_warehouses_from_api ({ commit }) {
+      return Axios('/rest/front_org', {
+        method: 'POST',
+        data: {
+          org_id: router.currentRoute._value.params.id,
+          action: 'get/org/available_warehouses'
+        },
+        headers: {
+          'Access-Control-Allow-Origin': '*'
+        }
+      })
+        .then((response) => {
+          commit('GET_ORG_AVAILABLE_WAREHOUSES_TO_VUEX', response.data)
+          // console.log(response)
+          return response
+        })
+        .catch(error => {
+          if (error.response.status === 403) {
+            localStorage.removeItem('user')
+            router.push({ name: 'main' })
+          }
+        })
+    },
     get_org_store_from_api ({ commit }) {
       return Axios('/rest/front_org', {
         method: 'POST',
@@ -138,6 +162,9 @@ export default {
   },
   
   mutations: {
+    GET_ORG_AVAILABLE_WAREHOUSES_TO_VUEX: (state, data) => {
+      state.available_warehouses = data.data
+    },
     SET_ORG_PROFILE_TO_VUEX: (state, data) => {
       state.org_profile = data.data
     },
@@ -169,6 +196,9 @@ export default {
     },
     individual_discount (state) {
       return state.individual_discount
+    },
+    available_warehouses (state) {
+      return state.available_warehouses
     },
   }
 }

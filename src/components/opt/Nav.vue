@@ -320,7 +320,9 @@
             </form>
         </div>
         
-        <button @click="requirement()" class="navmain__dart_btn a-dart-btn a-dart-btn-primary requirement-btn" title="Загрузить Потребность"><svg xmlns="http://www.w3.org/2000/svg" title="Загрузить Потребность" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package-search"><path d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14"/><path d="m7.5 4.27 9 5.15"/><polyline points="3.29 7 12 12 20.71 7"/><line x1="12" x2="12" y1="22" y2="12"/><circle cx="18.5" cy="15.5" r="2.5"/><path d="M20.27 17.27 22 19"/></svg></button>
+        <button @click="requirement()" class="navmain__dart_btn a-dart-btn a-dart-btn-primary requirement-btn" title="Загрузить Потребность">
+            <i class="pi pi-upload"></i>
+        </button>
         
         <div class="std-nav__right">
             <button class="a-dart-btn a-dart-btn-secondary kenost-vendors" @click="changeActive">
@@ -419,6 +421,21 @@
         </div>
     </Dialog>
 
+    <Dialog v-model:visible="this.modal_requirements_view" header="Выберите Поставщика" :style="{ width: '640px' }">
+        <form @submit.prevent="formRequirementsViewSubmit" :class="{ loading: requirements_loading }">
+            <div class="dart-alert dart-alert-info">Для того, чтобы посмотреть предложения согласно Вашей Потребности, необходимо выбрать Поставщика для просмотра.</div>
+            <div class="dart-form-group mb-4" :class="{
+                error: this.form_requirements_view.error
+            }">
+                <Dropdown v-model="this.form_requirements_view.warehouse" :options="this.available_warehouses" optionLabel="name" placeholder="Выберите склад" class="w-full md:w-14rem" />
+                <span class="error_desc" v-if="this.form_requirements_view.error">
+                    Выберите склад
+                </span>
+            </div>
+            <button class="dart-btn dart-btn-primary dart-btn-block" type="submit">Просмотреть предложения</button>
+        </form>
+    </Dialog>
+
     <Dialog v-model:visible="this.modal_requirements" header="Потребности"
         :style="{ width: '940px' }">
         <div class="dart-alert dart-alert-info">Обратите внимание! Здесь отображаются только те потребности, которые привязаны к Складу доставки.</div>
@@ -453,6 +470,7 @@ import router from '../../router';
 import Vendors from './Vendors.vue';
 import Accordion from '../Accordion.vue';
 import axios from 'axios';
+import Dropdown from 'primevue/dropdown';
 import Notification from './Notification.vue';
 import NotificationButton from '../NotificationButton.vue';
 import ConfirmDialog from "primevue/confirmdialog";
@@ -498,10 +516,16 @@ export default {
             requirements_loading: false,
             modal_requirement: false,
             modal_requirements: false,
-            requirements_page: 1,
+            modal_requirements_view: false,
+            requirements_page: 1,            
             form_requirements: {
                 name: "",
                 file: ""
+            },
+            form_requirements_view: {
+                requirement: {},
+                warehouse: {},
+                error: false
             },
             table_data: {
 				id: {
@@ -557,7 +581,8 @@ export default {
             'get_opt_products_from_api',
             'get_requirements_api',
             'set_requirements_api',
-            'unset_requirements'
+            'unset_requirements',
+            'get_available_warehouses_from_api'
         ]),
 		filterRequirements(data) {
             const senddata = {
@@ -582,9 +607,12 @@ export default {
             router.push({ name: 'opt_search', params: { search: this.search } });
         },
         viewReq(data){
-            console.log(data)
-            this.modal_requirements = false
-            router.push({ name: 'opt_req', params: { req: data.id } });
+            this.modal_requirements_view = true
+            this.form_requirements_view.requirement = data
+            if(data.warehouse){
+                this.form_requirements_view.warehouse = data.warehouse
+            }
+            
         },
         deleteReq(data){
             this.$confirm.require({
@@ -641,6 +669,31 @@ export default {
 					});
 				},
 			});
+        },
+        formRequirementsViewSubmit(event){
+            if(this.form_requirements_view.warehouse.length == 0){
+                this.form_requirements_view.error = true
+            }else{
+                this.form_requirements_view.error = false
+            }
+            if(!this.form_requirements_view.error){
+                this.$load(async () => {
+                    await this.set_requirements_api({
+                        action: "set/warehouse",
+                        id: router.currentRoute._value.params.id,
+                        data: this.form_requirements_view,
+                    }).then((response) => {
+                        if(response.data.success){
+                            this.$toast.add({ severity: 'success', summary: 'Поставщик установлен!', detail: response.data.message, life: 3000 });
+                            this.modal_requirements_view = false
+                            this.modal_requirements = false
+                            router.push({ name: 'opt_req', params: { req: this.form_requirements_view.requirement.id } });
+                        }else{
+                            this.$toast.add({ severity: 'error', summary: 'Ошибка сохранения Поставщика', detail: response.data.message, life: 3000 });
+                        }
+                    })
+                })
+            }
         },
         async formRequirementsSubmit(event){
             const validationResult = await this.v$.$validate();
@@ -833,6 +886,7 @@ export default {
 			page: this.requirements_page,
 			perpage: this.pagination_items_per_page
         });
+        this.get_available_warehouses_from_api();
         const getOrganizationss = async () => {
             this.organizations = (await this.org_get_from_api({ action: 'get/orgs' })).data.data;
         };
@@ -862,7 +916,7 @@ export default {
             });
         });
     },
-    components: { Vendors, Accordion, Notification, NotificationButton, Dialog, DropZone, vTable, ConfirmDialog },
+    components: { Vendors, Accordion, Notification, NotificationButton, Dialog, DropZone, vTable, ConfirmDialog, Dropdown },
     computed: {
         ...mapGetters([
             'optvendors', 
@@ -872,6 +926,7 @@ export default {
             'org_stores', 
             'warehouse_basket', 
             'optproducts',
+            'available_warehouses',
             'requirements'
         ]),
 
@@ -1375,6 +1430,6 @@ export default {
 }
 
 .a-dart-btn.requirement-btn{
-    padding: 12px 24px;
+    padding: 16px 24px;
 }
 </style>

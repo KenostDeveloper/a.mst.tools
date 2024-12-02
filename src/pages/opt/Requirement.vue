@@ -4,10 +4,16 @@
     <div class="d-col-content purchases">
       <div class="dart-home dart-window">
           <!-- <Breadcrumbs/> -->
-          <div>
-            <h1 class="h1-mini">Поиск по Потребности с №{{ $route.params.req }}</h1>
-            <div class="dart-alert dart-alert-info">В данном разделе перечислены только те товары Поставщиков, которые мы нашли согласно Потребности.</div>
+          <div class="profile-content__title">
+            <span class="title-h1">Поиск по Потребности с №{{ $route.params.req }}</span>
+            <div class="buttons_container">
+              <button class="dart-btn dart-btn-primary btn-padding" @click.prevent="addToCart()"> 
+                <i class="d_icon d_icon-busket"></i>
+                <span>В корзину</span> 
+              </button>
+            </div>
           </div>
+          <div class="dart-alert dart-alert-info">В данном разделе перечислены только те товары Поставщиков, которые мы нашли согласно Потребности.</div>
           <TableCatalog @updateBasket="updateBasket" v-if="opt_products.total !== 0" :items="opt_products"/>
           <div v-else>
             <div class="dart-alert dart-alert-warning">Ничего не найдено</div>
@@ -52,6 +58,8 @@ import Breadcrumbs from '../../components/Breadcrumbs.vue'
 import Paginate from 'vuejs-paginate-next'
 import TableCatalog from '../../components/opt/TableCatalog.vue'
 import OrderModal from '../../components/opt/OrderModal.vue'
+import router from '../../router'
+import Toast from 'primevue/toast'
 
 export default {
   name: 'OptsSearch',
@@ -79,6 +87,7 @@ export default {
     Breadcrumbs,
     TableCatalog,
     Paginate,
+    Toast,
     OrderModal
   },
   mounted () {
@@ -95,8 +104,34 @@ export default {
       'get_opt_catalog_from_api',
       'get_opt_vendors_from_api',
       'get_opt_products_from_api',
-      'opt_upload_products_file'
+      'opt_upload_products_file',
+      'set_requirements_api',
+      'busket_from_api'
     ]),
+    addToCart(){
+      this.$load(async () => {
+          await this.set_requirements_api({
+              action: "cart/products",
+              id: router.currentRoute._value.params.id,
+              req: router.currentRoute._value.params.req,
+          }).then((response) => {
+              if(response.data.success){
+                this.$toast.add({ severity: 'success', summary: 'Товар добавлен в корзину!', detail: response.data.message, life: 3000 });
+                this.busket_from_api({
+                  action: 'basket/get',
+                  id: router.currentRoute._value.params.id,
+                  warehouse: 'all'
+                })
+                this.busket_from_api({
+                  action: 'basket/get',
+                  id: router.currentRoute._value.params.id,
+                })
+              }else{
+                this.$toast.add({ severity: 'error', summary: 'Ошибка сохранения Поставщика', detail: response.data.message, life: 3000 });
+              }
+          })
+      })
+    },
     pagClickCallback (pageNum) {
       this.page = pageNum
       this.get_opt_products_from_api({
