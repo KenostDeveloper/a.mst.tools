@@ -53,6 +53,7 @@
         </td>
         <td class="k-table__busket">
             <!-- {{item}} -->
+            <!-- {{ item?.action?.multiplicity }} -->
             <form class="k-table__form" action="" :class="{ 'basket-true': item?.basket?.availability }">
                 <Counter
                     @ElemCount="ElemCount"
@@ -61,13 +62,15 @@
                     :id="item.remain_id"
                     :store_id="item.store_id"
                     :index="index"
-                    :value="item?.basket?.count" :step="item?.action?.multiplicity ? item?.action?.multiplicity : 1"
+                    :value="item?.basket?.count"
+                    :step="item?.action?.multiplicity ? item?.action?.multiplicity : 1"
                     :item="item"
                 />
                 <div @click="
                     addBasket(
                         item.remain_id,
-                        item?.action?.multiplicity > 1 ? item?.action?.multiplicity : item.basket.count,
+                        // item?.action?.min_count > 1 ? item?.action?.multiplicity > 1 ? item?.action?.multiplicity : item.basket.count,
+                        (item?.action?.min_count / (item?.action?.multiplicity ? item?.action?.multiplicity : 1)) * (item?.action?.multiplicity? item?.action?.multiplicity : 1),
                         item.store_id,
                         index
                     )
@@ -213,7 +216,7 @@
                                                         {{ tag.value.toLocaleString('ru') }}
                                                         шт.
                                                     </p>
-                                                    <img v-if="tag.type == 'sale'"
+                                                    <img v-if="tag.type == 'sale' && tag.value > 0"
                                                         src="../../assets/images/icons/action/sale.svg" alt="" />
                                                     <p v-if="tag.type == 'sale' && tag.value > 0">
                                                         Скидка
@@ -274,7 +277,7 @@
                                                             {{ tag.value.toLocaleString('ru') }}
                                                             шт.
                                                         </p>
-                                                        <img v-if="tag.type == 'sale'"
+                                                        <img v-if="tag.type == 'sale' && tag.value > 0"
                                                             src="../../assets/images/icons/action/sale.svg" alt="" />
                                                         <p v-if="tag.type == 'sale' && tag.value > 0" >
                                                             Скидка
@@ -363,10 +366,17 @@
             <td class="k-table__busket complect-button__td">
                 <!-- {{item.multiplicity}} -->
                 <form class="k-table__form" :class="{ 'basket-true': item?.basket?.availability }" action="">
-                    <Counter @ElemCount="ElemCountComplect"
-                        :step="item.multiplicity" :min="0" :item="item" :max="item.remain_complect * item.multiplicity"
-                        :id="item.complect_id" :store_id="item.store_id" :index="index"
-                        :value="item?.basket?.count * item.multiplicity" />
+                    <Counter
+                        @ElemCount="ElemCountComplect"
+                        :step="item.multiplicity"
+                        :min="0"
+                        :item="item"
+                        :max="item.remain_complect * item.multiplicity"
+                        :id="item.complect_id"
+                        :store_id="item.store_id"
+                        :index="index"
+                        :value="item?.basket?.count * item.multiplicity"
+                    />
                     <div @click="addBasketComplect(item.complect_id, item?.basket?.count, item.store_id, index)"
                         class="dart-btn dart-btn-primary">
                         <i class="d_icon d_icon-busket"></i>
@@ -456,7 +466,7 @@
                                                 шт.
                                             </p>
 
-                                            <img v-if="tag.type == 'sale'"
+                                            <img v-if="tag.type == 'sale' && tag.value > 0"
                                                 src="../../assets/images/icons/action/sale.svg" alt="" />
                                             <p v-if="tag.type == 'sale'">
                                                 Скидка
@@ -661,12 +671,12 @@ export default {
                 };
 
                 this.opt_api(dataUpdate).then((response) => {
-                    // console.log("response", response)
                     const data = {
                         remain_id: remainid,
                         store_id: storeid,
                         data: response.data.data
                     };
+                    console.log("SET_OPT_PRODUCT_TO_VUEX", data)
                     this.$store.commit('SET_OPT_PRODUCT_TO_VUEX', data);
                 });
             });
