@@ -23,7 +23,8 @@
                     active: this.active || this.is_warehouses || items.total_stores == 1,
                     'no-active': !this.active && !this.is_warehouses && items.total_stores > 1,
                     'bg-white': items.total_stores == 1
-                }">
+                }"
+                v-if="complect?.remain?.min_count > 0">
                 <!-- {{ complect.products }} -->
                 <tr
                     v-for="(item, index) in complect.products"
@@ -49,7 +50,11 @@
                         {{ Math.round(Number(item.old_price)).toLocaleString('ru') }} ₽
                     </td>
                     <td >
-                        {{ ((Number(item.old_price) - Number(item.new_price)) / (Number(item.old_price) / 100)).toFixed(2).toLocaleString('ru') }} %
+                        {{ 
+                            (Number(item.old_price) && Number(item.old_price) !== 0) 
+                                ? ((Number(item.old_price) - Number(item.new_price)) / (Number(item.old_price) / 100)).toFixed(2).toLocaleString('ru') 
+                                : '0'
+                        }}
                     </td>
                     <td>
                         {{ Math.round(Number(item.new_price)).toLocaleString('ru') }} ₽

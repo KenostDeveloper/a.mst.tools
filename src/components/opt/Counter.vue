@@ -14,15 +14,25 @@
 				name="count"
 				:value="this.d_value"
 				:step="d_step"
+				:max="this.max"
 			/>
 			<div class="k-quantity__btn pls" @click="onPlus">
 				<i class="pi pi-plus"></i>
 			</div>
 		</form>
 	</div>
+	<Dialog v-model:visible="this.modal_remain" header=" " :style="{ width: '340px' }">
+        <div class="kenost-not-produc">
+            <img src="/images/icons_milen/outOfStock2.png" alt="">
+            <b>У нас нет столько товаров :(</b>
+            <p>Извините, но количество данного товара ограничено</p>
+            <div class="a-dart-btn a-dart-btn-primary" @click="this.modal_remain = false">Понятно</div>
+        </div>
+    </Dialog>
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
+import Dialog from 'primevue/dialog'
 // import InputNumber from 'primevue/inputnumber'
 
 export default {
@@ -72,7 +82,8 @@ export default {
 			d_min: this.min,
 			d_max: this.max,
 			d_value: this.value,
-			d_step: this.step
+			d_step: this.step,
+			modal_remain: false
 		};
 	},
 	methods: {
@@ -81,27 +92,57 @@ export default {
 
 		},
 		onMinus() {
-			if (this.d_value > this.d_min) {
-				this.d_value = this.d_value - (1 * this.d_step);
+			// Уменьшаем на шаг
+			let newValue = this.d_value - this.d_step;
+
+			// Если новое значение меньше минимального, устанавливаем min
+			if (newValue < this.d_min) {
+				newValue = this.d_min;
 			}
-			this.debouncedSend()
+
+			// Убедитесь, что новое значение кратно шагу
+			if (newValue % this.d_step !== 0) {
+				newValue = Math.floor(newValue / this.d_step) * this.d_step;
+			}
+
+			this.d_value = newValue;
+			this.debouncedSend();
 		},
 		onPlus() {
-			if (this.d_value <= this.d_max) {
-				this.d_value = Number(this.d_value) + (1 * this.d_step);
+			// Увеличиваем на шаг
+			let newValue = this.d_value + this.d_step;
+
+			// Если новое значение превышает максимальное, устанавливаем max
+			if (newValue > this.d_max) {
+				newValue = this.d_max;
+				this.modal_remain = true
 			}
-			this.debouncedSend()
+
+			// Убедитесь, что новое значение кратно шагу
+			if (newValue % this.d_step !== 0) {
+				newValue = Math.floor(newValue / this.d_step) * this.d_step;
+			}
+
+			this.d_value = newValue;
+			this.debouncedSend();
 		},
 		onEmit(e) {
-			if (!this.d_value || this.d_value < 0) {
+			// Проверяем, что значение не меньше минимального
+			if (this.d_value < this.d_min) {
 				this.d_value = this.d_min;
 			}
 
-			if (this.d_value % this.d_step !== 0) {
-				const remains = this.d_value % this.d_step;
-				this.d_value = this.d_value - remains;
+			// Проверяем, что значение не больше максимального
+			if (this.d_value > this.d_max) {
+				this.d_value = this.d_max;
 			}
-			this.debouncedSend()
+
+			// Округляем значение до кратности шагу
+			if (this.d_value % this.d_step !== 0) {
+				this.d_value = Math.floor(this.d_value / this.d_step) * this.d_step;
+			}
+
+			this.debouncedSend();
 		},
 		send(){
 			const data = {
@@ -118,7 +159,7 @@ export default {
 	},
 	mounted() {},
 	components: {
-		// InputNumber
+		Dialog
 	},
 	computed: {
 		...mapGetters([]),
