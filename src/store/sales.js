@@ -20,6 +20,7 @@ export default {
         }
       })
         .then((response) => {
+          return response
           // commit('SET_MATRIX_TO_VUEX', response.data)
         })
         .catch(error => {

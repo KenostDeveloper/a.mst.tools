@@ -5,7 +5,7 @@
             <div class="buttons_container">
                 <RouterLink :to="{ name: 'b2b', params: { id: $route.params.id } }"
                     class="dart-btn dart-btn-secondary btn-padding">Отменить</RouterLink>
-                <button type="submit" class="dart-btn dart-btn-primary btn-padding"
+                <button @click="actions.active ? this.modal_checking = true : formSubmit(event)" type="button" class="dart-btn dart-btn-primary btn-padding"
                     :class="{ 'dart-btn-loading': loading }" :disabled="loading">
                     Сохранить изменения
                 </button>
@@ -986,6 +986,15 @@
                 </div>
             </div>
         </div>
+
+        <Dialog v-model:visible="this.modal_checking" header=" " :style="{ width: '380px' }">
+            <div class="kenost-not-produc">
+                <img src="/images/icons_milen/action-status.png" alt="">
+                <b class="text-center">Вы уверены, что хотите сохранить изменения?</b>
+                <p>Обратите внимание, что <b>акция в настоящее время активна</b>, и после сохранения она вступит в силу, применив изменения ко всем добавленным товарам.</p>
+                <div class="a-dart-btn a-dart-btn-primary" @click="formSubmit(event)">Сохранить</div>
+            </div>
+        </Dialog>
     </form>
     <Dialog v-model:visible="this.modals.delay" header="Настройка отсрочки платежа" :style="{ width: '800px' }">
         <div class="kenost-modal-price">
@@ -1192,6 +1201,7 @@ export default {
             page: 1,
             pageGift: 1,
             loading: true,
+            modal_checking: false,
             filter: {
                 name: '',
                 category: {}
@@ -1819,7 +1829,6 @@ export default {
                 }
             });
             this.loading = true;
-            // }
         },
         selectComplect(id) {
             console.log(id);

@@ -120,6 +120,15 @@
 			</div>
 		</div>
 	</Dialog>
+
+	<Dialog v-model:visible="this.modal_approve" header=" " :style="{ width: '340px' }">
+        <div class="kenost-not-produc">
+            <img src="/images/icons_milen/action-error.png" alt="">
+            <b>Продлите сроки акции</b>
+            <p>Для активации этой акции необходимо продлить ее сроки.</p>
+            <div class="a-dart-btn a-dart-btn-primary" @click="this.modal_approve = false">Понятно</div>
+        </div>
+    </Dialog>
 </template>
 
 <script>
@@ -194,6 +203,7 @@ export default {
 				items: [],
 				total: -1,
 			},
+			modal_approve: false,
 			diler_loading: false,
 			page: 1,
 			page_complects: 1,
@@ -345,10 +355,10 @@ export default {
 							icon: "pi pi-pencil",
 							label: "Редактировать",
 						},
-						approve: {
-							icon: "pi pi-power-off",
-							label: "Включить",
-						},
+						// approve: {
+						// 	icon: "pi pi-power-off",
+						// 	label: "Включить",
+						// },
 						delete: {
 							icon: "pi pi-trash",
 							label: "Удалить",
@@ -445,11 +455,16 @@ export default {
 					id: router.currentRoute._value.params.id,
 				})
 					.then((result) => {
-						this.get_sales_to_api({
-							page: this.page,
-							perpage: this.pagination_items_per_page,
-							type: "b2b",
-						});
+						if(result.data.data.status){
+							this.get_sales_to_api({
+								page: this.page,
+								perpage: this.pagination_items_per_page,
+								type: "b2b",
+							});
+						} else {
+							this.modal_approve = true
+						}
+						
 					})
 					.catch((result) => {
 						console.log(result);
