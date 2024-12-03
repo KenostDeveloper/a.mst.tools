@@ -108,7 +108,7 @@
 										<div class="table-actions__modal">
 											<div class="table-actions__modal-elems">
 												<div class="table-actions__modal-el" v-for="(tag, index) in action" v-bind:key="tag.id">
-												<img v-if="tag.type == 'min_sum'" src="../../assets/images/icons/action/basket.svg" alt="">
+												<img v-if="tag.type == 'min_sum'" src="/images/icons/action/red/basket.svg" alt="">
 												<p v-if="tag.type == 'min_sum'">Минимальна сумма покупки {{ Number(tag.value).toLocaleString('ru') }} ₽</p>
 
 												<img v-if="tag.type == 'free_delivery'" src="/images/icons/action/red/delivery.svg" alt="">
