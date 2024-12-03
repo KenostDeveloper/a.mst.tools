@@ -53,7 +53,8 @@
         </td>
         <td class="k-table__busket">
             <!-- {{item}} -->
-            <!-- {{ (item?.action?.multiplicity ? item?.action?.multiplicity : 1) }} - {{ (item?.action?.min_count ? item?.action?.min_count : 1) }} - {{ ((item?.action?.min_count ? item?.action?.min_count : 1) / (item?.action?.multiplicity ? item?.action?.multiplicity : 1)) * (item?.action?.multiplicity? item?.action?.multiplicity : 1) }} -->
+            <!-- {{ (item?.action?.multiplicity ? item?.action?.multiplicity : 1)}} 
+            - {{ (item?.action?.min_count ? item?.action?.min_count : 1) }} - {{ ((item?.action?.multiplicity ? item?.action?.multiplicity : 1) / (item?.action?.min_count ? item?.action?.min_count : 1)) * (item?.action?.min_count ? item?.action?.min_count : 1) }} -->
             <form class="k-table__form" action="" :class="{ 'basket-true': item?.basket?.availability }">
                 <Counter
                     @ElemCount="ElemCount"
@@ -70,7 +71,7 @@
                     addBasket(
                         item.remain_id,
                         // item?.action?.min_count > 1 ? item?.action?.multiplicity > 1 ? item?.action?.multiplicity : item.basket.count,
-                        ((item?.action?.min_count ? item?.action?.min_count : 1) / (item?.action?.multiplicity ? item?.action?.multiplicity : 1)) * (item?.action?.multiplicity? item?.action?.multiplicity : 1),
+                        ((item?.action?.multiplicity ? item?.action?.multiplicity : 1) / (item?.action?.min_count ? item?.action?.min_count : 1)) * (item?.action?.min_count ? item?.action?.min_count : 1),
                         item.store_id,
                         index
                     )

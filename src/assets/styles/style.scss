@@ -6968,6 +6968,11 @@ button.std-icon__wrapper {
 	border-top: 1px solid #e2e2e2;
 }
 
+.table-actions__modal-el{
+	z-index: 1;
+}
+
+
 .event-none {
 	pointer-events: none;
 }

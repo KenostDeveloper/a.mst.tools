@@ -69,6 +69,7 @@
 						<th class="std-table__hcol">Фото</th>
 						<th class="std-table__hcol">Название</th>
 						<th class="std-table__hcol">Стоимость за единицу</th>
+						<th class="std-table__hcol">Применённые акции</th>
 						<th class="std-table__hcol">Количество</th>
 						<th class="std-table__hcol">Сумма</th>
 					</tr>
@@ -81,6 +82,65 @@
 						</td>
 						<td class="std-table__col">{{ item.name }}</td>
 						<td class="std-table__col">{{ Number(item.price).toLocaleString('ru') }} ₽</td>
+						<td class="std-table__col">
+							<div class="table-actions__action active w-fit" v-for="(action, indexactions) in item.tags" v-bind:key="action.id">
+								<div v-if="action.length > 0" class="table-actions__container">
+									<div class="table-actions__el" v-for="(tag, indextag) in action" v-bind:key="tag.id">
+										<img v-if="tag.type == 'multiplicity'" src="/images/icons/action/gray/box.svg" alt="">
+										<p class="w-fit" v-if="tag.type == 'multiplicity'">{{ tag.value }} шт.</p>
+
+										<img v-if="tag.type == 'min'" src="/images/icons/action/gray/min.svg" alt="">
+
+										<img v-if="tag.type == 'gift'" src="/images/icons/action/gray/gift.svg" alt="">
+
+										<img v-if="tag.type == 'delay'" src="/images/icons/action/gray/time.svg" alt="">
+										<p class="w-fit" v-if="tag.type == 'delay'">Отсроч. {{ tag.value }} дн.</p>
+
+										<img v-if="tag.type == 'sale' && tag.value > 0" src="/images/icons/action/gray/sale.svg" alt="">
+										<p class="w-fit" v-if="tag.type == 'sale'">Скидка {{ Number(tag.value).toFixed(0) }}%</p>
+
+										<img v-if="tag.type == 'free_delivery'" src="/images/icons/action/gray/delivery.svg" alt="">
+									</div>
+								</div>
+								<div v-if="action.length > 0" class="table-actions__help">
+									<p>?</p>
+									<div class="table-actions__content">
+										<div class="table-actions__modal">
+											<div class="table-actions__modal-elems">
+												<div class="table-actions__modal-el" v-for="(tag, index) in action" v-bind:key="tag.id">
+												<img v-if="tag.type == 'min_sum'" src="../../assets/images/icons/action/basket.svg" alt="">
+												<p v-if="tag.type == 'min_sum'">Минимальна сумма покупки {{ Number(tag.value).toLocaleString('ru') }} ₽</p>
+
+												<img v-if="tag.type == 'free_delivery'" src="/images/icons/action/red/delivery.svg" alt="">
+												<p v-if="tag.type == 'free_delivery'"><span>Бесплатная доставка</span> <span v-if="tag.condition == '2'"> при покупке от {{ (tag.value).toLocaleString('ru') }} ₽</span> <span v-if="tag.condition == '3'"> при покупке от {{ (tag.value).toLocaleString('ru') }} шт.</span></p>
+
+												<img v-if="tag.type == 'gift'" src="/images/icons/action/red/gift.svg" alt="">
+												<p v-if="tag.type == 'gift'">Подарок</p>
+
+												<img v-if="tag.type == 'delay'" src="/images/icons/action/red/gift.svg" alt="">
+												<p v-if="tag.type == 'delay'">Отсрочка {{ tag.value }} дн.</p>
+
+												<img v-if="tag.type == 'multiplicity'" src="/images/icons/action/red/box.svg" alt="">
+												<p v-if="tag.type == 'multiplicity'">Кратность упаковки {{ (tag.value).toLocaleString('ru') }} шт.</p>
+
+												<img v-if="tag.type == 'sale' && tag.value > 0" src="/images/icons/action/red/sale.svg" alt="">
+												<p v-if="tag.type == 'sale'">
+													Скидка {{ (tag.value).toLocaleString('ru') }}%
+													<span v-if="tag.min_count > 1">
+														при покупке от
+														{{ tag.min_count.toLocaleString("ru") }} шт.</span
+													>
+												</p> 
+												</div>
+											</div>
+											<div class="table-actions__modal-btn-container">
+												<router-link v-if="action.action_id > 0" :to="{name: 'promotion', params: { id: this.$route.params.id, action: action.action_id }}" class="table-actions__modal-btn">Подробнее об акции</router-link>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</td>
 						<td class="std-table__col">{{ item.count }}  шт.</td>
 						<td class="std-table__col">{{ Number(item.price * item.count).toLocaleString('ru') }} ₽</td>
 					</tr>
