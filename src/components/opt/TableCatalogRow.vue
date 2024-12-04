@@ -73,7 +73,8 @@
                         // item?.action?.min_count > 1 ? item?.action?.multiplicity > 1 ? item?.action?.multiplicity : item.basket.count,
                         ((item?.action?.multiplicity ? item?.action?.multiplicity : 1) / (item?.action?.min_count ? item?.action?.min_count : 1)) * (item?.action?.min_count ? item?.action?.min_count : 1),
                         item.store_id,
-                        index
+                        index,
+                        item
                     )
                     " class="dart-btn dart-btn-primary">
                     <i class="d_icon d_icon-busket"></i>
@@ -702,7 +703,7 @@ export default {
                 delivery_day: minDeliveryDate
             };
         },
-        addBasket(id, value, storeid, index) {
+        addBasket(id, value, storeid, index, product) {
             const data = {
                 action: 'basket/add',
                 id: router.currentRoute._value.params.id,
@@ -717,10 +718,44 @@ export default {
                     warehouse: 'all'
                 });
             });
+
+            // Убедитесь, что dataLayer существует
+            window.dataLayer = window.dataLayer || [];
+
+            // Отправка данных в dataLayer
+            window.dataLayer.push({
+            ecommerce: {
+                currencyCode: "RUB",  // Валюта
+                add: {
+                products: [
+                    {
+                        id: id,  // ID товара
+                        name: product.name,  // Название товара
+                        price: product.price,  // Цена товара
+                        category: product.catalog,  // Категория товара
+                        quantity: value,  // Количество товара
+                    }
+                ]
+                }
+            }
+            });
+
+            // console.log({
+            //     transactionId: 'cart_' + Math.random().toString(36).substring(2, 9),
+            //     name: "Товар тест",
+            //     sku: 99, //id товара (remain_id)
+            //     category: "Пилы",
+            //     price: 9999,
+            //     quantity: value, // Количество товара
+            // })
+
+            // Логика добавления товара в корзину
+            //this.$store.dispatch('addToCart', product);
             // eslint-disable-next-line vue/no-mutating-props
             this.items.stores[index].basket.availability = true;
             this.$emit('updateBasket');
         },
+
         addBasketComplect(complectid, value, storeid, index) {
             const data = {
                 action: 'basket/add',
@@ -780,10 +815,7 @@ export default {
                 return;
             };
 
-            if (object.value > Number(object.max)) {
-                this.modal_remain = true;
-                // console.log(this.modal_remain)
-            } else {
+            //if (Number(object.value) !== Number(object.max)) {
                 // eslint-disable-next-line vue/no-mutating-props
                 this.items.stores[object.index].basket.count = object.value;
 
@@ -808,9 +840,30 @@ export default {
                             warehouse: 'all'
                         });
                     });
+
+                    // Убедитесь, что dataLayer существует
+                    window.dataLayer = window.dataLayer || [];
+
+                    // Отправка данных в dataLayer
+                    window.dataLayer.push({
+                        ecommerce: {
+                            currencyCode: "RUB",  // Валюта
+                            add: {
+                            products: [
+                                {
+                                    id: object.item.id,  // ID товара
+                                    name: object.item.name,  // Название товара
+                                    price: object.item.price,  // Цена товара
+                                    category: object.item.catalog,  // Категория товара
+                                    quantity: object.value,  // Количество товара
+                                }
+                            ]
+                            }
+                        }
+                    });
+                    
                     this.$emit('updateBasket');
                 }, 1000);
-            }
             // }, 300);
         },
         ElemCountComplect(object) {

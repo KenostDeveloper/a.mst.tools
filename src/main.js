@@ -189,6 +189,8 @@ app
 }))
 .mount('#app')
 
+
+
 app.config.globalProperties.$filters = {
   round (value) {
     return value.toFixed(2)

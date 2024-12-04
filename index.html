@@ -7,25 +7,50 @@
     <script src="https://unpkg.com/lodash@4.17.20/lodash.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>МСТ Аналитика</title>
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="MachineStore: Закупки | Оптовые цены и акции" />
+    <meta property="og:description" content="Цены и скидки от производителей, оптовых компаний. Эксклюзивные акции, индивидуальные цены, онлайн заказ, загрузка потребности. Бесплатно" />
+    <meta property="og:image" content="https://a.mst.tools/images/OpenGraph.png" />
+    <meta property="og:url" content="https://a.mst.tools/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="MachineStore" />
+    <meta property="og:locale" content="ru_RU" />
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="MachineStore: Закупки | Оптовые цены и акции" />
+    <meta name="twitter:description" content="Цены и скидки от производителей, оптовых компаний. Эксклюзивные акции, индивидуальные цены, онлайн заказ, загрузка потребности. Бесплатно" />
+    <meta name="twitter:image" content="https://a.mst.tools/images/OpenGraph.png" />
+    <meta name="twitter:url" content="https://a.mst.tools/" />
+
+    <!-- VK Meta Tags -->
+    <meta property="vk:image" content="https://a.mst.tools/images/OpenGraph.png" />
+    <meta property="vk:title" content="MachineStore: Закупки | Оптовые цены и акции" />
+    <meta property="vk:description" content="Цены и скидки от производителей, оптовых компаний. Эксклюзивные акции, индивидуальные цены, онлайн заказ, загрузка потребности. Бесплатно" />
+    <meta property="vk:url" content="https://a.mst.tools/" />
   </head>
   <body>
     <div id="app"></div>
     <script type="module" src="/src/main.js"></script>
+    <!-- Yandex.Metrika counter -->
     <script type="text/javascript" >
-      (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-      m[i].l=1*new Date();
-      for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-      k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-      (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+    (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+    m[i].l=1*new Date();
+    for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+    k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+    (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
 
-      ym(98499606, "init", {
-          clickmap:true,
-          trackLinks:true,
-          accurateTrackBounce:true,
-          webvisor:true
-      });
+    ym(98499606, "init", {
+        clickmap:true,
+        trackLinks:true,
+        accurateTrackBounce:true,
+        webvisor:true,
+        ecommerce:"dataLayer"
+    });
     </script>
     <noscript><div><img src="https://mc.yandex.ru/watch/98499606" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- /Yandex.Metrika counter -->
     <script>
       (function(w,d,u){
               var s=d.createElement('script');s.async=true;s.src=u+'?'+(Date.now()/60000|0);
