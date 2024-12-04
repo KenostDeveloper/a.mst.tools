@@ -52,6 +52,15 @@
         <RouterLink :to="{ name: 'org_matrix_add', params: { id: $route.params.id }}" class="dart-btn dart-btn-primary">Добавить матрицу</RouterLink>
       </template>
     </v-table> -->
+
+    <Dialog v-model:visible="this.modal_approve" header=" " :style="{ width: '340px' }">
+        <div class="kenost-not-produc">
+            <img src="/images/icons_milen/action-error.png" alt="">
+            <b>Продлите сроки акции</b>
+            <p>Для активации этой акции необходимо продлить ее сроки.</p>
+            <div class="a-dart-btn a-dart-btn-primary" @click="this.modal_approve = false">Понятно</div>
+        </div>
+    </Dialog>
   </template>
 
 <script>
@@ -62,6 +71,7 @@ import TabView from 'primevue/tabview'
 import TabPanel from 'primevue/tabpanel'
 import router from '../../router'
 import Breadcrumbs from '../../components/Breadcrumbs.vue'
+import Dialog from "primevue/dialog";
 
 export default {
   name: 'ProfileSales',
@@ -78,6 +88,7 @@ export default {
   data () {
     return {
       page: 1,
+      modal_approve: false,
       filters: {
         name: {
           name: 'Наименование',
@@ -171,11 +182,15 @@ export default {
 					id: router.currentRoute._value.params.id,
         })
           .then((result) => {
-            this.get_sales_to_api({
-              page: this.page,
-              perpage: this.pagination_items_per_page,
-              type: 'b2c'
-            })
+            if(result.data.data.status){
+							this.get_sales_to_api({
+                page: this.page,
+                perpage: this.pagination_items_per_page,
+                type: 'b2c'
+              })
+						} else {
+							this.modal_approve = true
+						}
           })
           .catch((result) => {
             console.log(result)
@@ -209,7 +224,7 @@ export default {
       type: 'b2c'
     })
   },
-  components: { vTable, RouterLink, TabView, TabPanel, Breadcrumbs },
+  components: { vTable, RouterLink, TabView, TabPanel, Breadcrumbs, Dialog },
   computed: {
     ...mapGetters([
       'actions'
