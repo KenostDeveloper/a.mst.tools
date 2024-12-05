@@ -1,5 +1,5 @@
 <template>
-    <tr v-if="!this.is_warehouses && items.total_stores > 1" @click="this.active = !this.active"
+    <tr v-if="!this.is_warehouses && items?.total_stores > 1" @click="this.active = !this.active"
         :class="{ 'active-el': this.active, 'no-active-el': !this.active }">
         <td class="hidden-mobile-l"><i class="pi pi-angle-up"></i></td>
         <td class="k-table__photo hidden-mobile-l">
@@ -35,7 +35,7 @@
         <td>{{ items.total_stores }}</td>
         <td class="hidden-mobile-l"></td>
     </tr>
-    <tr :data-product="item.remain_id" class="kenost-table-background" v-for="(item, index) in items.stores"
+    <tr :data-info="JSON.stringify({id: item.remain_id, name: item.name, price: item.price, category: item.catalog, list: 'Catalog'})" :data-product="item.remain_id" class="kenost-product-item kenost-table-background" v-for="(item, index) in items.stores"
         v-bind:key="item.id" :class="{
             active: this.active || this.is_warehouses || items.total_stores == 1,
             'no-active': !this.active && !this.is_warehouses && items.total_stores > 1,
@@ -740,17 +740,6 @@ export default {
             }
             });
 
-            // console.log({
-            //     transactionId: 'cart_' + Math.random().toString(36).substring(2, 9),
-            //     name: "Товар тест",
-            //     sku: 99, //id товара (remain_id)
-            //     category: "Пилы",
-            //     price: 9999,
-            //     quantity: value, // Количество товара
-            // })
-
-            // Логика добавления товара в корзину
-            //this.$store.dispatch('addToCart', product);
             // eslint-disable-next-line vue/no-mutating-props
             this.items.stores[index].basket.availability = true;
             this.$emit('updateBasket');
@@ -841,27 +830,30 @@ export default {
                         });
                     });
 
-                    // Убедитесь, что dataLayer существует
-                    window.dataLayer = window.dataLayer || [];
 
-                    // Отправка данных в dataLayer
-                    window.dataLayer.push({
-                        ecommerce: {
-                            currencyCode: "RUB",  // Валюта
-                            add: {
-                            products: [
-                                {
-                                    id: object.item.id,  // ID товара
-                                    name: object.item.name,  // Название товара
-                                    price: object.item.price,  // Цена товара
-                                    category: object.item.catalog,  // Категория товара
-                                    quantity: object.value,  // Количество товара
+                    if(Number(object.value) != object.old_value){
+                        // Убедитесь, что dataLayer существует
+                        window.dataLayer = window.dataLayer || [];
+
+                        // Отправка данных в dataLayer
+                        window.dataLayer.push({
+                            ecommerce: {
+                                currencyCode: "RUB",  // Валюта
+                                add: {
+                                products: [
+                                    {
+                                        id: object.item.id,  // ID товара
+                                        name: object.item.name,  // Название товара
+                                        price: object.item.price,  // Цена товара
+                                        category: object.item.catalog,  // Категория товара
+                                        quantity: object.value,  // Количество товара
+                                    }
+                                ]
                                 }
-                            ]
                             }
-                        }
-                    });
-                    
+                        });
+                    }
+                
                     this.$emit('updateBasket');
                 }, 1000);
             // }, 300);

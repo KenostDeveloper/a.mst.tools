@@ -66,7 +66,7 @@
 							v-bind:key="product.id"
 						>
 							<div
-								@click="clearBasketProduct(store.id, product.id_remain)"
+								@click="clearBasketProduct(store.id, product)"
 								class="btn-close link-no-style"
 							>
 								<!-- <i class="d_icon d_icon-close"></i> -->
@@ -81,7 +81,7 @@
 									<div class="kenost-basket__info-left">
 										<Counter
 											@ElemCount="ElemCount"
-											:item="basket"
+											:item="{basket, product}"
 											:mini="true"
 											:min="1"
 											:max="product?.remains"
@@ -296,7 +296,7 @@
 				<a
 					class="a-dart-btn a-dart-btn-primary btn-arrange button-basket"
 					@click.prevent="toOrder"
-					>Оформить заказ <span>{{ this.basket?.cost?.toLocaleString("ru") }} ₽</span></a
+					>Перейти к оформлению <span>{{ this.basket?.cost?.toLocaleString("ru") }} ₽</span></a
 				>
 			</div>
 			
@@ -414,7 +414,7 @@ export default {
 						id_remain: object.id,
 						value: object.value,
 						store_id: object.store_id,
-						actions: object.item.actions_ids,
+						actions: object.item.basket.actions_ids,
 					};
 					this.busket_from_api(data).then((response) => {
 						const datainfo = {
@@ -425,6 +425,27 @@ export default {
 						this.$store.commit("SET_OPT_PRODUCTS_MUTATION_TO_VUEX", datainfo);
 						this.$store.commit("SET_SALES_PRODUCTS_MUTATION_TO_VUEX", datainfo);
 					});
+					if(Number(object.value) != object.old_value){
+                        // Убедитесь, что dataLayer существует
+                        window.dataLayer = window.dataLayer || [];
+
+                        // Отправка данных в dataLayer
+                        window.dataLayer.push({
+                            ecommerce: {
+                                currencyCode: "RUB",  // Валюта
+                                add: {
+                                products: [
+                                    {
+                                        id: object.id,  // ID товара
+                                        name: object.item.product.name,  // Название товара
+                                        price: object.item.basket.price,  // Цена товара
+                                        quantity: object.value,  // Количество товара
+                                    }
+                                ]
+                                }
+                            }
+                        });
+                    }
 					this.busket_from_api({
 						action: 'basket/get',
 						id: router.currentRoute._value.params.id,
@@ -451,16 +472,37 @@ export default {
 
 			this.showClearBasketModal = false;
 		},
-		clearBasketProduct(storeid, productid) {
+		clearBasketProduct(storeid, product) {
 			this.$emit("catalogUpdate");
 			this.$emit("actionUpdate");
 			const data = {
 				action: "basket/clear",
 				id: router.currentRoute._value.params.id,
 				store_id: storeid,
-				id_remain: productid,
+				id_remain: product.id_remain,
 			};
 			this.busket_from_api(data).then((response) => {});
+
+			// Убедитесь, что dataLayer существует
+			window.dataLayer = window.dataLayer || [];
+
+			// Отправка данных в dataLayer
+			window.dataLayer.push({
+			ecommerce: {
+				currencyCode: "RUB",  // Валюта
+				remove: {
+					products: [
+						{
+							id: product.id_remain,  // ID товара
+							name: product.name,  // Название товара
+							price: product.basket[0].price,  // Цена товара
+							quantity: product.basket[0].count,  // Количество товара
+						}
+					]
+				}
+			}
+			});
+
 			this.busket_from_api({
 				action: 'basket/get',
 				id: router.currentRoute._value.params.id,
@@ -738,8 +780,8 @@ export default {
 	// background: #a6fff0;
 	border-radius: 5px;
 	box-shadow: 0px 0px 18px 0px rgba(0, 0, 0, 0.06);
-	max-height: 700px;
-	height: 70vh;
+	max-height: 90vh;
+	height: 90vh;
 	background: #fff;
 
 	.basket-empty {

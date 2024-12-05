@@ -85,8 +85,8 @@
                     </td>
                     <td class="k-table__busket">
                         <form class="k-table__form" action="" :class="{ 'basket-true': item?.basket?.availability }">
-                            <Counter @ElemCount="ElemCount" :min="1" :max="item.max" :id="item.remain_id" :store_id="item.store_id" :index="index" :value="item?.basket?.count" :step="item?.action?.multiplicity ? item?.action?.multiplicity : 1" />
-                            <div @click="addBasket(item.remain_id, item?.action?.multiplicity > 1 ? item?.action?.multiplicity : item.basket.count, item.store_id, index)" class="dart-btn dart-btn-primary">
+                            <Counter @ElemCount="ElemCount" :min="1" :max="item.max" :id="item.remain_id" :store_id="item.store_id" :item="item" :index="index" :value="Number(item?.basket?.count)" :step="item?.action?.multiplicity ? item?.action?.multiplicity : 1" />
+                            <div @click="addBasket(item.remain_id, item?.action?.multiplicity > 1 ? item?.action?.multiplicity : item.basket.count, item.store_id, index, item)" class="dart-btn dart-btn-primary">
                                 <i class="d_icon d_icon-busket"></i>
                             </div>
                         </form>
@@ -163,7 +163,7 @@ export default {
         updateBasket() {
             this.$emit('updateBasket');
         },
-        addBasket(id, value, storeid, index) {
+        addBasket(id, value, storeid, index, product) {
             // console.log(id, value, storeid, index)
 			const data = {
 				action: "basket/add",
@@ -180,6 +180,28 @@ export default {
 					warehouse: "all",
 				});
 			});
+
+            // Убедитесь, что dataLayer существует
+            window.dataLayer = window.dataLayer || [];
+
+            // Отправка данных в dataLayer
+            window.dataLayer.push({
+                ecommerce: {
+                    currencyCode: "RUB",  // Валюта
+                    add: {
+                    products: [
+                        {
+                            id: id,  // ID товара
+                            name: product.name,  // Название товара
+                            price: product.price,  // Цена товара
+                            category: product.catalog,  // Категория товара
+                            quantity: value,  // Количество товара
+                        }
+                    ]
+                    }
+                }
+            });
+
 			// eslint-disable-next-line vue/no-mutating-props
 			this.items.products[index].basket.availability = true;
 			this.$emit("updateBasket");
@@ -288,6 +310,32 @@ export default {
                         actions: [router.currentRoute._value.params.action]
                     };
                     this.busket_from_api(data).then();
+                    
+                    console.log(object)
+
+                    if(Number(object.value) != object.old_value){
+                        // Убедитесь, что dataLayer существует
+                        window.dataLayer = window.dataLayer || [];
+
+                        // Отправка данных в dataLayer
+                        window.dataLayer.push({
+                            ecommerce: {
+                                currencyCode: "RUB",  // Валюта
+                                add: {
+                                products: [
+                                    {
+                                        id: object.item.id,  // ID товара
+                                        name: object.item.name,  // Название товара
+                                        price: object.item.price,  // Цена товара
+                                        category: object.item.catalog,  // Категория товара
+                                        quantity: object.value,  // Количество товара
+                                    }
+                                ]
+                                }
+                            }
+                        });
+                    }
+                    
                     this.$emit('updateBasket');
                 }, 1000);
                 

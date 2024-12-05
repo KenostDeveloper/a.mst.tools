@@ -31,7 +31,7 @@
                                 <div class="k-order__product" v-for="product in item.basket" v-bind:key="product.id">
                                     <img class="k-order__product-img" :src="item.image" :alt="product.name">
                                     <div class="k-order__product-info">
-                                        <button href="#" class="k-order__product-delete" @click="clearBasketProduct(store.id, item.id_remain)">
+                                        <button href="#" class="k-order__product-delete" @click="clearBasketProduct(store.id, item)">
                                             <img src="/images/icons/trash.svg" alt="">
                                         </button>
                                         <div class="k-order__main-info">
@@ -109,7 +109,7 @@
                                             </div>
                                             <div class="k-order__buttons">
                                                 <b>{{(product.count * product.price).toLocaleString('ru')}} ₽</b>
-                                                <Counter :item="{product: product, warehouse_id: this.basket.warehouses.find((el) => el.id == key)}" @ElemCount="ElemCount" :min="1" :max="item.remains" :value="product.count" :id="item.id_remain" :store_id="item.store_id"/>
+                                                <Counter :item="{product: product, warehouse_id: this.basket.warehouses.find((el) => el.id == key), info: item}" @ElemCount="ElemCount" :min="1" :max="item.remains" :value="product.count" :id="item.id_remain" :store_id="item.store_id"/>
                                             </div>
                                         </div>
                                         <div class="k-order__product-data">
@@ -311,7 +311,39 @@ export default {
     },
     async orderSubmit ($storeId) {
       const data = { action: 'order/opt/submit', id: router.currentRoute._value.params.id, store_id: $storeId }
+      let arr = [];
       this.order = await this.opt_order_api(data).then((response) => {
+        let res = response.data?.data?.data;
+        if(!Array.isArray(res)){
+            res = Object.values(res);
+        }
+        for(let i = 0; i< res?.length; i++){
+            for(let j = 0; j< Object.keys(res[i].info.products).length; j++){
+                const product = res[i]?.info?.products[Object.keys(res[i].info.products)[j]];
+                arr.push({
+                    id: product.id_remain,
+                    name: product.name,
+                    price: product.basket[0].price,
+                    quantity: product.basket[0].cost
+                })
+            }
+        }
+
+        // Убедитесь, что dataLayer существует
+        window.dataLayer = window.dataLayer || [];
+
+        dataLayer.push({
+            "ecommerce": {
+                "currencyCode": "RUB",
+                "purchase": {
+                    "actionField": {
+                        "id" : "TRX987"
+                    },
+                    "products": arr
+                }
+            }
+        });
+
         this.$emit('orderSubmit', response.data?.data?.data[0]?.id)
 
         
@@ -345,6 +377,27 @@ export default {
                     id_warehouse: object.item.warehouse_id.id
                 }
                 this.busket_from_api(data).then(() => {
+                    if(Number(object.value) != object.old_value){
+                        // Убедитесь, что dataLayer существует
+                        window.dataLayer = window.dataLayer || [];
+
+                        // Отправка данных в dataLayer
+                        window.dataLayer.push({
+                            ecommerce: {
+                                currencyCode: "RUB",  // Валюта
+                                add: {
+                                products: [
+                                    {
+                                        id: object.id,  // ID товара
+                                        name: object.item.info.name,  // Название товара
+                                        price: object.item.product.price,  // Цена товара
+                                        quantity: object.value,  // Количество товара
+                                    }
+                                ]
+                                }
+                            }
+                        });
+                    }
                     this.busket_from_api({
                         action: 'basket/get',
                         id: router.currentRoute._value.params.id,
@@ -401,15 +454,33 @@ export default {
         warehouse: 'all'
       })
     },
-    clearBasketProduct (storeid, productid) {
+    clearBasketProduct (storeid, product) {
       const data = { 
         action: 'basket/clear', 
         id: router.currentRoute._value.params.id, 
         store_id: storeid, 
-        id_remain: productid 
+        id_remain: product.id_remain 
       }
       this.busket_from_api(data).then(() => {
         // console.log("бабадумс")
+        // Убедитесь, что dataLayer существует
+			window.dataLayer = window.dataLayer || [];
+                // Отправка данных в dataLayer
+                window.dataLayer.push({
+                ecommerce: {
+                    currencyCode: "RUB",  // Валюта
+                    remove: {
+                        products: [
+                            {
+                                id: product.id_remain,  // ID товара
+                                name: product.name,  // Название товара
+                                price: product.basket[0].price,  // Цена товара
+                                quantity: product.basket[0].count,  // Количество товара
+                            }
+                        ]
+                    }
+                }
+            });
         this.busket_from_api({
             action: 'basket/get',
             id: router.currentRoute._value.params.id,

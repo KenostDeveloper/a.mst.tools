@@ -1,25 +1,32 @@
 <template>
-    <div class="k-container std-catalog-table__wrapper">
-        <!-- <div class="scrollLegt" @mouseenter="leftScroll('start')" @mouseleave="leftScroll('stop')"></div>
-        <div class="scrollRight" @mouseenter="rigthScroll('start')" @mouseleave="rigthScroll('stop')"></div> -->
-        <table class="k-table" :style="{ marginLeft: this.marginValue + 'px' }">
-            <thead>
-                <tr>
-                    <th class="k-table__name k-tablr-th-icon hidden-mobile-l"></th>
-                    <th class="k-table__name k-tablr-th-photo hidden-mobile-l">Фото</th>
-                    <th class="k-table__name k-tablr-th-title">Наименование / Артикул</th>
-                    <th class="k-table__name k-tablr-th-buttons hidden-mobile-l"><i class="d_icon d_icon-busket"></i></th>
-                    <th class="k-table__name k-tablr-th-price">Цена /<br> отсрочка</th>
-                    <th class="k-table__name k-tablr-th-action hidden-mobile-l">Акции</th>
-                    <th class="k-table__name k-tablr-th-delivery">Оплата доставки /<br> срок доставки</th>
-                    <th class="k-table__name k-tablr-th-remain hidden-mobile-l">Остаток</th>
-                    <th class="k-table__name k-tablr-th-vendor">Поставщик / Склад</th>
-                    <th class="k-table__name k-tablr-th-retail hidden-mobile-l">РЦ / Наценка</th>
-                </tr>
-            </thead>
-              <TableCatalogRow :is_warehouses="this.is_warehouses" @ElemAction="ElemAction" @updateBasket="updateBasket" v-for="item in items.items" v-bind:key="item.id" :items="item"/>
-        </table>
-    </div>
+  <div class="k-container std-catalog-table__wrapper">
+    <table class="k-table" :style="{ marginLeft: this.marginValue + 'px' }">
+      <thead>
+        <tr>
+          <th class="k-table__name k-tablr-th-icon hidden-mobile-l"></th>
+          <th class="k-table__name k-tablr-th-photo hidden-mobile-l">Фото</th>
+          <th class="k-table__name k-tablr-th-title">Наименование / Артикул</th>
+          <th class="k-table__name k-tablr-th-buttons hidden-mobile-l"><i class="d_icon d_icon-busket"></i></th>
+          <th class="k-table__name k-tablr-th-price">Цена /<br> отсрочка</th>
+          <th class="k-table__name k-tablr-th-action hidden-mobile-l">Акции</th>
+          <th class="k-table__name k-tablr-th-delivery">Оплата доставки /<br> срок доставки</th>
+          <th class="k-table__name k-tablr-th-remain hidden-mobile-l">Остаток</th>
+          <th class="k-table__name k-tablr-th-vendor">Поставщик / Склад</th>
+          <th class="k-table__name k-tablr-th-retail hidden-mobile-l">РЦ / Наценка</th>
+        </tr>
+      </thead>
+      <tbody>
+        <TableCatalogRow
+          v-for="item in items.items"
+          :key="item.id"
+          :items="item"
+          @ElemAction="ElemAction"
+          @updateBasket="updateBasket"
+          :is_warehouses="is_warehouses"
+        />
+      </tbody>
+    </table>
+  </div>
 </template>
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
@@ -55,7 +62,11 @@ export default {
       interval: null,
       marginValue: 1,
       modal_actions: false,
-      actions_item: null
+      actions_item: null,
+      visibleItems: [],
+      sendItems: [],
+      tobserver: null,
+      timeOut: null
     }
   },
   methods: {
@@ -68,41 +79,91 @@ export default {
     updateBasket () {
       this.$emit('updateBasket')
     },
-    leftScroll (event) {
-      clearInterval(this.interval)
-      if (event === 'start') {
-        this.interval = window.setInterval(() => {
-          if (this.marginValue < 0) {
-            this.marginValue = this.marginValue + 50
-          } else {
-            this.marginValue = 0
-          }
-        }, 50)
+    initializeIntersectionObserver() {
+      // Если уже есть старый наблюдатель, останавливаем его
+      if (this.tobserver) {
+        this.tobserver.disconnect();
       }
+
+      // Создаем новый IntersectionObserver
+      this.tobserver = new IntersectionObserver(this.callback, {
+        threshold: 0.5, // Срабатывает, когда хотя бы 50% элемента видно
+      });
+
+      // Получаем все элементы товара и начинаем отслеживание
+      const productItems = document.querySelectorAll('.kenost-product-item');
+      productItems.forEach((item) => {
+        this.tobserver.observe(item);
+      });
     },
-    rigthScroll (event) {
-      clearInterval(this.interval)
-      if (event === 'start') {
-        const widthTable = document.querySelector('.k-container').offsetWidth
-        this.interval = window.setInterval(() => {
-          if ((1500 - widthTable) * -1 < this.marginValue) {
-            this.marginValue = this.marginValue - 50
-          } else {
-            this.marginValue = (1500 - widthTable) * -1
+
+    callback(entries, observer) {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const itemData = JSON.parse(entry.target.dataset.info);
+          if (!this.visibleItems.some(item => item.id === itemData.id)) {
+            this.visibleItems.push(itemData); // Добавляем весь объект товара
           }
-        }, 50)
+        }
+      });
+
+      if(this.timeOut){
+        clearTimeout(this.timeOut);
       }
+
+      this.timeOut = setTimeout(() => {
+        const productsVisible = this.visibleItems.filter(item => !this.sendItems.includes(item));
+        for(let i = 0; i < productsVisible.length; i++){
+          this.sendItems.push(productsVisible[i]);
+        }
+        if(productsVisible.length){
+          // Убедитесь, что dataLayer существует
+          window.dataLayer = window.dataLayer || [];
+
+          // Ваш запрос на сервер
+          dataLayer.push({
+              "ecommerce": {
+                "currencyCode": "RUB",
+                "impressions": productsVisible
+              }
+          });
+
+        }
+      }, 2000);
     },
+    // leftScroll (event) {
+    //   clearInterval(this.interval)
+    //   if (event === 'start') {
+    //     this.interval = window.setInterval(() => {
+    //       if (this.marginValue < 0) {
+    //         this.marginValue = this.marginValue + 50
+    //       } else {
+    //         this.marginValue = 0
+    //       }
+    //     }, 50)
+    //   }
+    // },
+    // rigthScroll (event) {
+    //   clearInterval(this.interval)
+    //   if (event === 'start') {
+    //     const widthTable = document.querySelector('.k-container').offsetWidth
+    //     this.interval = window.setInterval(() => {
+    //       if ((1500 - widthTable) * -1 < this.marginValue) {
+    //         this.marginValue = this.marginValue - 50
+    //       } else {
+    //         this.marginValue = (1500 - widthTable) * -1
+    //       }
+    //     }, 50)
+    //   }
+    // },
     ElemAction (obj) {
       this.actions_item = obj
-      // console.log(obj)
       this.modal_actions = true
     },
     async updateAction (remainid, storeid, actionid, status) {
       // Выключаем конфликтные акции
 
       const conflicts = this.actions_item.actions.find((action) => action.action_id === actionid)
-      // console.log(conflicts)
       if (conflicts.conflicts.items[conflicts.action_id]) {
         if (conflicts.conflicts.items[conflicts.action_id].postponement_conflicts) {
           for (let i = 0; i < conflicts.conflicts.items[conflicts.action_id].postponement_conflicts.length; i++) {
@@ -174,11 +235,20 @@ export default {
     }
   },
   mounted () {
+    // this.initializeIntersectionObserver();
   },
   components: { TableCatalogRow, Dialog, InputSwitch },
   computed: {
     ...mapGetters([
     ])
+  },
+  watch: {
+    items: function (oldVal, newVal) {
+      // Обновление товара при изменении данных
+      if (newVal && oldVal != newVal) {
+        setTimeout(() => this.initializeIntersectionObserver(), 3000)
+      }
+    }
   }
 }
 </script>

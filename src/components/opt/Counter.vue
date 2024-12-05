@@ -147,6 +147,7 @@ export default {
 		send(){
 			const data = {
 				value: this.d_value,
+				old_value: this.value,
 				id: this.id,
 				store_id: this.store_id,
 				max: this.d_max,
