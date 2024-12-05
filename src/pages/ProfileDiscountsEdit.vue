@@ -3,7 +3,7 @@
 
     <form @submit.prevent="formSubmit">
         <div class="profile-content__title sticky-element">
-            <span class="maintitle">Настройка индивидуальных условий</span>
+            <span class="maintitle">Настройка индивидуальных условий для {{action_discount.client_name}}</span>
             <div class="buttons_container">
                 <RouterLink :to="{ name: 'discounts', params: { id: $route.params.id } }"
                     class="dart-btn dart-btn-secondary btn-padding">Отменить</RouterLink>
@@ -1434,7 +1434,7 @@ export default {
             }
         },
         action_discount: function (newVal, oldVal) {
-            if (Object.keys(newVal).length > 0) {
+            if (newVal.exists) {
                 this.form.comment = newVal.comment
                 this.form.paymentDelivery = this.paymentDelivery[newVal.payer]
                 this.form.min_amount = newVal.condition_min_sum
