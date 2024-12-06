@@ -1,3 +1,5 @@
+import Axios from 'axios'
+
 export default {
   namespaced: true,
   state: {
@@ -22,6 +24,27 @@ export default {
     },
     deleteUser ({ commit }) {
       commit('DELETE_USER')
+    },
+    getSessionUser({ commit }){
+      return Axios('/rest/auth', {
+        method: 'POST',
+        data: {
+          action: 'get/session'
+        },
+        headers: {
+          'Access-Control-Allow-Origin': '*'
+        }
+      })
+        .then((response) => {
+          commit('SET_USER', response.data.data)
+          return response.data.data;
+        })
+        .catch(error => {
+          if (error.response.status === 403) {
+            localStorage.removeItem('user')
+            router.push({ name: 'main' })
+          }
+        })
     }
   }
 }

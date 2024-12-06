@@ -24,16 +24,23 @@ export default {
         })
     },
     async mounted() {
-        if (localStorage.getItem("user") !== null) {
+        console.log(localStorage.getItem("user"))
+        if (localStorage.getItem("user") !== null && localStorage.getItem("user") != 0) {
             this.setUser(JSON.parse(localStorage.getItem('user')));
+        }else{
+            // TODO: сделать запрос на проверку сессии
+            const user = await this.getSessionUser();
+            localStorage.setItem('user', JSON.stringify(user));
+            this.$store.dispatch('user/setUser', user);
         }
         if (this.getUser) {
             const orgs = await this.org_get_from_api({
                 action: 'get/orgs'
             });
             if (orgs !== undefined) {
-                // console.log(orgs.data.data)
+                console.log(orgs.data.data)
                 let role = localStorage.getItem('role');
+                console.log(role)
                 //const res = await this.$router.push({ name: 'org', params: { id: orgs.data.data[0].id } })
 
                 if (role == 1) {
@@ -59,6 +66,7 @@ export default {
         ...mapActions({
             setUser: 'user/setUser',
             deleteUser: 'user/deleteUser',
+            getSessionUser: 'user/getSessionUser',
             org_get_from_api: 'org_get_from_api'
         }),
 

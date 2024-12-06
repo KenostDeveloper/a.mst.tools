@@ -93,40 +93,34 @@ export default {
                     username: this.form.email,
                     password: this.form.password
                 });
-                if (data) {
-                    if (data === 'technical error') {
-                        this.$toast.add({ severity: 'info', summary: 'Техническая ошибка', detail: 'Попробуйте позже.', life: 3000 });
-                        this.loading = false;
-                    } else {
-                        localStorage.setItem('user', JSON.stringify(data.data.data));
-                        this.$store.dispatch('user/setUser', data.data.data);
-                        // this.$router.push({ name: 'home' })
+                if (data.data.success) {
+                    localStorage.setItem('user', JSON.stringify(data.data.data));
+                    this.$store.dispatch('user/setUser', data.data);
+                    // this.$router.push({ name: 'home' })
 
-                        // this.$router.push({ name: 'org', params: { id: '48' } })
+                    // this.$router.push({ name: 'org', params: { id: '48' } })
 
-                        const orgs = await this.org_get_from_api({
-                            action: 'get/orgs'
-                        });
+                    const orgs = await this.org_get_from_api({
+                        action: 'get/orgs'
+                    });
 
-                        if (orgs != undefined) {
-                            // console.log(orgs.data.data)
-                            let role = localStorage.getItem('role');
-                            //const res = await this.$router.push({ name: 'org', params: { id: orgs.data.data[0].id } })
-                            this.sendMetrik('auth');
-                            if (role == 1) {
-                                const res = await this.$router.push({ name: 'retail_orders', params: { id: orgs.data.data[0].id } });
-                            } else if (role == 2) {
-                                const res = await this.$router.push({ name: 'statistics', params: { id: orgs.data.data[0].id } });
-                            } else {
-                                const res = await this.$router.push({ name: 'purchases_home', params: { id: orgs.data.data[0].id } });
-                            }
-                        }else{
-                            this.deleteUser();
-                            this.$router.push({ name: 'home'})
+                    if (orgs != undefined) {
+                        // console.log(orgs.data.data)
+                        let role = localStorage.getItem('role');
+                        this.sendMetrik('auth');
+                        if (role == 1) {
+                            const res = await this.$router.push({ name: 'retail_orders', params: { id: orgs.data.data[0].id } });
+                        } else if (role == 2) {
+                            const res = await this.$router.push({ name: 'statistics', params: { id: orgs.data.data[0].id } });
+                        } else {
+                            const res = await this.$router.push({ name: 'purchases_home', params: { id: orgs.data.data[0].id } });
                         }
+                    }else{
+                        this.deleteUser();
+                        this.$router.push({ name: 'home'})
                     }
                 } else {
-                    this.$toast.add({ severity: 'info', summary: 'Вход запрещен', detail: 'Введен некорректный логин или пароль.', life: 3000 });
+                    this.$toast.add({ severity: 'error', summary: 'Вход запрещен', detail: data.data.message, life: 3000 });
                     this.loading = false;
                 }
             });
