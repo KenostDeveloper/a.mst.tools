@@ -31,7 +31,7 @@
 			>
 			</v-table>
 		</TabPanel>
-		<TabPanel header="Комплекты" v-if="organization.type != 1">
+		<TabPanel header="Комплекты товаров" v-if="organization.type != 1">
 			<div class="flex align-items-center justify-content-space-between mb-4">
 				<div class="title-h1">Мои комплекты</div>
 				<RouterLink
@@ -57,6 +57,10 @@
 				@deleteElem="deleteComplects"
 			>
 			</v-table>
+		</TabPanel>
+		<TabPanel header="Коллекции товаров" v-if="organization.type != 1">
+			<div class="dart-alert dart-alert-info">На данной странице Вы можете создать Коллекции товаров, которые будут сгруппированы по какому либо признаку. Таким образом, Вы сможете упростить создание Акций.</div>
+			
 		</TabPanel>
 	</TabView>
 
