@@ -40,6 +40,7 @@ import OrdersOpt from "../pages/OrdersOpt.vue";
 import OrderOpt from "../pages/OrderOpt.vue";
 import ProfileCreateClient from "../pages/ProfileCreateClient.vue";
 import Notifications from "../components/opt/Notifications.vue";
+import GroupEdit from "../pages/b2b/groups/GroupEdit.vue";
 
 const routes = [
 	{
@@ -347,6 +348,28 @@ const routes = [
 													},
 												},
 												component: ComplectEdit,
+											},
+										],
+									},
+									{
+										path: "groups",
+										meta: {
+											breadcrumb: {
+												label: "Коллекции",
+											},
+										},
+										children: [
+											{
+												path: "edit",
+												name: "groups_edit",
+												props: true,
+												label: "Редактирование коллекции",
+												meta: {
+													breadcrumb: {
+														label: "Редактирование коллекции",
+													},
+												},
+												component: GroupEdit,
 											},
 										],
 									},

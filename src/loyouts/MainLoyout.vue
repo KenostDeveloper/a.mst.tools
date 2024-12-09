@@ -189,7 +189,7 @@ export default {
                 routeName == 'discounts_edit' || routeName == 'org_sales_edit' ||
                 routeName == 'org_action_edit' || routeName == 'complect_add' ||
                 routeName == 'complect_edit' || this.namePathIsNav == 'purchases' ||
-                routeName == 'purchases_notifications') {
+                routeName == 'purchases_notifications' || routeName == 'groups_edit') {
                 return false;
             }
             return true;

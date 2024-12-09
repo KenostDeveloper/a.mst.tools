@@ -8386,3 +8386,21 @@ button.std-icon__wrapper {
 .std-catalog-button{
 	justify-content: center;
 }
+
+.kenost-card-button{
+	border: 1px solid #e2e2e2b2;
+	padding: 10px 20px;
+	border-radius: 8px;
+
+	&.active{
+		border: 1px solid #FF0000;
+	}
+}
+
+.justify-end{
+	justify-content: end;
+}
+
+.kenost-terms + .kenost-terms{
+	margin-top: 24px;
+}

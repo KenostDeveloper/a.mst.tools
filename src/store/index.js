@@ -29,6 +29,7 @@ import bonus from './bonus'
 import org from './org'
 import notification from './notification'
 import requirements from './requirements'
+import group from './group'
 
 export default new Vuex.Store({
   modules: {
@@ -60,6 +61,7 @@ export default new Vuex.Store({
     bonus,
     org,
     notification,
-    requirements
+    requirements,
+    group
   }
 })

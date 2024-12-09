@@ -59,8 +59,9 @@
 			</v-table>
 		</TabPanel>
 		<TabPanel header="Коллекции товаров" v-if="organization.type != 1">
-			<div class="dart-alert dart-alert-info">На данной странице Вы можете создать Коллекции товаров, которые будут сгруппированы по какому либо признаку. Таким образом, Вы сможете упростить создание Акций.</div>
-			
+			<div>
+				<Groups />
+			</div>
 		</TabPanel>
 	</TabView>
 
@@ -147,6 +148,7 @@ import ConfirmDialog from "primevue/confirmdialog";
 import Toast from "primevue/toast";
 import router from "../../router";
 import Breadcrumbs from "../../components/Breadcrumbs.vue";
+import Groups from '../../components/groups/Groups.vue'
 
 export default {
 	name: "ProfileSales",
@@ -602,6 +604,7 @@ export default {
 		Dialog,
 		InputNumber,
 		Breadcrumbs,
+		Groups
 	},
 	computed: {
 		...mapGetters(["actions", "optcomplects", "dilers", "organization", "getregions", "opts"]),
