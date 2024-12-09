@@ -782,6 +782,10 @@ const routes = [
 const router = createRouter({
 	history: createWebHistory(),
 	routes,
+	scrollBehavior(to, from, savedPosition) {
+	// Прокрутить страницу наверх при каждом переходе
+	return { top: 0 };
+	},
 });
 
 export default router;
