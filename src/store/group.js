@@ -10,6 +10,8 @@ export default {
   state: {
     group_tags: [],
     group_vendors: [],
+    group_catalog: [],
+    group_build: []
   },
   actions: {
     set_group_api({ commit }, data) {
@@ -65,6 +67,42 @@ export default {
               router.push({ name: 'main' })
             }
         })
+    },
+    get_catalog_group_api({ commit }, data) {
+        return Axios('/rest/front_group', {
+          method: 'POST',
+          data: data,
+          headers: {
+            'Access-Control-Allow-Origin': '*'
+          }
+        })
+          .then((response) => {
+            commit('SET_CATALOG_GROUP_TO_VUEX', response.data)
+          })
+          .catch(error => {
+            if (error.response.status === 403) {
+              localStorage.removeItem('user')
+              router.push({ name: 'main' })
+            }
+        })
+    },
+    build_group_api({ commit }, data) {
+        return Axios('/rest/front_group', {
+          method: 'POST',
+          data: data,
+          headers: {
+            'Access-Control-Allow-Origin': '*'
+          }
+        })
+          .then((response) => {
+            commit('BUILD_GROUP_TO_VUEX', response.data)
+          })
+          .catch(error => {
+            if (error.response.status === 403) {
+              localStorage.removeItem('user')
+              router.push({ name: 'main' })
+            }
+        })
     }
   },  
   mutations: {
@@ -74,13 +112,25 @@ export default {
     SET_VENDORS_GROUP_TO_VUEX: (state, data) => {
         state.group_vendors = data.data
     },
+    SET_CATALOG_GROUP_TO_VUEX: (state, data) => {
+      state.group_catalog = data.data
+    },
+    BUILD_GROUP_TO_VUEX: (state, data) => {
+      state.group_build = data.data
+    },
   },
   getters: {
     group_tags (state) {
-        return state.group_tags
+      return state.group_tags
     },
     group_vendors (state) {
-        return state.group_vendors
+      return state.group_vendors
+    },
+    group_catalog (state) {
+      return state.group_catalog
+    },
+    group_build (state) {
+      return state.group_build
     }
   }
 }
