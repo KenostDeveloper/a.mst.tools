@@ -1798,7 +1798,7 @@ export default {
       }
 
       &__selected{
-        width: 55%;
+        // width: 55%;
         border-radius: 5px;
         border: 1px solid rgba(0, 0, 0, 0.12);
       }
