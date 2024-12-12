@@ -8,12 +8,30 @@
         >
     </div>
 	<div class="dart-alert dart-alert-info">На данной странице Вы можете создать Коллекции товаров, которые будут сгруппированы по какому либо признаку. Таким образом, Вы сможете упростить создание Акций.</div>
+	<v-table
+		:items_data="groups.items"
+		:total="groups.total"
+		:pagination_items_per_page="this.perpage"
+		:pagination_offset="this.pagination_offset"
+		:page="this.page"
+		:table_data="this.table_data"
+		:filters="this.filters"
+		:title="''"
+		@filter="filter"
+		@sort="filter"
+		@paginate="paginate"
+		@editElem="editElem"
+		@deleteElem="deleteElem"
+	>
+	</v-table>
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
 import router from "../../router";
 import { RouterLink } from "vue-router";
+import vTable from "../table/v-table.vue";
+
 
 export default {
 	name: "Groups",
@@ -22,22 +40,69 @@ export default {
 	},
 	data() {
 		return {
-			
+			page: 1,
+			perpage: 20,
+			filter: {
+                name: ""
+            },
+			table_data: {
+				id: {
+					label: "Номер",
+					type: "text"
+				},
+				name: {
+					label: "Наименование",
+					type: "link",
+					// TODO
+					link_to: "groups_edit_id",
+					link_params: {
+						id: this.$route.params.id,
+						group_id: "id",
+					},
+					sort: true,
+				},
+				description: {
+					label: "Описание",
+					type: 'text'
+				}
+			},
 		};
 	},
 	methods: {
 		...mapActions([
-			
+			'get_group_api'
 		]),
+		getGroup(){
+			this.get_group_api({
+				page: this.page,
+				perpage: this.perpage,
+				id: this.$route.params.id,
+				action: "get"
+			})
+		},
+		editElem(value) {
+			
+		},
+		deleteElem(value) {
+
+		},
+		paginate(data) {
+			this.page = data.page;
+		},
+		filter(){
+
+		}
 	},
 	mounted() {
-		
+		this.getGroup()
 	},
 	components: {
-		
+		vTable,
 	},
 	computed: {
-		...mapGetters([""]),
+		...mapGetters([
+			'groups'
+		]),
 	},
 	watch: {
 	},

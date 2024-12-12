@@ -363,6 +363,18 @@ const routes = [
 												path: "edit",
 												name: "groups_edit",
 												props: true,
+												label: "Добавление коллекции",
+												meta: {
+													breadcrumb: {
+														label: "Добавление коллекции",
+													},
+												},
+												component: GroupEdit,
+											},
+											{
+												path: ":group_id",
+												name: "groups_edit_id",
+												props: true,
 												label: "Редактирование коллекции",
 												meta: {
 													breadcrumb: {
