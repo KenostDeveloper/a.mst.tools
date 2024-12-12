@@ -108,8 +108,18 @@
                         </button>
                     </div>
                     <div class="dart-form-group mt-2 mb-4" v-if="this.type == '2'">
-                        <DropZone v-if="!this.upload_product" class="kenost-dropzone" :maxFiles="Number(1)"
-                            url="/rest/file_upload.php?upload_products=xlsx" :uploadOnDrop="true" :multipleUpload="true"
+                        <div class="kenost-upload-xlsx" v-if="this.file">
+                            <div class="kenost-upload-xlsx__file">
+                                <img src="../../../../public/images/xslx.svg" alt="">
+                                <a targer="_blank" :href="site_url_prefix + 'assets/content/groups/' + file">{{ this.file }}</a>
+                            </div>
+                            <div v-if="this.file" class="kenost-link-blue mt-2" @click="() => {
+                                this.file = null
+                                this.updateBuild()
+                            }">Загрузить другой файл</div>
+                        </div>
+                        <DropZone v-if="!this.file" class="kenost-dropzone" :maxFiles="Number(1)"
+                            url="/rest/file_upload.php?upload_groups=xlsx" :uploadOnDrop="true" :multipleUpload="true"
                             :acceptedFiles="['xlsx', 'xlsx']" :parallelUpload="1" @sending="parseFile" v-bind="args">
                             <template v-slot:message>
                                 <div class="kenost-dropzone__custom">
@@ -119,7 +129,7 @@
                                 </div>
                             </template>
                         </DropZone>
-                        <a :href="site_url_prefix + '/assets/files/files/examples/ExampleLoadingRequirement.xlsx'" class="kenost-link-blue mt-2">Скачать шаблон файла</a>
+                        <a v-if="!this.file" :href="site_url_prefix + 'assets/files/files/examples/ExampleGroups.xlsx'" class="kenost-link-blue mt-2">Скачать шаблон файла</a>
 
                     </div>
                     <div v-if="this.type == '3'">
@@ -177,7 +187,7 @@
                                                         <span class="store-name-b2b" :style="{ background: item.color }">{{item.store}}</span></span>
                                                 </div>
                                             </td>
-                                            <td></td>
+                                            <td><p class="mb-0">{{ item.type }}</p></td>
                                             <td><p class="mb-0">{{ item.brand }}</p></td>
                                             <td><p class="mb-0">{{ item.category }}</p></td>
                                             <td><p class="mb-0">{{ item.tags }}</p></td>
