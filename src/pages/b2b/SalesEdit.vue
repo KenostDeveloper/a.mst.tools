@@ -857,7 +857,6 @@
                         <label for="participantsType-3" class="ml-2 radioLabel">Неограниченный круг участников</label>
                     </div>
                 </div>
-
                 <div class="dart-form-group" :class="{ error: v$.regions_select.$errors.length }">
                     <div v-if="this.form.participantsType == '1' || this.form.participantsType == '4'" class="kenost-select-reginos">
                         <p class="kenost-select-reginos__title" v-if="this.form.participantsType == '1'">Выбор участников по регионам</p>
@@ -983,6 +982,13 @@
                     <p>Значение</p>
                     <InputNumber v-model="this.form.limitationValue" inputId="horizontal-buttons" :step="0.1" min="0"
                         incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" />
+                </div>
+                <div class="dart-form-group">
+                    <div class="flex align-items-center gap-1">
+                        <Checkbox v-model="this.form.hide_for_clients" :binary="true" inputId="hide_for_clients"
+                            name="hide_for_clients" />
+                        <label for="hide_for_clients" class="ml-2 mb-0"> Скрыть акцию у клиентов с Индивидуальными условиями </label>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1290,7 +1296,8 @@ export default {
                 conditionMinCount: 0,
                 conditionMinSum: 0,
                 bigDiscount: [],
-                not_sale_client: []
+                not_sale_client: [],
+                hide_for_clients: false
             },
             listAction: {},
             kenostActivityAll: {
@@ -1761,7 +1768,8 @@ export default {
                         page_places: this.place_action.map((x) => x.code),
                         page_geo: this.geo_action?.key,
                         page_place_position: this.position,
-                        page_create: this.create_page_action[0] === 'true'
+                        page_create: this.create_page_action[0] === 'true',
+                        hide_for_clients: this.form.hide_for_clients
                     })
                         .then((result) => {
                             this.loading = false;
@@ -1817,7 +1825,8 @@ export default {
                         page_places: this.place_action.map((x) => x.code),
                         page_geo: this.geo_action?.key,
                         page_place_position: this.position,
-                        page_create: this.create_page_action[0] === 'true'
+                        page_create: this.create_page_action[0] === 'true',
+                        hide_for_clients: this.form.hide_for_clients
                     })
                         .then((result) => {
                             this.loading = false;
@@ -2375,6 +2384,7 @@ export default {
                 if (newVal.image) {
                     this.files.max.original_href = newVal.image.image;
                 }
+                this.form.hide_for_clients = newVal.hide_for_clients;
                 // if (newVal.image_inner) {
                 //     this.files.min.original_href = this.site_url_prefix + newVal.image_inner;
                 // }

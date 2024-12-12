@@ -67,16 +67,7 @@
                     :step="item?.action?.multiplicity ? item?.action?.multiplicity : 1"
                     :item="item"
                 />
-                <div @click="
-                    addBasket(
-                        item.remain_id,
-                        // item?.action?.min_count > 1 ? item?.action?.multiplicity > 1 ? item?.action?.multiplicity : item.basket.count,
-                        ((item?.action?.multiplicity ? item?.action?.multiplicity : 1) / (item?.action?.min_count ? item?.action?.min_count : 1)) * (item?.action?.min_count ? item?.action?.min_count : 1),
-                        item.store_id,
-                        index,
-                        item
-                    )
-                    " class="dart-btn dart-btn-primary">
+                <div @click="addBasket(item, index)" class="dart-btn dart-btn-primary">
                     <i class="d_icon d_icon-busket"></i>
                 </div>
             </form>
@@ -89,16 +80,7 @@
             <div class="table-actions">
                 <!-- 'red': action?.conflicts?.items[action.action_id]?.sales_conflicts -->
                 <div :data-test="(action?.tags?.length != 1 || (action?.tags?.length == 1 && action?.tags[0].type == 'sale' && action?.tags[0].value > 0) && action?.tags?.length != 0)" class="table-actions__action" :class="{active: action.enabled, red: isConflict(item.conflicts.items, item.actions, action.action_id), 'hidden': !(action?.tags?.length != 1 || (action?.tags?.length == 1 && action?.tags[0].type == 'sale' && action?.tags[0].value > 0) && action?.tags?.length != 0)}" v-for="(action, indexactions) in item.actions" v-bind:key="action.id">
-                    <div v-if="(action?.tags?.length != 1 || (action?.tags?.length == 1 && action?.tags[0].type == 'sale' && action?.tags[0].value > 0) && action?.tags?.length != 0)"  class="table-actions__container" @click="
-                        updateAction(
-                            item.id == 0 ? this.action.remain_id : item.remain_id,
-                            item.id == 0 ? this.action.store_id : item.store_id,
-                            action,
-                            index,
-                            indexactions,
-                            item.conflicts
-                        )
-                        ">
+                    <div v-if="(action?.tags?.length != 1 || (action?.tags?.length == 1 && action?.tags[0].type == 'sale' && action?.tags[0].value > 0) && action?.tags?.length != 0)"  class="table-actions__container">
                         <!-- {{ action }} -->
                         <div class="table-actions__el" v-for="(tag, indextag) in action.tags" v-bind:key="tag.id">
                             <img v-if="tag.type == 'multiplicity'" :src="action.enabled
@@ -379,7 +361,7 @@
                         :index="index"
                         :value="item?.basket?.count * item.multiplicity"
                     />
-                    <div @click="addBasketComplect(item.complect_id, item?.basket?.count, item.store_id, index)"
+                    <div @click="addBasketComplect(item, index)"
                         class="dart-btn dart-btn-primary">
                         <i class="d_icon d_icon-busket"></i>
                     </div>
@@ -395,16 +377,7 @@
                         active: action.enabled,
                         red: action?.conflicts?.items[action.action_id]?.sales_conflicts
                     }" v-for="(action, indexactions) in item.actions" v-bind:key="action.id">
-                        <div v-if="action?.tags?.length > 0" class="table-actions__container" @click="
-                            updateAction(
-                                item.id == 0 ? this.action.remain_id : item.remain_id,
-                                item.id == 0 ? this.action.store_id : item.store_id,
-                                action,
-                                index,
-                                indexactions,
-                                item.conflicts
-                            )
-                            ">
+                        <div v-if="action?.tags?.length > 0" class="table-actions__container">
                             <div class="table-actions__el" v-for="(tag, indextag) in action.tags" v-bind:key="tag.id">
                                 <img v-if="tag.type == 'multiplicity'" src="../../assets/images/icons/action/box.svg"
                                     alt="" />
@@ -703,13 +676,15 @@ export default {
                 delivery_day: minDeliveryDate
             };
         },
-        addBasket(id, value, storeid, index, product) {
+        addBasket(item, index) {
             const data = {
                 action: 'basket/add',
                 id: router.currentRoute._value.params.id,
-                id_remain: id,
-                value,
-                store_id: storeid
+                org_id: item.org_id,
+                store_id: item.store_id,
+                id_remain: item.id,
+                count: item.basket.count,
+                actions: item.actions
             };
             this.busket_from_api(data).then(() => {
                 this.busket_from_api({
@@ -729,11 +704,11 @@ export default {
                 add: {
                 products: [
                     {
-                        id: id,  // ID товара
-                        name: product.name,  // Название товара
-                        price: product.price,  // Цена товара
-                        category: product.catalog,  // Категория товара
-                        quantity: value,  // Количество товара
+                        id: item.id,  // ID товара
+                        name: item.name,  // Название товара
+                        price: item.price,  // Цена товара
+                        category: item.catalog,  // Категория товара
+                        quantity: item.basket.count,  // Количество товара
                     }
                 ]
                 }
@@ -745,13 +720,15 @@ export default {
             this.$emit('updateBasket');
         },
 
-        addBasketComplect(complectid, value, storeid, index) {
+        addBasketComplect(item, index) {
             const data = {
                 action: 'basket/add',
                 id: router.currentRoute._value.params.id,
-                id_complect: complectid,
-                value,
-                store_id: storeid
+                org_id: item.org_id,
+                store_id: item.store_id,
+                id_remain: item.id,
+                count: item.basket.count,
+                actions: item.actions
             };
             this.busket_from_api(data).then(() => {
                 this.busket_from_api({
