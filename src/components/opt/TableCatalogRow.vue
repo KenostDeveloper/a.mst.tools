@@ -677,6 +677,7 @@ export default {
             };
         },
         addBasket(item, index) {
+            console.log(item)
             const data = {
                 action: 'basket/add',
                 id: router.currentRoute._value.params.id,
@@ -741,21 +742,37 @@ export default {
             this.items.complects[index][0].basket.availability = true;
             this.$emit('updateBasket');
         },
-        clearBasketProduct(storeid, productid) {
-            this.$emit("catalogUpdate");
-            this.$emit("actionUpdate");
-            const data = {
-                action: "basket/clear",
-                id: router.currentRoute._value.params.id,
-                store_id: storeid,
-                id_remain: productid,
-            };
-            this.busket_from_api(data).then((response) => { });
+        clearBasketProduct(org_id, store_id, key, product) {
+			const data = {
+				action: "basket/remove",
+				id: router.currentRoute._value.params.id,
+				org_id: org_id,
+				store_id: store_id,
+				key: key,
+				product: product
+			};
+			this.busket_from_api(data).then((response) => {});
+			window.dataLayer = window.dataLayer || [];
+			window.dataLayer.push({
+                ecommerce: {
+                    currencyCode: "RUB",  // Валюта
+                    remove: {
+                        products: [
+                            {
+                                id: product.remain_id,  // ID товара
+                                name: product.name,  // Название товара
+                                price: product.price,  // Цена товара
+                                quantity: product.count,  // Количество товара
+                            }
+                        ]
+                    }
+                }
+			});
             this.busket_from_api({
-                action: 'basket/get',
-                id: router.currentRoute._value.params.id,
-                warehouse: 'all'
-            })
+				action: 'basket/get',
+				id: router.currentRoute._value.params.id,
+				warehouse: 'all'
+			})
         },
         clearBasketComplect(storeid, complectid) {
             this.$emit("catalogUpdate");
@@ -775,65 +792,48 @@ export default {
         },
         ElemCount(object) {
             console.log(object);
-            // debounce(() => {
             if (object.value == object.min) {
-                this.clearBasketProduct(object.store_id, object.id)
+                this.clearBasketProduct(object.item.org_id, object.item.store_id, object.item.basket.key, object.product)
                 return;
+            };            
+            this.items.stores[object.index].basket.count = object.value;                
+            const data = {
+                action: 'basket/update',
+                id: router.currentRoute._value.params.id,
+                org_id: object.item.org_id,
+                store_id: object.item.store_id,
+                remain_id: object.id,
+                value: object.value,
+                key: object.item.basket.key,
+                actions: object.item.basket.ids_actions
             };
-
-            //if (Number(object.value) !== Number(object.max)) {
-                // eslint-disable-next-line vue/no-mutating-props
-                this.items.stores[object.index].basket.count = object.value;
-
-                if(this.timeOut){
-                    clearTimeout(this.timeOut);
-                }
-
-                this.timeOut = setTimeout(() => {
-                    // Ваш запрос на сервер
-                    const data = {
-                        action: 'basket/update',
-                        id: router.currentRoute._value.params.id,
-                        id_remain: object.id,
-                        value: object.value,
-                        store_id: object.store_id,
-                        actions: object.item.basket.ids_actions
-                    };
-                    this.busket_from_api(data).then(() => {
-                        this.busket_from_api({
-                            action: 'basket/get',
-                            id: router.currentRoute._value.params.id,
-                            warehouse: 'all'
-                        });
-                    });
-
-
-                    if(Number(object.value) != object.old_value){
-                        // Убедитесь, что dataLayer существует
-                        window.dataLayer = window.dataLayer || [];
-
-                        // Отправка данных в dataLayer
-                        window.dataLayer.push({
-                            ecommerce: {
-                                currencyCode: "RUB",  // Валюта
-                                add: {
-                                products: [
-                                    {
-                                        id: object.item.id,  // ID товара
-                                        name: object.item.name,  // Название товара
-                                        price: object.item.price,  // Цена товара
-                                        category: object.item.catalog,  // Категория товара
-                                        quantity: object.value,  // Количество товара
-                                    }
-                                ]
-                                }
+            this.busket_from_api(data).then(() => {
+                this.busket_from_api({
+                    action: 'basket/get',
+                    id: router.currentRoute._value.params.id,
+                    warehouse: 'all'
+                });
+            });
+            if(Number(object.value) != object.old_value){
+                window.dataLayer = window.dataLayer || [];
+                window.dataLayer.push({
+                    ecommerce: {
+                        currencyCode: "RUB",
+                        add: {
+                        products: [
+                            {
+                                id: object.item.id,
+                                name: object.item.name,
+                                price: object.item.price,
+                                category: object.item.catalog,
+                                quantity: object.value
                             }
-                        });
+                        ]
+                        }
                     }
-                
-                    this.$emit('updateBasket');
-                }, 1000);
-            // }, 300);
+                });
+            }        
+            this.$emit('updateBasket');
         },
         ElemCountComplect(object) {
             if (object.value == object.min) {

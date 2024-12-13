@@ -7,8 +7,8 @@
 						<p class="d-col-basket__title std-basket__title"><span>Корзина</span></p>
 						<!-- {{ this.basket }} -->
 						<div class="std-cart-icon__wrapper">
-							<span class="basket-count-all" v-if="this.basket?.count">{{
-								this.basket?.count
+							<span class="basket-count-all" v-if="this.basket?.cart_data?.sku_count">{{
+								this.basket?.cart_data?.sku_count
 							}}</span
 							><span class="basket-count-all" v-else>0</span>
 						</div>
@@ -17,25 +17,24 @@
 						<i class="pi pi-angle-down std-basket__expand-icon"></i>
 					</button>
 				</div>
-
-				<div class="std-basket__warehouse-wrapper" v-if="this.basket?.warehouses?.length > 0">
+				<div class="std-basket__warehouse-wrapper" v-if="this.cartLength && this.basket.length">
 					<span class="std-basket__warehouse-title">Адрес доставки заказа:</span>
 					<div class="std-basket__warehouse-container">
-						<div @click="setWarehouse(warehous.id)" v-for="warehous in this.basket?.warehouses" v-bind:key="warehous.id" class="std-basket__warehouse" :class="{'std-basket__warehouse--active' : warehouse_basket == warehous.id}">
-							<span v-if="warehous.name_short && warehous.address_short">«{{warehous.name_short}}», {{ warehous.address_short }}</span>
-							<span v-else>«{{warehous.name}}», {{ warehous.address }}</span>
+						<div @click="setWarehouse(whs.store_data.id)" v-for="whs in this.basket?.data" v-bind:key="whs.store_data.id" class="std-basket__warehouse" :class="{'std-basket__warehouse--active' : warehouse_basket == whs.store_data.id}">
+							<span v-if="whs.store_data.name_short && whs.store_data.address_short">«{{whs.store_data.name_short}}», {{ whs.store_data.address_short }}</span>
+							<span v-else>«{{whs.store_data.name}}», {{ whs.store_data.address }}</span>
 						</div>
 					</div>
 				</div>
 
-				<div v-if="this.basket?.stores" class="std-basket__info-container">
+				<div v-if="this.cartLength" class="std-basket__info-container">
 					<button @click="this.showClearBasketModal = true" class="basketClear std-basket__clear-button">
 						Очистить корзину
 						<i class="pi pi-times"></i>
 					</button>
 				</div>
 			</div>
-			<div className="basket-empty" v-if="!this.basket?.stores">
+			<div className="basket-empty" v-if="!this.cartLength || this.basket.length">
 				<div className="basket-empty__content">
 					<img
 						class="hidden-mobile-l"
@@ -50,98 +49,92 @@
 					<h3>В вашей корзине пока пусто</h3>
 				</div>
 			</div>
-			<div v-if="this.basket?.stores" class="basket-container">
-				<div v-for="store in this.basket?.stores" v-bind:key="store.id">
-					<div class="basket-container__adres" :style="{ background: store.color }">
-						{{ store.name }}
+			<div v-else class="basket-container">
+				<div v-for="org in this.basket.data[warehouse_basket].data" v-bind:key="org.org_data.id">
+					<div class="basket-container__adres" :style="{ background: org.org_data.color }">
+						{{ org.org_data.name }}
 					</div>
-					<div
-						class="kenost-product-basket"
-						v-for="product in store.products"
-						v-bind:key="product.id"
-					>
-						<div
-							class="kenost-basket"
-							v-for="basket in product.basket"
-							v-bind:key="product.id"
-						>
+					<div v-for="warehouse in org.data" v-bind:key="warehouse.warehouse_data.id">
+						<div class="kenost-product-basket" v-for="(product, p_key) in warehouse.data" v-bind:key="product.remain_id">
 							<div
-								@click="clearBasketProduct(store.id, product)"
-								class="btn-close link-no-style"
+								class="kenost-basket"
 							>
-								<!-- <i class="d_icon d_icon-close"></i> -->
-								<img src="../../assets/images/icons/close.svg" alt="" />
-							</div>
-							<div class="kenost-basket__product">
-								<p class="kenost-basket__name" :title="product.name">
-									{{ product.name }}
-								</p>
-								<div class="kenost-basket__info">
-									<span>{{ product.article }}</span>
-									<div class="kenost-basket__info-left">
-										<Counter
-											@ElemCount="ElemCount"
-											:item="{basket, product}"
-											:mini="true"
-											:min="1"
-											:max="product?.remains"
-											:value="basket?.count"
-											:id="product?.id_remain"
-											:store_id="store.id"
-										/>
-										<b>{{ (basket?.cost).toLocaleString("ru") }} ₽</b>
+								<div
+									@click="clearBasketProduct(org.org_data.id, warehouse.warehouse_data.id, p_key, product)"
+									class="btn-close link-no-style"
+								>
+									<!-- <i class="d_icon d_icon-close"></i> -->
+									<img src="../../assets/images/icons/close.svg" alt="" />
+								</div>
+								<div class="kenost-basket__product">
+									<p class="kenost-basket__name" :title="product.name">
+										{{ product.name }}
+									</p>
+									<div class="kenost-basket__info">
+										<span>{{ product.article }}</span>
+										<div class="kenost-basket__info-left">
+											<Counter
+												@ElemCount="ElemCount"
+												:item="{basket, product}"
+												:mini="true"
+												:min="1"
+												:max="product?.available"
+												:value="product?.count"
+												:id="product?.remain_id"
+												:key="product?.key"
+											/>
+											<b>{{ (product?.cost).toLocaleString("ru") }} ₽</b>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-
-					<div
-						v-for="complect in store.complects"
-						v-bind:key="complect.id"
-						class="kenost-product-basket kenost-product-basket-complect"
-					>
-						<!-- {{ console.log(complect) }} -->
-						<span class="complect-icon">Комплект</span>
+					<!--
 						<div
-							class="kenost-basket"
-							v-for="(product, index) in complect.products"
-							v-bind:key="product.id"
+							v-for="complect in store.complects"
+							v-bind:key="complect.id"
+							class="kenost-product-basket kenost-product-basket-complect"
 						>
+							<span class="complect-icon">Комплект</span>
+							<div
+								class="kenost-basket"
+								v-for="(product, index) in complect.products"
+								v-bind:key="product.id"
+							>
+							
+								<div
+									@click="clearBasketComplect(store.id, product.complect_id)"
+									class="btn-close link-no-style"
+								>
+									<img src="../../assets/images/icons/close.svg" alt="" />
+								</div>
+								<div class="kenost-basket__product">
+									<p class="kenost-basket__name" :title="product.name">
+										{{ product.name }}
+									</p>
+									<div class="kenost-basket__info">
+										<span>{{ product.article }}</span>
+										<div class="kenost-basket__info-left">
+											<Counter
+												@ElemCount="ElemComplectCount"
+												:item="product"
+												:mini="true"
+												:min="1"
+												:step="Number(product.multiplicity)"
+												:max="complect?.info?.complect_data?.min_count * Number(product.multiplicity)"
+												:value="complect?.info?.count * Number(product.multiplicity)"
+												:id="product?.id_remain"
+												:store_id="store.id"
+											/>
+											<b>{{ (Number(product?.new_price) * complect?.info?.complect_data?.min_count * Number(product.multiplicity)).toLocaleString("ru") }} ₽</b>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 						
-							<div
-								@click="clearBasketComplect(store.id, product.complect_id)"
-								class="btn-close link-no-style"
-							>
-								<!-- <i class="d_icon d_icon-close"></i> -->
-								<img src="../../assets/images/icons/close.svg" alt="" />
-							</div>
-							<div class="kenost-basket__product">
-								<p class="kenost-basket__name" :title="product.name">
-									{{ product.name }}
-								</p>
-								<div class="kenost-basket__info">
-									<span>{{ product.article }}</span>
-									<div class="kenost-basket__info-left">
-										<Counter
-											@ElemCount="ElemComplectCount"
-											:item="product"
-											:mini="true"
-											:min="1"
-											:step="Number(product.multiplicity)"
-											:max="complect?.info?.complect_data?.min_count * Number(product.multiplicity)"
-											:value="complect?.info?.count * Number(product.multiplicity)"
-											:id="product?.id_remain"
-											:store_id="store.id"
-										/>
-										<b>{{ (Number(product?.new_price) * complect?.info?.complect_data?.min_count * Number(product.multiplicity)).toLocaleString("ru") }} ₽</b>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					
-
+					-->
 
 
 					<!-- ПОДАРОК -->
@@ -283,7 +276,7 @@
 				</div>
 			</div>
 			
-			<div v-if="this.basket?.stores" class="std-basket__footer">
+			<div v-if="this.cartLength" class="std-basket__footer">
 				<div class="std-basket__total-container">
 					<span class="std-basket__total-label">Итого на поставщика</span>
 					<span class="std-basket__total-value">26 580 ₽</span>
@@ -296,7 +289,7 @@
 				<a
 					class="a-dart-btn a-dart-btn-primary btn-arrange button-basket"
 					@click.prevent="toOrder"
-					>Перейти к оформлению <span>{{ this.basket?.cost?.toLocaleString("ru") }} ₽</span></a
+					>Перейти к оформлению <span>{{ this.basket.data[warehouse_basket].cart_data?.cost?.toLocaleString("ru") }} ₽</span></a
 				>
 			</div>
 			
@@ -314,7 +307,7 @@
 	</Dialog>
 
 	<Dialog v-model:visible="this.showClearBasketModal" header="Вы точно хотите очистить корзину?" :style="{ width: '340px' }">
-		<div class="std-clear-basket">
+		<div class="std-clear-basket dart-mt-2">
 			<!-- <img src="../../../public/img/opt/not-products.png" alt="" /> -->
 			<button class="dart-btn dart-btn-primary" @click="clearBasket">Да</button>
 			<button class="dart-btn dart-btn-secondary" @click="this.showClearBasketModal = false">Нет</button>
@@ -347,6 +340,7 @@ export default {
 			active_warehouse: [],
 			loading: true,
 			basket: {},
+			cartLength: 0,
 			modal_remain: false,
 			timeOut: null
 		};
@@ -398,61 +392,53 @@ export default {
 			}
 		},
 		ElemCount(object) {
+			console.log(object)
 			if (object.value > Number(object.max)) {
 				this.modal_remain = true;
-			} else {
-				if(this.timeOut){
-                    clearTimeout(this.timeOut);
-                }
-
-                this.timeOut = setTimeout(() => {
-                    // Ваш запрос на сервер
-                    this.$emit("catalogUpdate");
-					const data = {
-						action: "basket/update",
-						id: router.currentRoute._value.params.id,
-						id_remain: object.id,
-						value: object.value,
+			} else {				
+				this.$emit("catalogUpdate");
+				const data = {
+					action: 'basket/update',
+					id: router.currentRoute._value.params.id,
+					org_id: object.item.product.org_id,
+					store_id: object.item.product.store_id,
+					remain_id: object.id,
+					value: object.value,
+					key: object.item.product.key,
+					actions: object.item.product.actions
+				};
+				this.busket_from_api(data).then((response) => {
+					const datainfo = {
+						remain_id: object.id,
 						store_id: object.store_id,
-						actions: object.item.basket.actions_ids,
+						count: object.value,
 					};
-					this.busket_from_api(data).then((response) => {
-						const datainfo = {
-							remain_id: object.id,
-							store_id: object.store_id,
-							count: object.value,
-						};
-						this.$store.commit("SET_OPT_PRODUCTS_MUTATION_TO_VUEX", datainfo);
-						this.$store.commit("SET_SALES_PRODUCTS_MUTATION_TO_VUEX", datainfo);
-					});
-					if(Number(object.value) != object.old_value){
-                        // Убедитесь, что dataLayer существует
-                        window.dataLayer = window.dataLayer || [];
-
-                        // Отправка данных в dataLayer
-                        window.dataLayer.push({
-                            ecommerce: {
-                                currencyCode: "RUB",  // Валюта
-                                add: {
-                                products: [
-                                    {
-                                        id: object.id,  // ID товара
-                                        name: object.item.product.name,  // Название товара
-                                        price: object.item.basket.price,  // Цена товара
-                                        quantity: object.value,  // Количество товара
-                                    }
-                                ]
-                                }
-                            }
-                        });
-                    }
-					this.busket_from_api({
-						action: 'basket/get',
-						id: router.currentRoute._value.params.id,
-						warehouse: 'all'
-					})
-                }, 1000);
-				
+					this.$store.commit("SET_OPT_PRODUCTS_MUTATION_TO_VUEX", datainfo);
+					this.$store.commit("SET_SALES_PRODUCTS_MUTATION_TO_VUEX", datainfo);
+				});
+				if(Number(object.value) != object.old_value){
+						window.dataLayer = window.dataLayer || [];
+						window.dataLayer.push({
+								ecommerce: {
+										currencyCode: "RUB",  // Валюта
+										add: {
+										products: [
+											{
+												id: object.id,  // ID товара
+												name: object.item.product.name,  // Название товара
+												price: object.item.basket.price,  // Цена товара
+												quantity: object.value,  // Количество товара
+											}
+										]
+										}
+								}
+						});
+				}
+				this.busket_from_api({
+					action: 'basket/get',
+					id: router.currentRoute._value.params.id,
+					warehouse: 'all'
+				})				
 			}
 		},
 		clearBasket() {
@@ -469,17 +455,19 @@ export default {
 				id: router.currentRoute._value.params.id,
 				warehouse: 'all'
 			})
-
 			this.showClearBasketModal = false;
 		},
-		clearBasketProduct(storeid, product) {
+		clearBasketProduct(org_id, store_id, key, product) {
+			console.log(store_id)
 			this.$emit("catalogUpdate");
 			this.$emit("actionUpdate");
 			const data = {
-				action: "basket/clear",
+				action: "basket/remove",
 				id: router.currentRoute._value.params.id,
-				store_id: storeid,
-				id_remain: product.id_remain,
+				org_id: org_id,
+				store_id: store_id,
+				key: key,
+				product: product
 			};
 			this.busket_from_api(data).then((response) => {});
 
@@ -493,10 +481,10 @@ export default {
 				remove: {
 					products: [
 						{
-							id: product.id_remain,  // ID товара
+							id: product.remain_id,  // ID товара
 							name: product.name,  // Название товара
-							price: product.basket[0].price,  // Цена товара
-							quantity: product.basket[0].count,  // Количество товара
+							price: product.price,  // Цена товара
+							quantity: product.count,  // Количество товара
 						}
 					]
 				}
@@ -571,11 +559,17 @@ export default {
 		Dialog,
 	},
 	computed: {
-		...mapGetters(["optbasket", "warehouse_basket"]),
+		...mapGetters(["optbasket", "warehouse_basket"])
 	},
 	watch: {
 		optbasket: function (newVal, oldVal) {
+			console.log(newVal)
 			this.basket = newVal;
+			if(Object.hasOwn(newVal, "data")){
+				this.cartLength = Object.keys(newVal.data).length
+			}else{
+				this.cartLength = 0
+			}			
 			this.$emit("catalogUpdate");
 		},
 	},

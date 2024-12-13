@@ -337,6 +337,7 @@ export default {
           return response
         })
         .catch(error => {
+          console.log(error)
           if (error.response.status === 403) {
             localStorage.removeItem('user')
             router.push({ name: 'main' })
@@ -522,6 +523,7 @@ export default {
       }
     },
     SET_BUSKET_TO_VUEX: (state, data) => {
+      console.log(data)
       if(data.data.props.warehouse != 'all'){
         //Корзина склада
         state.optbasket = data.data
