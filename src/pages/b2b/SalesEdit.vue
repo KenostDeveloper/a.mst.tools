@@ -1364,9 +1364,9 @@ export default {
                 { name: '%', key: 1 }
             ],
             typePricing: [
-                {name: 'Наценка', key: 0},
-                {name: 'Скидка', key: 1},
-                {name: 'Фиксированая цена', key: 2}
+                {name: 'Наценка', key: 1},
+                {name: 'Скидка', key: 2},
+                {name: 'Фиксированая цена', key: 3}
             ],
             typePrice: [],
             massAction: [
@@ -1488,6 +1488,10 @@ export default {
                     discountInRubles: 0
                 };
                 this.selected_data[item.id] = elem;
+            }else{
+                if(this.selected_data[item.id].percent){
+                    this.saleValue = this.selected_data[item.id].percent
+                }
             }
         },
         parseFile(files, xhr, formData) {
@@ -2398,6 +2402,7 @@ export default {
                     }
                     if (newVal.visible) {
                         this.selected_visible = newVal.visible;
+                        console.log(this.selected_visible)
                         this.ids_visible = newVal.ids_selected;
                     }
                     this.total_products = newVal.total;
@@ -2436,6 +2441,7 @@ export default {
         },
         actions: async function (newVal, oldVal) {
             if (router.currentRoute._value.params.sales_id) {
+                console.log(newVal)
                 this.form.name = newVal.name;
                 if (newVal.image) {
                     this.files.max.original_href = newVal.image.image;
@@ -2511,6 +2517,40 @@ export default {
                 this.form.dates = [datefrom, dateto];
                 this.selected = newVal.products;
                 this.selected_data = newVal.products_data;
+                console.log(this.selected)
+                console.log(this.selected_data)
+                for (var key in this.selected_data) {
+                    if(this.selected_data[key].pricing_type){
+                        for (var k_pricing in this.typePricing) {
+                            if(this.typePricing[k_pricing].key == this.selected_data[key].pricing_type){
+                                this.selected_data[key].typePricing = this.typePricing[k_pricing]
+                            }
+                        }
+                    }else{
+                        this.selected_data[key].typePricing = this.typePricing[1]
+                    }
+                    if(this.selected_data[key].pricing_formula){
+                        for (var k_formula in this.typeFormul) {
+                            if(this.typeFormul[k_formula].key == this.selected_data[key].pricing_formula){
+                                this.selected_data[key].typeFormul = this.typeFormul[k_formula]
+                            }
+                        }
+                    }else{
+                        this.selected_data[key].typeFormul = this.typeFormul[1]
+                    }
+                    if(this.selected_data[key].type_price){
+                        for (var k_price in this.selected[key].prices) {
+                            if(this.selected[key].prices[k_price].guid == this.selected_data[key].type_price){
+                                this.selected_data[key].typePrice = this.selected[key].prices[k_price]
+                            }
+                        }
+                    }else{
+                        this.selected_data[key].typePrice = this.selected[key].prices[0]
+                    }
+                    if(this.selected_data[key].percent){
+                        this.selected_data[key].discountInterest = this.selected_data[key].percent
+                    }
+                }
                 // let count = 0
                 // for (let i = 0; i < Object.keys(newVal.products).length; i++) {
                 //   if (count === 25) {

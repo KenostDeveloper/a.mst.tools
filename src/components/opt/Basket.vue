@@ -34,7 +34,7 @@
 					</button>
 				</div>
 			</div>
-			<div className="basket-empty" v-if="!this.cartLength || this.basket.length">
+			<div className="basket-empty" v-if="!this.cartLength">
 				<div className="basket-empty__content">
 					<img
 						class="hidden-mobile-l"
@@ -49,231 +49,233 @@
 					<h3>В вашей корзине пока пусто</h3>
 				</div>
 			</div>
-			<div v-else class="basket-container">
-				<div v-for="org in this.basket.data[warehouse_basket].data" v-bind:key="org.org_data.id">
-					<div class="basket-container__adres" :style="{ background: org.org_data.color }">
-						{{ org.org_data.name }}
-					</div>
-					<div v-for="warehouse in org.data" v-bind:key="warehouse.warehouse_data.id">
-						<div class="kenost-product-basket" v-for="(product, p_key) in warehouse.data" v-bind:key="product.remain_id">
-							<div
-								class="kenost-basket"
-							>
+			<div v-if="Object.prototype.hasOwnProperty.call(this.basket, 'data')" class="basket-container">
+				<div v-if="Object.prototype.hasOwnProperty.call(this.basket.data, warehouse_basket)">
+					<div v-for="org in this.basket.data[warehouse_basket].data" v-bind:key="org.org_data.id">
+						<div class="basket-container__adres" :style="{ background: org.org_data.color }">
+							{{ org.org_data.name }}
+						</div>
+						<div v-for="warehouse in org.data" v-bind:key="warehouse.warehouse_data.id">
+							<div class="kenost-product-basket" v-for="(product, p_key) in warehouse.data" v-bind:key="product.remain_id">
 								<div
-									@click="clearBasketProduct(org.org_data.id, warehouse.warehouse_data.id, p_key, product)"
-									class="btn-close link-no-style"
+									class="kenost-basket"
 								>
-									<!-- <i class="d_icon d_icon-close"></i> -->
-									<img src="../../assets/images/icons/close.svg" alt="" />
-								</div>
-								<div class="kenost-basket__product">
-									<p class="kenost-basket__name" :title="product.name">
-										{{ product.name }}
-									</p>
-									<div class="kenost-basket__info">
-										<span>{{ product.article }}</span>
-										<div class="kenost-basket__info-left">
-											<Counter
-												@ElemCount="ElemCount"
-												:item="{basket, product}"
-												:mini="true"
-												:min="1"
-												:max="product?.available"
-												:value="product?.count"
-												:id="product?.remain_id"
-												:key="product?.key"
-											/>
-											<b>{{ (product?.cost).toLocaleString("ru") }} ₽</b>
+									<div
+										@click="clearBasketProduct(org.org_data.id, warehouse.warehouse_data.id, p_key, product)"
+										class="btn-close link-no-style"
+									>
+										<!-- <i class="d_icon d_icon-close"></i> -->
+										<img src="../../assets/images/icons/close.svg" alt="" />
+									</div>
+									<div class="kenost-basket__product">
+										<p class="kenost-basket__name" :title="product.name">
+											{{ product.name }}
+										</p>
+										<div class="kenost-basket__info">
+											<span>{{ product.article }}</span>
+											<div class="kenost-basket__info-left">
+												<Counter
+													@ElemCount="ElemCount"
+													:item="{basket, product}"
+													:mini="true"
+													:min="1"
+													:max="product?.available"
+													:value="product?.count"
+													:id="product?.remain_id"
+													:key="product?.key"
+												/>
+												<b>{{ (product?.cost).toLocaleString("ru") }} ₽</b>
+											</div>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-					<!--
-						<div
+						<!--
+							<div
+								v-for="complect in store.complects"
+								v-bind:key="complect.id"
+								class="kenost-product-basket kenost-product-basket-complect"
+							>
+								<span class="complect-icon">Комплект</span>
+								<div
+									class="kenost-basket"
+									v-for="(product, index) in complect.products"
+									v-bind:key="product.id"
+								>
+								
+									<div
+										@click="clearBasketComplect(store.id, product.complect_id)"
+										class="btn-close link-no-style"
+									>
+										<img src="../../assets/images/icons/close.svg" alt="" />
+									</div>
+									<div class="kenost-basket__product">
+										<p class="kenost-basket__name" :title="product.name">
+											{{ product.name }}
+										</p>
+										<div class="kenost-basket__info">
+											<span>{{ product.article }}</span>
+											<div class="kenost-basket__info-left">
+												<Counter
+													@ElemCount="ElemComplectCount"
+													:item="product"
+													:mini="true"
+													:min="1"
+													:step="Number(product.multiplicity)"
+													:max="complect?.info?.complect_data?.min_count * Number(product.multiplicity)"
+													:value="complect?.info?.count * Number(product.multiplicity)"
+													:id="product?.id_remain"
+													:store_id="store.id"
+												/>
+												<b>{{ (Number(product?.new_price) * complect?.info?.complect_data?.min_count * Number(product.multiplicity)).toLocaleString("ru") }} ₽</b>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+						-->
+	
+	
+						<!-- ПОДАРОК -->
+						<!-- <div
 							v-for="complect in store.complects"
 							v-bind:key="complect.id"
-							class="kenost-product-basket kenost-product-basket-complect"
+							class="kenost-basket__complect"
 						>
-							<span class="complect-icon">Комплект</span>
-							<div
-								class="kenost-basket"
-								v-for="(product, index) in complect.products"
-								v-bind:key="product.id"
-							>
-							
+							<div class="kenost-basket">
 								<div
-									@click="clearBasketComplect(store.id, product.complect_id)"
+									@click="clearBasketComplect(store.id, complect.info.id)"
 									class="btn-close link-no-style"
 								>
 									<img src="../../assets/images/icons/close.svg" alt="" />
 								</div>
 								<div class="kenost-basket__product">
-									<p class="kenost-basket__name" :title="product.name">
-										{{ product.name }}
+									<p class="kenost-basket__name" :title="complect.products[0].name">
+										{{ complect.products[0].name }}
 									</p>
 									<div class="kenost-basket__info">
-										<span>{{ product.article }}</span>
+										<span>{{ complect.products[0].article }}</span>
 										<div class="kenost-basket__info-left">
 											<Counter
+												:key="new Date().getMilliseconds() + complect.info.id"
 												@ElemCount="ElemComplectCount"
-												:item="product"
 												:mini="true"
 												:min="1"
-												:step="Number(product.multiplicity)"
-												:max="complect?.info?.complect_data?.min_count * Number(product.multiplicity)"
-												:value="complect?.info?.count * Number(product.multiplicity)"
-												:id="product?.id_remain"
+												:max="complect.info.complect_data?.min_count"
+												:value="complect.info.count"
+												:id="complect.info.id"
 												:store_id="store.id"
 											/>
-											<b>{{ (Number(product?.new_price) * complect?.info?.complect_data?.min_count * Number(product.multiplicity)).toLocaleString("ru") }} ₽</b>
+											<b
+												>{{
+													(
+														complect.products[0].info.count *
+														complect.products[0].info.price
+													).toLocaleString("ru")
+												}}
+												₽</b
+											>
 										</div>
+									</div>
+									<div class="kenost-basket__hide" @click="showGift($event.target)">
+										— Посмотреть подарок
 									</div>
 								</div>
 							</div>
-						</div>
-						
-					-->
-
-
-					<!-- ПОДАРОК -->
-					<!-- <div
-						v-for="complect in store.complects"
-						v-bind:key="complect.id"
-						class="kenost-basket__complect"
-					>
-						<div class="kenost-basket">
-							<div
-								@click="clearBasketComplect(store.id, complect.info.id)"
-								class="btn-close link-no-style"
-							>
-								<img src="../../assets/images/icons/close.svg" alt="" />
-							</div>
-							<div class="kenost-basket__product">
-								<p class="kenost-basket__name" :title="complect.products[0].name">
-									{{ complect.products[0].name }}
-								</p>
-								<div class="kenost-basket__info">
-									<span>{{ complect.products[0].article }}</span>
-									<div class="kenost-basket__info-left">
-										<Counter
-											:key="new Date().getMilliseconds() + complect.info.id"
-											@ElemCount="ElemComplectCount"
-											:mini="true"
-											:min="1"
-											:max="complect.info.complect_data?.min_count"
-											:value="complect.info.count"
-											:id="complect.info.id"
-											:store_id="store.id"
-										/>
-										<b
-											>{{
+							<div class="kenost-basket-gift__container">
+								<div
+									v-for="(product, index) in complect.products"
+									v-bind:key="product.id"
+									class="kenost-basket-gift"
+									:class="{ none: index === 0 }"
+								>
+									<p
+										v-if="index !== 0"
+										class="kenost-basket-gift__name"
+										:title="product.name"
+									>
+										{{ product.name }}
+									</p>
+									<div v-if="index !== 0" class="kenost-basket-gift__info">
+										<span>{{ product.article }}</span>
+										<span
+											>{{ product.info.count.toLocaleString("ru") }} х
+											{{
 												(
-													complect.products[0].info.count *
-													complect.products[0].info.price
+													Number(product.info.price) /
+													Number(product.info.count)
 												).toLocaleString("ru")
 											}}
-											₽</b
+											₽</span
 										>
 									</div>
 								</div>
-								<div class="kenost-basket__hide" @click="showGift($event.target)">
-									— Посмотреть подарок
-								</div>
 							</div>
-						</div>
-						<div class="kenost-basket-gift__container">
-							<div
-								v-for="(product, index) in complect.products"
-								v-bind:key="product.id"
-								class="kenost-basket-gift"
-								:class="{ none: index === 0 }"
-							>
-								<p
-									v-if="index !== 0"
-									class="kenost-basket-gift__name"
-									:title="product.name"
-								>
-									{{ product.name }}
-								</p>
-								<div v-if="index !== 0" class="kenost-basket-gift__info">
-									<span>{{ product.article }}</span>
-									<span
-										>{{ product.info.count.toLocaleString("ru") }} х
-										{{
-											(
-												Number(product.info.price) /
-												Number(product.info.count)
-											).toLocaleString("ru")
-										}}
-										₽</span
-									>
-								</div>
-							</div>
-						</div>
-					</div> -->
-					<!-- <div v-for="product in store.products" v-bind:key="product.id" class="basket-container__card basket-item">
-                        <img
-                            class="basket-container__img"
-                            :src="product.image"
-                            :alt="product.name"
-                        />
-                        <div class="basket-container__info">
-                            <div class="basket-container__title">
-                                <p>
-                                    {{product.name}}
-                                </p>
-                                <div @click="clearBasketProduct(store.id, product.id_remain)" class="btn-close link-no-style"
-                                    ><i class="d_icon d_icon-close"></i
-                                ></div>
-                            </div>
-                            <p class="basket-container__article">{{product.article}}</p>
-                            <div class="basket-container__count">
-                                <p>В наличии <span>{{ product.remains }} шт.</span></p>
-                            </div>
-                            <div class="basket-container__price">
-                                <Counter :key="new Date().getMilliseconds() + product.id_remain" @ElemCount="ElemCount" :min="1" :max="product.remains" :value="product.info.count" :id="product.id_remain" :store_id="store.id"/>
-                                <b>{{(product.info.count * product.info.price).toLocaleString('ru')}} ₽</b>
-                            </div>
-                        </div>
-                    </div>
-                    <div v-for="complect in store.complects" v-bind:key="complect.id" class="basket-item">
-                        <div class="basket-container__complect">
-                            <div @click="clearBasketComplect(store.id, complect.info.id)" class="btn-close link-no-style"
-                                ><i class="d_icon d_icon-close"></i
-                            ></div>
-                            <div v-for="(product, index) in complect.products" v-bind:key="product.id">
-                                <div class="basket-container__card">
-                                    <img
-                                        class="basket-container__img"
-                                        :src="product.image"
-                                        :alt="product.name"
-                                    />
-                                    <div class="basket-container__info">
-                                        <div class="basket-container__title">
-                                            <p>
-                                                {{product.name}}
-                                            </p>
-                                        </div>
-                                        <div class="basket-container__article-container">
-                                            <p class="basket-container__article">{{product.article}} x {{product.multiplicity * complect.info.count}} шт</p>
-                                            <b v-if="index != 0">{{(Number(complect.info.count) * product.multiplicity * product.new_price).toLocaleString('ru')}} ₽</b>
-                                        </div>
-                                        <div v-if="index === 0" class="basket-container__price">
-                                            <Counter :key="new Date().getMilliseconds() + complect.info.id" @ElemCount="ElemComplectCount" :min="1" :max="complect.info.complect_data?.min_count" :value="complect.info.count" :id="complect.info.id" :store_id="store.id"/>
-                                            <b>{{(Number(complect.info.count) * product.multiplicity * product.new_price).toLocaleString('ru')}} ₽</b>
-                                        </div>
-                                        <div v-if="index === 0" class="basket-container__count">
-                                            <p>В наличии <span>{{ complect.info.complect_data?.min_count }} шт.</span></p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <i v-if="index === 0" class="mst-icon mst-icon-link basket-container__link-complect"></i>
-                            </div>
-                        </div>
-                    </div> -->
-				</div>
+						</div> -->
+						<!-- <div v-for="product in store.products" v-bind:key="product.id" class="basket-container__card basket-item">
+													<img
+															class="basket-container__img"
+															:src="product.image"
+															:alt="product.name"
+													/>
+													<div class="basket-container__info">
+															<div class="basket-container__title">
+																	<p>
+																			{{product.name}}
+																	</p>
+																	<div @click="clearBasketProduct(store.id, product.id_remain)" class="btn-close link-no-style"
+																			><i class="d_icon d_icon-close"></i
+																	></div>
+															</div>
+															<p class="basket-container__article">{{product.article}}</p>
+															<div class="basket-container__count">
+																	<p>В наличии <span>{{ product.remains }} шт.</span></p>
+															</div>
+															<div class="basket-container__price">
+																	<Counter :key="new Date().getMilliseconds() + product.id_remain" @ElemCount="ElemCount" :min="1" :max="product.remains" :value="product.info.count" :id="product.id_remain" :store_id="store.id"/>
+																	<b>{{(product.info.count * product.info.price).toLocaleString('ru')}} ₽</b>
+															</div>
+													</div>
+											</div>
+											<div v-for="complect in store.complects" v-bind:key="complect.id" class="basket-item">
+													<div class="basket-container__complect">
+															<div @click="clearBasketComplect(store.id, complect.info.id)" class="btn-close link-no-style"
+																	><i class="d_icon d_icon-close"></i
+															></div>
+															<div v-for="(product, index) in complect.products" v-bind:key="product.id">
+																	<div class="basket-container__card">
+																			<img
+																					class="basket-container__img"
+																					:src="product.image"
+																					:alt="product.name"
+																			/>
+																			<div class="basket-container__info">
+																					<div class="basket-container__title">
+																							<p>
+																									{{product.name}}
+																							</p>
+																					</div>
+																					<div class="basket-container__article-container">
+																							<p class="basket-container__article">{{product.article}} x {{product.multiplicity * complect.info.count}} шт</p>
+																							<b v-if="index != 0">{{(Number(complect.info.count) * product.multiplicity * product.new_price).toLocaleString('ru')}} ₽</b>
+																					</div>
+																					<div v-if="index === 0" class="basket-container__price">
+																							<Counter :key="new Date().getMilliseconds() + complect.info.id" @ElemCount="ElemComplectCount" :min="1" :max="complect.info.complect_data?.min_count" :value="complect.info.count" :id="complect.info.id" :store_id="store.id"/>
+																							<b>{{(Number(complect.info.count) * product.multiplicity * product.new_price).toLocaleString('ru')}} ₽</b>
+																					</div>
+																					<div v-if="index === 0" class="basket-container__count">
+																							<p>В наличии <span>{{ complect.info.complect_data?.min_count }} шт.</span></p>
+																					</div>
+																			</div>
+																	</div>
+																	<i v-if="index === 0" class="mst-icon mst-icon-link basket-container__link-complect"></i>
+															</div>
+													</div>
+											</div> -->
+					</div>
+				</div>				
 			</div>
 			
 			<div v-if="this.cartLength" class="std-basket__footer">
@@ -287,9 +289,10 @@
 				</div>
 
 				<a
+					v-if="Object.prototype.hasOwnProperty.call(this.basket, 'data')"
 					class="a-dart-btn a-dart-btn-primary btn-arrange button-basket"
 					@click.prevent="toOrder"
-					>Перейти к оформлению <span>{{ this.basket.data[warehouse_basket].cart_data?.cost?.toLocaleString("ru") }} ₽</span></a
+					>Перейти к оформлению <span>{{ this.basket.data[warehouse_basket]?.cart_data?.cost?.toLocaleString("ru") }} ₽</span></a
 				>
 			</div>
 			
@@ -458,7 +461,6 @@ export default {
 			this.showClearBasketModal = false;
 		},
 		clearBasketProduct(org_id, store_id, key, product) {
-			console.log(store_id)
 			this.$emit("catalogUpdate");
 			this.$emit("actionUpdate");
 			const data = {

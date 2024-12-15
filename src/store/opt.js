@@ -524,6 +524,8 @@ export default {
     },
     SET_BUSKET_TO_VUEX: (state, data) => {
       console.log(data)
+      state.optbasket = data.data
+      state.optbasketall = data.data
       if(data.data.props.warehouse != 'all'){
         //Корзина склада
         state.optbasket = data.data
