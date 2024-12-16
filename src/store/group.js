@@ -115,6 +115,7 @@ export default {
         })
           .then((response) => {
             commit('BUILD_GROUP_TO_VUEX', response.data)
+            return response.data
           })
           .catch(error => {
             if (error.response.status === 403) {
