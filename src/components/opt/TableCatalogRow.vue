@@ -134,13 +134,8 @@
                                         : '/images/icons/action/black/delivery.svg'
                                     " alt="" />
 
-                                <!-- TODO: Комплекты -->
                             </div>
 
-                            <!-- <div class="table-actions__el">
-                <img src="../../assets/images/icons/action/complect.svg" alt="">
-                <p>Компл-т</p>
-                </div> -->
                         </div>
                         <div v-if="(action?.tags?.length != 1 || (action?.tags?.length == 1 && action?.tags[0].type == 'sale' && action?.tags[0].value > 0) && action?.tags?.length != 0)" class="table-actions__help" :data-id="action?.action_id">
                             <p :class="{
@@ -149,155 +144,7 @@
                             }">
                                 ?
                             </p>
-                            <div class="table-actions__content">
-                                <div class="table-actions__modal">
-                                    <!-- <div v-if="action?.image" class="table-actions__modal-banner">
-                                        <img :src="action?.image" />
-                                    </div> -->
-                                    <div class="table-actions__modal-content">
-                                        <!-- <p class="table-actions__modal-title">
-                                            {{ action?.name }}
-                                        </p> -->
-                                        <img v-if="action?.image.image && action?.type != 3 && action?.image.thumb_medium" :src="action?.image.thumb_medium"
-                                        :srcset="action?.image.image +' 2x, ' + action?.image.thumb_medium + ' 1x'" :alt="action?.name" class="table-actions__modal-img">
-
-                                        <div class="table-actions__modal-content-inner">
-                                            <p class="table-actions__modal-title">{{ action?.type == 3 ? "Индивидуальная акция" : action?.name }}</p>
-
-                                            <div class="table-actions__modal-elems-wrapper">
-                                                <div class="table-actions__modal-elems" v-if="action.tags.length > 2">
-                                                    <div class="table-actions__modal-el" v-for="(tag, index) in action.tags
-                                                        .slice(0, !(action.tags.length % 2)
-                                                            ?
-                                                            action.tags.length - Math.floor(action.tags.length / 2) + 1
-                                                            :
-                                                            action.tags.length - Math.floor(action.tags.length / 2))"
-                                                        v-bind:key="tag.id">
-                                                        <img v-if="tag.type == 'min_sum'"
-                                                            src="../../assets/images/icons/action/basket.svg" alt="" />
-                                                        <p v-if="tag.type == 'min_sum'">
-                                                            Минимальна сумма покупки
-                                                            {{ Number(tag.value).toLocaleString('ru') }}
-                                                            ₽
-                                                        </p>
-                                                        <img v-if="tag.type == 'free_delivery'"
-                                                            src="../../assets/images/icons/action/delivery.svg" alt="" />
-                                                        <p v-if="tag.type == 'free_delivery'">
-                                                            <span>Бесплатная доставка</span>
-                                                            <span v-if="tag.condition == '2'">
-                                                                при покупке от
-                                                                {{ tag.value.toLocaleString('ru') }}
-                                                                ₽</span>
-                                                            <span v-if="tag.condition == '3'">
-                                                                при покупке от
-                                                                {{ tag.value.toLocaleString('ru') }}
-                                                                шт.</span>
-                                                        </p>
-                                                        <img v-if="tag.type == 'gift'"
-                                                            src="../../assets/images/icons/action/gift.svg" alt="" />
-                                                        <p v-if="tag.type == 'gift'">Подарок</p>
-                                                        <img v-if="tag.type == 'delay'"
-                                                            src="../../assets/images/icons/action/time.svg" alt="" />
-                                                        <p v-if="tag.type == 'delay'">Отсрочка {{ tag.value }} дн.</p>
-                                                        <img v-if="tag.type == 'multiplicity'"
-                                                            src="../../assets/images/icons/action/box.svg" alt="" />
-                                                        <p v-if="tag.type == 'multiplicity'">
-                                                            Кратность упаковки
-                                                            {{ tag.value.toLocaleString('ru') }}
-                                                            шт.
-                                                        </p>
-                                                        <img v-if="tag.type == 'sale' && tag.value > 0"
-                                                            src="../../assets/images/icons/action/sale.svg" alt="" />
-                                                        <p v-if="tag.type == 'sale' && tag.value > 0">
-                                                            Скидка
-                                                            {{ tag.value.toLocaleString('ru') }}%
-                                                            <!-- <span v-if="tag.condition == '2'">
-                                                                                                при покупке от
-                                                                                                {{ tag.value.toLocaleString("ru") }} ₽</span
-                                                                                            > -->
-                                                            <span v-if="tag.min_count > 1 && tag.value > 0">
-                                                                при покупке от
-                                                                {{ tag.min_count.toLocaleString('ru') }}
-                                                                шт.</span>
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                <div class="table-actions__modal-elems-container">
-                                                    <div class="table-actions__modal-elems">
-                                                        <div class="table-actions__modal-el" v-for="(tag, index) in action.tags.length > 2
-                                                            ?
-                                                            action.tags
-                                                                .slice(!(action.tags.length % 2)
-                                                                    ?
-                                                                    action.tags.length - Math.floor(action.tags.length / 2) + 1
-                                                                    :
-                                                                    action.tags.length - Math.floor(action.tags.length / 2))
-                                                            :
-                                                            action.tags" v-bind:key="tag.id">
-                                                            <img v-if="tag.type == 'min_sum'"
-                                                                src="../../assets/images/icons/action/basket.svg" alt="" />
-                                                            <p v-if="tag.type == 'min_sum'">
-                                                                Минимальна сумма покупки
-                                                                {{ Number(tag.value).toLocaleString('ru') }}
-                                                                ₽
-                                                            </p>
-                                                            <img v-if="tag.type == 'free_delivery'"
-                                                                src="../../assets/images/icons/action/delivery.svg" alt="" />
-                                                            <p v-if="tag.type == 'free_delivery'">
-                                                                <span>Бесплатная доставка</span>
-                                                                <span v-if="tag.condition == '2'">
-                                                                    при покупке от
-                                                                    {{ tag.value.toLocaleString('ru') }}
-                                                                    ₽</span>
-                                                                <span v-if="tag.condition == '3'">
-                                                                    при покупке от
-                                                                    {{ tag.value.toLocaleString('ru') }}
-                                                                    шт.</span>
-                                                            </p>
-                                                            <img v-if="tag.type == 'gift'"
-                                                                src="../../assets/images/icons/action/gift.svg" alt="" />
-                                                            <p v-if="tag.type == 'gift'">Подарок</p>
-                                                            <img v-if="tag.type == 'delay'"
-                                                                src="../../assets/images/icons/action/time.svg" alt="" />
-                                                            <p v-if="tag.type == 'delay'">Отсрочка {{ tag.value }} дн.</p>
-                                                            <img v-if="tag.type == 'multiplicity'"
-                                                                src="../../assets/images/icons/action/box.svg" alt="" />
-                                                            <p v-if="tag.type == 'multiplicity'">
-                                                                Кратность упаковки
-                                                                {{ tag.value.toLocaleString('ru') }}
-                                                                шт.
-                                                            </p>
-                                                            <img v-if="tag.type == 'sale' && tag.value > 0"
-                                                                src="../../assets/images/icons/action/sale.svg" alt="" />
-                                                            <p v-if="tag.type == 'sale' && tag.value > 0" >
-                                                                Скидка
-                                                                {{ tag.value.toLocaleString('ru') }}%
-                                                                <!-- <span v-if="tag.condition == '2'">
-                                                                                                        при покупке от
-                                                                                                        {{ tag.value.toLocaleString("ru") }} ₽</span
-                                                                                                    > -->
-                                                                <span v-if="tag.min_count > 1">
-                                                                    при покупке от
-                                                                    {{ tag.min_count.toLocaleString('ru') }}
-                                                                    шт.</span>
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="table-actions__modal-btn-container">
-                                                        <router-link v-if="action.type != 3" :to="{
-                                                            name: 'promotion',
-                                                            params: {
-                                                                id: this.$route.params.id,
-                                                                action: action.action_id
-                                                            }
-                                                        }" class="table-actions__modal-btn">Подробнее об акции</router-link>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <ActionModal :action="action"/>
                         </div>
                     </div>
                 </div>
@@ -530,6 +377,7 @@ import Counter from './Counter.vue';
 import router from '../../router';
 import Dialog from 'primevue/dialog';
 import debounce from '../../utils/debounce';
+import ActionModal from './ActionModal.vue'
 
 export default {
     name: 'TableCatalogRow',
@@ -915,7 +763,8 @@ export default {
     mounted() { },
     components: {
         Counter,
-        Dialog
+        Dialog,
+        ActionModal
     },
     computed: {
         ...mapGetters(['basket'])

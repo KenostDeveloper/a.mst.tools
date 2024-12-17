@@ -5898,7 +5898,7 @@ button.std-icon__wrapper {
 
 			object-fit: contain;
 
-			margin-bottom: 14px;
+			// margin-bottom: 14px;
 		}
 		&__modal-title {
 			color: #282828;
@@ -5907,9 +5907,9 @@ button.std-icon__wrapper {
 			line-height: 1;
 
 			padding: 0 !important;
-			margin: 0 !important;
-			margin-inline: auto !important;
-			margin-bottom: 17px !important;
+			margin: 0 auto 12px auto !important;
+			// margin-inline: auto !important;
+			// margin-bottom: 17px !important;
 		}
 		&__modal-elems {
 			display: flex;
@@ -6981,8 +6981,37 @@ button.std-icon__wrapper {
 }
 
 
+// .table-actions__modal{
+// 	padding: 20px 0;
+// }
+
+.table-actions__modal-btn-container{
+	justify-content: center !important;
+}
+
 .table-actions__modal{
-	padding: 20px 0;
+	padding-bottom: 16px;
+}
+
+.kenost-action-modal {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 16px;
+	padding-bottom: 16px;
+	justify-content: center;
+
+	&__item{
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		flex: 0 1 calc(50% - 32px);
+		width: fit-content;
+		box-sizing: border-box;
+
+		p{
+			margin: 0;
+		}
+	}
 }
 
 .event-none {
