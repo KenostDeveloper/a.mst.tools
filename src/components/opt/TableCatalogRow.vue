@@ -58,7 +58,8 @@
                 <b>Арт: {{ item.article }}</b>
             </td>
             <td class="k-table__busket">
-                <form class="k-table__form" action="" :class="{ 'basket-true': item?.basket?.availability }">
+                <!-- {{ this.fetchIds.indexOf(item.remain_id) != -1 ? "Загрузка..." : "" }} -->
+                <form class="k-table__form" action="" :class="{ 'basket-true': item?.basket?.availability, 'loading-counter': this.fetchIds.indexOf(item.remain_id) != -1 }">
                     <Counter
                         @ElemCount="ElemCount"
                         :min="0"
@@ -555,7 +556,8 @@ export default {
             active: false,
             value: 1,
             modal_remain: false,
-            timeOut: null
+            timeOut: null,
+            fetchIds: [],
         };
     },
     methods: {
@@ -584,7 +586,7 @@ export default {
             this.$emit('ElemAction', item);
         },
         async updateAction(remainid, storeid, action, indexstore, indexaction, conflicts) {
-            console.log('updateAction', remainid, storeid, action, indexstore, indexaction, conflicts);
+            // console.log('updateAction', remainid, storeid, action, indexstore, indexaction, conflicts);
             // console.log(this.items.stores[index].actions)
 
             this.items.stores[indexstore].actions[indexaction].enabled = !this.items.stores[indexstore].actions[indexaction].enabled;
@@ -603,7 +605,7 @@ export default {
                                     // console.log('this.items.stores[indexstore].actions', this.this.items.stores[indexstore].actions[j])
                                     this.items.stores[indexstore].actions[j].enabled = false;
                                     //this.items.stores[indexstore].actions[indexaction].enabled = false
-                                    console.log(conflicts.store_id);
+                                    // console.log(conflicts.store_id);
                                     const data = {
                                         action: 'action/user/off/on',
                                         remain_id: this.items.stores[indexstore].actions[j].remain_id
@@ -673,7 +675,7 @@ export default {
                         store_id: storeid,
                         data: response.data.data
                     };
-                    console.log("SET_OPT_PRODUCT_TO_VUEX", data)
+                    // console.log("SET_OPT_PRODUCT_TO_VUEX", data)
                     this.$store.commit('SET_OPT_PRODUCT_TO_VUEX', data);
                 });
             });
@@ -699,7 +701,7 @@ export default {
             };
         },
         addBasket(item, index) {
-            console.log(item)
+            // console.log(item)
             const data = {
                 action: 'basket/add',
                 id: router.currentRoute._value.params.id,
@@ -813,7 +815,9 @@ export default {
             })
         },
         ElemCount(object) {
-            console.log(object);
+            if (!this.fetchIds.includes(object.id)) {
+                this.fetchIds.push(object.id);
+            }
             if (object.value == object.min) {
                 this.clearBasketProduct(object.item.org_id, object.item.store_id, object.item.basket.key, object.product)
                 return;
@@ -834,6 +838,11 @@ export default {
                     action: 'basket/get',
                     id: router.currentRoute._value.params.id,
                     warehouse: 'all'
+                }).then((res) => {
+                    const index = this.fetchIds.indexOf(object.id);
+                    if (index !== -1) {
+                        this.fetchIds.splice(index, 1); // Удаляем один элемент по индексу
+                    }
                 });
             });
             if(Number(object.value) != object.old_value){

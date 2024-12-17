@@ -215,15 +215,17 @@
                                             </div>
                                             <div class="k-order__buttons">
                                                 <b>{{(item.count * item.price).toLocaleString('ru')}} ₽</b>
-                                                <Counter
-													@ElemCount="ElemCount"
-													:item="{basket, item}"
-													:min="1"
-													:max="item?.available"
-													:value="item?.count"
-													:id="item?.remain_id"
-													:key="item?.key"
-												/>
+                                                <div :class="{'loading-counter': this.fetchIds.indexOf(item.remain_id) != -1 }">
+                                                    <Counter
+                                                        @ElemCount="ElemCount"
+                                                        :item="{basket, item}"
+                                                        :min="1"
+                                                        :max="item?.available"
+                                                        :value="item?.count"
+                                                        :id="item?.remain_id"
+                                                        :key="item?.key"
+                                                    />
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="k-order__product-data">
@@ -350,7 +352,8 @@ export default {
       order: '',
       value: 1,
       modal_remain: false,
-      timeOut: null
+      timeOut: null,
+      fetchIds: []
     }
   },
   emits: ['fromOrder', 'orderSubmit'],
@@ -409,7 +412,9 @@ export default {
       })
     },
     ElemCount(object) {
-        console.log(object)
+        if (!this.fetchIds.includes(object.id)) {
+            this.fetchIds.push(object.id);
+        }
         if (object.value > Number(object.max)) {
             this.modal_remain = true;
         } else {				
@@ -455,7 +460,12 @@ export default {
                 action: 'basket/get',
                 id: router.currentRoute._value.params.id,
                 warehouse: 'all'
-            })				
+            }).then((res) => {
+                const index = this.fetchIds.indexOf(object.id);
+                if (index !== -1) {
+                    this.fetchIds.splice(index, 1); // Удаляем один элемент по индексу
+                }
+            });				
         }
     },
     ElemComplectCount(object) {
