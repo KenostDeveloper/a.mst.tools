@@ -828,6 +828,129 @@
                     </div>
                 </div>
 
+                <div class="dart-form-group mt-4 flex">
+                    <span class="ktitle">Коллекции</span>
+                    <div>
+                        <button @click="this.modals.add_group = true" type="button" class="dart-btn dart-btn-primary  flex gap-2 align-items-center">
+                            <i class="pi pi-upload"></i><div>Добавить коллекцию</div>
+                        </button>
+                    </div>
+                </div>
+                <TabView class="tab-custom hidden-mobile-l mt-3 kenost-tab-custom">
+                    <TabPanel v-for="el in this.action_groups">
+                        <template #header>
+                            {{ el.group.name }}
+                            <Badge class="ml-2" :value="el?.products?.total"></Badge>
+                        </template>
+                        <div class="table-kenost mt-4">
+                            <div class="flex align-items-center justify-between">
+                                <p class="table-kenost__title">Товары коллекции «{{ el.group.name }}»</p>
+                                <button @click="deleteGroup(el.group.id)" type="button" class="dart-btn dart-btn-secondary btn-padding flex gap-2 align-items-center">
+                                    <i class="pi pi-trash"></i><div>Удалить коллекцию</div>
+                                </button>
+                            </div>
+                            <div class="table-kenost__filters">
+                                <div class="table-kenost__filters-left">
+                                    <div class="form_input_group input_pl input-parent required">
+                                        <input type="text" id="filter_table" placeholder="Введите артикул или название"
+                                            class="dart-form-control" v-model="el.search"
+                                            @input="setFilterGroup(el.group.id)" />
+                                        <label for="product_filter_name" class="s-complex-input__label">Введите артикул или
+                                            название</label>
+                                        <div class="form_input_group__icon">
+                                            <i class="d_icon d_icon-search"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <table class="table-kenost__table mt-0">
+                                <thead>
+                                    <tr>
+                                        <th class="table-kenost__name table-kenost__name-checkbox hidden">
+                                            <Checkbox @update:modelValue="kenostTableCheckedAll" v-model="this.kenost_table_all"
+                                                inputId="kenost_table_all" value="1" />
+                                        </th>
+                                        <th class="table-kenost__name table-kenost__name-product">Товар</th>
+                                        <th class="table-kenost__name">Тип добавления</th>
+                                        <th class="table-kenost__name">Бренд</th>
+                                        <th class="table-kenost__name">РРЦ</th>
+                                        <th class="table-kenost__name">
+                                            Скидка \ Наценка </br> <div class="text-primary cursor-pointer" @click="() => {
+                                                this.modals.price_group = true
+                                                this.modals.group_id = el.group.id
+                                                
+                                            }">Настроить</div>
+                                        </th>
+                                        <th class="table-kenost__name">Тип ценообразования</th>
+                                        <th class="table-kenost__name">Цена со скидкой за шт.</th>
+                                    </tr>
+                                </thead>
+                                <!-- Вывод комплектов -->
+                                <tbody v-for="item in el?.products?.items" :key="item.id">
+                                    <tr>
+                                        <td class="table-kenost__checkbox hidden">
+                                            <Checkbox @change="kenostTableCheckedAllCheck" v-model="this.kenost_table"
+                                                inputId="kenost_table" :value="item.id" />
+                                        </td>
+                                        <td class="table-kenost__product">
+                                            <img :src="item.image" />
+                                            <div class="table-kenost__product-text">
+                                                <p>{{ item.name }}</p>
+                                                <span>{{ item.article }}
+                                                    <span class="store-name-b2b" :style="{ background: item.color }">{{item.store}}</span></span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            {{ item.type }}
+                                        </td>
+                                        <td>
+                                            {{ item.brand }}
+                                        </td>
+                                        <td>
+                                            {{ item.price }}
+                                        </td>
+                                        <td>
+                                            {{ item.price > 0 && item.price > item.new_price ? ((Math.round(((item.price - item.new_price) / item.price) * 10000) / 100) + '%') : '0' }}
+                                        </td>
+                                        <td>
+                                            {{ el.typePricing?.name }}
+                                        </td>
+                                        <td>
+                                            {{(Number(item.new_price)).toFixed(2)}}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <paginate
+                                :page-count="(this.action_groups[el.group.id]?.products?.total / this.action_groups[el.group.id]?.perpage) > 0 ? Math.ceil(this.action_groups[el.group.id]?.products?.total / this.action_groups[el.group.id]?.perpage) : 1"
+                                :click-handler="(page) => pagClickCallbackGroup(page, el.group.id)"
+                                :prev-text="'Пред'"
+                                :next-text="'След'"
+                                :container-class="'pagination justify-content-center'"
+                                :initialPage="this.page_selected"
+                                :forcePage="el.page"
+                            >
+                            </paginate>
+                            <!-- <div class="table-kenost-help">
+                                <div class="table-kenost-help__select">
+                                    <span>Отмечено:</span> {{ this.kenost_table.length }} / {{ Object.keys(this.selected).length}}
+                                </div>
+                                <div class="flex align-items-center gap-1">
+                                    <Checkbox @change="globalTable" v-model="this.form.global_kenost_table"
+                                        inputId="global_kenost_table-1" name="global_kenost_table-1" value="true" />
+                                    <label for="global_kenost_table-1" class="ml-1 mb-0">Все</label>
+                                </div>
+                                <div v-if="filter_table.name != ''" class="flex align-items-center gap-1">
+                                    <Checkbox @change="filterglobalTable" v-model="this.form.filter_kenost_table"
+                                        inputId="global_kenost_table-2" name="global_kenost_table-2" value="true" />
+                                    <label for="global_kenost_table-2" class="ml-1 mb-0">Отметить подходящие по фильтру</label>
+                                </div>
+                            </div> -->
+                        </div>
+                    </TabPanel>
+                </TabView>
+                
+
                 <div class="dart-form-group mt-4">
                     <span class="ktitle">Участники</span>
                     <div class="flex align-items-center gap-1 mt-2">
@@ -965,18 +1088,6 @@
                     </div>
                 </div>
 
-                <!-- <div class="dart-form-group mt-4">
-                    <span class="ktitle">Ограничения</span>
-                    <div class="flex align-items-center gap-1 mt-2">
-                        <RadioButton v-model="this.form.limitations" inputId="limitations-1" name="limitations" value="1" />
-                        <label for="limitations-1" class="ml-2 radioLabel">Без ограничений</label>
-                    </div>
-                    <div class="flex align-items-center gap-1 mt-3">
-                        <RadioButton v-model="this.form.limitations" inputId="limitations-2" name="limitations" value="2" />
-                        <label for="limitations-2" class="ml-2 radioLabel">Ограничить по сумме</label>
-                    </div>
-                </div> -->
-
                 <div class="kenost-wiget" v-if="this.form.limitations == '2'">
                     <p>Значение</p>
                     <InputNumber v-model="this.form.limitationValue" inputId="horizontal-buttons" :step="0.1" min="0"
@@ -1046,6 +1157,19 @@
         </div>
     </Dialog>
 
+    <Dialog v-model:visible="this.modals.add_group" header="Добавить коллекцию"
+        :style="{ width: '640px' }">
+        <div>
+            <!-- {{this.groups?.items}} -->
+            <Dropdown option-label="name" v-model="this.add_group" :options="groups.items" optionLabel="name" class="w-full md:w-14rem mt-2" />
+            <div class="w-full mt-3 justify-content-end flex">
+                <button @click="addGroup()" type="button" class="dart-btn dart-btn-primary  flex gap-1 align-items-center">
+                    <i class="pi pi-plus"></i><div>Добавить коллекцию</div>
+                </button>
+            </div>
+        </div>
+    </Dialog>
+
     <Dialog v-model:visible="this.modals.price" :header="this.modals.headers[this.modals.price_step]"
         :style="{ width: '700px' }">
         <div class="kenost-modal-price">
@@ -1084,7 +1208,7 @@
                     <p>Тип цены</p>
                     <Dropdown @change="setDiscountFormul()"
                         v-model="this.selected_data[this.modals.product_id].typePrice"
-                        :options="this.selected[this.modals.product_id].prices" optionLabel="name"
+                        :options="this.selected[this.modals.product_id].prices" optionLabel="name" 
                         class="w-full md:w-14rem" />
                 </div>
                 <div class="kenost-wiget-two">
@@ -1095,7 +1219,7 @@
                     </div>
                     <div class="kenost-wiget">
                         <p>&nbsp;</p>
-                        <Dropdown @change="setDiscountFormul()" :disabled="this.selected_data[this.modals.product_id]?.typePricing?.key == 0 || this.selected_data[this.modals.product_id]?.typePricing?.key == 2" v-model="this.selected_data[this.modals.product_id].typeFormul"
+                        <Dropdown @change="setDiscountFormul()" :disabled="this.selected_data[this.modals.product_id]?.typePricing?.key != 2" v-model="this.selected_data[this.modals.product_id].typeFormul"
                             :options="this.typeFormul" optionLabel="name" class="w-full md:w-14rem" />
                     </div>
                 </div>
@@ -1151,10 +1275,7 @@
                 <p>
                     Цена со скидой:
                     {{
-                        (this.selected_data[this.modals.product_id]
-                        ? this.selected_data[this.modals.product_id]?.finalPrice
-                        : this.selected[this.modals.product_id]?.price
-                        )?.toFixed(2)
+                        this.selected_data[this.modals.product_id]?.finalPrice ? this.selected_data[this.modals.product_id]?.finalPrice : this.selected_data[this.modals.product_id]?.price
                     }}
                     ₽
                 </p>
@@ -1163,6 +1284,76 @@
             <div v-if="this.selected_data[this.modals.product_id]?.typePricing?.key == 2">
                 <div class="dart-alert dart-alert-info mt-2">
                     Цена будет всегда оставаться неизменной, даже при изменении типов цен, РРЦ и любых других параметров товара.
+                </div>
+            </div>
+
+            <div class="kenost-modal-price__button kenost-modal-price__flex">
+                <span v-if="this.modals.price_step == 0"></span>
+                <div v-if="this.modals.price_step != 0" class="dart-btn dart-btn-secondary btn-padding"
+                    @click="this.modals.price_step = 0">
+                    Назад
+                </div>
+                <div class="dart-btn dart-btn-primary btn-padding" @click="closeDialogPrice">
+                    {{ this.modals.price_step == 0 ? 'Далее' : 'Готово' }}
+                </div>
+            </div>
+        </div>
+    </Dialog>
+
+    <Dialog v-model:visible="this.modals.price_group" :header="this.modals.headers[this.modals.price_step]"
+        :style="{ width: '700px' }">
+        <div class="kenost-modal-price">
+            <div class="kenost-method-edit-flex" v-if="this.modals.price_step == 0">
+                <div class="flex align-items-center gap-1 mt-3">
+                    <RadioButton v-model="this.modals.type_price" inputId="type_price-1" name="type_price" value="1" />
+                    <label for="type_price-1" class="ml-2 radioLabel">Задать вручную</label>
+                </div>
+                <div class="flex align-items-center gap-1 mt-3">
+                    <RadioButton v-model="this.modals.type_price" inputId="type_price-2" name="type_price" value="2" />
+                    <label for="type_price-2" class="ml-2 radioLabel">Тип цен</label>
+                </div>
+                <!-- <div class="flex align-items-center gap-1 mt-3">
+                    <RadioButton v-model="this.modals.type_price" inputId="type_price-3" name="type_price" value="3" />
+                    <label for="type_price-3" class="ml-2 radioLabel">Задать вручную</label>
+                </div> -->
+            </div>
+
+            <div v-if="this.modals.price_step == 1" class="two-colums mt-3">
+                <div class="kenost-wiget">
+                    <p>Тип ценообразования</p>
+                    <Dropdown
+                        @change="setDiscountFormulGroup()"
+                        v-model="this.action_groups[this.modals.group_id].typePricing"
+                        :options="this.typePricingGroup" optionLabel="name"
+                        class="w-full md:w-14rem" />
+                </div>
+                <div class="kenost-wiget" v-if="this.action_groups[this.modals.group_id]?.typePricing?.key != 2">
+                    <p>Тип цены</p>
+                    <Dropdown @change="setDiscountFormulGroup()"
+                        v-model="this.action_groups[this.modals.group_id].price"
+                        :options="this.typePrice" optionLabel="name" optionValue="key"
+                        class="w-full md:w-14rem" />
+                </div>
+                <div class="kenost-wiget-two">
+                    <div class="kenost-wiget">
+                        <p>Значение</p>
+                        <InputNumber v-model="this.action_groups[this.modals.group_id].saleValue" inputId="horizontal-buttons" :step="0.1" min="0"
+                            @update:modelValue="setDiscountFormulGroup()" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" />
+                    </div>
+                    <div class="kenost-wiget">
+                        <p>&nbsp;</p>
+                        <Dropdown @change="setDiscountFormulGroup()" :disabled="this.action_groups[this.modals.group_id]?.typePricing?.key != 2" v-model="this.action_groups[this.modals.group_id].typeFormul"
+                            :options="this.typeFormul" optionLabel="name" class="w-full md:w-14rem" />
+                    </div>
+                </div>
+            </div>
+
+            <div v-if="this.modals.price_step == 2" class="two-colums mt-3">
+                <div class="kenost-wiget">
+                    <p>Тип цены</p>
+                    <Dropdown @change="setGroupTypePrice()" v-model="this.action_groups[this.modals.group_id].price"
+                        :options="this.typePrice" optionLabel="name" optionValue="key"
+                        class="w-full md:w-14rem" />
                 </div>
             </div>
 
@@ -1196,7 +1387,9 @@ import MultiSelect from 'primevue/multiselect';
 import router from '../../router';
 import Paginate from 'vuejs-paginate-next';
 import { helpers, required } from '@vuelidate/validators';
-
+import TabView from "primevue/tabview";
+import TabPanel from "primevue/tabpanel";
+import Badge from 'primevue/badge';
 
 export default {
     name: 'ProfileSalesAdd',
@@ -1311,11 +1504,16 @@ export default {
                 delay: false,
                 price: false,
                 error_product: false,
+                add_group: false,
+                price_group: false,
                 price_step: 0,
                 type_price: '1',
                 product_id: -1,
+                group_id: -1,
                 headers: ['Метод редактирования цены', 'Задать вручную', 'Тип цен']
             },
+            add_group: {},
+            action_groups: {},
             files: {
                 max: {
                     original_href: ''
@@ -1368,6 +1566,10 @@ export default {
                 {name: 'Скидка', key: 2},
                 {name: 'Фиксированая цена', key: 3}
             ],
+            typePricingGroup: [
+                {name: 'Наценка', key: 1},
+                {name: 'Скидка', key: 2},
+            ],
             typePrice: [],
             massAction: [
                 { name: 'Скидка по формуле', key: 0 },
@@ -1401,8 +1603,32 @@ export default {
             'opt_get_remain_prices',
             'get_opt_catalog_tree_from_api',
             'org_get_stores_from_api',
-            'get_sales_adv_pages_to_api'
+            'get_sales_adv_pages_to_api',
+            'get_group_api',
+            'build_group_api'
         ]),
+        addGroup(){
+            this.action_groups[this.add_group.id] = {
+                group: this.add_group,
+                page: 1,
+                perpage: 20,
+                search: "",
+                typePricing: null,
+                prices: null,
+                price: 'key',
+                saleValue: 0,
+                typeFormul: null
+            };
+            this.updateGroups(this.add_group.id)
+            this.add_group = {}
+            this.modals.add_group = false
+        },
+        deleteGroup(id){
+            this.action_groups = Object.fromEntries(
+                Object.entries(this.action_groups)  // Преобразуем объект в массив [ключ, значение]
+                    .filter(([key]) => key !== id.toString())    // Фильтруем, исключая ключ, который равен id
+            );
+        },
         onUpload(data) {
             if (data.xhr.response) {
                 const response = JSON.parse(data.xhr.response);
@@ -1421,6 +1647,31 @@ export default {
                 }
             }
             this.$toast.add({ severity: 'info', summary: 'Файлы загружены', detail: 'Файл был успешно загружен', life: 3000 });
+        },
+        updateGroups(id){
+            console.log(this.action_groups[id])
+            this.build_group_api({
+                action: 'build',
+                id: this.$route.params.id,
+                store_id: this.form.store_id[0],
+                terms: this.action_groups[id].group?.properties?.terms ? this.action_groups[id].group?.properties?.terms : [],
+                black_list: this.action_groups[id].group?.properties?.black_list ? this.action_groups[id].group?.properties?.black_list : [],
+                type: this.action_groups[id].group.type,
+                file: this.action_groups[id].group.file,
+                page: this.action_groups[id].page,
+                perpage: this.action_groups[id].perpage,
+                price: this.action_groups[id].price ? this.action_groups[id].price : 'key',
+                saleValue: this.action_groups[id].saleValue,
+                typeFormul: this.action_groups[id].typeFormul?.key,
+                typePricing: this.action_groups[id].typePricing?.key ? this.action_groups[id].typePricing?.key : 'key',
+                filter: {
+                    name: this.action_groups[id].search
+                }
+            }).then((res) => {
+                this.action_groups[id].products = res.data
+            })
+
+            // console.log(this.action_groups)
         },
         updateProducts() {
             const data = {
@@ -1723,8 +1974,15 @@ export default {
         async formSubmit(event) {
             const validationResult = await this.v$.$validate();
             if (!validationResult) {
-                console.log('validation failed');
+                // console.log('validation failed');
                 return;
+            }
+
+            let groups_data = this.action_groups
+            // console.log(groups_data)
+            for(let i = 0; i < Object.keys(groups_data).length; i++){
+                // console.log(groups_data[Object.keys(groups_data)[i]])
+                groups_data[Object.keys(groups_data)[i]].products = null
             }
 
             this.$load(async () => {
@@ -1834,7 +2092,8 @@ export default {
                         page_geo: this.geo_action?.key,
                         page_place_position: this.position,
                         page_create: this.create_page_action[0] === 'true',
-                        hide_for_clients: this.form.hide_for_clients
+                        hide_for_clients: this.form.hide_for_clients,
+                        groups: groups_data
                     })
                         .then((result) => {
                             this.loading = false;
@@ -1848,13 +2107,13 @@ export default {
             this.loading = true;
         },
         selectComplect(id) {
-            console.log(id);
+            // console.log(id);
             const complect = this.complects.find((r) => r.id === id);
-            console.log(complect);
+            // console.log(complect);
             this.selected_complects[complect.id] = complect;
-            console.log(this.selected_complects);
+            // console.log(this.selected_complects);
             this.complects = this.complects.filter((r) => r.id !== id);
-            console.log(this.selected_complects);
+            // console.log(this.selected_complects);
             const data = {
                 action: 'complects/get',
                 filter: this.filter_complects,
@@ -1863,7 +2122,7 @@ export default {
                 store_id: router.currentRoute._value.params.id,
                 selected: this.selected_complects
             };
-            console.log(data);
+            // console.log(data);
             this.opt_get_complects(data);
             // this.total_selected++
         },
@@ -1902,7 +2161,7 @@ export default {
             product.typeFormul = {};
             product.typePrice = '';
 
-            console.log(product);
+            // console.log(product);
 
             const dataProduct = {
                 action: 'get/product/prices',
@@ -2086,6 +2345,13 @@ export default {
                 this.kenostTableCheckedAllCheck();
             });
         },
+        pagClickCallbackGroup(pageNum, id){
+            this.action_groups[id].page = pageNum
+            this.updateGroups(id)
+        },
+        setFilterGroup(id){
+            this.updateGroups(id)
+        },
         kenostTableCheckedAllCheck() {
             let isPageSelect = false;
             if (Object.keys(this.selected_visible).length === 0) {
@@ -2145,6 +2411,7 @@ export default {
                 this.selected_data[obj.id].discountInterest = 0;
                 this.selected_data[obj.id].discountInRubles = 0;
                 this.selected_data[obj.id].min_count = 1;
+                this.selected_data[obj.id].typeFormul = null;
             }
             this.selected_data[obj.id].multiplicity = obj.value;
         },
@@ -2157,6 +2424,7 @@ export default {
                 this.selected_data[obj.id].discountInterest = 0;
                 this.selected_data[obj.id].discountInRubles = 0;
                 this.selected_data[obj.id].min_count = 1;
+                this.selected_data[obj.id].typeFormul = null;
             }
             this.selected_data[obj.id].min_count = obj.value;
         },
@@ -2166,6 +2434,7 @@ export default {
             } else {
                 this.modals.price_step = 0;
                 this.modals.price = false;
+                this.modals.price_group = false;
             }
         },
         setPrices(index, name, value) {
@@ -2195,6 +2464,10 @@ export default {
                 (Number(this.selected_data[this.modals.product_id].price) - Number(getPrice)) /
                 (Number(this.selected_data[this.modals.product_id].price) / 100);
         },
+        setGroupTypePrice(){
+            this.action_groups[this.modals.group_id].typePricing = {name: 'Скидка', key: 2}
+            this.updateGroups(this.modals.group_id)
+        },
         createSet() {
             // Создание комлпекта
             const tempComplect = {};
@@ -2205,18 +2478,33 @@ export default {
             this.complects.push(tempComplect);
             // console.log(this.complects_ids)
         },
+        setDiscountFormulGroup(){
+            if(this.action_groups[this.modals.group_id].typePricing){
+                // console.log(this.action_groups[this.modals.group_id].typePricing.key)
+                switch(this.action_groups[this.modals.group_id].typePricing.key){
+                    case 1:
+                        // console.log({ name: '%', key: 1 })
+                        this.action_groups[this.modals.group_id].typeFormul = { name: '%', key: 1 }
+                        break;
+                    case 2:
+                        if(this.action_groups[this.modals.group_id].saleValue && this.action_groups[this.modals.group_id].typeFormul){
+                            this.action_groups[this.modals.group_id].price = 'key'
+                        }
+                        break;
+                }
+            }
+            this.updateGroups(this.modals.group_id)
+        },
         setDiscountFormul() {
-            console.log(this.selected_data[this.modals.product_id])
             let sale = 0;
             if(this.selected_data[this.modals.product_id].typePrice){
                 //Скидка от Типа цены
                 sale = Number(this.selected_data[this.modals.product_id].price) - Number(this.selected_data[this.modals.product_id].typePrice.price)
             }
-
             if(this.selected_data[this.modals.product_id].typePricing){
                 switch(this.selected_data[this.modals.product_id].typePricing.key){
-                    case 0:
-                        this.selected_data[this.modals.product_id].typeFormul = {key: 1, name: "%"}
+                    case 1:
+                        this.selected_data[this.modals.product_id].typeFormul = { name: '%', key: 1 }
                         if(this.saleValue){
                             //ФОРМУЛА 100-1500*100/2000
                             //Например: Товар с РРЦ 2000, Типом цен "Опт1", Цена "Опт1" = 1000, Значение наценки: 50 => Цена товара со скидкой: 1000*1,5 = 1500, Скидка = 100-1500*100/2000  = 25%
@@ -2227,7 +2515,7 @@ export default {
                             this.selected_data[this.modals.product_id].percent = this.saleValue
                         }
                         break;
-                    case 1:
+                    case 2:
                         if(this.saleValue && this.selected_data[this.modals.product_id].typeFormul){
                             if(this.saleValue && this.selected_data[this.modals.product_id]?.typeFormul?.key == 1){
                                 let salePrice = (Number(this.selected_data[this.modals.product_id].price) - sale)*(1-this.saleValue/100)
@@ -2240,7 +2528,7 @@ export default {
                             
                         }
                         break;
-                    case 2:
+                    case 3:
                         // console.log(this.selected_data[this.modals.product_id])
                         this.selected_data[this.modals.product_id].typeFormul = {key: 0, name: "₽"}
                         if(this.saleValue){
@@ -2254,7 +2542,7 @@ export default {
             this.selected_data[this.modals.product_id].finalPrice = Number(this.selected_data[this.modals.product_id].price) - sale
             //Расчет % скидки от РРЦ
             this.selected_data[this.modals.product_id].discountInterest = Number(this.selected_data[this.modals.product_id].discountInRubles) / (Number(this.selected_data[this.modals.product_id].price) / 100)
-            console.log(this.selected_data[this.modals.product_id])
+            // console.log(this.selected_data[this.modals.product_id])
 
             // if()
             
@@ -2322,6 +2610,10 @@ export default {
             store_id: router.currentRoute._value.params.id,
             type: 1
         });
+        this.get_group_api({
+            id: this.$route.params.id,
+            action: "get"
+        })
     },
     components: {
         FileUpload,
@@ -2335,7 +2627,10 @@ export default {
         Checkbox,
         Counter,
         MultiSelect,
-        Paginate
+        Paginate,
+        TabView,
+        TabPanel,
+        Badge
     },
     computed: {
         ...mapGetters([
@@ -2351,7 +2646,9 @@ export default {
             'oprpricesremain',
             'optcatalogtree',
             'org_stores',
-            'adv_pages'
+            'adv_pages',
+            'groups',
+            'group_build'
         ]),
         pagesCountSelect() {
             let pages = Math.round(this.total_selected / this.per_page);
@@ -2402,7 +2699,7 @@ export default {
                     }
                     if (newVal.visible) {
                         this.selected_visible = newVal.visible;
-                        console.log(this.selected_visible)
+                        // console.log(this.selected_visible)
                         this.ids_visible = newVal.ids_selected;
                     }
                     this.total_products = newVal.total;
@@ -2441,7 +2738,7 @@ export default {
         },
         actions: async function (newVal, oldVal) {
             if (router.currentRoute._value.params.sales_id) {
-                console.log(newVal)
+                // console.log(newVal)
                 this.form.name = newVal.name;
                 if (newVal.image) {
                     this.files.max.original_href = newVal.image.image;
@@ -2494,6 +2791,23 @@ export default {
                         type: 'gift'
                     };
                     this.get_available_products_from_api(data).then();
+
+                    if(newVal.groups){
+                        for(let i = 0; i < newVal.groups.length; i++){
+                            this.action_groups[newVal.groups[i].group.id] = {
+                                group: newVal.groups[i].group,
+                                page: 1,
+                                perpage: 20,
+                                search: "",
+                                typePricing: this.typePricingGroup[Number(newVal.groups[i].pricing_type) - 1],
+                                prices: null,
+                                price: newVal.groups[i].type_price ? newVal.groups[i].type_price : 'key',
+                                saleValue: Number(newVal.groups[i].percent),
+                                typeFormul: this.typeFormul[Number(newVal.groups[i].pricing_formula)]
+                            };
+                            this.updateGroups(newVal.groups[i].group.id)
+                        }
+                    }
                 }
 
                 if (newVal.icon) {
@@ -2501,7 +2815,7 @@ export default {
                 }
 
                 if (Object.keys(newVal.complects).length > 0) {
-                    console.log(newVal.complects)
+                    // console.log(newVal.complects)
                     this.selected_complects = newVal.complects;
                 }
                 this.form.description = newVal.description;
@@ -2517,8 +2831,8 @@ export default {
                 this.form.dates = [datefrom, dateto];
                 this.selected = newVal.products;
                 this.selected_data = newVal.products_data;
-                console.log(this.selected)
-                console.log(this.selected_data)
+                // console.log(this.selected)
+                // console.log(this.selected_data)
                 for (var key in this.selected_data) {
                     if(this.selected_data[key].pricing_type){
                         for (var k_pricing in this.typePricing) {
