@@ -15,7 +15,7 @@
           <th class="k-table__name k-tablr-th-retail hidden-mobile-l">РЦ / Наценка</th>
         </tr>
       </thead>
-      <tbody>
+      <!-- <tbody> -->
         <TableCatalogRow
           v-for="item in items.items"
           :key="item.id"
@@ -24,7 +24,7 @@
           @updateBasket="updateBasket"
           :is_warehouses="is_warehouses"
         />
-      </tbody>
+      <!-- </tbody> -->
     </table>
   </div>
 </template>
