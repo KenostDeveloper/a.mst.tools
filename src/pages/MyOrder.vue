@@ -86,9 +86,9 @@
 						<td class="std-table__col">{{ item.name }}</td>
 						<td class="std-table__col">{{ Number(item.price).toLocaleString('ru') }} ₽</td>
 						<td class="std-table__col">
-							<div class="table-actions__action active w-fit" v-for="(action, indexactions) in item.tags" v-bind:key="action.id">
-								<div v-if="action.length > 0" class="table-actions__container">
-									<div class="table-actions__el" v-for="(tag, indextag) in action" v-bind:key="tag.id">
+							<div class="table-actions__action active w-fit" v-for="(action, indexactions) in item.actions" v-bind:key="action.action_id" :class="{active: action.enabled}">
+								<div v-if="action.tags.length > 0" class="table-actions__container">
+									<div class="table-actions__el" v-for="(tag, indextag) in action.tags" v-bind:key="tag.id">
 										<img v-if="tag.type == 'multiplicity'" src="/images/icons/action/gray/box.svg" alt="">
 										<p class="w-fit" v-if="tag.type == 'multiplicity'">{{ tag.value }} шт.</p>
 
@@ -105,12 +105,12 @@
 										<img v-if="tag.type == 'free_delivery'" src="/images/icons/action/gray/delivery.svg" alt="">
 									</div>
 								</div>
-								<div v-if="action.length > 0" class="table-actions__help">
+								<div v-if="action.tags.length > 0" class="table-actions__help">
 									<p>?</p>
 									<div class="table-actions__content">
 										<div class="table-actions__modal">
 											<div class="table-actions__modal-elems">
-												<div class="table-actions__modal-el" v-for="(tag, index) in action" v-bind:key="tag.id">
+												<div class="table-actions__modal-el" v-for="(tag, index) in action.tags" v-bind:key="tag.id">
 												<img v-if="tag.type == 'min_sum'" src="/images/icons/action/red/basket.svg" alt="">
 												<p v-if="tag.type == 'min_sum'">Минимальна сумма покупки {{ Number(tag.value).toLocaleString('ru') }} ₽</p>
 

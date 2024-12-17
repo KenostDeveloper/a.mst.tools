@@ -165,7 +165,7 @@ export default {
 	computed: {
 		...mapGetters([]),
 		debouncedSend: function () {
-			return _.debounce(this.send, 200)
+			return _.debounce(this.send, 500)
 		}
 	},
 	watch: {
