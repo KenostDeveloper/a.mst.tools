@@ -64,13 +64,29 @@ export default {
 				description: {
 					label: "Описание",
 					type: 'text'
-				}
+				},
+				actions: {
+					label: "Действия",
+					type: "actions",
+					sort: false,
+					available: {
+						edit: {
+							icon: "pi pi-pencil",
+							label: "Редактировать",
+						},
+						delete: {
+							icon: "pi pi-trash",
+							label: "Удалить",
+						},
+					},
+				},
 			},
 		};
 	},
 	methods: {
 		...mapActions([
-			'get_group_api'
+			'get_group_api',
+			'set_group_api'
 		]),
 		getGroup(){
 			this.get_group_api({
@@ -81,10 +97,17 @@ export default {
 			})
 		},
 		editElem(value) {
-			
+			router.push({
+				name: "groups_edit_id",
+				params: { id: this.$route.params.id, group_id: value.id },
+			});
 		},
 		deleteElem(value) {
-
+			this.set_group_api({
+				id: this.$route.params.id,
+				action: "delete",
+				id_group: value.id
+			}).then(() => this.getGroup());
 		},
 		paginate(data) {
 			this.page = data.page;
