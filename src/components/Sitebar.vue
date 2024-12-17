@@ -37,8 +37,9 @@
 			</div>
 			<div class="sitebar-profile">
 				<div class="sitebar-org">
-					<div class="sitebar-profile__icon">
-						<img :src="this.organozation?.image" alt="" />
+					<div class="sitebar-profile__icon" :class="{'sitebar-avatar-none': !this.organozation?.image}">
+						<img v-if="this.organozation?.image" :src="this.organozation?.image" alt="" />
+						<div v-else class="sitebar-avatar-none-char">{{this.organozation?.name ? this.organozation?.name?.startsWith('ИП') ? this.organozation?.name?.replace(/^ИП\s*/, '').split(' ')[0][0] : this.organozation?.name[0] : '' }}</div>
 					</div>
 					<button v-if="this.organizations.length > 1" class="sitebar-profile__change" @click="this.changeOrgModal = true">
 						<!-- <img src="../assets/images/icons/change.svg" /> -->
@@ -175,7 +176,10 @@
 		<div class="change-org-container">
 			<div class="change-org__wrapper">
 				<div class="change-org-el" :class="{ active: true }">
-					<div class="icon"><img :src="this.activeOrganization?.image" alt="" /></div>
+					<div class="icon">
+						<img v-if="this.activeOrganization?.image" :src="this.activeOrganization?.image" alt="" />
+						<div v-else class="sitebar-avatar-none-char">{{this.activeOrganization?.name ? this.activeOrganization?.name?.startsWith('ИП') ? this.activeOrganization?.name?.replace(/^ИП\s*/, '').split(' ')[0][0] : this.activeOrganization?.name[0] : '' }}</div>
+					</div>
 					<div class="change-org-el__text">
 						<b>{{ this.activeOrganization?.name }}</b>
 						<p>{{ this.activeOrganization?.description }}</p>
@@ -208,7 +212,10 @@
 					class="change-org-el"
 					v-bind:key="item.id"
 				>
-					<div class="icon"><img :src="item.image" alt="" /></div>
+					<div class="icon">
+						<img v-if="item.image" :src="item.image" alt="" />
+						<div v-else class="sitebar-avatar-none-char">{{item?.name ? item?.name?.startsWith('ИП') ? item?.name?.replace(/^ИП\s*/, '').split(' ')[0][0] : item?.name[0] : '' }}</div>
+					</div>
 					<div class="change-org-el__text">
 						<b>{{ item.name }}</b>
 						<p>{{ item.description }}</p>

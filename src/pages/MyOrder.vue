@@ -85,7 +85,7 @@
 						</td>
 						<td class="std-table__col">{{ item.name }}</td>
 						<td class="std-table__col">{{ Number(item.price).toLocaleString('ru') }} ₽</td>
-						<td class="std-table__col">
+						<td class="std-table__col table-actions">
 							<div class="table-actions__action active w-fit" v-for="(action, indexactions) in item.actions" v-bind:key="action.action_id" :class="{active: action.enabled}">
 								<div v-if="action.tags.length > 0" class="table-actions__container">
 									<div class="table-actions__el" v-for="(tag, indextag) in action.tags" v-bind:key="tag.id">
@@ -107,40 +107,7 @@
 								</div>
 								<div v-if="action.tags.length > 0" class="table-actions__help">
 									<p>?</p>
-									<div class="table-actions__content">
-										<div class="table-actions__modal">
-											<div class="table-actions__modal-elems">
-												<div class="table-actions__modal-el" v-for="(tag, index) in action.tags" v-bind:key="tag.id">
-												<img v-if="tag.type == 'min_sum'" src="/images/icons/action/red/basket.svg" alt="">
-												<p v-if="tag.type == 'min_sum'">Минимальна сумма покупки {{ Number(tag.value).toLocaleString('ru') }} ₽</p>
-
-												<img v-if="tag.type == 'free_delivery'" src="/images/icons/action/red/delivery.svg" alt="">
-												<p v-if="tag.type == 'free_delivery'"><span>Бесплатная доставка</span> <span v-if="tag.condition == '2'"> при покупке от {{ (tag.value).toLocaleString('ru') }} ₽</span> <span v-if="tag.condition == '3'"> при покупке от {{ (tag.value).toLocaleString('ru') }} шт.</span></p>
-
-												<img v-if="tag.type == 'gift'" src="/images/icons/action/red/gift.svg" alt="">
-												<p v-if="tag.type == 'gift'">Подарок</p>
-
-												<img v-if="tag.type == 'delay'" src="/images/icons/action/red/gift.svg" alt="">
-												<p v-if="tag.type == 'delay'">Отсрочка {{ tag.value }} дн.</p>
-
-												<img v-if="tag.type == 'multiplicity'" src="/images/icons/action/red/box.svg" alt="">
-												<p v-if="tag.type == 'multiplicity'">Кратность упаковки {{ (tag.value).toLocaleString('ru') }} шт.</p>
-
-												<img v-if="tag.type == 'sale' && tag.value > 0" src="/images/icons/action/red/sale.svg" alt="">
-												<p v-if="tag.type == 'sale'">
-													Скидка {{ (tag.value).toLocaleString('ru') }}%
-													<span v-if="tag.min_count > 1">
-														при покупке от
-														{{ tag.min_count.toLocaleString("ru") }} шт.</span
-													>
-												</p> 
-												</div>
-											</div>
-											<div class="table-actions__modal-btn-container">
-												<router-link v-if="action.action_id > 0" :to="{name: 'promotion', params: { id: this.$route.params.id, action: action.action_id }}" class="table-actions__modal-btn">Подробнее об акции</router-link>
-											</div>
-										</div>
-									</div>
+									<ActionModal :action="action"/>
 								</div>
 							</div>
 						</td>
@@ -180,7 +147,7 @@
 
 <script>
 import { mapActions, mapGetters, mapMutations } from "vuex";
-  import router from '../router'
+import router from '../router'
 import AutoComplete from "primevue/autocomplete";
 import Dropdown from "primevue/dropdown";
 import MultiSelect from "primevue/multiselect";
@@ -192,6 +159,7 @@ import Dialog from "primevue/dialog";
 import Breadcrumbs from "../components/Breadcrumbs.vue";
 import OrderModal from '../components/opt/OrderModal.vue';
 import Basket from '../components/opt/Basket.vue';
+import ActionModal from '../components/opt/ActionModal.vue'
 
 
 export default {
@@ -266,7 +234,7 @@ export default {
 		AutoComplete,
 		Calendar,
 		DatePicker,
-		// customModal,
+		ActionModal,
 		vTable,
 		Dialog,
 		CalendarVue,

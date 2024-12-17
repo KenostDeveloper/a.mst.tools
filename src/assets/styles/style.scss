@@ -5163,7 +5163,7 @@ button.std-icon__wrapper {
 }
 
 .change-org-el .icon {
-	box-shadow: unset;
+	// box-shadow: unset;
 }
 
 .change-org-container {
@@ -9048,4 +9048,11 @@ button.std-icon__wrapper {
 	display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.sitebar-avatar-none-char{
+	font-size: 28px;
+	font-weight: 700;
+	line-height: 1.2;
+	text-transform: uppercase;
 }
