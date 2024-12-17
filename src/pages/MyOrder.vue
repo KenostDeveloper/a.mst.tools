@@ -86,7 +86,7 @@
 						<td class="std-table__col">{{ item.name }}</td>
 						<td class="std-table__col">{{ Number(item.price).toLocaleString('ru') }} ₽</td>
 						<td class="std-table__col">
-							<div class="table-actions__action active w-fit" v-for="(action, indexactions) in item.actions" v-bind:key="action.action_id">
+							<div class="table-actions__action active w-fit" v-for="(action, indexactions) in item.actions" v-bind:key="action.action_id" :class="{active: action.enabled}">
 								<div v-if="action.tags.length > 0" class="table-actions__container">
 									<div class="table-actions__el" v-for="(tag, indextag) in action.tags" v-bind:key="tag.id">
 										<img v-if="tag.type == 'multiplicity'" src="/images/icons/action/gray/box.svg" alt="">
