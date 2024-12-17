@@ -22,7 +22,7 @@
                 <div class="k-order__orders" v-if="Object.prototype.hasOwnProperty.call(this.basket, 'data')">
                     <div v-for="(warehouse, w_key) in this.basket.data" v-bind:key="warehouse.store_data.id">
                         <div v-for="(org, o_key) in warehouse.data" v-bind:key="org.org_data.id" class="k-order__order">
-                            <h3>Адрес доставки: «{{ warehouse.store_data.name_short }}», {{ warehouse.store_data.address_short }}</h3>
+                            <h3>Адрес доставки: «{{ warehouse.store_data.name_short ? warehouse.store_data.name_short : warehouse.store_data.name }}», {{ warehouse.store_data.address_short  ? warehouse.store_data.address_short : warehouse.store_data.address }}</h3>
                             <div class="k-order__shop">
                                 <!-- <img src="../../assets/img/ava.png" alt=""> -->
                                 <p :style="{'background': org.org_data.color}">{{org.org_data.name}}</p>
@@ -38,7 +38,7 @@
                                             <p :data-id="item.id_remain">{{item.name}}</p>
                                             <div class="k-order__actions">
                                                 <div class="table-actions">                                                    
-                                                    <div class="table-actions__action active" v-for="(action, indexactions) in item.action" v-bind:key="action.id">                                                        
+                                                    <div class="table-actions__action" v-for="(action, indexactions) in item.action" v-bind:key="action.id" :class="{active: action.enabled}">                                                        
                                                         <div v-if="action.tags.length > 0" class="table-actions__container" >
                                                             <div class="table-actions__el" v-for="(tag, indextag) in action.tags" v-bind:key="indextag">                                                                
                                                                 <img v-if="tag.type == 'multiplicity'" src="/images/icons/action/gray/box.svg" alt="">
