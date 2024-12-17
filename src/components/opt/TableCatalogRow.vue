@@ -18,19 +18,23 @@
             </form>
         </td>
         <td>
-            от
-            {{ Math.round(getMinPrice(items.stores)).toLocaleString('ru') }} ₽
+            <div class="" v-if="Math.round(getMinPrice(items.stores)) > 0">
+                от
+                {{ Math.round(getMinPrice(items.stores)).toLocaleString('ru') }} ₽
+            </div>            
         </td>
         <td class="hidden-mobile-l"></td>
         <td>
-            ~ {{ getMinDelivery(items.stores).delivery }} дней ({{
-                new Date(getMinDelivery(items.stores).delivery_day).toLocaleString('ru', {
-                    month: '2-digit',
-                    day: '2-digit',
-                    year: '2-digit'
-                })
-            }})
-        </td>
+            <div v-if="Math.round(getMinPrice(items.stores)) > 0">
+                ~ {{ getMinDelivery(items.stores).delivery }} дней ({{
+                    new Date(getMinDelivery(items.stores).delivery_day).toLocaleString('ru', {
+                        month: '2-digit',
+                        day: '2-digit',
+                        year: '2-digit'
+                    })
+                }})
+            </div>
+            </td>
         <td class="hidden-mobile-l"></td>
         <td>{{ items.total_stores }}</td>
         <td class="hidden-mobile-l"></td>
@@ -38,6 +42,7 @@
     <tr :data-info="JSON.stringify({id: item.remain_id, name: item.name, price: item.price, category: item.catalog, list: 'Catalog'})" :data-product="item.remain_id" class="kenost-product-item kenost-table-background" v-for="(item, index) in items.stores"
         v-bind:key="item.id" :class="{
             active: this.active || this.is_warehouses || items.total_stores == 1,
+            notavailable: item.available == 0,
             'no-active': !this.active && !this.is_warehouses && items.total_stores > 1,
             'bg-white': items.total_stores == 1
         }">
@@ -73,13 +78,15 @@
             </form>
         </td>
         <td>
-            {{ Math.round(item.price).toLocaleString('ru') }} ₽ <br />
-            {{ item.delay ? Number(item.delay).toFixed(1) + ' дн' : 'Предоплата' }}
+            <div class="kenost-product-item__price-info">
+                {{ Math.round(item.price).toLocaleString('ru') }} ₽ <br />
+                {{ item.delay ? Number(item.delay).toFixed(1) + ' дн' : 'Предоплата' }}
+            </div>
         </td>
         <td>
             <div class="table-actions">
                 <!-- 'red': action?.conflicts?.items[action.action_id]?.sales_conflicts -->
-                <div :data-test="(action?.tags?.length != 1 || (action?.tags?.length == 1 && action?.tags[0].type == 'sale' && action?.tags[0].value > 0) && action?.tags?.length != 0)" class="table-actions__action" :class="{active: action.enabled, red: isConflict(item.conflicts.items, item.actions, action.action_id), 'hidden': !(action?.tags?.length != 1 || (action?.tags?.length == 1 && action?.tags[0].type == 'sale' && action?.tags[0].value > 0) && action?.tags?.length != 0)}" v-for="(action, indexactions) in item.actions" v-bind:key="action.id">
+                <div :data-test="(action?.tags?.length != 1 || (action?.tags?.length == 1 && action?.tags[0].type == 'sale' && action?.tags[0].value > 0) && action?.tags?.length != 0)" class="table-actions__action" :class="{active: action.enabled, red: isConflict(item.conflicts.items, item.actions, action.action_id), 'hidden': !(action?.tags?.length != 1 || (action?.tags?.length == 1 && action?.tags[0].type == 'sale' && action?.tags[0].value > 0) && action?.tags?.length != 0)}" v-for="(action, indexactions) in item.actions" v-bind:key="action.action_id" :data-id="action?.action_id">
                     <div v-if="(action?.tags?.length != 1 || (action?.tags?.length == 1 && action?.tags[0].type == 'sale' && action?.tags[0].value > 0) && action?.tags?.length != 0)"  class="table-actions__container">
                         <!-- {{ action }} -->
                         <div class="table-actions__el" v-for="(tag, indextag) in action.tags" v-bind:key="tag.id">
@@ -136,7 +143,7 @@
               <p>Компл-т</p>
             </div> -->
                     </div>
-                    <div v-if="(action?.tags?.length != 1 || (action?.tags?.length == 1 && action?.tags[0].type == 'sale' && action?.tags[0].value > 0) && action?.tags?.length != 0)" class="table-actions__help">
+                    <div v-if="(action?.tags?.length != 1 || (action?.tags?.length == 1 && action?.tags[0].type == 'sale' && action?.tags[0].value > 0) && action?.tags?.length != 0)" class="table-actions__help" :data-id="action?.action_id">
                         <p :class="{
                             active: action.enabled,
                             red: isConflict(item.conflicts.items, item.actions, action.action_id)
@@ -297,27 +304,41 @@
             </div>
         </td>
         <td>
-            {{ item.payer === '1' ? 'Поставщик' : 'Покупатель' }} / <br />
-            ~ {{ item.delivery }} дней ({{
-                new Date(item.delivery_day).toLocaleString('ru', {
-                    month: '2-digit',
-                    day: '2-digit',
-                    year: '2-digit'
-                })
-            }})
+            <div class="kenost-product-item__delivery">
+                {{ item.payer === '1' ? 'Поставщик' : 'Покупатель' }} / <br />
+                ~ {{ item.delivery }} дней ({{
+                    new Date(item.delivery_day).toLocaleString('ru', {
+                        month: '2-digit',
+                        day: '2-digit',
+                        year: '2-digit'
+                    })
+                }})
+            </div>
         </td>
-        <td>{{ item.remains }} шт. <span v-if="item.req" class="kenost-err-min"><br>Не удовлетворяет Потребности</span></td>
+        <td>
+            <div v-if="item.available > 0">
+                {{ item.available }} шт. 
+                <span v-if="item.req" class="kenost-err-min"><br>Не удовлетворяет Потребности</span>
+            </div>
+            <div v-else>
+                <span class="kenost-err-min">Нет в наличии</span>
+            </div>
+        </td>
         <td>
             <span class="flex align-items-center justify-content-center gap-1 mb-1"><img :src="item.store_image"
                     class="kenost-table-elem__logo" alt="" /> {{ item.store_name }}</span>
             {{ item.store_city }}
         </td>
-        <td v-if="item.old_price > 0 && item.old_price != item.price">
-            {{ Math.round(item.old_price).toLocaleString('ru') }} ₽ <br />
-            {{ (item.old_price - item.price).toFixed(0).toLocaleString('ru') }}
-            ₽
+        <td>
+            <div class="kenost-product-item__profit_info" v-if="item.prices.rrc > 0 && item.prices.rrc != item.price">
+                {{ Math.round(item.prices.rrc).toLocaleString('ru') }} ₽ <br />
+                {{ (item.prices.rrc - item.price).toFixed(0).toLocaleString('ru') }}
+                ₽
+            </div>
+            <div class="kenost-product-item__profit_info" v-else>
+                {{ Math.round(item.price).toLocaleString('ru') }} ₽
+            </div>
         </td>
-        <td v-else>{{ Math.round(item.price).toLocaleString('ru') }} ₽</td>
     </tr>
     <!-- Вывод комплектов -->
     <tbody class="complect-button kenost-table-background kenost-table-background-complect"
@@ -542,14 +563,16 @@ export default {
         ...mapActions(['busket_from_api', 'opt_api']),
         ...mapMutations(['SET_OPT_PRODUCT_TO_VUEX']),
         getMinPrice(stores) {
-            let minPrice;
-
+            let minPrice = 0;
             for (let i = 0; i < stores.length; i++) {
                 if (i === 0) {
-                    // eslint-disable-next-line no-unused-vars
-                    minPrice = stores[i].price;
+                    if(stores[i].available > 0){
+                        minPrice = stores[i].price;
+                    }
                 } else if (stores[i].price < minPrice) {
-                    minPrice = stores[i].price;
+                    if(stores[i].available > 0){
+                        minPrice = stores[i].price;
+                    }
                 }
             }
 
@@ -983,6 +1006,16 @@ export default {
             position: relative;
             top: 1px;
         }
+    }
+}
+.kenost-product-item.notavailable{
+    opacity: .6;
+    .k-table__busket *,
+    .table-actions,
+    .kenost-product-item__delivery,
+    .kenost-product-item__profit_info,
+    .kenost-product-item__price-info{
+        display: none;
     }
 }
 </style>

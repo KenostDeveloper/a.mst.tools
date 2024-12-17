@@ -55,8 +55,9 @@
 						<div class="basket-container__adres" :style="{ background: org.org_data.color }">
 							{{ org.org_data.name }}
 						</div>
-						<div v-for="warehouse in org.data" v-bind:key="warehouse.warehouse_data.id">
+						<div v-for="warehouse in org.data" v-bind:key="warehouse.warehouse_data.id">							
 							<div class="kenost-product-basket" v-for="(product, p_key) in warehouse.data" v-bind:key="product.remain_id">
+								{{ console.log(product) }}
 								<div
 									class="kenost-basket"
 								>

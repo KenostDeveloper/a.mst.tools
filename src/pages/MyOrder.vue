@@ -33,10 +33,12 @@
 					<span>Отсрочка</span>
 					<div class="kenost-table-elem__content">{{ Number(this.order.delay) == 0 ? "Предоплата" : this.order.delay + ' дн.' }}</div>
 				</div>
+				<!--
 				<div class="w-full kenost-table-elem">
 					<span>Статус</span>
 					<div class="kenost-table-elem__content">{{ this.order.status_name }}</div>
 				</div>
+				-->
 			</div>
 			<div class="kenost-table-line">
 				<div><img src="../assets/images/icons/delivery.svg" alt=""></div>

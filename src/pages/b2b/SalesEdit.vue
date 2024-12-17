@@ -2526,8 +2526,6 @@ export default {
                                 this.selected_data[key].typePricing = this.typePricing[k_pricing]
                             }
                         }
-                    }else{
-                        this.selected_data[key].typePricing = this.typePricing[1]
                     }
                     if(this.selected_data[key].pricing_formula){
                         for (var k_formula in this.typeFormul) {
@@ -2535,8 +2533,6 @@ export default {
                                 this.selected_data[key].typeFormul = this.typeFormul[k_formula]
                             }
                         }
-                    }else{
-                        this.selected_data[key].typeFormul = this.typeFormul[1]
                     }
                     if(this.selected_data[key].type_price){
                         for (var k_price in this.selected[key].prices) {
@@ -2544,8 +2540,6 @@ export default {
                                 this.selected_data[key].typePrice = this.selected[key].prices[k_price]
                             }
                         }
-                    }else{
-                        this.selected_data[key].typePrice = this.selected[key].prices[0]
                     }
                     if(this.selected_data[key].percent){
                         this.selected_data[key].discountInterest = this.selected_data[key].percent
