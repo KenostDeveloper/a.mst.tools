@@ -7877,6 +7877,32 @@ button.std-icon__wrapper {
 	}
 }
 
+.loading-counter{
+	position: relative;
+	// color: transparent;
+	height: 100%;
+	pointer-events: none;
+
+	input{
+		visibility: hidden;
+	}
+
+	&::before {
+		content: "";
+		position: absolute;
+		height: 100%;
+		background-image: url(/images/loader.svg);
+		z-index: 10;
+		width: 20%;
+		max-width: 95px;
+		background-repeat: no-repeat;
+		background-position: center;
+		background-size: contain;
+		left: 50%;
+		transform: translate(-50%, 0px);
+	}
+}
+
 .loading {
 	position: relative;
 	color: transparent;

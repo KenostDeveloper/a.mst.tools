@@ -57,7 +57,7 @@
 						</div>
 						<div v-for="warehouse in org.data" v-bind:key="warehouse.warehouse_data.id">							
 							<div class="kenost-product-basket" v-for="(product, p_key) in warehouse.data" v-bind:key="product.remain_id">
-								{{ console.log(product) }}
+								<!-- {{ console.log(product) }} -->
 								<div
 									class="kenost-basket"
 								>
@@ -75,16 +75,18 @@
 										<div class="kenost-basket__info">
 											<span>{{ product.article }}</span>
 											<div class="kenost-basket__info-left">
-												<Counter
-													@ElemCount="ElemCount"
-													:item="{basket, product}"
-													:mini="true"
-													:min="1"
-													:max="product?.available"
-													:value="product?.count"
-													:id="product?.remain_id"
-													:key="product?.key"
-												/>
+												<div :class="{'loading-counter': this.fetchIds.indexOf(product.remain_id) != -1 }">
+													<Counter
+														@ElemCount="ElemCount"
+														:item="{basket, product}"
+														:mini="true"
+														:min="1"
+														:max="product?.available"
+														:value="product?.count"
+														:id="product?.remain_id"
+														:key="product?.key"
+													/>
+												</div>
 												<b>{{ (product?.cost).toLocaleString("ru") }} ₽</b>
 											</div>
 										</div>
@@ -346,7 +348,8 @@ export default {
 			basket: {},
 			cartLength: 0,
 			modal_remain: false,
-			timeOut: null
+			timeOut: null,
+			fetchIds: []
 		};
 	},
 	methods: {
@@ -396,7 +399,9 @@ export default {
 			}
 		},
 		ElemCount(object) {
-			console.log(object)
+			if (!this.fetchIds.includes(object.id)) {
+                this.fetchIds.push(object.id);
+            }
 			if (object.value > Number(object.max)) {
 				this.modal_remain = true;
 			} else {				
@@ -442,7 +447,12 @@ export default {
 					action: 'basket/get',
 					id: router.currentRoute._value.params.id,
 					warehouse: 'all'
-				})				
+				}).then((res) => {
+                    const index = this.fetchIds.indexOf(object.id);
+                    if (index !== -1) {
+                        this.fetchIds.splice(index, 1); // Удаляем один элемент по индексу
+                    }
+                });				
 			}
 		},
 		clearBasket() {
