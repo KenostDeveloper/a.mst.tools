@@ -1,5 +1,6 @@
 <template>
-    <form @submit.prevent="formSubmit" :class="{ loading: loading }">
+    <Loading v-if="loading" />
+    <form v-else @submit.prevent="formSubmit">
         <div class="profile-content__title sticky-element">
             <span class="maintitle">Настройка коллекции</span>
             <div class="buttons_container">
@@ -334,6 +335,7 @@ import TabView from "primevue/tabview";
 import TabPanel from "primevue/tabpanel";
 import Badge from 'primevue/badge';
 import router from '../../../router';
+import Loading from '../../../components/Loading.vue'
 
 export default {
 	name: "GroupEdit",
@@ -342,6 +344,7 @@ export default {
 	},
 	data() {
 		return {
+            loading: true,
             page: 1,
             perpage: 20,
 			stores: [],
@@ -604,7 +607,7 @@ export default {
                 id: this.$route.params.id,
 				action: "get",
                 group_id: this.$route.params.group_id
-            })
+            }).then(() => this.loading = false)
         }
 	},
 	components: {
@@ -622,7 +625,8 @@ export default {
         Paginate,
         TabView,
 		TabPanel,
-        Badge
+        Badge,
+        Loading
     },
 	computed: {
 		...mapGetters([

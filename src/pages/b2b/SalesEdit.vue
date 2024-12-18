@@ -1873,6 +1873,7 @@ export default {
                     };
                     this.selected_data[this.kenost_table[i]] = elem;
                 }
+                this.selected_data[this.kenost_table[i]].typeFormul = this.kenostActivityAll.typeFormul
                 switch (this.kenostActivityAll.type.key) {
                     case 0:
                         let sale = 0;
@@ -1916,12 +1917,18 @@ export default {
                                 break;
                         }
 
-                        //Устанавливаем цену со скидкой
-                        this.selected_data[this.kenost_table[i]].discountInRubles = sale
-                        this.selected_data[this.kenost_table[i]].finalPrice = Number(this.selected_data[this.kenost_table[i]].price) - sale
-                        //Расчет % скидки от РРЦ
-                        this.selected_data[this.kenost_table[i]].discountInterest = Number(this.selected_data[this.kenost_table[i]].discountInRubles) / (Number(this.selected_data[this.kenost_table[i]].price) / 100)
 
+                        if(isNaN(sale)){
+                            this.selected_data[this.kenost_table[i]].discountInRubles = 0
+                            this.selected_data[this.kenost_table[i]].finalPrice = Number(this.selected_data[this.kenost_table[i]].price)
+                            this.selected_data[this.kenost_table[i]].discountInterest = 0
+                        } else {
+                            //Устанавливаем цену со скидкой
+                            this.selected_data[this.kenost_table[i]].discountInRubles = sale
+                            this.selected_data[this.kenost_table[i]].finalPrice = Number(this.selected_data[this.kenost_table[i]].price) - sale
+                            //Расчет % скидки от РРЦ
+                            this.selected_data[this.kenost_table[i]].discountInterest = Number(this.selected_data[this.kenost_table[i]].discountInRubles) / (Number(this.selected_data[this.kenost_table[i]].price) / 100)
+                        }
                         break;
                     case 1:
                         // console.log(this.selected)
@@ -1947,6 +1954,10 @@ export default {
                             this.selected_data[this.kenost_table[i]].discountInterest = 
                                 100 - (isPrice.price / (price / 100));
                             }
+
+                            this.selected_data[this.kenost_table[i]].typePricing = {}
+                            this.selected_data[this.kenost_table[i]].typeFormul = {}
+                            this.selected_data[this.kenost_table[i]].percent = 0
                         }
                         break;
                     case 3:
@@ -2080,7 +2091,8 @@ export default {
                         page_geo: this.geo_action?.key,
                         page_place_position: this.position,
                         page_create: this.create_page_action[0] === 'true',
-                        hide_for_clients: this.form.hide_for_clients
+                        hide_for_clients: this.form.hide_for_clients,
+                        groups: groups_data
                     })
                         .then((result) => {
                             this.loading = false;
@@ -2604,7 +2616,6 @@ export default {
             this.selected_data[this.modals.product_id].finalPrice = Number(this.selected_data[this.modals.product_id].price) - sale
             //Расчет % скидки от РРЦ
             this.selected_data[this.modals.product_id].discountInterest = Number(this.selected_data[this.modals.product_id].discountInRubles) / (Number(this.selected_data[this.modals.product_id].price) / 100)
-
         }
     },
     mounted() {
