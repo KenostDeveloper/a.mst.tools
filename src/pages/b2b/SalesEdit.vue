@@ -773,8 +773,18 @@
                         <Dropdown v-model="this.kenostActivityAll.type" :options="this.massAction" optionLabel="name"
                             placeholder="Массовое действие" class="w-full md:w-14rem" />
                     </div>
+
+                    <div class="kenost-wiget" v-if="this.kenostActivityAll.type.key == 0">
+                        <p>Тип ценообразования</p>
+                        <Dropdown
+                            @change="setDiscountFormulMas()"
+                            v-model="this.kenostActivityAll.typePricing"
+                            :options="this.typePricing" optionLabel="name"
+                            class="w-full md:w-14rem" />
+                    </div>
+
                     <div class="kenost-wiget" :class="{ error: v$.kenostActivityAll.typePrice.$errors.length }"
-                        v-if="this.kenostActivityAll.type.key == 0 || this.kenostActivityAll.type.key == 1">
+                        v-if="(this.kenostActivityAll.type.key == 0 && this.kenostActivityAll?.typePricing?.key !=2) || this.kenostActivityAll.type.key == 1">
                         <p>Тип цен</p>
                         <Dropdown v-model="this.kenostActivityAll.typePrice" :options="this.typePrice"
                             optionLabel="name" placeholder="Тип цен" class="w-full md:w-14rem" />
@@ -797,7 +807,7 @@
                     <div class="kenost-wiget" :class="{ error: v$.kenostActivityAll.typeFormul.$errors.length }"
                         v-if="this.kenostActivityAll.type.key == 0">
                         <p>&nbsp;</p>
-                        <Dropdown v-model="kenostActivityAll.typeFormul" :options="this.typeFormul" optionLabel="name"
+                        <Dropdown :disabled="this.kenostActivityAll?.typePricing?.key != 2" v-model="kenostActivityAll.typeFormul" :options="this.typeFormul" optionLabel="name"
                             class="w-full md:w-14rem" />
 
                         <span class="error_desc" v-for="error of v$.kenostActivityAll.typeFormul.$errors"
@@ -1281,7 +1291,7 @@
                 </p>
             </div>
 
-            <div v-if="this.selected_data[this.modals.product_id]?.typePricing?.key == 2">
+            <div v-if="this.selected_data[this.modals.product_id]?.typePricing?.key == 2 && this.modals.price_step != 0">
                 <div class="dart-alert dart-alert-info mt-2">
                     Цена будет всегда оставаться неизменной, даже при изменении типов цен, РРЦ и любых других параметров товара.
                 </div>
@@ -1496,9 +1506,10 @@ export default {
                 type: {},
                 typePrice: {},
                 value: 0,
-                typeFormul: {},
+                typeFormul: { name: '%', key: 1 },
                 discountInterest: 0,
-                multiplicity: 1
+                multiplicity: 1,
+                typePricing: {name: 'Наценка', key: 1}
             },
             modals: {
                 delay: false,
@@ -1572,7 +1583,7 @@ export default {
             ],
             typePrice: [],
             massAction: [
-                { name: 'Скидка по формуле', key: 0 },
+                { name: 'Задать вручную', key: 0 },
                 { name: 'Тип цен', key: 1 },
                 { name: 'Кратность', key: 3 }
             ],
@@ -1649,7 +1660,7 @@ export default {
             this.$toast.add({ severity: 'info', summary: 'Файлы загружены', detail: 'Файл был успешно загружен', life: 3000 });
         },
         updateGroups(id){
-            console.log(this.action_groups[id])
+            // console.log(this.action_groups[id])
             this.build_group_api({
                 action: 'build',
                 id: this.$route.params.id,
@@ -1740,7 +1751,11 @@ export default {
                 };
                 this.selected_data[item.id] = elem;
             }else{
-                if(this.selected_data[item.id].percent){
+                if(this.selected_data[item.id].typePricing?.key == 3){
+                    this.saleValue = this.selected_data[item.id].finalPrice
+                } else if(this.selected_data[item.id].typePricing?.key == 2 && this.selected_data[item.id].typeFormul?.key == 0){
+                    this.saleValue = this.selected_data[item.id].price - this.selected_data[item.id].finalPrice
+                } else if(this.selected_data[item.id].percent){
                     this.saleValue = this.selected_data[item.id].percent
                 }
             }
@@ -1847,7 +1862,6 @@ export default {
         },
         massActionTable() {
             for (let i = 0; i < this.kenost_table.length; i++) {
-                // console.log(this.kenostActivityAll.type.key)
                 if (!this.selected_data[this.kenost_table[i]]) {
                     const elem = {
                         price: this.selected[this.kenost_table[i]].price,
@@ -1861,21 +1875,53 @@ export default {
                 }
                 switch (this.kenostActivityAll.type.key) {
                     case 0:
-                        this.selected_data[this.kenost_table[i]].typePrice = this.kenostActivityAll.typePrice;
-                        if (this.kenostActivityAll.typeFormul.key === 0) {
-                            this.selected[this.kenost_table[i]].finalPrice =
-                                Number(this.selected_data[this.kenost_table[i]].price) - this.kenostActivityAll.value;
-                            this.selected_data[this.kenost_table[i]].discountInRubles = this.kenostActivityAll.value;
-                            this.selected_data[this.kenost_table[i]].discountInterest =
-                                this.kenostActivityAll.value / (Number(this.selected_data[this.kenost_table[i]].price) / 100);
-                        } else {
-                            this.selected_data[this.kenost_table[i]].finalPrice =
-                                Number(this.selected_data[this.kenost_table[i]].price) -
-                                (Number(this.selected_data[this.kenost_table[i]].price) / 100) * this.kenostActivityAll.value;
-                            this.selected_data[this.kenost_table[i]].discountInRubles =
-                                this.selected_data[this.kenost_table[i]].finalPrice - Number(this.selected_data[this.kenost_table[i]].price);
-                            this.selected_data[this.kenost_table[i]].discountInterest = this.kenostActivityAll.value;
+                        let sale = 0;
+
+                        const isTypePrice = this.selected[this.kenost_table[i]].prices.find((r) => r.guid === this.kenostActivityAll.typePrice.key);
+                        if(isTypePrice){
+                            this.selected_data[this.kenost_table[i]].typePrice = this.kenostActivityAll.typePrice;
+                            sale = Number(this.selected_data[this.kenost_table[i]].price) - Number(isTypePrice.price)
                         }
+                        
+                        this.selected_data[this.kenost_table[i]].typePricing = this.kenostActivityAll.typePricing;
+                        switch(this.kenostActivityAll.typePricing.key){
+                            case 1:
+                                if(this.kenostActivityAll.value){
+                                    let salePercent = (100 - ((Number(this.selected_data[this.kenost_table[i]].price) - sale) * (1.5 + (1.7 - 1.5) * (this.kenostActivityAll.value - 50) / (70 - 50))) * 100 / (Number(this.selected_data[this.kenost_table[i]].price)))
+                                    sale = Number(this.selected_data[this.kenost_table[i]].price) - Number(this.selected_data[this.kenost_table[i]].price) * (1 - salePercent / 100)
+                                    this.selected_data[this.kenost_table[i]].percent = this.kenostActivityAll.value
+                                }
+                                break;
+                            case 2:
+                                sale = 0;
+                                this.selected_data[this.kenost_table[i]].typePrice = ""
+                                if(this.kenostActivityAll.value && this.kenostActivityAll.typeFormul){
+                                    if(this.kenostActivityAll.value && this.kenostActivityAll?.typeFormul?.key == 1){
+                                        let salePrice = (Number(this.selected_data[this.kenost_table[i]].price) - sale)*(1-this.kenostActivityAll.value/100)
+                                        sale = Number(this.selected_data[this.kenost_table[i]].price) - salePrice
+                                        this.selected_data[this.kenost_table[i]].percent = this.kenostActivityAll.value
+                                    } else {
+                                        let salePrice = Number(this.selected_data[this.kenost_table[i]].price) - sale - this.kenostActivityAll.value
+                                        sale = Number(this.selected_data[this.kenost_table[i]].price) - salePrice
+                                        this.selected_data[this.kenost_table[i]].percent = 0;
+                                    }
+                                }
+                                break;
+                            case 3:
+                                // console.log(this.selected_data[this.modals.product_id])
+                                if(this.kenostActivityAll.value){
+                                    sale = Number(this.selected_data[this.kenost_table[i]].price) - this.kenostActivityAll.value
+                                    this.selected_data[this.kenost_table[i]].percent = 0;
+                                }
+                                break;
+                        }
+
+                        //Устанавливаем цену со скидкой
+                        this.selected_data[this.kenost_table[i]].discountInRubles = sale
+                        this.selected_data[this.kenost_table[i]].finalPrice = Number(this.selected_data[this.kenost_table[i]].price) - sale
+                        //Расчет % скидки от РРЦ
+                        this.selected_data[this.kenost_table[i]].discountInterest = Number(this.selected_data[this.kenost_table[i]].discountInRubles) / (Number(this.selected_data[this.kenost_table[i]].price) / 100)
+
                         break;
                     case 1:
                         // console.log(this.selected)
@@ -1907,7 +1953,6 @@ export default {
                         this.selected_data[this.kenost_table[i]].multiplicity = this.kenostActivityAll.multiplicity;
                         break;
                 }
-                // console.log(this.selected[this.kenost_table[i]])
             }
         },
         setFilter() {
@@ -2495,6 +2540,18 @@ export default {
             }
             this.updateGroups(this.modals.group_id)
         },
+        setDiscountFormulMas(){
+            if(this.kenostActivityAll.typePricing){
+                switch(this.kenostActivityAll.typePricing.key){
+                    case 1:
+                        this.kenostActivityAll.typeFormul = { name: '%', key: 1 }
+                        break;
+                    case 3:
+                    this.kenostActivityAll.typeFormul = {key: 0, name: "₽"}
+                        break;
+                }
+            }
+        },
         setDiscountFormul() {
             let sale = 0;
             if(this.selected_data[this.modals.product_id].typePrice){
@@ -2516,6 +2573,9 @@ export default {
                         }
                         break;
                     case 2:
+                        sale = 0;
+                        this.selected_data[this.modals.product_id].typePrice = ""
+
                         if(this.saleValue && this.selected_data[this.modals.product_id].typeFormul){
                             if(this.saleValue && this.selected_data[this.modals.product_id]?.typeFormul?.key == 1){
                                 let salePrice = (Number(this.selected_data[this.modals.product_id].price) - sale)*(1-this.saleValue/100)
@@ -2524,6 +2584,7 @@ export default {
                             } else {
                                 let salePrice = Number(this.selected_data[this.modals.product_id].price) - sale - this.saleValue
                                 sale = Number(this.selected_data[this.modals.product_id].price) - salePrice
+                                this.selected_data[this.modals.product_id].percent = 0;
                             }
                             
                         }
@@ -2533,6 +2594,7 @@ export default {
                         this.selected_data[this.modals.product_id].typeFormul = {key: 0, name: "₽"}
                         if(this.saleValue){
                             sale = Number(this.selected_data[this.modals.product_id].price) - this.saleValue
+                            this.selected_data[this.modals.product_id].percent = 0
                         }
                 }
             }
@@ -2542,38 +2604,7 @@ export default {
             this.selected_data[this.modals.product_id].finalPrice = Number(this.selected_data[this.modals.product_id].price) - sale
             //Расчет % скидки от РРЦ
             this.selected_data[this.modals.product_id].discountInterest = Number(this.selected_data[this.modals.product_id].discountInRubles) / (Number(this.selected_data[this.modals.product_id].price) / 100)
-            // console.log(this.selected_data[this.modals.product_id])
 
-            // if()
-            
-            // if (type && value >= 0 && typePrice) {
-            //     this.setTypePrice();
-            //     value = Number(value);
-            //     this.selected_data[this.modals.product_id].price = this.selected[this.modals.product_id].price;
-            //     let getPrice = Number(this.selected_data[this.modals.product_id].price);
-
-            //     if (this.selected_data[this.modals.product_id].typePrice) {
-            //         // eslint-disable-next-line no-unused-vars
-            //         getPrice = Number(
-            //             this.selected[this.modals.product_id].prices.find((r) => r.guid === this.selected_data[this.modals.product_id].typePrice.guid)
-            //                 .price
-            //         );
-            //     }
-            //     if (type.key === 0) {
-            //         this.selected_data[this.modals.product_id].discountInRubles =
-            //             Number(this.selected_data[this.modals.product_id].price) - (getPrice - value);
-            //         this.selected_data[this.modals.product_id].discountInterest =
-            //             (Number(this.selected_data[this.modals.product_id].price) - (getPrice - value)) /
-            //             (Number(this.selected_data[this.modals.product_id].price) / 100);
-            //         this.selected_data[this.modals.product_id].finalPrice = getPrice - value;
-            //     } else if (type.key === 1) {
-            //         this.selected_data[this.modals.product_id].discountInRubles =
-            //             Number(this.selected_data[this.modals.product_id].price) - (getPrice - value * (getPrice / 100));
-            //         this.selected_data[this.modals.product_id].discountInterest =
-            //             (value * (getPrice / 100)) / (Number(this.selected_data[this.modals.product_id].price) / 100);
-            //         this.selected_data[this.modals.product_id].finalPrice = getPrice - value * (getPrice / 100);
-            //     }
-            // }
         }
     },
     mounted() {
@@ -2831,31 +2862,29 @@ export default {
                 this.form.dates = [datefrom, dateto];
                 this.selected = newVal.products;
                 this.selected_data = newVal.products_data;
-                // console.log(this.selected)
-                // console.log(this.selected_data)
                 for (var key in this.selected_data) {
-                    if(this.selected_data[key].pricing_type){
+                    if(this.selected_data[key].pricing_type !== undefined && this.selected_data[key].pricing_type !== null ){
                         for (var k_pricing in this.typePricing) {
                             if(this.typePricing[k_pricing].key == this.selected_data[key].pricing_type){
                                 this.selected_data[key].typePricing = this.typePricing[k_pricing]
                             }
                         }
                     }
-                    if(this.selected_data[key].pricing_formula){
+                    if(this.selected_data[key].pricing_formula !== undefined && this.selected_data[key].pricing_formula !== null){
                         for (var k_formula in this.typeFormul) {
                             if(this.typeFormul[k_formula].key == this.selected_data[key].pricing_formula){
                                 this.selected_data[key].typeFormul = this.typeFormul[k_formula]
                             }
                         }
                     }
-                    if(this.selected_data[key].type_price){
+                    if(this.selected_data[key].type_price !== undefined && this.selected_data[key].type_price !== null){
                         for (var k_price in this.selected[key].prices) {
                             if(this.selected[key].prices[k_price].guid == this.selected_data[key].type_price){
                                 this.selected_data[key].typePrice = this.selected[key].prices[k_price]
                             }
                         }
                     }
-                    if(this.selected_data[key].percent){
+                    if(this.selected_data[key].percent !== undefined && this.selected_data[key].percent !== null){
                         this.selected_data[key].discountInterest = this.selected_data[key].percent
                     }
                 }
