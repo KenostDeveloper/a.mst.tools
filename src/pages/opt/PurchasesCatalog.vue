@@ -177,10 +177,14 @@ export default {
 		]),
 		pagClickCallback(pageNum) {
 			this.page = pageNum;
+			this.loading = true
 			this.get_opt_products_from_api({
 				page: this.page,
 				perpage: this.perpage,
-			}).then((this.opt_products = this.optproducts));
+			}).then(() => {
+				this.opt_products = this.optproducts
+				this.loading = false
+			});
 		},
 		loadingCheack(num) {
 			if (this.loading_elems.length == num) {
