@@ -4,54 +4,25 @@
 		<div class="std-title__container">
 			<h1 class="std-title title-h1">Оптовые заказы</h1>
 		</div>
-			<!-- 
-			<div class="std-table__wrapper">
-				<table class="std-table">
-					<thead class="std-table__head">
-						<tr class="std-table__row">
-							<th class="std-table__hcol">№</th>
-							<th class="std-table__hcol">Дата создания</th>
-							<th class="std-table__hcol">Сумма</th>
-							<th class="std-table__hcol">Оплата доставки</th>
-							<th class="std-table__hcol">Клиент</th>
-							<th class="std-table__hcol">Склад</th>
-							<th class="std-table__hcol">Отсрочка</th>
-							<th class="std-table__hcol">Объем товарво, кг</th>
-							<th class="std-table__hcol">Кол-во товаров, шт</th>
-							<th class="std-table__hcol">Статус</th>
-						</tr>
-					</thead>
-					<tbody class="std-table__body">
-						<tr class="std-table__row" v-for="item in my_orders.orders" v-bind:key="item.id" style="cursor: pointer" @click.prevent="$router.push({ name: 'my_orders_opt_id', params: { id: this.$route.params.id, order_id: item.id } })">
-							<td class="std-table__col">{{ item.id }}</td>
-							<td class="std-table__col">{{ new Date(item.date).toLocaleString('ru', {year: '2-digit', month: '2-digit', day: '2-digit', hour: 'numeric', minute: 'numeric'}) }}</td>
-							<td class="std-table__col">{{ Number(item.cost).toLocaleString('ru') }} ₽</td>
-							<td class="std-table__col">{{ item.payer === '1' ? 'Поставщик' : 'Покупатель'}}</td>
-							<td class="std-table__col flex align-items-center gap-1 justify-content-center"><img class="kenost-table-elem__logo" :src="item.buyer_image">{{ item.buyer_name }}</td>
-							<td class="std-table__col">{{ item.seller_address }}</td>
-							<td class="std-table__col">{{ Number(item.delay) == 0 ? "Предоплата" : item.delay + ' дн.' }}</td>
-						</tr>
-					</tbody>
-				</table>
-				{{ shipping.shipment }}
-
-			</div> -->
-			<v-table
-				:items_data="my_orders.orders"
-				:total="my_orders.total"
-				:pagination_items_per_page="this.pagination_items_per_page"
-				:pagination_offset="this.pagination_offset"
-				:page="this.page"
-				:table_data="this.table_data"
-				:editMode="this.editMode"
-				@filter="filter"
-				@setAllCheck="setAll"
-				@sort="filter"
-				@paginate="paginate"
-				@clickElem="clickElem"
-				@checkElem="checkElem"
-			>
-			</v-table>
+		<v-table
+			:items_data="my_orders.orders"
+			:total="my_orders.total"
+			:pagination_items_per_page="this.pagination_items_per_page"
+			:pagination_offset="this.pagination_offset"
+			:page="this.page"
+			:table_data="this.table_data"
+			@filter="filter"
+			@sort="filter"
+			@paginate="paginate"
+			:link_row="{
+				link_to: 'my_orders_opt_id',
+				link_params: {
+					id: this.$route.params.id,
+					order_id: 'id',
+				},
+			}"
+		>
+		</v-table>
 	</div>
 </template>
 
@@ -73,7 +44,7 @@ export default {
 	props: {
 		pagination_items_per_page: {
       type: Number,
-      default: 25
+      default: 24
     },
     pagination_offset: {
       type: Number,
@@ -83,65 +54,45 @@ export default {
 	data() {
 		return {
 			page: 1,
+			filters: {
+				name: {
+					name: "Наименование Организации",
+					placeholder: "Наименование Организации",
+					type: "text",
+				}
+			},
 			table_data: {
         id: {
           label: 'Номер',
-          type: 'link',
-          link_to: 'my_orders_opt_id',
-          link_params: {
-            id: this.$route.params.id,
-            order_id: 'id'
-          },
+          type: 'text',
           sort: true
         },
         buyer: {
           label: 'Покупатель',
-          type: 'link',
-          link_to: 'my_orders_opt_id',
-          link_params: {
-            id: this.$route.params.id,
-            order_id: 'id'
-          }
-        },
-        createdon: {
-          label: 'Дата',
-          type: 'link',
-          link_to: 'my_orders_opt_id',
-          link_params: {
-            id: this.$route.params.id,
-            order_id: 'id'
-          },
+          type: 'text',
           sort: true
         },
-        // status: {
-        //   label: 'Статус',
-        //   type: 'status'
-        // },
+        date: {
+          label: 'Дата',
+          type: 'text',
+          sort: true
+        },
         cost: {
           label: 'Сумма',
-          type: 'link',
-          link_to: 'my_orders_opt_id',
-          link_params: {
-            id: this.$route.params.id,
-            order_id: 'id'
-          },
+          type: 'text',
           sort: true
         },
-				seller: {
+				seller_w_name: {
           label: 'Магазин/Склад',
-          type: 'link',
-          link_to: 'my_orders_opt_id',
-          link_params: {
-            id: this.$route.params.id,
-            order_id: 'id'
-          }
+          type: 'text',
+          sort: true
         }
       }
 		};
 	},
 	methods: {
 		...mapActions([
-            'get_opt_my_order_api'
+      'get_opt_my_order_api'
 		]),
 		filter (data) {
 			data.id = router.currentRoute._value.params.id

@@ -18,19 +18,19 @@
 				</div>
 				<div class="w-full kenost-table-elem">
 					<span>Дата создания</span>
-					<div class="kenost-table-elem__content">{{ new Date(this.order.date).toLocaleString('ru', {year: '2-digit', month: '2-digit', day: '2-digit', hour: 'numeric', minute: 'numeric'}) }}</div>
+					<div class="kenost-table-elem__content">{{ this.order.date }}</div>
 				</div>
 				<div class="w-full kenost-table-elem">
 					<span>Сумма</span>
-					<div class="kenost-table-elem__content">{{ Number(this.order.cost).toLocaleString('ru') }} ₽</div>
+					<div class="kenost-table-elem__content">{{ this.order.cost }}</div>
 				</div>
 				<div class="w-full kenost-table-elem">
 					<span>Клиент</span>
-					<div class="kenost-table-elem__content gap-2"><img class="kenost-table-elem__logo" :src="this.order.buyer_image">{{ this.order.buyer_name }}</div>
+					<div class="kenost-table-elem__content gap-2"><img class="kenost-table-elem__logo" :src="this.order.buyer_image" v-if="this.order.buyer_image">{{ this.order.buyer }}</div>
 				</div>
 				<div class="w-full kenost-table-elem">
 					<span>Отсрочка</span>
-					<div class="kenost-table-elem__content">{{ Number(this.order.delay) == 0 ? "Предоплата" : this.order.delay + ' дн.' }}</div>
+					<div class="kenost-table-elem__content">{{ this.order.delay }}</div>
 				</div>
 				<!--
 					<div class="w-full kenost-table-elem">
@@ -46,11 +46,11 @@
 			<div class="w-full flex">
 				<div class="w-full kenost-table-elem">
 					<span>Оплата доставки</span>
-					<div class="kenost-table-elem__content">{{ this.order.payer === '1' ? 'Поставщик' : 'Покупатель'}}</div>
+					<div class="kenost-table-elem__content">{{ this.order.payer }}</div>
 				</div>
 				<div class="w-full kenost-table-elem">
 					<span>Срок доставки</span>
-					<div class="kenost-table-elem__content">{{ this.order.day_delivery }} дн. ({{new Date(this.order.delivery_date).toLocaleString("ru", {month: '2-digit', day: '2-digit', year: '2-digit'})}})</div>
+					<div class="kenost-table-elem__content">{{ this.order.day_delivery }} дн. ({{ this.order.delivery_date }})</div>
 				</div>
 				<div class="w-full kenost-table-elem">
 					<span>Склад</span>
@@ -116,7 +116,7 @@
 				</tbody>
 			</table>
 			<div class="kenost-table-line right">
-				<b>Итого: {{Number(this.order.cost).toLocaleString('ru')}} ₽ </b>
+				<b>Итого: {{ this.order.cost }} </b>
 			</div>
 		</div>
 	</div>

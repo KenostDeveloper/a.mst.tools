@@ -1,7 +1,6 @@
 <template>
 	<div class="shipping std-shipping std-my-order">
-        <Breadcrumbs />
-
+    <Breadcrumbs />
 		<div class="std-shipping__title-container hidden-tablet-l">
 			<h1 class="table-kenost__title std-shipping__title">Заказ № {{ this.order?.id }}</h1>
 			<button class="dart-btn dart-btn-primary std-shipping__button" @click="repeat_order">Повторить заказ</button>
@@ -19,19 +18,19 @@
 				</div>
 				<div class="w-full kenost-table-elem">
 					<span>Дата создания</span>
-					<div class="kenost-table-elem__content">{{ new Date(this.order.date).toLocaleString('ru', {year: '2-digit', month: '2-digit', day: '2-digit', hour: 'numeric', minute: 'numeric'}) }}</div>
+					<div class="kenost-table-elem__content">{{ this.order.date }}</div>
 				</div>
 				<div class="w-full kenost-table-elem">
 					<span>Сумма</span>
-					<div class="kenost-table-elem__content">{{ Number(this.order.cost).toLocaleString('ru') }} ₽</div>
+					<div class="kenost-table-elem__content">{{ this.order.cost }}</div>
 				</div>
 				<div class="w-full kenost-table-elem">
 					<span>Поставщик</span>
-					<div class="kenost-table-elem__content"><img class="kenost-table-elem__logo" :src="this.order.seller_image">{{ this.order.name_short }}</div>
+					<div class="kenost-table-elem__content"><img class="kenost-table-elem__logo" :src="this.order.seller_image" v-if="this.order.seller_image">{{ this.order.seller_name }}</div>
 				</div>
 				<div class="w-full kenost-table-elem">
 					<span>Отсрочка</span>
-					<div class="kenost-table-elem__content">{{ Number(this.order.delay) == 0 ? "Предоплата" : this.order.delay + ' дн.' }}</div>
+					<div class="kenost-table-elem__content">{{ this.order.delay }}</div>
 				</div>
 				<!--
 				<div class="w-full kenost-table-elem">
@@ -47,11 +46,11 @@
 			<div class="w-full flex">
 				<div class="w-full kenost-table-elem">
 					<span>Оплата доставки</span>
-					<div class="kenost-table-elem__content">{{ this.order.payer === '1' ? 'Поставщик' : 'Покупатель'}}</div>
+					<div class="kenost-table-elem__content">{{ this.order.payer }}</div>
 				</div>
 				<div class="w-full kenost-table-elem">
 					<span>Срок доставки</span>
-					<div class="kenost-table-elem__content">{{ this.order.day_delivery }} дн. ({{new Date(this.order.delivery_date).toLocaleString("ru", {month: '2-digit', day: '2-digit', year: '2-digit'})}})</div>
+					<div class="kenost-table-elem__content">{{ this.order.day_delivery }} дн. ({{ this.order.delivery_date }})</div>
 				</div>
 				<div class="w-full kenost-table-elem">
 					<span>Склад</span>
@@ -87,27 +86,29 @@
 						<td class="std-table__col">{{ Number(item.price).toLocaleString('ru') }} ₽</td>
 						<td class="std-table__col table-actions">
 							<div class="table-actions__action active w-fit" v-for="(action, indexactions) in item.actions" v-bind:key="action.action_id" :class="{active: action.enabled}">
-								<div v-if="action.tags.length > 0" class="table-actions__container">
-									<div class="table-actions__el" v-for="(tag, indextag) in action.tags" v-bind:key="tag.id">
-										<img v-if="tag.type == 'multiplicity'" src="/images/icons/action/gray/box.svg" alt="">
-										<p class="w-fit" v-if="tag.type == 'multiplicity'">{{ tag.value }} шт.</p>
-
-										<img v-if="tag.type == 'min'" src="/images/icons/action/gray/min.svg" alt="">
-
-										<img v-if="tag.type == 'gift'" src="/images/icons/action/gray/gift.svg" alt="">
-
-										<img v-if="tag.type == 'delay'" src="/images/icons/action/gray/time.svg" alt="">
-										<p class="w-fit" v-if="tag.type == 'delay'">Отсроч. {{ tag.value }} дн.</p>
-
-										<img v-if="tag.type == 'sale' && tag.value > 0" src="/images/icons/action/gray/sale.svg" alt="">
-										<p class="w-fit" v-if="tag.type == 'sale'">Скидка {{ Number(tag.value).toFixed(0) }}%</p>
-
-										<img v-if="tag.type == 'free_delivery'" src="/images/icons/action/gray/delivery.svg" alt="">
+								<div v-if="action.tags && action.action_id">
+									<div v-if="action.tags.length > 0" class="table-actions__container">
+										<div class="table-actions__el" v-for="(tag, indextag) in action.tags" v-bind:key="tag.id">
+											<img v-if="tag.type == 'multiplicity'" src="/images/icons/action/gray/box.svg" alt="">
+											<p class="w-fit" v-if="tag.type == 'multiplicity'">{{ tag.value }} шт.</p>
+	
+											<img v-if="tag.type == 'min'" src="/images/icons/action/gray/min.svg" alt="">
+	
+											<img v-if="tag.type == 'gift'" src="/images/icons/action/gray/gift.svg" alt="">
+	
+											<img v-if="tag.type == 'delay'" src="/images/icons/action/gray/time.svg" alt="">
+											<p class="w-fit" v-if="tag.type == 'delay'">Отсроч. {{ tag.value }} дн.</p>
+	
+											<img v-if="tag.type == 'sale' && tag.value > 0" src="/images/icons/action/gray/sale.svg" alt="">
+											<p class="w-fit" v-if="tag.type == 'sale'">Скидка {{ Number(tag.value).toFixed(0) }}%</p>
+	
+											<img v-if="tag.type == 'free_delivery'" src="/images/icons/action/gray/delivery.svg" alt="">
+										</div>
 									</div>
-								</div>
-								<div v-if="action.tags.length > 0" class="table-actions__help">
-									<p>?</p>
-									<ActionModal :action="action"/>
+									<div v-if="action.tags.length > 0" class="table-actions__help">
+										<p>?</p>
+										<ActionModal :action="action"/>
+									</div>
 								</div>
 							</div>
 						</td>
@@ -117,32 +118,10 @@
 				</tbody>
 			</table>
 			<div class="kenost-table-line right">
-				<b>Итого: {{Number(this.order.cost).toLocaleString('ru')}} ₽ </b>
+				<b>Итого: {{ this.order.cost }}</b>
 			</div>
 		</div>
 	</div>
-	<Basket @actionUpdate="actionUpdate" ref="childComponent" @toOrder="toOrder" />
-	<OrderModal :show="show_order" @fromOrder="fromOrder" />
-
-	<Dialog v-model:visible="this.modal_products" header="Список товаров, которых не хватает у продавца на складе"
-        :style="{ width: '640px' }">
-        <div class="kenost-list-error">
-            <table>
-                <tr>
-                    <th>Артикул</th>
-					<th>Наименование</th>
-					<th>Необходимое количество</th>
-					<th>Остаток у продавца</th>
-                </tr>
-                <tr v-for="(item, index) in this.list" :key="item.id">
-                    <td class="text-center">{{ item.article }}</td>
-					<td class="text-center">{{ item.name }}</td>
-                    <td class="text-center">{{ item.value }}</td>
-					<td class="text-center">{{ item.available }}</td>
-                </tr>
-            </table>
-        </div>
-    </Dialog>
 </template>
 
 <script>
@@ -176,7 +155,7 @@ export default {
 	},
 	methods: {
 		...mapActions([
-            'get_opt_order_api',
+      'get_opt_order_api',
 			'opt_api',
 			'busket_from_api'
 		]),
@@ -247,8 +226,8 @@ export default {
 	},
 	computed: {
 		...mapGetters([
-            'optorder'
-        ]),
+			'optorder'
+		]),
 	},
 	watch: {
 		optorder: function (newVal, oldVal) {

@@ -1,109 +1,40 @@
 <template>
-	<div class="shipping std-shipping">
-		<div class="std-shipping__title-container hidden-tablet-l">
-			<h1 class="table-kenost__title std-shipping__title">Мои заказы</h1>
-		</div>
-
-		<div class="std-shipping__title-container visible-tablet-l">
-				<p class="table-kenost__title std-shipping__title">Отгрузки</p>
-			</div>
-
-			<div
-				:class="`shipping-calendar std-calendar ${
-					this.calendarIsExpanded ? 'std-calendar--active' : ''
-				} visible-desktop-s`"
-			>
-				<div class="shipping-calendar__head std-calendar__head">
-					<p>Календарь отгрузок</p>
-					<div class="std-calendar__actions">
-						<div
-							class="std-calendar__expand-button hidden-tablet-l"
-							@click="this.calendarIsExpanded = !this.calendarIsExpanded"
-						>
-							<i class="pi pi-angle-up"></i>
-						</div>
-						<div class="dart-btn dart-btn-primary std-plus-icon__wrapper" @click="this.showShip = true">
-							<i class="pi pi-plus"></i>
-						</div>
-					</div>
+	<div class="clients retails">
+		<Breadcrumbs />
+		<v-table
+			class=""
+			:filters="this.filters"
+			:items_data="my_orders.orders"
+			:total="my_orders.total"
+			:pagination_items_per_page="this.pagination_items_per_page"
+			:pagination_offset="this.pagination_offset"
+			:page="this.page"
+			:table_data="this.table_data"
+			title="Мои заказы"
+			@filter="filter_opt_my"
+			@sort="filter_opt_my"
+			@paginate="paginate_opt_my"
+			:link_row="{
+				link_to: 'my_orders_id',
+				link_params: {
+					id: this.$route.params.id,
+					order_id: 'id',
+				},
+			}"
+		>
+			<template v-slot:button>
+				<div>
+					
 				</div>
-				<Calendar
-					class="shipping-calendar-css std-calendar__content"
-					is-expanded
-					title-position="left"
-					:attributes="attributes"
-					:masks="{ weekdays: 'WW' }"
-					:modelValue="checkDate"
-					content="red"
-					@dayclick="dayClicked"
-				/>
-				<div class="calendar-associations">
-					<p class="calendar-associations__blue">— дни, в которые есть отгрузка</p>
-				</div>
-			</div>
-
-			<!-- <v-table
-				class="std-shipping__filters"
-				:filters="this.filters"
-				:items_data="shipping.shipment"
-				:total="shipping.total"
-				:pagination_items_per_page="this.pagination_items_per_page"
-				:pagination_offset="this.pagination_offset"
-				:page="this.page"
-				:table_data="this.table_data"
-				:editMode="this.editMode"
-				title="Отгрузки"
-				@filter="filter"
-				@setAllCheck="setAll"
-				@sort="filter"
-				@paginate="paginate"
-				@clickElem="clickElem"
-				@checkElem="checkElem"
-			>
-				<template v-slot:button>
-					<div>
-						
-					</div>
-				</template>
-			</v-table> -->
-
-			<div class="std-table__wrapper">
-				<table class="std-table">
-					<thead class="std-table__head">
-						<tr class="std-table__row">
-							<th class="std-table__hcol">№</th>
-							<th class="std-table__hcol">Дата создания</th>
-							<th class="std-table__hcol">Сумма</th>
-							<th class="std-table__hcol">Оплата доставки</th>
-							<th class="std-table__hcol">Поставщик</th>
-							<th class="std-table__hcol">Склад</th>
-							<th class="std-table__hcol">Отсрочка</th>
-							<!-- <th class="std-table__hcol">Объем товарво, кг</th>
-							<th class="std-table__hcol">Кол-во товаров, шт</th>
-							<th class="std-table__hcol">Статус</th> -->
-						</tr>
-					</thead>
-					<tbody class="std-table__body">
-						<tr class="std-table__row" v-for="item in my_orders.orders" v-bind:key="item.id" style="cursor: pointer" @click.prevent="$router.push({ name: 'my_orders_id', params: { id: this.$route.params.id, order_id: item.id } })">
-							<td class="std-table__col">{{ item.id }}</td>
-							<td class="std-table__col">{{ new Date(item.date).toLocaleString('ru', {year: '2-digit', month: '2-digit', day: '2-digit', hour: 'numeric', minute: 'numeric'}) }}</td>
-							<td class="std-table__col">{{ Number(item.cost).toLocaleString('ru') }} ₽</td>
-							<td class="std-table__col">{{ item.payer === '1' ? 'Поставщик' : 'Покупатель'}}</td>
-							<td class="std-table__col">{{ item.store_name }}</td>
-							<td class="std-table__col">{{ item.seller_address }}</td>
-							<td class="std-table__col">{{ Number(item.delay) == 0 ? "Предоплата" : item.delay + ' дн.' }}</td>
-						</tr>
-					</tbody>
-				</table>
-				<!-- {{ shipping.shipment }} -->
-
-			</div>
+			</template>
+		</v-table>
 	</div>
 </template>
 
 <script>
 import { mapActions, mapGetters, mapMutations } from "vuex";
-  import router from '../router'
+import router from '../router'
+import Breadcrumbs from "../components/Breadcrumbs.vue";
 import AutoComplete from "primevue/autocomplete";
 import Dropdown from "primevue/dropdown";
 import MultiSelect from "primevue/multiselect";
@@ -116,34 +47,92 @@ import Dialog from "primevue/dialog";
 export default {
 	name: "MyOrders",
 	props: {
+		pagination_items_per_page: {
+			type: Number,
+			default: 24,
+		},
+		pagination_offset: {
+			type: Number,
+			default: 0,
+		}
 	},
 	data() {
 		return {
-			
+			page: 1,
+			filters: {
+				name: {
+					name: "Наименование Организации",
+					placeholder: "Наименование Организации",
+					type: "text",
+				}
+			},
+			table_data: {
+				id: {
+					label: "№",
+					type: "link",
+					link_to: "my_orders_id",
+					link_params: {
+						id: this.$route.params.id,
+						order_id: "id",
+					},
+					sort: true,
+				},
+				date: {
+					label: "Дата создания",
+					type: "text",
+					sort: true,
+				},
+				cost: {
+					label: "Сумма",
+					type: "text",
+					sort: true,
+				},
+				payer: {
+					label: "Оплата доставки",
+					type: "text",
+					sort: true,
+				},
+				seller_name: {
+					label: "Поставщик",
+					type: "text",
+					sort: true,
+				},
+				seller_address: {
+					label: "Склад Поставщика",
+					type: "text",
+					sort: true,
+				},
+				delay: {
+					label: "Отсрочка",
+					type: "text",
+					sort: true,
+				}
+			},
 		};
 	},
 	methods: {
 		...mapActions([
-            'get_opt_my_order_api'
+			'get_opt_my_order_api'
 		]),
-        filter_opt_my (data) {
-            data.id = router.currentRoute._value.params.id
-            data.action = 'get/orders/buyer'
-            this.get_opt_my_order_api(data)
-        },
-        paginate_opt_my (data) {
-            data.id = router.currentRoute._value.params.id
-            data.action = 'get/orders/buyer'
-            this.get_opt_my_order_api(data)
-        }
+		filter_opt_my (data) {
+			data.id = router.currentRoute._value.params.id
+			data.action = 'get/orders/buyer'
+			this.get_opt_my_order_api(data)
+		},
+		paginate_opt_my (data) {
+			this.page = data.page
+			data.id = router.currentRoute._value.params.id
+			data.action = 'get/orders/buyer'
+			this.get_opt_my_order_api(data)
+		}
 	},
 	mounted() {
 		this.get_opt_my_order_api({
-            action: 'get/orders/buyer',
-            id: router.currentRoute._value.params.id,
-            page: this.page_opt,
-            perpage: this.pagination_items_per_page_opt
-        })
+			action: 'get/orders/buyer',
+			id: router.currentRoute._value.params.id,
+			page: this.page,
+			perpage: this.pagination_items_per_page
+    })
 	},
 	components: {
 		Dropdown,
@@ -151,6 +140,7 @@ export default {
 		AutoComplete,
 		Calendar,
 		DatePicker,
+		Breadcrumbs,
 		// customModal,
 		vTable,
 		Dialog,
@@ -161,8 +151,8 @@ export default {
 	},
 	computed: {
 		...mapGetters([
-            "my_orders",
-        ]),
+			"my_orders",
+		])
 	},
 	watch: {
 	},
