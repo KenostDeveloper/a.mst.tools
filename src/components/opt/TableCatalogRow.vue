@@ -59,7 +59,7 @@
             </td>
             <td class="k-table__busket">
                 <!-- {{ this.fetchIds.indexOf(item.remain_id) != -1 ? "Загрузка..." : "" }} -->
-                <form class="k-table__form" action="" :class="{ 'basket-true': item?.basket?.availability, 'loading-counter': this.fetchIds.indexOf(item.remain_id) != -1 }">
+                <form class="k-table__form" action="" :class="{ 'basket-true': item?.basket?.availability || this.add_basket.indexOf(item.remain_id) != -1, 'loading-counter': this.fetchIds.indexOf(item.remain_id) != -1 }">
                     <Counter
                         @ElemCount="ElemCount"
                         :min="0"
@@ -406,6 +406,7 @@ export default {
             modal_remain: false,
             timeOut: null,
             fetchIds: [],
+            add_basket: []
         };
     },
     methods: {
@@ -549,6 +550,9 @@ export default {
             };
         },
         addBasket(item, index) {
+            if (!this.add_basket.includes(item.id)) {
+                this.add_basket.push(item.id);
+            }
             // console.log(item)
             const data = {
                 action: 'basket/add',
@@ -564,6 +568,13 @@ export default {
                     action: 'basket/get',
                     id: router.currentRoute._value.params.id,
                     warehouse: 'all'
+                }).then(() => {
+                    setTimeout(() => {
+                        const index = this.add_basket.indexOf(item.id);
+                        if (index !== -1) {
+                            this.add_basket.splice(index, 1); // Удаляем один элемент по индексу
+                        }
+                    }, 1000)
                 });
             });
 
@@ -623,6 +634,7 @@ export default {
 				key: key,
 				product: product
 			};
+            console.log(product)
 			this.busket_from_api(data).then((response) => {});
 			window.dataLayer = window.dataLayer || [];
 			window.dataLayer.push({
@@ -644,7 +656,12 @@ export default {
 				action: 'basket/get',
 				id: router.currentRoute._value.params.id,
 				warehouse: 'all'
-			})
+			}).then(() => {
+                const index = this.fetchIds.indexOf(product.remain_id);
+                if (index !== -1) {
+                    this.fetchIds.splice(index, 1); // Удаляем один элемент по индексу
+                }
+            })
         },
         clearBasketComplect(storeid, complectid) {
             this.$emit("catalogUpdate");
@@ -667,7 +684,8 @@ export default {
                 this.fetchIds.push(object.id);
             }
             if (object.value == object.min) {
-                this.clearBasketProduct(object.item.org_id, object.item.store_id, object.item.basket.key, object.product)
+                this.clearBasketProduct(object.item.org_id, object.item.store_id, object.item.basket.key, object.item)
+                
                 return;
             };            
             this.items.stores[object.index].basket.count = object.value;                
