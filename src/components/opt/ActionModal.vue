@@ -8,7 +8,7 @@
             <p class="table-actions__modal-title mt-3">{{ action?.type == 3 ? "Индивидуальная акция" : action?.name }}</p>
 
             <div class="kenost-action-modal">
-                <div class="kenost-action-modal__item" v-if="tag.type != 'min'" v-for="(tag, index) in action.tags.slice(0, !(action.tags.length % 2)?  action.tags.length - Math.floor(action.tags.length / 2) + 1:action.tags.length - Math.floor(action.tags.length / 2))" v-bind:key="tag.id">
+                <div class="kenost-action-modal__item" v-if="tag?.type != 'min'" v-for="(tag, index) in action.tags.slice(0, !(action.tags.length % 2)?  action.tags.length - Math.floor(action.tags.length / 2) + 1:action.tags.length - Math.floor(action.tags.length / 2))" v-bind:key="tag.id">
                     <img v-if="tag.type == 'min_sum'"
                         src="../../assets/images/icons/action/basket.svg" alt="" />
                     <p v-if="tag.type == 'min_sum'">
