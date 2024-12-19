@@ -59,7 +59,7 @@
             </td>
             <td class="k-table__busket">
                 <!-- {{ this.fetchIds.indexOf(item.remain_id) != -1 ? "Загрузка..." : "" }} -->
-                <form class="k-table__form" action="" :class="{ 'basket-true': item?.basket?.availability || this.add_basket.indexOf(item.remain_id) != -1, 'loading-counter': this.fetchIds.indexOf(item.remain_id) != -1 }">
+                <form class="k-table__form" action="" :class="{ 'basket-true': item?.basket?.availability || this.add_basket.indexOf(item.key) != -1, 'loading-counter': this.fetchIds.indexOf(item.key) != -1 }">
                     <Counter
                         @ElemCount="ElemCount"
                         :min="0"
@@ -550,10 +550,9 @@ export default {
             };
         },
         addBasket(item, index) {
-            if (!this.add_basket.includes(item.id)) {
-                this.add_basket.push(item.id);
+            if (!this.add_basket.includes(item.key)) {
+                this.add_basket.push(item.key);
             }
-            // console.log(item)
             const data = {
                 action: 'basket/add',
                 id: router.currentRoute._value.params.id,
@@ -570,7 +569,7 @@ export default {
                     warehouse: 'all'
                 }).then(() => {
                     setTimeout(() => {
-                        const index = this.add_basket.indexOf(item.id);
+                        const index = this.add_basket.indexOf(item.key);
                         if (index !== -1) {
                             this.add_basket.splice(index, 1); // Удаляем один элемент по индексу
                         }
@@ -634,7 +633,6 @@ export default {
 				key: key,
 				product: product
 			};
-            console.log(product)
 			this.busket_from_api(data).then((response) => {});
 			window.dataLayer = window.dataLayer || [];
 			window.dataLayer.push({
@@ -657,7 +655,7 @@ export default {
 				id: router.currentRoute._value.params.id,
 				warehouse: 'all'
 			}).then(() => {
-                const index = this.fetchIds.indexOf(product.remain_id);
+                const index = this.fetchIds.indexOf(product.key);
                 if (index !== -1) {
                     this.fetchIds.splice(index, 1); // Удаляем один элемент по индексу
                 }
@@ -680,8 +678,8 @@ export default {
             })
         },
         ElemCount(object) {
-            if (!this.fetchIds.includes(object.id)) {
-                this.fetchIds.push(object.id);
+            if (!this.fetchIds.includes(object.item.key)) {
+                this.fetchIds.push(object.item.key);
             }
             if (object.value == object.min) {
                 this.clearBasketProduct(object.item.org_id, object.item.store_id, object.item.basket.key, object.item)
@@ -705,7 +703,7 @@ export default {
                     id: router.currentRoute._value.params.id,
                     warehouse: 'all'
                 }).then((res) => {
-                    const index = this.fetchIds.indexOf(object.id);
+                    const index = this.fetchIds.indexOf(object.item.key);
                     if (index !== -1) {
                         this.fetchIds.splice(index, 1); // Удаляем один элемент по индексу
                     }

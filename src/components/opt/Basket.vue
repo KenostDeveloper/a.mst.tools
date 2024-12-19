@@ -75,7 +75,7 @@
 										<div class="kenost-basket__info">
 											<span>{{ product.article }}</span>
 											<div class="kenost-basket__info-left">
-												<div :class="{'loading-counter': this.fetchIds.indexOf(product.remain_id) != -1 }">
+												<div :class="{'loading-counter': this.fetchIds.indexOf(product.key) != -1 }">
 													<Counter
 														@ElemCount="ElemCount"
 														:item="{basket, product}"
@@ -399,8 +399,8 @@ export default {
 			}
 		},
 		ElemCount(object) {
-			if (!this.fetchIds.includes(object.id)) {
-                this.fetchIds.push(object.id);
+			if (!this.fetchIds.includes(object.item.product.key)) {
+                this.fetchIds.push(object.item.product.key);
             }
 			if (object.value > Number(object.max)) {
 				this.modal_remain = true;
@@ -448,7 +448,7 @@ export default {
 					id: router.currentRoute._value.params.id,
 					warehouse: 'all'
 				}).then((res) => {
-                    const index = this.fetchIds.indexOf(object.id);
+                    const index = this.fetchIds.indexOf(object.item.product.key);
                     if (index !== -1) {
                         this.fetchIds.splice(index, 1); // Удаляем один элемент по индексу
                     }

@@ -67,7 +67,7 @@
                                             </div>
                                             <div class="k-order__buttons">
                                                 <b>{{(item.count * item.price).toLocaleString('ru')}} ₽</b>
-                                                <div :class="{'loading-counter': this.fetchIds.indexOf(item.remain_id) != -1 }">
+                                                <div :class="{'loading-counter': this.fetchIds.indexOf(item.key) != -1 }">
                                                     <Counter
                                                         @ElemCount="ElemCount"
                                                         :item="{basket, item}"
@@ -110,7 +110,7 @@
                                    
                                 </div>
                                 <div class="k-order__final-button">
-                                    <div class="a-dart-btn a-dart-btn-secondary" @click="generateXSLX(org.org_data.id, key)">Скачать</div>
+                                    <div class="a-dart-btn a-dart-btn-secondary" @click="generateXSLX(org.org_data.id, warehouse.store_data.id)">Скачать</div>
                                     <div class="a-dart-btn a-dart-btn-primary k-order__oplata" @click.prevent="orderSubmit(org.org_data.id)"><p>Отправить заказ</p> <p>{{ org.cart_data?.cost?.toLocaleString('ru') }} ₽</p></div>
                                 </div>
                             </div>
@@ -265,8 +265,9 @@ export default {
       })
     },
     ElemCount(object) {
-        if (!this.fetchIds.includes(object.id)) {
-            this.fetchIds.push(object.id);
+        console.log(object)
+        if (!this.fetchIds.includes(object.item.item.key)) {
+            this.fetchIds.push(object.item.item.key);
         }
         if (object.value > Number(object.max)) {
             this.modal_remain = true;
@@ -314,7 +315,7 @@ export default {
                 id: router.currentRoute._value.params.id,
                 warehouse: 'all'
             }).then((res) => {
-                const index = this.fetchIds.indexOf(object.id);
+                const index = this.fetchIds.indexOf(object.item.item.key);
                 if (index !== -1) {
                     this.fetchIds.splice(index, 1); // Удаляем один элемент по индексу
                 }
@@ -368,6 +369,7 @@ export default {
       })
     },
     clearBasketProduct(org_id, store_id, key, product) {
+
         this.$emit("catalogUpdate");
         this.$emit("actionUpdate");
         const data = {
@@ -403,6 +405,11 @@ export default {
             action: 'basket/get',
             id: router.currentRoute._value.params.id,
             warehouse: 'all'
+        }).then(() => {
+            const index = this.fetchIds.indexOf(product.key);
+            if (index !== -1) {
+                this.fetchIds.splice(index, 1); // Удаляем один элемент по индексу
+            }
         })
     },
     clearBasketComplect(storeid, complectid) {
@@ -429,6 +436,7 @@ export default {
             warehouse_id: warehouseId
         }
         this.opt_api(data).then((res) => {
+            console.log('res file', res)
             var anchor = document.createElement('a');
             anchor.href = res.data.data;
             anchor.target="_blank";
