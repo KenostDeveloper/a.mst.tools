@@ -52,14 +52,10 @@
                                                             <div class="table-actions__el" v-for="(tag, indextag) in action.tags" v-bind:key="indextag">                                                                
                                                                 <img v-if="tag.type == 'multiplicity'" src="/images/icons/action/gray/box.svg" alt="">
                                                                 <p class="w-fit" v-if="tag.type == 'multiplicity'">{{ tag.value }} шт.</p>
-
-                                                                <img v-if="tag.type == 'min'" src="/images/icons/action/gray/min.svg" alt="">
-    
-                                                                <img v-if="tag.type == 'gift'" src="/images/icons/action/gray/gift.svg" alt="">
-    
+                                                                <img v-if="tag.type == 'min'" src="/images/icons/action/gray/min.svg" alt="">    
+                                                                <img v-if="tag.type == 'gift'" src="/images/icons/action/gray/gift.svg" alt="">    
                                                                 <img v-if="tag.type == 'delay'" src="/images/icons/action/gray/time.svg" alt="">
-                                                                <p class="w-fit" v-if="tag.type == 'delay'">Отсроч. {{ tag.value }} дн.</p>
-    
+                                                                <p class="w-fit" v-if="tag.type == 'delay'">Отсроч. {{ tag.value }} дн.</p>    
                                                                 <img v-if="tag.type == 'sale' && tag.value > 0" src="/images/icons/action/gray/sale.svg" alt="">
                                                                 <p class="w-fit" v-if="tag.type == 'sale'">Скидка {{ Number(tag.value).toFixed(0) }}%</p>
     
@@ -67,7 +63,7 @@
     
                                                             </div>
                                                         </div>
-                                                        <div class="table-actions__help">
+                                                        <div v-if="action.tags.length > 0" class="table-actions__help">
                                                             <p>?</p>
                                                             <ActionModal :action="action"/>                                                          
                                                         </div>
