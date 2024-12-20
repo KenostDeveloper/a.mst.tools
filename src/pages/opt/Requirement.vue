@@ -14,7 +14,9 @@
               </button>
             </div>
           </div>
+          <!--
           <div class="dart-alert dart-alert-info">В данном разделе перечислены только те товары Поставщиков, которые мы нашли согласно Потребности.</div>
+          -->
           <TableCatalog @updateBasket="updateBasket" v-if="opt_products.total !== 0" :items="opt_products"/>
           <div v-else>
             <div class="dart-alert dart-alert-warning">Ничего не найдено</div>
