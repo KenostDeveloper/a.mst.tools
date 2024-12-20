@@ -22,7 +22,13 @@
                 <div class="k-order__orders" v-if="Object.prototype.hasOwnProperty.call(this.basket, 'data')">
                     <div v-for="(warehouse, w_key) in this.basket.data" v-bind:key="warehouse.store_data.id">
                         <div v-for="(org, o_key) in warehouse.data" v-bind:key="org.org_data.id" class="k-order__order">
-                            <h3>Адрес доставки: «{{ warehouse.store_data.name_short ? warehouse.store_data.name_short : warehouse.store_data.name }}», {{ warehouse.store_data.address_short  ? warehouse.store_data.address_short : warehouse.store_data.address }}</h3>
+                            <h3 class="flex justify-content-space-between align-items-center">
+                                <div>Адрес доставки: «{{ warehouse.store_data.name_short ? warehouse.store_data.name_short : warehouse.store_data.name }}», {{ warehouse.store_data.address_short  ? warehouse.store_data.address_short : warehouse.store_data.address }}</div>
+                                <div>
+                                    <button class="basketClear std-basket__clear-button" @click="clearBasketOrg(org.org_data.id)">Очистить <i class="pi pi-times"></i></button>
+                                </div>
+                            </h3>
+                            
                             <div class="k-order__shop">
                                 <!-- <img src="../../assets/img/ava.png" alt=""> -->
                                 <p :style="{'background': org.org_data.color}">{{org.org_data.name}}</p>
@@ -149,7 +155,7 @@
                            
                         </div>
                         <div class="k-order__final-button">
-                            <div @click="generateXSLXAll" class="a-dart-btn a-dart-btn-secondary"><i class="pi pi-download"></i></div>
+                            <div @click="generateXSLXAll(this.basket.data[Object.keys(this.basket.data)[0]].store_data.id)" class="a-dart-btn a-dart-btn-secondary"><i class="pi pi-download"></i></div>
                             <div class="a-dart-btn a-dart-btn-primary k-order__oplata" @click.prevent="orderSubmit('all')"><p>Отправить все заказы</p> <p>{{ this.basket?.cart_data?.cost?.toLocaleString('ru') }} ₽</p></div>
                         </div>
                     </div>
@@ -221,6 +227,7 @@ export default {
       this.$emit('fromOrder')
     },
     async orderSubmit ($orgId) {
+      this.loading = true
       const data = { action: 'order/opt/submit', id: router.currentRoute._value.params.id, org_id: $orgId }
       let arr = [];
       await this.opt_order_api(data).then((response) => {
@@ -261,7 +268,7 @@ export default {
             action: 'basket/get',
             id: router.currentRoute._value.params.id,
             warehouse: 'all'
-        })
+        }).then(() => this.loading = false)
       })
     },
     ElemCount(object) {
@@ -369,7 +376,6 @@ export default {
       })
     },
     clearBasketProduct(org_id, store_id, key, product) {
-
         this.$emit("catalogUpdate");
         this.$emit("actionUpdate");
         const data = {
@@ -443,15 +449,33 @@ export default {
             anchor.click();
         })
     },
-    generateXSLXAll () {
-      const data = { action: 'generate/xslx', id: router.currentRoute._value.params.id }
+    generateXSLXAll (warehouseId) {
+        const data = {
+            action: 'generate/xslx',
+            id: router.currentRoute._value.params.id,
+            warehouse_id: warehouseId
+        }
       this.opt_api(data).then((res) => {
         var anchor = document.createElement('a');
         anchor.href = res.data.data;
         anchor.target="_blank";
         anchor.click();
       })
-    }
+    },
+    clearBasketOrg(id) {
+        this.loading = true
+        const data = {
+            action: 'basket/clear',
+            id: router.currentRoute._value.params.id,
+            org_id: id
+        }
+        this.busket_from_api(data).then()
+        this.busket_from_api({
+            action: 'basket/get',
+            id: router.currentRoute._value.params.id,
+            warehouse: 'all'
+        }).then(() => this.loading = false)
+    },
   },
   mounted () {
     if(this.order_id){

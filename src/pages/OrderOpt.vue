@@ -1,4 +1,5 @@
 <template>
+	<Loading v-if="this.loading"/>
 	<div class="shipping std-shipping">
 		<Breadcrumbs />
 
@@ -135,6 +136,7 @@ import "v-calendar/style.css";
 import Dialog from "primevue/dialog";
 import Breadcrumbs from "../components/Breadcrumbs.vue";
 import ActionModal from '../components/opt/ActionModal.vue'
+import Loading from "../components/Loading.vue";
 
 export default {
 	name: "MyOrders",
@@ -142,7 +144,8 @@ export default {
 	},
 	data() {
 		return {
-			order: []
+			order: [],
+			loading: true
 		};
 	},
 	methods: {
@@ -155,7 +158,7 @@ export default {
 			action: 'get/orders/seller',
 			id: router.currentRoute._value.params.id,
 			order_id: router.currentRoute._value.params.order_id
-		})
+		}).then(() => this.loading = false)
 	},
 	components: {
 		Dropdown,
@@ -171,7 +174,8 @@ export default {
 		// Checkbox,
 		// Swiper,
 		// SwiperSlide
-		Breadcrumbs
+		Breadcrumbs,
+		Loading
 	},
 	computed: {
 		...mapGetters([
