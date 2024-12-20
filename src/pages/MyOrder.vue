@@ -1,4 +1,5 @@
 <template>
+	<Loading v-if="this.loading"/>
 	<div class="shipping std-shipping std-my-order">
     <Breadcrumbs />
 		<div class="std-shipping__title-container hidden-tablet-l">
@@ -145,6 +146,7 @@ import Breadcrumbs from "../components/Breadcrumbs.vue";
 import OrderModal from '../components/opt/OrderModal.vue';
 import Basket from '../components/opt/Basket.vue';
 import ActionModal from '../components/opt/ActionModal.vue'
+import Loading from "../components/Loading.vue";
 
 
 export default {
@@ -156,7 +158,8 @@ export default {
 			order: [],
 			show_order: false,
 			modal_products: false,
-			list: []
+			list: [],
+			loading: true
 		};
 	},
 	methods: {
@@ -211,7 +214,7 @@ export default {
 			action: 'get/orders/buyer',
 			id: router.currentRoute._value.params.id,
 			order_id: router.currentRoute._value.params.order_id
-		})
+		}).then(() => this.loading = false)
 	},
 	components: {
 		Dropdown,
@@ -228,7 +231,8 @@ export default {
 		// SwiperSlide
 		OrderModal,
 		Basket,
-		Breadcrumbs
+		Breadcrumbs,
+		Loading
 	},
 	computed: {
 		...mapGetters([

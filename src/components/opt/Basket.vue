@@ -1,6 +1,6 @@
 <template>
 	<div :class="`std-basket ${this.isOpened ? 'std-basket--active' : ''}`">
-		<div class="d-col-basket std-basket__inner">
+		<div class="d-col-basket std-basket__inner" :class="{'loading': this.loadingClearBasket}">
 			<div class="std-basket__header-wrapper">
 				<div class="std-basket__header" @click.stop="this.isOpened = !this.isOpened">
 					<div class="std-basket__title-container">
@@ -52,8 +52,9 @@
 			<div v-if="Object.prototype.hasOwnProperty.call(this.basket, 'data')" class="basket-container">
 				<div v-if="Object.prototype.hasOwnProperty.call(this.basket.data, warehouse_basket)">
 					<div v-for="org in this.basket.data[warehouse_basket].data" v-bind:key="org.org_data.id">
-						<div class="basket-container__adres" :style="{ background: org.org_data.color }">
-							{{ org.org_data.name }}
+						<div class="basket-container__adres flex justify-content-space-between align-items-center" :style="{ background: org.org_data.color }">
+							<div>{{ org.org_data.name }}</div>
+							<i @click="clearBasketOrg(org.org_data.id)" class="pi pi-times cursor-pointer"></i>
 						</div>
 						<div v-for="warehouse in org.data" v-bind:key="warehouse.warehouse_data.id">							
 							<div class="kenost-product-basket" v-for="(product, p_key) in warehouse.data" v-bind:key="product.remain_id">
@@ -349,7 +350,8 @@ export default {
 			cartLength: 0,
 			modal_remain: false,
 			timeOut: null,
-			fetchIds: []
+			fetchIds: [],
+			loadingClearBasket: false
 		};
 	},
 	methods: {
@@ -456,6 +458,7 @@ export default {
 			}
 		},
 		clearBasket() {
+			this.loadingClearBasket = true
 			this.$emit("catalogUpdate");
 			this.$emit("actionUpdate");
 			const data = {
@@ -468,8 +471,27 @@ export default {
 				action: 'basket/get',
 				id: router.currentRoute._value.params.id,
 				warehouse: 'all'
+			}).then(() => {
+				this.loadingClearBasket = false
 			})
-			this.showClearBasketModal = false;
+		},
+		clearBasketOrg(id) {
+			this.loadingClearBasket = true
+			this.$emit("catalogUpdate");
+			this.$emit("actionUpdate");
+			const data = {
+				action: "basket/clear",
+				id: router.currentRoute._value.params.id,
+				org_id: id
+			};
+			this.busket_from_api(data).then((response) => {});
+			this.busket_from_api({
+				action: 'basket/get',
+				id: router.currentRoute._value.params.id,
+				warehouse: 'all'
+			}).then(() => {
+				this.loadingClearBasket = false
+			})
 		},
 		clearBasketProduct(org_id, store_id, key, product) {
 			this.$emit("catalogUpdate");
