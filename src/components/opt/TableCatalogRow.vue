@@ -43,7 +43,7 @@
         <tr :data-info="JSON.stringify({id: item.remain_id, name: item.name, price: item.price, category: item.catalog, list: 'Catalog'})" :data-product="item.remain_id" class="kenost-product-item kenost-table-background" v-for="(item, index) in items.stores"
             v-bind:key="item.id" :class="{
                 active: this.active || this.is_warehouses || items.total_stores == 1,
-                notavailable: item.available == 0,
+                notavailable: item.available == 0 || item.price == 0,
                 'no-active': !this.active && !this.is_warehouses && items.total_stores > 1,
                 'bg-white': items.total_stores == 1
             }">
@@ -163,8 +163,19 @@
             </td>
             <td>
                 <div v-if="item.available > 0">
-                    {{ item.available }} шт. 
-                    <span v-if="item.req" class="kenost-err-min"><br>Не удовлетворяет Потребности</span>
+                    <div v-if="item.price > 0">
+                        {{ item.available }} шт.
+                        <div v-if="item.requirement">
+                            <div v-if="Number(item.requirement.count) > Number(item.available)" class="kenost-table-elem__adding_info">
+                                <span class="kenost-err-min">Не хватает {{ Number(item.requirement.count) - Number(item.available) }} шт.</span>
+                                <span>Потребность {{ Number(item.requirement.count) }} шт.</span>
+                            </div>
+                            <div v-else class="kenost-table-elem__adding_info">
+                                <span>Потребность {{ Number(item.requirement.count) }} шт.</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-else class="kenost-err-min">Некорректно указана цена у Поставщика</div>           
                 </div>
                 <div v-else>
                     <span class="kenost-err-min">Нет в наличии</span>
@@ -889,6 +900,17 @@ export default {
     .kenost-product-item__profit_info,
     .kenost-product-item__price-info{
         display: none;
+    }
+}
+.kenost-table-elem__adding_info{
+    span{
+        color: #afafaf;
+        display: block;
+        font-size: 12px;
+        line-height: 1.3;
+        &.kenost-err-min{
+            color: #F00;
+        }
     }
 }
 </style>
