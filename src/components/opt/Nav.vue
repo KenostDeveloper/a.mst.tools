@@ -427,7 +427,7 @@
             <div class="dart-form-group mb-4" :class="{
                 error: this.form_requirements_view.error
             }">
-                <Dropdown v-model="this.form_requirements_view.warehouse" :options="this.available_warehouses" optionLabel="name" placeholder="Выберите склад" class="w-full md:w-14rem" />
+                <Dropdown v-model="this.form_requirements_view.warehouse" :options="this.available_sellers" optionLabel="name" placeholder="Выберите склад" class="w-full md:w-14rem" />
                 <span class="error_desc" v-if="this.form_requirements_view.error">
                     Выберите склад
                 </span>
@@ -582,7 +582,8 @@ export default {
             'get_requirements_api',
             'set_requirements_api',
             'unset_requirements',
-            'get_available_warehouses_from_api'
+            'get_available_sellers_from_api',
+            
         ]),
 		filterRequirements(data) {
             const senddata = {
@@ -687,7 +688,7 @@ export default {
                             this.$toast.add({ severity: 'success', summary: 'Поставщик установлен!', detail: response.data.message, life: 3000 });
                             this.modal_requirements_view = false
                             this.modal_requirements = false
-                            router.push({ name: 'opt_req', params: { req: this.form_requirements_view.requirement.id } });
+                            router.push({ name: 'opt_req', params: { req: this.form_requirements_view.requirement.id + '_req'} });
                         }else{
                             this.$toast.add({ severity: 'error', summary: 'Ошибка сохранения Поставщика', detail: response.data.message, life: 3000 });
                         }
@@ -768,7 +769,6 @@ export default {
 
             this.organizationsOrCategories = state;
         },
-
         getImageSrc(src) {
             // if (!src) return "";
             // return src.startsWith("https://dev.mst.tools") ? src : "https://dev.mst.tools/" + src;
@@ -816,7 +816,6 @@ export default {
                     this.findParent(item.children);
                 }
             });
-
             return this.parentCatalog;
         },
         setWarehouse(id) {
@@ -835,7 +834,6 @@ export default {
             });
             this.showWarehouseList = false;
         },
-
         async searchProducts() {
             if(this.search.length < 3) return;
 
@@ -886,7 +884,7 @@ export default {
 			page: this.requirements_page,
 			perpage: this.pagination_items_per_page
         });
-        this.get_available_warehouses_from_api();
+        this.get_available_sellers_from_api();
         const getOrganizationss = async () => {
             this.organizations = (await this.org_get_from_api({ action: 'get/orgs' })).data.data;
         };
@@ -926,7 +924,7 @@ export default {
             'org_stores', 
             'warehouse_basket', 
             'optproducts',
-            'available_warehouses',
+            'available_sellers',
             'requirements'
         ]),
 

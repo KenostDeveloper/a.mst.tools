@@ -5,7 +5,8 @@
       <div class="dart-home dart-window">
           <!-- <Breadcrumbs/> -->
           <div class="profile-content__title">
-            <span class="title-h1">Поиск по Потребности с №{{ $route.params.req }}</span>
+            <span class="title-h1" v-if="header[1] == 'req'">Поиск по Потребности с №{{ header[0] }}</span>
+            <span class="title-h1" v-if="header[1] == 'order'">Повтор Заказа №{{ header[0] }}</span>
             <div class="buttons_container">
               <button class="dart-btn dart-btn-primary btn-padding" @click.prevent="addToCart()"> 
                 <i class="d_icon d_icon-busket"></i>
@@ -13,7 +14,9 @@
               </button>
             </div>
           </div>
+          <!--
           <div class="dart-alert dart-alert-info">В данном разделе перечислены только те товары Поставщиков, которые мы нашли согласно Потребности.</div>
+          -->
           <TableCatalog @updateBasket="updateBasket" v-if="opt_products.total !== 0" :items="opt_products"/>
           <div v-else>
             <div class="dart-alert dart-alert-warning">Ничего не найдено</div>
@@ -67,6 +70,7 @@ export default {
   },
   data () {
     return {
+      header: '',
       show_order: false,
       loading: false,
       reloading: false,
@@ -109,12 +113,14 @@ export default {
       'busket_from_api'
     ]),
     addToCart(){
+      this.loading = true;
       this.$load(async () => {
           await this.set_requirements_api({
               action: "cart/products",
               id: router.currentRoute._value.params.id,
               req: router.currentRoute._value.params.req,
           }).then((response) => {
+              this.loading = false;
               if(response.data.success){
                 this.$toast.add({ severity: 'success', summary: 'Товар добавлен в корзину!', detail: response.data.message, life: 3000 });
                 this.busket_from_api({
@@ -144,9 +150,9 @@ export default {
       })
     },
     updatePage (order_id) {
-      this.page = 1
-			this.order_id = order_id
       this.loading = true
+      const page_data = router.currentRoute._value.params.req
+      this.header = page_data.split('_', 2)
       this.get_opt_catalog_from_api().then(
         this.opt_catalog = this.optcatalog
       )
@@ -166,7 +172,6 @@ export default {
       this.$refs.childComponent.updateBasket()
     },
     catalogUpdate () {
-      console.log('cart update')
       this.get_opt_products_from_api({
         page: this.page,
         perpage: this.perpage
@@ -208,7 +213,7 @@ export default {
       this.opt_products = newVal
     },
     $route () {
-      this.updatePage(this.$route.params.category_id)
+      this.updatePage()
     }
   }
 }
