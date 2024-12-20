@@ -25,7 +25,10 @@
                             <h3 class="flex justify-content-space-between align-items-center">
                                 <div>Адрес доставки: «{{ warehouse.store_data.name_short ? warehouse.store_data.name_short : warehouse.store_data.name }}», {{ warehouse.store_data.address_short  ? warehouse.store_data.address_short : warehouse.store_data.address }}</div>
                                 <div>
-                                    <button class="basketClear std-basket__clear-button" @click="clearBasketOrg(org.org_data.id)">Очистить <i class="pi pi-times"></i></button>
+                                    <button class="basketClear std-basket__clear-button" @click="() => {
+                                        this.showClearBasketModal = true
+                                        this.id_clear_org = org.org_data.id
+                                    }">Очистить <i class="pi pi-times"></i></button>
                                 </div>
                             </h3>
                             
@@ -165,6 +168,21 @@
         </div>
     </div>
 
+    <Dialog v-model:visible="this.showClearBasketModal" header="Вы точно хотите очистить корзину?" :style="{ width: '340px' }">
+		<div class="std-clear-basket dart-mt-2">
+			<!-- <img src="../../../public/img/opt/not-products.png" alt="" /> -->
+			<button class="dart-btn dart-btn-primary" @click="() => {
+				clearBasketOrg(this.id_clear_org)
+				this.showClearBasketModal = false
+				this.id_clear_org = null;
+			}">Да</button>
+			<button class="dart-btn dart-btn-secondary" @click="() => {
+				this.showClearBasketModal = false
+				this.id_clear_org = null;
+			}">Нет</button>
+		</div>
+	</Dialog>
+
     <Dialog v-model:visible="this.modal_remain" header=" " :style="{ width: '340px' }">
 		<div class="kenost-not-produc">
 			<img src="/images/icons_milen/outOfStock2.png" alt="" />
@@ -212,7 +230,9 @@ export default {
       value: 1,
       modal_remain: false,
       timeOut: null,
-      fetchIds: []
+      fetchIds: [],
+      id_clear_org: null,
+      showClearBasketModal: false
     }
   },
   emits: ['fromOrder', 'orderSubmit'],

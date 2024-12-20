@@ -54,7 +54,10 @@
 					<div v-for="org in this.basket.data[warehouse_basket].data" v-bind:key="org.org_data.id">
 						<div class="basket-container__adres flex justify-content-space-between align-items-center" :style="{ background: org.org_data.color }">
 							<div>{{ org.org_data.name }}</div>
-							<i @click="clearBasketOrg(org.org_data.id)" class="pi pi-times cursor-pointer"></i>
+							<i @click="() => {
+								this.showClearBasketModal = true
+								this.id_clear_org = org.org_data.id
+							}" class="pi pi-times cursor-pointer"></i>
 						</div>
 						<div v-for="warehouse in org.data" v-bind:key="warehouse.warehouse_data.id">							
 							<div class="kenost-product-basket" v-for="(product, p_key) in warehouse.data" v-bind:key="product.remain_id">
@@ -316,8 +319,19 @@
 	<Dialog v-model:visible="this.showClearBasketModal" header="Вы точно хотите очистить корзину?" :style="{ width: '340px' }">
 		<div class="std-clear-basket dart-mt-2">
 			<!-- <img src="../../../public/img/opt/not-products.png" alt="" /> -->
-			<button class="dart-btn dart-btn-primary" @click="clearBasket">Да</button>
-			<button class="dart-btn dart-btn-secondary" @click="this.showClearBasketModal = false">Нет</button>
+			<button class="dart-btn dart-btn-primary" @click="() => {
+				if(this.id_clear_org){
+					clearBasketOrg(this.id_clear_org)
+				} else {
+					clearBasket()
+				}
+				this.showClearBasketModal = false
+				this.id_clear_org = null;
+			}">Да</button>
+			<button class="dart-btn dart-btn-secondary" @click="() => {
+				this.showClearBasketModal = false
+				this.id_clear_org = null;
+			}">Нет</button>
 		</div>
 	</Dialog>
 </template>
@@ -351,7 +365,8 @@ export default {
 			modal_remain: false,
 			timeOut: null,
 			fetchIds: [],
-			loadingClearBasket: false
+			loadingClearBasket: false,
+			id_clear_org: null
 		};
 	},
 	methods: {
