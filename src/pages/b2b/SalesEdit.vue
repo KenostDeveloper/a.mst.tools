@@ -920,7 +920,7 @@
                                             {{ item.price }}
                                         </td>
                                         <td>
-                                            {{ item.price > 0 && item.price > item.new_price ? ((Math.round(((item.price - item.new_price) / item.price) * 10000) / 100) + '%') : '0' }}
+                                            {{ item.price > 0 ? ((Math.round(((item.price - item.new_price) / item.price) * 10000) / 100) + '%') : '0' }}
                                         </td>
                                         <td>
                                             {{ el.typePricing?.name }}
@@ -1660,7 +1660,7 @@ export default {
             this.$toast.add({ severity: 'info', summary: 'Файлы загружены', detail: 'Файл был успешно загружен', life: 3000 });
         },
         updateGroups(id){
-            // console.log(this.action_groups[id])
+            console.log('updateGroups', this.action_groups[id])
             this.build_group_api({
                 action: 'build',
                 id: this.$route.params.id,
@@ -1674,7 +1674,7 @@ export default {
                 price: this.action_groups[id].price ? this.action_groups[id].price : 'key',
                 saleValue: this.action_groups[id].saleValue,
                 typeFormul: this.action_groups[id].typeFormul?.key,
-                typePricing: this.action_groups[id].typePricing?.key ? this.action_groups[id].typePricing?.key : 'key',
+                typePricing: this.action_groups[id].typePricing?.key,
                 filter: {
                     name: this.action_groups[id].search
                 }
@@ -2522,7 +2522,12 @@ export default {
                 (Number(this.selected_data[this.modals.product_id].price) / 100);
         },
         setGroupTypePrice(){
-            this.action_groups[this.modals.group_id].typePricing = {name: 'Скидка', key: 2}
+            console.log('setGroupTypePrice')
+            this.action_groups[this.modals.group_id].saleValue = 0;
+            this.action_groups[this.modals.group_id].typeFormul = null;
+            this.action_groups[this.modals.group_id].typePricing= {name: 'Тип цен', key: 0};
+            this.action_groups[this.modals.group_id].percent = 0;
+            console.log(this.action_groups)
             this.updateGroups(this.modals.group_id)
         },
         createSet() {
