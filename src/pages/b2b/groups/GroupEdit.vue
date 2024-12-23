@@ -608,6 +608,8 @@ export default {
 				action: "get",
                 group_id: this.$route.params.group_id
             }).then(() => this.loading = false)
+        } else {
+            this.loading = false
         }
 	},
 	components: {
