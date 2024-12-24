@@ -613,7 +613,7 @@ export default {
 	},
 	watch: {
 		optbasket: function (newVal, oldVal) {
-			console.log(newVal)
+			// console.log(newVal)
 			this.basket = newVal;
 			if(Object.hasOwn(newVal, "data")){
 				this.cartLength = Object.keys(newVal.data).length

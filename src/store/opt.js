@@ -337,7 +337,7 @@ export default {
           return response
         })
         .catch(error => {
-          console.log(error)
+          // console.log(error)
           if (error.response.status === 403) {
             localStorage.removeItem('user')
             router.push({ name: 'main' })
@@ -492,13 +492,13 @@ export default {
       }
     },
     SET_OPT_PRODUCTS_MUTATION_TO_VUEX: (state, data) => {
-      console.log('SET_OPT_PRODUCTS_MUTATION_TO_VUEX')
+      // console.log('SET_OPT_PRODUCTS_MUTATION_TO_VUEX')
       if (state.optproducts.length) {
         for (let i = 0; i < Object.keys(state.optproducts.items).length; i++) {
           if (state.optproducts.items[i].remain_id === data.remain_id) {
             for (let j = 0; j < Object.keys(state.optproducts.items[i].stores).length; j++) {
               if (state.optproducts.items[i].stores[j].store_id === data.store_id) {
-                console.log(data.complect_id)
+                // console.log(data.complect_id)
                 state.optproducts.items[i].stores[j].basket.availability = true
                 state.optproducts.items[i].stores[j].basket.count = data.count
               }
@@ -508,7 +508,7 @@ export default {
       }
     },
     SET_OPT_COMPLECT_MUTATION_TO_VUEX: (state, data) => {
-      console.log('SET_OPT_COMPLECT_MUTATION_TO_VUEX', state.optproducts.length)
+      // console.log('SET_OPT_COMPLECT_MUTATION_TO_VUEX', state.optproducts.length)
       if (state.optproducts.length) {
         for (let i = 0; i < Object.keys(state.optproducts.items).length; i++) {
           for (let j = 0; j < Object.keys(state.optproducts.items[i].complects).length; j++) {
@@ -523,7 +523,7 @@ export default {
       }
     },
     SET_BUSKET_TO_VUEX: (state, data) => {
-      console.log(data)
+      // console.log(data)
       state.optbasket = data.data
       state.optbasketall = data.data
       if(data.data.props.warehouse != 'all'){

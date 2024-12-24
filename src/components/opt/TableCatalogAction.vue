@@ -73,40 +73,56 @@
                 </tr>
             </tbody>
 
-            <tbody class="kenost-table-border-bottom" v-for="(item, index) in items.products" v-bind:key="item.id">
+            <tbody class="kenost-table-border-bottom" v-for="(product, index1) in items.products" v-bind:key="product.id">
                 <!-- {{ console.log(item) }} -->
-                <tr v-if="item.max != 0">
+                <tr v-for="(item, index2) in product.stores" v-bind:key="item.id">
                     <td class="k-table__photo hidden-mobile-l">
-                        <img class="k-table__image" :src="item.image" alt="" />
+                        <img class="k-table__image" :src="product.image" alt="" />
                     </td>
                     <td class="k-table__title">
                         <p>{{ item.name }}</p>
                         <b>Арт: {{ item.article }}</b>
                     </td>
                     <td class="k-table__busket">
-                        <form class="k-table__form" action="" :class="{ 'basket-true': item?.basket?.availability }">
+                        <!-- <form class="k-table__form" action="" :class="{ 'basket-true': item?.basket?.availability }">
                             <Counter @ElemCount="ElemCount" :min="1" :max="item.max" :id="item.remain_id" :store_id="item.store_id" :item="item" :index="index" :value="Number(item?.basket?.count)" :step="item?.action?.multiplicity ? item?.action?.multiplicity : 1" />
                             <div @click="addBasket(item.remain_id, item?.action?.multiplicity > 1 ? item?.action?.multiplicity : item.basket.count, item.store_id, index, item)" class="dart-btn dart-btn-primary">
+                                <i class="d_icon d_icon-busket"></i>
+                            </div>
+                        </form> -->
+                        <form class="k-table__form" action="" :class="{ 'basket-true': item?.basket?.availability || this.add_basket.indexOf(item.key) != -1, 'loading-counter': this.fetchIds.indexOf(item.key) != -1 }">
+                            <Counter
+                                @ElemCount="ElemCount"
+                                :min="0"
+                                :max="product.max"
+                                :id="product.remain_id"
+                                :store_id="item.store_id"
+                                :index="index"
+                                :value="item?.basket?.count"
+                                :step="item?.action?.multiplicity ? item?.action?.multiplicity : 1"
+                                :item="item"
+                            />
+                            <div @click="addBasket(item, index1, index2)" class="dart-btn dart-btn-primary">
                                 <i class="d_icon d_icon-busket"></i>
                             </div>
                         </form>
                     </td>
                     <td>
-                        {{ Number(item.price) != 0 ? Math.round(Number(item.price)).toLocaleString('ru') : Math.round(Number(item.new_price)).toLocaleString('ru') }} ₽
+                        {{ Number(product.price) != 0 ? Math.round(Number(product.price)).toLocaleString('ru') : Math.round(Number(product.new_price)).toLocaleString('ru') }} ₽
                     </td>
                     <td>
-                        {{ Number(item.price) != 0 ? Math.round((Number(item.old_price) - (Number(item.new_price))) / (Number(item.old_price) / 100)).toLocaleString('ru') : 0 }} %
+                        {{ Number(product.price) != 0 ? Math.round((Number(product.old_price) - (Number(product.new_price))) / (Number(product.old_price) / 100)).toLocaleString('ru') : 0 }} %
                     </td>
                     <td>
-                        {{ Math.round(item.new_price).toLocaleString('ru') }} ₽
+                        {{ Math.round(product.new_price).toLocaleString('ru') }} ₽
                     </td>
                     <td>
-                        {{ (Number(item.multiplicity) * Number(item.new_price)).toLocaleString('ru') }} ₽
+                        {{ (Number(product.multiplicity) * Number(product.new_price)).toLocaleString('ru') }} ₽
                     </td>
                     <td>
-                        {{ item.multiplicity }}
+                        {{ product.multiplicity }}
                     </td>
-                    <td>{{ item.remain }} шт.</td>
+                    <td>{{ product.available }} шт.</td>
                 </tr>
             </tbody>
             <!-- </tbody> -->
@@ -154,7 +170,9 @@ export default {
             actions_item: null,
             value: 1,
             modal_remain: false,
-            timeOut: null
+            timeOut: null,
+            fetchIds: [],
+            add_basket: [],
         };
     },
     methods: {
@@ -163,49 +181,61 @@ export default {
         updateBasket() {
             this.$emit('updateBasket');
         },
-        addBasket(id, value, storeid, index, product) {
-            // console.log(id, value, storeid, index)
-			const data = {
-				action: "basket/add",
-				id: router.currentRoute._value.params.id,
-				id_remain: id,
-				value,
-				store_id: storeid,
-                actions: [router.currentRoute._value.params.action]
-			};
-			this.busket_from_api(data).then(() => {
-				this.busket_from_api({
-					action: "basket/get",
-					id: router.currentRoute._value.params.id,
-					warehouse: "all",
-				});
-			});
+        addBasket(item, index1, index2) {
+            console.log(item)
+            if (!this.add_basket.includes(item.key)) {
+                this.add_basket.push(item.key);
+            }
+            const data = {
+                action: 'basket/add',
+                id: router.currentRoute._value.params.id,
+                org_id: item.org_id,
+                store_id: item.store_id,
+                id_remain: item.id,
+                count: item.basket.count,
+                actions: item.actions
+            };
+            this.busket_from_api(data).then(() => {
+                this.busket_from_api({
+                    action: 'basket/get',
+                    id: router.currentRoute._value.params.id,
+                    warehouse: 'all'
+                }).then(() => {
+                    setTimeout(() => {
+                        const index = this.add_basket.indexOf(item.key);
+                        if (index !== -1) {
+                            this.add_basket.splice(index, 1); // Удаляем один элемент по индексу
+                        }
+                    }, 1000)
+                });
+            });
 
             // Убедитесь, что dataLayer существует
             window.dataLayer = window.dataLayer || [];
 
             // Отправка данных в dataLayer
             window.dataLayer.push({
-                ecommerce: {
-                    currencyCode: "RUB",  // Валюта
-                    add: {
-                    products: [
-                        {
-                            id: id,  // ID товара
-                            name: product.name,  // Название товара
-                            price: product.price,  // Цена товара
-                            category: product.catalog,  // Категория товара
-                            quantity: value,  // Количество товара
-                        }
-                    ]
+            ecommerce: {
+                currencyCode: "RUB",  // Валюта
+                add: {
+                products: [
+                    {
+                        id: item.id,  // ID товара
+                        name: item.name,  // Название товара
+                        price: item.price,  // Цена товара
+                        category: item.catalog,  // Категория товара
+                        quantity: item.basket.count,  // Количество товара
                     }
+                ]
                 }
+            }
             });
 
-			// eslint-disable-next-line vue/no-mutating-props
-			this.items.products[index].basket.availability = true;
-			this.$emit("updateBasket");
-		},
+            console.log('this.items', this.items)
+            // eslint-disable-next-line vue/no-mutating-props
+            this.items.products[index1].stores[index2].basket.availability = true;
+            this.$emit('updateBasket');
+        },
         addBasketComplect(complectid, value, storeid, index) {
 			const data = {
 				action: "basket/add",
@@ -283,63 +313,58 @@ export default {
 			})
 		},
         ElemCount(object) {
-            // console.log(object)
-            if (object.value == object.min) {
-                this.clearBasketProduct(object.store_id, object.id)
-                return;
-            };
-
-            if (object.value > Number(object.max)) {
-                this.modal_remain = true;
-            } else {
-                // eslint-disable-next-line vue/no-mutating-props
-                this.items.products[object.id].basket.count = object.value;
-
-                if(this.timeOut){
-                    clearTimeout(this.timeOut);
-                }
-
-                this.timeOut = setTimeout(() => {
-                    // Ваш запрос на сервер
-                    const data = {
-                        action: 'basket/update',
-                        id: router.currentRoute._value.params.id,
-                        id_remain: object.id,
-                        value: object.value,
-                        store_id: object.store_id,
-                        actions: [router.currentRoute._value.params.action]
-                    };
-                    this.busket_from_api(data).then();
-                    
-                    console.log(object)
-
-                    if(Number(object.value) != object.old_value){
-                        // Убедитесь, что dataLayer существует
-                        window.dataLayer = window.dataLayer || [];
-
-                        // Отправка данных в dataLayer
-                        window.dataLayer.push({
-                            ecommerce: {
-                                currencyCode: "RUB",  // Валюта
-                                add: {
-                                products: [
-                                    {
-                                        id: object.item.id,  // ID товара
-                                        name: object.item.name,  // Название товара
-                                        price: object.item.price,  // Цена товара
-                                        category: object.item.catalog,  // Категория товара
-                                        quantity: object.value,  // Количество товара
-                                    }
-                                ]
-                                }
-                            }
-                        });
-                    }
-                    
-                    this.$emit('updateBasket');
-                }, 1000);
-                
+            console.log(object)
+            if (!this.fetchIds.includes(object.item.key)) {
+                this.fetchIds.push(object.item.key);
             }
+            if (object.value == object.min) {
+                this.clearBasketProduct(object.item.org_id, object.item.store_id, object.item.basket.key, object.item)
+                
+                return;
+            };            
+            this.items.stores[object.index].basket.count = object.value;    
+            const data = {
+                action: 'basket/update',
+                id: router.currentRoute._value.params.id,
+                org_id: object.item.org_id,
+                store_id: object.item.store_id,
+                remain_id: object.id_remain,
+                value: object.value,
+                key: object.item.basket.key,
+                actions: object.item.basket.ids_actions
+            };
+            this.busket_from_api(data).then(() => {
+                this.busket_from_api({
+                    action: 'basket/get',
+                    id: router.currentRoute._value.params.id,
+                    warehouse: 'all'
+                }).then((res) => {
+                    const index = this.fetchIds.indexOf(object.item.key);
+                    if (index !== -1) {
+                        this.fetchIds.splice(index, 1); // Удаляем один элемент по индексу
+                    }
+                });
+            });
+            if(Number(object.value) != object.old_value){
+                window.dataLayer = window.dataLayer || [];
+                window.dataLayer.push({
+                    ecommerce: {
+                        currencyCode: "RUB",
+                        add: {
+                        products: [
+                            {
+                                id: object.item.id,
+                                name: object.item.name,
+                                price: object.item.price,
+                                category: object.item.catalog,
+                                quantity: object.value
+                            }
+                        ]
+                        }
+                    }
+                });
+            }        
+            this.$emit('updateBasket');
         },
         ElemCountComplect(object) {
             // console.log(object)
