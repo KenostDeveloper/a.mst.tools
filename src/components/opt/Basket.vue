@@ -87,6 +87,7 @@
 														:min="1"
 														:max="product?.available"
 														:value="product?.count"
+														:step="product?.multiplicity ? product?.multiplicity : 1"
 														:id="product?.remain_id"
 														:key="product?.key"
 													/>
@@ -434,13 +435,14 @@ export default {
 					actions: object.item.product.actions
 				};
 				this.busket_from_api(data).then((response) => {
+					// console.log(response)
 					const datainfo = {
 						remain_id: object.id,
 						store_id: object.store_id,
 						count: object.value,
 					};
-					this.$store.commit("SET_OPT_PRODUCTS_MUTATION_TO_VUEX", datainfo);
-					this.$store.commit("SET_SALES_PRODUCTS_MUTATION_TO_VUEX", datainfo);
+					// this.$store.commit("SET_OPT_PRODUCTS_MUTATION_TO_VUEX", datainfo);
+					// this.$store.commit("SET_SALES_PRODUCTS_MUTATION_TO_VUEX", datainfo);
 				});
 				if(Number(object.value) != object.old_value){
 						window.dataLayer = window.dataLayer || [];

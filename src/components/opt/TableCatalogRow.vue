@@ -68,7 +68,7 @@
                         :store_id="item.store_id"
                         :index="index"
                         :value="item?.basket?.count"
-                        :step="item?.action?.multiplicity ? item?.action?.multiplicity : 1"
+                        :step="item?.multiplicity ? item?.multiplicity : 1"
                         :item="item"
                     />
                     <div @click="addBasket(item, index)" class="dart-btn dart-btn-primary">
@@ -85,8 +85,8 @@
             <td>
                 <div class="table-actions">
                     <!-- 'red': action?.conflicts?.items[action.action_id]?.sales_conflicts -->
-                    <div :data-test="(action?.tags?.length != 1 || (action?.tags?.length == 1 && action?.tags[0].type == 'sale' && action?.tags[0].value > 0) && action?.tags?.length != 0)" class="table-actions__action" :class="{active: action.enabled, red: isConflict(item.conflicts.items, item.actions, action.action_id), 'hidden': !(action?.tags?.length != 1 || (action?.tags?.length == 1 && action?.tags[0].type == 'sale' && action?.tags[0].value > 0) && action?.tags?.length != 0)}" v-for="(action, indexactions) in item.actions" v-bind:key="action.action_id" :data-id="action?.action_id">
-                        <div v-if="(action?.tags?.length != 1 || (action?.tags?.length == 1 && action?.tags[0].type == 'sale' && action?.tags[0].value > 0) && action?.tags?.length != 0)"  class="table-actions__container">
+                    <div :data-test="action?.tags?.length != 0" class="table-actions__action" :class="{active: action.enabled}" v-for="(action, indexactions) in item.actions" v-bind:key="action.action_id" :data-id="action?.action_id">
+                        <div v-if="action?.tags?.length != 0"  class="table-actions__container">
                             <!-- {{ action }} -->
                             <div class="table-actions__el" v-for="(tag, indextag) in action.tags" v-bind:key="tag.id">
                                 <img v-if="tag.type == 'multiplicity'" :src="action.enabled
@@ -137,10 +137,9 @@
                             </div>
 
                         </div>
-                        <div v-if="(action?.tags?.length != 1 || (action?.tags?.length == 1 && action?.tags[0].type == 'sale' && action?.tags[0].value > 0) && action?.tags?.length != 0)" class="table-actions__help" :data-id="action?.action_id">
+                        <div v-if="action?.tags?.length > 0" class="table-actions__help" :data-id="action?.action_id">
                             <p :class="{
-                                active: action.enabled,
-                                red: isConflict(item.conflicts.items, item.actions, action.action_id)
+                                active: action.enabled
                             }">
                                 ?
                             </p>
@@ -775,6 +774,7 @@ export default {
         },
         isConflict(conflicts, actions, action_id) {
             // console.log(conflicts, actions, action_id)
+            /*
             if (actions.find((el) => el.action_id == action_id)?.enabled) {
                 return false;
             } else {
@@ -785,6 +785,8 @@ export default {
                     }
                 }
             }
+                */
+            return false;
         }
     },
     mounted() { },

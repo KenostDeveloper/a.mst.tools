@@ -94,35 +94,24 @@ export default {
 		onMinus() {
 			// Уменьшаем на шаг
 			let newValue = this.d_value - this.d_step;
-
-			// Если новое значение меньше минимального, устанавливаем min
 			if (newValue < this.d_min) {
 				newValue = this.d_min;
 			}
-
-			// Убедитесь, что новое значение кратно шагу
 			if (newValue % this.d_step !== 0) {
 				newValue = Math.floor(newValue / this.d_step) * this.d_step;
 			}
-
 			this.d_value = newValue;
 			this.debouncedSend();
 		},
 		onPlus() {
-			// Увеличиваем на шаг
-			let newValue = this.d_value + this.d_step;
-
-			// Если новое значение превышает максимальное, устанавливаем max
+			let newValue = Number(this.d_value) + Number(this.d_step);
 			if (newValue > this.d_max) {
 				newValue = this.d_max;
 				this.modal_remain = true
 			}
-
-			// Убедитесь, что новое значение кратно шагу
 			if (newValue % this.d_step !== 0) {
 				newValue = Math.floor(newValue / this.d_step) * this.d_step;
 			}
-
 			this.d_value = newValue;
 			this.debouncedSend();
 		},
@@ -131,17 +120,13 @@ export default {
 			if (this.d_value < this.d_min) {
 				this.d_value = this.d_min;
 			}
-
-			// Проверяем, что значение не больше максимального
 			if (this.d_value > this.d_max) {
 				this.d_value = this.d_max;
 			}
-
 			// Округляем значение до кратности шагу
 			if (this.d_value % this.d_step !== 0) {
-				this.d_value = Math.floor(this.d_value / this.d_step) * this.d_step;
+				this.d_value = Math.floor(this.d_value / this.d_step) * Number(this.d_step);
 			}
-
 			this.debouncedSend();
 		},
 		send(){

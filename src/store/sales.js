@@ -180,9 +180,11 @@ export default {
     },
     SET_SALES_PRODUCTS_MUTATION_TO_VUEX: (state, data) => {
       if (Object.keys(state.actions).length) {
-        // console.log('mut 1')
+        
         for (let i = 0; i < Object.keys(state.actions.products).length; i++) {
           if (state.actions.products[Object.keys(state.actions.products)[i]].remain_id === data.remain_id) {
+            console.log(state.actions.products[Object.keys(state.actions.products)[i]])
+            console.log(data)
             state.actions.products[Object.keys(state.actions.products)[i]].basket.availability = true
             state.actions.products[Object.keys(state.actions.products)[i]].basket.count = data.count
           }

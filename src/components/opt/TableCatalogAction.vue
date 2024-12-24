@@ -93,13 +93,13 @@
                         <form class="k-table__form" action="" :class="{ 'basket-true': item?.basket?.availability || this.add_basket.indexOf(item.key) != -1, 'loading-counter': this.fetchIds.indexOf(item.key) != -1 }">
                             <Counter
                                 @ElemCount="ElemCount"
-                                :min="0"
+                                :min="product?.min_count ? product?.min_count : 1"
                                 :max="product.max"
                                 :id="product.remain_id"
                                 :store_id="item.store_id"
                                 :index="index"
                                 :value="item?.basket?.count"
-                                :step="item?.action?.multiplicity ? item?.action?.multiplicity : 1"
+                                :step="product?.multiplicity ? product?.multiplicity : 1"
                                 :item="item"
                             />
                             <div @click="addBasket(item, index1, index2)" class="dart-btn dart-btn-primary">

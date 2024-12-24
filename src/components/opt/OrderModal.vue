@@ -80,6 +80,7 @@
                                                         :max="item?.available"
                                                         :value="item?.count"
                                                         :id="item?.remain_id"
+                                                        :step="item?.multiplicity ? item?.multiplicity : 1"
                                                         :key="item?.key"
                                                     />
                                                 </div>
