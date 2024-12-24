@@ -393,7 +393,7 @@ export default {
 		},
 		filterComplects(data) {
 			data.action = "complects/get";
-			data.store_id = router.currentRoute._value.params.id;
+			data.id = router.currentRoute._value.params.id;
 			this.opt_get_complects(data);
 		},
 		filterDilers(data) {
@@ -410,7 +410,7 @@ export default {
 		paginateComplects(data) {
 			this.page_complects = data.page;
 			data.action = "complects/get";
-			data.store_id = router.currentRoute._value.params.id;
+			data.id = router.currentRoute._value.params.id;
 			this.opt_get_complects(data);
 		},
 		editElem(value) {
@@ -490,7 +490,7 @@ export default {
 							action: "complects/get",
 							page: this.page_complects,
 							perpage: this.pagination_items_per_page_complects,
-							store_id: router.currentRoute._value.params.id,
+							id: router.currentRoute._value.params.id,
 						});
 					})
 					.catch((result) => {
@@ -530,7 +530,7 @@ export default {
 							action: "complects/get",
 							page: this.page_complects,
 							perpage: this.pagination_items_per_page_complects,
-							store_id: router.currentRoute._value.params.id,
+							id: router.currentRoute._value.params.id,
 						});
 					})
 					.catch((result) => {
@@ -573,7 +573,7 @@ export default {
 			action: "complects/get",
 			page: this.page_complects,
 			perpage: this.pagination_items_per_page_complects,
-			store_id: router.currentRoute._value.params.id,
+			id: router.currentRoute._value.params.id,
 		});
 		this.get_dilers_from_api({
 			type: 1,

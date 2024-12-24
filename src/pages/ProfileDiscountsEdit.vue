@@ -1005,7 +1005,7 @@ export default {
             action: 'complects/get',
             page: this.page_complects,
             perpage: this.pagination_items_per_page_complects,
-            store_id: router.currentRoute._value.params.id
+            id: router.currentRoute._value.params.id
         })
         this.opt_get_prices({
             action: 'get/type/prices',
@@ -1339,7 +1339,7 @@ export default {
                 filter: this.filter_complects,
                 page: this.page_complects,
                 perpage: this.pagination_items_per_page_complects,
-                store_id: router.currentRoute._value.params.id,
+                id: router.currentRoute._value.params.id,
                 selected: this.selected_complects
             }
             this.opt_get_complects(data)
@@ -1365,7 +1365,7 @@ export default {
                 filter: this.filter_complects,
                 page: this.page_complects,
                 perpage: this.pagination_items_per_page_complects,
-                store_id: router.currentRoute._value.params.id,
+                id: router.currentRoute._value.params.id,
                 selected: this.selected_complects
             }
             this.opt_get_complects(data)

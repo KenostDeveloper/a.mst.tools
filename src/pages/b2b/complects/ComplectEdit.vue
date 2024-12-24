@@ -593,7 +593,7 @@ export default {
     })
     this.opt_get_complects({
       action: 'complects/get',
-      store_id: router.currentRoute._value.params.id,
+      id: router.currentRoute._value.params.id,
       complect_id: router.currentRoute._value.params.complect_id
     })
   },

@@ -2022,7 +2022,7 @@ export default {
                 filter: this.filter_complects,
                 page: this.page_complects,
                 perpage: this.pagination_items_per_page_complects,
-                store_id: router.currentRoute._value.params.id,
+                id: router.currentRoute._value.params.id,
                 selected: this.selected_complects
             };
             this.opt_get_complects(data);
@@ -2176,7 +2176,7 @@ export default {
                 filter: this.filter_complects,
                 page: this.page_complects,
                 perpage: this.pagination_items_per_page_complects,
-                store_id: router.currentRoute._value.params.id,
+                id: router.currentRoute._value.params.id,
                 selected: this.selected_complects
             };
             // console.log(data);
@@ -2203,7 +2203,7 @@ export default {
                 filter: this.filter_complects,
                 page: this.page_complects,
                 perpage: this.pagination_items_per_page_complects,
-                store_id: router.currentRoute._value.params.id,
+                id: router.currentRoute._value.params.id,
                 selected: this.selected_complects
             };
             this.opt_get_complects(data);
@@ -2642,7 +2642,7 @@ export default {
             action: 'complects/get',
             page: this.page_complects,
             perpage: this.pagination_items_per_page_complects,
-            store_id: router.currentRoute._value.params.id
+            id: router.currentRoute._value.params.id
         });
         this.get_sales_to_api({ id: router.currentRoute._value.params.sales_id, actionid: router.currentRoute._value.params.sales_id }).then(() => {
             this.loading = false;
@@ -2989,7 +2989,7 @@ export default {
                     filter: this.filter_complects,
                     page: this.page_complects,
                     perpage: this.pagination_items_per_page_complects,
-                    store_id: router.currentRoute._value.params.id,
+                    id: router.currentRoute._value.params.id,
                     selected: this.selected_complects
                 };
                 this.opt_get_complects(dataComplect);

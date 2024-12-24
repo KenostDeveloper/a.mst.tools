@@ -45,14 +45,14 @@
             </div>
             <div class="d-col-md-6">
               <div class="modalright__header">
-                <span class="title">Выбор складов поставщиков</span>
+                <span class="title">Выбор поставщиков</span>
                 <a href="#" class="btn-close modalright__close" @click.prevent="toggleVendorModal">
                   <!-- <i class="d_icon d_icon-close"></i> -->
                   <img src="../../assets/images/icons/close.svg" alt="">
                 </a>
               </div>
               <div class="vendors_selected">
-                <span class="vendors_selected__label">Выбранные склады поставщиков</span>
+                <span class="vendors_selected__label">Выбранные поставщики</span>
                 <div class="vendors_selected__rows" v-if="items.selected_count">
                   <div class="vendors_selected__row" v-for="(item) in items.selected" :key="item.id">
                     <a href="#" class="btn btn-close" @click.prevent="changeOpts(item.id, 0)">
@@ -60,7 +60,7 @@
                       <img src="../../assets/images/icons/close.svg" alt="">
                     </a>
                     <div class="vendors_selected__row-text">
-                      <span class="name">{{ item.name_short }}</span>
+                      <span class="name">{{ item.name }}</span>
                       <span class="desc">{{ item.address }}</span>
                       <span class="changevendor__description">{{ item.description }}</span>
                       <div class="changevendor__info">
@@ -74,11 +74,11 @@
                     </div>
                   </div>
                 </div>
-                <div class="dart-alert dart-alert-info dart-mt-1" v-else>Склады поставщиков еще не выбраны</div>
+                <div class="dart-alert dart-alert-info dart-mt-1" v-else>Поставщики еще не выбраны</div>
               </div>
               <div class="vendor_select" v-if="items.selected_count < items.available_count">
                 <div class="vendor_select__title">
-                  <span>Список складов подключенных поставщиков</span>
+                  <span>Список подключенных поставщиков</span>
                   <!--
                   <a href="#" class="add_vendor">
                     <i class="d_icon d_icon-close"></i>
@@ -90,12 +90,12 @@
                   <input type="text" class="dart-form-control" v-model="filter" placeholder="Адрес или наименование склада поставщика" @input="setFilter('filter')">
                 </div>
                 <div class="vendor_select__rows" v-if="avLength">
-                  <div class="vendor_select__row" v-for="(item) in items.available" :key="item.id">
+                  <div class="vendor_select__row" v-for="(item) in items.available" :key="item.key" :data-id="item.key">
                     <div class="vendor_select__row-check">
                       <Checkbox @change="changeSelectCheckbox(item.id)" v-model="vendorForm.selected[item.id]" name="0" :binary="true"/>
                     </div>
                     <div class="vendor_select__row-text">
-                      <span class="name">{{ item.name_short }}</span>
+                      <span class="name">{{ item.name }}</span>
                       <span class="desc">{{ item.address }}</span>
                       <span class="changevendor__description">{{ item.description }}</span>
                       <div class="changevendor__info">
@@ -113,17 +113,17 @@
                   <div class="dart-alert dart-alert-info">Ничего не найдено</div>
                 </div>
                 <div class="vendor_select__actions">
-                  <button class="dart-btn dart-btn-primary dart-btn-block" @click.prevent="checkVendors" v-if="avLength">Выбрать склады</button>
+                  <button class="dart-btn dart-btn-primary dart-btn-block" @click.prevent="checkVendors" v-if="avLength">Выбрать поставщиков</button>
                 </div>
               </div>
               <div class="mt-2" v-else>
                 <div v-if="items.selected_count == 0 && items.available_count == 0">
-                  <div class="dart-alert dart-alert-text">Для просмотра доступных складов необходимо выбрать поставщика!</div>
+                  <div class="dart-alert dart-alert-text">Для ассортимента необходимо выбрать Поставщика!</div>
                   <div class="text-center">
                     <RouterLink class="dart-btn dart-btn-primary" :to="{ name: 'vendors', params: { id: $route.params.id }}">Выбрать поставщика</RouterLink>
                   </div>                  
                 </div>
-                <div class="dart-alert dart-alert-info" v-else>Вы выбрали все доступные склады поставщиков</div>
+                <div class="dart-alert dart-alert-info" v-else>Вы выбрали всех доступных поставщиков</div>
               </div>
             </div>
           </div>
@@ -209,11 +209,6 @@ export default {
         }
         this.vendorForm.selected[id] = true
       }
-      console.log('tut1')
-      this.get_opt_products_from_api({
-        page: 1,
-        perpage: 25
-      });
     },
     changeOpts (id, action) {
       this.loading = true
@@ -226,16 +221,13 @@ export default {
         this.get_opt_vendors_from_api().then((result) => {
           this.loading = false
           this.$emit('vendorCheck')
+          this.get_opt_warehouse_catalog_from_api();
+          this.get_opt_products_from_api({
+            page: 1,
+            perpage: 25
+          });
         })
       })
-
-      this.get_opt_warehouse_catalog_from_api();
-      console.log('tut')
-      this.get_opt_products_from_api({
-        page: 1,
-        perpage: 25
-      });
-
     },
     setFilter (type) {
       if (type === 'filter') {
@@ -271,17 +263,20 @@ export default {
         }
         this.loading = true
         this.$load(async () => {
-          await this.set_vendors_to_api({
-            action: 'set',
-            type: 'opts',
-            id: router.currentRoute._value.params.id,
-            vendors: this.vendorForm.selected
+          await this.toggle_opts_visible({
+            action: 1,
+            store: router.currentRoute._value.params.id,
+            id: this.vendorForm.selected
           })
             .then((result) => {
               this.loading = false
               this.get_opt_vendors_from_api()
               this.vendorForm.selected = []
               this.$emit('vendorCheck')
+              this.get_opt_products_from_api({
+                page: 1,
+                perpage: 25
+              });
             })
             .catch((result) => {
               console.log(result)
