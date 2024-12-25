@@ -514,6 +514,7 @@ export default {
           action: 'complect/set',
           store_id: this.form.store_id,
           products: this.selected,
+          org_id: this.$route.params.id,
           // dates: [this.form.dates[0].toDateString(), this.form.dates[1].toDateString()],
           name: this.form.name,
           complect_id: router.currentRoute._value.params.complect_id
