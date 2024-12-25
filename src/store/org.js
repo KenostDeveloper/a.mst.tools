@@ -25,7 +25,6 @@ export default {
       })
         .then((response) => {
           commit('GET_ORG_AVAILABLE_SELLERS_TO_VUEX', response.data)
-          console.log(response)
           return response
         })
         .catch(error => {
@@ -62,6 +61,7 @@ export default {
       return Axios('/rest/front_org', {
         method: 'POST',
         data: {
+          id: router.currentRoute._value.params.id,
           store_id: router.currentRoute._value.params.store_id,
           action: 'get/org/store'
         },
@@ -91,8 +91,6 @@ export default {
       })
         .then((response) => {
           commit('SET_ORG_PROFILE_TO_VUEX', response.data)
-          console.log(response)
-          // router.push({ name: 'preenter' })
           return response
         })
         .catch(error => {
