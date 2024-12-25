@@ -396,7 +396,7 @@ export default {
                 terms: this.terms,
                 black_list: Object.keys(this.black_list),
                 file: this.file,
-                apply: this.apply.length > 0
+                apply: this.apply.length > 0 ? true : false
             }
 
             if(this.$route.params.group_id){
@@ -697,6 +697,10 @@ export default {
 
             if(newVal.file){
                 this.file = newVal.file
+            }
+
+            if(newVal.update){
+                this.apply = ['true']
             }
 
             if(newVal.properties){
