@@ -55,14 +55,16 @@
                     </div>
 
                     <div v-if="this.type == '1'">
+                        <div class="dart-form-group mt-2 mb-4" >
+                            <div class="flex align-items-center mt-1">
+                                <Checkbox v-model="this.apply" :inputId="'apply'" value="true" />
+                                <label :for="'apply'" class="ml-2">Применять условия к новым товарам</label>
+                            </div>
+                        </div>
                         <div class="kenost-terms dart-form-group" v-for="(item, index) in this.terms" :key="index">
                             <div class="flex align-items-center justify-content-between">
                                 <div class="ktitle">— Условие: {{ item.term == "1" ? "Категории" : item.term == "2" ? "Категории системы интеграции" : item.term == "3" ? "Теги" : "Бренды" }}</div>
                                 <i class="pi pi-trash cursor-pointer" @click="deleteTerms(index)"></i>
-                            </div>
-                            <div class="flex align-items-center mt-1">
-                                <Checkbox v-model="item.apply" :inputId="'apply' + index" value="true" />
-                                <label :for="'apply' + index" class="ml-2">Применять условие к новым товарам</label>
                             </div>
 
                             <div v-if="item.term == '1'">
@@ -133,9 +135,7 @@
                         <a v-if="!this.file" :href="site_url_prefix + 'assets/files/files/examples/ExampleGroups.xlsx'" class="kenost-link-blue mt-2">Скачать шаблон файла</a>
 
                     </div>
-                    <div v-if="this.type == '3'">
-                        
-                    </div>
+
 
                     <TabView class="tab-custom hidden-mobile-l mt-4 kenost-tab-custom">
                         <TabPanel>
@@ -307,10 +307,6 @@
                         </label>
                     </div>
                 </div>
-                <div class="flex align-items-center mt-3">
-                    <Checkbox v-model="apply" inputId="ingredient3" value="true" />
-                    <label for="ingredient3" class="ml-2">Применять условие к новым товарам</label>
-                </div>
                 <div class="w-full flex justify-end mt-3">
                     <div class="dart-btn dart-btn-primary btn-padding" @click="addTerms">Добавить</div>
                 </div>
@@ -399,7 +395,8 @@ export default {
                 description: this.description,
                 terms: this.terms,
                 black_list: Object.keys(this.black_list),
-                file: this.file
+                file: this.file,
+                apply: this.apply.length > 0
             }
 
             if(this.$route.params.group_id){
@@ -432,7 +429,6 @@ export default {
         addTerms(){
             this.terms.push({
                 term: this.term,
-                apply: this.apply,
                 tags: [],
                 vendors: [],
                 catalog: [],

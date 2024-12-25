@@ -438,11 +438,12 @@ export default {
 					// console.log(response)
 					const datainfo = {
 						remain_id: object.id,
-						store_id: object.store_id,
+						store_id: object.item.product.store_id,
 						count: object.value,
+						key: object.item.product.key
 					};
 					// this.$store.commit("SET_OPT_PRODUCTS_MUTATION_TO_VUEX", datainfo);
-					// this.$store.commit("SET_SALES_PRODUCTS_MUTATION_TO_VUEX", datainfo);
+					this.$store.commit("SET_SALES_PRODUCTS_MUTATION_TO_VUEX", datainfo);
 				});
 				if(Number(object.value) != object.old_value){
 						window.dataLayer = window.dataLayer || [];

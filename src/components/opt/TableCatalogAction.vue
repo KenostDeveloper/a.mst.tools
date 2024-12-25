@@ -9,6 +9,7 @@
                     <th class="k-table__name k-tablr-th-price">РРЦ</th>
                     <th class="k-table__name k-tablr-th-delivery hidden-mobile-l">Скидка %</th>
                     <th class="k-table__name k-tablr-th-action">Цена со скидкой за шт. (₽)</th>
+                    <th class="k-table__name k-tablr-th-actions">Акции</th>
                     <th class="k-table__name k-tablr-th-remain hidden-mobile-l">Сумма (₽)</th>
                     <th class="k-table__name k-tablr-th-vendor">Кратность</th>
                     <th class="k-table__name k-tablr-th-retail hidden-mobile-l">Остатки на складе</th>
@@ -52,15 +53,18 @@
                     <td >
                         {{ 
                             (Number(item.old_price) && Number(item.old_price) !== 0) 
-                                ? ((Number(item.old_price) - Number(item.new_price)) / (Number(item.old_price) / 100)).toFixed(2).toLocaleString('ru') 
+                                ? ((Number(item.old_price) - Number(item.price)) / (Number(item.old_price) / 100)).toFixed(2).toLocaleString('ru') 
                                 : '0'
                         }}
                     </td>
                     <td>
-                        {{ Math.round(Number(item.new_price)).toLocaleString('ru') }} ₽
+                        {{ Math.round(Number(item.price)).toLocaleString('ru') }} ₽
                     </td>
                     <td>
-                        {{ Math.round(Number(item.new_price) * item.multiplicity).toLocaleString('ru') }} ₽
+                        {{ item.actions }}
+                    </td>
+                    <td>
+                        {{ Math.round(Number(item.price) * item.multiplicity).toLocaleString('ru') }} ₽
                     </td>
                     <td>
                         {{ Math.round(item.multiplicity).toLocaleString('ru') }} ₽
@@ -97,10 +101,10 @@
                                 :max="product.max"
                                 :id="product.remain_id"
                                 :store_id="item.store_id"
-                                :index="index"
+                                :index="{index}"
                                 :value="item?.basket?.count"
                                 :step="product?.multiplicity ? product?.multiplicity : 1"
-                                :item="item"
+                                :item="{item: item, index1, index2}"
                             />
                             <div @click="addBasket(item, index1, index2)" class="dart-btn dart-btn-primary">
                                 <i class="d_icon d_icon-busket"></i>
@@ -108,16 +112,82 @@
                         </form>
                     </td>
                     <td>
-                        {{ Number(product.price) != 0 ? Math.round(Number(product.price)).toLocaleString('ru') : Math.round(Number(product.new_price)).toLocaleString('ru') }} ₽
+                        {{ Number(item.price) != 0 ? Math.round(Number(item.price)).toLocaleString('ru') : Math.round(Number(product.price)).toLocaleString('ru') }} ₽
                     </td>
                     <td>
-                        {{ Number(product.price) != 0 ? Math.round((Number(product.old_price) - (Number(product.new_price))) / (Number(product.old_price) / 100)).toLocaleString('ru') : 0 }} %
+                        {{ Number(item.price) != 0 ? Math.round((Number(product.price) - (Number(item.price))) / (Number(product.price) / 100)).toLocaleString('ru') : 0 }} %
                     </td>
                     <td>
-                        {{ Math.round(product.new_price).toLocaleString('ru') }} ₽
+                        {{ Math.round(item.price).toLocaleString('ru') }} ₽
                     </td>
                     <td>
-                        {{ (Number(product.multiplicity) * Number(product.new_price)).toLocaleString('ru') }} ₽
+                        <div class="table-actions">
+                    <!-- 'red': action?.conflicts?.items[action.action_id]?.sales_conflicts -->
+                    <div :data-test="action?.tags?.length != 0" class="table-actions__action" :class="{active: action.enabled}" v-for="(action, indexactions) in item.actions" v-bind:key="action.action_id" :data-id="action?.action_id">
+                        <div v-if="action?.tags?.length != 0"  class="table-actions__container">
+                            <!-- {{ action }} -->
+                            <div class="table-actions__el" v-for="(tag, indextag) in action.tags" v-bind:key="tag.id">
+                                <img v-if="tag.type == 'multiplicity'" :src="action.enabled
+                                    ? '/images/icons/action/gray/box.svg'
+                                    : isConflict(item.conflicts.items, item.actions, action.action_id)
+                                        ? '/images/icons/action/red/box.svg'
+                                        : '/images/icons/action/black/box.svg'
+                                    " alt="" />
+                                <p v-if="tag.type == 'multiplicity'">{{ tag.value }} шт.</p>
+
+                                <img v-if="tag.type == 'min'" :src="action.enabled
+                                    ? '/images/icons/action/gray/min.svg'
+                                    : isConflict(item.conflicts.items, item.actions, action.action_id)
+                                        ? '/images/icons/action/red/min.svg'
+                                        : '/images/icons/action/black/min.svg'
+                                    " alt="" />
+
+                                <img v-if="tag.type == 'gift'" :src="action.enabled
+                                    ? '/images/icons/action/gray/gift.svg'
+                                    : isConflict(item.conflicts.items, item.actions, action.action_id)
+                                        ? '/images/icons/action/red/gift.svg'
+                                        : '/images/icons/action/black/gift.svg'
+                                    " alt="" />
+
+                                <img v-if="tag.type == 'delay'" :src="action.enabled
+                                    ? '/images/icons/action/gray/time.svg'
+                                    : isConflict(item.conflicts.items, item.actions, action.action_id)
+                                        ? '/images/icons/action/red/time.svg'
+                                        : '/images/icons/action/black/time.svg'
+                                    " alt="" />
+                                <p v-if="tag.type == 'delay'">Отсроч. {{ tag.value }} дн.</p>
+
+                                <img v-if="tag.type == 'sale' && tag.value > 0" :src="action.enabled
+                                    ? '/images/icons/action/gray/sale.svg'
+                                    : isConflict(item.conflicts.items, item.actions, action.action_id)
+                                        ? '/images/icons/action/red/sale.svg'
+                                        : '/images/icons/action/black/sale.svg'
+                                    " alt="" />
+                                <p v-if="tag.type == 'sale' && tag.value > 0">Скидка {{ Number(tag.value).toFixed(0) }}%</p>
+
+                                <img v-if="tag.type == 'free_delivery'" :src="action.enabled
+                                    ? '/images/icons/action/gray/delivery.svg'
+                                    : isConflict(item.conflicts.items, item.actions, action.action_id)
+                                        ? '/images/icons/action/red/delivery.svg'
+                                        : '/images/icons/action/black/delivery.svg'
+                                    " alt="" />
+
+                            </div>
+
+                        </div>
+                        <div v-if="action?.tags?.length > 0" class="table-actions__help" :data-id="action?.action_id">
+                            <p :class="{
+                                active: action.enabled
+                            }">
+                                ?
+                            </p>
+                            <ActionModal :action="action"/>
+                        </div>
+                    </div>
+                </div>
+                    </td>
+                    <td>
+                        {{ (Number(product.multiplicity) * Number(item.price)).toLocaleString('ru') }} ₽
                     </td>
                     <td>
                         {{ product.multiplicity }}
@@ -144,6 +214,7 @@ import Dialog from 'primevue/dialog'
 // import InputSwitch from 'primevue/inputswitch'
 import Counter from './Counter.vue';
 import router from '../../router';
+import ActionModal from '../../components/opt/ActionModal.vue'
 
 export default {
     name: 'TableCatalogAction',
@@ -230,8 +301,6 @@ export default {
                 }
             }
             });
-
-            console.log('this.items', this.items)
             // eslint-disable-next-line vue/no-mutating-props
             this.items.products[index1].stores[index2].basket.availability = true;
             this.$emit('updateBasket');
@@ -280,22 +349,67 @@ export default {
                 delivery_day: minDeliveryDate
             };
         },
-        clearBasketProduct(storeid, productid) {
-			this.$emit("catalogUpdate");
-			this.$emit("actionUpdate");
+        // clearBasketProduct(storeid, productid) {
+		// 	this.$emit("catalogUpdate");
+		// 	this.$emit("actionUpdate");
+		// 	const data = {
+		// 		action: "basket/clear",
+		// 		id: router.currentRoute._value.params.id,
+		// 		store_id: storeid,
+		// 		id_remain: productid,
+		// 	};
+		// 	this.busket_from_api(data).then((response) => {});
+		// 	this.busket_from_api({
+		// 		action: 'basket/get',
+		// 		id: router.currentRoute._value.params.id,
+		// 		warehouse: 'all'
+		// 	}).then(() => {
+        //         const index = this.fetchIds.indexOf(product.key);
+        //         if (index !== -1) {
+        //             this.fetchIds.splice(index, 1); // Удаляем один элемент по индексу
+        //         }
+        //     })
+		// },
+        clearBasketProduct(org_id, store_id, key, product, index1, index2) {
+            console.log(org_id, store_id, key, product)
 			const data = {
-				action: "basket/clear",
+				action: "basket/remove",
 				id: router.currentRoute._value.params.id,
-				store_id: storeid,
-				id_remain: productid,
+				org_id: org_id,
+				store_id: store_id,
+				key: key,
+				product: product
 			};
 			this.busket_from_api(data).then((response) => {});
-			this.busket_from_api({
+			window.dataLayer = window.dataLayer || [];
+			window.dataLayer.push({
+                ecommerce: {
+                    currencyCode: "RUB",  // Валюта
+                    remove: {
+                        products: [
+                            {
+                                id: product.remain_id,  // ID товара
+                                name: product.name,  // Название товара
+                                price: product.price,  // Цена товара
+                                quantity: product.count,  // Количество товара
+                            }
+                        ]
+                    }
+                }
+			});
+            this.busket_from_api({
 				action: 'basket/get',
 				id: router.currentRoute._value.params.id,
 				warehouse: 'all'
-			})
-		},
+			}).then(() => {
+                const index = this.fetchIds.indexOf(product.key);
+                if (index !== -1) {
+                    this.fetchIds.splice(index, 1); // Удаляем один элемент по индексу
+                }
+            })
+
+            this.items.products[index1].stores[index2].basket.availability = false;
+        },
 		clearBasketComplect(storeid, complectid) {
 			this.$emit("catalogUpdate");
 			this.$emit("actionUpdate");
@@ -313,25 +427,24 @@ export default {
 			})
 		},
         ElemCount(object) {
-            console.log(object)
-            if (!this.fetchIds.includes(object.item.key)) {
-                this.fetchIds.push(object.item.key);
+            // console.log(object)
+            if (!this.fetchIds.includes(object.item.item.key)) {
+                this.fetchIds.push(object.item.item.key);
             }
             if (object.value == object.min) {
-                this.clearBasketProduct(object.item.org_id, object.item.store_id, object.item.basket.key, object.item)
-                
+                this.clearBasketProduct(object.item.item.org_id, object.item.item.store_id, object.item.item.key, object.item.item, object.item.index1, object.item.index2)
                 return;
-            };            
-            this.items.stores[object.index].basket.count = object.value;    
+            }; 
+            this.items.products[object.item.index1].stores[object.item.index2].basket.count = object.value;
             const data = {
                 action: 'basket/update',
                 id: router.currentRoute._value.params.id,
-                org_id: object.item.org_id,
-                store_id: object.item.store_id,
-                remain_id: object.id_remain,
+                org_id: object.item.item.org_id,
+                store_id: object.item.item.store_id,
+                remain_id: object.id,
                 value: object.value,
-                key: object.item.basket.key,
-                actions: object.item.basket.ids_actions
+                key: object.item.item.basket.key,
+                actions: object.item.item.basket.ids_actions
             };
             this.busket_from_api(data).then(() => {
                 this.busket_from_api({
@@ -339,7 +452,7 @@ export default {
                     id: router.currentRoute._value.params.id,
                     warehouse: 'all'
                 }).then((res) => {
-                    const index = this.fetchIds.indexOf(object.item.key);
+                    const index = this.fetchIds.indexOf(object.item.item.key);
                     if (index !== -1) {
                         this.fetchIds.splice(index, 1); // Удаляем один элемент по индексу
                     }
@@ -353,10 +466,10 @@ export default {
                         add: {
                         products: [
                             {
-                                id: object.item.id,
-                                name: object.item.name,
-                                price: object.item.price,
-                                category: object.item.catalog,
+                                id: object.item.item.id,
+                                name: object.item.item.name,
+                                price: object.item.item.price,
+                                category: object.item.item.catalog,
                                 quantity: object.value
                             }
                         ]
@@ -444,7 +557,7 @@ export default {
         }
     },
     mounted() {},
-    components: { Counter, Dialog },
+    components: { Counter, Dialog, ActionModal },
     computed: {
         ...mapGetters(['basket'])
     }

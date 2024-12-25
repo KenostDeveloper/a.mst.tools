@@ -310,8 +310,9 @@ export default {
             this.busket_from_api(data).then((response) => {
                 const datainfo = {
                     remain_id: object.id,
-                    store_id: object.store_id,
+                    store_id: object.item.item.store_id,
                     count: object.value,
+					key: object.item.item.key
                 };
                 this.$store.commit("SET_OPT_PRODUCTS_MUTATION_TO_VUEX", datainfo);
                 this.$store.commit("SET_SALES_PRODUCTS_MUTATION_TO_VUEX", datainfo);

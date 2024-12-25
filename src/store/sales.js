@@ -179,17 +179,30 @@ export default {
       state.action_discount = data.data
     },
     SET_SALES_PRODUCTS_MUTATION_TO_VUEX: (state, data) => {
-      if (Object.keys(state.actions).length) {
-        
-        for (let i = 0; i < Object.keys(state.actions.products).length; i++) {
-          if (state.actions.products[Object.keys(state.actions.products)[i]].remain_id === data.remain_id) {
-            console.log(state.actions.products[Object.keys(state.actions.products)[i]])
-            console.log(data)
-            state.actions.products[Object.keys(state.actions.products)[i]].basket.availability = true
-            state.actions.products[Object.keys(state.actions.products)[i]].basket.count = data.count
+      if(state.actions.products){
+        for(let i = 0; i < state.actions.products.length; i++){
+          if(state.actions.products[i].remain_id == data.remain_id){
+            for(let j = 0; j < state.actions.products[i].stores.length; j++){
+              if(state.actions.products[i].stores[j].store_id == data.store_id){
+                if(state.actions.products[i].stores[j].basket.key == data.key){
+                  state.actions.products[i].stores[j].basket.availability = true
+                  state.actions.products[i].stores[j].basket.count = data.count
+                }
+              }
+            }
           }
         }
       }
+      // if (Object.keys(state.actions).length) {
+      //   for (let i = 0; i < Object.keys(state.actions.products).length; i++) {
+      //     if (state.actions.products[Object.keys(state.actions.products)[i]].remain_id === data.remain_id) {
+      //       console.log(state.actions.products[Object.keys(state.actions.products)[i]])
+      //       console.log(data)
+      //       state.actions.products[Object.keys(state.actions.products)[i]].basket.availability = true
+      //       state.actions.products[Object.keys(state.actions.products)[i]].basket.count = data.count
+      //     }
+      //   }
+      // }
     },
     SET_SALES_COMPLECT_MUTATION_TO_VUEX: (state, data) => {
       // console.log('mut SET_SALES_COMPLECT_MUTATION_TO_VUEX', data)
