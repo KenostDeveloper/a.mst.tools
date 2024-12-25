@@ -172,9 +172,9 @@
                         {{ (Number(product.multiplicity) * Number(item.price)).toLocaleString('ru') }} ₽
                     </td>
                     <td>
-                        {{ product.multiplicity }}
+                        {{ item.multiplicity }}
                     </td>
-                    <td>{{ product.available }} шт.</td>
+                    <td>{{ item.available }} шт.</td>
                 </tr>
             </tbody>
             <!-- </tbody> -->
@@ -331,7 +331,8 @@ export default {
                 delivery_day: minDeliveryDate
             };
         },
-        clearBasketProduct(org_id, store_id, key, product, index1, index2) {
+        clearBasketProduct(org_id, store_id, key, product, index1, index2, mult) {
+            console.log(org_id, store_id, key, product, index1, index2, mult)
 			const data = {
 				action: "basket/remove",
 				id: router.currentRoute._value.params.id,
@@ -368,9 +369,8 @@ export default {
                 }
             })
 
-            console.log('count', product)
             this.items.products[index1].stores[index2].basket.availability = false;
-            this.items.products[index1].stores[index2].basket.count = this.items.products[index1].stores[index2].multiplicity
+            this.items.products[index1].stores[index2].basket.count = mult
         },
 		clearBasketComplect(storeid, complectid) {
 			this.$emit("catalogUpdate");
@@ -394,10 +394,12 @@ export default {
                 this.fetchIds.push(object.item.item.key);
             }
             if (object.value <= object.min) {
-                this.clearBasketProduct(object.item.item.org_id, object.item.item.store_id, object.item.item.key, object.item.item, object.item.index1, object.item.index2)
+                this.clearBasketProduct(object.item.item.org_id, object.item.item.store_id, object.item.item.key, object.item.item, object.item.index1, object.item.index2, object.item.item.multiplicity)
+                this.items.products[object.item.index1].stores[object.item.index2].basket.count = object.item.item.multiplicity;
                 return;
+            } else {
+                this.items.products[object.item.index1].stores[object.item.index2].basket.count = object.value;
             }; 
-            this.items.products[object.item.index1].stores[object.item.index2].basket.count = object.value;
             const data = {
                 action: 'basket/update',
                 id: router.currentRoute._value.params.id,
