@@ -1632,7 +1632,8 @@ export default {
 				await this.set_organization_settings({
 					action: "set",
 					type: "organization",
-					id: router.currentRoute._value.params.store_id,
+					id: router.currentRoute._value.params.id,
+					store_id: router.currentRoute._value.params.store_id,
 					settings: this.settingsForm,
 				})
 					.then((result) => {

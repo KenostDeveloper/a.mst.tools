@@ -163,7 +163,12 @@
             <td>
                 <div v-if="item.available > 0">
                     <div v-if="item.price > 0">
-                        {{ item.available }} шт.
+                        <span v-if="item.remains_abstract != item.available">
+                            {{ item.remains_abstract }}
+                        </span>
+                        <span v-else>
+                            {{ item.available }} шт.
+                        </span>                        
                         <div v-if="item.requirement">
                             <div v-if="Number(item.requirement.count) > Number(item.available)" class="kenost-table-elem__adding_info">
                                 <span class="kenost-err-min">Не хватает {{ Number(item.requirement.count) - Number(item.available) }} шт.</span>
