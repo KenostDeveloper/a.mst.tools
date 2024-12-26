@@ -16,7 +16,6 @@ import Actions from "../pages/b2c/Actions.vue";
 import ActionEdit from "../pages/b2c/ActionEdit.vue";
 import Sales from "../pages/b2b/Sales.vue";
 import SalesEdit from "../pages/b2b/SalesEdit.vue";
-import ComplectAdd from "../pages/b2b/complects/ComplectAdd.vue";
 import ComplectEdit from "../pages/b2b/complects/ComplectEdit.vue";
 import ProfilePurchases from "../pages/opt/ProfilePurchases.vue";
 import PurchasesCatalog from "../pages/opt/PurchasesCatalog.vue";
@@ -326,7 +325,7 @@ const routes = [
 										},
 										children: [
 											{
-												path: "add",
+												path: "create",
 												name: "complect_add",
 												props: true,
 												label: "Добавление комлекта",
@@ -335,7 +334,7 @@ const routes = [
 														label: "Добавление комплекта",
 													},
 												},
-												component: ComplectAdd,
+												component: ComplectEdit,
 											},
 											{
 												path: ":complect_id",
