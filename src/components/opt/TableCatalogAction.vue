@@ -172,9 +172,9 @@
                         {{ (Number(product.multiplicity) * Number(item.price)).toLocaleString('ru') }} ₽
                     </td>
                     <td>
-                        {{ product.multiplicity }}
+                        {{ item.multiplicity }}
                     </td>
-                    <td>{{ product.available }} шт.</td>
+                    <td>{{ item.available }} шт.</td>
                 </tr>
             </tbody>
             <!-- </tbody> -->
@@ -235,7 +235,7 @@ export default {
             this.$emit('updateBasket');
         },
         addBasket(item, index1, index2) {
-            console.log(item)
+            console.log('addBasket', item)
             if (!this.add_basket.includes(item.key)) {
                 this.add_basket.push(item.key);
             }
@@ -331,29 +331,8 @@ export default {
                 delivery_day: minDeliveryDate
             };
         },
-        // clearBasketProduct(storeid, productid) {
-		// 	this.$emit("catalogUpdate");
-		// 	this.$emit("actionUpdate");
-		// 	const data = {
-		// 		action: "basket/clear",
-		// 		id: router.currentRoute._value.params.id,
-		// 		store_id: storeid,
-		// 		id_remain: productid,
-		// 	};
-		// 	this.busket_from_api(data).then((response) => {});
-		// 	this.busket_from_api({
-		// 		action: 'basket/get',
-		// 		id: router.currentRoute._value.params.id,
-		// 		warehouse: 'all'
-		// 	}).then(() => {
-        //         const index = this.fetchIds.indexOf(product.key);
-        //         if (index !== -1) {
-        //             this.fetchIds.splice(index, 1); // Удаляем один элемент по индексу
-        //         }
-        //     })
-		// },
-        clearBasketProduct(org_id, store_id, key, product, index1, index2) {
-            console.log(org_id, store_id, key, product)
+        clearBasketProduct(org_id, store_id, key, product, index1, index2, mult) {
+            console.log(org_id, store_id, key, product, index1, index2, mult)
 			const data = {
 				action: "basket/remove",
 				id: router.currentRoute._value.params.id,
@@ -391,6 +370,7 @@ export default {
             })
 
             this.items.products[index1].stores[index2].basket.availability = false;
+            this.items.products[index1].stores[index2].basket.count = mult
         },
 		clearBasketComplect(storeid, complectid) {
 			this.$emit("catalogUpdate");
@@ -413,11 +393,13 @@ export default {
             if (!this.fetchIds.includes(object.item.item.key)) {
                 this.fetchIds.push(object.item.item.key);
             }
-            if (object.value == object.min) {
-                this.clearBasketProduct(object.item.item.org_id, object.item.item.store_id, object.item.item.key, object.item.item, object.item.index1, object.item.index2)
+            if (object.value <= object.min) {
+                this.clearBasketProduct(object.item.item.org_id, object.item.item.store_id, object.item.item.key, object.item.item, object.item.index1, object.item.index2, object.item.item.multiplicity)
+                this.items.products[object.item.index1].stores[object.item.index2].basket.count = object.item.item.multiplicity;
                 return;
+            } else {
+                this.items.products[object.item.index1].stores[object.item.index2].basket.count = object.value;
             }; 
-            this.items.products[object.item.index1].stores[object.item.index2].basket.count = object.value;
             const data = {
                 action: 'basket/update',
                 id: router.currentRoute._value.params.id,

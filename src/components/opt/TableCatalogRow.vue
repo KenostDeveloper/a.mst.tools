@@ -203,13 +203,13 @@
         </tr>
     </tbody>
     <!-- Вывод комплектов -->
-    <tbody class="complect-button kenost-table-background kenost-table-background-complect"
+    <tbody class="complect-button kenost-table-background kenost-table-background-complect active-catalog-group"
         v-for="complect in items.complects" v-bind:key="complect.id" :class="{
             active: this.active || this.is_warehouses || items.total_stores == 1,
             'no-active': !this.active && !this.is_warehouses && items.total_stores > 1,
             'bg-white': items.total_stores == 1
         }">
-        <tr v-for="(item, index) in complect" v-bind:key="item.id" :class="{
+        <tr v-for="(item, index) in complect.products" v-bind:key="item.id" :class="{
             active: this.active || this.is_warehouses || items.total_stores == 1,
             'kenost-table-bg-complect': items.total_stores == 1,
             'no-active': !this.active && !this.is_warehouses && items.total_stores > 1

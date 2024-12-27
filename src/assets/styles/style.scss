@@ -7074,6 +7074,21 @@ button.std-icon__wrapper {
 		cursor: pointer;
 	}
 
+	// .active-catalog-group{
+	// 	tr:first-child {
+	// 		td{
+	// 			font-weight: 700;
+	// 			transition: all 0.3s;
+	// 			&:first-child{
+	// 				border-radius: 5px 0 0 0;
+	// 			}
+	// 			&:last-child{
+	// 				border-radius: 0 5px 0 0;
+	// 			}
+	// 		}
+	// 	}
+	// }
+
 	.active-el {
 		// & + tr.kenost-table-background.active td{
 		// 	border-top: 4px solid #e8e8e8 !important;
@@ -7084,16 +7099,16 @@ button.std-icon__wrapper {
 			}
 		}
 
-		td {
-			font-weight: 700;
-			transition: all 0.3s;
-			&:first-child{
-				border-radius: 5px 0 0 0;
-			}
-			&:last-child{
-				border-radius: 0 5px 0 0;
-			}
-		}
+		// td {
+		// 	font-weight: 700;
+		// 	transition: all 0.3s;
+		// 	&:first-child{
+		// 		border-radius: 5px 0 0 0;
+		// 	}
+		// 	&:last-child{
+		// 		border-radius: 0 5px 0 0;
+		// 	}
+		// }
 	}
 
 	tbody tr.active-el {
@@ -7728,9 +7743,9 @@ button.std-icon__wrapper {
 	border-collapse: separate; /* Это важно для корректной работы border-radius */
 	border-spacing: 0; /* Чтобы избежать двойных границ */
 
-	tbody+tbody tr td {
-		border-top: 1px solid #e2e2e2;
-	}
+	// tbody+tbody tr td {
+	// 	border-top: 1px solid #e2e2e2;
+	// }
 }
 
 .active-catalog-group{
@@ -7754,6 +7769,10 @@ button.std-icon__wrapper {
 		border-right: 2.5px solid #A7A7A7;
 	}
 	
+	tr:first-child td:first-child {
+		border-top-left-radius: 10px !important;
+	}
+
 	tr:first-child td:last-child {
 		border-top-right-radius: 10px !important;
 	}
@@ -7807,12 +7826,16 @@ button.std-icon__wrapper {
 	// display:table;
     // border: 1px solid red;
     // border-radius: 12px;
-	box-shadow: 0 0 0 1px #A7A7A7;
-  	border-radius: 5px;
+	// box-shadow: 0 0 0 1px #A7A7A7;
+  	// border-radius: 5px;
 
 	&.bg-white{
 		background: transparent !important;
 	}
+
+	// td{
+	// 	border-top: none !important;
+	// }
 	
 	// tr:nth-child(1){
 	// 	// background: red;
@@ -8915,15 +8938,17 @@ button.std-icon__wrapper {
         td:last-child {
             padding: 0 12px 0 0;
         }
-
-        th:first-child {
-            border-radius: 5px 0 0 0;
-        }
-
-        th:last-child {
-            border-radius: 0 5px 0 0;
-        }
     }
+
+	// .active-catalog-group{
+	// 	th:first-child {
+    //         border-radius: 5px 0 0 0;
+    //     }
+
+    //     th:last-child {
+    //         border-radius: 0 5px 0 0;
+    //     }
+	// }
 
     &__name {
         color: #5e5e5e;

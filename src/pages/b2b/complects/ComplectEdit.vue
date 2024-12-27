@@ -129,17 +129,36 @@
                       {{(Number(item.price).toFixed(0)).toLocaleString('ru')}} ₽
                   </td>
                   <td>
-                      {{(Number(item.discountInterest).toFixed(2)).toLocaleString('ru')}}
+                    {{this.selected_data[item.id] ?
+                      Number(this.selected_data[item.id].discountInterest).toFixed(2).toLocaleString('ru')
+                      :
+                      Number(0.0).toFixed(2)
+                    }}
                   </td>
                   <td>
-                      {{(Number(item.finalPrice).toFixed(0)).toLocaleString('ru')}} ₽
-                      <p class="table-kenost__settings" @click="this.modals.price = true; this.modals.product_id = item.id; this.modals.type_settings = '2'" >Настроить</p>
+                    {{ this.selected_data[item.id]?
+                    Number(this.selected_data[item.id].finalPrice).toFixed(2).toLocaleString('ru')
+                    :
+                    item.price.toLocaleString('ru')
+                    }} ₽
+                      <p class="table-kenost__settings" @click="settings(item, true)" >Настроить</p>
+                  </td>
+                  <td class="flex justify-content-center" v-if="this.selected_data[item.id]">
+                      <Counter class="margin-auto" @ElemCount="ElemCount" :item="item" :id="item.id"
+                          :min="1" :value="this.selected_data[item.id].multiplicity"
+                          :key="new Date().getMilliseconds() + item.id" />
+                  </td>
+                  <td class="flex justify-content-center" v-else>
+                      <Counter class="margin-auto" @ElemCount="ElemCount" :item="item" :id="item.id"
+                          :min="1" :value="1" />
                   </td>
                   <td>
-                      <Counter class="margin-auto" @ElemCount="ElemCount" :id="item.id" :min="1" :value="item.multiplicity"/>
-                  </td>
-                  <td>
-                      {{(Number(item.finalPrice).toFixed(0)).toLocaleString('ru') * item.multiplicity}} ₽
+                    {{
+                      this.selected_data[item.id]
+                          ? (Number(this.selected_data[item.id].finalPrice) *
+                              this.selected_data[item.id].multiplicity).toFixed(2)
+                          : item.price.toLocaleString('ru')
+                    }} ₽
                   </td>
                   </tr>
               </tbody>
@@ -235,7 +254,7 @@
       </div>
   </form>
 
-  <Dialog v-model:visible="this.modals.price" :header="this.modals.headers[this.modals.price_step]" :style="{ width: '600px' }">
+  <Dialog v-model:visible="this.modals.price" :header="this.modals.headers[this.modals.price_step]" :style="{ width: '700px' }">
       <div class="kenost-modal-price">
           <div class="product-kenost-card">
             <img :src="this.selected[this.modals.product_id]?.image">
@@ -245,108 +264,118 @@
             </div>
           </div>
           <div class="kenost-method-edit-flex" v-if="this.modals.price_step == 0">
-            <div class="flex align-items-center mt-3 gap-1">
-              <RadioButton v-model="this.modals.type_price" inputId="type_price-1" name="type_price" value="1"/>
-              <label for="type_price-1" class="ml-2 radioLabel">Скидка по формуле</label>
+            <div class="flex align-items-center gap-1 mt-3">
+                <RadioButton v-model="this.modals.type_price" inputId="type_price-1" name="type_price" value="1" />
+                <label for="type_price-1" class="ml-2 radioLabel">Задать вручную</label>
             </div>
-            <div class="flex align-items-center mt-3 gap-1">
-              <RadioButton v-model="this.modals.type_price" inputId="type_price-2" name="type_price" value="2"/>
-              <label for="type_price-2" class="ml-2 radioLabel">Тип цен</label>
-            </div>
-            <div class="flex align-items-center mt-3 gap-1">
-              <RadioButton v-model="this.modals.type_price" inputId="type_price-3" name="type_price" value="3"/>
-              <label for="type_price-3" class="ml-2 radioLabel">Задать вручную</label>
+            <div class="flex align-items-center gap-1 mt-3">
+                <RadioButton v-model="this.modals.type_price" inputId="type_price-2" name="type_price" value="2" />
+                <label for="type_price-2" class="ml-2 radioLabel">Тип цен</label>
             </div>
           </div>
 
           <div v-if="this.modals.price_step == 1" class="two-colums mt-3">
-            <div class="kenost-wiget">
-                <p>Тип цены</p>
-                <Dropdown v-model="this.selected[this.modals.product_id].typePrice" :options="this.typePrice" optionLabel="name" class="w-full md:w-14rem" />
+                <div class="kenost-wiget">
+                    <p>Тип ценообразования</p>
+                    <Dropdown
+                        @change="setDiscountFormul()"
+                        v-model="this.selected_data[this.modals.product_id].typePricing"
+                        :options="this.typePricing" optionLabel="name"
+                        class="w-full md:w-14rem" />
+                </div>
+                <div class="kenost-wiget" v-if="this.selected_data[this.modals.product_id]?.typePricing?.key != 2">
+                    <p>Тип цены</p>
+                    <Dropdown @change="setDiscountFormul()"
+                        v-model="this.selected_data[this.modals.product_id].typePrice"
+                        :options="this.selected[this.modals.product_id].prices" optionLabel="name" 
+                        class="w-full md:w-14rem" />
+                </div>
+                <div class="kenost-wiget-two">
+                    <div class="kenost-wiget">
+                        <p>Значение</p>
+                        <InputNumber v-model="this.saleValue" inputId="horizontal-buttons" :step="0.1" min="0"
+                            @update:modelValue="setDiscountFormul()" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" />
+                    </div>
+                    <div class="kenost-wiget">
+                        <p>&nbsp;</p>
+                        <Dropdown @change="setDiscountFormul()" :disabled="this.selected_data[this.modals.product_id]?.typePricing?.key != 2" v-model="this.selected_data[this.modals.product_id].typeFormul"
+                            :options="this.typeFormul" optionLabel="name" class="w-full md:w-14rem" />
+                    </div>
+                </div>
             </div>
-            <div class="kenost-wiget-two">
-              <div class="kenost-wiget">
-                <p>Значение</p>
-                <InputNumber
-                  v-model="this.saleValue"
-                  inputId="horizontal-buttons"
-                  :step="0.1"
-                  min="0"
-                  @update:modelValue="setDiscountFormul(this.selected[this.modals.product_id].typeFormul, this.saleValue)"
-                  incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"
-                />
-              </div>
-              <div class="kenost-wiget">
-                <p>&nbsp;</p>
-                <Dropdown @change="setDiscountFormul(this.selected[this.modals.product_id].typeFormul, this.saleValue)" v-model="this.selected[this.modals.product_id].typeFormul" :options="this.typeFormul" optionLabel="name" class="w-full md:w-14rem" />
-              </div>
-            </div>
-          </div>
 
-          <div v-if="this.modals.price_step == 2" class="two-colums mt-3">
-            <div class="kenost-wiget">
-                <p>Тип цены</p>
-                <Dropdown v-model="this.selected[this.modals.product_id].typePrice" :options="this.typePrice" optionLabel="name" class="w-full md:w-14rem" />
+            <div v-if="this.modals.price_step == 2" class="two-colums mt-3">
+                <div class="kenost-wiget">
+                    <p>Тип цены</p>
+                    <Dropdown @change="setTypePrice()" v-model="this.selected_data[this.modals.product_id].typePrice"
+                        :options="this.selected[this.modals.product_id].prices" optionLabel="name"
+                        class="w-full md:w-14rem" />
+                </div>
             </div>
-          </div>
 
-          <div v-if="this.modals.price_step == 3" class="two-colums mt-3">
-            <div class="kenost-wiget">
-              <p>Скидка в %</p>
-              <InputNumber
-                  v-model="this.selected[this.modals.product_id].discountInterest"
-                  inputId="horizontal-buttons"
-                  :step="1"
-                  min="0"
-                  max="100"
-                  suffix=" %"
-                  @update:modelValue="setPrices(this.modals.product_id, 'discountInterest', this.selected[this.modals.product_id].discountInterest)"
-                  incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"
-              />
-            </div>
-            <div class="kenost-wiget">
-              <p>Скидка в ₽</p>
-              <InputNumber
-                  v-model="selected[this.modals.product_id].discountInRubles"
-                  inputId="horizontal-buttons"
-                  :step="1"
-                  min="0"
-                  :max="selected[this.modals.product_id].price"
-                  mode="currency" currency="RUB"
-                  @update:modelValue="setPrices(this.modals.product_id, 'discountInRubles', this.selected[this.modals.product_id].discountInRubles)"
-                  incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"
-              />
-            </div>
-            <div class="kenost-wiget">
-              <p>Цена со скидкой</p>
-              <InputNumber
-                  v-model="selected[this.modals.product_id].finalPrice"
-                  inputId="horizontal-buttons"
-                  :step="1"
-                  :max="selected[this.modals.product_id].price"
-                  mode="currency" currency="RUB"
-                  min="0"
-                  @update:modelValue="setPrices(this.modals.product_id, 'finalPrice', this.selected[this.modals.product_id].finalPrice)"
-                  incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"
-              />
-            </div>
-          </div>
+            <!-- <div v-if="this.modals.price_step == 3" class="two-colums mt-3">
+                <div class="kenost-wiget">
+                    <p>Скидка в %</p>
+                    <InputNumber v-model="this.selected_data[this.modals.product_id].discountInterest"
+                        inputId="horizontal-buttons" :step="1" min="0" max="100" suffix=" %" @update:modelValue="
+                            setPrices(this.modals.product_id, 'discountInterest', this.selected_data[this.modals.product_id].discountInterest)
+                            " incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" />
+                </div>
+                <div class="kenost-wiget">
+                    <p>Скидка в ₽</p>
+                    <InputNumber v-model="selected_data[this.modals.product_id].discountInRubles"
+                        inputId="horizontal-buttons" :step="1" min="0" :max="selected[this.modals.product_id].price"
+                        mode="currency" currency="RUB" @update:modelValue="
+                            setPrices(this.modals.product_id, 'discountInRubles', this.selected_data[this.modals.product_id].discountInRubles)
+                            " incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" />
+                </div>
+                <div class="kenost-wiget">
+                    <p>Цена со скидкой</p>
+                    <InputNumber v-model="selected_data[this.modals.product_id].finalPrice" inputId="horizontal-buttons"
+                        :step="1" :max="selected[this.modals.product_id].price" mode="currency" currency="RUB" min="0"
+                        @update:modelValue="setPrices(this.modals.product_id, 'finalPrice', this.selected_data[this.modals.product_id].finalPrice)"
+                        incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" />
+                </div>
+            </div> -->
 
-          <div class="kenost-info-line" v-if="this.modals.price_step != 0">
-            <p>РРЦ: {{this.selected[this.modals.product_id]?.price}} ₽</p>
-            <p>Скидка: {{(this.selected[this.modals.product_id]?.discountInterest).toFixed(2)}} %</p>
-            <p>Цена со скидой: {{this.selected[this.modals.product_id]?.finalPrice}} ₽</p>
-          </div>
+            <div class="kenost-info-line" v-if="this.modals.price_step != 0">
+                <p>РРЦ: {{ this.selected[this.modals.product_id]?.price ?? '—' }} ₽</p>
+                <p>
+                    Скидка от РРЦ:
+                    {{
+                        this.selected_data[this.modals.product_id]
+                        ? Number(this.selected_data[this.modals.product_id].discountInterest)
+                            .toFixed(2)
+                            .toLocaleString('ru')
+                        : '0'
+                    }}
+                    %
+                </p>
+                <p>
+                    Цена со скидой:
+                    {{
+                        this.selected_data[this.modals.product_id]?.finalPrice ? this.selected_data[this.modals.product_id]?.finalPrice : this.selected_data[this.modals.product_id]?.price
+                    }}
+                    ₽
+                </p>
+            </div>
 
-          <div class="kenost-modal-price__button kenost-modal-price__flex">
-              <span v-if="this.modals.price_step == 0"></span>
-              <div v-if="this.modals.price_step != 0" class="dart-btn dart-btn-secondary btn-padding" @click="this.modals.price_step = 0">
-                Назад
-              </div>
-              <div class="dart-btn dart-btn-primary btn-padding" @click="closeDialogPrice">
-                {{this.modals.price_step == 0? 'Далее' : 'Готово'}}
-              </div>
-          </div>
+            <div v-if="this.selected_data[this.modals.product_id]?.typePricing?.key == 2 && this.modals.price_step != 0">
+                <div class="dart-alert dart-alert-info mt-2">
+                    Цена будет всегда оставаться неизменной, даже при изменении типов цен, РРЦ и любых других параметров товара.
+                </div>
+            </div>
+
+            <div class="kenost-modal-price__button kenost-modal-price__flex">
+                <span v-if="this.modals.price_step == 0"></span>
+                <div v-if="this.modals.price_step != 0" class="dart-btn dart-btn-secondary btn-padding"
+                    @click="this.modals.price_step = 0">
+                    Назад
+                </div>
+                <div class="dart-btn dart-btn-primary btn-padding" @click="closeDialogPrice">
+                    {{ this.modals.price_step == 0 ? 'Далее' : 'Готово' }}
+                </div>
+            </div>
       </div>
   </Dialog>
 </template>
@@ -383,7 +412,9 @@ export default {
         name: '',
         type: [1, 2]
       },
+      saleValue: 0,
       selected: {},
+      selected_data: {},
       products: [],
       all_organizations: [],
       all_organizations_selected: {},
@@ -397,16 +428,20 @@ export default {
         price_step: 0,
         type_price: '1',
         product_id: -1,
-        headers: [
-          'Метод редактирования цены',
-          'Скидка по формуле',
-          'Тип цен',
-          'Скидка вручную'
-        ]
+        headers: ['Метод редактирования цены', 'Задать вручную', 'Тип цен']
       },
       typePrice: [
-        { name: 'Заданная', key: 0 }
-      ]
+        { name: 'Розничная', key: 0 }
+      ],
+      typeFormul: [
+        { name: '₽', key: 0 },
+        { name: '%', key: 1 }
+      ],
+      typePricing: [
+        {name: 'Наценка', key: 1},
+        {name: 'Скидка', key: 2},
+        {name: 'Фиксированая цена', key: 3}
+      ],
     }
   },
   methods: {
@@ -418,6 +453,7 @@ export default {
       'opt_api',
       'opt_get_complects',
       'org_get_stores_from_api',
+      'opt_get_remain_prices'
     ]),
     setFilter () {
       const data = { storeid: [this.form.store_id], filter: this.filter, filterselected: this.filter_table, selected: Object.keys(this.selected), pageselected: this.page_selected, page: this.page, perpage: this.per_page }
@@ -451,6 +487,46 @@ export default {
       this.products = []
 
       this.get_available_products_from_api(data).then()
+    },
+    setTypePrice() {
+          const getPrice = this.selected[this.modals.product_id].prices.find(
+              (r) => r.guid === this.selected_data[this.modals.product_id].typePrice.guid
+          ).price;
+          this.selected_data[this.modals.product_id].finalPrice = Number(getPrice);
+          this.selected_data[this.modals.product_id].discountInRubles = Number(this.selected_data[this.modals.product_id].price) - Number(getPrice);
+          this.selected_data[this.modals.product_id].discountInterest =
+              (Number(this.selected_data[this.modals.product_id].price) - Number(getPrice)) /
+              (Number(this.selected_data[this.modals.product_id].price) / 100);
+      },
+    settings(item, modal) {
+      this.opt_get_remain_prices({
+        action: 'get/product/prices',
+        remain_id: item.id
+      }).then((res) => {
+        this.selected[item.id].prices = res.data.data;
+      });
+
+      this.modals.price = modal;
+      this.modals.product_id = item.id;
+      if (!this.selected_data[item.id]) {
+          const elem = {
+              price: item.price,
+              multiplicity: 1,
+              min_count: 1,
+              finalPrice: item.price,
+              discountInterest: 0,
+              discountInRubles: 0
+          };
+          this.selected_data[item.id] = elem;
+      }else{
+          if(this.selected_data[item.id].typePricing?.key == 3){
+              this.saleValue = this.selected_data[item.id].finalPrice
+          } else if(this.selected_data[item.id].typePricing?.key == 2 && this.selected_data[item.id].typeFormul?.key == 0){
+              this.saleValue = this.selected_data[item.id].price - this.selected_data[item.id].finalPrice
+          } else if(this.selected_data[item.id].percent){
+              this.saleValue = this.selected_data[item.id].percent
+          }
+      }
     },
     setPrices (index, name, value) {
       switch (name) {
@@ -509,39 +585,103 @@ export default {
       this.total_selected++
     },
     formSubmit (event) {
-      this.$load(async () => {
-        await this.opt_api({
-          action: 'complect/set',
-          store_id: this.form.store_id,
-          products: this.selected,
-          // dates: [this.form.dates[0].toDateString(), this.form.dates[1].toDateString()],
-          name: this.form.name,
-          complect_id: router.currentRoute._value.params.complect_id
+      if(router.currentRoute._value.params.complect_id){
+        //Редактирование
+        this.$load(async () => {
+          await this.opt_api({
+            action: 'complect/set',
+            store_id: this.form.store_id,
+            products:  Object.keys(this.selected),
+            products_data: this.selected_data,
+            org_id: this.$route.params.id,
+            name: this.form.name,
+            complect_id: router.currentRoute._value.params.complect_id
+          })
+            .then((result) => {
+              this.loading = false
+              router.push({ name: 'b2b', params: { id: router.currentRoute._value.params.id } })
+            })
+            .catch((result) => {
+              console.log(result)
+            })
         })
-          .then((result) => {
-            this.loading = false
-            router.push({ name: 'b2b', params: { id: router.currentRoute._value.params.id } })
+      } else {
+        //Создание
+        this.$load(async () => {
+          await this.opt_api({
+              action: 'complect/set',
+              store_id: this.form.store_id,
+              products:  Object.keys(this.selected),
+              products_data: this.selected_data,
+              org_id: this.$route.params.id,
+              // dates: [this.form.dates[0].toDateString(), this.form.dates[1].toDateString()],
+              name: this.form.name
           })
-          .catch((result) => {
-            console.log(result)
-          })
-      })
+              .then((result) => {
+                  this.loading = false;
+                  router.push({ name: 'b2b', params: { id: router.currentRoute._value.params.id } });
+              })
+              .catch((result) => {
+                  console.log(result);
+              });
+         });
+      }
+      
       this.loading = true
     // }
     },
-    setDiscountFormul (type, value) {
-      if (type && value !== 0) {
-        if (type.key === 0) {
-          value = Number(value)
-          this.selected[this.modals.product_id].discountInRubles = value
-          this.selected[this.modals.product_id].discountInterest = value / (this.selected[this.modals.product_id].price / 100)
-          this.selected[this.modals.product_id].finalPrice = this.selected[this.modals.product_id].price - value
-        } else if (type.key === 1) {
-          this.selected[this.modals.product_id].discountInRubles = (this.selected[this.modals.product_id].price / 100) * value
-          this.selected[this.modals.product_id].discountInterest = value
-          this.selected[this.modals.product_id].finalPrice = this.selected[this.modals.product_id].price - (this.selected[this.modals.product_index].price / 100) * value
+    setDiscountFormul() {
+        let sale = 0;
+        if(this.selected_data[this.modals.product_id].typePrice){
+            //Скидка от Типа цены
+            sale = Number(this.selected_data[this.modals.product_id].price) - Number(this.selected_data[this.modals.product_id].typePrice.price)
         }
-      }
+        if(this.selected_data[this.modals.product_id].typePricing){
+            switch(this.selected_data[this.modals.product_id].typePricing.key){
+                case 1:
+                    this.selected_data[this.modals.product_id].typeFormul = { name: '%', key: 1 }
+                    if(this.saleValue){
+                        //ФОРМУЛА 100-1500*100/2000
+                        //Например: Товар с РРЦ 2000, Типом цен "Опт1", Цена "Опт1" = 1000, Значение наценки: 50 => Цена товара со скидкой: 1000*1,5 = 1500, Скидка = 100-1500*100/2000  = 25%
+                        //console.log(`100 - ${((Number(this.selected_data[this.modals.product_id].price) - sale) * (1.5 + (1.7 - 1.5) * (this.saleValue - 50) / (70 - 50)))} * 100 / ${Number(this.selected_data[this.modals.product_id].price)}`)
+                        //console.log((1.5 + (1.7 - 1.5) * (this.saleValue - 50) / (70 - 50)))
+                        let salePercent = (100 - ((Number(this.selected_data[this.modals.product_id].price) - sale) * (1.5 + (1.7 - 1.5) * (this.saleValue - 50) / (70 - 50))) * 100 / (Number(this.selected_data[this.modals.product_id].price)))
+                        sale = Number(this.selected_data[this.modals.product_id].price) - Number(this.selected_data[this.modals.product_id].price) * (1 - salePercent / 100)
+                        this.selected_data[this.modals.product_id].percent = this.saleValue
+                    }
+                    break;
+                case 2:
+                    sale = 0;
+                    this.selected_data[this.modals.product_id].typePrice = ""
+
+                    if(this.saleValue && this.selected_data[this.modals.product_id].typeFormul){
+                        if(this.saleValue && this.selected_data[this.modals.product_id]?.typeFormul?.key == 1){
+                            let salePrice = (Number(this.selected_data[this.modals.product_id].price) - sale)*(1-this.saleValue/100)
+                            sale = Number(this.selected_data[this.modals.product_id].price) - salePrice
+                            this.selected_data[this.modals.product_id].percent = this.saleValue
+                        } else {
+                            let salePrice = Number(this.selected_data[this.modals.product_id].price) - sale - this.saleValue
+                            sale = Number(this.selected_data[this.modals.product_id].price) - salePrice
+                            this.selected_data[this.modals.product_id].percent = 0;
+                        }
+                        
+                    }
+                    break;
+                case 3:
+                    // console.log(this.selected_data[this.modals.product_id])
+                    this.selected_data[this.modals.product_id].typeFormul = {key: 0, name: "₽"}
+                    if(this.saleValue){
+                        sale = Number(this.selected_data[this.modals.product_id].price) - this.saleValue
+                        this.selected_data[this.modals.product_id].percent = 0
+                    }
+            }
+        }
+
+        //Устанавливаем цену со скидкой
+        this.selected_data[this.modals.product_id].discountInRubles = sale
+        this.selected_data[this.modals.product_id].finalPrice = Number(this.selected_data[this.modals.product_id].price) - sale
+        //Расчет % скидки от РРЦ
+        this.selected_data[this.modals.product_id].discountInterest = Number(this.selected_data[this.modals.product_id].discountInRubles) / (Number(this.selected_data[this.modals.product_id].price) / 100)
     },
     deleteSelect (id) {
       this.products.push(this.selected[id])
@@ -591,11 +731,14 @@ export default {
       action: 'get/stores',
       id: this.$route.params.id
     })
-    this.opt_get_complects({
-      action: 'complects/get',
-      id: router.currentRoute._value.params.id,
-      complect_id: router.currentRoute._value.params.complect_id
-    })
+    if(router.currentRoute._value.params.complect_id){
+      this.opt_get_complects({
+        action: 'complects/get',
+        id: router.currentRoute._value.params.id,
+        complect_id: router.currentRoute._value.params.complect_id
+      })
+    }
+    
   },
   components: {
     // Calendar,
@@ -626,8 +769,12 @@ export default {
       }
     },
     available_products: function (newVal, oldVal) {
-      this.products = newVal.products
-      this.total_products = newVal.total
+      if(newVal?.products){
+        this.products = newVal.products
+      }
+      if(newVal.total >= 0){
+        this.total_products = newVal.total
+      }
     },
     getcatalog: function (newVal, oldVal) {
       this.get_catalog = newVal
@@ -640,11 +787,41 @@ export default {
     },
     optcomplects: function (newVal, oldVal) {
       this.form.name = newVal.name
-      this.form.store_id = (newVal.store_id).toString()
+      this.form.store_id = (newVal.store_id)?.toString()
       // const dateto = new Date(newVal.date_to)
       // const datefrom = new Date(newVal.date_from)
       // this.form.dates = [datefrom, dateto]
       this.selected = newVal.products
+
+      if(newVal.products_data){
+        this.selected_data = newVal.products_data;
+        for (var key in this.selected_data) {
+            if(this.selected_data[key].pricing_type !== undefined && this.selected_data[key].pricing_type !== null ){
+                for (var k_pricing in this.typePricing) {
+                    if(this.typePricing[k_pricing].key == this.selected_data[key].pricing_type){
+                        this.selected_data[key].typePricing = this.typePricing[k_pricing]
+                    }
+                }
+            }
+            if(this.selected_data[key].pricing_formula !== undefined && this.selected_data[key].pricing_formula !== null){
+                for (var k_formula in this.typeFormul) {
+                    if(this.typeFormul[k_formula].key == this.selected_data[key].pricing_formula){
+                        this.selected_data[key].typeFormul = this.typeFormul[k_formula]
+                    }
+                }
+            }
+            if(this.selected_data[key].type_price !== undefined && this.selected_data[key].type_price !== null){
+                for (var k_price in this.selected[key].prices) {
+                    if(this.selected[key].prices[k_price].guid == this.selected_data[key].type_price){
+                        this.selected_data[key].typePrice = this.selected[key].prices[k_price]
+                    }
+                }
+            }
+            if(this.selected_data[key].percent !== undefined && this.selected_data[key].percent !== null){
+                this.selected_data[key].discountInterest = this.selected_data[key].percent
+            }
+        }
+      }
 
       const data = {
         storeid: [this.form.store_id],
