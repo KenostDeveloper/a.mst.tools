@@ -9,7 +9,7 @@
 			<!-- <CatalogMenu :items="opt_catalog" /> -->
 			<div class="d-col-content purchases">
 				<div class="dart-home dart-window">
-					<Breadcrumbs class="std-breadcrumbs--margin" />
+					<!-- <Breadcrumbs class="std-breadcrumbs--margin" /> -->
 					<div v-if="$route.params.warehouse_id && !$route.params.warehouse_cat_id">
 						<h1 class="h1-mini">Все товары</h1>
 						<div class="dart-alert dart-alert-info">

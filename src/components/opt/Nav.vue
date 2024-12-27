@@ -58,7 +58,7 @@
                 </button>
 
                 <div class="std-catalog__nav std-catalog__nav--secondary">
-                    <router-link v-if="this.organizationsOrCategories === 'organizations'" :to="warehouseLink"
+                    <router-link v-if="this.organizationsOrCategories === 'organizations' && 'warehouse_id' in this.actualCatalog" :to="warehouseLink"
                         class="std-catalog__link" @click="toggleCatalogVisibilityAd()">
                         <img src="/images/icons/all_products.svg" alt="" />
                         <span class="std-tab-item__text">Все товары</span>
@@ -86,7 +86,7 @@
                             name: 'org_opt_waregouse_category',
                             params: {
                                 id: this.$route.params.id,
-                                warehouse_id: this.catalogWarehouseParent,
+                                warehouse_id: catItem.warehouse_id,
                                 warehouse_cat_id: catItem.id
                             }
                         }" class="std-catalog__tab-item std-tab-item std-tab-item--none"
@@ -775,6 +775,7 @@ export default {
             return src;
         },
         setActualCatalog(catalog) {
+            console.log(catalog)
             this.actualCatalog = catalog;
         },
         setPrevCatalog() {
@@ -796,17 +797,17 @@ export default {
         findParent(catalog) {
             catalog.forEach((item) => {
                 if (String(this.actualCatalog.parent).includes('warehouse_')) {
-                    if (item.id == String(this.actualCatalog.parent).split('warehouse_')[1]) {
+                    if (item.key == String(this.actualCatalog.parent)) {
                         this.parentCatalog = item;
                         return;
                     }
                 } else if (this.actualCatalog.parent == 0) {
-                    if (item.id == this.catalogWarehouseParent) {
+                    if (item.key == this.actualCatalog.parent) {
                         this.parentCatalog = item;
                         return;
                     }
                 } else {
-                    if (String(item.id) == String(this.actualCatalog.parent)) {
+                    if (String(item.key) == String(this.actualCatalog.parent)) {
                         this.parentCatalog = item;
                         return;
                     }
@@ -943,7 +944,7 @@ export default {
                 name: 'org_opt_waregouse_category',
                 params: {
                     id: this.$route.params.id,
-                    warehouse_id: this.catalogWarehouseParent,
+                    warehouse_id: this.actualCatalog.warehouse_id,
                     warehouse_cat_id: this.actualCatalog.id
                 }
             };

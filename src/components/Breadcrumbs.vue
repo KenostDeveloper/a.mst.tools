@@ -173,7 +173,7 @@ export default {
 				case ":warehouse_id": {
 					return this.optcatalogwarehouse?.find(
 						(catItem) => catItem.id == currentRoute.params[param.slice(1)]
-					)?.pagetitle;
+					)?.name;
 				}
 				case ":warehouse_cat_id": {
 					return this.getCatItem(currentRoute.params[param.slice(1)])?.pagetitle;
@@ -184,7 +184,7 @@ export default {
 			return this.orgs?.find((org) => org.id == id)?.name;
 		},
 		getStoreName() {
-			return this.org_store?.name_short;
+			return this.org_store?.name;
 		},
 		getProductName() {
 			return this.product?.pagetitle;
