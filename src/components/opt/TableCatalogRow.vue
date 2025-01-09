@@ -58,6 +58,7 @@
                 <b>Арт: {{ item.article }}</b>
             </td>
             <td class="k-table__busket">
+                {{ item.min }}
                 <!-- {{ this.fetchIds.indexOf(item.remain_id) != -1 ? "Загрузка..." : "" }} -->
                 <form class="k-table__form" action="" :class="{ 'basket-true': item?.basket?.availability || this.add_basket.indexOf(item.key) != -1, 'loading-counter': this.fetchIds.indexOf(item.key) != -1 }">
                     <Counter
