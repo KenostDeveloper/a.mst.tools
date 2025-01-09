@@ -5,6 +5,10 @@
 
 		<div class="std-shipping__title-container hidden-tablet-l">
 			<h1 class="table-kenost__title std-shipping__title">Заказ № {{ this.order?.id }}</h1>
+			<div class="dart-btn dart-btn-secondary gap-2" @click="generateXSLX()">
+				<i class="pi pi-download"></i>
+				<span>Скачать заказ</span>
+			</div>
 		</div>
 
 		<div class="w-full">
@@ -150,8 +154,22 @@ export default {
 	},
 	methods: {
 		...mapActions([
-            'get_opt_order_api'
+            'get_opt_order_api',
+			'opt_api'
 		]),
+		generateXSLX () {
+			this.opt_api({
+				action: 'save/orders/seller',
+				id: router.currentRoute._value.params.id,
+				order_id: router.currentRoute._value.params.order_id
+			}).then((res) => {
+				// console.log('res file', res)
+				var anchor = document.createElement('a');
+				anchor.href = res.data.data;
+				anchor.target="_blank";
+				anchor.click();
+			})
+		}
 	},
 	mounted() {
 		this.get_opt_order_api({

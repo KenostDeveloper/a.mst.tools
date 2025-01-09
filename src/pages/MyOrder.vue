@@ -4,13 +4,17 @@
     <Breadcrumbs />
 		<div class="std-shipping__title-container hidden-tablet-l">
 			<h1 class="table-kenost__title std-shipping__title">Заказ № {{ this.order?.id }}</h1>
-			<RouterLink
-				:to="{ name: 'opt_req', params: { id: $route.params.id, req: this.order?.id + '_order' } }"
-				class="dart-btn dart-btn-primary"
-				>
-				<i class="pi pi-refresh"></i>
-				<span>Повторить заказ</span>	
-			</RouterLink>
+			<div class="flex gap-2">
+				<RouterLink
+					:to="{ name: 'opt_req', params: { id: $route.params.id, req: this.order?.id + '_order' } }"
+					class="dart-btn dart-btn-primary"
+					>
+					<i class="pi pi-refresh"></i>
+					<span>Повторить заказ</span>	
+				</RouterLink>
+				<div class="dart-btn dart-btn-secondary gap-2" @click="generateXSLX()"><i class="pi pi-download"></i>
+					<span>Скачать заказ</span></div>
+			</div>
 		</div>
 
 		<div class="w-full">
@@ -190,18 +194,19 @@ export default {
 				})
 			})
 		},
-		// actionUpdate() {
-        //     setTimeout(() => {
-        //         this.get_sales_to_api({
-        //             id: router.currentRoute._value.params.sales_id,
-        //             actionid: router.currentRoute._value.params.action,
-        //             page: this.page,
-        //             perpage: this.perpage,
-        //             isAction: true
-        //         });
-        //     }, 1000)
-            
-        // },
+		generateXSLX () {
+			this.opt_api({
+				action: 'save/orders/buyer',
+				id: router.currentRoute._value.params.id,
+				order_id: router.currentRoute._value.params.order_id
+			}).then((res) => {
+				// console.log('res file', res)
+				var anchor = document.createElement('a');
+				anchor.href = res.data.data;
+				anchor.target="_blank";
+				anchor.click();
+			})
+		},
 		toOrder() {
             this.show_order = true;
         },
