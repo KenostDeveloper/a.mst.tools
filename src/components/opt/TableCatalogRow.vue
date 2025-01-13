@@ -636,7 +636,6 @@ export default {
             }
             if (object.value == object.min) {
                 this.clearBasketProduct(object.item.org_id, object.item.store_id, object.item.basket.key, object.item)
-                
                 return;
             };            
             this.items.stores[object.index].basket.count = object.value;                

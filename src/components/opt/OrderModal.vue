@@ -48,36 +48,13 @@
                                             <div class="k-order__actions">  
                                                 <ActionModal :actions="item.action"/>
                                             </div>
-                                            <!-- <div class="k-order__actions table-actions">                                                  
-                                                <div class="table-actions__action" v-for="(action, indexactions) in item.action" v-bind:key="action.id" :class="{active: action.enabled}">                                                        
-                                                    <div v-if="action.tags.length > 0" class="table-actions__container" >
-                                                        <div class="table-actions__el" v-for="(tag, indextag) in action.tags" v-bind:key="indextag">                                                                
-                                                            <img v-if="tag.type == 'multiplicity'" src="/images/icons/action/gray/box.svg" alt="">
-                                                            <p class="w-fit" v-if="tag.type == 'multiplicity'">{{ tag.value }} шт.</p>
-                                                            <img v-if="tag.type == 'min'" src="/images/icons/action/gray/min.svg" alt="">    
-                                                            <img v-if="tag.type == 'gift'" src="/images/icons/action/gray/gift.svg" alt="">    
-                                                            <img v-if="tag.type == 'delay'" src="/images/icons/action/gray/time.svg" alt="">
-                                                            <p class="w-fit" v-if="tag.type == 'delay'">Отсроч. {{ tag.value }} дн.</p>    
-                                                            <img v-if="tag.type == 'sale' && tag.value > 0" src="/images/icons/action/gray/sale.svg" alt="">
-                                                            <p class="w-fit" v-if="tag.type == 'sale'">Скидка {{ Number(tag.value).toFixed(0) }}%</p>
-
-                                                            <img v-if="tag.type == 'free_delivery'" src="/images/icons/action/gray/delivery.svg" alt="">
-
-                                                        </div>
-                                                    </div>
-                                                    <div v-if="action.tags.length > 0" class="table-actions__help">
-                                                        <p>?</p>
-                                                        <ActionModal :action="action"/>
-                                                    </div>
-                                                </div>
-                                            </div> -->
                                             <div class="k-order__buttons">
                                                 <b>{{(item.count * item.price).toLocaleString('ru')}} ₽</b>
                                                 <div :class="{'loading-counter': this.fetchIds.indexOf(item.key) != -1 }">
                                                     <Counter
                                                         @ElemCount="ElemCount"
                                                         :item="{basket, item}"
-                                                        :min="1"
+                                                        :min="0"
                                                         :max="item?.available"
                                                         :value="item?.count"
                                                         :id="item?.remain_id"
@@ -290,10 +267,14 @@ export default {
       })
     },
     ElemCount(object) {
-        console.log(object)
         if (!this.fetchIds.includes(object.item.item.key)) {
             this.fetchIds.push(object.item.item.key);
         }
+        console.log(object)
+        if (object.value == object.min) {
+            this.clearBasketProduct(object.item.item.org_id, object.item.item.store_id, object.item.item.key, object.item.item)
+            return;
+        }; 
         if (object.value > Number(object.max)) {
             this.modal_remain = true;
         } else {				

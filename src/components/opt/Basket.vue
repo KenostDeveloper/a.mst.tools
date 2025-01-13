@@ -84,7 +84,7 @@
 														@ElemCount="ElemCount"
 														:item="{basket, product}"
 														:mini="true"
-														:min="1"
+														:min="0"
 														:max="product?.available"
 														:value="product?.count"
 														:step="product?.multiplicity ? product?.multiplicity : 1"
@@ -420,6 +420,10 @@ export default {
 			if (!this.fetchIds.includes(object.item.product.key)) {
                 this.fetchIds.push(object.item.product.key);
             }
+			if (object.value == object.min) {
+				this.clearBasketProduct(object.item.product.org_id, object.item.product.store_id, object.item.product.key, object.item.product)
+				return;
+			};
 			if (object.value > Number(object.max)) {
 				this.modal_remain = true;
 			} else {				
@@ -548,6 +552,11 @@ export default {
 				action: 'basket/get',
 				id: router.currentRoute._value.params.id,
 				warehouse: 'all'
+			}).then(() => {
+				const index = this.fetchIds.indexOf(product.key);
+				if (index !== -1) {
+					this.fetchIds.splice(index, 1); // Удаляем один элемент по индексу
+				}
 			})
 		},
 		clearBasketComplect(storeid, complectid) {
