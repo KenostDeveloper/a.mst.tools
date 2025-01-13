@@ -153,7 +153,7 @@
             'no-active': !this.active && !this.is_warehouses && items.total_stores > 1
         }">
             <td class="td-center" :class="{ 'pointer-none': index !== 0 }">
-                <!-- <span :style="'top:' + (complect.length * 74) / 2 + 'px'" v-if="index === 0"><i class="pi pi-minus"></i></span> -->
+                <span :style="'top:' + (complect.length * 74) / 2 + 'px'" v-if="index === 0"><i class="pi pi-minus"></i></span>
             </td>
             <td class="k-table__photo">
                 <img class="k-table__image" :src="item.image" alt="" />
@@ -182,14 +182,14 @@
                         :index="index"
                         :value="item?.basket?.count * item.multiplicity"
                     />
-                    <div @click="addBasketComplect(item, index)"
+                    <div @click="addBasketComplect(item, index, complect.action_id)"
                         class="dart-btn dart-btn-primary">
                         <i class="d_icon d_icon-busket"></i>
                     </div>
                 </form>
             </td>
             <td>
-                {{ Math.round(Number(item.new_price)).toLocaleString('ru') }} ₽<br />
+                {{ Math.round(Number(item.price.price)).toLocaleString('ru') }} ₽<br />
                 {{ item.action?.delay ? Number(item.action?.delay).toFixed(1) + ' дн' : 'Предоплата' }}
             </td>
             <td>
@@ -295,7 +295,7 @@
                 }})
             </td>
             <td class="td-center" :class="{ 'pointer-none': index !== 0 }">
-                <span :style="'top:' + (complect.length * 74) / 2 + 'px'" v-if="index === 0">{{ item.remain_complect }}
+                <span :style="'top:' + (complect.length * 74) / 2 + 'px'" v-if="index === 0">{{ item.remain }}
                     шт.</span>
             </td>
             <td class="td-center">
@@ -305,14 +305,16 @@
                     class="flex align-items-center justify-content-center gap-1"><img :src="item.store_image"
                         class="kenost-table-elem__logo" alt="" /> {{ item.store_city }}</span>
             </td>
-            <td v-if="item.price && item.price > item.new_price">
+            <!-- <td v-if="item.price.price && item.price.price > item.new_price">
+                {{ item }}
                 {{ item.price ? Math.round(item.price).toLocaleString('ru') :
                     Math.round(item.new_price).toLocaleString('ru') }}
                 ₽ <br />
                 {{ (item.price - item.new_price).toFixed(0).toLocaleString('ru') }}
                 ₽
-            </td>
-            <td v-else>{{ Math.round(item.price).toLocaleString('ru') }} ₽</td>
+            </td> -->
+            <td>{{ Math.round(item.price.price).toLocaleString('ru') }} ₽ <br />
+                {{ (item.price.rrc - item.price.price).toLocaleString('ru') }} ₽</td>
         </tr>
     </tbody>
     <Dialog v-model:visible="this.modal_remain" header=" " :style="{ width: '340px' }">
@@ -556,16 +558,18 @@ export default {
             this.$emit('updateBasket');
         },
 
-        addBasketComplect(item, index) {
+        addBasketComplect(item, index, action_id) {
+            console.log(item, index)
             const data = {
                 action: 'basket/add',
                 id: router.currentRoute._value.params.id,
                 org_id: item.org_id,
                 store_id: item.store_id,
-                id_remain: item.id,
-                count: item.basket.count,
-                actions: item.actions
+                id_complect: item.complect_id,
+                count: 1,
+                actions: [action_id]
             };
+            // this.busket_from_api(data)
             this.busket_from_api(data).then(() => {
                 this.busket_from_api({
                     action: 'basket/get',
@@ -574,7 +578,7 @@ export default {
                 });
             });
             // eslint-disable-next-line vue/no-mutating-props
-            this.items.complects[index][0].basket.availability = true;
+            // this.items.complects[index][0].basket.availability = true;
             this.$emit('updateBasket');
         },
         clearBasketProduct(org_id, store_id, key, product) {
@@ -683,36 +687,37 @@ export default {
             this.$emit('updateBasket');
         },
         ElemCountComplect(object) {
-            if (object.value == object.min) {
-                this.clearBasketComplect(object.store_id, object.id)
-                return;
-            }
+            console.log(object)
+            // if (object.value == object.min) {
+            //     this.clearBasketComplect(object.store_id, object.id)
+            //     return;
+            // }
 
-            if (object.value > Number(object.max)) {
-                this.modal_remain = true;
-                // console.log(this.modal_remain)
-            } else {
-                // eslint-disable-next-line vue/no-mutating-props
-                //this.items.stores[object.index].basket.count = object.value;
-                if(this.timeOut){
-                    clearTimeout(this.timeOut);
-                }
+            // if (object.value > Number(object.max)) {
+            //     this.modal_remain = true;
+            //     // console.log(this.modal_remain)
+            // } else {
+            //     // eslint-disable-next-line vue/no-mutating-props
+            //     //this.items.stores[object.index].basket.count = object.value;
+            //     if(this.timeOut){
+            //         clearTimeout(this.timeOut);
+            //     }
 
-                this.timeOut = setTimeout(() => {
-                    // Ваш запрос на сервер
-                    const data = {
-                        action: 'basket/update',
-                        id: router.currentRoute._value.params.id,
-                        id_complect: object.id,
-                        value: object.value / object.item.multiplicity,
-                        store_id: object.store_id
-                    };
-                    // console.log(data)
-                    this.busket_from_api(data).then();
-                    this.$emit('updateBasket');
-                }, 1000);
+            //     this.timeOut = setTimeout(() => {
+            //         // Ваш запрос на сервер
+            //         const data = {
+            //             action: 'basket/update',
+            //             id: router.currentRoute._value.params.id,
+            //             id_complect: object.id,
+            //             value: object.value / object.item.multiplicity,
+            //             store_id: object.store_id
+            //         };
+            //         // console.log(data)
+            //         this.busket_from_api(data).then();
+            //         this.$emit('updateBasket');
+            //     }, 1000);
                 
-            }
+            // }
         },
     },
     mounted() { },

@@ -5150,9 +5150,21 @@ button.std-icon__wrapper {
 	position: static;
 }
 
-// .std-catalog-table__wrapper td {
-// 	border: none;
-// }
+.std-catalog-table__wrapper thead + tbody::before {
+    content: "";
+    display: table-row;
+    height: 5px;
+}
+
+.std-catalog-table__wrapper tbody + tbody::before {
+    content: "";
+    display: table-row;
+    height: 5px;
+}
+
+.std-catalog-table__wrapper .kenost-table-background-complect td {
+	border: none;
+}
 
 .k-table tbody tr {
 	height: 74px;

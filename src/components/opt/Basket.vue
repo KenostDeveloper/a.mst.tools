@@ -99,51 +99,51 @@
 								</div>
 							</div>
 						</div>
-						<!--
+						<div
+							v-for="complect in org.data.complects"
+							v-bind:key="complect.id"
+							class="kenost-product-basket kenost-product-basket-complect"
+						>
+							<span class="complect-icon">Комплект</span>
 							<div
-								v-for="complect in store.complects"
-								v-bind:key="complect.id"
-								class="kenost-product-basket kenost-product-basket-complect"
+								class="kenost-basket"
+								v-for="(product, index) in complect"
+								v-bind:key="product.id"
 							>
-								<span class="complect-icon">Комплект</span>
+							
 								<div
-									class="kenost-basket"
-									v-for="(product, index) in complect.products"
-									v-bind:key="product.id"
+									@click="clearBasketComplect(store.id, product.complect_id)"
+									class="btn-close link-no-style"
 								>
-								
-									<div
-										@click="clearBasketComplect(store.id, product.complect_id)"
-										class="btn-close link-no-style"
-									>
-										<img src="../../assets/images/icons/close.svg" alt="" />
-									</div>
-									<div class="kenost-basket__product">
-										<p class="kenost-basket__name" :title="product.name">
-											{{ product.name }}
-										</p>
-										<div class="kenost-basket__info">
-											<span>{{ product.article }}</span>
-											<div class="kenost-basket__info-left">
-												<Counter
-													@ElemCount="ElemComplectCount"
-													:item="product"
-													:mini="true"
-													:min="1"
-													:step="Number(product.multiplicity)"
-													:max="complect?.info?.complect_data?.min_count * Number(product.multiplicity)"
-													:value="complect?.info?.count * Number(product.multiplicity)"
-													:id="product?.id_remain"
-													:store_id="store.id"
-												/>
-												<b>{{ (Number(product?.new_price) * complect?.info?.complect_data?.min_count * Number(product.multiplicity)).toLocaleString("ru") }} ₽</b>
-											</div>
+									<img src="../../assets/images/icons/close.svg" alt="" />
+								</div>
+								<div class="kenost-basket__product">
+									<p class="kenost-basket__name" :title="product.name">
+										{{ product.name }}
+									</p>
+									<div class="kenost-basket__info">
+										<span>{{ product.article }}</span>
+										<div class="kenost-basket__info-left">
+											<Counter
+												@ElemCount="ElemComplectCount"
+												:item="product"
+												:mini="true"
+												:min="1"
+												:step="Number(product.multiplicity)"
+												:max="complect?.info?.complect_data?.min_count * Number(product.multiplicity)"
+												:value="complect?.info?.count * Number(product.multiplicity)"
+												:id="product?.id_remain"
+												:store_id="store.id"
+											/>
+											<b>{{ (Number(product?.new_price) * complect?.info?.complect_data?.min_count * Number(product.multiplicity)).toLocaleString("ru") }} ₽</b>
 										</div>
 									</div>
 								</div>
 							</div>
+						</div>
 							
-						-->
+							
+						
 	
 	
 						<!-- ПОДАРОК -->
