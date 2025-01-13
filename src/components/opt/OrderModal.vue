@@ -270,11 +270,10 @@ export default {
         if (!this.fetchIds.includes(object.item.item.key)) {
             this.fetchIds.push(object.item.item.key);
         }
-        console.log(object)
         if (object.value == object.min) {
             this.clearBasketProduct(object.item.item.org_id, object.item.item.store_id, object.item.item.key, object.item.item)
             return;
-        }; 
+        };
         if (object.value > Number(object.max)) {
             this.modal_remain = true;
         } else {				
