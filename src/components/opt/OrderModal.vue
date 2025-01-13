@@ -44,32 +44,33 @@
                                             <img src="/images/icons/trash.svg" alt="">
                                         </button>
                                         <div class="k-order__main-info">
-                                            <p :data-id="item.id_remain">{{item.name}}</p>
-                                            <div class="k-order__actions">
-                                                <div class="table-actions">                                                    
-                                                    <div class="table-actions__action" v-for="(action, indexactions) in item.action" v-bind:key="action.id" :class="{active: action.enabled}">                                                        
-                                                        <div v-if="action.tags.length > 0" class="table-actions__container" >
-                                                            <div class="table-actions__el" v-for="(tag, indextag) in action.tags" v-bind:key="indextag">                                                                
-                                                                <img v-if="tag.type == 'multiplicity'" src="/images/icons/action/gray/box.svg" alt="">
-                                                                <p class="w-fit" v-if="tag.type == 'multiplicity'">{{ tag.value }} шт.</p>
-                                                                <img v-if="tag.type == 'min'" src="/images/icons/action/gray/min.svg" alt="">    
-                                                                <img v-if="tag.type == 'gift'" src="/images/icons/action/gray/gift.svg" alt="">    
-                                                                <img v-if="tag.type == 'delay'" src="/images/icons/action/gray/time.svg" alt="">
-                                                                <p class="w-fit" v-if="tag.type == 'delay'">Отсроч. {{ tag.value }} дн.</p>    
-                                                                <img v-if="tag.type == 'sale' && tag.value > 0" src="/images/icons/action/gray/sale.svg" alt="">
-                                                                <p class="w-fit" v-if="tag.type == 'sale'">Скидка {{ Number(tag.value).toFixed(0) }}%</p>
-    
-                                                                <img v-if="tag.type == 'free_delivery'" src="/images/icons/action/gray/delivery.svg" alt="">
-    
-                                                            </div>
-                                                        </div>
-                                                        <div v-if="action.tags.length > 0" class="table-actions__help">
-                                                            <p>?</p>
-                                                            <ActionModal :action="action"/>                                                          
+                                            <p class="kenost-product-name" :data-id="item.id_remain">{{item.name}}</p>
+                                            <div class="k-order__actions">  
+                                                <ActionModal :actions="item.action"/>
+                                            </div>
+                                            <!-- <div class="k-order__actions table-actions">                                                  
+                                                <div class="table-actions__action" v-for="(action, indexactions) in item.action" v-bind:key="action.id" :class="{active: action.enabled}">                                                        
+                                                    <div v-if="action.tags.length > 0" class="table-actions__container" >
+                                                        <div class="table-actions__el" v-for="(tag, indextag) in action.tags" v-bind:key="indextag">                                                                
+                                                            <img v-if="tag.type == 'multiplicity'" src="/images/icons/action/gray/box.svg" alt="">
+                                                            <p class="w-fit" v-if="tag.type == 'multiplicity'">{{ tag.value }} шт.</p>
+                                                            <img v-if="tag.type == 'min'" src="/images/icons/action/gray/min.svg" alt="">    
+                                                            <img v-if="tag.type == 'gift'" src="/images/icons/action/gray/gift.svg" alt="">    
+                                                            <img v-if="tag.type == 'delay'" src="/images/icons/action/gray/time.svg" alt="">
+                                                            <p class="w-fit" v-if="tag.type == 'delay'">Отсроч. {{ tag.value }} дн.</p>    
+                                                            <img v-if="tag.type == 'sale' && tag.value > 0" src="/images/icons/action/gray/sale.svg" alt="">
+                                                            <p class="w-fit" v-if="tag.type == 'sale'">Скидка {{ Number(tag.value).toFixed(0) }}%</p>
+
+                                                            <img v-if="tag.type == 'free_delivery'" src="/images/icons/action/gray/delivery.svg" alt="">
+
                                                         </div>
                                                     </div>
+                                                    <div v-if="action.tags.length > 0" class="table-actions__help">
+                                                        <p>?</p>
+                                                        <ActionModal :action="action"/>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            </div> -->
                                             <div class="k-order__buttons">
                                                 <b>{{(item.count * item.price).toLocaleString('ru')}} ₽</b>
                                                 <div :class="{'loading-counter': this.fetchIds.indexOf(item.key) != -1 }">
@@ -516,6 +517,16 @@ export default {
 }
 </script>
 <style lang="scss">
+    .kenost-product-name{
+        width: 340px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        font-size: 14px;
+        line-height: 18px;
+    }
+
     .k-order{
         z-index: 10;
         width: 100vw;
@@ -774,16 +785,6 @@ export default {
             width: 100%;
             display: flex;
             justify-content: space-between;
-
-            p{
-                width: 340px;
-                display: -webkit-box;
-                -webkit-line-clamp: 2;
-                -webkit-box-orient: vertical;
-                overflow: hidden;
-                font-size: 14px;
-                line-height: 18px;
-            }
         }
 
         &__product-img{

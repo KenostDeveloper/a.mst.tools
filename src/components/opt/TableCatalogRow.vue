@@ -84,70 +84,7 @@
                 </div>
             </td>
             <td>
-                <div class="table-actions">
-                    <!-- 'red': action?.conflicts?.items[action.action_id]?.sales_conflicts -->
-                    <div :data-test="action?.tags?.length != 0" class="table-actions__action" :class="{active: action.enabled}" v-for="(action, indexactions) in item.actions" v-bind:key="action.action_id" :data-id="action?.action_id">
-                        <div v-if="action?.tags?.length != 0"  class="table-actions__container">
-                            <!-- {{ action }} -->
-                            <div class="table-actions__el" v-for="(tag, indextag) in action.tags" v-bind:key="tag.id">
-                                <img v-if="tag.type == 'multiplicity'" :src="action.enabled
-                                    ? '/images/icons/action/gray/box.svg'
-                                    : isConflict(item.conflicts.items, item.actions, action.action_id)
-                                        ? '/images/icons/action/red/box.svg'
-                                        : '/images/icons/action/black/box.svg'
-                                    " alt="" />
-                                <p v-if="tag.type == 'multiplicity'">{{ tag.value }} шт.</p>
-
-                                <img v-if="tag.type == 'min'" :src="action.enabled
-                                    ? '/images/icons/action/gray/min.svg'
-                                    : isConflict(item.conflicts.items, item.actions, action.action_id)
-                                        ? '/images/icons/action/red/min.svg'
-                                        : '/images/icons/action/black/min.svg'
-                                    " alt="" />
-
-                                <img v-if="tag.type == 'gift'" :src="action.enabled
-                                    ? '/images/icons/action/gray/gift.svg'
-                                    : isConflict(item.conflicts.items, item.actions, action.action_id)
-                                        ? '/images/icons/action/red/gift.svg'
-                                        : '/images/icons/action/black/gift.svg'
-                                    " alt="" />
-
-                                <img v-if="tag.type == 'delay'" :src="action.enabled
-                                    ? '/images/icons/action/gray/time.svg'
-                                    : isConflict(item.conflicts.items, item.actions, action.action_id)
-                                        ? '/images/icons/action/red/time.svg'
-                                        : '/images/icons/action/black/time.svg'
-                                    " alt="" />
-                                <p v-if="tag.type == 'delay'">Отсроч. {{ tag.value }} дн.</p>
-
-                                <img v-if="tag.type == 'sale' && tag.value > 0" :src="action.enabled
-                                    ? '/images/icons/action/gray/sale.svg'
-                                    : isConflict(item.conflicts.items, item.actions, action.action_id)
-                                        ? '/images/icons/action/red/sale.svg'
-                                        : '/images/icons/action/black/sale.svg'
-                                    " alt="" />
-                                <p v-if="tag.type == 'sale' && tag.value > 0">Скидка {{ Number(tag.value).toFixed(0) }}%</p>
-
-                                <img v-if="tag.type == 'free_delivery'" :src="action.enabled
-                                    ? '/images/icons/action/gray/delivery.svg'
-                                    : isConflict(item.conflicts.items, item.actions, action.action_id)
-                                        ? '/images/icons/action/red/delivery.svg'
-                                        : '/images/icons/action/black/delivery.svg'
-                                    " alt="" />
-
-                            </div>
-
-                        </div>
-                        <div v-if="action?.tags?.length > 0" class="table-actions__help" :data-id="action?.action_id">
-                            <p :class="{
-                                active: action.enabled
-                            }">
-                                ?
-                            </p>
-                            <ActionModal :action="action"/>
-                        </div>
-                    </div>
-                </div>
+                <ActionModal :actions="item.actions"/>
             </td>
             <td>
                 <div class="kenost-product-item__delivery">
@@ -778,22 +715,6 @@ export default {
                 
             }
         },
-        isConflict(conflicts, actions, action_id) {
-            // console.log(conflicts, actions, action_id)
-            /*
-            if (actions.find((el) => el.action_id == action_id)?.enabled) {
-                return false;
-            } else {
-                // Бежим по sales_conflicts
-                for (let i = 0; i < conflicts[action_id]?.sales_conflicts.length; i++) {
-                    if (actions.find((el) => el.action_id == conflicts[action_id].sales_conflicts[i])?.enabled) {
-                        return true;
-                    }
-                }
-            }
-                */
-            return false;
-        }
     },
     mounted() { },
     components: {

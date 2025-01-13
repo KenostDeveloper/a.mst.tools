@@ -90,30 +90,7 @@
 						<td class="std-table__col">{{ item.name }}</td>
 						<td class="std-table__col">{{ Number(item.price).toLocaleString('ru') }} ₽</td>
 						<td class="std-table__col table-actions">
-							<div class="table-actions__action w-fit" v-for="(action, indexactions) in item.actions" v-bind:key="action.action_id" :class="{active: action.enabled}">
-								<div v-if="action.tags.length > 0" class="table-actions__container">
-									<div class="table-actions__el" v-for="(tag, indextag) in action.tags" v-bind:key="tag.id">
-										<img v-if="tag.type == 'multiplicity'" src="/images/icons/action/gray/box.svg" alt="">
-										<p class="w-fit" v-if="tag.type == 'multiplicity'">{{ tag.value }} шт.</p>
-
-										<img v-if="tag.type == 'min'" src="/images/icons/action/gray/min.svg" alt="">
-
-										<img v-if="tag.type == 'gift'" src="/images/icons/action/gray/gift.svg" alt="">
-
-										<img v-if="tag.type == 'delay'" src="/images/icons/action/gray/time.svg" alt="">
-										<p class="w-fit" v-if="tag.type == 'delay'">Отсроч. {{ tag.value }} дн.</p>
-
-										<img v-if="tag.type == 'sale' && tag.value > 0" src="/images/icons/action/gray/sale.svg" alt="">
-										<p class="w-fit" v-if="tag.type == 'sale'">Скидка {{ Number(tag.value).toFixed(0) }}%</p>
-
-										<img v-if="tag.type == 'free_delivery'" src="/images/icons/action/gray/delivery.svg" alt="">
-									</div>
-								</div>
-								<div v-if="action.tags.length > 0" class="table-actions__help">
-									<p>?</p>
-									<ActionModal :action="action"/>
-								</div>
-							</div>
+							<ActionModal :actions="item.actions"/>
 						</td>
 						<td class="std-table__col">{{ item.count }}  шт.</td>
 						<td class="std-table__col">{{ Number(item.price * item.count).toLocaleString('ru') }} ₽</td>
