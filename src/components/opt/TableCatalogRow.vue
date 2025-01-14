@@ -58,7 +58,7 @@
                 <b>Арт: {{ item.article }}</b>
             </td>
             <td class="k-table__busket">
-                {{ item.min }}
+                <!-- {{ item.min }} -->
                 <!-- {{ this.fetchIds.indexOf(item.remain_id) != -1 ? "Загрузка..." : "" }} -->
                 <form class="k-table__form" action="" :class="{ 'basket-true': item?.basket?.availability || this.add_basket.indexOf(item.key) != -1, 'loading-counter': this.fetchIds.indexOf(item.key) != -1 }">
                     <Counter
@@ -147,6 +147,7 @@
             'no-active': !this.active && !this.is_warehouses && items.total_stores > 1,
             'bg-white': items.total_stores == 1
         }">
+
         <tr v-for="(item, index) in complect.products" v-bind:key="item.id" :class="{
             active: this.active || this.is_warehouses || items.total_stores == 1,
             'kenost-table-bg-complect': items.total_stores == 1,
@@ -169,18 +170,19 @@
                 <b>Арт: {{ item.article }}</b>
             </td>
             <td class="k-table__busket complect-button__td">
-                <!-- {{item.multiplicity}} -->
-                <form class="k-table__form" :class="{ 'basket-true': item?.basket?.availability }" action="">
+                <!-- {{ item.test }} -->
+
+                <form class="k-table__form" :class="{ 'basket-true': complect?.basket?.availability || this.add_basket.indexOf(item.key) != -1, 'loading-counter': this.fetchIds.indexOf(item.key) != -1 }" action="">
                     <Counter
                         @ElemCount="ElemCountComplect"
                         :step="item.multiplicity"
                         :min="0"
-                        :item="item"
-                        :max="item.remain_complect * item.multiplicity"
+                        :item="{item: item, basket: complect?.basket}"
+                        :max="item.remain * item.multiplicity"
                         :id="item.complect_id"
                         :store_id="item.store_id"
                         :index="index"
-                        :value="item?.basket?.count * item.multiplicity"
+                        :value="complect?.basket?.count * item.multiplicity"
                     />
                     <div @click="addBasketComplect(item, index, complect.action_id)"
                         class="dart-btn dart-btn-primary">
@@ -688,37 +690,45 @@ export default {
         },
         ElemCountComplect(object) {
             console.log(object)
-            // if (object.value == object.min) {
-            //     this.clearBasketComplect(object.store_id, object.id)
-            //     return;
-            // }
+			if (!this.fetchIds.includes(object.item.key)) {
+                this.fetchIds.push(object.item.key);
+            }
+			if (object.value > Number(object.max)) {
+				this.modal_remain = true;
+			} else {
+				if(this.timeOut){
+                    clearTimeout(this.timeOut);
+                }
 
-            // if (object.value > Number(object.max)) {
-            //     this.modal_remain = true;
-            //     // console.log(this.modal_remain)
-            // } else {
-            //     // eslint-disable-next-line vue/no-mutating-props
-            //     //this.items.stores[object.index].basket.count = object.value;
-            //     if(this.timeOut){
-            //         clearTimeout(this.timeOut);
-            //     }
-
-            //     this.timeOut = setTimeout(() => {
-            //         // Ваш запрос на сервер
-            //         const data = {
-            //             action: 'basket/update',
-            //             id: router.currentRoute._value.params.id,
-            //             id_complect: object.id,
-            //             value: object.value / object.item.multiplicity,
-            //             store_id: object.store_id
-            //         };
-            //         // console.log(data)
-            //         this.busket_from_api(data).then();
-            //         this.$emit('updateBasket');
-            //     }, 1000);
-                
-            // }
-        },
+                this.timeOut = setTimeout(() => {
+                    // Ваш запрос на сервер
+					const data = {
+						action: "basket/update",
+						id: router.currentRoute._value.params.id,
+						id_complect: object.item.item.complect_id,
+						count: object.value / object.item.item.multiplicity,
+						store_id: object.store_id,
+						key: object.item.basket.key,
+						org_id: object.item.item.org_id,
+						actions: object.item.basket.ids_actions
+					}
+                    this.busket_from_api(data).then((response) => {});
+					this.busket_from_api({
+						action: 'basket/get',
+						id: router.currentRoute._value.params.id,
+						warehouse: 'all'
+					}).then((res) => {
+						const index = this.fetchIds.indexOf(object.item.key);
+						if (index !== -1) {
+							this.fetchIds.splice(index, 1); // Удаляем один элемент по индексу
+						}
+					});
+                    this.$emit('updateBasket');
+                    this.$emit("catalogUpdate");
+                }, 1000);
+				
+			}
+		},
     },
     mounted() { },
     components: {

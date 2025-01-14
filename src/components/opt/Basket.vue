@@ -59,7 +59,7 @@
 								this.id_clear_org = org.org_data.id
 							}" class="pi pi-times cursor-pointer"></i>
 						</div>
-						<div v-for="warehouse in org.data" v-bind:key="warehouse.warehouse_data.id">							
+						<div class="kenost-basket-product" v-for="warehouse in org.data" v-bind:key="warehouse.warehouse_data.id">							
 							<div class="kenost-product-basket" v-for="(product, p_key) in warehouse.data" v-bind:key="product.remain_id">
 								<!-- {{ console.log(product) }} -->
 								<div
@@ -99,43 +99,48 @@
 								</div>
 							</div>
 						</div>
-						<div
-							v-for="complect in org.data.complects"
-							v-bind:key="complect.id"
-							class="kenost-product-basket kenost-product-basket-complect"
-						>
-							<span class="complect-icon">Комплект</span>
+						<div :class="{'kenost-basket-product': warehouse?.complects}" v-for="warehouse in org.data" v-bind:key="warehouse.warehouse_data.id">
 							<div
-								class="kenost-basket"
-								v-for="(product, index) in complect"
-								v-bind:key="product.id"
+								v-if="warehouse?.complects"
+								v-for="complect in warehouse.complects"
+								v-bind:key="complect.id"
+								class="kenost-product-basket kenost-product-basket-complect"
 							>
-							
+								<span class="complect-icon">Комплект</span>
 								<div
-									@click="clearBasketComplect(store.id, product.complect_id)"
-									class="btn-close link-no-style"
+									class="kenost-basket"
+									v-for="(product, index) in complect.products"
+									v-bind:key="product.id"
 								>
-									<img src="../../assets/images/icons/close.svg" alt="" />
-								</div>
-								<div class="kenost-basket__product">
-									<p class="kenost-basket__name" :title="product.name">
-										{{ product.name }}
-									</p>
-									<div class="kenost-basket__info">
-										<span>{{ product.article }}</span>
-										<div class="kenost-basket__info-left">
-											<Counter
-												@ElemCount="ElemComplectCount"
-												:item="product"
-												:mini="true"
-												:min="1"
-												:step="Number(product.multiplicity)"
-												:max="complect?.info?.complect_data?.min_count * Number(product.multiplicity)"
-												:value="complect?.info?.count * Number(product.multiplicity)"
-												:id="product?.id_remain"
-												:store_id="store.id"
-											/>
-											<b>{{ (Number(product?.new_price) * complect?.info?.complect_data?.min_count * Number(product.multiplicity)).toLocaleString("ru") }} ₽</b>
+									<!-- {{ product.test }} -->
+									<div
+										@click="clearBasketComplect(product)"
+										class="btn-close link-no-style"
+									>
+										<img src="../../assets/images/icons/close.svg" alt="" />
+									</div>
+									<div class="kenost-basket__product">
+										<p class="kenost-basket__name" :title="product.name">
+											{{ product.name }}
+										</p>
+										<div class="kenost-basket__info">
+											<span>{{ product.article }}</span>
+											<div class="kenost-basket__info-left">
+												<div :class="{'loading-counter': this.fetchIds.indexOf(product.key) != -1 }">
+													<Counter
+														@ElemCount="ElemComplectCount"
+														:item="product"
+														:mini="true"
+														:min="0"
+														:step="Number(product.multiplicity)"
+														:max="complect?.remain * Number(product.multiplicity)"
+														:value="complect?.count * Number(product.multiplicity)"
+														:id="product?.id_remain"
+														:store_id="product?.store_id"
+													/>
+												</div>
+												<b>{{ (Number(product?.prices.price) * Number(product.multiplicity) * Number(complect?.count)).toLocaleString("ru") }} ₽</b>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -380,7 +385,9 @@ export default {
 			// console.log("iiii")
 		},
 		ElemComplectCount(object) {
-			// console.log(object)
+			if (!this.fetchIds.includes(object.item.key)) {
+                this.fetchIds.push(object.item.key);
+            }
 			if (object.value > Number(object.max)) {
 				this.modal_remain = true;
 			} else {
@@ -395,9 +402,12 @@ export default {
 						action: "basket/update",
 						id: router.currentRoute._value.params.id,
 						id_complect: object.item.complect_id,
-						value: object.value / object.item.multiplicity,
+						count: object.value / object.item.multiplicity,
 						store_id: object.store_id,
-					};
+						key: object.item.key,
+						org_id: object.item.org_id,
+						actions: object.item.actions
+					}
 					this.busket_from_api(data).then((response) => {
 						const datainfo = {
 							complect_id: object.item.complect_id,
@@ -411,7 +421,12 @@ export default {
 						action: 'basket/get',
 						id: router.currentRoute._value.params.id,
 						warehouse: 'all'
-					})
+					}).then((res) => {
+						const index = this.fetchIds.indexOf(object.item.key);
+						if (index !== -1) {
+							this.fetchIds.splice(index, 1); // Удаляем один элемент по индексу
+						}
+					});	
                 }, 1000);
 				
 			}
@@ -559,14 +574,16 @@ export default {
 				}
 			})
 		},
-		clearBasketComplect(storeid, complectid) {
+		clearBasketComplect(product) {
 			this.$emit("catalogUpdate");
 			this.$emit("actionUpdate");
 			const data = {
-				action: "basket/clear",
+				action: "basket/remove",
 				id: router.currentRoute._value.params.id,
-				store_id: storeid,
-				id_complect: complectid,
+				key: product.key,
+				store_id: product.store_id,
+				org_id: product.org_id,
+				id_complect: product.complect_id
 			};
 			this.busket_from_api(data).then((response) => {});
 			this.busket_from_api({

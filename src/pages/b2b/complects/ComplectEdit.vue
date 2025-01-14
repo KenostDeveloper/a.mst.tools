@@ -460,7 +460,7 @@ export default {
       this.get_available_products_from_api(data)
     },
     ElemCount (obj) {
-      this.selected[obj.id].multiplicity = obj.value
+      this.selected_data[obj.id].multiplicity = obj.value
     },
     closeDialogPrice () {
       if (this.modals.price_step === 0) {

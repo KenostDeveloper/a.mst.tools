@@ -32,7 +32,7 @@
                                 </div>
                             </h3>
                             
-                            <div class="k-order__shop">
+                            <div class="k-order__shop mb-1">
                                 <!-- <img src="../../assets/img/ava.png" alt=""> -->
                                 <p :style="{'background': org.org_data.color}">{{org.org_data.name}}</p>
                             </div>
@@ -69,6 +69,66 @@
                                             <p class="k-order__info">Отсрочка: <span>{{item.delay ? Number(item.delay).toFixed(1) + ' дн' : 'Предоплата'}}</span></p>
                                             <p class="k-order__info">Оплата доставки: <span>{{item.payer === '1' ? 'Поставщик' : 'Покупатель'}}</span></p>
                                         </div>
+                                    </div>
+                                </div>
+                                <div v-if="store?.complects" v-for="complect in store.complects" v-bind:key="complect.id" class="k-order__complects relative">
+                                    <span class="complect-icon">Комплект</span>
+                                    <button href="#" class="k-order__product-delete complect-delete" @click="clearBasketComplect(complect.products[0])">
+                                        <img src="/images/icons/trash.svg" alt="">
+                                    </button>
+                                    
+                                    <div class="k-order__complect-rows dart-align-items-center flex flex-col">
+                                        <div class="k-order__complect" v-for="product in complect.products" v-bind:key="product.id">
+                                            <!-- <pre>
+                                                {{ product }}
+                                            </pre> -->
+                                            <div class="flex">
+                                                <div class="">
+                                                    <img class="k-order__product-img " :src="product.image" :alt="product.name">
+                                                </div>
+                                                <div class="">
+                                                    <div class="k-order__product-info">
+                                                        <div class="k-order__main-info">
+                                                            <p>{{product.name}} </p>
+                                                            <div class="k-order__actions center">
+                                                                <!-- <div class="k-actions" v-for="(action, index) in product.actions" v-bind:key="action.id"> -->
+                                                                <!-- <img :style="index > 2 ? { display: 'none' } : false" class="k-order__actions-el" :src="site_url_prefix + action.icon" > -->
+                                                                <!-- <div v-if="action.conflicts.items[action.action_id]?.length" :style="index > 2 ? { display: 'none' } : false" class="k-err-icon"><i class="pi pi-info"></i></div> -->
+                                                                <!-- </div> -->
+                                                                <!-- <div v-if="item.actions.length > 3" class="k-order__actions-el last">+{{ item.actions.length - 3 }}</div> -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="k-order__product-data">
+                                                        <span class="k-order__article">{{product.article}} x {{product.multiplicity * complect.count}} шт</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="k-order__complect-data">
+                                                <div class="k-order__complect-data-items flex flex-col items-end">
+                                                    <b>{{ (Number(product?.prices.price) * Number(product.multiplicity) * Number(complect?.count)).toLocaleString("ru") }} ₽</b>
+                                                    <div :class="{'loading-counter': this.fetchIds.indexOf(product.key) != -1 }">
+                                                        <Counter
+                                                            @ElemCount="ElemComplectCount"
+                                                            :item="product"
+                                                            :min="0"
+                                                            :step="Number(product.multiplicity)"
+                                                            :max="complect?.remain * Number(product.multiplicity)"
+                                                            :value="complect?.count * Number(product.multiplicity)"
+                                                            :id="product?.id_remain"
+                                                            :store_id="product?.store_id"
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="k-order__product-data">
+                                        <!-- <p class="k-order__info">Отсрочка: <span>50 дн.</span></p>
+                                        <p class="k-order__info">Оплата доставки: <span>Покупатель</span></p> -->
+                                        <!-- {{ store }} -->
+                                        <p class="k-order__info">Отсрочка: <span>{{complect.products[0].delay ? Number(complect.products[0].delay).toFixed(1) + ' дн' : 'Предоплата'}}</span></p>
+                                        <p class="k-order__info">Оплата доставки: <span>{{complect.products[0].payer === '1' ? 'Поставщик' : 'Покупатель'}}</span></p>
                                     </div>
                                 </div>
                             </div> 
@@ -329,41 +389,50 @@ export default {
         }
     },
     ElemComplectCount(object) {
-        console.log(object)
-        if (object.value > Number(object.max)) {
-            this.modal_remain = true;
-        } else {
-            if(this.timeOut){
-                clearTimeout(this.timeOut);
+        if (!this.fetchIds.includes(object.item.key)) {
+                this.fetchIds.push(object.item.key);
             }
+			if (object.value > Number(object.max)) {
+				this.modal_remain = true;
+			} else {
+				if(this.timeOut){
+                    clearTimeout(this.timeOut);
+                }
 
-            this.timeOut = setTimeout(() => {
-                // Ваш запрос на сервер
-                this.$emit("catalogUpdate");
-                const data = {
-                    action: "basket/update",
-                    id: router.currentRoute._value.params.id,
-                    id_complect: object.item.complect_id,
-                    value: object.value / object.item.multiplicity,
-                    store_id: object.store_id,
-                };
-                this.busket_from_api(data).then((response) => {
-                    const datainfo = {
-                        complect_id: object.item.complect_id,
-                        store_id: object.store_id,
-                        count: object.value / object.item.multiplicity,
-                    };
-                    this.$store.commit("SET_OPT_COMPLECT_MUTATION_TO_VUEX", datainfo);
-                    this.$store.commit("SET_SALES_COMPLECT_MUTATION_TO_VUEX", datainfo);
-                });
-                this.busket_from_api({
-                    action: 'basket/get',
-                    id: router.currentRoute._value.params.id,
-                    warehouse: 'all'
-                })
-            }, 1000);
-            
-        }
+                this.timeOut = setTimeout(() => {
+                    // Ваш запрос на сервер
+                    this.$emit("catalogUpdate");
+					const data = {
+						action: "basket/update",
+						id: router.currentRoute._value.params.id,
+						id_complect: object.item.complect_id,
+						count: object.value / object.item.multiplicity,
+						store_id: object.store_id,
+						key: object.item.key,
+						org_id: object.item.org_id,
+						actions: object.item.actions
+					}
+					this.busket_from_api(data).then((response) => {
+						const datainfo = {
+							complect_id: object.item.complect_id,
+							store_id: object.store_id,
+							count: object.value / object.item.multiplicity,
+						};
+						this.$store.commit("SET_OPT_COMPLECT_MUTATION_TO_VUEX", datainfo);
+						this.$store.commit("SET_SALES_COMPLECT_MUTATION_TO_VUEX", datainfo);
+					});
+					this.busket_from_api({
+						action: 'basket/get',
+						id: router.currentRoute._value.params.id,
+						warehouse: 'all'
+					}).then((res) => {
+						const index = this.fetchIds.indexOf(object.item.key);
+						if (index !== -1) {
+							this.fetchIds.splice(index, 1); // Удаляем один элемент по индексу
+						}
+					});	
+                }, 1000);
+			}
     },
     clearBasket () {
       const data = { action: 'basket/clear', id: router.currentRoute._value.params.id }
@@ -417,22 +486,24 @@ export default {
             }
         })
     },
-    clearBasketComplect(storeid, complectid) {
-			this.$emit("catalogUpdate");
-			this.$emit("actionUpdate");
-			const data = {
-				action: "basket/clear",
-				id: router.currentRoute._value.params.id,
-				store_id: storeid,
-				id_complect: complectid,
-			};
-			this.busket_from_api(data).then((response) => {});
-			this.busket_from_api({
-				action: 'basket/get',
-				id: router.currentRoute._value.params.id,
-				warehouse: 'all'
-			})
-		},
+    clearBasketComplect(product) {
+        this.$emit("catalogUpdate");
+        this.$emit("actionUpdate");
+        const data = {
+            action: "basket/remove",
+            id: router.currentRoute._value.params.id,
+            key: product.key,
+            store_id: product.store_id,
+            org_id: product.org_id,
+            id_complect: product.complect_id
+        };
+        this.busket_from_api(data).then((response) => {});
+        this.busket_from_api({
+            action: 'basket/get',
+            id: router.currentRoute._value.params.id,
+            warehouse: 'all'
+        })
+    },
     generateXSLX (storeId, warehouseId) {
         const data = {
             action: 'generate/xslx',

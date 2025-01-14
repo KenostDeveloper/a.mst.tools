@@ -1542,7 +1542,7 @@ img {
 			padding: 6px 12px;
 			border-radius: 19px;
 			border: 1px solid #00f619;
-			font-size: 14px;
+			font-size: 8px;
 			line-height: 1;
 			font-weight: 500;
 			background: rgba(0, 246, 25, 0.15);
@@ -2133,9 +2133,15 @@ img {
 	border-bottom: 1px solid #adadad;
 }
 
-.profile-table tbody tr:last-child {
-	border-bottom: none;
+.kenost-basket-product + .kenost-basket-product {
+    padding-top: 8px;
+    margin-top: 8px;
+    border-top: 1px solid #e2e2e2;
 }
+
+// .profile-table tbody tr:last-child {
+// 	border-bottom: none;
+// }
 
 .profile-table tbody tr td {
 	padding: 16px 10px;
@@ -7984,6 +7990,16 @@ button.std-icon__wrapper {
 			color: #282828;
 		}
 	}
+}
+
+.k-order__complect .k-order__main-info p{
+	line-height: 1.1;
+	padding-left: 8px;
+	margin-bottom: 5px;
+}
+
+.k-order__product-data{
+	padding-left: 8px;
 }
 
 .loading-page {

@@ -10,6 +10,22 @@
 	}
 }
 
+@media (max-width: 1400px) {
+	.sitebar.hide + .std-empty-dialog__overlay + .content{
+		max-width: calc(100vw - 0px);
+		padding-left: 54px;
+	}
+
+	.sitebar + .std-empty-dialog__overlay + .content{
+		max-width: calc(100vw - 0px);
+		padding-left: 54px;
+	}
+
+	.sitebar{
+		position: fixed;
+	}
+}
+
 @media (max-width: 1200px) {
 	.content {
 		// background: #c3ffa0;
