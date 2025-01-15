@@ -29,16 +29,18 @@
           </div>
         </div>
         <div class="dart-form-group" v-if="ffilter.type == 'select'">
-          <label>{{ ffilter.name }}</label>
+          <!-- <label>{{ ffilter.name }}</label> -->
           <select
-            :name=i
-            :id="'filter_' + i"
-            class="dart-form-control"
-            v-model="filtersdata[i]"
-            @change="setFilter"
-            >
-            <option v-for="(opt, opt_i) in ffilter.values" :key="opt_i" :value=opt>{{ opt_i }}</option>
-          </select>
+						:name="i"
+						:id="'filter_' + i"
+						class="dart-form-control"
+						v-model="filtersdata[i]"
+						@change="setFilter"
+					>
+						<option v-for="(opt, opt_i) in ffilter.values" :key="opt_i" :value="opt">
+							{{ opt_i }}
+						</option>
+					</select>
         </div>
         <div class="dart-form-group" v-if="ffilter.type == 'dropdown'">
           <Dropdown v-model="filtersdata[i]" :options="ffilter.values" filter showClear :optionLabel="(ffilter.optionLabel) ? ffilter.optionLabel : 'name'" :optionValue="(ffilter.optionValue) ? ffilter.optionValue : 'id'" :placeholder="ffilter.placeholder" @change="setFilter"></Dropdown>

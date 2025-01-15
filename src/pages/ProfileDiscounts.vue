@@ -100,6 +100,12 @@
             placeholder: "Наименование",
             type: "text",
           },
+          manager: {
+            name: "Менеджер",
+            placeholder: "Выберите менеджера",
+            type: "dropdown",
+            values: []
+          },
           store: {
             name: 'Склады',
             placeholder: 'Выберите склады',
@@ -163,10 +169,12 @@
       ...mapActions([
         'get_dilers_from_api',
         'org_get_discount_individual_api',
-        'org_get_stores_from_api'
+        'org_get_stores_from_api',
+        'org_get_managers_from_api'
       ]),
       filter(data) {
         this.loading = true
+        this.page = 1
         this.org_get_discount_individual_api({
           page: this.page,
           id: router.currentRoute._value.params.id,
@@ -230,12 +238,18 @@
       }).then(() => {
         this.loading = false
       })
+
+      this.org_get_managers_from_api({
+        action: "get/org/managers",
+        id: router.currentRoute._value.params.id,
+      });
     },
     components: { vTable, vOpts, Toast, ConfirmDialog, RouterLink, TabView, TabPanel, Dialog, InputNumber, Breadcrumbs },
     computed: {
       ...mapGetters([
         'individual_discount',
-        'org_stores'
+        'org_stores',
+        'org_managers'
       ])
     },
     watch: {
@@ -247,6 +261,9 @@
         }
         console.log(this.storesall)
       },
+      org_managers: function (newVal, oldVal) {
+        this.filters.manager.values = newVal
+      }
     }
   }
   </script>

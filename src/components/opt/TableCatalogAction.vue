@@ -16,17 +16,16 @@
                 </tr>
             </thead>
             <!-- Вывод комплектов -->
+             <!-- {{ items.complects }} -->
             <tbody
-                class="complect-button kenost-table-background kenost-table-background-complect active bg-white"
+                class="complect-button kenost-table-background kenost-table-background-complect active-catalog-group"
                 v-for="complect in items.complects"
                 v-bind:key="complect.id"
                 :class="{
                     active: this.active || this.is_warehouses || items.total_stores == 1,
                     'no-active': !this.active && !this.is_warehouses && items.total_stores > 1,
                     'bg-white': items.total_stores == 1
-                }"
-                v-if="complect?.remain?.min_count > 0">
-                <!-- {{ complect.products }} -->
+                }">
                 <tr
                     v-for="(item, index) in complect.products"
                     v-bind:key="item.id" class="active">
@@ -35,42 +34,50 @@
                     </td>
                     <td class="k-table__title">
                         <span class="complect-icon" v-if="index == 0">Комплект</span>
-                        <p>{{ item.name }}</p>
+                        <p>{{ item.pagetitle }}</p>
                         <b>Арт: {{ item.article }}</b>
                     </td>
                     <td class="k-table__busket complect-button__td">
                         <!-- {{ item?.basket?.count }} -->
-                        <form class="k-table__form" :class="{ 'basket-true': item?.basket?.availability }" action="">
-                            <Counter @ElemCount="ElemCountComplect" :step="item.multiplicity" :min="1" :item="item" :max="item.remain.min_count * item.multiplicity" :id="item.complect_id" :store_id="complect.store_id" :index="index" :value="item?.basket?.count * item.multiplicity" />
-                            <div @click="addBasketComplect(item.complect_id, item?.basket?.count, complect.store_id, index)" class="dart-btn dart-btn-primary">
+                        <form class="k-table__form" :class="{ 'basket-true': complect?.basket?.availability || this.add_basket.indexOf(item.key) != -1, 'loading-counter': this.fetchIds.indexOf(item.key) != -1 }" action="">
+                            <Counter
+                                @ElemCount="ElemCountComplect"
+                                :step="item.multiplicity"
+                                :min="0"
+                                :item="{item: item, basket: complect?.basket}"
+                                :max="item.remain * item.multiplicity"
+                                :id="item.complect_id"
+                                :store_id="item.store_id"
+                                :index="index"
+                                :value="complect?.basket?.count * item.multiplicity"
+                            />
+                            <div @click="addBasketComplect(item, index, complect.action_id)" class="dart-btn dart-btn-primary">
                                 <i class="d_icon d_icon-busket"></i>
                             </div>
                         </form>
                     </td>
                     <td >
-                        {{ Math.round(Number(item.old_price)).toLocaleString('ru') }} ₽
+                        {{ Math.round(Number(item.price.rrc)).toLocaleString('ru') }} ₽
                     </td>
                     <td >
                         {{ 
-                            (Number(item.old_price) && Number(item.old_price) !== 0) 
-                                ? ((Number(item.old_price) - Number(item.price)) / (Number(item.old_price) / 100)).toFixed(2).toLocaleString('ru') 
-                                : '0'
+                            ((Number(item.price.price) - Number(item.price.rrc)) / (Number(item.price.rrc) / 100)).toFixed(2).toLocaleString('ru') 
                         }}
                     </td>
                     <td>
-                        {{ Math.round(Number(item.price)).toLocaleString('ru') }} ₽
+                        {{ Math.round(Number(item.price.price)).toLocaleString('ru') }} ₽
                     </td>
                     <td>
-                        {{ item.actions }}
+                        <!-- {{ item.actions }} -->
                     </td>
                     <td>
-                        {{ Math.round(Number(item.price) * item.multiplicity).toLocaleString('ru') }} ₽
+                        {{ Math.round(Number(item.price.price) * item.multiplicity).toLocaleString('ru') }} ₽
                     </td>
                     <td>
-                        {{ Math.round(item.multiplicity).toLocaleString('ru') }} ₽
+                        {{ Math.round(item.multiplicity).toLocaleString('ru') }}
                     </td>
                     <td>
-                        {{ Math.round(Number(item.remain.min_count * item.multiplicity)).toLocaleString('ru') }} шт
+                        {{ Math.round(Number(item.remain * item.multiplicity)).toLocaleString('ru') }} шт
                     </td>
                     <!-- {{ console.log(complect.store_id) }}
                     {{console.log(item)}} -->
@@ -112,13 +119,14 @@
                         </form>
                     </td>
                     <td>
-                        {{ Number(item.price) != 0 ? Math.round(Number(item.price)).toLocaleString('ru') : Math.round(Number(product.price)).toLocaleString('ru') }} ₽
+                        <!-- {{ item }} -->
+                        {{ Math.round(Number(item.prices.rrc)).toLocaleString('ru') }} ₽
                     </td>
                     <td>
-                        {{ Number(item.price) != 0 ? Math.round((Number(product.price) - (Number(item.price))) / (Number(product.price) / 100)).toLocaleString('ru') : 0 }} %
+                        {{ Math.round((Number(item.prices.rrc) - (Number(item.prices.price))) / (Number(item.prices.rrc) / 100)).toLocaleString('ru') }} %
                     </td>
                     <td>
-                        {{ Math.round(item.price).toLocaleString('ru') }} ₽
+                        {{ Math.round(item.prices.price).toLocaleString('ru') }} ₽
                     </td>
                     <td>
                         <ActionModal :actions="item.actions"/>
@@ -190,7 +198,6 @@ export default {
             this.$emit('updateBasket');
         },
         addBasket(item, index1, index2) {
-            console.log('addBasket', item)
             if (!this.add_basket.includes(item.key)) {
                 this.add_basket.push(item.key);
             }
@@ -239,31 +246,53 @@ export default {
             }
             });
             // eslint-disable-next-line vue/no-mutating-props
-            this.items.products[index1].stores[index2].basket.availability = true;
             this.$emit('updateBasket');
         },
-        addBasketComplect(complectid, value, storeid, index) {
-			const data = {
-				action: "basket/add",
-				id: router.currentRoute._value.params.id,
-				id_complect: complectid,
-				value,
-				store_id: storeid,
-			};
-			this.busket_from_api(data).then(() => {
-				this.busket_from_api({
-					action: "basket/get",
-					id: router.currentRoute._value.params.id,
-					warehouse: "all",
-				});
-			});
-			// eslint-disable-next-line vue/no-mutating-props
-            for(let i = 0; i < this.items.complects[complectid].products.length; i++){
-                this.items.complects[complectid].products[i].basket.availability = true;
-            }
-			// this.items.complects[index][0].basket.availability = true;
-			this.$emit("updateBasket");
-		},
+        addBasketComplect(item, index, action_id) {
+            console.log(item, index)
+            const data = {
+                action: 'basket/add',
+                id: router.currentRoute._value.params.id,
+                org_id: item.org_id,
+                store_id: item.store_id,
+                id_complect: item.complect_id,
+                count: 1,
+                actions: [action_id]
+            };
+            // this.busket_from_api(data)
+            this.busket_from_api(data).then(() => {
+                this.busket_from_api({
+                    action: 'basket/get',
+                    id: router.currentRoute._value.params.id,
+                    warehouse: 'all'
+                });
+            });
+            // eslint-disable-next-line vue/no-mutating-props
+            // this.items.complects[index][0].basket.availability = true;
+            this.$emit('updateBasket');
+        },
+        // addBasketComplect(complectid, value, storeid, index) {
+		// 	const data = {
+		// 		action: "basket/add",
+		// 		id: router.currentRoute._value.params.id,
+		// 		id_complect: complectid,
+		// 		value,
+		// 		store_id: storeid,
+		// 	};
+		// 	this.busket_from_api(data).then(() => {
+		// 		this.busket_from_api({
+		// 			action: "basket/get",
+		// 			id: router.currentRoute._value.params.id,
+		// 			warehouse: "all",
+		// 		});
+		// 	});
+		// 	// eslint-disable-next-line vue/no-mutating-props
+        //     for(let i = 0; i < this.items.complects[complectid].products.length; i++){
+        //         this.items.complects[complectid].products[i].basket.availability = true;
+        //     }
+		// 	// this.items.complects[index][0].basket.availability = true;
+		// 	this.$emit("updateBasket");
+		// },
         getMinDelivery(stores) {
 			// console.log(stores)
 
@@ -399,51 +428,91 @@ export default {
             this.$emit('updateBasket');
         },
         ElemCountComplect(object) {
-            // console.log(object)
-            if (object.value == object.min) {
-                this.clearBasketComplect(object.store_id, object.id)
-                return;
+			if (!this.fetchIds.includes(object.item.key)) {
+                this.fetchIds.push(object.item.key);
             }
-
-            if (object.value > Number(object.max)) {
-                this.modal_remain = true;
-                // console.log(this.modal_remain)
-            } else {
-                // eslint-disable-next-line vue/no-mutating-props
-
-                if(this.timeOut){
+			if (object.value > Number(object.max)) {
+				this.modal_remain = true;
+			} else {
+				if(this.timeOut){
                     clearTimeout(this.timeOut);
                 }
 
                 this.timeOut = setTimeout(() => {
                     // Ваш запрос на сервер
+					const data = {
+						action: "basket/update",
+						id: router.currentRoute._value.params.id,
+						id_complect: object.item.item.complect_id,
+						count: object.value / object.item.item.multiplicity,
+						store_id: object.store_id,
+						key: object.item.basket.key,
+						org_id: object.item.item.org_id,
+						actions: object.item.basket.ids_actions
+					}
+                    this.busket_from_api(data).then((response) => {});
+					this.busket_from_api({
+						action: 'basket/get',
+						id: router.currentRoute._value.params.id,
+						warehouse: 'all'
+					}).then((res) => {
+						const index = this.fetchIds.indexOf(object.item.key);
+						if (index !== -1) {
+							this.fetchIds.splice(index, 1); // Удаляем один элемент по индексу
+						}
+					});
+                    this.$emit('updateBasket');
                     this.$emit("catalogUpdate");
-                    const data = {
-                        action: 'basket/update',
-                        id: router.currentRoute._value.params.id,
-                        id_complect: object.id,
-                        value: object.value / Number(object.item.multiplicity),
-                        store_id: object.store_id
-                    };
-                    // console.log(data)
-                    this.busket_from_api(data).then((response) => {
-                        const datainfo = {
-                            complect_id: object.id,
-                            store_id: object.store_id,
-                            count: object.value / Number(object.item.multiplicity),
-                        };
-                        // this.$store.commit("SET_OPT_COMPLECT_MUTATION_TO_VUEX", datainfo);
-                        this.$store.commit("SET_SALES_COMPLECT_MUTATION_TO_VUEX", datainfo);
-                    });
-                    this.busket_from_api({
-                        action: 'basket/get',
-                        id: router.currentRoute._value.params.id,
-                        warehouse: 'all'
-                    })
                 }, 1000);
+				
+			}
+		},
+        // ElemCountComplect(object) {
+        //     // console.log(object)
+        //     if (object.value == object.min) {
+        //         this.clearBasketComplect(object.store_id, object.id)
+        //         return;
+        //     }
+
+        //     if (object.value > Number(object.max)) {
+        //         this.modal_remain = true;
+        //         // console.log(this.modal_remain)
+        //     } else {
+        //         // eslint-disable-next-line vue/no-mutating-props
+
+        //         if(this.timeOut){
+        //             clearTimeout(this.timeOut);
+        //         }
+
+        //         this.timeOut = setTimeout(() => {
+        //             // Ваш запрос на сервер
+        //             this.$emit("catalogUpdate");
+        //             const data = {
+        //                 action: 'basket/update',
+        //                 id: router.currentRoute._value.params.id,
+        //                 id_complect: object.id,
+        //                 value: object.value / Number(object.item.multiplicity),
+        //                 store_id: object.store_id
+        //             };
+        //             // console.log(data)
+        //             this.busket_from_api(data).then((response) => {
+        //                 const datainfo = {
+        //                     complect_id: object.id,
+        //                     store_id: object.store_id,
+        //                     count: object.value / Number(object.item.multiplicity),
+        //                 };
+        //                 // this.$store.commit("SET_OPT_COMPLECT_MUTATION_TO_VUEX", datainfo);
+        //                 this.$store.commit("SET_SALES_COMPLECT_MUTATION_TO_VUEX", datainfo);
+        //             });
+        //             this.busket_from_api({
+        //                 action: 'basket/get',
+        //                 id: router.currentRoute._value.params.id,
+        //                 warehouse: 'all'
+        //             })
+        //         }, 1000);
                 
-            }
-        },
+        //     }
+        // },
         leftScroll(event) {
             clearInterval(this.interval);
             if (event === 'start') {

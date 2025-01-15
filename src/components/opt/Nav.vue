@@ -429,7 +429,7 @@
             }">
                 <Dropdown v-model="this.form_requirements_view.warehouse" :options="this.available_sellers" optionLabel="name" placeholder="Выберите склад" class="w-full md:w-14rem" />
                 <span class="error_desc" v-if="this.form_requirements_view.error">
-                    Выберите склад
+                    Выберите поставщика
                 </span>
             </div>
             <button class="dart-btn dart-btn-primary dart-btn-block" type="submit">Просмотреть предложения</button>
@@ -688,7 +688,8 @@ export default {
                             this.$toast.add({ severity: 'success', summary: 'Поставщик установлен!', detail: response.data.message, life: 3000 });
                             this.modal_requirements_view = false
                             this.modal_requirements = false
-                            router.push({ name: 'opt_req', params: { req: this.form_requirements_view.requirement.id + '_req'} });
+                            
+                            this.$router.push({ name: 'opt_req', params: { req: this.form_requirements_view.requirement.id + '_req'}, query: { timestamp: Date.now() } });
                         }else{
                             this.$toast.add({ severity: 'error', summary: 'Ошибка сохранения Поставщика', detail: response.data.message, life: 3000 });
                         }

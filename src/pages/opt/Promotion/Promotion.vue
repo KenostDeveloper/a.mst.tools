@@ -50,10 +50,7 @@
                 </div>
             </div>
         </div>
-        <!-- <div class="d-col-map"> -->
-			<!-- <Vendors :items="this.opt_vendors" /> -->
-			<Basket @actionUpdate="actionUpdate" ref="childComponent" @toOrder="toOrder" />
-		<!-- </div> -->
+		<Basket @actionUpdate="actionUpdate" ref="childComponent" @toOrder="toOrder" />
     </div>
     <!-- <Toast /> -->
     <OrderModal :show="show_order" @fromOrder="fromOrder" />
@@ -163,7 +160,7 @@ export default {
             }
         },
         updateBasket() {
-            this.$refs.childComponent.updateBasket();
+            this.actionUpdate()
         },
         toOrder() {
             this.show_order = true;

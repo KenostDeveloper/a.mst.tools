@@ -377,13 +377,6 @@ export default {
 	},
 	methods: {
 		...mapActions(["busket_from_api", "opt_warehouse_basket"]),
-		updateBasket() {
-			//   const data = { action: 'basket/get', id: router.currentRoute._value.params.id }
-			//   this.busket_from_api(data).then(
-			//     this.basket = this.optbasket
-			//   )
-			// console.log("iiii")
-		},
 		ElemComplectCount(object) {
 			if (!this.fetchIds.includes(object.item.key)) {
                 this.fetchIds.push(object.item.key);
@@ -409,13 +402,8 @@ export default {
 						actions: object.item.actions
 					}
 					this.busket_from_api(data).then((response) => {
-						const datainfo = {
-							complect_id: object.item.complect_id,
-							store_id: object.store_id,
-							count: object.value / object.item.multiplicity,
-						};
-						this.$store.commit("SET_OPT_COMPLECT_MUTATION_TO_VUEX", datainfo);
-						this.$store.commit("SET_SALES_COMPLECT_MUTATION_TO_VUEX", datainfo);
+						this.$emit("catalogUpdate");
+						this.$emit("actionUpdate");
 					});
 					this.busket_from_api({
 						action: 'basket/get',
@@ -462,6 +450,8 @@ export default {
 						key: object.item.product.key
 					};
 					// this.$store.commit("SET_OPT_PRODUCTS_MUTATION_TO_VUEX", datainfo);
+					this.$emit("catalogUpdate");
+					this.$emit("actionUpdate");
 					this.$store.commit("SET_SALES_PRODUCTS_MUTATION_TO_VUEX", datainfo);
 				});
 				if(Number(object.value) != object.old_value){

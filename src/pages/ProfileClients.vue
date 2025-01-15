@@ -2,26 +2,25 @@
 	<section class="clients">
 		<Breadcrumbs class="std-breadcrumbs--margin" />
 		<ConfirmDialog/>
-		<!-- <Toast /> -->
 		<v-clients
-        :items_data="stores.items"
-        :total="stores.total"
-        :pagination_items_per_page="this.pagination_items_per_page"
-        :pagination_offset="this.pagination_offset"
-        :page="this.page"
-        :filters="this.filters"
-        :title="'Мои клиенты'"
-        @delete="deleteClient"
-        @filter="filter"
-        @sort="filter"
-        @paginate="paginate"
+			:items_data="stores.items"
+			:total="stores.total"
+			:pagination_items_per_page="this.pagination_items_per_page"
+			:pagination_offset="this.pagination_offset"
+			:page="this.page"
+			:filters="this.filters"
+			:title="'Мои клиенты'"
+			@delete="deleteClient"
+			@filter="filter"
+			@sort="filter"
+			@paginate="paginate"
         >
         <template v-slot:desc>
             <span class="desc">Доступные организации, которые являются вашими клиентами</span>
         </template>
-				<template v-slot:button>
-					<router-link :to="{ name: 'client_create', params: { id: $route.params.id } }" class="dart-btn dart-btn-primary dart-btn-long">Создать нового клиента</router-link>
-				</template>
+		<template v-slot:button>
+			<router-link :to="{ name: 'client_create', params: { id: $route.params.id } }" class="dart-btn dart-btn-primary dart-btn-long">Создать нового клиента</router-link>
+		</template>
     </v-clients>
 	</section>
 </template>
@@ -55,19 +54,25 @@ export default {
 			store_id: null,
 			filters: {
 				filter: {
-          name: 'Введите название организации',
-          placeholder: 'Введите название организации',
-          type: 'text'
-        },
-        our: {
-          name: 'Созданные поставщиком',
-          placeholder: 'Созданные поставщиком',
-          type: 'checkbox',
-          values: 1
-        }
+					name: 'Введите название организации',
+					placeholder: 'Введите название организации',
+					type: 'text'
+				},
+				manager: {
+					name: "Менеджер",
+					placeholder: "Выберите менеджера",
+					type: "dropdown",
+					values: []
+				},
+				our: {
+					name: 'Созданные поставщиком',
+					placeholder: 'Созданные поставщиком',
+					type: 'checkbox',
+					values: 1
+				},
 			},
 			stores_list: [],
-			page: 1
+			page: 1,
 		};
 	},
 	methods: {
@@ -76,7 +81,8 @@ export default {
 			'set_diler_to_api',
 			'unset_dilers',
 			'org_get_stores_from_api',
-			'org_profile_set_from_api'
+			'org_profile_set_from_api',
+			'org_get_managers_from_api'
 		]),
 		filter (data) {
 			this.unset_dilers()
@@ -156,7 +162,10 @@ export default {
 				}
 			}
 		})
-
+		this.org_get_managers_from_api({
+			action: "get/org/managers",
+			id: router.currentRoute._value.params.id,
+		});
 		this.org_get_stores_from_api({
 			action: 'get/stores',
 			id: this.$route.params.id
@@ -165,7 +174,8 @@ export default {
 	computed: {
 		...mapGetters([
 			'dilers',
-			'org_stores'
+			'org_stores',
+			'org_managers'
 		])
   },
 	components: { Dropdown, Breadcrumbs, vClients, ConfirmDialog, Toast },
@@ -193,6 +203,9 @@ export default {
 				this.stores_list.push({ label: newVal.items[i].name, value: newVal.items[i].id })
 			}
 		},
+		org_managers: function (newVal, oldVal) {
+			this.filters.manager.values = newVal
+		}
 	}
 };
 </script>

@@ -170,8 +170,6 @@
                 <b>Арт: {{ item.article }}</b>
             </td>
             <td class="k-table__busket complect-button__td">
-                <!-- {{ item.test }} -->
-
                 <form class="k-table__form" :class="{ 'basket-true': complect?.basket?.availability || this.add_basket.indexOf(item.key) != -1, 'loading-counter': this.fetchIds.indexOf(item.key) != -1 }" action="">
                     <Counter
                         @ElemCount="ElemCountComplect"
@@ -561,7 +559,9 @@ export default {
         },
 
         addBasketComplect(item, index, action_id) {
-            console.log(item, index)
+            if (!this.add_basket.includes(item.key)) {
+                this.add_basket.push(item.key);
+            }
             const data = {
                 action: 'basket/add',
                 id: router.currentRoute._value.params.id,
@@ -618,6 +618,12 @@ export default {
                 if (index !== -1) {
                     this.fetchIds.splice(index, 1); // Удаляем один элемент по индексу
                 }
+                setTimeout(() => {
+                    const index = this.add_basket.indexOf(item.key);
+                    if (index !== -1) {
+                        this.add_basket.splice(index, 1); // Удаляем один элемент по индексу
+                    }
+                }, 1000)
             })
         },
         clearBasketComplect(storeid, complectid) {
@@ -689,7 +695,6 @@ export default {
             this.$emit('updateBasket');
         },
         ElemCountComplect(object) {
-            console.log(object)
 			if (!this.fetchIds.includes(object.item.key)) {
                 this.fetchIds.push(object.item.key);
             }
