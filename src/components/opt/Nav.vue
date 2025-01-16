@@ -255,7 +255,7 @@
                 <img src="/images/icons/arrow-rounded.svg" alt="" class="visible-tablet-l" />
             </button>
             <div class="std-nav__address-wrapper" v-if="opt_vendors.selected_count > 0">
-                <button class="std-nav__address" @click.stop="() => (this.showWarehouseList = !this.showWarehouseList)">
+                <button v-if="org_stores?.items?.find((el) => el.id == warehouse_basket)" class="std-nav__address" @click.stop="() => (this.showWarehouseList = !this.showWarehouseList)">
                     <img class="std-nav__address-icon" src="/images/icons/map_marker.svg" />
                     <span class="std-nav__address-text">
                         <span>Адрес доставки:</span><br />

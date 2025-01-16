@@ -58,7 +58,7 @@
     </div>
     <div class="clients__card-container" v-if="total != 0">
       <div class="dart-row" v-if="total != -1">
-        <div class="d-col-md-3" v-for="item in items_data" :key="item.id">
+        <div class="d-col-xxl-3 d-col-xl-4" v-for="item in items_data" :key="item.id">
           <div class="d-client-card" :class="{ 'd-client-card-with_button': !item.our }">
             <div class="d-client-card__content">
               <img :src="item.image" alt="" class="client-card__img" />
@@ -92,7 +92,7 @@
         </div>
       </div>
       <div class="dart-row" v-else>
-				<div class="d-col-md-3" v-for="n in 4" :key="n">
+				<div class="d-col-md-3 d-col-lg-4" v-for="n in 4" :key="n">
 					<div class="image">
 						<Skeleton width="100%" height="150px" class="mb-2"></Skeleton>
 					</div>

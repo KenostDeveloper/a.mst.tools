@@ -5790,6 +5790,11 @@ button.std-icon__wrapper {
 
 			&__question {
 				width: 24px;
+				height: 24px;
+
+				&::before{
+					font-size: 16px;
+				}
 			}
 
 			span {
@@ -6427,6 +6432,7 @@ button.std-icon__wrapper {
 
 	& + .std-empty-dialog__overlay + .content {
 		max-width: calc(100vw - 327px);
+		overflow: hidden;
 
 		.dart-home {
 			max-width: calc(100vw - 327px - 37px * 2);

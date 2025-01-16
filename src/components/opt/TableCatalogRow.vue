@@ -646,6 +646,33 @@ export default {
             if (!this.fetchIds.includes(object.item.key)) {
                 this.fetchIds.push(object.item.key);
             }
+            if (object.value > Number(object.max)) {
+                this.modal_remain = true;
+				this.$emit("catalogUpdate");
+                const data = {
+                    action: 'basket/update',
+                    id: router.currentRoute._value.params.id,
+                    org_id: object.item.org_id,
+                    store_id: object.item.store_id,
+                    id_remain: object.id,
+                    count: object.max,
+                    key: object.item.basket.key,
+                    actions: object.item.basket.ids_actions
+                };
+				this.busket_from_api(data).then(() => {
+					this.busket_from_api({
+						action: 'basket/get',
+						id: router.currentRoute._value.params.id,
+						warehouse: 'all'
+					}).then((res) => {
+						const index = this.fetchIds.indexOf(object.item.key);
+						if (index !== -1) {
+							this.fetchIds.splice(index, 1); // Удаляем один элемент по индексу
+						}
+					});
+				})
+                return
+			}
             if (object.value == object.min) {
                 this.clearBasketProduct(object.item.org_id, object.item.store_id, object.item.basket.key, object.item)
                 return;

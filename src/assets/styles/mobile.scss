@@ -25,6 +25,16 @@
 		position: fixed;
 		box-shadow: 25px 0px 20px -20px rgba(0,0,0,0.45);
 	}
+
+	.b24-widget-button-inner-container, .bx-touch .b24-widget-button-inner-container{
+		transform: scale(0.5);
+	}
+
+	// .b24-widget-button-wrapper {
+	// 	top: 51px !important;
+    //     left: 0px;
+    //     bottom: unset !important;
+	// }
 }
 
 @media (max-width: 1200px) {
