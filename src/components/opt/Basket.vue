@@ -429,6 +429,29 @@ export default {
 			};
 			if (object.value > Number(object.max)) {
 				this.modal_remain = true;
+				this.$emit("catalogUpdate");
+				const data = {
+					action: 'basket/update',
+					id: router.currentRoute._value.params.id,
+					org_id: object.item.product.org_id,
+					store_id: object.item.product.store_id,
+					id_remain: object.id,
+					count: object.max,
+					key: object.item.product.key,
+					actions: object.item.product.actions
+				};
+				this.busket_from_api(data).then(() => {
+					this.busket_from_api({
+						action: 'basket/get',
+						id: router.currentRoute._value.params.id,
+						warehouse: 'all'
+					}).then((res) => {
+						const index = this.fetchIds.indexOf(object.item.product.key);
+						if (index !== -1) {
+							this.fetchIds.splice(index, 1); // Удаляем один элемент по индексу
+						}
+					});
+				})
 			} else {				
 				this.$emit("catalogUpdate");
 				const data = {
