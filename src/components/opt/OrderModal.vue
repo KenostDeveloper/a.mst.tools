@@ -51,10 +51,10 @@
                                             <div class="k-order__buttons">
                                                 <b>{{(item.count * item.price).toLocaleString('ru')}} ₽</b>
                                                 <div class="k-order-count-change">
-                                                    <div class="k-order-count-change__cost">-13 290 ₽ (1 шт)</div>
-                                                    <svg width="12" height="11" viewBox="0 0 12 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <!-- <div class="k-order-count-change__cost">-13 290 ₽ (1 шт)</div> -->
+                                                    <!-- <svg width="12" height="11" viewBox="0 0 12 11" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                         <path d="M5.53125 0C8.56882 0 11.0312 2.46243 11.0312 5.5C11.0312 8.53757 8.56882 11 5.53125 11C2.49368 11 0.03125 8.53757 0.03125 5.5C0.03125 2.46243 2.49368 0 5.53125 0ZM5.53125 7.90625C5.24648 7.90625 5.01562 8.1371 5.01562 8.42188C5.01562 8.70665 5.24648 8.9375 5.53125 8.9375C5.81602 8.9375 6.04688 8.70665 6.04688 8.42188C6.04688 8.1371 5.81602 7.90625 5.53125 7.90625ZM5.53125 2.40625C4.58201 2.40625 3.8125 3.17576 3.8125 4.125C3.8125 4.31485 3.9664 4.46875 4.15625 4.46875C4.3461 4.46875 4.5 4.31485 4.5 4.125C4.5 3.55546 4.96171 3.09375 5.53125 3.09375C6.10079 3.09375 6.5625 3.55546 6.5625 4.125C6.5625 4.3789 6.47039 4.61712 6.30947 4.80182L6.23636 4.87759L6.15523 4.94614L5.98565 5.07288C5.89701 5.14242 5.81758 5.21345 5.74118 5.29487C5.38902 5.67014 5.1875 6.17922 5.1875 6.875C5.1875 7.06485 5.3414 7.21875 5.53125 7.21875C5.7211 7.21875 5.875 7.06485 5.875 6.875C5.875 6.35403 6.00993 6.01316 6.24251 5.76532L6.29439 5.71309L6.34982 5.66306L6.40999 5.6138L6.56021 5.50167L6.66652 5.41551C7.03333 5.09282 7.25 4.62659 7.25 4.125C7.25 3.17576 6.48049 2.40625 5.53125 2.40625Z" fill="#FF0000"/>
-                                                    </svg>
+                                                    </svg> -->
                                                 </div>
                                                 <div :class="{'loading-counter': this.fetchIds.indexOf(item.key) != -1 }">
                                                     <Counter
@@ -423,8 +423,8 @@ export default {
                 id: router.currentRoute._value.params.id,
                 org_id: object.item.item.org_id,
                 store_id: object.item.item.store_id,
-                remain_id: object.id,
-                value: object.value,
+                id_remain: object.id,
+                count: object.value,
                 key: object.item.item.key,
                 actions: object.item.item.actions
             };

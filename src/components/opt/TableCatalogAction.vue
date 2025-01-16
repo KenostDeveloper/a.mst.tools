@@ -389,8 +389,8 @@ export default {
                 id: router.currentRoute._value.params.id,
                 org_id: object.item.item.org_id,
                 store_id: object.item.item.store_id,
-                remain_id: object.id,
-                value: object.value,
+                id_remain: object.id,
+                count: object.value,
                 key: object.item.item.basket.key,
                 actions: object.item.item.basket.ids_actions
             };
