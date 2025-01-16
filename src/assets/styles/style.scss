@@ -7746,7 +7746,7 @@ button.std-icon__wrapper {
 
 .k-order__product{
 	.k-order__actions{
-		width: calc(100% - 450px);
+		width: calc(100% - 480px);
 	}
 }
 
@@ -9347,6 +9347,10 @@ button.std-icon__wrapper {
 	}
 }
 
+.k-order__buttons{
+	gap: 2px !important;
+}
+
 .k-order-count-change{
 	display: flex;
 	align-items: center;
@@ -9364,4 +9368,9 @@ button.std-icon__wrapper {
 	svg{
 		cursor: pointer;
 	}
+}
+
+.kenost-basket-change-modal{
+	position: absolute;
+    right: 165px;
 }
