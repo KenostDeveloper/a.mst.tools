@@ -221,7 +221,7 @@ export default {
 			this.updatePage(this.$route.params.category_id);
 		},
 		updateBasket() {
-			this.$refs.childComponent.updateBasket();
+			// this.$refs.childComponent.updateBasket();
 		},
 		toOrder() {
 			this.show_order = true;

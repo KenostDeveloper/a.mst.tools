@@ -169,7 +169,7 @@ export default {
       )
     },
     updateBasket () {
-      this.$refs.childComponent.updateBasket()
+      // this.$refs.childComponent.updateBasket()
     },
     catalogUpdate () {
       this.get_opt_products_from_api({

@@ -136,7 +136,7 @@ export default {
       )
     },
     updateBasket () {
-      this.$refs.childComponent.updateBasket()
+      // this.$refs.childComponent.updateBasket()
     },
     catalogUpdate () {
       console.log('cart update')
