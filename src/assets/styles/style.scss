@@ -6432,7 +6432,6 @@ button.std-icon__wrapper {
 
 	& + .std-empty-dialog__overlay + .content {
 		max-width: calc(100vw - 327px);
-		overflow: hidden;
 
 		.dart-home {
 			max-width: calc(100vw - 327px - 37px * 2);
