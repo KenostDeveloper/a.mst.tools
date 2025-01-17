@@ -55,14 +55,11 @@
                             <label for="create-page-action" class="ml-2 mb-0"> Разместить рекламные баннеры </label>
                         </div>
                     </div>
-                    <div class="dart-form-group kenost-action-page pt-3" :class="{ error: v$.place_action.$errors.length }"
+                    <div class="dart-form-group kenost-action-page pt-3"
                         v-if="this.create_page_action.length != 0">
                         <span class="ktitle">Место размещения баннера/товара</span>
                         <MultiSelect v-model="this.place_action" :options="this.place" optionLabel="name"
                             placeholder="Выберите один или несколько вариантов" class="w-full" />
-                        <span class="error_desc" v-for="error of v$.place_action.$errors" :key="error.$uid">
-                            {{ error.$message }}
-                        </span>
                     </div>
                     <div class="dart-form-group kenost-action-page pt-3" v-if="this.create_page_action.length != 0">
                         <div class="upload-banner">
@@ -188,16 +185,12 @@
                 <label for="actionLast-1" class="ml-2 mb-0">Применяется последней (от стоимости товара по всем акциям)</label>
               </div>
               -->
-                <div class="dart-form-group mt-4" :class="{ error: v$.form.bigDiscount.$errors.length }"
+                <div class="dart-form-group mt-4"
                     v-if="this.form.compatibilityDiscount == 3 || this.form.compatibilityDiscount == 4">
                     <label>Выберите акции из списка</label>
                     <MultiSelect :key="new Date().getMilliseconds()" filter v-model="this.form.bigDiscount"
                         display="chip" :options="this.allAction" optionLabel="name" placeholder="Выберите из списка"
                         class="w-full md:w-20rem kenost-multiselect" />
-
-                    <span class="error_desc" v-for="error of v$.form.bigDiscount.$errors" :key="error.$uid">
-                        {{ error.$message }}
-                    </span>
                 </div>
                 <div class="dart-form-group mt-4"
                     v-if="this.form.compatibilityDiscount == 1 || this.form.compatibilityDiscount == 3 || this.form.compatibilityDiscount == 4">
@@ -233,16 +226,12 @@
                     </div>
                 </div>
 
-                <div class="dart-form-group mt-4" :class="{ error: v$.form.bigPost.$errors.length }"
+                <div class="dart-form-group mt-4"
                     v-if="this.form.compatibilityPost == 3 || this.form.compatibilityPost == 4">
                     <label>Выберите акции из списка</label>
                     <MultiSelect filter v-model="this.form.bigPost" display="chip" :options="this.allAction"
                         optionLabel="name" placeholder="Выберите из списка"
                         class="w-full md:w-20rem kenost-multiselect" />
-
-                    <span class="error_desc" v-for="error of v$.form.bigPost.$errors" :key="error.$uid">
-                        {{ error.$message }}
-                    </span>
                 </div>
 
                 <div class="dart-form-group mt-4"
@@ -262,7 +251,7 @@
                     </span>
                 </div>
 
-                <div class="dart-form-group mb-4" :class="{ error: v$.form.dateShipment.$errors.length }">
+                <div class="dart-form-group mb-4">
                     <span class="ktitle">Срок отгрузки товаров</span>
                     <div class="flex align-items-center gap-1 mt-3">
                         <RadioButton v-model="this.form.typeShipment" inputId="typeShipment-1" name="typeShipment"
@@ -283,10 +272,6 @@
 
                     <Calendar class="mt-3" v-if="this.form.typeShipment == 3" v-model="this.form.dateShipment"
                         placeholder="Выберите ближайшую дату отгрузки" :manualInput="false" showIcon />
-
-                    <span class="error_desc" v-for="error of v$.form.dateShipment.$errors" :key="error.$uid">
-                        {{ error.$message }}
-                    </span>
                 </div>
 
                 <div class="dart-form-group mb-4">
@@ -369,6 +354,11 @@
                         <div class="kenost-wiget">
                             <p>Минимальное общее кол-во SKU</p>
                             <InputNumber v-model="this.form.conditionMinCount" inputId="horizontal-buttons" :step="0.1"
+                                min="0" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" />
+                        </div>
+                        <div class="kenost-wiget">
+                            <p>Минимальное общее кол-во товаров</p>
+                            <InputNumber v-model="this.form.conditionMinGeneralCount" inputId="horizontal-buttons" :step="0.1"
                                 min="0" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" />
                         </div>
                     </div>
@@ -783,49 +773,30 @@
                             class="w-full md:w-14rem" />
                     </div>
 
-                    <div class="kenost-wiget" :class="{ error: v$.kenostActivityAll.typePrice.$errors.length }"
+                    <div class="kenost-wiget"
                         v-if="(this.kenostActivityAll.type.key == 0 && this.kenostActivityAll?.typePricing?.key !=2) || this.kenostActivityAll.type.key == 1">
                         <p>Тип цен</p>
                         <Dropdown v-model="this.kenostActivityAll.typePrice" :options="this.typePrice"
                             optionLabel="name" placeholder="Тип цен" class="w-full md:w-14rem" />
-
-                        <span class="error_desc" v-for="error of v$.kenostActivityAll.typePrice.$errors"
-                            :key="error.$uid">
-                            {{ error.$message }}
-                        </span>
                     </div>
-                    <div class="kenost-wiget" :class="{ error: v$.kenostActivityAll.value.$errors.length }"
+                    <div class="kenost-wiget"
                         v-if="this.kenostActivityAll.type.key == 0">
                         <p>Значение</p>
                         <InputNumber v-model="this.kenostActivityAll.value" inputId="horizontal-buttons" :step="1"
                             min="0" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" />
-
-                        <span class="error_desc" v-for="error of v$.kenostActivityAll.value.$errors" :key="error.$uid">
-                            {{ error.$message }}
-                        </span>
                     </div>
-                    <div class="kenost-wiget" :class="{ error: v$.kenostActivityAll.typeFormul.$errors.length }"
+                    <div class="kenost-wiget"
                         v-if="this.kenostActivityAll.type.key == 0">
                         <p>&nbsp;</p>
                         <Dropdown :disabled="this.kenostActivityAll?.typePricing?.key != 2" v-model="kenostActivityAll.typeFormul" :options="this.typeFormul" optionLabel="name"
                             class="w-full md:w-14rem" />
-
-                        <span class="error_desc" v-for="error of v$.kenostActivityAll.typeFormul.$errors"
-                            :key="error.$uid">
-                            {{ error.$message }}
-                        </span>
                     </div>
 
-                    <div class="kenost-wiget" :class="{ error: v$.kenostActivityAll.multiplicity.$errors.length }"
+                    <div class="kenost-wiget"
                         v-if="this.kenostActivityAll.type.key == 3">
                         <p>Значение</p>
                         <InputNumber v-model="this.kenostActivityAll.multiplicity" inputId="horizontal-buttons"
                             :step="1" min="1" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" />
-
-                        <span class="error_desc" v-for="error of v$.kenostActivityAll.multiplicity.$errors"
-                            :key="error.$uid">
-                            {{ error.$message }}
-                        </span>
                     </div>
 
                     <div v-if="
@@ -989,7 +960,7 @@
                         <label for="participantsType-3" class="ml-2 radioLabel">Неограниченный круг участников</label>
                     </div>
                 </div>
-                <div class="dart-form-group" :class="{ error: v$.regions_select.$errors.length }">
+                <div class="dart-form-group">
                     <div v-if="this.form.participantsType == '1' || this.form.participantsType == '4'" class="kenost-select-reginos">
                         <p class="kenost-select-reginos__title" v-if="this.form.participantsType == '1'">Выбор участников по регионам</p>
                         <p class="kenost-select-reginos__title" v-else>Выбор исключения по регионам</p>
@@ -1035,10 +1006,6 @@
                             optionLabel="name" placeholder="Выберите регионы"
                             class="w-full md:w-20rem kenost-multiselect mt-2" />
                     </div>
-
-                    <span class="error_desc" v-for="error of v$.regions_select.$errors" :key="error.$uid">
-                        {{ error.$message }}
-                    </span>
                 </div>
 
                 <div class="PickList" v-if="this.form.participantsType == '2' || this.form.participantsType == '5'">
@@ -1070,7 +1037,7 @@
                         </div>
                     </div>
 
-                    <div class="PickList__selected" :class="{ error: v$.all_organizations_selected.$errors.length }"
+                    <div class="PickList__selected"
                         :style="{ width: '40%' }">
                         <div class="PickList__title mb-4">
                             <b v-if="this.form.participantsType == '2'">Добавленные организации</b>
@@ -1090,11 +1057,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <span class="error_desc" v-for="error of v$.all_organizations_selected.$errors"
-                            :key="error.$uid">
-                            {{ error.$message }}
-                        </span>
                     </div>
                 </div>
 
@@ -1497,6 +1459,7 @@ export default {
                 available_opt: [],
                 conditionMinCount: 0,
                 conditionMinSum: 0,
+                conditionMinGeneralCount: 0,
                 bigDiscount: [],
                 not_sale_client: [],
                 hide_for_clients: false
@@ -2028,7 +1991,9 @@ export default {
             this.opt_get_complects(data);
         },
         async formSubmit(event) {
+            console.log('create')
             const validationResult = await this.v$.$validate();
+            console.log(validationResult)
             if (!validationResult) {
                 // console.log('validation failed');
                 return;
@@ -2040,6 +2005,7 @@ export default {
                 // console.log(groups_data[Object.keys(groups_data)[i]])
                 groups_data[Object.keys(groups_data)[i]].products = null
             }
+            console.log('create')
 
             this.$load(async () => {
                 if (router.currentRoute._value.params.sales_id) {
@@ -2069,6 +2035,7 @@ export default {
                         delay_condition_value: this.form.postponementConditionsValue,
                         condition_type: this.form.condition.key,
                         condition_min_sum: this.form.conditionMinSum,
+                        condition_min_count: this.form.conditionMinGeneralCount,
                         condition_SKU: this.form.conditionMinCount,
                         participants_type: this.form.participantsType,
                         products: Object.keys(this.selected),
@@ -2128,6 +2095,7 @@ export default {
                         delay_condition_value: this.form.postponementConditionsValue,
                         condition_type: this.form.condition.key,
                         condition_min_sum: this.form.conditionMinSum,
+                        condition_min_count: this.form.conditionMinGeneralCount,
                         condition_SKU: this.form.conditionMinCount,
                         participants_type: this.form.participantsType,
                         products: Object.keys(this.selected),
@@ -2928,6 +2896,7 @@ export default {
                 this.form.condition = this.condition[newVal.condition_type];
                 this.form.conditionMinSum = newVal.condition_min_sum;
                 this.form.conditionMinCount = newVal.condition_SKU;
+                this.form.conditionMinGeneralCount = newVal.condition_min_count;
                 if (newVal.method_adding_products) {
                     this.form.addProductType = newVal.method_adding_products.toString();
                 }
@@ -3014,33 +2983,33 @@ export default {
                 // award: {
                 //   required: helpers.withMessage("Заполните награду", required),
                 // },
-                bigDiscount: {
-                    required: helpers.withMessage('Выберите акции', () => {
-                        if (this.form.compatibilityDiscount != 3 && this.form.compatibilityPost != 4) return true;
-                        return this.form.bigDiscount?.length > 0;
-                    })
-                },
-                bigPost: {
-                    required: helpers.withMessage('Выберите отсрочки', () => {
-                        if (this.form.compatibilityPost != 3 && this.form.compatibilityPost != 4) return true;
-                        return this.form.bigPost?.length > 0;
-                    })
-                },
+                // bigDiscount: {
+                //     required: helpers.withMessage('Выберите акции', () => {
+                //         if (this.form.compatibilityDiscount != 3 && this.form.compatibilityPost != 4) return true;
+                //         return this.form.bigDiscount?.length > 0;
+                //     })
+                // },
+                // bigPost: {
+                //     required: helpers.withMessage('Выберите отсрочки', () => {
+                //         if (this.form.compatibilityPost != 3 && this.form.compatibilityPost != 4) return true;
+                //         return this.form.bigPost?.length > 0;
+                //     })
+                // },
                 dates: {
                     required: helpers.withMessage('Заполните даты проведения', () => this.form.dates?.length > 0)
                 },
-                dateShipment: {
-                    required: helpers.withMessage('Заполните дату отгрузки', () => {
-                        if (this.form.typeShipment != 3) return true;
-                        return required(this.form.dateShipment);
-                    })
-                }
+                // dateShipment: {
+                //     required: helpers.withMessage('Заполните дату отгрузки', () => {
+                //         if (this.form.typeShipment != 3) return true;
+                //         return required(this.form.dateShipment);
+                //     })
+                // }
             },
             place_action: {
-                required: helpers.withMessage('Выберите хотя бы одно место размещения баннера/товара', () => {
-                    if (this.create_page_action?.length < 1) return true;
-                    return this.place_action?.length > 0;
-                })
+                // required: helpers.withMessage('Выберите хотя бы одно место размещения баннера/товара', () => {
+                //     if (this.create_page_action?.length < 1) return true;
+                //     return this.place_action?.length > 0;
+                // })
             },
             // selected: {
             //     required: helpers.withMessage('Выберите хотя бы один товар', () => {
@@ -3061,43 +3030,43 @@ export default {
                 //         return this.kenostActivityAll?.type?.name;
                 //     })
                 // },
-                typePrice: {
-                    required: helpers.withMessage('Выберите тип цен', () => {
-                        if (this.kenostActivityAll?.type?.key != 0 && this.kenostActivityAll?.type?.key != 1) return true;
-                        return this.kenostActivityAll?.typePrice?.name;
-                    })
-                },
-                value: {
-                    required: helpers.withMessage('Заполните значение', () => {
-                        if (this.kenostActivityAll?.type?.key != 0) return true;
-                        return this.kenostActivityAll?.value;
-                    })
-                },
-                typeFormul: {
-                    required: helpers.withMessage('Выберите единицу измерения', () => {
-                        if (this.kenostActivityAll?.type?.key != 0) return true;
-                        return this.kenostActivityAll?.typeFormul?.name;
-                    })
-                },
-                multiplicity: {
-                    required: helpers.withMessage('Заполните кратность', () => {
-                        if (this.kenostActivityAll?.type?.key != 3) return true;
-                        return this.kenostActivityAll?.multiplicity;
-                    })
-                }
+                // typePrice: {
+                //     required: helpers.withMessage('Выберите тип цен', () => {
+                //         if (this.kenostActivityAll?.type?.key != 0 && this.kenostActivityAll?.type?.key != 1) return true;
+                //         return this.kenostActivityAll?.typePrice?.name;
+                //     })
+                // },
+                // value: {
+                //     required: helpers.withMessage('Заполните значение', () => {
+                //         if (this.kenostActivityAll?.type?.key != 0) return true;
+                //         return this.kenostActivityAll?.value;
+                //     })
+                // },
+                // typeFormul: {
+                //     required: helpers.withMessage('Выберите единицу измерения', () => {
+                //         if (this.kenostActivityAll?.type?.key != 0) return true;
+                //         return this.kenostActivityAll?.typeFormul?.name;
+                //     })
+                // },
+                // multiplicity: {
+                //     required: helpers.withMessage('Заполните кратность', () => {
+                //         if (this.kenostActivityAll?.type?.key != 3) return true;
+                //         return this.kenostActivityAll?.multiplicity;
+                //     })
+                // }
             },
-            regions_select: {
-                required: helpers.withMessage('Выберите хотя бы один регион', () => {
-                    if (this.form.participantsType != 1) return true;
-                    return this.regions_select?.length > 0
-                })
-            },
-            all_organizations_selected: {
-                required: helpers.withMessage('Выберите хотя бы одну организацию', () => {
-                    if (this.form.participantsType != 2) return true;
-                    return Object.keys(this.all_organizations_selected).length > 0
-                })
-            }
+            // regions_select: {
+            //     required: helpers.withMessage('Выберите хотя бы один регион', () => {
+            //         if (this.form.participantsType != 1) return true;
+            //         return this.regions_select?.length > 0
+            //     })
+            // },
+            // all_organizations_selected: {
+            //     required: helpers.withMessage('Выберите хотя бы одну организацию', () => {
+            //         if (this.form.participantsType != 2) return true;
+            //         return Object.keys(this.all_organizations_selected).length > 0
+            //     })
+            // }
         };
     }
 };
