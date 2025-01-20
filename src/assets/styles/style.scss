@@ -5,6 +5,7 @@
 
 @layer table-actions-1, table-actions-2;
 
+
 :root {
 	// * Colors
 	--color-black: #282828;
@@ -57,6 +58,8 @@
 
 	// * Animations
 	--transition-duration: .3s;
+
+	--app-height: 100%;
 }
 
 
@@ -157,6 +160,10 @@ button {
 //   vertical-align: baseline;
 // }
 // /* HTML5 display-role reset for older browsers */
+
+html{
+	scrollbar-gutter: stable;
+}
 
 article,
 aside,
@@ -1191,7 +1198,9 @@ img {
 			}
 
 			&-logo {
-				gap: 0;
+				&> * + * {
+					margin-left: 0px;
+				}
 				span {
 					max-width: 0px;
 				}
@@ -1199,7 +1208,7 @@ img {
 
 			&-toggler {
 				i {
-					rotate: 180deg;
+					transform: rotate(180deg);
 				}
 			}
 
@@ -1256,13 +1265,16 @@ img {
 				}
 
 				&__on {
-					gap: 0;
+
+					margin-left: auto !important;
+					margin-right: auto !important;
 					transition: all 0.4s ease-in-out;
 					margin: auto;
 					padding: 6px 8px;
 					span {
 						transition: all 0.4s ease-in-out;
 						max-width: 0px;
+						margin-left: 0;
 					}
 				}
 
@@ -1340,7 +1352,9 @@ img {
 	&-org {
 		text-decoration: none;
 		display: flex;
-		gap: 12px;
+		&>* + *{
+			margin-left: 12px !important;
+		}
 	}
 
 	&-logout {
@@ -1351,8 +1365,11 @@ img {
 		cursor: pointer;
 		display: flex;
 		align-items: center;
-		gap: 16px;
 		width: 100%;
+
+		&>* + * {
+			margin-left: 16px !important;
+		}
 
 		span {
 			transition: all 0.4s ease-in-out;
@@ -1417,13 +1434,17 @@ img {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		gap: 16px;
+
 		text-decoration: none;
 		transition: all 0.4s ease-in-out;
 
+		&>* + *{
+			margin-left: 16px;
+		}
+
 		&:hover {
 			img {
-				rotate: 90deg;
+				transform: rotate(90deg);
 			}
 		}
 
@@ -1516,8 +1537,11 @@ img {
 			transition: all 0.4s ease-in-out;
 			display: flex;
 			align-items: center;
-			gap: 16px;
 			margin-top: 12px;
+
+			&>* + * {
+				margin-left: 16px !important;
+			}
 		}
 
 		&__tag {
@@ -1534,8 +1558,8 @@ img {
 		}
 
 		&__on {
+			
 			display: flex;
-			gap: 4px;
 			align-items: center;
 			max-width: 100%;
 			transition: all 0.4s ease-in-out;
@@ -1547,6 +1571,10 @@ img {
 			font-weight: 500;
 			background: rgba(0, 246, 25, 0.15);
 			width: fit-content;
+
+			&>*{
+				margin-left: 4px;
+			}
 
 			span {
 				transition: all 0.4s ease-in-out;
@@ -1587,10 +1615,13 @@ img {
 		&__name {
 			display: flex;
 			align-items: center;
-			gap: 16px;
 			width: 100%;
 			height: 100%;
 			padding: 0 0 0 40px;
+
+			&>* + * {
+				margin-left: 16px !important;
+			}
 		}
 
 		&__item {
@@ -1641,7 +1672,10 @@ img {
 	&-roles {
 		display: flex;
 		align-items: center;
-		gap: 16px;
+
+		&>* + * {
+			margin-left: 16px !important;
+		}
 	}
 
 	&-role {
@@ -2602,7 +2636,8 @@ p {
 		width: 100% !important;
 
 		.std-table__hcol {
-			padding-inline: 9px;
+			padding-left: 9px;
+    		padding-right: 9px;
 
 			&:first-child {
 				padding-left: 15px;
@@ -2628,7 +2663,8 @@ p {
 
 		.std-shipping__button {
 			height: 44px;
-			padding-inline: 30px;
+			padding-left: 30px;
+    		padding-right: 30px;
 		}
 	}
 
@@ -2691,20 +2727,22 @@ p {
 		z-index: 10;
 
 		&--active {
-			max-height: 100dvh;
+			max-height: 100vh;
 
 			.std-calendar__head {
-				padding-block: 24px 10px;
+				padding-top: 24px;    /* Отступ сверху */
+    			padding-bottom: 10px; /* Отступ снизу */
 				max-height: 100%;
 			}
 
 			.std-calendar__expand-button {
-				rotate: 180deg;
+				transform: rotate(180deg);
 			}
 		}
 
 		&__head {
-			padding-block: 0;
+			padding-top: 0;    /* Отступ сверху */
+    		padding-bottom: 0; /* Отступ снизу */
 			height: 60px;
 
 			transition-duration: 0.3s;
@@ -2790,7 +2828,8 @@ p {
 	}
 
 	&__col {
-		padding-block: 28px;
+		padding-top: 28px;    /* Отступ сверху */
+    	padding-bottom: 28px; /* Отступ снизу */
 
 		font-size: 14px;
 		font-weight: 400;
@@ -2835,7 +2874,7 @@ p {
 .std-dropdown {
 	&[open] {
 		.std-dropdown__button {
-			rotate: 180deg;
+			transform: rotate(180deg);
 		}
 	}
 
@@ -3051,7 +3090,8 @@ p {
 		&__button {
 			width: max-content;
 			height: 34px;
-			padding-inline: 54px;
+			padding-left: 54px;
+    		padding-right: 54px;
 			margin: 0 auto;
 		}
 
@@ -3298,7 +3338,12 @@ p {
 
 		.promotion__back-button {
 			cursor: pointer;
-			@include flex-center($gap: 10px);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			&>* + * {
+				margin-left: 10px !important;
+			}
 
 			& {
 				background-color: transparent;
@@ -3426,7 +3471,8 @@ p {
 
 	.provider-card {
 		&__button {
-			padding-block: 0;
+			padding-top: 0;    /* Отступ сверху */
+    		padding-bottom: 0; /* Отступ снизу */
 
 			&--remove {
 				@include flex-center($gap: 10px);
@@ -3438,7 +3484,8 @@ p {
 					box-shadow: none;
 					color: #7b7b7b;
 
-					padding-inline: 30px;
+					padding-left: 30px;
+    				padding-right: 30px;
 				}
 			}
 
@@ -3457,7 +3504,9 @@ p {
 			&--select {
 				background-color: #ff0000;
 				color: white;
-				padding-inline: 50px;
+
+				padding-left: 50px;
+    			padding-right: 50px;
 			}
 		}
 	}
@@ -3481,14 +3530,14 @@ p {
 	transition-duration: 0.5s;
 
 	&--active {
-		max-height: 90dvh !important;
+		max-height: 90vh !important;
 
 		.std-basket__header-wrapper {
 			height: auto;
 		}
 
 		.std-basket__expand-icon {
-			rotate: 0deg;
+			transform: rotate(0deg);
 		}
 	}
 
@@ -3586,7 +3635,7 @@ p {
 
 	&__expand-icon {
 		transition-duration: 0.3s;
-		rotate: 180deg;
+		transform: rotate(180deg);
 
 		&::before {
 			font-size: 20px;
@@ -3633,7 +3682,8 @@ p {
 
 	.basket-container {
 		& {
-			padding-block: 0 !important;
+			padding-top: 0;    /* Отступ сверху */
+    		padding-bottom: 0; /* Отступ снизу */
 		}
 	}
 
@@ -3715,7 +3765,9 @@ p {
 
 		width: 100%;
 		padding: 5px;
-		padding-inline: 6px 16px;
+		padding-left: 6px; /* Отступ в начале строки */
+    	padding-right: 16px; /* Отступ в конце строки */
+		
 
 		transition-duration: .3s;
 
@@ -3731,11 +3783,9 @@ p {
 
 // Nav
 .std-nav {
-	gap: 10px;
-
 	border-radius: 5px;
 
-	padding: 14px 45px !important;
+	padding: 14px 25px !important;
 	margin: 20px 25px 0;
 
 	height: 76px;
@@ -3743,6 +3793,10 @@ p {
 	min-width: fit-content;
 
 	position: relative;
+
+	&>* + * {
+		margin-left: 10px !important;
+	}
 
 	&--active {
 		border-bottom-left-radius: 0;
@@ -3772,7 +3826,8 @@ p {
 
 			// width: 280px;
 			min-width: 180px;
-			padding-inline: 6px 9px;
+			padding-left: 6px; /* Отступ в начале строки */
+    		padding-right: 9px; /* Отступ в конце строки */
 
 			position: relative;
 		}
@@ -3870,7 +3925,11 @@ p {
 }
 
 .std-catalog-button {
-	@include flex-direction($gap: 18px);
+	display: flex;
+	&> * + * {
+		margin-left: 18px;
+	}
+	
 
 	& {
 		align-items: center;
@@ -3884,25 +3943,26 @@ p {
 		border-radius: 5px;
 
 		height: 48px;
-		padding-inline: 24px;
+		padding-left: 24px;
+    	padding-right: 24px;
 
 		cursor: pointer;
 	}
 
 	&__icon {
-		rotate: 180deg;
+		transform: rotate(180deg);
 	}
 }
 
 .std-search-field {
 	@include flex;
 
-	& {
-		background-color: #f8f7f5 !important;
-		border-radius: 5px;
-		height: 48px;
-		width: clamp(400px, 30vw, 600px) !important;
-	}
+	background-color: #f8f7f5 !important;
+	border-radius: 5px;
+	height: 48px;
+	width: 30vw !important;
+    max-width: 600px !important;
+    min-width: 400px !important;
 
 	&__wrapper {
 		&::before {
@@ -4009,7 +4069,7 @@ p {
 }
 
 .std-catalog {
-	@include flex-direction;
+	display: flex;
 
 	& {
 		background-color: white;
@@ -4029,7 +4089,7 @@ p {
 		opacity: 0;
 		// transition-duration: .3s;
 
-		max-height: calc(100dvh - 96px);
+		max-height: calc(100vh - 96px);
 	}
 
 	&--active {
@@ -4053,7 +4113,11 @@ p {
 	}
 
 	&__tabs {
-		@include flex-direction(column, 17px);
+		display: flex;
+		flex-direction: column;
+		&>* + * {
+			margin-top: 16px !important;
+		}
 
 		& {
 			padding-left: 45px;
@@ -4081,7 +4145,11 @@ p {
 
 	&__item,
 	.std-tab-item {
-		@include flex-direction($gap: 14px);
+		min-height: 50px;
+		display: flex;
+		&>* + * {
+			margin-left: 14px !important;
+		}
 
 		& {
 			cursor: pointer;
@@ -4095,8 +4163,10 @@ p {
 			text-decoration: none;
 
 			width: 240px;
-			padding-block: 5px;
-			// height: 50px;
+			padding-top: 5px;    /* Отступ сверху */
+    		padding-bottom: 5px; /* Отступ снизу */
+			height: 50px;
+			min-height: 50px;
 			position: relative;
 			
 			transition-duration: .3s;
@@ -4129,14 +4199,15 @@ p {
 		}
 
 		&__img-container {
-			@include flex-center;
+			display: flex;
+			justify-content: center;
+			align-items: center;
 
-			& {
-				width: 40px;
-				aspect-ratio: 1;
-				border-radius: 5px;
-				background-color: #f8f7f5;
-			}
+			width: 40px;
+			height: 40px;
+			aspect-ratio: 1;
+			border-radius: 5px;
+			background-color: #f8f7f5;
 		}
 
 		&__text {
@@ -4146,7 +4217,7 @@ p {
 		}
 
 		&__icon {
-			rotate: -90deg;
+			transform: rotate(-90deg);
 
 			&::before {
 				font-size: 10px;
@@ -4159,7 +4230,6 @@ p {
 				translate: 0;
 				width: calc(100% + 40px - 3px);
 				height: 100%;
-				// padding-block: 5px;
 				right: 0;
 			}
 
@@ -4174,7 +4244,8 @@ p {
 
 		&--alt2 {
 			justify-content: space-between;
-			padding-block: 8px;
+			padding-top: 8px;    /* Отступ сверху */
+    		padding-bottom: 8px; /* Отступ снизу */
 			padding-left: 10px;
 
 			&::before {
@@ -4197,9 +4268,9 @@ p {
 			// &::before {
 			// 	display: none;
 			// }
-
 			justify-content: space-between;
-			padding-block: 8px;
+			padding-top: 8px;    /* Отступ сверху */
+    		padding-bottom: 8px; /* Отступ снизу */
 			padding-left: 10px;
 
 			&::before {
@@ -4235,7 +4306,7 @@ p {
 			flex-basis: 0;
 			flex-grow: 1;
 
-			// max-height: 60dvh;
+			// max-height: 60vh;
 			overflow-y: auto;
 			overflow-x: hidden;
 		}
@@ -4259,33 +4330,43 @@ p {
 
 		&--primary {
 			@include scrollbar(5px, auto, 5px, #2828287e, transparent);
-			@include flex-direction(column, 18px);
+			display: flex;
+			flex-direction: column;
 
-			& {
-				padding-left: 40px;
-				padding-right: 20px;
-				padding-bottom: 30px;
+			padding-left: 40px;
+			padding-right: 20px;
+			padding-bottom: 30px;
 
-				flex-basis: 0;
-				flex-grow: 1;
+			flex-basis: 0;
+			flex-grow: 1;
 
-				max-height: calc(100dvh - 284px);
-				max-width: min-content;
-				min-width: 100%;
-				overflow-y: auto;
-				overflow-x: hidden;
+			max-height: calc(100vh - 284px);
+			max-width: min-content;
+			min-width: 100%;
+			overflow-y: auto;
+			overflow-x: hidden;
+			
+			&>* + * {
+				margin-top: 18px !important;
 			}
 		}
 
 		&--secondary,
 		&--thirdy {
-			gap: 13px;
+			// &>* + *{
+			// 	margin-top: 13px;
+			// }
 			width: 260px;
 		}
 
 		&--secondary {
-			@include flex($direction: column, $gap: 20px);
 			@include scrollbar;
+
+			display: flex;
+			flex-direction: column;
+			// &>* + *{
+			// 	margin-top: 20px;
+			// }
 
 			& {
 				overflow-y: auto;
@@ -4305,7 +4386,12 @@ p {
 	}
 
 	&__back-button {
-		@include flex-center(row, 18px);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		&>* + * {
+			margin-left: 18px !important;
+		}
 
 		& {
 			cursor: pointer;
@@ -4316,12 +4402,13 @@ p {
 			font-size: 16px;
 
 			min-height: 32px;
-			padding-inline: 8px;
+			padding-left: 8px;
+    		padding-right: 8px;
 		}
 
 		i {
 			display: flex;
-			rotate: 90deg !important;
+			transform: rotate(90deg) !important;
 
 			&::before {
 				font-size: 7.4px !important;
@@ -4335,7 +4422,12 @@ p {
 	}
 
 	&__secondary-tabs-container {
-		@include flex($direction: column, $gap: 20px);
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		&>* + * {
+			margin-top: 10px !important;
+		}
 
 		& {
 			max-width: 250px;
@@ -4344,7 +4436,14 @@ p {
 	}
 
 	&__link {
-		@include flex($align: center, $gap: 21px);
+		display: flex;
+		align-items: center;
+		margin-bottom: 20px;
+		height: 50px;
+		min-height: 50px;
+		&>* + *{
+			margin-left: 21px;
+		}
 
 		& {
 			color: rgba(40, 40, 40, 1);
@@ -4390,9 +4489,12 @@ p {
 	.categories {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 18px;
+		// gap: 18px;
+		margin: -9px;
+		margin-bottom: 20px;
 
 		.category-item {
+			margin: 9px;
 			border: 1px solid rgba(180, 180, 180, 1);
 			border-radius: 26px;
 
@@ -4400,6 +4502,7 @@ p {
 
 			text-decoration: none;
 			transition-duration: .3s;
+
 
 			&:hover,
 			&--active {
@@ -4505,7 +4608,8 @@ p {
 					line-height: 1.17;
 
 					min-width: 66px;
-					padding-inline: 12px;
+					padding-left: 12px;
+    				padding-right: 12px;
 				}
 			}
 		}
@@ -4971,7 +5075,7 @@ button.std-icon__wrapper {
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	height: 100dvh;
+	height: 100vh;
 
 	p {
 		max-width: 400px;
@@ -5136,7 +5240,8 @@ button.std-icon__wrapper {
 	}
 
 	.k-table__name {
-		padding-inline: 15px;
+		padding-left: 15px;
+    	padding-right: 15px;
 	}
 }
 
@@ -5207,7 +5312,7 @@ button.std-icon__wrapper {
 
 		& {
 			overflow-y: auto;
-			max-height: 60dvh;
+			max-height: 60vh;
 			padding: 5px 40px 40px 40px;
 		}
 	}
@@ -5483,7 +5588,8 @@ button.std-icon__wrapper {
 		&__hcol,
 		&__col {
 			height: auto;
-			padding-block: 10px;
+			padding-top: 10px;    /* Отступ сверху */
+    		padding-bottom: 10px; /* Отступ снизу */
 		}
 	}
 
@@ -5508,15 +5614,17 @@ button.std-icon__wrapper {
 .analytics_reg {
 	@include flex-center;
 
-	& {
-		// margin-block: 45px;
-		padding-block: 45px;
-		height: fit-content !important;
-		min-height: 100dvh;
-	}
+	padding-top: 45px;    /* Отступ сверху */
+    padding-bottom: 45px; /* Отступ снизу */
+	height: fit-content !important;
+	min-height: 100vh;
 }
 .form-signup {
-	@include flex-direction(column, 35px);
+	display: flex;
+	flex-direction: column;
+	&>*+*{
+		margin-top: 35px;
+	}
 
 	& {
 		max-width: 450px !important;
@@ -5538,11 +5646,19 @@ button.std-icon__wrapper {
 }
 .std-auth {
 	&__input-container-wrapper {
-		@include flex-direction(column, 8px);
+		display: flex;
+		flex-direction: column;
+		&>*+*{
+			margin-top: 8px;
+		}
 	}
 
 	&__input-container {
-		@include flex-direction(column, 12px);
+		display: flex;
+		flex-direction: column;
+		&>* + *{
+			margin-top: 12px;
+		}
 	}
 
 	&__input-label {
@@ -5554,12 +5670,17 @@ button.std-icon__wrapper {
 	}
 
 	&__button-container {
-		@include flex-direction(column, 17px);
+		display: flex;
+		flex-direction: column;
+		&>*+*{
+			margin-top: 17px !important;
+		}
 	}
 
 	&__input {
 		border-radius: 5px !important;
 		height: 58px !important;
+		min-height: 58px;
 		padding: 16px 30px !important;
 		margin: 0 !important;
 
@@ -5582,17 +5703,23 @@ button.std-icon__wrapper {
 	}
 
 	&__button {
-		@include flex-direction($gap: 12px);
+		display: flex;
+		// flex-direction: column;
+		align-items: center;
+		
 
-		& {
-			color: #fff;
-			font-size: 24px;
-			font-weight: 500;
+		color: #fff;
+		font-size: 24px;
+		font-weight: 500;
+		min-height: 58px;
+		height: 58px !important;
+		padding-top: 15px;    /* Отступ сверху */
+		padding-bottom: 15px; /* Отступ снизу */
 
-			height: 58px !important;
-			padding-block: 15px;
+		&>*+*{
+			margin-left: 12px;
 		}
-
+		
 		&--secondary {
 			background: #282828;
 		}
@@ -5697,7 +5824,6 @@ button.std-icon__wrapper {
 	line-height: normal;
 	text-decoration-line: underline;
 
-	margin: 0 !important;
 }
 .form-signin__copy {
 	color: #FFF !important;
@@ -5714,7 +5840,13 @@ button.std-icon__wrapper {
 }
 
 .sitebar-logout {
-	@include flex-center($gap: 14px);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	&>* + * {
+		margin-left: 14px !important;
+	}
 
 	& {
 		color: #B5B5B5;
@@ -5728,7 +5860,10 @@ button.std-icon__wrapper {
 	}
 
 	&__container {
-		@include flex-direction($gap: 10px);
+		display: flex;
+		&>* + * {
+			margin-left: 10px !important;
+		}
 
 		& {
 			margin-left: 40px;
@@ -5737,7 +5872,9 @@ button.std-icon__wrapper {
 	}
 
 	&__question {
-		@include flex-center();
+		display: flex;
+		justify-content: center;
+		align-items: center;
 
 		& {
 			border: 0.5px solid #B5B5B5;
@@ -5759,7 +5896,11 @@ button.std-icon__wrapper {
 
 .sitebar-profile {
 	&__address {
-		@include flex($align: center, $gap: 5px);
+		display: flex;
+		align-items: center;
+		&>* + * {
+			margin-left: 5px !important;
+		}
 
 		& {
 			color: rgba(255, 255, 255, 0.58);
@@ -5783,9 +5924,14 @@ button.std-icon__wrapper {
 			&__container {
 				align-items: center;
 				flex-direction: column;
-				gap: 14px;
+				// gap: 14px;
 				margin: 0;
 				margin-inline: 7px;
+				margin-left: 0 !important;
+
+				&> * + * {
+					margin-top: 14px !important;
+				}
 			}
 
 			&__question {
@@ -5977,7 +6123,8 @@ button.std-icon__wrapper {
 			font-size: 12px;
 			font-weight: 500;
 
-			padding-block: 6px;
+			padding-top: 6px;    /* Отступ сверху */
+    		padding-bottom: 6px; /* Отступ снизу */
 			height: 25px;
 			width: max-content;
 		}
@@ -6573,7 +6720,8 @@ button.std-icon__wrapper {
 		font-weight: 700;
 
 		margin-inline: auto;
-		padding-block: 16px 15px;
+		padding-top: 16px;    /* Отступ сверху */
+    	padding-bottom: 15px; /* Отступ снизу */
 
 		height: 47px;
 		width: 360px;
@@ -6811,7 +6959,7 @@ button.std-icon__wrapper {
 		height: 20px;
 		background: #fb203a;
 		border-radius: 3px;
-		rotate: 45deg;
+		transform: rotate(45deg);
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -6819,7 +6967,8 @@ button.std-icon__wrapper {
 		i {
 			color: #fff;
 			font-size: 12px;
-			rotate: 135deg;
+			transform: rotate(135deg);
+
 			position: relative;
 
 			&::before {
@@ -6848,7 +6997,6 @@ button.std-icon__wrapper {
 		opacity: 0;
 		pointer-events: none;
 		position: absolute;
-		// rotate: -45deg;
 		white-space: nowrap;
 		top: 40px;
 		right: 0;
@@ -6862,7 +7010,7 @@ button.std-icon__wrapper {
 			border-radius: 5px;
 			position: absolute;
 			content: "";
-			rotate: 45deg;
+			transform: rotate(45deg);
 			top: -7px;
 			right: 63px;
 			background: #282828;
@@ -7684,7 +7832,7 @@ button.std-icon__wrapper {
 			&::before {
 				content: "";
 				position: absolute;
-				rotate: 45deg;
+				transform: rotate(45deg);
 				bottom: -10px;
 				width: 14px;
 				height: 14px;
@@ -8219,7 +8367,8 @@ button.std-icon__wrapper {
 	  justify-content: center;
 	  cursor: pointer;
 	  transition: all 0.4s;
-	  rotate: 180deg;
+	  transform: rotate(180deg);
+
 	  z-index: 2;
 	  display: none;
   
@@ -8421,7 +8570,7 @@ button.std-icon__wrapper {
 	left: 0;
 	display: none;
 	width: 100vw;
-	height: 100dvh;
+	height: 100vh;
 	background: #282828;
 	flex-direction: column;
 	align-items: center;
@@ -8580,7 +8729,7 @@ button.std-icon__wrapper {
 	}
 }
 
-@media (max-width: 1200px){
+@media (max-width: 991px){
 	.kenost-small-window{
 		display: flex;
 	}
@@ -9087,7 +9236,7 @@ button.std-icon__wrapper {
             position: absolute;
             right: 40px;
             bottom: -8px;
-            rotate: 45deg;
+			transform: rotate(45deg);
         }
 
         // display: none;
@@ -9378,4 +9527,10 @@ button.std-icon__wrapper {
 .kenost-basket-change-modal{
 	position: absolute;
     right: 165px;
+}
+
+.std-cart-icon__wrapper{
+	width: 34px;
+	height: 34px;
+	min-height: 34px;
 }

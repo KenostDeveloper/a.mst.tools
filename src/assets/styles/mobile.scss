@@ -8,6 +8,33 @@
 	.content {
 		// background: #ffcf99;
 	}
+
+	.std-nav__left .std-catalog-button {
+		margin-right: 8px;
+	}
+
+	.std-catalog-button img{
+		display: none;
+	}
+
+	.std-nav__right .kenost-vendors{
+		margin-right: 8px;
+		height: 48px;
+	}
+
+	.kenost-vendors{
+		.std-icon{
+			display: none;
+		}
+	}
+
+	.std-search-field{
+		width: 25vw !important;
+	}
+
+	.table-kenost__settings{
+		opacity: 1;
+	}
 }
 
 @media (max-width: 1400px) {
@@ -55,7 +82,7 @@
 	  }
 	
 	  .helpModal__close{
-		rotate: 180deg;
+		transform: rotate(180deg);
 		left: 0 !important;
 		z-index: 2;
 	  }
@@ -275,11 +302,11 @@
 		}
 
 		.std-catalog-button {
-			max-height: calc(100dvh - 155px);
+			max-height: calc(100vh - 155px);
 
 			&__icon {
 				display: flex;
-				rotate: 0deg;
+				transform: rotate(0deg);
 
 				&::before {
 					font-size: 10px;
@@ -339,7 +366,7 @@
 			padding-top: 6px;
 			padding-bottom: 80px;
 			left: 0;
-			max-height: 85dvh;
+			max-height: 85vh;
 			gap: 14px;
 
 			&__line {
@@ -445,7 +472,7 @@
 						@include std-tab-item-active;
 
 						& > .std-tab-item__icon {
-							rotate: 0deg;
+							transform: rotate(0deg);
 						}
 					}
 				}
@@ -510,7 +537,7 @@
 			border: none;
 			box-shadow: none;
 
-			max-height: 100dvh;
+			max-height: 100vh;
 			width: 100%;
 			margin-bottom: 32px;
 
@@ -547,7 +574,7 @@
 		border-radius: 0 !important;
 
 		width: 100% !important;
-		height: 100dvh;
+		height: 100vh;
 		max-height: none;
 	}
 
@@ -1632,8 +1659,8 @@
 		width: 100%;
 
 		&--active {
-			max-height: 50dvh !important;
-			height: 50dvh !important;
+			max-height: 50vh !important;
+			height: 50vh !important;
 		}
 
 		&:not(.std-basket--active) .std-basket__header {

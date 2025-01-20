@@ -56,7 +56,7 @@
 				<div class="sitebar-profile__name">{{ this.organozation?.name }}</div>
 				<div class="sitebar-profile__address">
 					<i class="std_icon std_icon-location"></i>
-					{{ this.organozation?.description }}
+					<span>{{ this.organozation?.description }}</span>
 				</div>
 				<div class="sitebar-profile__tags">
 					<button class="sitebar-profile__tag" v-if="this.role == 0">Закупщик</button>

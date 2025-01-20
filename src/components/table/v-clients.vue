@@ -58,7 +58,7 @@
     </div>
     <div class="clients__card-container" v-if="total != 0">
       <div class="dart-row" v-if="total != -1">
-        <div class="d-col-xxl-3 d-col-xl-4" v-for="item in items_data" :key="item.id">
+        <div class="d-col-xxl-3 d-col-xl-4 d-col-md-6" v-for="item in items_data" :key="item.id">
           <div class="d-client-card" :class="{ 'd-client-card-with_button': !item.our }">
             <div class="d-client-card__content">
               <img :src="item.image" alt="" class="client-card__img" />

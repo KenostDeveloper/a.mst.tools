@@ -117,8 +117,7 @@
         </div>
 
         <!-- Каталог мобилка -->
-        <div :class="`std-catalog ${catalogIsOpened ? 'std-catalog--active' : ''} visible-desktop-s-minus`">
-            <!-- <hr class="std-nav__line" /> -->
+        <!-- <div :class="`std-catalog ${catalogIsOpened ? 'std-catalog--active' : ''} visible-desktop-s-minus`">
 
             <div class="std-catalog__tabs">
                 <button
@@ -141,13 +140,11 @@
 
             <hr class="std-catalog__line" />
 
-            <!-- Mobile catalog -->
             <div class="std-catalog__content">
                 <div class="std-catalog__nav std-catalog__nav--primary std-catalog__tabs std-catalo__tabs--vertical">
                     <template
                         v-for="level1 in this.organizationsOrCategories === 'organizations' ? this.catalog_warehouse : this.catalog"
                         :key="level1.id">
-                        <!-- If first link has subbed links -->
                         <Accordion v-if="level1.children">
                             <template v-slot:header>
                                 <div :key="level1.id" class="std-catalog__tab-item std-tab-item std-tab-item--alt">
@@ -163,16 +160,10 @@
                                 <div
                                     class="std-catalog__nav std-catalog__nav--primary std-catalog__tabs std-catalo__tabs--vertical">
                                     <template v-for="level2 in level1.children">
-                                        <!-- If second link has subbed links -->
                                         <Accordion v-if="level2.children">
                                             <template v-slot:header>
                                                 <div :key="level2.id"
                                                     class="std-catalog__tab-item std-tab-item std-tab-item--alt2">
-                                                    <!-- <div class="std-tab-item__img-container">
-														<img
-															:src="getImageSrc(level2.image || level2.menu_image)"
-														/>
-													</div> -->
                                                     <span class="std-tab-item__text">{{ level2.name || level2.pagetitle
                                                         }}</span>
                                                     <i class="d_icon d_icon-arrow std-tab-item__icon"></i>
@@ -190,11 +181,6 @@
                                                         }
                                                     }" :key="level3" @click="toggleCatalogVisibilityAd()"
                                                         class="std-catalog__tab-item std-tab-item std-tab-item--alt2 std-tab-item--alt3">
-                                                        <!-- <div class="std-tab-item__img-container">
-															<img
-																:src="getImageSrc(level3.image || level3.menu_image)"
-															/>
-														</div> -->
                                                         <span class="std-tab-item__text">{{ level3.name ||
                                                             level3.pagetitle }}</span>
                                                     </router-link>
@@ -202,7 +188,6 @@
                                             </template>
                                         </Accordion>
 
-                                        <!-- If second link has no subbed links -->
                                         <router-link v-else :to="{
                                             name: 'purchases_catalog',
                                             params: {
@@ -211,11 +196,6 @@
                                             }
                                         }" :key="level2" @click="toggleCatalogVisibilityAd()"
                                             class="std-catalog__tab-item std-tab-item std-tab-item--alt2">
-                                            <!-- <div class="std-tab-item__img-container">
-												<img
-													:src="getImageSrc(level2.image || level2.menu_image)"
-												/>
-											</div> -->
                                             <span class="std-tab-item__text">{{ level2.name || level2.pagetitle
                                                 }}</span>
                                         </router-link>
@@ -224,7 +204,6 @@
                             </template>
                         </Accordion>
 
-                        <!-- If first link has no subbed links -->
                         <router-link v-else :to="{
                             name: 'purchases_catalog',
                             params: { id: this.$route.params.id, category_id: level1.id }
@@ -244,15 +223,13 @@
                     </template>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <div class="std-nav__left">
             <button class="std-nav__button std-catalog-button" @click="() => toggleCatalogVisibilityAd(true)">
-                Каталог
-                <!-- <i class="pi pi-bars std-catalog-button__icon hidden-mobile-l"></i> -->
-                <!-- <i class="pi pi-angle-down std-catalog-button__icon visible-mobile-l"></i> -->
+                <span>Каталог</span>
                 <img src="/images/icons/menu.svg" alt="" class="hidden-tablet-l" />
-                <img src="/images/icons/arrow-rounded.svg" alt="" class="visible-tablet-l" />
+                <!-- <img src="/images/icons/arrow-rounded.svg" alt="" class="visible-tablet-l" /> -->
             </button>
             <div class="std-nav__address-wrapper" v-if="opt_vendors.selected_count > 0">
                 <button v-if="org_stores?.items?.find((el) => el.id == warehouse_basket)" class="std-nav__address" @click.stop="() => (this.showWarehouseList = !this.showWarehouseList)">
