@@ -271,7 +271,7 @@
                         <i class="pi pi-times"></i>
                     </button>
                     <button type="submit"
-                        class="navmain__dart_btn a-dart-btn a-dart-btn-primary std-search-field__button">Найти</button>
+                        class="navmain__dart_btn a-dart-btn a-dart-btn-primary std-search-field__button kenost-search"><span>Найти</span><i class="pi pi-search"></i></button>
                 </div>
 
 

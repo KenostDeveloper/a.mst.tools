@@ -178,6 +178,29 @@
 			width: 1200px;
 		}
 	}
+
+	.navmain.std-nav{
+		margin: 20px 0 0 !important;
+	}
+
+	.d-col-content.purchases{
+		padding: 0 !important;
+	}
+
+	.purchases .categories .category-item .title{
+		font-size: 14px;
+	}
+
+	.kenost-search{
+		padding: 15px 17px;
+		i{
+			display: block;
+		}
+
+		span{
+			display: none;
+		}
+	}
 }
 
 @media (max-width: 991px) {
