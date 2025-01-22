@@ -3682,7 +3682,7 @@ p {
 
 	.basket-container {
 		& {
-			padding-top: 0;    /* Отступ сверху */
+			padding-top: 0 !important;    /* Отступ сверху */
     		padding-bottom: 0; /* Отступ снизу */
 		}
 	}

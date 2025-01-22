@@ -1,7 +1,7 @@
 <template>
     <Loading v-if="loading" />
 
-    <form @submit.prevent="formSubmit">
+    <form @submit.prevent="formSubmit" class="kenost-discounts">
         <div class="profile-content__title sticky-element">
             <span class="maintitle">Настройка индивидуальных условий для {{action_discount.client_name}}</span>
             <div class="buttons_container">

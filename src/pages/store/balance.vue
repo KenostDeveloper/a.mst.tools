@@ -160,7 +160,7 @@
 			</div>
 		</div>
 		<div class="dart-row balance__main">
-			<div class="d-col-md-6 hidden-mobile-l">
+			<div class="d-col-xxl-6 d-col-lg-12">
 				<div class="panel-widget">
 					<v-table
 						:items_data="balance_requests.items"
@@ -174,7 +174,7 @@
 					</v-table>
 				</div>
 			</div>
-			<div class="d-col-md-6 hidden-mobile-l">
+			<div class="d-col-xxl-6 d-col-lg-12">
 				<div class="panel-widget">
 					<v-table
 						:items_data="balance.items"

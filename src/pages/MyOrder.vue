@@ -67,9 +67,9 @@
 					<span>Склад</span>
 					<div class="kenost-table-elem__content">{{ this.order.seller_address }}</div>
 				</div>
-				<div class="w-full kenost-table-elem"></div>
-				<div class="w-full kenost-table-elem"></div>
-				<div class="w-full kenost-table-elem"></div>
+				<div class="w-full kenost-table-elem d-none"></div>
+				<div class="w-full kenost-table-elem d-none"></div>
+				<div class="w-full kenost-table-elem d-none"></div>
 			</div>
 			<div class="kenost-table-line">
 				<div><img src="../assets/images/icons/orders.svg" alt=""></div>
@@ -93,7 +93,7 @@
 						<td class="std-table__col">
 							<img class="kenost-image-table" :src="item.image" alt="">
 						</td>
-						<td class="std-table__col">{{ item.name }}</td>
+						<td class="std-table__col std-table__col-name">{{ item.name }}</td>
 						<td class="std-table__col">{{ Number(item.price).toLocaleString('ru') }} ₽</td>
 						<td class="std-table__col table-actions">
 							<ActionModal :actions="item.actions"/>
