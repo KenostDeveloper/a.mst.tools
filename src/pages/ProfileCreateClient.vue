@@ -16,7 +16,7 @@
                 >Сохранить</div>
             </div>
         </div>
-        <form action="#" @submit.prevent="formChangeSimple">
+        <form action="#" @submit.prevent="formChangeSimple" autocomplete="off">
             <!-- <div class="dart-alert dart-alert-info">Вы можете изменить только данные контактного лица и логотип организации.</div> -->
             <div class="dart-form-group mb-5 std-create-clients__logo-container">
                 <span class="ktitle">Логотип</span>
@@ -87,6 +87,76 @@
                         >
                             {{ error.$message }}
                         </span>
+                    </div>                    
+                </div>
+                <div class="dart-form-group" v-if="!$route.params.client_id">
+                    <div class="flex align-items-center mb-3">
+                        <Checkbox v-model="this.form.company.register" inputId="company-register" name="company-register" :binary="true" />
+                        <label for="company-register" class="ml-2 mb-0">
+                            Зарегистрировать Клиента
+                        </label>
+                    </div>
+                </div>
+                <div v-if="this.form.company.register">
+                    <div class="dart-form-group"
+                        :class="{
+                            error: v$.orgprofile.login.$errors.length,
+                        }"
+                    >
+                        <input
+                            type="text"
+                            v-model="this.orgprofile.login"
+                            class="dart-form-control std-create-clients__input"
+                            name="login"
+                            placeholder="Логин" readonly
+                            onfocus="this.removeAttribute('readonly')"/>
+                        <span
+                            class="error_desc"
+                            v-for="error of v$.orgprofile.login.$errors"
+                            :key="error.$uid"
+                        >
+                            {{ error.$message }}
+                        </span>
+                    </div>
+                    <div class="dart-form-group"
+                        :class="{
+                            error: v$.orgprofile.password.$errors.length,
+                        }"
+                    >
+                        <input
+                            type="password"
+                            v-model="this.orgprofile.password"
+                            class="dart-form-control std-create-clients__input"
+                            name="password"
+                            placeholder="Пароль" readonly
+                            onfocus="this.removeAttribute('readonly')"/>
+                        <span
+                            class="error_desc"
+                            v-for="error of v$.orgprofile.password.$errors"
+                            :key="error.$uid"
+                        >
+                            {{ error.$message }}
+                        </span>
+                    </div>
+                    <div class="dart-form-group"
+                        :class="{
+                            error: v$.orgprofile.passwordRepeat.$errors.length,
+                        }"
+                    >
+                        <input
+                            type="password"
+                            v-model="this.orgprofile.passwordRepeat"
+                            class="dart-form-control std-create-clients__input"
+                            name="passwordRepeat"
+                            placeholder="Пароль" readonly
+                            onfocus="this.removeAttribute('readonly')"/>
+                        <span
+                            class="error_desc"
+                            v-for="error of v$.orgprofile.passwordRepeat.$errors"
+                            :key="error.$uid"
+                        >
+                            {{ error.$message }}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -131,13 +201,14 @@
                         </span>
                     </div>
                 </div>
+
                 <div class="form_input_group dart-form-group w-50" v-for="(warehouse, index) in this.form.company.warehouses" :key="index"
                 :class="{
                     error: v$.form.company.warehouses.$errors.length,
                 }"
                 >
                     <AddAddress
-                        :key="new Date().getMilliseconds() + index"
+                        :key="index"
                         :index="index"
                         :value="this.form.company.warehouses[index].address"
                         v-model="this.form.company.warehouses[index].address"
@@ -168,7 +239,7 @@
                         <span>Добавить адрес</span>
                         <i class="pi pi-plus"></i>
                     </button>
-                </div>
+                </div> 
             </div>
         </form>
     </div>
@@ -177,7 +248,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import { useVuelidate } from "@vuelidate/core";
-import { required } from "../utils/i18n-validators";
+import { required, minLength } from "../utils/i18n-validators";
 import { helpers } from "@vuelidate/validators";
 import router from '../router';
 import FileUpload from 'primevue/fileupload';
@@ -200,7 +271,11 @@ export default {
             loading: false,
             showFormModal: false,
             typePrice: [],
-            orgprofile: [],
+            orgprofile: {
+                login: '',
+                password: '',
+                passwordRepeat: ''
+            },
             booleanValue: [
                 {
                     name: 'Да',
@@ -241,7 +316,12 @@ export default {
                 company: {
                     data: { value: '' },
                     inn: '',
-                    warehouses: [{ address: {value: ''} }]
+                    warehouses: [{ 
+                        address: {
+                            value: ''
+                        } 
+                    }],
+                    register: false
                 }
             }
         };
@@ -302,6 +382,11 @@ export default {
                         email: this.orgprofile.email,
                         phone: this.orgprofile.phone,
                         image: this.orgprofile.image,
+                        register: this.form.company.register,
+                        register_data: {
+                            login: this.orgprofile.login,
+                            password: this.orgprofile.password
+                        },
                         org: {
                             inn: this.form.company.inn,
                             name: this.form.company.data,
@@ -314,21 +399,25 @@ export default {
                     if(!res.data.success){
                         this.$toast.add({ severity: 'error', summary: 'Ошибка!', detail: res.data.message, life: 3000 });
                     }else{
-                        this.$toast.add({
-                            severity: 'info',
-                            summary: 'Сохранено!',
-                            detail: res.data.message,
-                            life: 3000
-                        });
-                        router.push({ name: 'clients', params: { id: router.currentRoute._value.params.id } });
+                        if(!res.data.data?.success){
+                            this.$toast.add({ severity: 'error', summary: 'Ошибка!', detail: res.data.data?.message, life: 3000 });
+                        }else{
+                            this.$toast.add({
+                                severity: 'info',
+                                summary: 'Сохранено!',
+                                detail: res.data.message,
+                                life: 3000
+                            });
+                            router.push({ name: 'clients', params: { id: router.currentRoute._value.params.id } });
+                        }                        
                     }          
                     this.loading = false          
                 });                
             }
         },
         updateAddress (address, index) {
-            console.log(address)
-            console.log(index)
+            // console.log(address)
+            // console.log(index)
         }
     },
     mounted() {
@@ -370,6 +459,27 @@ export default {
 				},
                 phone: {
 					required,
+				},
+                login: {
+                    minLength: minLength(4),
+                },
+                password: {
+					required: helpers.withMessage(
+                        "Поле обязательно для заполнения",
+                        () => {
+                            return this.form.company.register && this.orgprofile.password != ''
+                        }
+                    ),
+                    minLength: minLength(6)
+				},
+                passwordRepeat: {
+					required: helpers.withMessage(
+                        "Поле обязательно для заполнения",
+                        () => {
+                            return this.form.company.register && this.orgprofile.password != '' && this.orgprofile.passwordRepeat != '' && (this.orgprofile.password == this.orgprofile.passwordRepeat)
+                        }
+                    ),
+                    minLength: minLength(6)
 				}
 			},
             form: {
@@ -396,6 +506,7 @@ export default {
     },
     watch: {
         org_profile: function (newVal, oldVal) {
+            console.log(newVal)
             if(!newVal.success){
                 this.$toast.add({ severity: 'error', summary: 'Ошибка!', detail: newVal.message, life: 3000 });
                 router.push({ name: 'clients', params: { id: router.currentRoute._value.params.id } });

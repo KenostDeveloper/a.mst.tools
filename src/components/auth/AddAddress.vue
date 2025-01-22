@@ -42,7 +42,7 @@ export default {
         return {
             address: this.modelValue || { value: '' }, // Инициализация, если modelValue отсутствует
             mapAddress: this.modelValue || { value: '' },
-            coordinates: '' // Исправлена опечатка (coordindates -> coordinates)
+            coordinates: ''
         };
     },
     setup() {
@@ -102,16 +102,9 @@ export default {
         }
     },
     mounted() {
-        setTimeout(() => this.setCoordinates(), 500)
-        
+        setTimeout(() => this.setCoordinates(), 500)        
     },
     watch: {
-        value: {
-            handler(newVal) {
-                console.log(newVal); // Добавьте проверку newVal, чтобы избежать ошибок
-            },
-            immediate: true // Убедитесь, что обработчик запускается при первом рендере
-        },
         mapAddress: {
             handler(newVal) {
                 if (newVal) this.getAddress(newVal);
