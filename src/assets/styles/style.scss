@@ -65,6 +65,9 @@
 	--app-height: 100%;
 }
 
+// p{
+// 	margin: 0;
+// }
 
 *:not(i, .pi, .d_icon, ::before, ::after) {
 	font-family: "Roboto", sans-serif !important;
@@ -3045,7 +3048,7 @@ p {
 		flex-wrap: wrap;
 		grid-template: auto / repeat(auto-fit, minmax(370px, 1fr));
 		// gap: 24px;
-		margin: -12px;
+		// margin: -12px;
 
 		.provider-card{
 			margin: 12px;
