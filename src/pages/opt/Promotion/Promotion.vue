@@ -229,8 +229,12 @@ export default {
     display: flex;
     justify-content: center;
     flex-direction: column;
-    gap: 40px;
+
     padding: 24px;
+
+    main{
+        margin-top: 40px;
+    }
 
     &__header,
     .header {
@@ -267,7 +271,10 @@ export default {
     .main {
         display: flex;
         flex-direction: column;
-        gap: 40px;
+
+        &>*+*{
+            margin-top: 40px;
+        }
 
         &__card-container {
             display: grid;

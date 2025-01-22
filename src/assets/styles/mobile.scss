@@ -301,11 +301,8 @@
 	}
 
 	.promotion {
-		&__main,
-		.promotion-main {
-			&__content {
-				gap: 150px;
-			}
+		.promotion-main__content{
+			margin-bottom: 110px;
 		}
 	}
 }
@@ -552,7 +549,7 @@
 
 				&::before {
 					top: 50%;
-					translate: -15px -50%;
+					// translate: -15px -50%;
 					height: 36px;
 					width: 100%;
 				}

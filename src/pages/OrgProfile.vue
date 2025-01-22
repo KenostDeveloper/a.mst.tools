@@ -1093,6 +1093,7 @@ export default {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 0 16px;
+	justify-content: space-between;
 
 	.w-50 {
 		width: calc(50% - 8px) !important;

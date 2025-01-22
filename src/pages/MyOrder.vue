@@ -4,7 +4,7 @@
     <Breadcrumbs />
 		<div class="std-shipping__title-container hidden-tablet-l">
 			<h1 class="table-kenost__title std-shipping__title">Заказ № {{ this.order?.id }}</h1>
-			<div class="flex gap-2">
+			<div class="flex gap-left-2">
 				<RouterLink
 					:to="{ name: 'opt_req', params: { id: $route.params.id, req: this.order?.id + '_order' } }"
 					class="dart-btn dart-btn-primary"
@@ -12,7 +12,7 @@
 					<i class="pi pi-refresh"></i>
 					<span>Повторить заказ</span>	
 				</RouterLink>
-				<div class="dart-btn dart-btn-secondary gap-2" @click="generateXSLX()"><i class="pi pi-download"></i>
+				<div class="dart-btn dart-btn-secondary gap-left-2" @click="generateXSLX()"><i class="pi pi-download"></i>
 					<span>Скачать заказ</span></div>
 			</div>
 		</div>

@@ -58,7 +58,7 @@
         </li>
         <button class="dart-btn dart-btn-primary manager-list__add-button" @click="addItem">
             <i class="mst_icon-plus manager-list__add-button-icon"></i>
-            Добавить менеджера
+            <span>Добавить менеджера</span>
         </button>
     </ul>
 </template>

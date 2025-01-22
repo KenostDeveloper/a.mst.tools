@@ -28,7 +28,7 @@
                                     <button class="basketClear std-basket__clear-button" @click="() => {
                                         this.showClearBasketModal = true
                                         this.id_clear_org = org.org_data.id
-                                    }">Очистить <i class="pi pi-times"></i></button>
+                                    }"><span>Очистить</span> <i class="pi pi-times"></i></button>
                                 </div>
                             </h3>
                             
@@ -681,7 +681,11 @@ export default {
             display: flex;
             flex-direction: column;
             align-items: flex-end;
-            gap: 14px;  
+            // gap: 14px;
+            
+            &>*+*{
+                margin-top: 14px;
+            }
         }
 
         &__complects{
@@ -819,13 +823,17 @@ export default {
         &__final-button{
             display: flex;
             align-items: center;
-            gap: 12px;
+            &>*+*{
+                margin-left: 12px;
+            }
         }
 
         &__product-data{
             display: flex;
             align-items: center;
-            gap: 16px;
+            &>*+*{
+                margin-left: 16px !important;
+            }
         }
 
         &__info{
@@ -904,9 +912,13 @@ export default {
             display: flex;
             align-items: flex-start;
             position: relative;
-            gap: 8px;
             padding: 35px 0 16px;
             border-bottom: 1px solid #E2E2E2;
+
+            &>*+*{
+                margin-left: 8px;
+            }
+            
             &-delete{
                 position: absolute;
                 cursor: pointer;

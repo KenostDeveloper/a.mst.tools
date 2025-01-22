@@ -118,7 +118,11 @@
 // }
 
 .retails {
-  gap: 35px;
+  // gap: 35px;
+
+  nav{
+    margin-bottom: 35px;
+  }
 
   .std-title__container {
     & {

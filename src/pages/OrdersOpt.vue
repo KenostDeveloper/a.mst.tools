@@ -152,7 +152,9 @@ export default {
 }
 .shipping {
 	display: flex;
-	gap: 10px;
+	&>*+*{
+		margin-top: 10px;
+	}
 	align-items: flex-start;
 }
 

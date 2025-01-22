@@ -1101,10 +1101,14 @@ export default {
     display: inline-flex;
     text-align: center;
     align-items: center;
-    justify-content: center;
-    gap: 8px;
+    justify-content: space-between;
+    // gap: 8px;
     cursor: pointer;
     border: none;
+
+    &>*+*{
+        margin-left: 8px;
+    }
 
     .d_icon {
         font-size: 18px;

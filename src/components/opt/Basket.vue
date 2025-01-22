@@ -29,21 +29,16 @@
 
 				<div v-if="this.cartLength" class="std-basket__info-container">
 					<button @click="this.showClearBasketModal = true" class="basketClear std-basket__clear-button">
-						Очистить корзину
+						<span>Очистить корзину</span>
 						<i class="pi pi-times"></i>
 					</button>
 				</div>
 			</div>
-			<div className="basket-empty" v-if="!this.cartLength">
+			<div className="basket-empty" v-if="this.cartLength == 0">
 				<div className="basket-empty__content">
 					<img
 						class="hidden-mobile-l"
 						src="../../assets/images/icons/basket.svg"
-						alt=""
-					/>
-					<img
-						class="visible-mobile-l"
-						src="../../assets/images/icons/basket-gray.svg"
 						alt=""
 					/>
 					<h3>В вашей корзине пока пусто</h3>

@@ -83,7 +83,7 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    gap: 16px;
+    // gap: 16px;
 
     height: 100%;
   }

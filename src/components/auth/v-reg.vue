@@ -1,212 +1,215 @@
 <template>
-    <div class="analytics_auth analytics_reg">
-        <form class="form-signup" @submit.prevent="formSubmit" autocomplete="false">
-            <div class="logo text-center">
-                <img src="../../assets/images/logo.svg" alt="" width="200" />
-            </div>
+    <div>
+        <div class="analytics_reg">
+            <form class="form-signup" @submit.prevent="formSubmit" autocomplete="false">
+                <div class="logo text-center">
+                    <img src="../../assets/images/logo.svg" alt="" width="200" />
+                </div>
 
-            <div v-if="!this.regIsSuccess" class="std-auth__input-container">
-                <div :class="{ 'has-error': v$.form.login.$error }">
-                    <FloatLabel>
-                        <input
-                            ref="loginInput"
-                            type="text"
-                            id="login"
-                            placeholder="Логин"
+                <div v-if="!this.regIsSuccess" class="std-auth__input-container">
+                    <div :class="{ 'has-error': v$.form.login.$error }">
+                        <FloatLabel>
+                            <input
+                                ref="loginInput"
+                                type="text"
+                                id="login"
+                                placeholder="Логин"
+                                class="dart-form-control std-auth__input"
+                                v-model="form.login"
+                                autocomplete="off" />
+                            <div v-if="v$.form.login.$error" class="error-message">
+                                <span v-if="!v$.form.login.required">Пожалуйста, введите логин.</span>
+                                <span v-else-if="v$.form.login.minLength">Логин должен содержать минимум 3 символа.</span>
+                                <span v-else-if="v$.form.login.maxLength">Логин должен содержать максимум 30 символов.</span>
+                            </div>
+                        </FloatLabel>
+                    </div>
+
+                    <div :class="{ 'has-error': v$.form.password.$error }">
+                        <FloatLabel>
+                            <div class="relative">
+                                <input
+                                    :type="showPassword1 ? 'text' : 'password'"
+                                    ref="passwordInput"
+                                    id="password"
+                                    placeholder="Пароль"
+                                    class="dart-form-control std-auth__input"
+                                    v-model="form.password"
+                                    autocomplete="new-password" />
+                                <button type="button" @click="togglePasswordVisibility1" class="password-toggle">
+                                    <i :class="showPassword1 ? 'pi pi-eye-slash' : 'pi pi-eye'"></i>
+                                </button>
+                            </div>
+                            <div v-if="v$.form.password.$error" class="error-message">
+                                <span v-if="!v$.form.password.required">Пожалуйста, введите пароль.</span>
+                                <span v-else-if="v$.form.password.minLength">Пароль должен содержать минимум 6 символов.</span>
+                            </div>
+                        </FloatLabel>
+                    </div>
+
+                    <div :class="{ 'has-error': v$.form.passwordConfirm.$error }">
+                        <FloatLabel>
+                            <div class="relative">
+                                <input
+                                    :type="showPassword2 ? 'text' : 'password'"
+                                    id="passwordConfirm"
+                                    placeholder="Подтверждение пароля"
+                                    class="dart-form-control std-auth__input"
+                                    v-model="form.passwordConfirm"
+                                    autocomplete="new-password" />
+                                <button type="button" @click="togglePasswordVisibility2" class="password-toggle">
+                                    <i :class="showPassword2 ? 'pi pi-eye-slash' : 'pi pi-eye'"></i>
+                                </button>
+                            </div>
+                            <div v-if="v$.form.passwordConfirm.$error" class="error-message">
+                                <span>Пожалуйста, подтвердите пароль. Пароли должны совпадать.</span>
+                            </div>
+                        </FloatLabel>
+                    </div>
+                </div>
+
+                <div v-if="!this.regIsSuccess" class="std-auth__input-container-wrapper">
+                    <span class="std-auth__input-label">Данные контактного лица</span>
+
+                    <div :class="{ 'has-error': v$.form.name.$error }">
+                        <Autocomplete
+                            ref="nameInput"
+                            name="name"
+                            id="name"
+                            placeholder="ФИО контактного лица"
                             class="dart-form-control std-auth__input"
-                            v-model="form.login"
+                            type="fio"
+                            selectionType="single"
+                            v-model="form.name"
+                            @setSelection="setName"
                             autocomplete="off" />
-                        <div v-if="v$.form.login.$error" class="error-message">
-                            <span v-if="!v$.form.login.required">Пожалуйста, введите логин.</span>
-                            <span v-else-if="v$.form.login.minLength">Логин должен содержать минимум 3 символа.</span>
-                            <span v-else-if="v$.form.login.maxLength">Логин должен содержать максимум 30 символов.</span>
+                        <div v-if="v$.form.name.$error" class="error-message">
+                            <span v-if="!v$.form.name.required">Пожалуйста, введите ФИО.</span>
+                            <span v-else-if="v$.form.name.minLength">ФИО должно содержать минимум 3 символа.</span>
                         </div>
-                    </FloatLabel>
+                    </div>
+
+                    <div :class="{ 'has-error': v$.form.telephone.$error }">
+                        <input
+                            v-imask="mask"
+                            type="tel"
+                            id="telephone"
+                            placeholder="Телефон"
+                            class="dart-form-control std-auth__input"
+                            v-model="form.telephone"
+                            @input="form.telephone = normalizePhone(form.telephone)"
+                            autocomplete="off" />
+                        <div v-if="v$.form.telephone.$error" class="error-message">
+                            <span v-if="!v$.form.telephone.required">Пожалуйста, введите номер телефона.</span>
+                            <span v-else-if="v$.form.telephone.minLength">Введите корректный номер телефона.</span>
+                        </div>
+                    </div>
+
+                    <div :class="{ 'has-error': v$.form.email.$error }">
+                        <input
+                            type="email"
+                            id="email"
+                            placeholder="Email"
+                            class="dart-form-control std-auth__input"
+                            v-model="form.email"
+                            autocomplete="off" />
+                        <div v-if="v$.form.email.$error" class="error-message">
+                            <span v-if="!v$.form.email.required">Пожалуйста, введите email.</span>
+                            <span v-else-if="v$.form.email.email">Введите корректный email.</span>
+                        </div>
+                    </div>
                 </div>
 
-                <div :class="{ 'has-error': v$.form.password.$error }">
-                    <FloatLabel>
-                        <div class="relative">
-                            <input
-                                :type="showPassword1 ? 'text' : 'password'"
-                                ref="passwordInput"
-                                id="password"
-                                placeholder="Пароль"
-                                class="dart-form-control std-auth__input"
-                                v-model="form.password"
-                                autocomplete="new-password" />
-                            <button type="button" @click="togglePasswordVisibility1" class="password-toggle">
-                                <i :class="showPassword1 ? 'pi pi-eye-slash' : 'pi pi-eye'"></i>
+                <div v-if="!this.regIsSuccess" class="std-auth__input-container-wrapper">
+                    <span class="std-auth__input-label">Данные компании</span>
+
+                    <div :class="{ 'has-error': v$.form.org.inn.validInn.$response != true && v$.form.org.inn.$dirty }">
+                        <!-- <input
+                            maxlength="12"
+                            ref="innInput"
+                            name="inn"
+                            id="inn"
+                            placeholder="ИНН"
+                            class="dart-form-control std-auth__input"
+                            v-model="form.org.inn"
+                        /> -->
+                        <Autocomplete
+                            ref="innInput"
+                            name="inn"
+                            id="inn"
+                            placeholder="ИНН"
+                            class="dart-form-control std-auth__input"
+                            type="company"
+                            selectionType="single"
+                            v-model="form.org.inn"
+                            @setSelection="setCompany"
+                        />
+                        <!-- {{ v$.form.org.inn.validInn.$response }} -->
+                        <div v-if="v$.form.org.inn.validInn.$response != true && v$.form.org.inn.$dirty" class="error-message">
+                            <span>{{ v$.form.org.inn.validInn.$response || 'Некорректный ИНН' }}</span>
+                        </div>
+                    </div>
+
+                    <div :class="{ 'has-error': v$.form.org.name.$error }">
+                        <input
+                            type="text"
+                            id="org_name"
+                            placeholder="Наименование организации"
+                            class="dart-form-control std-auth__input"
+                            v-model="form.org.name"
+                            autocomplete="off"
+                        />
+                        <div v-if="v$.form.org.name.$error" class="error-message">
+                            <span v-if="!v$.form.org.name.required">Пожалуйста, введите наименование организации.</span>
+                            <span v-else-if="v$.form.org.name.minLength">Наименование должно содержать минимум 3 символа.</span>
+                        </div>
+                    </div>
+
+                    <div class="std-auth__input-container">
+                        <span class="std-auth__input-label">Адрес доставки</span>
+                        <AddAddress
+                            v-for="(address, index) in form.delivery_addresses"
+                            :key="index"
+                            :index="index"
+                            v-model="form.delivery_addresses[index]"
+                        />
+                        <div class="std-auth__actions-container">
+                            <button
+                                v-if="form.delivery_addresses.length > 1"
+                                class="dart-btn dart-btn-secondary dart-btn-block align-items-center flex justify-content-center std-auth__button std-auth__button--secondary"
+                                type="button"
+                                @click="() => this.form.delivery_addresses.pop()">
+                                <span>Удалить</span>
+                            </button>
+                            <button
+                                class="dart-btn dart-btn-secondary dart-btn-block align-items-center flex justify-content-center std-auth__button std-auth__button--secondary"
+                                type="button"
+                                @click="() => this.form.delivery_addresses.push({ value: '' })">
+                                <span>Добавить адрес</span>
+                                <i class="pi pi-plus"></i>
                             </button>
                         </div>
-                        <div v-if="v$.form.password.$error" class="error-message">
-                            <span v-if="!v$.form.password.required">Пожалуйста, введите пароль.</span>
-                            <span v-else-if="v$.form.password.minLength">Пароль должен содержать минимум 6 символов.</span>
-                        </div>
-                    </FloatLabel>
-                </div>
-
-                <div :class="{ 'has-error': v$.form.passwordConfirm.$error }">
-                    <FloatLabel>
-                        <div class="relative">
-                            <input
-                                :type="showPassword2 ? 'text' : 'password'"
-                                id="passwordConfirm"
-                                placeholder="Подтверждение пароля"
-                                class="dart-form-control std-auth__input"
-                                v-model="form.passwordConfirm"
-                                autocomplete="new-password" />
-                            <button type="button" @click="togglePasswordVisibility2" class="password-toggle">
-                                <i :class="showPassword2 ? 'pi pi-eye-slash' : 'pi pi-eye'"></i>
-                            </button>
-                        </div>
-                        <div v-if="v$.form.passwordConfirm.$error" class="error-message">
-                            <span>Пожалуйста, подтвердите пароль. Пароли должны совпадать.</span>
-                        </div>
-                    </FloatLabel>
-                </div>
-            </div>
-
-            <div v-if="!this.regIsSuccess" class="std-auth__input-container-wrapper">
-                <span class="std-auth__input-label">Данные контактного лица</span>
-
-                <div :class="{ 'has-error': v$.form.name.$error }">
-                    <Autocomplete
-                        ref="nameInput"
-                        name="name"
-                        id="name"
-                        placeholder="ФИО контактного лица"
-                        class="dart-form-control std-auth__input"
-                        type="fio"
-                        selectionType="single"
-                        v-model="form.name"
-                        @setSelection="setName"
-                        autocomplete="off" />
-                    <div v-if="v$.form.name.$error" class="error-message">
-                        <span v-if="!v$.form.name.required">Пожалуйста, введите ФИО.</span>
-                        <span v-else-if="v$.form.name.minLength">ФИО должно содержать минимум 3 символа.</span>
                     </div>
                 </div>
+                <div class="std-auth__button-container">
+                    <button v-if="!this.regIsSuccess" :disabled="this.loading" class="dart-btn dart-btn-primary dart-btn-block align-items-center flex justify-content-center std-auth__button" type="submit">
+                        <i v-if="this.loading" class="pi pi-spin pi-spinner" style="font-size: 14px"></i>
+                        <span>Зарегистрироваться</span>
+                    </button>
+                    
+                    <!-- {{ this.form.telephone }} -->
 
-                <div :class="{ 'has-error': v$.form.telephone.$error }">
-                    <input
-                        v-imask="mask"
-                        type="tel"
-                        id="telephone"
-                        placeholder="Телефон"
-                        class="dart-form-control std-auth__input"
-                        v-model="form.telephone"
-                        @input="form.telephone = normalizePhone(form.telephone)"
-                        autocomplete="off" />
-                    <div v-if="v$.form.telephone.$error" class="error-message">
-                        <span v-if="!v$.form.telephone.required">Пожалуйста, введите номер телефона.</span>
-                        <span v-else-if="v$.form.telephone.minLength">Введите корректный номер телефона.</span>
-                    </div>
+                    <span v-if="this.regIsSuccess" class="std-auth__span">Регистрация прошла успешно!</span>
+                    <button @click="() => { this.setRegForm(); this.regIsSuccess = false; }" class="dart-btn dart-btn-secondary-outline dart-btn-block align-items-center flex justify-content-center std-auth__button std-auth__button--secondary" type="button">
+                        <span>Войти</span>
+                    </button>
+                    <p class="kenost-policy">Нажимая кнопку "Зарегистрироваться", Вы соглашаетесь с <a targer="_blank" href="https://mst.tools/politika-konfidenczialnosti.html">Политика конфиденциальности</a> и обработкой персональных данных</p>
+
                 </div>
-
-                <div :class="{ 'has-error': v$.form.email.$error }">
-                    <input
-                        type="email"
-                        id="email"
-                        placeholder="Email"
-                        class="dart-form-control std-auth__input"
-                        v-model="form.email"
-                        autocomplete="off" />
-                    <div v-if="v$.form.email.$error" class="error-message">
-                        <span v-if="!v$.form.email.required">Пожалуйста, введите email.</span>
-                        <span v-else-if="v$.form.email.email">Введите корректный email.</span>
-                    </div>
-                </div>
-            </div>
-
-            <div v-if="!this.regIsSuccess" class="std-auth__input-container-wrapper">
-                <span class="std-auth__input-label">Данные компании</span>
-
-                <div :class="{ 'has-error': v$.form.org.inn.validInn.$response != true && v$.form.org.inn.$dirty }">
-                    <!-- <input
-                        maxlength="12"
-                        ref="innInput"
-                        name="inn"
-                        id="inn"
-                        placeholder="ИНН"
-                        class="dart-form-control std-auth__input"
-                        v-model="form.org.inn"
-                    /> -->
-                    <Autocomplete
-                        ref="innInput"
-                        name="inn"
-                        id="inn"
-                        placeholder="ИНН"
-                        class="dart-form-control std-auth__input"
-                        type="company"
-                        selectionType="single"
-                        v-model="form.org.inn"
-                        @setSelection="setCompany"
-                    />
-                    <!-- {{ v$.form.org.inn.validInn.$response }} -->
-                    <div v-if="v$.form.org.inn.validInn.$response != true && v$.form.org.inn.$dirty" class="error-message">
-                        <span>{{ v$.form.org.inn.validInn.$response || 'Некорректный ИНН' }}</span>
-                    </div>
-                </div>
-
-                <div :class="{ 'has-error': v$.form.org.name.$error }">
-                    <input
-                        type="text"
-                        id="org_name"
-                        placeholder="Наименование организации"
-                        class="dart-form-control std-auth__input"
-                        v-model="form.org.name"
-                        autocomplete="off"
-                    />
-                    <div v-if="v$.form.org.name.$error" class="error-message">
-                        <span v-if="!v$.form.org.name.required">Пожалуйста, введите наименование организации.</span>
-                        <span v-else-if="v$.form.org.name.minLength">Наименование должно содержать минимум 3 символа.</span>
-                    </div>
-                </div>
-
-                <div class="std-auth__input-container">
-                    <span class="std-auth__input-label">Адрес доставки</span>
-                    <AddAddress
-                        v-for="(address, index) in form.delivery_addresses"
-                        :key="index"
-                        :index="index"
-                        v-model="form.delivery_addresses[index]"
-                    />
-                    <div class="std-auth__actions-container">
-                        <button
-                            v-if="form.delivery_addresses.length > 1"
-                            class="dart-btn dart-btn-secondary dart-btn-block align-items-center flex justify-content-center std-auth__button std-auth__button--secondary"
-                            type="button"
-                            @click="() => this.form.delivery_addresses.pop()">
-                            <span>Удалить</span>
-                        </button>
-                        <button
-                            class="dart-btn dart-btn-secondary dart-btn-block align-items-center flex justify-content-center std-auth__button std-auth__button--secondary"
-                            type="button"
-                            @click="() => this.form.delivery_addresses.push({ value: '' })">
-                            <span>Добавить адрес</span>
-                            <i class="pi pi-plus"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="std-auth__button-container">
-                <button v-if="!this.regIsSuccess" :disabled="this.loading" class="dart-btn dart-btn-primary dart-btn-block align-items-center flex justify-content-center std-auth__button" type="submit">
-                    <i v-if="this.loading" class="pi pi-spin pi-spinner" style="font-size: 14px"></i>
-                    <span>Зарегистрироваться</span>
-                </button>
-                
-                <!-- {{ this.form.telephone }} -->
-
-                <span v-if="this.regIsSuccess" class="std-auth__span">Регистрация прошла успешно!</span>
-                <button @click="() => { this.setRegForm(); this.regIsSuccess = false; }" class="dart-btn dart-btn-secondary-outline dart-btn-block align-items-center flex justify-content-center std-auth__button std-auth__button--secondary" type="button">
-                    <span>Войти</span>
-                </button>
-                <p class="kenost-policy">Нажимая кнопку "Зарегистрироваться", Вы соглашаетесь с <a targer="_blank" href="https://mst.tools/politika-konfidenczialnosti.html">Политика конфиденциальности</a> и обработкой персональных данных</p>
-
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
+
 </template>
 
 

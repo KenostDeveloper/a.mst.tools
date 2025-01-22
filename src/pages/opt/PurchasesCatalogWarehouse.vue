@@ -239,7 +239,6 @@ export default {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-auto-flow: row;
-    gap: 8px;
     margin-bottom: 35px;
     width: 100%;
     .category{
