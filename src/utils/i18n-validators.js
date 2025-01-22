@@ -12,3 +12,4 @@ const withI18nMessage = createI18nMessage({ t: i18n.global.t.bind(i18n) })
 
 // wrap each validator.
 export const required = withI18nMessage(validators.required)
+export const minLength = withI18nMessage(validators.minLength, { withArguments: true })

@@ -131,8 +131,8 @@ export default {
 			"org_profile_from_api",
 		]),
 		getRouteName(currentRoute, param) {
-			console.log("Current route: ", currentRoute);
-			console.log("Current route param: ", param);
+			// console.log("Current route: ", currentRoute);
+			// console.log("Current route param: ", param);
 			switch (param) {
 				case ":id": {
 					return this.getOrgNameById(currentRoute.params[param.slice(1)]);

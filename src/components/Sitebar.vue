@@ -522,7 +522,7 @@ export default {
 			action: "get/orgs",
 		};
 		this.org_get_from_api(data).then((response) => {
-			console.log(response)
+			// console.log(response)
 			this.getRole()
 		});
 
