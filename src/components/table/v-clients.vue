@@ -12,7 +12,7 @@
 		</div>
     <div class="">
 		<div class="dart-row dart-align-items-center" v-if="show_filter">
-      <div class="d-col-md-3" v-for="(ffilter, i) in filters" :key="i">
+      <div class="d-col-xl-3 d-col-lg-4" v-for="(ffilter, i) in filters" :key="i">
         <div class="form_input_group input_pl input-parent required" v-if="ffilter.type == 'text'">
           <input
           type="text"
