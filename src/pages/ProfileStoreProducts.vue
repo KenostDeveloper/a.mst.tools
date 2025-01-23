@@ -2330,173 +2330,173 @@ export default {
 	font-weight: 400;
 }
 
-.dart-helper {
-	margin-bottom: 12px;
-	border-radius: 8px;
-	background: #fff;
-	border: 1px solid #0000001f;
+// .dart-helper {
+// 	margin-bottom: 12px;
+// 	border-radius: 8px;
+// 	background: #fff;
+// 	border: 1px solid #0000001f;
 
-	&__nav {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		padding: 16px 24px;
-		border-bottom: 1px solid #0000001f;
-	}
+// 	&__nav {
+// 		display: flex;
+// 		align-items: center;
+// 		justify-content: space-between;
+// 		padding: 16px 24px;
+// 		border-bottom: 1px solid #0000001f;
+// 	}
 
-	p {
-		margin: 0;
-	}
+// 	p {
+// 		margin: 0;
+// 	}
 
-	&__left {
-		display: flex;
-		align-items: center;
-		p {
-			color: #676767;
-			font-size: 14px;
-			margin-right: 16px;
-		}
+// 	&__left {
+// 		display: flex;
+// 		align-items: center;
+// 		p {
+// 			color: #676767;
+// 			font-size: 14px;
+// 			margin-right: 16px;
+// 		}
 
-		span {
-			padding: 0 5px;
-			min-width: 25px;
-			height: 25px;
-			border-radius: 5px;
-			color: #fff;
-			font-size: 14px;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-		}
-	}
+// 		span {
+// 			padding: 0 5px;
+// 			min-width: 25px;
+// 			height: 25px;
+// 			border-radius: 5px;
+// 			color: #fff;
+// 			font-size: 14px;
+// 			display: flex;
+// 			align-items: center;
+// 			justify-content: center;
+// 		}
+// 	}
 
-	&__right {
-		min-height: 39px;
-		p {
-			color: #676767;
-			font-size: 11px;
-		}
+// 	&__right {
+// 		min-height: 39px;
+// 		p {
+// 			color: #676767;
+// 			font-size: 11px;
+// 		}
 
-		span {
-			font-size: 16px;
-			font-weight: 500;
-		}
-	}
+// 		span {
+// 			font-size: 16px;
+// 			font-weight: 500;
+// 		}
+// 	}
 
-	&__body {
-		display: flex;
-		align-items: center;
-		gap: 8px;
-		padding: 16px 24px;
-	}
+// 	&__body {
+// 		display: flex;
+// 		align-items: center;
+// 		gap: 8px;
+// 		padding: 16px 24px;
+// 	}
 
-	&__graph {
-		max-height: 60px;
-		max-width: 60px;
-	}
+// 	&__graph {
+// 		max-height: 60px;
+// 		max-width: 60px;
+// 	}
 
-	&__info {
-		b {
-			font-size: 28px;
-			font-weight: 500;
-		}
+// 	&__info {
+// 		b {
+// 			font-size: 28px;
+// 			font-weight: 500;
+// 		}
 
-		p {
-			color: #676767;
-			font-size: 14px;
-			font-weight: 400;
-		}
-	}
-}
+// 		p {
+// 			color: #676767;
+// 			font-size: 14px;
+// 			font-weight: 400;
+// 		}
+// 	}
+// }
 
-.dart-helper-footer {
-	padding-bottom: 12px;
-	&__icon {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		.d_icon {
-			transform: rotate(0deg);
-			font-size: 8px;
-			cursor: pointer;
-		}
-	}
-	&.show {
-		.dart-helper-footer {
-			&__text {
-				max-height: 400px;
-				transition: all 0.6s;
-				padding: 16px 24px;
-			}
+// .dart-helper-footer {
+// 	padding-bottom: 12px;
+// 	&__icon {
+// 		display: flex;
+// 		justify-content: center;
+// 		align-items: center;
+// 		.d_icon {
+// 			transform: rotate(0deg);
+// 			font-size: 8px;
+// 			cursor: pointer;
+// 		}
+// 	}
+// 	&.show {
+// 		.dart-helper-footer {
+// 			&__text {
+// 				max-height: 400px;
+// 				transition: all 0.6s;
+// 				padding: 16px 24px;
+// 			}
 
-			&__icon {
-				.d_icon {
-					transform: rotate(180deg);
-				}
-			}
-		}
-	}
-	&__text {
-		padding: 0 24px;
-		transition: all 0.6s;
-		max-height: 0;
-		overflow: hidden;
-		p {
-			font-size: 12px;
-			line-height: 1.1;
-			font-weight: 400;
-		}
+// 			&__icon {
+// 				.d_icon {
+// 					transform: rotate(180deg);
+// 				}
+// 			}
+// 		}
+// 	}
+// 	&__text {
+// 		padding: 0 24px;
+// 		transition: all 0.6s;
+// 		max-height: 0;
+// 		overflow: hidden;
+// 		p {
+// 			font-size: 12px;
+// 			line-height: 1.1;
+// 			font-weight: 400;
+// 		}
 
-		p + p {
-			margin-top: 8px;
-		}
-	}
-}
+// 		p + p {
+// 			margin-top: 8px;
+// 		}
+// 	}
+// }
 
-.dart-helper-1 {
-	border-top: 3px solid #008fff;
+// .dart-helper-1 {
+// 	border-top: 3px solid #008fff;
 
-	.dart-helper {
-		&__left {
-			span {
-				background: #008fff;
-			}
-		}
-	}
-}
+// 	.dart-helper {
+// 		&__left {
+// 			span {
+// 				background: #008fff;
+// 			}
+// 		}
+// 	}
+// }
 
-.dart-helper-2 {
-	border-top: 3px solid #f363e6;
-	.dart-helper {
-		&__left {
-			span {
-				background: #f363e6;
-			}
-		}
-	}
-}
+// .dart-helper-2 {
+// 	border-top: 3px solid #f363e6;
+// 	.dart-helper {
+// 		&__left {
+// 			span {
+// 				background: #f363e6;
+// 			}
+// 		}
+// 	}
+// }
 
-.dart-helper-3 {
-	border-top: 3px solid #ff6221;
-	.dart-helper {
-		&__left {
-			span {
-				background: #ff6221;
-			}
-		}
-	}
-}
+// .dart-helper-3 {
+// 	border-top: 3px solid #ff6221;
+// 	.dart-helper {
+// 		&__left {
+// 			span {
+// 				background: #ff6221;
+// 			}
+// 		}
+// 	}
+// }
 
-.dart-helper-4 {
-	border-top: 3px solid #ffd02c;
-	.dart-helper {
-		&__left {
-			span {
-				background: #ffd02c;
-			}
-		}
-	}
-}
+// .dart-helper-4 {
+// 	border-top: 3px solid #ffd02c;
+// 	.dart-helper {
+// 		&__left {
+// 			span {
+// 				background: #ffd02c;
+// 			}
+// 		}
+// 	}
+// }
 
 .p-dropdown .p-dropdown-clear-icon {
 	position: absolute;

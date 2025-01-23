@@ -590,7 +590,6 @@ export default {
             if(data.warehouse){
                 this.form_requirements_view.warehouse = data.warehouse
             }
-            
         },
         deleteReq(data){
             this.$confirm.require({
@@ -1101,7 +1100,7 @@ export default {
     display: inline-flex;
     text-align: center;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     // gap: 8px;
     cursor: pointer;
     border: none;

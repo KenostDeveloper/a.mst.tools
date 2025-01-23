@@ -682,11 +682,10 @@
                                 </td>
                                 <td>{{ Number(item.price).toFixed(2).toLocaleString('ru') }} ₽</td>
                                 <td>
-                                    {{
-                                        this.selected_data[item.id]
-                                            ?
-                                            Number(this.selected_data[item.id].discountInterest).toFixed(2).toLocaleString('ru')
-                                            : Number(0.0).toFixed(2)
+                                    {{ Number(this.selected_data[item.id].finalPrice) > Number(item.price) ? 
+                                        this.selected_data[item.id]? (Number(this.selected_data[item.id].discountInterest) * -1).toFixed(2).toLocaleString('ru') : Number(0.0).toFixed(2)
+                                        :
+                                        this.selected_data[item.id]? Number(this.selected_data[item.id].discountInterest).toFixed(2).toLocaleString('ru') : Number(0.0).toFixed(2)
                                     }}
                                 </td>
                                 <td>
@@ -1070,6 +1069,14 @@
                         <Checkbox v-model="this.form.hide_for_clients" :binary="true" inputId="hide_for_clients"
                             name="hide_for_clients" />
                         <label for="hide_for_clients" class="ml-2 mb-0"> Скрыть акцию у клиентов с Индивидуальными условиями </label>
+                    </div>
+                </div>
+
+                <div class="dart-form-group">
+                    <div class="flex align-items-center gap-1">
+                        <Checkbox v-model="this.form.negative" :binary="true" inputId="negative"
+                            name="negative" />
+                        <label for="negative" class="ml-2 mb-0"> Негативная акция </label>
                     </div>
                 </div>
             </div>
@@ -1462,6 +1469,7 @@ export default {
                 conditionMinGeneralCount: 0,
                 bigDiscount: [],
                 not_sale_client: [],
+                negative: false,
                 hide_for_clients: false
             },
             listAction: {},
@@ -2051,6 +2059,7 @@ export default {
                         big_sale_actions: this.form.bigDiscount,
                         big_post_actions: this.form.bigPost,
                         not_sale_client: this.form.not_sale_client[0] === 'true',
+                        negative: this.form.negative,
                         limit_sum: this.form.limitationValue,
                         limit_type: this.form.limitations,
                         actionLast: this.form.actionLast[0] === 'true',
@@ -2105,6 +2114,7 @@ export default {
                         method_adding_products: this.form.addProductType,
                         available_stores: this.form.available_stores[0] === 'true',
                         available_vendors: this.form.available_vendors[0] === 'true',
+                        negative: this.form.negative,
                         available_opt: this.form.available_opt[0] === 'true',
                         complects: this.selected_complects,
                         big_sale_actions: this.form.bigDiscount,
@@ -2908,6 +2918,9 @@ export default {
                 }
                 if (newVal.available_vendors) {
                     this.form.available_vendors = ['true'];
+                }
+                if (newVal.negative) {
+                    this.form.negative = true;
                 }
                 if (newVal.available_opt) {
                     this.form.available_opt = ['true'];

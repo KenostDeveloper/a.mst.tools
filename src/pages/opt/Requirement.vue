@@ -5,7 +5,7 @@
       <div class="dart-home dart-window">
           <!-- <Breadcrumbs/> -->
           <div class="profile-content__title">
-            <span class="title-h1" v-if="header[1] == 'req'">Поиск по Потребности с №{{ header[0] }}</span>
+            <span class="title-h1" v-if="header[1] == 'req'">{{this.opt_products.name}} №{{ header[0] }}</span>
             <span class="title-h1" v-if="header[1] == 'order'">Повтор Заказа №{{ header[0] }}</span>
             <div class="buttons_container">
               <button class="dart-btn dart-btn-primary btn-padding" @click.prevent="addToCart()"> 
@@ -210,6 +210,7 @@ export default {
       this.opt_vendors = newVal
     },
     optproducts: function (newVal, oldVal) {
+      console.log(newVal)
       this.opt_products = newVal
     },
     $route () {

@@ -2627,7 +2627,9 @@ p {
 	&__container {
 		display: flex;
 		flex-direction: column;
-		gap: 14px;
+		&>*+*{
+			margin-top: 14px;
+		}
 	}
 
 	&__description {
@@ -2746,8 +2748,8 @@ p {
 			max-height: 100vh;
 
 			.std-calendar__head {
-				padding-top: 24px;    /* Отступ сверху */
-    			padding-bottom: 10px; /* Отступ снизу */
+				padding-top: 24px;
+    			padding-bottom: 10px;
 				max-height: 100%;
 			}
 
@@ -2757,8 +2759,8 @@ p {
 		}
 
 		&__head {
-			padding-top: 0;    /* Отступ сверху */
-    		padding-bottom: 0; /* Отступ снизу */
+			padding-top: 0;
+    		padding-bottom: 0;
 			height: 60px;
 
 			transition-duration: 0.3s;
@@ -2844,8 +2846,8 @@ p {
 	}
 
 	&__col {
-		padding-top: 28px;    /* Отступ сверху */
-    	padding-bottom: 28px; /* Отступ снизу */
+		padding-top: 28px;
+    	padding-bottom: 28px;
 
 		font-size: 14px;
 		font-weight: 400;
@@ -3419,6 +3421,7 @@ p {
 		.promotion__title-container {
 			display: flex;
 			flex-direction: column;
+			margin-right: 100px;
 			
 			:is(.promotion__title, .promotion__span) {
 				line-height: 1.17;
@@ -4726,7 +4729,8 @@ p {
 }
 
 .std-money {
-	@include flex-direction(column, 16px);
+	display: flex;
+	flex-direction: column;
 
 	& {
 		margin: 27px 40px;
@@ -4734,7 +4738,10 @@ p {
 	}
 
 	&__text-container {
-		@include flex($justify: space-between, $align: center, $gap: 10px);
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 16px;
 	}
 
 	&__label {
@@ -5622,11 +5629,14 @@ button.std-icon__wrapper {
 		.actions {
 			.p-buttonset {
 				display: flex;
-				gap: 8px;
 				align-items: center;
 				justify-content: center;
 				.kenostButton {
 					margin: 0;
+				}
+
+				&>*+*{
+					margin-left: 8px !important;
 				}
 			}
 		}
@@ -6089,6 +6099,7 @@ button.std-icon__wrapper {
 	&__el {
 		& > p {
 			margin: 0 !important;
+			white-space: nowrap;
 		}
 	}
 	&__help {
@@ -7922,7 +7933,6 @@ button.std-icon__wrapper {
 	}
 
 	&__modal {
-		padding: 14px 24px;
 		border-radius: 5px;
 		background: #e5e5e5;
 		position: relative;
@@ -7932,13 +7942,12 @@ button.std-icon__wrapper {
 		&::before {
 			content: "";
 			position: absolute;
-			transform: rotate(45deg);
 			bottom: -10px;
 			width: 14px;
 			height: 14px;
 			background: #e5e5e5;
 			left: 50%;
-			transform: translate(0, -50%);
+			transform: translate(0, -50%) rotate(45deg);
 		}
 
 		&-elems {

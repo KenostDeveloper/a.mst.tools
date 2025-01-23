@@ -3,39 +3,40 @@
         <div :data-test="action?.tags?.length != 0" class="table-actions__action" :class="{active: action.enabled}" v-for="(action, indexactions) in actions" v-bind:key="action.action_id" :data-id="action?.action_id">
             <div v-if="action?.tags?.length != 0"  class="table-actions__container">
                 <div class="table-actions__el" v-for="(tag, indextag) in action.tags" v-bind:key="tag.id">
-                    <img v-if="tag.type == 'multiplicity'" :src="action.enabled
+                    <!-- <img v-if="tag.type == 'multiplicity'" :src="action.enabled
                         ? '/images/icons/action/gray/box.svg'
                             : '/images/icons/action/black/box.svg'
-                        " alt="" />
-                    <p v-if="tag.type == 'multiplicity'">{{ tag.value }} шт.</p>
+                        " alt="" /> -->
+                    <p v-if="tag.type == 'multiplicity'">Крат. {{ tag.value }} шт.</p>
 
-                    <img v-if="tag.type == 'min'" :src="action.enabled
+                    <!-- <img v-if="tag.type == 'min'" :src="action.enabled
                         ? '/images/icons/action/gray/min.svg'
                             : '/images/icons/action/black/min.svg'
-                        " alt="" />
+                        " alt="" /> -->
 
-                    <img v-if="tag.type == 'gift'" :src="action.enabled
+                    <!-- <img v-if="tag.type == 'gift'" :src="action.enabled
                         ? '/images/icons/action/gray/gift.svg'
                             : '/images/icons/action/black/gift.svg'
-                        " alt="" />
+                        " alt="" /> -->
 
-                    <img v-if="tag.type == 'delay'" :src="action.enabled
+                    <!-- <img v-if="tag.type == 'delay'" :src="action.enabled
                         ? '/images/icons/action/gray/time.svg'
                             : '/images/icons/action/black/time.svg'
-                        " alt="" />
+                        " alt="" /> -->
                     <p v-if="tag.type == 'delay'">Отсроч. {{ tag.value }} дн.</p>
 
-                    <img v-if="tag.type == 'sale' && tag.value > 0" :src="action.enabled
+                    <!-- <img v-if="tag.type == 'sale' && tag.value > 0" :src="action.enabled
                         ? '/images/icons/action/gray/sale.svg'
                             : '/images/icons/action/black/sale.svg'
-                        " alt="" />
+                        " alt="" /> -->
                     <p v-if="tag.type == 'sale' && tag.value > 0">Скидка {{ Number(tag.value).toFixed(0) }}%</p>
 
-                    <img v-if="tag.type == 'free_delivery'" :src="action.enabled
+                    <!-- <img v-if="tag.type == 'free_delivery'" :src="action.enabled
                         ? '/images/icons/action/gray/delivery.svg'
                             : '/images/icons/action/black/delivery.svg'
-                        " alt="" />
-
+                        " alt="" /> -->
+                    <p v-if="tag.type == 'free_delivery'">Беспл. доставка</p>
+                    <span v-if="(indextag != action.tags.length - 1 && (tag.type == 'multiplicity' || tag.type == 'delay' || tag.type == 'sale' ||  tag.type == 'free_delivery'))"> | </span>
                 </div>
 
             </div>
@@ -50,6 +51,7 @@
                         <img v-if="action?.image.image && action?.type != 3 && action?.image.thumb_medium" :src="action?.image.thumb_medium"
                             :srcset="action?.image.image +' 2x, ' + action?.image.thumb_medium + ' 1x'" :alt="action?.name" class="table-actions__modal-img">
                         <img v-else-if="action.image && action?.type != 3" :src="action.image" :alt="action?.name" class="table-actions__modal-img">
+                        <img v-else-if="action?.type == 3" src="/images/action_discount.jpg" :alt="action?.name" class="table-actions__modal-img">
 
                         <p class="table-actions__modal-title mt-3">{{ action?.type == 3 ? "Индивидуальная акция" : action?.name }}</p>
 

@@ -1463,7 +1463,6 @@ export default {
 	&__body {
 		display: flex;
 		align-items: center;
-		gap: 8px;
 		padding: 16px 24px;
 	}
 
@@ -1473,6 +1472,7 @@ export default {
 	}
 
 	&__info {
+		margin-left: 8px;
 		b {
 			font-size: 28px;
 			font-weight: 500;

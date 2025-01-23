@@ -259,7 +259,6 @@ export default {
 .shopping-kenost {
 	&__dates {
 		display: flex;
-		gap: 12px;
 	}
 
 	&__button {

@@ -298,7 +298,7 @@
 
 				<a
 					v-if="Object.prototype.hasOwnProperty.call(this.basket, 'data')"
-					class="a-dart-btn a-dart-btn-primary btn-arrange button-basket"
+					class="a-dart-btn a-dart-btn-primary btn-arrange button-basket justify-content-space-between"
 					@click.prevent="toOrder"
 					>Перейти к оформлению <span>{{ this.basket.data[warehouse_basket]?.cart_data?.cost?.toLocaleString("ru") }} ₽</span></a
 				>

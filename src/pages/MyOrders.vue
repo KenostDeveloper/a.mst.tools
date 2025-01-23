@@ -279,13 +279,14 @@ export default {
 .shopping-kenost {
 	&__dates {
 		display: flex;
-		gap: 12px;
 	}
 
 	&__button {
 		display: flex;
-		gap: 12px;
 		margin-top: 20px;
+		&>*+*{
+			margin-left: 12px;
+		}
 
 		.dart-btn {
 			width: 100%;

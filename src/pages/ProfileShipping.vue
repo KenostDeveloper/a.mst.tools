@@ -1382,7 +1382,10 @@ export default {
 .shopping-kenost {
 	&__dates {
 		display: flex;
-		gap: 12px;
+
+		&>*+*{
+			margin-left: 8px;
+		}
 	}
 
 	&__button {
