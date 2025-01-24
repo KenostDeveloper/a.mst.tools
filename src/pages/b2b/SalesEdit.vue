@@ -682,7 +682,7 @@
                                 </td>
                                 <td>{{ Number(item.price).toFixed(2).toLocaleString('ru') }} ₽</td>
                                 <td>
-                                    {{ Number(this.selected_data[item.id].finalPrice) > Number(item.price) ? 
+                                    {{ Number(this.selected_data[item.id]?.finalPrice) > Number(item.price) ? 
                                         this.selected_data[item.id]? (Number(this.selected_data[item.id].discountInterest) * -1).toFixed(2).toLocaleString('ru') : Number(0.0).toFixed(2)
                                         :
                                         this.selected_data[item.id]? Number(this.selected_data[item.id].discountInterest).toFixed(2).toLocaleString('ru') : Number(0.0).toFixed(2)
@@ -691,7 +691,7 @@
                                 <td>
                                     {{
                                         this.selected_data[item.id]
-                                            ? Number(this.selected_data[item.id].finalPrice).toFixed(2).toLocaleString('ru')
+                                            ? Number(this.selected_data[item.id]?.finalPrice).toFixed(2).toLocaleString('ru')
                                             : item.price.toLocaleString('ru')
                                     }}
                                     ₽

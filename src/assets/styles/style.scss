@@ -3048,7 +3048,7 @@ p {
 		// display: flex;
 		display: grid;
 		flex-wrap: wrap;
-		grid-template: auto / repeat(auto-fit, minmax(370px, 1fr));
+		grid-template: auto / repeat(auto-fit, minmax(370px, 33%));
 		// gap: 24px;
 		// margin: -12px;
 
