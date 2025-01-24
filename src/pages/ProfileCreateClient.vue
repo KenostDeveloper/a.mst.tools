@@ -248,7 +248,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import { useVuelidate } from "@vuelidate/core";
-import { required, minLength } from "../utils/i18n-validators";
+import { required, minLength, sameAs } from "../utils/i18n-validators";
 import { helpers } from "@vuelidate/validators";
 import router from '../router';
 import FileUpload from 'primevue/fileupload';
@@ -461,26 +461,19 @@ export default {
 					required,
 				},
                 login: {
-                    minLength: minLength(4),
+                    required: () => {
+                        return (this.form.company.register && this.orgprofile.login != '') || (!this.form.company.register)
+                    },
                 },
                 password: {
-					required: helpers.withMessage(
-                        "Поле обязательно для заполнения",
-                        () => {
-                            return this.form.company.register && this.orgprofile.password != ''
-                        }
-                    ),
+					required: () => {
+                        return (this.form.company.register && this.orgprofile.password != '') || (!this.form.company.register)
+                    },
                     minLength: minLength(6)
 				},
                 passwordRepeat: {
-					required: helpers.withMessage(
-                        "Поле обязательно для заполнения",
-                        () => {
-                            return this.form.company.register && this.orgprofile.password != '' && this.orgprofile.passwordRepeat != '' && (this.orgprofile.password == this.orgprofile.passwordRepeat)
-                        }
-                    ),
-                    minLength: minLength(6)
-				}
+                    sameAs: sameAs(this.orgprofile.password)
+                }
 			},
             form: {
                 company: {
