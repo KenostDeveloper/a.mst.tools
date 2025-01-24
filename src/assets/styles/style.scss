@@ -3048,7 +3048,7 @@ p {
 		// display: flex;
 		display: grid;
 		flex-wrap: wrap;
-		grid-template: auto / repeat(auto-fit, minmax(370px, 33%));
+		grid-template: auto / repeat(auto-fit, minmax(370px, 1fr));
 		// gap: 24px;
 		// margin: -12px;
 
@@ -3059,6 +3059,8 @@ p {
 
 	.clients__card,
 	.client-card {
+		height: 100%;
+		position: relative;
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;

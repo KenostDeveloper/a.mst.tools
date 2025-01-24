@@ -30,6 +30,8 @@
                             : '/images/icons/action/black/sale.svg'
                         " alt="" /> -->
                     <p v-if="tag.type == 'sale' && tag.value > 0">Скидка {{ Number(tag.value).toFixed(0) }}%</p>
+                    <p v-if="tag.type == 'sale' && tag.value < 0">Наценка {{ (Number(tag.value) * -1).toFixed(0) }}%</p>
+
 
                     <!-- <img v-if="tag.type == 'free_delivery'" :src="action.enabled
                         ? '/images/icons/action/gray/delivery.svg'
@@ -95,6 +97,14 @@
                                 <p v-if="tag.type == 'sale' && tag.value > 0">
                                     Скидка
                                     {{ tag.value.toLocaleString('ru') }}%
+                                    <span v-if="tag.min_count > 1 && tag.value > 0">
+                                        при покупке от
+                                        {{ tag.min_count.toLocaleString('ru') }}
+                                        шт.</span>
+                                </p>
+                                <p v-if="tag.type == 'sale' && tag.value < 0">
+                                    Наценка
+                                    {{ (Number(tag.value) * -1).toLocaleString('ru') }}%
                                     <span v-if="tag.min_count > 1 && tag.value > 0">
                                         при покупке от
                                         {{ tag.min_count.toLocaleString('ru') }}

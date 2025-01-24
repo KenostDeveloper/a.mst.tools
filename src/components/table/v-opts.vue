@@ -54,50 +54,52 @@
       </div>
     </div>
 		<div class="profile-opts" v-if="total != 0">
-			<div class="dart-row clients__card-container providers__card-container" v-if="total != -1">
-				<article class="client__card client-card provider-card" v-for="row in items_data" :key="row.id">
-					<div class="client-card__content">
-						<img :src="row.image" alt="" class="client-card__img" />
-						<div class="client-card__info">
-							<h2 class="client-card__title">{{ row.name }}</h2>
-							<!-- <p class="client-card__address" v-if="row.address">{{ row.address }}</p> -->
-							<p class="client-card__address"><span class="d-client-card__data-label" v-if="row.req">Адрес:</span> {{ row.req?.fact_address}}</p>
-							<p class="client-card__address"><span class="d-client-card__data-label" v-if="row.req">ИНН:</span> {{ row.req?.inn }}</p>
-							<p class="client-card__address"><span class="d-client-card__data-label" v-if="row.phone">Телефон:</span> {{ row.phone }}</p>
-							<p class="client-card__address"><span class="d-client-card__data-label" v-if="row.email">Email:</span> {{ row.email }}</p>
+			<div class="dart-row" v-if="total != -1">
+				<div class="d-col-xxl-3 d-col-xl-4 d-col-md-6 mb-4" v-for="row in items_data" :key="row.id">
+					<article class="client__card client-card provider-card">
+						<div class="client-card__content">
+							<img :src="row.image" alt="" class="client-card__img" />
+							<div class="client-card__info">
+								<h2 class="client-card__title">{{ row.name }}</h2>
+								<!-- <p class="client-card__address" v-if="row.address">{{ row.address }}</p> -->
+								<p class="client-card__address"><span class="d-client-card__data-label" v-if="row.req">Адрес:</span> {{ row.req?.fact_address}}</p>
+								<p class="client-card__address"><span class="d-client-card__data-label" v-if="row.req">ИНН:</span> {{ row.req?.inn }}</p>
+								<p class="client-card__address"><span class="d-client-card__data-label" v-if="row.phone">Телефон:</span> {{ row.phone }}</p>
+								<p class="client-card__address"><span class="d-client-card__data-label" v-if="row.email">Email:</span> {{ row.email }}</p>
+							</div>
 						</div>
-					</div>
-					<div class="participation-block">
-						<div class="participation participation-no" v-if="row.connection != 0">
-							<button
-								href="#"
-								class="dart-btn dart-btn-secondary dart-btn-block client-card__button provider-card__button provider-card__button--remove"
-								@click.prevent="changeOpts(row.id, 0)"
-							>
-								<mdicon name="close" />
-								<span>Убрать из поставщиков</span>
-            </button>
+						<div class="participation-block">
+							<div class="participation participation-no" v-if="row.connection != 0">
+								<button
+									href="#"
+									class="dart-btn dart-btn-secondary dart-btn-block client-card__button provider-card__button provider-card__button--remove"
+									@click.prevent="changeOpts(row.id, 0)"
+								>
+									<mdicon name="close" />
+									<span>Убрать из поставщиков</span>
+				</button>
+							</div>
+				<!-- <div class="participation participation-soon" v-if="row.connection != 2">
+								<button
+									href="#"
+									class="dart-btn dart-btn-secondary dart-btn-block client-card__button provider-card__button provider-card__button--soon"
+					disabled
+								>
+									<span>Скоро будет доступен</span>
+				</button>
+							</div> -->
+							<div class="participation participation-yes" v-else>
+								<button
+									href="#"
+									class="dart-btn dart-btn-primary-outline dart-btn-block client-card__button provider-card__button provider-card__button--select"
+									@click.prevent="changeOpts(row.id, 1)"
+								>
+									<span>Выбрать поставщика</span>
+								</button>
+							</div>
 						</div>
-            <!-- <div class="participation participation-soon" v-if="row.connection != 2">
-							<button
-								href="#"
-								class="dart-btn dart-btn-secondary dart-btn-block client-card__button provider-card__button provider-card__button--soon"
-                disabled
-							>
-								<span>Скоро будет доступен</span>
-            </button>
-						</div> -->
-						<div class="participation participation-yes" v-else>
-							<button
-								href="#"
-								class="dart-btn dart-btn-primary-outline dart-btn-block client-card__button provider-card__button provider-card__button--select"
-								@click.prevent="changeOpts(row.id, 1)"
-							>
-								<span>Выбрать поставщика</span>
-							</button>
-						</div>
-					</div>
-				</article>
+					</article>
+				</div>
 			</div>
 			<div class="dart-row" v-else>
 				<div class="d-col-md-3" v-for="n in 4" :key="n">

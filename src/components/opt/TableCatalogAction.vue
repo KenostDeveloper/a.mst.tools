@@ -132,7 +132,7 @@
                         <ActionModal :actions="item.actions"/>
                     </td>
                     <td>
-                        {{ (Number(product.multiplicity) * Number(item.price)).toLocaleString('ru') }} ₽
+                        {{ (Number(item.multiplicity) * Number(item.price)).toLocaleString('ru') }} ₽
                     </td>
                     <td>
                         {{ item.multiplicity }}
