@@ -210,7 +210,10 @@ export default {
                 count: item.basket.count,
                 actions: item.actions
             };
-            this.busket_from_api(data).then(() => {
+            this.busket_from_api(data).then((response) => {
+                if(!response?.data?.data?.success){
+                    this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
+                }
                 this.busket_from_api({
                     action: 'basket/get',
                     id: router.currentRoute._value.params.id,
@@ -226,7 +229,7 @@ export default {
                         }
                     }, 1000)
                 });
-            });
+            })
 
             // Убедитесь, что dataLayer существует
             window.dataLayer = window.dataLayer || [];

@@ -535,10 +535,7 @@ export default {
           //Вся корзина
           state.optbasketall = data.data.data
         }
-      } else {
-        this.$toast.add({ severity: 'error', summary: 'Ошибка!', detail: data.data.message, life: 3000 });
       }
-      
     },
     GET_OPT_ORDER_TO_VUEX: (state, data) => {
       state.optorder = data.data
