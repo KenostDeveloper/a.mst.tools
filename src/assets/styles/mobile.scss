@@ -66,6 +66,10 @@
 		transform: scale(0.5);
 	}
 
+	.std-catalog-table__wrapper {
+        overflow: auto;
+    }
+
 	// .b24-widget-button-wrapper {
 	// 	top: 51px !important;
     //     left: 0px;
