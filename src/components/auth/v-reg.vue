@@ -381,7 +381,7 @@ export default {
                 });
                 return;
             }
-            if (this.form.password === this.form.passwordConfirm) {
+            if ((this.form.password === this.form.passwordConfirm) && validateInn(this.form.org.inn)) {
                 this.loading = true;
                 this.$load(async () => {
                     const data = await this.$api.auth.register(this.form);

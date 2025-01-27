@@ -744,6 +744,7 @@ export default {
         &__orders{
             height: calc(100% - 200px);
             overflow-y: auto;
+            overflow-x: hidden;
             margin: 20px 0;
 
             &::-webkit-scrollbar {
