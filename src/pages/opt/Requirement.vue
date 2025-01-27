@@ -127,10 +127,18 @@ export default {
                   action: 'basket/get',
                   id: router.currentRoute._value.params.id,
                   warehouse: 'all'
+                }).then((response) => {
+                  if(!response?.data?.data?.success){
+                    this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
+                  }
                 })
                 this.busket_from_api({
                   action: 'basket/get',
                   id: router.currentRoute._value.params.id,
+                }).then((response) => {
+                  if(!response?.data?.data?.success){
+                    this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
+                  }
                 })
               }else{
                 this.$toast.add({ severity: 'error', summary: 'Ошибка сохранения Поставщика', detail: response.data.message, life: 3000 });

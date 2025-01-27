@@ -399,12 +399,18 @@ export default {
 					this.busket_from_api(data).then((response) => {
 						this.$emit("catalogUpdate");
 						this.$emit("actionUpdate");
+						if(!response?.data?.data?.success){
+							this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
+						}
 					});
 					this.busket_from_api({
 						action: 'basket/get',
 						id: router.currentRoute._value.params.id,
 						warehouse: 'all'
-					}).then((res) => {
+					}).then((response) => {
+						if(!response?.data?.data?.success){
+							this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
+						}
 						const index = this.fetchIds.indexOf(object.item.key);
 						if (index !== -1) {
 							this.fetchIds.splice(index, 1); // Удаляем один элемент по индексу
@@ -440,7 +446,10 @@ export default {
 						action: 'basket/get',
 						id: router.currentRoute._value.params.id,
 						warehouse: 'all'
-					}).then((res) => {
+					}).then((response) => {
+						if(!response?.data?.data?.success){
+							this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
+						}
 						const index = this.fetchIds.indexOf(object.item.product.key);
 						if (index !== -1) {
 							this.fetchIds.splice(index, 1); // Удаляем один элемент по индексу
@@ -461,6 +470,9 @@ export default {
 				};
 				this.busket_from_api(data).then((response) => {
 					// console.log(response)
+					if(!response?.data?.data?.success){
+						this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
+					}
 					const datainfo = {
 						remain_id: object.id,
 						store_id: object.item.product.store_id,
@@ -494,7 +506,10 @@ export default {
 					action: 'basket/get',
 					id: router.currentRoute._value.params.id,
 					warehouse: 'all'
-				}).then((res) => {
+				}).then((response) => {
+					if(!response?.data?.data?.success){
+						this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
+					}
                     const index = this.fetchIds.indexOf(object.item.product.key);
                     if (index !== -1) {
                         this.fetchIds.splice(index, 1); // Удаляем один элемент по индексу
@@ -511,12 +526,19 @@ export default {
 				id: router.currentRoute._value.params.id,
 				// store_id: 'all',
 			};
-			this.busket_from_api(data).then((response) => {});
+			this.busket_from_api(data).then((response) => {
+				if(!response?.data?.data?.success){
+					this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
+				}
+			});
 			this.busket_from_api({
 				action: 'basket/get',
 				id: router.currentRoute._value.params.id,
 				warehouse: 'all'
-			}).then(() => {
+			}).then((response) => {
+				if(!response?.data?.data?.success){
+					this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
+				}
 				this.loadingClearBasket = false
 			})
 		},
@@ -529,12 +551,19 @@ export default {
 				id: router.currentRoute._value.params.id,
 				org_id: id
 			};
-			this.busket_from_api(data).then((response) => {});
+			this.busket_from_api(data).then((response) => {
+				if(!response?.data?.data?.success){
+					this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
+				}
+			});
 			this.busket_from_api({
 				action: 'basket/get',
 				id: router.currentRoute._value.params.id,
 				warehouse: 'all'
-			}).then(() => {
+			}).then((response) => {
+				if(!response?.data?.data?.success){
+					this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
+				}
 				this.loadingClearBasket = false
 			})
 		},
@@ -549,7 +578,11 @@ export default {
 				key: key,
 				product: product
 			};
-			this.busket_from_api(data).then((response) => {});
+			this.busket_from_api(data).then((response) => {
+				if(!response?.data?.data?.success){
+					this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
+				}
+			});
 
 			// Убедитесь, что dataLayer существует
 			window.dataLayer = window.dataLayer || [];
@@ -575,7 +608,10 @@ export default {
 				action: 'basket/get',
 				id: router.currentRoute._value.params.id,
 				warehouse: 'all'
-			}).then(() => {
+			}).then((response) => {
+				if(!response?.data?.data?.success){
+					this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
+				}
 				const index = this.fetchIds.indexOf(product.key);
 				if (index !== -1) {
 					this.fetchIds.splice(index, 1); // Удаляем один элемент по индексу
@@ -593,11 +629,19 @@ export default {
 				org_id: product.org_id,
 				id_complect: product.complect_id
 			};
-			this.busket_from_api(data).then((response) => {});
+			this.busket_from_api(data).then((response) => {
+				if(!response?.data?.data?.success){
+					this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
+				}
+			});
 			this.busket_from_api({
 				action: 'basket/get',
 				id: router.currentRoute._value.params.id,
 				warehouse: 'all'
+			}).then((response) => {
+				if(!response?.data?.data?.success){
+					this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
+				}
 			})
 		},
 		toOrder() {
@@ -628,13 +672,21 @@ export default {
 					action: 'basket/get',
 					id: router.currentRoute._value.params.id,
 					warehouse: 'all'
+				}).then((response) => {
+					if(!response?.data?.data?.success){
+						this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
+					}
 				})
 			})
 		}
 	},
 	mounted() {
 		const data = { action: "basket/get", id: router.currentRoute._value.params.id };
-		this.busket_from_api(data);
+		this.busket_from_api(data).then((response) => {
+			if(!response?.data?.data?.success){
+				this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
+			}
+		});
 
 		this.opt_warehouse_basket({
 			action: 'get/active/basket/warehouse',

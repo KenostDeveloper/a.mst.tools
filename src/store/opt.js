@@ -1,6 +1,7 @@
 import Axios from 'axios'
 import router from '../router'
 import { transformCatalog } from '../utils/helpers'
+import Toast from 'primevue/toast';
 
 export default {
   state: {
@@ -339,7 +340,7 @@ export default {
         })
         .catch(error => {
           // console.log(error)
-          if (error.response.status === 403) {
+          if (error?.response?.status === 403) {
             localStorage.removeItem('user')
             router.push({ name: 'main' })
           }
@@ -524,16 +525,20 @@ export default {
       }
     },
     SET_BUSKET_TO_VUEX: (state, data) => {
-      // console.log(data)
-      state.optbasket = data.data
-      state.optbasketall = data.data
-      if(data.data.props.warehouse != 'all'){
-        //Корзина склада
-        state.optbasket = data.data
+      if(data.data.success){
+        state.optbasket = data.data.data
+        state.optbasketall = data.data.data
+        if(data.data.data.props.warehouse != 'all'){
+          //Корзина склада
+          state.optbasket = data.data.data
+        } else {
+          //Вся корзина
+          state.optbasketall = data.data.data
+        }
       } else {
-        //Вся корзина
-        state.optbasketall = data.data
+        this.$toast.add({ severity: 'error', summary: 'Ошибка!', detail: data.data.message, life: 3000 });
       }
+      
     },
     GET_OPT_ORDER_TO_VUEX: (state, data) => {
       state.optorder = data.data
