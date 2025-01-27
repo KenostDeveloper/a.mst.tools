@@ -67,6 +67,7 @@
                         name: 'purchases_catalog',
                         params: {
                             id: this.$route.params.id,
+                            org_w_id: this.actualCatalog.org_w_id,
                             category_id: this.actualCatalog.id
                         }
                     }" class="std-catalog__link" @click="toggleCatalogVisibilityAd()">
@@ -86,6 +87,7 @@
                             name: 'org_opt_waregouse_category',
                             params: {
                                 id: this.$route.params.id,
+                                org_w_id: catItem.org_w_id,
                                 warehouse_id: catItem.warehouse_id,
                                 warehouse_cat_id: catItem.id
                             }
@@ -752,7 +754,6 @@ export default {
             return src;
         },
         setActualCatalog(catalog) {
-            console.log(catalog)
             this.actualCatalog = catalog;
         },
         setPrevCatalog() {
@@ -912,6 +913,7 @@ export default {
                     name: 'purchases_catalog_warehouse',
                     params: {
                         id: this.$route.params.id,
+                        org_w_id: this.actualCatalog.org_w_id,
                         warehouse_id: this.catalogWarehouseParent
                     }
                 };
@@ -921,6 +923,7 @@ export default {
                 name: 'org_opt_waregouse_category',
                 params: {
                     id: this.$route.params.id,
+                    org_w_id: this.actualCatalog.org_w_id,
                     warehouse_id: this.actualCatalog.warehouse_id,
                     warehouse_cat_id: this.actualCatalog.id
                 }

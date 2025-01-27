@@ -439,7 +439,7 @@ const routes = [
 												],
 											},
 											{
-												path: "warehouses/:warehouse_id",
+												path: "warehouses/:org_w_id/:warehouse_id",
 												children: [
 													{
 														path: "",

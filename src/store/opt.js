@@ -302,6 +302,7 @@ export default {
           id: router.currentRoute._value.params.id,
           type: router.currentRoute._value.params.type,
           category_id: cat,
+          org_w_id: router.currentRoute._value.params.org_w_id,
           warehouse_id: router.currentRoute._value.params.warehouse_id,
           warehouse_cat_id: router.currentRoute._value.params.warehouse_cat_id,
           search: router.currentRoute._value.params.search,
