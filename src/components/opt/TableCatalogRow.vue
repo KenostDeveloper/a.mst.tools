@@ -523,7 +523,7 @@ export default {
                     id: router.currentRoute._value.params.id,
                     warehouse: 'all'
                 }).then((response) => {
-                    if(!response?.data?.data?.success){
+                    if(!response?.data?.data?.success && response?.data?.data?.message){
                         this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
                     }
                     setTimeout(() => {
@@ -576,7 +576,7 @@ export default {
             };
             // this.busket_from_api(data)
             this.busket_from_api(data).then((response) => {
-                if(!response?.data?.data?.success){
+                if(!response?.data?.data?.success && response?.data?.data?.message){
 					this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
 				}
                 this.busket_from_api({
@@ -599,7 +599,7 @@ export default {
 				product: product
 			};
 			this.busket_from_api(data).then((response) => {
-                if(!response?.data?.data?.success){
+                if(!response?.data?.data?.success && response?.data?.data?.message){
 					this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
 				}
             });
@@ -624,7 +624,7 @@ export default {
 				id: router.currentRoute._value.params.id,
 				warehouse: 'all'
 			}).then((response) => {
-                if(!response?.data?.data?.success){
+                if(!response?.data?.data?.success && response?.data?.data?.message){
 					this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
 				}
                 const index = this.fetchIds.indexOf(product.key);
@@ -649,7 +649,7 @@ export default {
                 id_complect: complectid,
             };
             this.busket_from_api(data).then((response) => {
-                if(!response?.data?.data?.success){
+                if(!response?.data?.data?.success && response?.data?.data?.message){
 					this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
 				}
             });
@@ -658,7 +658,7 @@ export default {
                 id: router.currentRoute._value.params.id,
                 warehouse: 'all'
             }).then((response) => {
-                if(!response?.data?.data?.success){
+                if(!response?.data?.data?.success && response?.data?.data?.message){
 					this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
 				}
             })
@@ -686,7 +686,7 @@ export default {
 						id: router.currentRoute._value.params.id,
 						warehouse: 'all'
 					}).then((response) => {
-                        if(!response?.data?.data?.success){
+                        if(!response?.data?.data?.success && response?.data?.data?.message){
 							this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
 						}
 						const index = this.fetchIds.indexOf(object.item.key);
@@ -695,7 +695,7 @@ export default {
 						}
 					});
 				}).then((response) => {
-                    if(!response?.data?.data?.success){
+                    if(!response?.data?.data?.success && response?.data?.data?.message){
                         this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
                     }
                 })
@@ -722,7 +722,7 @@ export default {
                     id: router.currentRoute._value.params.id,
                     warehouse: 'all'
                 }).then((response) => {
-                    if(!response?.data?.data?.success){
+                    if(!response?.data?.data?.success && response?.data?.data?.message){
                         this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
                     }
                     const index = this.fetchIds.indexOf(object.item.key);
@@ -731,7 +731,7 @@ export default {
                     }
                 });
             }).then((response) => {
-                if(!response?.data?.data?.success){
+                if(!response?.data?.data?.success && response?.data?.data?.message){
 					this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
 				}
             });
@@ -780,7 +780,7 @@ export default {
 						actions: object.item.basket.ids_actions
 					}
                     this.busket_from_api(data).then((response) => {
-                        if(!response?.data?.data?.success){
+                        if(!response?.data?.data?.success && response?.data?.data?.message){
 							this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
 						}
                     });
@@ -789,7 +789,7 @@ export default {
 						id: router.currentRoute._value.params.id,
 						warehouse: 'all'
 					}).then((response) => {
-                        if(!response?.data?.data?.success){
+                        if(!response?.data?.data?.success && response?.data?.data?.message){
 							this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
 						}
 						const index = this.fetchIds.indexOf(object.item.key);

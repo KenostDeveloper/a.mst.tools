@@ -810,7 +810,7 @@ export default {
                     id: router.currentRoute._value.params.id,
                     warehouse: 'all'
                 }).then((response) => {
-                    if(!response?.data?.data?.success){
+                    if(!response?.data?.data?.success && response?.data?.data?.message){
                         this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
                     }
                 });
