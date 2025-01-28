@@ -521,10 +521,11 @@
 			<div class="widgets-block">
 				<div class="dart-row">
 					<div class="d-col-lg-12 d-col-md-12">
-						<form action="#" class="panel-widget" @submit.prevent="formChangeSettings">
-							<div class="dart-row">
+						<form action="#"  @submit.prevent="formChangeSettings">
+							<div>
+								<!-- {{ org_store?.settings?.groups }} -->
 								<div
-									class="d-col-md-6"
+								class="mb-4"
 									v-for="(group, index) in org_store?.settings?.groups"
 									:key="index"
 								>
@@ -532,7 +533,7 @@
 										<span class="title">{{ group.label }}</span>
 										<div class="dart-form-setting-group">
 											<div
-												class="dart-form-group"
+												:class="{'dart-form-group': setting.type != 7}"
 												v-for="setting in group.settings"
 												:key="setting.id"
 											>
@@ -598,12 +599,11 @@
 													</div>
 												</div>
 												<div v-if="setting.type == 6">			
-													<label for="regions">Выберите регионы</label>										
-													<MultiSelect filter v-model="this.settingsForm[setting.key]" display="chip" :options="this.regions_all" optionLabel="name" placeholder="Выберите регионы"
-                    				class="w-full md:w-20rem kenost-multiselect mt-2" />
+													<label for="regions">Выберите регионы</label>					
+													<MultiSelect class="w-full" filter v-model="this.settingsForm[setting.key]" :options="this.regions_all" optionLabel="name" placeholder="Выберите регионы"/>
 												</div>
 												<div v-if="setting.type == 7">
-													<div class="PickList">
+													<div class="PickList mt-4">
 														<div class="PickList__product" :style="{ width: '40%' }">
 															<b class="PickList__title">Добавление отдельных организаций</b>
 															<div class="PickList__filters">
@@ -1306,11 +1306,11 @@ export default {
 			page_brand: 1,
 			page_modal: 1,
 			filter_organizations: {
-        name: '',
-        type: [1, 2]
-      },
+				name: '',
+				type: [1, 2]
+			},
 			all_organizations: [],
-      all_organizations_selected: {},
+      		all_organizations_selected: {},
 			filters: {
 				name: {
 					name: "Наименование, артикул",
@@ -1628,6 +1628,15 @@ export default {
 		},
 		formChangeSettings() {
 			this.loading = true;
+			for(let i = 0; i < Object.keys(this.org_store?.settings?.groups).length; i++){
+				let key = Object.keys(this.org_store?.settings?.groups)[i];
+				for(let j = 0; j < this.org_store?.settings?.groups[key].settings.length; j++){
+					if(this.org_store?.settings?.groups[key].settings[j].type == 7){
+						this.settingsForm[this.org_store?.settings?.groups[key].settings[j].key] = this.all_organizations_selected
+					}
+				}
+			}
+
 			this.$load(async () => {
 				await this.set_organization_settings({
 					action: "set",
@@ -1911,7 +1920,10 @@ export default {
       this.all_organizations = this.all_organizations.filter((r) => r.id !== id)
     },
     setFilterOrganization () {
-      const data = { filter: this.filter_organizations }
+      const data = {
+		filter: this.filter_organizations,
+		selected: this.all_organizations_selected
+	}
       this.get_all_organizations_from_api(data).then(
         this.all_organizations = this.allorganizations
       )
@@ -1968,7 +1980,10 @@ export default {
 				page: this.page_modal,
 				perpage: this.pagination_items_per_page,
 			});
-			const data = { filter: this.filter_organizations }
+			const data = {
+				filter: this.filter_organizations,
+				selected: this.all_organizations_selected
+			}
 			this.get_all_organizations_from_api(data).then(
 				this.all_organizations = this.allorganizations
 			);
@@ -2100,6 +2115,15 @@ export default {
 								settings.groups[groupKeys[i]].settings[keys[j]].key
 							] = false;
 						}
+					}else if (settings.groups[groupKeys[i]].settings[keys[j]].type === "7") {
+						this.all_organizations_selected = settings.groups[groupKeys[i]].settings[keys[j]].value
+						const data = {
+							filter: this.filter_organizations,
+							selected: this.all_organizations_selected
+						}
+						this.get_all_organizations_from_api(data).then(
+							this.all_organizations = this.allorganizations
+						)
 					} else {
 						this.settingsForm[settings.groups[groupKeys[i]].settings[keys[j]].key] =
 							settings.groups[groupKeys[i]].settings[keys[j]].value;
@@ -2125,9 +2149,12 @@ export default {
 				this.typePrice.push({ key: newVal[i].guid, name: newVal[i].name });
 			}
 		},
+		allorganizations: function (newVal, oldVal) {
+            this.all_organizations = newVal;
+        },
 		getregions: function (newVal, oldVal) {
-      this.regions = this.getregions
-    },
+			this.regions = this.getregions
+		},
 	},
 };
 </script>
