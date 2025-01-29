@@ -680,7 +680,11 @@ export default {
                     key: object.item.basket.key,
                     actions: object.item.basket.ids_actions
                 };
-				this.busket_from_api(data).then(() => {
+				this.busket_from_api(data).then((response) => {
+                    if(!response?.data?.data?.success && response?.data?.data?.message){
+                        this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
+                    }
+
 					this.busket_from_api({
 						action: 'basket/get',
 						id: router.currentRoute._value.params.id,
@@ -694,11 +698,7 @@ export default {
 							this.fetchIds.splice(index, 1); // Удаляем один элемент по индексу
 						}
 					});
-				}).then((response) => {
-                    if(!response?.data?.data?.success && response?.data?.data?.message){
-                        this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
-                    }
-                })
+				})
                 return
 			}
             if (object.value == object.min) {
@@ -716,7 +716,14 @@ export default {
                 key: object.item.basket.key,
                 actions: object.item.basket.ids_actions
             };
-            this.busket_from_api(data).then(() => {
+            this.busket_from_api(data).then((response) => {
+                if(!response?.data?.data?.success && response?.data?.data?.message){
+                    if(response?.data?.data?.message == "Нет достаточного количества товара на Складе"){
+                        this.modal_remain = true;
+                    } else{
+                        this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
+                    }
+				}
                 this.busket_from_api({
                     action: 'basket/get',
                     id: router.currentRoute._value.params.id,
@@ -730,11 +737,7 @@ export default {
                         this.fetchIds.splice(index, 1); // Удаляем один элемент по индексу
                     }
                 });
-            }).then((response) => {
-                if(!response?.data?.data?.success && response?.data?.data?.message){
-					this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
-				}
-            });
+            })
             if(Number(object.value) != object.old_value){
                 window.dataLayer = window.dataLayer || [];
                 window.dataLayer.push({
