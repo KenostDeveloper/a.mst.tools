@@ -632,7 +632,6 @@
 																</div>
 															</div>
 														</div>
-				
 														<div class="PickList__selected" :style="{ width: '40%' }">
 															<div class="PickList__title mb-4">
 																<b>Добавленные организации</b>
@@ -1915,9 +1914,10 @@ export default {
 			}
 		},
 		selectOrganization (id) {
-      const organization = this.all_organizations.find(r => r.id === id)
-      this.all_organizations_selected[organization.id] = organization
-      this.all_organizations = this.all_organizations.filter((r) => r.id !== id)
+			console.log(id)
+			const organization = this.all_organizations.find(r => r.id === id)
+			this.all_organizations_selected[organization.id] = organization
+			this.all_organizations = this.all_organizations.filter((r) => r.id !== id)
     },
     setFilterOrganization () {
       const data = {
@@ -2116,14 +2116,16 @@ export default {
 							] = false;
 						}
 					}else if (settings.groups[groupKeys[i]].settings[keys[j]].type === "7") {
-						this.all_organizations_selected = settings.groups[groupKeys[i]].settings[keys[j]].value
-						const data = {
-							filter: this.filter_organizations,
-							selected: this.all_organizations_selected
+						if(Object.keys(settings.groups[groupKeys[i]].settings[keys[j]].value).length > 0){
+							this.all_organizations_selected = settings.groups[groupKeys[i]].settings[keys[j]].value
+							const data = {
+								filter: this.filter_organizations,
+								selected: this.all_organizations_selected
+							}
+							this.get_all_organizations_from_api(data).then(
+								this.all_organizations = this.allorganizations
+							)
 						}
-						this.get_all_organizations_from_api(data).then(
-							this.all_organizations = this.allorganizations
-						)
 					} else {
 						this.settingsForm[settings.groups[groupKeys[i]].settings[keys[j]].key] =
 							settings.groups[groupKeys[i]].settings[keys[j]].value;
