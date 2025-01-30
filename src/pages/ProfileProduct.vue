@@ -19,7 +19,7 @@
 				<div class="panel_widget panel_widget_number">
 					<span class="title">Остаток</span>
 					<span class="description">На сегодня</span>
-					<span class="value">{{ product.remains }}</span>
+					<span class="value">{{ product.available }}</span>
 				</div>
 			</div>
 			<!-- / item -->

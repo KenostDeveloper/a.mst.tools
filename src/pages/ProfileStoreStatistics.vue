@@ -177,7 +177,7 @@ import Breadcrumbs from '../components/Breadcrumbs.vue'
             type: 'text',
             sort: true
           },
-          remains: {
+          available: {
             label: 'Остаток сейчас',
             type: 'text',
             sort: true

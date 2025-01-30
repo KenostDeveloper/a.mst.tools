@@ -359,7 +359,7 @@ export default {
           type: 'text',
           sort: true
         },
-        remains: {
+        available: {
           label: 'Остаток сейчас',
           type: 'text',
           sort: true
@@ -423,7 +423,7 @@ export default {
           type: 'text',
           sort: false
         },
-        remains: {
+        available: {
           label: 'Остаток сейчас',
           type: 'text',
           sort: false
