@@ -230,7 +230,7 @@
               </div>
             </div>
 
-            <a :href="site_url_prefix + '/assets/files/files/examples/ExampleLoadingProductsB2C.xlsx'" class="kenost-link-blue mt-2">Скачать шаблон файла</a>
+            <a :href="site_url_prefix + '/assets/files/files/examples/ExampleLoadingProductsB2C.xlsx'" class="kenost-link-blue mt-2" target="_blank">Скачать шаблон файла</a>
           </div>
 
           <div class="dart-form-group picker-wrap">

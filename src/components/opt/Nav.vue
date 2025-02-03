@@ -390,7 +390,7 @@
                     </div> -->
 
                     <a :href="site_url_prefix + '/assets/files/files/examples/ExampleLoadingRequirement.xlsx'"
-                        class="kenost-link-blue mt-2">Скачать шаблон файла</a>
+                        class="kenost-link-blue mt-2" target="_blank">Скачать шаблон файла</a>
                     <span class="error_desc" v-for="error of v$.form_requirements.file.$errors" :key="error.$uid">
                         {{ error.$message }}
                     </span>

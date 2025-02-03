@@ -132,7 +132,7 @@
                                 </div>
                             </template>
                         </DropZone>
-                        <a v-if="!this.file" :href="site_url_prefix + 'assets/files/files/examples/ExampleGroups.xlsx'" class="kenost-link-blue mt-2">Скачать шаблон файла</a>
+                        <a v-if="!this.file" :href="site_url_prefix + 'assets/files/files/examples/ExampleGroups.xlsx'" class="kenost-link-blue mt-2" target="_blank">Скачать шаблон файла</a>
 
                     </div>
 

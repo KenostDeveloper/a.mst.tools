@@ -560,7 +560,7 @@
                     </div>
 
                     <a :href="site_url_prefix + '/assets/files/files/examples/ExampleLoadingProducts.xlsx'"
-                        class="kenost-link-blue mt-2">Скачать шаблон файла</a>
+                        class="kenost-link-blue mt-2" target="_blank">Скачать шаблон файла</a>
                 </div>
 
                 <div v-if="this.form.addProductType == '3'" class="PickList mt-3">
