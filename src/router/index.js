@@ -40,6 +40,8 @@ import OrderOpt from "../pages/OrderOpt.vue";
 import ProfileCreateClient from "../pages/ProfileCreateClient.vue";
 import Notifications from "../components/opt/Notifications.vue";
 import GroupEdit from "../pages/b2b/groups/GroupEdit.vue";
+import Profile from '../pages/Profile.vue'
+import ProfileHash from '../pages/ProfileHash.vue'
 
 const routes = [
 	{
@@ -76,6 +78,26 @@ const routes = [
 						component: Home,
 					},
 					{
+						path: "profile",
+						name: "profileHash",
+						props: true,
+						label: "Профиль",
+						children: [
+							{
+								path: ":id",
+								children: [
+									{
+										path: "",
+										name: "profileConfirmHash",
+										props: true,
+										label: "Организация",
+										component: ProfileHash,
+									}
+								]
+							}
+						]
+					},
+					{
 						path: "",
 						name: "preenter",
 						beforeEnter: (to, from, next) => {
@@ -100,6 +122,18 @@ const routes = [
 										},
 										label: "Организация",
 										component: ProfileOrganization,
+									},
+									{
+										path: "profile",
+										name: "profile",
+										props: true,
+										label: "Профиль пользователя",
+										meta: {
+											breadcrumb: {
+												label: "Профиль пользователя",
+											},
+										},
+										component: Profile,
 									},
 									{
 										path: "stores",

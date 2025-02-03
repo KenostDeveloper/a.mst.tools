@@ -201,7 +201,7 @@
       editDiler (value) {
         router.push({
           name: "discounts_edit",
-          params: { id: this.$route.params.id, client_id: value.client_id, store_id: value.store_id },
+          params: { id: this.$route.params.id, client_id: value.org_client, store_id: value.store_id },
         });
       },
       setSale () {
