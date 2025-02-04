@@ -58,10 +58,10 @@
 					<i class="std_icon std_icon-location"></i>
 					<span>{{ this.organozation?.description }}</span>
 				</div>
-				<!-- <router-link :to="{ name: 'profile' }" class="sitebar-profile-name">
+				<router-link :to="{ name: 'profile' }" class="sitebar-profile-name">
 					<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAABMklEQVR4nJWTTU4CQRCFP3WFmwn+4B24gAvZcQU3ookmLkVJdKF71HgAvYDeQDTGhWJwAwfwPM8U1JCiaWKspGa633vVP29qIAnBhqAjeBH0PW18ZlyqnwkXDQQtQRHwwjHjTmerPAQPgq5gmQVhnOBacJ/buZspWLXM4DeCdrzzIO7shU+CN89HQSXwK4LvsSeaGNZKdrgT7IX5vuA20RyM/dDE4SIh+8l8KYNVBb05sZO26GaY18bieV3fHqMM0RB8+Lsc72R0Q9ykWoasu9uW9Qy/JXi1wYXgmH+G1QjOy/sNA7EuuBK8C748bXxpXDB1NPVJsO3gkffEbmwg7wvDjDv0jmykR2oKfmLDZI5dcU1zkaDtR7Yfpxpw++aGGXfylzlr3p09wafns2PTRcv4BfR8s897bWeIAAAAAElFTkSuQmCC" alt="user-male-circle">
 					<span>{{this.getUser?.profile?.fullname}}</span>
-				</router-link> -->
+				</router-link>
 				<div class="sitebar-profile__tags">
 					<button class="sitebar-profile__tag" v-if="this.role == 0">Закупщик</button>
 					<button class="sitebar-profile__tag" v-if="this.role == 1">Маркетплейс</button>
@@ -522,6 +522,7 @@ export default {
 		},
 	},
 	mounted() {
+		
 		const data = {
 			action: "get/orgs",
 		};

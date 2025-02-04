@@ -45,6 +45,24 @@ export default {
             router.push({ name: 'main' })
           }
         })
-    }
+    },
+    edit_profile ({ commit }, data) {
+      return Axios('/rest/front_profile', {
+        method: 'POST',
+        data: data,
+        headers: {
+          'Access-Control-Allow-Origin': '*'
+        }
+      })
+      .then((response) => {
+        return response
+      })
+      .catch(error => {
+        if (error.response.status === 403) {
+          localStorage.removeItem('user')
+          router.push({ name: 'main' })
+        }
+      })
+    },
   }
 }

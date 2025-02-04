@@ -28,7 +28,7 @@
                 </div>
                 <div class="my-profile__field">
                     <div class="my-profile__name">Пароль</div>
-                    <div class="my-profile__desc">Был изменён 10 месяцев назад</div>
+                    <div class="my-profile__desc">{{ this.timeAgo }}</div>
                 </div>
             </div>
             <div class="my-profile__edit">
@@ -120,6 +120,24 @@
             <div class="a-dart-btn a-dart-btn-primary mt-3" @click="editProfile('phone', this.phone)">Сохранить</div>
         </div>
     </Dialog>
+
+    <Dialog v-model:visible="this.modal.confirm" header=" " :style="{ width: '380px' }">
+        <div class="kenost-not-produc">
+            <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="#ff0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail-check"><path d="M22 13V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12c0 1.1.9 2 2 2h8"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/><path d="m16 19 2 2 4-4"/></svg>
+            <b class="text-center">На вашу почту отправлено письмо!</b>
+            <p>Пожалуйста, откройте его и следуйте инструкциям для подтверждения редактирования. Если письмо не пришло, проверьте папку «Спам» или подождите несколько минут.</p>
+            <div class="a-dart-btn a-dart-btn-primary mt-3" @click="this.modal.confirm = false">Хорошо!</div>
+        </div>
+    </Dialog>
+
+    <Dialog v-model:visible="this.modal.success" header=" " :style="{ width: '380px' }">
+        <div class="kenost-not-produc">
+            <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="#ff0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-badge-check"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m9 12 2 2 4-4"/></svg>
+            <b class="text-center">Изменения сохранены!</b>
+            <p>Ваши настройки были успешно применены.</p>
+            <div class="a-dart-btn a-dart-btn-primary mt-3" @click="this.modal.success = false">Хорошо!</div>
+        </div>
+    </Dialog>
 </template>
 
 <script>
@@ -142,14 +160,18 @@ export default {
                 login: false,
                 password: false,
                 email: false,
-                phone: false
-            }
+                phone: false,
+                confirm: false,
+                success: false
+            },
+            timeAgo: "Загрузка...",
 		};
 	},
 	methods: {
-		...mapActions([
-			
-		]),
+		...mapActions('user', ['edit_profile']),
+        ...mapActions({
+			getSessionUser: 'user/getSessionUser',
+		}),
         togglePasswordVisibility() {
             this.showPassword = !this.showPassword;
         },
@@ -176,11 +198,22 @@ export default {
 		editProfile(name, value){
             switch(name){
                 case 'login':
-                    if (!this.validateLogin(value)) {
+                    if (!this.validateLogin(value) || this.getUser?.username == value) {
                         this.$toast.add({ severity: 'error', summary: 'Ошибка', detail: 'Некорректный логин', life: 3000 });
                         return;
                     } else{
-                        this.modal.login = false
+                        this.edit_profile({
+                            action: 'profile/edit',
+                            field: 'username',
+                            value: value
+                        }).then((res) => {
+                            if(!res.data.data.success){
+                                this.$toast.add({ severity: 'error', summary: 'Ошибка', detail: res.data.data.message, life: 3000 });
+                            } else {
+                                this.modal.login = false
+                                this.modal.confirm = true
+                            }
+                        })
                     }
                     break;
                 case 'password':
@@ -193,22 +226,55 @@ export default {
                         this.$toast.add({ severity: 'error', summary: 'Ошибка', detail: 'Пароль должен содержать минимум 6 символов', life: 3000 });
                         return;
                     }
-                    this.modal.password = false
+                    this.edit_profile({
+                        action: 'profile/edit',
+                        field: 'password',
+                        value: value
+                    }).then((res) => {
+                        if(!res.data.data.success){
+                            this.$toast.add({ severity: 'error', summary: 'Ошибка', detail: res.data.data.message, life: 3000 });
+                        } else {
+                            this.modal.password = false
+                            this.modal.confirm = true
+                        }
+                    })
                     break;
                 case 'email':
                     if (!this.validateEmail(value)) {
                         this.$toast.add({ severity: 'error', summary: 'Ошибка', detail: 'Некорректная почта', life: 3000 });
                         return;
                     } else{
-                        this.modal.login = false
+                        this.edit_profile({
+                            action: 'profile/edit',
+                            field: 'email',
+                            value: value
+                        }).then((res) => {
+                            if(!res.data.data.success){
+                                this.$toast.add({ severity: 'error', summary: 'Ошибка', detail: res.data.data.message, life: 3000 });
+                            } else {
+                                this.modal.email = false
+                                this.modal.confirm = true
+                            }
+                        })
                     }
                     break;
                 case 'phone':
-                    if (!this.validatePhone(phone)) {
+                    if (!this.validatePhone(value)) {
                         this.$toast.add({ severity: 'error', summary: 'Ошибка', detail: 'Некорректный номер телефона', life: 3000 });
                         return;
                     } else{
-                        this.modal.login = false
+                        this.edit_profile({
+                            action: 'profile/edit',
+                            field: 'phone',
+                            value: this.formatPhoneNumber(value)
+                        }).then((res) => {
+                            if(!res.data.data.success){
+                                this.$toast.add({ severity: 'error', summary: 'Ошибка', detail: res.data.data.message, life: 3000 });
+                            } else {
+                                this.modal.phone = false
+                                this.modal.confirm = true
+                            }
+                        })
                     }
                     break;
             }
@@ -225,15 +291,81 @@ export default {
         validatePhone(phone) {
             const regex = /^\+\d{1}\s\(\d{3}\)\s\d{3}-\d{2}-\d{2}$/;
             return regex.test(phone);
+        },
+        formatPhoneNumber(phone) {
+            return phone.replace(/\D/g, ''); // Удаляет все нецифровые символы
+        },
+        updateTimeAgo(dateString) {
+            if (!dateString || typeof dateString !== "string") {
+                this.timeAgo = "Дата неизвестна";
+                return;
+            }
+
+            const now = new Date();
+            const date = new Date(dateString);
+
+            if (isNaN(date.getTime())) {
+                this.timeAgo = "Некорректная дата";
+                return;
+            }
+
+            const diffInSeconds = Math.floor((now - date) / 1000);
+            const secondsInMinute = 60;
+            const secondsInHour = 60 * secondsInMinute;
+            const secondsInDay = 24 * secondsInHour;
+            const secondsInMonth = 30 * secondsInDay;
+            const secondsInYear = 12 * secondsInMonth;
+
+            console.log(diffInSeconds, secondsInMinute)
+
+            if (diffInSeconds < secondsInMinute) {
+                this.timeAgo = "Был изменён только что";
+            } else if (diffInSeconds < secondsInHour) {
+                const minutes = Math.floor(diffInSeconds / secondsInMinute);
+                this.timeAgo = `Был изменён ${minutes} ${this.pluralize(minutes, "минуту", "минуты", "минут")} назад`;
+            } else if (diffInSeconds < secondsInDay) {
+                const hours = Math.floor(diffInSeconds / secondsInHour);
+                this.timeAgo = `Был изменён ${hours} ${this.pluralize(hours, "час", "часа", "часов")} назад`;
+            } else if (diffInSeconds < secondsInMonth) {
+                const days = Math.floor(diffInSeconds / secondsInDay);
+                this.timeAgo = `Был изменён ${days} ${this.pluralize(days, "день", "дня", "дней")} назад`;
+            } else if (diffInSeconds < secondsInYear) {
+                const months = Math.floor(diffInSeconds / secondsInMonth);
+                this.timeAgo = `Был изменён ${months} ${this.pluralize(months, "месяц", "месяца", "месяцев")} назад`;
+            } else {
+                const years = Math.floor(diffInSeconds / secondsInYear);
+                this.timeAgo = `Был изменён ${years} ${this.pluralize(years, "год", "года", "лет")} назад`;
+            }
+
+            console.log("Обновлён timeAgo:", this.timeAgo);
+        },
+
+        // Функция для правильного склонения числительных
+        pluralize(number, one, few, many) {
+            if (number % 10 === 1 && number % 100 !== 11) {
+                return one; // 1 минута, 1 день, 1 год
+            } else if ([2, 3, 4].includes(number % 10) && ![12, 13, 14].includes(number % 100)) {
+                return few; // 2-4 минуты, 2-4 дня, 2-4 года
+            } else {
+                return many; // 5-20 минут, 5-20 дней, 5-20 лет
+            }
         }
 	},
 	mounted() {
-		
+        if (this.$route.query.update === 'true') {
+            //Обновляем профиль
+            this.getSessionUser().then(() => {
+                this.modal.success = true
+                this.$router.replace({ query: { ...this.$route.query, update: undefined } });
+            })
+        }
 	},
 	computed: {
 		...mapGetters({
             getUser: "user/getUser",
-        })
+        }),
+        computed: {
+        }
     },
 	components: {
         Breadcrumbs,
@@ -241,7 +373,12 @@ export default {
     },
 	watch: {
 		getUser: function (newVal, oldVal) {
-            this.login = newVal.username
+            if(newVal) {
+                this.login = newVal.username
+                console.log("getUser обновился:", newVal);
+                console.log("last_password:", newVal?.last_password);
+                this.updateTimeAgo(newVal?.last_password);
+            }
         }
 	}
 };

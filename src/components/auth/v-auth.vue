@@ -79,7 +79,10 @@ export default {
     },
     methods: {
         sendMetrik: sendMetrik,
-        ...mapActions(['org_get_from_api']),
+        ...mapActions({
+            org_get_from_api: 'org_get_from_api',
+            getSessionUser: 'user/getSessionUser',
+        }),
         formSubmit() {
             this.signIn();
         },
@@ -94,6 +97,7 @@ export default {
                     password: this.form.password
                 });
                 if (data.data.success) {
+                    this.getSessionUser()
                     localStorage.setItem('user', JSON.stringify(data.data.data));
                     this.$store.dispatch('user/setUser', data.data);
                     // this.$router.push({ name: 'home' })

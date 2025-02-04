@@ -78,16 +78,16 @@ const routes = [
 						component: Home,
 					},
 					{
-						path: "profile",
+						path: "",
 						name: "profileHash",
 						props: true,
 						label: "Профиль",
 						children: [
 							{
-								path: ":id",
+								path: "profile",
 								children: [
 									{
-										path: "",
+										path: ":hash",
 										name: "profileConfirmHash",
 										props: true,
 										label: "Организация",

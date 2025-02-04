@@ -144,9 +144,9 @@
                       <p class="table-kenost__settings" @click="settings(item, true)" >Настроить</p>
                   </td>
                   <td class="flex justify-content-center" v-if="this.selected_data[item.id]">
-                      <Counter class="margin-auto" @ElemCount="ElemCount" :item="item" :id="item.id"
-                          :min="1" :value="this.selected_data[item.id].multiplicity"
-                          :key="new Date().getMilliseconds() + item.id" />
+                    <Counter class="margin-auto" @ElemCount="ElemCount" :item="item" :id="item.id"
+                        :min="1" :value="this.selected_data[item.id].multiplicity"
+                        :key="new Date().getMilliseconds() + item.id" />
                   </td>
                   <td class="flex justify-content-center" v-else>
                       <Counter class="margin-auto" @ElemCount="ElemCount" :item="item" :id="item.id"
@@ -460,7 +460,18 @@ export default {
       this.get_available_products_from_api(data)
     },
     ElemCount (obj) {
-      this.selected_data[obj.id].multiplicity = obj.value
+      this.settings(obj.item, false);
+        if (!this.selected_data[obj.id]) {
+          this.selected_data[obj.id] = [];
+          this.selected_data[obj.id].multiplicity = obj.value;
+          this.selected_data[obj.id].finalPrice = this.selected[obj.id].price;
+          this.selected_data[obj.id].discountInterest = 0;
+          this.selected_data[obj.id].discountInRubles = 0;
+          this.selected_data[obj.id].min_count = 1;
+          this.selected_data[obj.id].typeFormul = null;
+      }
+      this.selected_data[obj.id].multiplicity = obj.value;
+      // this.selected_data[obj.id].multiplicity = obj.value
     },
     closeDialogPrice () {
       if (this.modals.price_step === 0) {

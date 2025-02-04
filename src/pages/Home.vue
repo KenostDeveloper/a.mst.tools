@@ -24,7 +24,7 @@ export default {
         })
     },
     async mounted() {
-        console.log(localStorage.getItem("user"))
+        // console.log(localStorage.getItem("user"))
         if (localStorage.getItem("user") !== null && localStorage.getItem("user") != 0) {
             this.setUser(JSON.parse(localStorage.getItem('user')));
         }else{
