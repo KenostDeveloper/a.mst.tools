@@ -54,7 +54,8 @@ export default {
   data () {
     return {
       loading: true,
-      isMenuActive: false
+      isMenuActive: false,
+      namePathIsNav: null
     }
   },
   methods: {
@@ -79,6 +80,10 @@ export default {
         this.opt_warehouse = this.optwarehouse
       )
     }
+    this.namePathIsNav = router?.currentRoute?._value.matched[4]?.name;
+  },
+  updated(){
+    this.namePathIsNav = router?.currentRoute?._value.matched[4]?.name;
   },
   components: { CatalogEl },
   computed: {

@@ -203,6 +203,7 @@ export default {
             }
             const data = {
                 action: 'basket/add',
+                extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
                 id: router.currentRoute._value.params.id,
                 org_id: item.org_id,
                 store_id: item.store_id,
@@ -216,6 +217,7 @@ export default {
                 }
                 this.busket_from_api({
                     action: 'basket/get',
+                    extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
                     id: router.currentRoute._value.params.id,
                     warehouse: 'all'
                 }).then((response) => {
@@ -258,6 +260,7 @@ export default {
             console.log(item, index)
             const data = {
                 action: 'basket/add',
+                extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
                 id: router.currentRoute._value.params.id,
                 org_id: item.org_id,
                 store_id: item.store_id,
@@ -272,6 +275,7 @@ export default {
 				}
                 this.busket_from_api({
                     action: 'basket/get',
+                    extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
                     id: router.currentRoute._value.params.id,
                     warehouse: 'all'
                 });
@@ -328,6 +332,7 @@ export default {
             console.log(org_id, store_id, key, product, index1, index2, mult)
 			const data = {
 				action: "basket/remove",
+                extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
 				id: router.currentRoute._value.params.id,
 				org_id: org_id,
 				store_id: store_id,
@@ -357,6 +362,7 @@ export default {
 			});
             this.busket_from_api({
 				action: 'basket/get',
+                extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
 				id: router.currentRoute._value.params.id,
 				warehouse: 'all'
 			}).then((response) => {
@@ -377,6 +383,7 @@ export default {
 			this.$emit("actionUpdate");
 			const data = {
 				action: "basket/clear",
+                extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
 				id: router.currentRoute._value.params.id,
 				store_id: storeid,
 				id_complect: complectid,
@@ -388,6 +395,7 @@ export default {
             });
 			this.busket_from_api({
 				action: 'basket/get',
+                extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
 				id: router.currentRoute._value.params.id,
 				warehouse: 'all'
 			}).then((response) => {
@@ -410,6 +418,7 @@ export default {
             }; 
             const data = {
                 action: 'basket/update',
+                extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
                 id: router.currentRoute._value.params.id,
                 org_id: object.item.item.org_id,
                 store_id: object.item.item.store_id,
@@ -421,6 +430,7 @@ export default {
             this.busket_from_api(data).then(() => {
                 this.busket_from_api({
                     action: 'basket/get',
+                    extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
                     id: router.currentRoute._value.params.id,
                     warehouse: 'all'
                 }).then((response) => {
@@ -469,6 +479,7 @@ export default {
                     // Ваш запрос на сервер
 					const data = {
 						action: "basket/update",
+                        extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
 						id: router.currentRoute._value.params.id,
 						id_complect: object.item.item.complect_id,
 						count: object.value / object.item.item.multiplicity,
@@ -484,6 +495,7 @@ export default {
                     });
 					this.busket_from_api({
 						action: 'basket/get',
+                        extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
 						id: router.currentRoute._value.params.id,
 						warehouse: 'all'
 					}).then((response) => {

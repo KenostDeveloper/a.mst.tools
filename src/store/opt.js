@@ -307,6 +307,7 @@ export default {
           warehouse_id: router.currentRoute._value.params.warehouse_id,
           warehouse_cat_id: router.currentRoute._value.params.warehouse_cat_id,
           search: router.currentRoute._value.params.search,
+          extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
           page: page,
           req: req,
           perpage: perpage,

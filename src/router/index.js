@@ -545,6 +545,132 @@ const routes = [
 										],
 									},
 									{
+										path: "offer",
+										name: "purchases_offer",
+										props: true,
+										label: "Закупки",
+										meta: {
+											breadcrumb: {
+												label: "Закупки",
+											},
+										},
+										children: [
+											{
+												path: "",
+												name: "purchases_home_offer",
+												component: ProfilePurchases,
+												label: "Закупки",
+												meta: {
+													breadcrumb: {
+														label: "Закупки",
+													},
+												},
+											},
+											{
+												path: ":category_id",
+												name: "purchases_catalog_offer",
+												component: PurchasesCatalog,
+												label: "Каталог",
+												meta: {
+													breadcrumb: {
+														label: "",
+													},
+												},
+											},
+											{
+												path: "action_offer",
+												meta: {
+													breadcrumb: {
+														label: "Акции",
+													},
+												},
+												children: [
+													{
+														path: ":action",
+														name: "promotion",
+														props: true,
+														meta: {
+															breadcrumb: {
+																label: "Акция",
+															},
+														},
+														component: Promotion,
+													},
+												],
+											},
+											{
+												path: "warehouses/:org_w_id/:warehouse_id",
+												children: [
+													{
+														path: "",
+														name: "purchases_catalog_warehouse_offer",
+														component: PurchasesCatalog,
+														label: "Каталог оптовика",
+														meta: {
+															breadcrumb: {
+																label: "Каталог оптовика",
+																link: "warehouse_id",
+															},
+														},
+													},
+													{
+														path: ":warehouse_cat_id",
+														children: [
+															{
+																path: "",
+																name: "org_opt_waregouse_category_offer",
+																label: "Мой оптовик",
+																component: PurchasesCatalog,
+															},
+														],
+													},
+												],
+											},
+											{
+												path: "search_offer",
+												meta: {
+													breadcrumb: {
+														label: "Поиск",
+													},
+												},
+												children: [
+													{
+														path: ":search",
+														name: "opt_search",
+														props: true,
+														meta: {
+															breadcrumb: {
+																label: "Поиск"
+															}
+														},
+														component: PurchasesSearch,
+													},
+												],
+											},
+											{
+												path: "req_offer",
+												meta: {
+													breadcrumb: {
+														label: "Потребность",
+													},
+												},
+												children: [
+													{
+														path: ":req",
+														name: "opt_req",
+														props: true,
+														meta: {
+															breadcrumb: {
+																label: "Потребность"
+															}
+														},
+														component: Requirement,
+													},
+												],
+											}
+										],
+									},
+									{
 										path: "opt/actions",
 										name: "opt_actions",
 										meta: {

@@ -161,6 +161,7 @@ export default {
 				this.busket_from_api({
 					action: 'basket/get',
 					id: router.currentRoute._value.params.id,
+					extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
 					warehouse: 'all'
 				}).then((response) => {
 					if(!response?.data?.data?.success && response?.data?.data?.message){
@@ -169,6 +170,7 @@ export default {
 				})
 				this.busket_from_api({
 					action: 'basket/get',
+					extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
 					id: router.currentRoute._value.params.id,
 				}).then((response) => {
 					if(!response?.data?.data?.success && response?.data?.data?.message){

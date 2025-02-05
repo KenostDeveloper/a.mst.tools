@@ -64,7 +64,7 @@
                         <span class="std-tab-item__text">Все товары</span>
                     </router-link>
                     <router-link v-if="this.organizationsOrCategories === 'categories'" :to="{
-                        name: 'purchases_catalog',
+                        name: namePathIsNav == 'purchases' ? 'purchases_catalog' : 'purchases_catalog_offer',
                         params: {
                             id: this.$route.params.id,
                             org_w_id: this.actualCatalog.org_w_id,
@@ -104,7 +104,7 @@
                             <i class="d_icon d_icon-arrow std-tab-item__icon"></i>
                         </div>
                         <router-link v-else :to="{
-                            name: 'purchases_catalog',
+                            name: namePathIsNav == 'purchases' ? 'purchases_catalog' : 'purchases_catalog_offer',
                             params: {
                                 id: this.$route.params.id,
                                 category_id: catItem.id
@@ -299,7 +299,7 @@
             </form>
         </div>
         
-        <button @click="requirement()" class="navmain__dart_btn a-dart-btn a-dart-btn-primary requirement-btn" title="Загрузить Потребность">
+        <button v-if="this.namePathIsNav != 'purchases_offer'" @click="requirement()" class="navmain__dart_btn a-dart-btn a-dart-btn-primary requirement-btn" title="Загрузить Потребность">
             <i class="pi pi-upload"></i>
         </button>
         
@@ -480,6 +480,7 @@ export default {
             catalogWarehouseParent: 1,
             // parentCatalog: {},
             catalog: [],
+            namePathIsNav: null,
             loading: true,
             search: '',
             opt_vendors: [],
@@ -803,10 +804,11 @@ export default {
                 id: this.$route.params.id,
                 id_warehouse: id
             }).then(() => {
-                const data = { action: 'basket/get', id: router.currentRoute._value.params.id };
+                const data = { action: 'basket/get', extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart', id: router.currentRoute._value.params.id };
                 this.busket_from_api(data);
                 this.busket_from_api({
                     action: 'basket/get',
+                    extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
                     id: router.currentRoute._value.params.id,
                     warehouse: 'all'
                 }).then((response) => {
@@ -896,6 +898,11 @@ export default {
                 id: this.$route.params.id
             });
         });
+
+        this.namePathIsNav = router?.currentRoute?._value.matched[4]?.name;
+    },
+    updated(){
+        this.namePathIsNav = router?.currentRoute?._value.matched[4]?.name;
     },
     components: { Vendors, Accordion, Notification, NotificationButton, Dialog, DropZone, vTable, ConfirmDialog, Dropdown },
     computed: {
@@ -914,7 +921,7 @@ export default {
         warehouseLink() {
             if (this.catalogWarehouseParent == this.actualCatalog.id) {
                 return {
-                    name: 'purchases_catalog_warehouse',
+                    name: this.namePathIsNav == 'purchases' ? 'purchases_catalog_warehouse' : 'purchases_catalog_warehouse_offer',
                     params: {
                         id: this.$route.params.id,
                         org_w_id: this.actualCatalog.org_w_id,
@@ -924,7 +931,7 @@ export default {
             }
 
             return {
-                name: 'org_opt_waregouse_category',
+                name: this.namePathIsNav == 'purchases' ? 'org_opt_waregouse_category' : 'org_opt_waregouse_category_offer',
                 params: {
                     id: this.$route.params.id,
                     org_w_id: this.actualCatalog.org_w_id,

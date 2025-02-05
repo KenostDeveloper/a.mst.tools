@@ -1,28 +1,35 @@
 <template>
-	<section class="clients">
-		<Breadcrumbs class="std-breadcrumbs--margin" />
-		<ConfirmDialog/>
-		<v-clients
-			:items_data="stores.items"
-			:total="stores.total"
-			:pagination_items_per_page="this.pagination_items_per_page"
-			:pagination_offset="this.pagination_offset"
-			:page="this.page"
-			:filters="this.filters"
-			:title="'Мои клиенты'"
-			@delete="deleteClient"
-			@filter="filter"
-			@sort="filter"
-			@paginate="paginate"
-        >
-        <template v-slot:desc>
-            <span class="desc">Доступные организации, которые являются вашими клиентами</span>
-        </template>
-		<template v-slot:button>
-			<router-link :to="{ name: 'client_create', params: { id: $route.params.id } }" class="dart-btn dart-btn-primary dart-btn-long">Создать нового клиента</router-link>
-		</template>
-    </v-clients>
-	</section>
+	<Breadcrumbs class="std-breadcrumbs--margin" />
+	<TabView class="tab-custom hidden-mobile-l">
+		<TabPanel header="Мои клиенты">
+			<section class="clients">
+				<ConfirmDialog/>
+				<v-clients
+					:items_data="stores.items"
+					:total="stores.total"
+					:pagination_items_per_page="this.pagination_items_per_page"
+					:pagination_offset="this.pagination_offset"
+					:page="this.page"
+					:filters="this.filters"
+					:title="'Мои клиенты'"
+					@delete="deleteClient"
+					@filter="filter"
+					@sort="filter"
+					@paginate="paginate"
+				>
+				<template v-slot:desc>
+					<span class="desc">Доступные организации, которые являются вашими клиентами</span>
+				</template>
+				<template v-slot:button>
+					<router-link :to="{ name: 'client_create', params: { id: $route.params.id } }" class="dart-btn dart-btn-primary dart-btn-long">Создать нового клиента</router-link>
+				</template>
+				</v-clients>
+			</section>
+		</TabPanel>
+		<TabPanel header="Мои предложения">
+			
+		</TabPanel>
+	</TabView>
 </template>
 
 <script>
@@ -33,6 +40,8 @@ import router from "../router"
 import ConfirmDialog from "primevue/confirmdialog";
 import Breadcrumbs from '../components/Breadcrumbs.vue'
 import vClients from '../components/table/v-clients.vue'
+import TabView from "primevue/tabview";
+import TabPanel from "primevue/tabpanel";
 
 export default {
 	props: {
@@ -178,7 +187,15 @@ export default {
 			'org_managers'
 		])
   },
-	components: { Dropdown, Breadcrumbs, vClients, ConfirmDialog, Toast },
+	components: {
+		Dropdown,
+		Breadcrumbs,
+		vClients,
+		ConfirmDialog,
+		Toast,
+		TabView,
+		TabPanel
+	},
 	watch: {
 		dilers: function (newVal, oldVal) {
 			if (typeof newVal === 'object') {

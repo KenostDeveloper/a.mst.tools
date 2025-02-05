@@ -46,10 +46,10 @@
         </div>
     </div>
     <Sitebar v-if="this.$route.params.id" :active="this.sitebar" />
-    <div class="content" :class="{ white: this.namePathIsNav == 'purchases' }">
+    <div class="content" :class="{ white: this.namePathIsNav == 'purchases' || this.namePathIsNav == 'purchases_offer' }">
         <CookieConsent />
         <div class="dart_container_wrap">
-            <Nav v-if="namePathIsNav == 'purchases'" />
+            <Nav v-if="namePathIsNav == 'purchases' || namePathIsNav == 'purchases_offer'" />
             <div class="dart_wrapper">
                 <NotificationButton v-if="this.$route.params.id && pageIsAvailable()" class="absolute" />
                 <router-view > </router-view>
@@ -184,12 +184,14 @@ export default {
         },
         pageIsAvailable() {
             const routeName = this.$route.name;
+            console.log(routeName)
             if (routeName == 'shipments' || routeName == 'org_settings' || 
                 routeName == 'org_action_add' || routeName == 'org_sales_add' ||
                 routeName == 'discounts_edit' || routeName == 'org_sales_edit' ||
                 routeName == 'org_action_edit' || routeName == 'complect_add' ||
                 routeName == 'complect_edit' || this.namePathIsNav == 'purchases' ||
-                routeName == 'purchases_notifications' || routeName == 'groups_edit'  || routeName == 'groups_edit_id') {
+                routeName == 'purchases_notifications' || routeName == 'groups_edit' ||
+                routeName == 'groups_edit_id' || routeName == 'purchases_home_offer' || routeName == 'purchases_catalog_offer') {
                 return false;
             }
             return true;

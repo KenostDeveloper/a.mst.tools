@@ -22,7 +22,7 @@
 						<template :key="cat.id" v-for="cat in opt_products.categories">
 							<RouterLink
 								:to="{
-									name: 'org_opt_waregouse_category',
+									name: namePathIsNav == 'purchases' ? 'org_opt_waregouse_category' : 'org_opt_waregouse_category_offer',
 									params: { warehouse_cat_id: cat.id },
 								}"
 								v-if="$route.params.warehouse_id"
@@ -32,7 +32,7 @@
 								<!-- <img :src="cat.image" :alt="cat.pagetitle" v-if="cat.image" /> -->
 							</RouterLink>
 							<RouterLink
-								:to="{ name: 'purchases_catalog', params: { category_id: cat.id } }"
+								:to="{ name: namePathIsNav == 'purchases' ? 'purchases_catalog' : 'purchases_catalog_offer', params: { category_id: cat.id } }"
 								v-else
 								class="category-item"
 							>
@@ -126,6 +126,7 @@ export default {
 			page: 1,
 			perpage: 25,
 			vendorModal: false,
+			namePathIsNav: null
 		};
 	},
 	components: {
@@ -164,8 +165,11 @@ export default {
 				this.loadingCheack(3);
 			});
 		}
+		this.namePathIsNav = router?.currentRoute?._value.matched[4]?.name;
 	},
-	updated() {},
+	updated() {
+		this.namePathIsNav = router?.currentRoute?._value.matched[4]?.name;
+	},
 	unmounted() {},
 	methods: {
 		...mapActions([

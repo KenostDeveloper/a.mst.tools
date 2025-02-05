@@ -83,10 +83,13 @@
                 </button>
               </div>
             </div>
-            <div class="d-client-card__buttons" v-else>
+            <div class="d-client-card__buttons flex" v-else>
               <router-link :to="{ name: 'client_id', params: { id: $route.params.id, client_id: item.id } }" class="link-no-style">
                 <button class="dart-btn dart-btn-primary">Посмотреть остатки</button>
-              </router-link>	
+              </router-link>
+              <router-link :to="{ name: 'client_id', params: { id: $route.params.id, client_id: item.id } }" class="link-no-style">
+                <button class="dart-btn dart-btn-primary">Создать предложение</button>
+              </router-link>
             </div>    			
           </div>
         </div>
@@ -293,7 +296,7 @@ export default {
     padding: 24px 24px;
     border: 1px solid #E0E0E0;
     &.d-client-card-with_button{
-      padding-bottom: 86px;
+      padding-bottom: 126px;
     }
     &__content{
       position: relative;
@@ -334,14 +337,20 @@ export default {
     }
     & .d-client-card__buttons{
       position: absolute;
+      width: 100%;
+      left: 0;
+      flex-direction: column;
+      padding: 0 20px;
+      gap: 8px;
       bottom: 24px;
-      left: 24px;
-      right: 24px;
-      text-align: center;
+      // left: 24px;
+      // right: 24px;
+      // text-align: center;
       &.d-client-card__buttons-flex{
         display: flex;
         align-items: center;
         justify-content: space-between;
+        flex-direction: row;
         .d-client-card__actions{
           button{
             color: #666;
@@ -355,7 +364,7 @@ export default {
       }
       .dart-btn{
         width: 100%;
-        max-width: 245px;
+        // max-width: 245px;
       }
     }
   }
