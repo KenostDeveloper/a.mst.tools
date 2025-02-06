@@ -170,7 +170,7 @@ export default {
       return Axios('/rest/front_opt', {
         method: 'POST',
         data: {
-          id: router.currentRoute._value.params.id,
+          id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
           //warehouse_id: router.currentRoute._value.params.warehouse_id,
           action: 'get/catalog'
         },
@@ -193,7 +193,7 @@ export default {
       return Axios('/rest/front_opt', {
         method: 'POST',
         data: {
-          id: router.currentRoute._value.params.id,
+          id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
           //warehouse_id: router.currentRoute._value.params.warehouse_id,
           warehouse: true,
           action: 'get/catalog'
@@ -216,7 +216,7 @@ export default {
       return Axios('/rest/front_opt', {
         method: 'POST',
         data: {
-          warehouse_id: router.currentRoute._value.params.id,
+          id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
           action: 'get/catalog'
         },
         headers: {
@@ -258,7 +258,7 @@ export default {
     },
     get_opt_vendors_from_api ({ commit }, sendData) {
       const data = {
-        id: router.currentRoute._value.params.id,
+        id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
         type: router.currentRoute._value.params.type,
         action: 'get/vendors'
       }
@@ -300,7 +300,7 @@ export default {
       return Axios('/rest/front_opt', {
         method: 'POST',
         data: {
-          id: router.currentRoute._value.params.id,
+          id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
           type: router.currentRoute._value.params.type,
           category_id: cat,
           org_w_id: router.currentRoute._value.params.org_w_id,

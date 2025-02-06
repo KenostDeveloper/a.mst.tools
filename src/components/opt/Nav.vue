@@ -804,12 +804,15 @@ export default {
                 id: this.$route.params.id,
                 id_warehouse: id
             }).then(() => {
-                const data = { action: 'basket/get', extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart', id: router.currentRoute._value.params.id };
+                const data = {
+                    action: 'basket/get', extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
+                    id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
+                };
                 this.busket_from_api(data);
                 this.busket_from_api({
                     action: 'basket/get',
                     extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
-                    id: router.currentRoute._value.params.id,
+                    id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
                     warehouse: 'all'
                 }).then((response) => {
                     if(!response?.data?.data?.success && response?.data?.data?.message){
@@ -891,11 +894,11 @@ export default {
 
         this.org_get_stores_from_api({
             action: 'get/stores',
-            id: this.$route.params.id
+            id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id
         }).then(() => {
             this.opt_warehouse_basket({
                 action: 'get/active/basket/warehouse',
-                id: this.$route.params.id
+                id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
             });
         });
 
@@ -931,7 +934,7 @@ export default {
             }
 
             return {
-                name: this.namePathIsNav == 'purchases' ? 'org_opt_waregouse_category' : 'org_opt_waregouse_category_offer',
+                name: this.namePathIsNav == 'purchases' ? 'org_opt_waregouse_category' : 'purchases_catalog_warehouse_offer',
                 params: {
                     id: this.$route.params.id,
                     org_w_id: this.actualCatalog.org_w_id,

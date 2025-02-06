@@ -191,7 +191,10 @@ export default {
                 routeName == 'org_action_edit' || routeName == 'complect_add' ||
                 routeName == 'complect_edit' || this.namePathIsNav == 'purchases' ||
                 routeName == 'purchases_notifications' || routeName == 'groups_edit' ||
-                routeName == 'groups_edit_id' || routeName == 'purchases_home_offer' || routeName == 'purchases_catalog_offer') {
+                routeName == 'groups_edit_id' || routeName == 'purchases_home_offer' ||
+                routeName == 'purchases_catalog_offer' || routeName == 'opt_search' ||
+                routeName == 'purchases_catalog_warehouse_offer'
+            ) {
                 return false;
             }
             return true;

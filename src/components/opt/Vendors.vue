@@ -215,7 +215,7 @@ export default {
       const data = {
         id: id,
         action: action,
-        store: router.currentRoute._value.params.id
+        store: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
       }
       this.toggle_opts_visible(data).then(() => {
         this.get_opt_vendors_from_api().then((result) => {
@@ -256,7 +256,7 @@ export default {
             const data = {
               id: this.items.selected[i].id,
               action: 0,
-              store: router.currentRoute._value.params.id
+              store: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
             }
             this.toggle_opts_visible(data)
           }
@@ -265,7 +265,7 @@ export default {
         this.$load(async () => {
           await this.toggle_opts_visible({
             action: 1,
-            store: router.currentRoute._value.params.id,
+            store: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
             id: this.vendorForm.selected
           })
             .then((result) => {

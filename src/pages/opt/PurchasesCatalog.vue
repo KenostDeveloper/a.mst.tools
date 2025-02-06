@@ -22,7 +22,7 @@
 						<template :key="cat.id" v-for="cat in opt_products.categories">
 							<RouterLink
 								:to="{
-									name: namePathIsNav == 'purchases' ? 'org_opt_waregouse_category' : 'org_opt_waregouse_category_offer',
+									name: namePathIsNav == 'purchases' ? 'org_opt_waregouse_category' : 'purchases_catalog_warehouse_offer',
 									params: { warehouse_cat_id: cat.id },
 								}"
 								v-if="$route.params.warehouse_id"

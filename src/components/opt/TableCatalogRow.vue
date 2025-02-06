@@ -511,7 +511,7 @@ export default {
             const data = {
                 action: 'basket/add',
                 extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
-                id: router.currentRoute._value.params.id,
+                id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
                 org_id: item.org_id,
                 store_id: item.store_id,
                 id_remain: item.id,
@@ -522,7 +522,7 @@ export default {
                 this.busket_from_api({
                     action: 'basket/get',
                     extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
-                    id: router.currentRoute._value.params.id,
+                    id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
                     warehouse: 'all'
                 }).then((response) => {
                     if(!response?.data?.data?.success && response?.data?.data?.message){
@@ -570,7 +570,7 @@ export default {
             const data = {
                 action: 'basket/add',
                 extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
-                id: router.currentRoute._value.params.id,
+                id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
                 org_id: item.org_id,
                 store_id: item.store_id,
                 id_complect: item.complect_id,
@@ -585,7 +585,7 @@ export default {
                 this.busket_from_api({
                     action: 'basket/get',
                     extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
-                    id: router.currentRoute._value.params.id,
+                    id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
                     warehouse: 'all'
                 });
             });
@@ -597,7 +597,7 @@ export default {
 			const data = {
 				action: "basket/remove",
                 extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
-				id: router.currentRoute._value.params.id,
+				id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
 				org_id: org_id,
 				store_id: store_id,
 				key: key,
@@ -627,7 +627,7 @@ export default {
             this.busket_from_api({
 				action: 'basket/get',
                 extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
-				id: router.currentRoute._value.params.id,
+				id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
 				warehouse: 'all'
 			}).then((response) => {
                 if(!response?.data?.data?.success && response?.data?.data?.message){
@@ -651,7 +651,7 @@ export default {
             const data = {
                 action: "basket/clear",
                 extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
-                id: router.currentRoute._value.params.id,
+                id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
                 store_id: storeid,
                 id_complect: complectid,
             };
@@ -663,7 +663,7 @@ export default {
             this.busket_from_api({
                 action: 'basket/get',
                 extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
-                id: router.currentRoute._value.params.id,
+                id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
                 warehouse: 'all'
             }).then((response) => {
                 if(!response?.data?.data?.success && response?.data?.data?.message){
@@ -681,7 +681,7 @@ export default {
                 const data = {
                     action: 'basket/update',
                     extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
-                    id: router.currentRoute._value.params.id,
+                    id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
                     org_id: object.item.org_id,
                     store_id: object.item.store_id,
                     id_remain: object.id,
@@ -697,7 +697,7 @@ export default {
 					this.busket_from_api({
 						action: 'basket/get',
                         extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
-						id: router.currentRoute._value.params.id,
+						id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
 						warehouse: 'all'
 					}).then((response) => {
                         if(!response?.data?.data?.success && response?.data?.data?.message){
@@ -719,7 +719,7 @@ export default {
             const data = {
                 action: 'basket/update',
                 extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
-                id: router.currentRoute._value.params.id,
+                id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
                 org_id: object.item.org_id,
                 store_id: object.item.store_id,
                 id_remain: object.id,
@@ -738,7 +738,7 @@ export default {
                 this.busket_from_api({
                     action: 'basket/get',
                     extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
-                    id: router.currentRoute._value.params.id,
+                    id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
                     warehouse: 'all'
                 }).then((response) => {
                     if(!response?.data?.data?.success && response?.data?.data?.message){
@@ -787,7 +787,7 @@ export default {
 					const data = {
 						action: "basket/update",
                         extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
-						id: router.currentRoute._value.params.id,
+						id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
 						id_complect: object.item.item.complect_id,
 						count: object.value / object.item.item.multiplicity,
 						store_id: object.store_id,
@@ -803,7 +803,7 @@ export default {
 					this.busket_from_api({
 						action: 'basket/get',
                         extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
-						id: router.currentRoute._value.params.id,
+						id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
 						warehouse: 'all'
 					}).then((response) => {
                         if(!response?.data?.data?.success && response?.data?.data?.message){

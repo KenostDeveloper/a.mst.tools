@@ -545,7 +545,7 @@ const routes = [
 										],
 									},
 									{
-										path: "offer",
+										path: "offer/:id_org_from",
 										name: "purchases_offer",
 										props: true,
 										label: "Закупки",
@@ -573,7 +573,7 @@ const routes = [
 												label: "Каталог",
 												meta: {
 													breadcrumb: {
-														label: "",
+														label: "Каталог",
 													},
 												},
 											},
@@ -618,7 +618,7 @@ const routes = [
 														children: [
 															{
 																path: "",
-																name: "org_opt_waregouse_category_offer",
+																name: "org_opt_warehouse_category_offer",
 																label: "Мой оптовик",
 																component: PurchasesCatalog,
 															},
@@ -640,36 +640,15 @@ const routes = [
 														props: true,
 														meta: {
 															breadcrumb: {
-																label: "Поиск"
-															}
+																label: "Поиск",
+															},
 														},
 														component: PurchasesSearch,
 													},
 												],
 											},
-											{
-												path: "req_offer",
-												meta: {
-													breadcrumb: {
-														label: "Потребность",
-													},
-												},
-												children: [
-													{
-														path: ":req",
-														name: "opt_req",
-														props: true,
-														meta: {
-															breadcrumb: {
-																label: "Потребность"
-															}
-														},
-														component: Requirement,
-													},
-												],
-											}
 										],
-									},
+									},									
 									{
 										path: "opt/actions",
 										name: "opt_actions",

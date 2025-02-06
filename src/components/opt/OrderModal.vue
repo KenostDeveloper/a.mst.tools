@@ -9,7 +9,7 @@
                 </div>
             </div>
             <div class="k-order__title" v-else>
-                <span class="title">Оформление заказа</span>
+                <span class="title">{{ this.namePathIsNav == 'purchases_offer' ? 'Оформление предложения' : 'Оформление заказа' }}</span>
                 <div class="k-order__close" @click.prevent="fromOrder">
                     <i class="pi pi-times"></i>
                 </div>
@@ -159,7 +159,7 @@
                                     </div> -->
                                    
                                 </div>
-                                <div class="k-order__final-button">
+                                <div v-if="this.namePathIsNav != 'purchases_offer'" class="k-order__final-button">
                                     <div class="a-dart-btn a-dart-btn-secondary" @click="generateXSLX(org.org_data.id, warehouse.store_data.id)">Скачать</div>
                                     <div class="a-dart-btn a-dart-btn-primary k-order__oplata" @click.prevent="() => {
                                         if (org?.cart_data?.not_available) {
@@ -205,7 +205,7 @@
                             </div> -->
                            
                         </div>
-                        <div class="k-order__final-button">
+                        <div v-if="this.namePathIsNav != 'purchases_offer'" class="k-order__final-button">
                             <div @click="generateXSLXAll(this.basket.data[Object.keys(this.basket.data)[0]].store_data.id)" class="a-dart-btn a-dart-btn-secondary"><i class="pi pi-download"></i></div>
                             <div class="a-dart-btn a-dart-btn-primary k-order__oplata" @click.prevent="() => {
                                 if (this.basket?.cart_data?.not_available) {
@@ -215,6 +215,17 @@
                                     orderSubmit('all');
                                 }
                             }"><p>Отправить все заказы</p> <p>{{ this.basket?.cart_data?.cost?.toLocaleString('ru') }} ₽</p></div>
+                        </div>
+                        <div v-else class="k-order__final-button">
+                            <div @click="generateXSLXAll(this.basket.data[Object.keys(this.basket.data)[0]].store_data.id)" class="a-dart-btn a-dart-btn-secondary"><i class="pi pi-download"></i></div>
+                            <div class="a-dart-btn a-dart-btn-primary k-order__oplata" @click.prevent="() => {
+                                if (this.basket?.cart_data?.not_available) {
+                                    this.showChangedCount = true;
+                                    this.chowChangedId = 'all';
+                                } else {
+                                    offerSubmit('all');
+                                }
+                            }"><p>Отправить предложения</p> <p>{{ this.basket?.cart_data?.cost?.toLocaleString('ru') }} ₽</p></div>
                         </div>
                     </div>
                 </div>
@@ -334,7 +345,8 @@ export default {
       id_clear_org: null,
       showClearBasketModal: false,
       chowChangedId: 'all',
-      showChangedCount: false
+      showChangedCount: false,
+      namePathIsNav: null
     }
   },
   emits: ['fromOrder', 'orderSubmit'],
@@ -384,12 +396,16 @@ export default {
         });
         this.$emit('orderSubmit', nums)
         this.order = nums
-        const data = { action: 'basket/get', extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart', id: router.currentRoute._value.params.id }
+        const data = {
+            action: 'basket/get',
+            extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
+            id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
+        }
         this.busket_from_api(data)
         this.busket_from_api({
             action: 'basket/get',
             extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
-            id: router.currentRoute._value.params.id,
+            id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
             warehouse: 'all'
         }).then((response) => {
             if(!response?.data?.data?.success && response?.data?.data?.message){
@@ -398,6 +414,9 @@ export default {
             this.loading = false
         })
       })
+    },
+    offerSubmit(orgId){
+        console.log(orgId)
     },
     ElemCount(object) {
         if (!this.fetchIds.includes(object.item.item.key)) {
@@ -413,7 +432,7 @@ export default {
             const data = {
                 action: 'basket/update',
                 extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
-                id: router.currentRoute._value.params.id,
+                id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
                 org_id: object.item.item.org_id,
                 store_id: object.item.item.store_id,
                 id_remain: object.id,
@@ -425,7 +444,7 @@ export default {
                     this.busket_from_api({ 
                     action: 'basket/get',
                     extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
-                    id: router.currentRoute._value.params.id,
+                    id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
                     warehouse: 'all'
                 }).then((response) => {
                     if(!response?.data?.data?.success && response?.data?.data?.message){
@@ -442,7 +461,7 @@ export default {
             const data = {
                 action: 'basket/update',
                 extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
-                id: router.currentRoute._value.params.id,
+                id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
                 org_id: object.item.item.org_id,
                 store_id: object.item.item.store_id,
                 id_remain: object.id,
@@ -484,7 +503,7 @@ export default {
             this.busket_from_api({
                 action: 'basket/get',
                 extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
-                id: router.currentRoute._value.params.id,
+                id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
                 warehouse: 'all'
             }).then((res) => {
                 const index = this.fetchIds.indexOf(object.item.item.key);
@@ -511,7 +530,7 @@ export default {
 					const data = {
 						action: "basket/update",
                         extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
-						id: router.currentRoute._value.params.id,
+						id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
 						id_complect: object.item.complect_id,
 						count: object.value / object.item.multiplicity,
 						store_id: object.store_id,
@@ -534,7 +553,7 @@ export default {
 					this.busket_from_api({
 						action: 'basket/get',
                         extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
-						id: router.currentRoute._value.params.id,
+						id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
 						warehouse: 'all'
 					}).then((response) => {
                         if(!response?.data?.data?.success && response?.data?.data?.message){
@@ -549,8 +568,11 @@ export default {
 			}
     },
     clearBasket () {
-      const data = { action: 'basket/clear', extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
-      id: router.currentRoute._value.params.id }
+      const data = {
+        action: 'basket/clear',
+        extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
+        id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
+    }
       this.busket_from_api(data).then((response) => {
         if(!response?.data?.data?.success && response?.data?.data?.message){
 							this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
@@ -559,7 +581,7 @@ export default {
       this.busket_from_api({
         action: 'basket/get',
         extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
-        id: router.currentRoute._value.params.id,
+        id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
         warehouse: 'all'
       }).then((response) => {
         if(!response?.data?.data?.success && response?.data?.data?.message){
@@ -573,7 +595,7 @@ export default {
         const data = {
             action: "basket/remove",
             extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
-            id: router.currentRoute._value.params.id,
+            id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
             org_id: org_id,
             store_id: store_id,
             key: key,
@@ -607,7 +629,7 @@ export default {
         this.busket_from_api({
             action: 'basket/get',
             extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
-            id: router.currentRoute._value.params.id,
+            id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
             warehouse: 'all'
         }).then((response) => {
             if(!response?.data?.data?.success && response?.data?.data?.message){
@@ -625,7 +647,7 @@ export default {
         const data = {
             action: "basket/remove",
             extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
-            id: router.currentRoute._value.params.id,
+            id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
             key: product.key,
             store_id: product.store_id,
             org_id: product.org_id,
@@ -639,7 +661,7 @@ export default {
         this.busket_from_api({
             action: 'basket/get',
             extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
-            id: router.currentRoute._value.params.id,
+            id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
             warehouse: 'all'
         }).then((response) => {
             if(!response?.data?.data?.success && response?.data?.data?.message){
@@ -650,7 +672,7 @@ export default {
     generateXSLX (storeId, warehouseId) {
         const data = {
             action: 'generate/xslx',
-            id: router.currentRoute._value.params.id,
+            id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
             store_id: storeId,
             warehouse_id: warehouseId
         }
@@ -665,7 +687,7 @@ export default {
     generateXSLXAll (warehouseId) {
         const data = {
             action: 'generate/xslx',
-            id: router.currentRoute._value.params.id,
+            id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
             warehouse_id: warehouseId
         }
       this.opt_api(data).then((res) => {
@@ -680,14 +702,14 @@ export default {
         const data = {
             action: 'basket/clear',
             extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
-            id: router.currentRoute._value.params.id,
+            id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
             org_id: id
         }
         this.busket_from_api(data).then()
         this.busket_from_api({
             action: 'basket/get',
             extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
-            id: router.currentRoute._value.params.id,
+            id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
             warehouse: 'all'
         }).then((response) => {
             this.loading = false
@@ -701,13 +723,21 @@ export default {
     if(this.order_id){
         this.order = this.order_id
     }
-    const data = { action: "basket/get", extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart', id: router.currentRoute._value.params.id };
+    const data = {
+        action: "basket/get",
+        extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
+        id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
+    };
 	this.busket_from_api(data).then((response) => {
         if(!response?.data?.data?.success && response?.data?.data?.message){
             this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
         }
     });
+    this.namePathIsNav = router?.currentRoute?._value.matched[4]?.name;
   },
+  updated(){
+    this.namePathIsNav = router?.currentRoute?._value.matched[4]?.name;
+    },
   components: { Counter, Dialog, ActionModal },
   computed: {
     ...mapGetters([

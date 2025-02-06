@@ -126,7 +126,7 @@ export default {
                 this.busket_from_api({
                   action: 'basket/get',
                   extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
-                  id: router.currentRoute._value.params.id,
+                  id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
                   warehouse: 'all'
                 }).then((response) => {
                   if(!response?.data?.data?.success && response?.data?.data?.message){
@@ -136,7 +136,7 @@ export default {
                 this.busket_from_api({
                   action: 'basket/get',
                   extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
-                  id: router.currentRoute._value.params.id,
+                  id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
                 }).then((response) => {
                   if(!response?.data?.data?.success && response?.data?.data?.message){
                     this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
