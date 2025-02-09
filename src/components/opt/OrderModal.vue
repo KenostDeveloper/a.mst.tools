@@ -354,13 +354,14 @@ export default {
     ...mapActions([
       'busket_from_api',
       'opt_order_api',
-      'opt_api'
+      'opt_api',
+      'offer_api'
     ]),
     fromOrder () {
       this.order = false
       this.$emit('fromOrder')
     },
-    async orderSubmit ($orgId) {
+    async orderSubmit (orgId) {
       this.loading = true
       const data = { action: 'order/opt/submit', id: router.currentRoute._value.params.id, org_id: $orgId }
       let arr = [];
@@ -415,8 +416,17 @@ export default {
         })
       })
     },
-    offerSubmit(orgId){
-        console.log(orgId)
+    async offerSubmit(){
+        // this.loading = true
+        const data = {
+            action: 'create/offer',
+            id: router.currentRoute._value.params.id,
+            id_org_from: router.currentRoute._value.params.id_org_from
+        }
+        // console.log(data)
+        await this.offer_api(data).then((response) => {
+            console.log(response)
+        })
     },
     ElemCount(object) {
         if (!this.fetchIds.includes(object.item.item.key)) {
