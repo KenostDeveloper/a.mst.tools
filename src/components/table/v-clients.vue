@@ -87,7 +87,7 @@
               <router-link :to="{ name: 'client_id', params: { id: $route.params.id, client_id: item.id } }" class="link-no-style">
                 <button class="dart-btn dart-btn-primary">Посмотреть остатки</button>
               </router-link>
-              <router-link :to="{ name: 'purchases_offer', params: { id: $route.params.id, id_org_from: item.id } }" class="link-no-style">
+              <router-link :to="{ name: 'purchases_home_offer', params: { id: $route.params.id, id_org_from: item.id } }" class="link-no-style">
                 <button class="dart-btn dart-btn-primary">Создать предложение</button>
               </router-link>
             </div>    			

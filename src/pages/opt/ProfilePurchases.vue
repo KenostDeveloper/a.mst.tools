@@ -96,7 +96,7 @@ export default {
 		vendorCheck() {
 			this.get_salses_banners_to_api({
 				action: "get/banners",
-				id: router.currentRoute._value.params.id,
+				id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
 			});
 		},
 		changeActive() {
@@ -110,7 +110,7 @@ export default {
 		});
 		this.get_salses_banners_to_api({
 			action: "get/banners",
-			id: router.currentRoute._value.params.id,
+			id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
 		}).then(() => {
 			this.loading_elems.push("load");
 			this.loadingCheack(1);

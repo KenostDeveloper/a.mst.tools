@@ -359,7 +359,6 @@ export default {
 			this.$emit("deleteElem", data);
 		},
 		clickElem(data) {
-			console.log(data);
 			this.$emit("clickElem", data);
 		},
 		updateElem(data) {

@@ -39,7 +39,9 @@
 					@filter="this.offer.filter"
 					title=""
 					@paginate="paginate"
+					@clickElem="clickElem"
 					@editElem="view"
+					@deleteElem="deleteOffer"
 				/>
 			</section>
 		</TabPanel>
@@ -135,6 +137,14 @@ export default {
 							edit: {
 								icon: 'pi pi-eye',
 								label: 'Подробнее'
+							},
+							click: {
+								icon: 'pi pi-clone',
+								label: 'Копировать'
+							},
+							delete: {
+								icon: 'pi pi-trash',
+								label: 'Копировать'
 							}
 						}
 					}
@@ -150,7 +160,8 @@ export default {
 			'org_get_stores_from_api',
 			'org_profile_set_from_api',
 			'org_get_managers_from_api',
-			'get_offer_api'
+			'get_offer_api',
+			'offer_api'
 		]),
 		filter (data) {
 			this.unset_dilers()
@@ -161,6 +172,20 @@ export default {
 			this.unset_dilers()
 			this.page = data.page
 			this.get_dilers_from_api(data)
+		},
+		deleteOffer(value){
+			this.loading = true
+			this.offer_api({
+				action: 'delete',
+				id: router.currentRoute._value.params.id,
+				offer_id: value.id,
+			}).then(() => {
+				this.get_offer_api({
+					action: 'get/offers/clients',
+					id: this.$route.params.id
+				})
+				this.loading = false
+			})
 		},
 		deleteClient(data) {
 			this.$confirm.require({
@@ -211,11 +236,26 @@ export default {
 			});
 		},
 		view(value) {
+			console.log('view', value)
 			router.push({
 				name: "offer_view",
 				params: { id: this.$route.params.id, offer_id: value.id },
 			});
 		},
+		clickElem(value){
+			this.loading = true
+			this.get_offer_api({
+				action: 'copy',
+				id: router.currentRoute._value.params.id,
+				offer_id: value.id
+			}).then(() => {
+				this.get_offer_api({
+					action: 'get/offers/clients',
+					id: this.$route.params.id
+				})
+				this.loading = false
+			})
+		}
 	},
 	mounted() {
 		this.get_dilers_from_api({

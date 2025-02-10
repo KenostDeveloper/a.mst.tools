@@ -9,6 +9,9 @@
 				<div v-if="this?.offer?.status == 1" class="dart-btn dart-btn-primary" @click="acceptOffer()">
 					<span>Принять предложение</span>	
 				</div>
+				<div v-if="this?.offer?.status == 4" class="dart-btn dart-btn-primary" @click="acceptOffer()">
+					<span>Добавить в корзину</span>	
+				</div>
 				<div v-if="this?.offer?.status == 1" class="dart-btn dart-btn-secondary gap-left-2" @click="changeStatus(3)">
 					<span>Отклонить предложение</span>
 				</div>
@@ -27,7 +30,11 @@
 				</div> -->
 				<div class="w-full kenost-table-elem">
 					<span>Дата создания</span>
-					<div class="kenost-table-elem__content">{{ this.offer?.date }}</div>
+					<div class="kenost-table-elem__content">{{ new Date(this.offer?.date).toLocaleString('ru', {
+                            month: '2-digit',
+                            day: '2-digit',
+                            year: '2-digit'
+                        }) }}</div>
 				</div>
 				<div class="w-full kenost-table-elem">
 					<span>Инициатор</span>
@@ -115,6 +122,22 @@
 			</div>
 		</div>
 	</div>
+	<div class="d-col-map purchases__basket-wrapper">
+		<Vendors :items="this.opt_vendors" @vendorCheck="vendorCheck" />
+		<Basket ref="childComponent" @toOrder="toOrder" @catalogUpdate="catalogUpdate" />
+	</div>
+	<OrderModal
+		:show="show_order"
+		:order_id="order_id"
+		@fromOrder="fromOrder"
+		@orderSubmit="updatePage($event, num)"
+	/>
+	<Vendors
+			@changeActive="changeActive"
+			@vendorCheck="vendorCheck"
+			:vendorModal="this.vendorModal"
+			:items="this.opt_vendors"
+		/>
 </template>
 
 <script>
@@ -131,6 +154,10 @@ import Dialog from "primevue/dialog";
 import Breadcrumbs from "../components/Breadcrumbs.vue";
 import ActionModal from '../components/opt/ActionModal.vue'
 import Loading from "../components/Loading.vue";
+import Basket from "../components/opt/Basket.vue";
+import Vendors from "../components/opt/Vendors.vue";
+import OrderModal from "../components/opt/OrderModal.vue";
+
 
 export default {
 	name: "MyOrders",
@@ -139,13 +166,19 @@ export default {
 	data() {
 		return {
 			offer: [],
-			loading: true
+			loading: true,
+			show_order: false,
+			opt_vendors: {},
+			order_id: 0,
+			vendorModal: false,
+
 		};
 	},
 	methods: {
 		...mapActions([
             'get_offer_api',
-			'offer_api'
+			'offer_api',
+			'busket_from_api'
 		]),
 		changeStatus(id_status){
 			this.loading = true
@@ -162,12 +195,31 @@ export default {
 				}).then(() => this.loading = false)
 			})
 		},
+		toOrder() {
+			this.show_order = true;
+		},
+		fromOrder() {
+			this.show_order = false;
+		},
 		acceptOffer(){
+			this.loading = true
 			this.offer_api({
 				action: 'accept',
 				id: router.currentRoute._value.params.id,
 				offer_id: router.currentRoute._value.params.offer_id
-			}).then((res) => console.log('accept', res))
+			}).then((res) => {
+				this.busket_from_api({
+                    action: 'basket/get',
+                    extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
+                    id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
+                    warehouse: 'all'
+                }).then((response) => {
+                    if(!response?.data?.data?.success && response?.data?.data?.message){
+                        this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
+                    }
+					this.loading = false
+                });
+			})
 		}
 	},
 	mounted() {
@@ -188,8 +240,9 @@ export default {
 		vTable,
 		Dialog,
 		CalendarVue,
-		// Checkbox,
-		// Swiper,
+		Basket,
+		Vendors,
+		OrderModal,
 		// SwiperSlide
 		Breadcrumbs,
 		Loading

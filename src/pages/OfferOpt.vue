@@ -5,6 +5,14 @@
 
 		<div class="std-shipping__title-container hidden-tablet-l">
 			<h1 class="table-kenost__title std-shipping__title">Предложение № {{ this.offer?.id }}</h1>
+			<div class="flex gap-left-2">
+				<div v-if="this?.offer?.status == 2" class="dart-btn dart-btn-primary" @click="changeStatus(1)">
+					<span>Отправить</span>	
+				</div>
+				<div v-if="this?.offer?.status == 2" class="dart-btn dart-btn-secondary gap-left-2" @click="deleteOffer()">
+					<span>Удалить</span>	
+				</div>
+			</div>
 		</div>
 
 		<div class="w-full">
@@ -19,7 +27,11 @@
 				</div> -->
 				<div class="w-full kenost-table-elem">
 					<span>Дата создания</span>
-					<div class="kenost-table-elem__content">{{ this.offer?.date }}</div>
+					<div class="kenost-table-elem__content">{{ new Date(this.offer?.date).toLocaleString('ru', {
+                            month: '2-digit',
+                            day: '2-digit',
+                            year: '2-digit'
+                        }) }}</div>
 				</div>
 				<div class="w-full kenost-table-elem">
 					<span>Сумма</span>
@@ -133,7 +145,36 @@ export default {
 	methods: {
 		...mapActions([
             'get_offer_api',
-		])
+			'offer_api'
+		]),
+		changeStatus(id_status){
+			this.loading = true
+			this.offer_api({
+				action: 'change/status',
+				id: router.currentRoute._value.params.id,
+				offer_id: router.currentRoute._value.params.offer_id,
+				status: id_status
+			}).then(() => {
+				this.get_offer_api({
+					action: 'get/offers/my',
+					id: router.currentRoute._value.params.id,
+					offer_id: router.currentRoute._value.params.offer_id
+				}).then(() => this.loading = false)
+			})
+		},
+		deleteOffer(){
+			this.loading = true
+			this.offer_api({
+				action: 'delete',
+				id: router.currentRoute._value.params.id,
+				offer_id: router.currentRoute._value.params.offer_id,
+			}).then(() => {
+				router.push({
+					name: "clients",
+					params: { id: this.$route.params.id },
+				});
+			})
+		}
 	},
 	mounted() {
 		this.get_offer_api({
