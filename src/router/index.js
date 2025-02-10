@@ -42,6 +42,8 @@ import Notifications from "../components/opt/Notifications.vue";
 import GroupEdit from "../pages/b2b/groups/GroupEdit.vue";
 import Profile from '../pages/Profile.vue'
 import ProfileHash from '../pages/ProfileHash.vue'
+import OfferOpt from '../pages/OfferOpt.vue'
+import MyOffer from '../pages/MyOfferOpt.vue'
 
 const routes = [
 	{
@@ -587,7 +589,7 @@ const routes = [
 												children: [
 													{
 														path: ":action",
-														name: "promotion",
+														name: "promotion_offer",
 														props: true,
 														meta: {
 															breadcrumb: {
@@ -636,7 +638,7 @@ const routes = [
 												children: [
 													{
 														path: ":search",
-														name: "opt_search",
+														name: "opt_search_offer",
 														props: true,
 														meta: {
 															breadcrumb: {
@@ -766,6 +768,16 @@ const routes = [
 												component: ProfileStoreStatistics,
 											},
 										],
+									},
+									{
+										path: "offers/:offer_id",
+										name: "my_offer_id",
+										meta: {
+											breadcrumb: {
+												label: "Мои заказы",
+											},
+										},
+										component: MyOffer,
 									},
 									{
 										path: "orders",
@@ -922,6 +934,16 @@ const routes = [
 													},
 												},
 												component: ProfileCreateClient,
+											},
+											{
+												path: "offer/:offer_id",
+												name: "offer_view",
+												meta: {
+													breadcrumb: {
+														label: "",
+													},
+												},
+												component: OfferOpt,
 											}
 										],
 									},

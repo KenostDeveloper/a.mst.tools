@@ -1,34 +1,53 @@
 <template>
-	<div class="clients retails">
-		<Breadcrumbs />
-		<v-table
-			class=""
-			:filters="this.filters"
-			:items_data="my_orders.orders"
-			:total="my_orders.total"
-			:pagination_items_per_page="this.pagination_items_per_page"
-			:pagination_offset="this.pagination_offset"
-			:page="this.page"
-			:table_data="this.table_data"
-			title="Мои заказы"
-			@filter="filter_opt_my"
-			@sort="filter_opt_my"
-			@paginate="paginate_opt_my"
-			:link_row="{
-				link_to: 'my_orders_id',
-				link_params: {
-					id: this.$route.params.id,
-					order_id: 'id',
-				},
-			}"
-		>
-			<template v-slot:button>
-				<div>
-					
-				</div>
-			</template>
-		</v-table>
-	</div>
+	<Breadcrumbs />
+	<TabView class="tab-custom mt-4">
+		<TabPanel header="Мои заказы">
+			<v-table
+				class=""
+				:filters="this.filters"
+				:items_data="my_orders.orders"
+				:total="my_orders.total"
+				:pagination_items_per_page="this.pagination_items_per_page"
+				:pagination_offset="this.pagination_offset"
+				:page="this.page"
+				:table_data="this.table_data"
+				title="Мои заказы"
+				@filter="filter_opt_my"
+				@sort="filter_opt_my"
+				@paginate="paginate_opt_my"
+				:link_row="{
+					link_to: 'my_orders_id',
+					link_params: {
+						id: this.$route.params.id,
+						order_id: 'id',
+					},
+				}"
+			>
+				<template v-slot:button>
+					<div>
+						
+					</div>
+				</template>
+			</v-table>
+		</TabPanel>
+		<TabPanel header="Предложения">
+			<section class="clients">
+				<v-table
+					:items_data="offers.items"
+					:total="offers.total"
+					:pagination_items_per_page="this.offer.pagination_items_per_page"
+					:pagination_offset="this.offer.pagination_offset"
+					:page="this.offer.page"
+					:table_data="this.offer.table_data"
+					:filters="this.filters"
+					@filter="this.offer.filter"
+					title=""
+					@paginate="paginate"
+					@editElem="view"
+				/>
+			</section>
+		</TabPanel>
+	</TabView>
 </template>
 
 <script>
@@ -43,6 +62,8 @@ import CalendarVue from "primevue/calendar";
 import vTable from "../components/table/v-table.vue";
 import "v-calendar/style.css";
 import Dialog from "primevue/dialog";
+import TabView from "primevue/tabview";
+import TabPanel from "primevue/tabpanel";
 
 export default {
 	name: "MyOrders",
@@ -108,11 +129,55 @@ export default {
 					sort: true,
 				}
 			},
+			offer:{
+				page: 1,
+				pagination_offset: 0,
+				pagination_items_per_page: 25,
+				filter: {},
+				table_data: {
+					id: {
+						label: "№",
+						type: "text",
+					},
+					date: {
+						label: 'Дата создания',
+						type: 'text',
+					},
+					from_org_name: {
+						label: 'Клиент',
+						type: 'text',
+					},
+					store_name: {
+						label: 'Склад клиента',
+						type: 'text',
+					},
+					cost: {
+						label: 'Сумма',
+						type: 'text',
+					},
+					status_name: {
+						label: 'Статус',
+						type: 'text'
+					},
+					actions: {
+						label: 'Действия',
+						type: 'actions',
+						sort: false,
+						available: {
+							edit: {
+								icon: 'pi pi-eye',
+								label: 'Подробнее'
+							}
+						}
+					}
+				},
+			}
 		};
 	},
 	methods: {
 		...mapActions([
-			'get_opt_my_order_api'
+			'get_opt_my_order_api',
+			'get_offer_api'
 		]),
 		filter_opt_my (data) {
 			data.id = router.currentRoute._value.params.id
@@ -124,7 +189,13 @@ export default {
 			data.id = router.currentRoute._value.params.id
 			data.action = 'get/orders/buyer'
 			this.get_opt_my_order_api(data)
-		}
+		},
+		view(value) {
+			router.push({
+				name: "my_offer_id",
+				params: { id: this.$route.params.id, offer_id: value.id },
+			});
+		},
 	},
 	mounted() {
 		this.get_opt_my_order_api({
@@ -132,7 +203,11 @@ export default {
 			id: router.currentRoute._value.params.id,
 			page: this.page,
 			perpage: this.pagination_items_per_page
-    })
+    	})
+		this.get_offer_api({
+			action: 'get/offers/my',
+			id: this.$route.params.id
+		})
 	},
 	components: {
 		Dropdown,
@@ -145,6 +220,8 @@ export default {
 		vTable,
 		Dialog,
 		CalendarVue,
+		TabPanel,
+		TabView
 		// Checkbox,
 		// Swiper,
 		// SwiperSlide
@@ -152,6 +229,7 @@ export default {
 	computed: {
 		...mapGetters([
 			"my_orders",
+			'offers'
 		])
 	},
 	watch: {

@@ -417,7 +417,7 @@ export default {
       })
     },
     async offerSubmit(){
-        // this.loading = true
+        this.loading = true
         const data = {
             action: 'create/offer',
             id: router.currentRoute._value.params.id,
@@ -425,7 +425,11 @@ export default {
         }
         // console.log(data)
         await this.offer_api(data).then((response) => {
-            console.log(response)
+            this.loading = false
+            router.push({
+				name: "offer_view",
+				params: { id: this.$route.params.id, offer_id: response.data.data.offer_id },
+			});
         })
     },
     ElemCount(object) {

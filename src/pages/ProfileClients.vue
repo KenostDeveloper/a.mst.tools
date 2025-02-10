@@ -1,6 +1,6 @@
 <template>
 	<Breadcrumbs class="std-breadcrumbs--margin" />
-	<TabView class="tab-custom hidden-mobile-l">
+	<TabView class="tab-custom">
 		<TabPanel header="Мои клиенты">
 			<section class="clients">
 				<ConfirmDialog/>
@@ -27,7 +27,21 @@
 			</section>
 		</TabPanel>
 		<TabPanel header="Мои предложения">
-			
+			<section class="clients">
+				<v-table
+					:items_data="offers.items"
+					:total="offers.total"
+					:pagination_items_per_page="this.offer.pagination_items_per_page"
+					:pagination_offset="this.offer.pagination_offset"
+					:page="this.offer.page"
+					:table_data="this.offer.table_data"
+					:filters="this.offer.filters"
+					@filter="this.offer.filter"
+					title=""
+					@paginate="paginate"
+					@editElem="view"
+				/>
+			</section>
 		</TabPanel>
 	</TabView>
 </template>
@@ -42,6 +56,7 @@ import Breadcrumbs from '../components/Breadcrumbs.vue'
 import vClients from '../components/table/v-clients.vue'
 import TabView from "primevue/tabview";
 import TabPanel from "primevue/tabpanel";
+import vTable from '../components/table/v-table.vue'
 
 export default {
 	props: {
@@ -82,6 +97,49 @@ export default {
 			},
 			stores_list: [],
 			page: 1,
+			offer:{
+				page: 1,
+				pagination_offset: 0,
+				pagination_items_per_page: 25,
+				filter: {},
+				table_data: {
+					id: {
+						label: "№",
+						type: "text",
+					},
+					date: {
+						label: 'Дата создания',
+						type: 'text',
+					},
+					from_org_name: {
+						label: 'Клиент',
+						type: 'text',
+					},
+					store_name: {
+						label: 'Склад клиента',
+						type: 'text',
+					},
+					cost: {
+						label: 'Сумма',
+						type: 'text',
+					},
+					status_name: {
+						label: 'Статус',
+						type: 'text'
+					},
+					actions: {
+						label: 'Действия',
+						type: 'actions',
+						sort: false,
+						available: {
+							edit: {
+								icon: 'pi pi-eye',
+								label: 'Подробнее'
+							}
+						}
+					}
+				},
+			}
 		};
 	},
 	methods: {
@@ -91,7 +149,8 @@ export default {
 			'unset_dilers',
 			'org_get_stores_from_api',
 			'org_profile_set_from_api',
-			'org_get_managers_from_api'
+			'org_get_managers_from_api',
+			'get_offer_api'
 		]),
 		filter (data) {
 			this.unset_dilers()
@@ -151,6 +210,12 @@ export default {
 				},
 			});
 		},
+		view(value) {
+			router.push({
+				name: "offer_view",
+				params: { id: this.$route.params.id, offer_id: value.id },
+			});
+		},
 	},
 	mounted() {
 		this.get_dilers_from_api({
@@ -179,12 +244,17 @@ export default {
 			action: 'get/stores',
 			id: this.$route.params.id
 		})
+		this.get_offer_api({
+			action: 'get/offers/clients',
+			id: this.$route.params.id
+		})
 	},
 	computed: {
 		...mapGetters([
 			'dilers',
 			'org_stores',
-			'org_managers'
+			'org_managers',
+			'offers'
 		])
   },
 	components: {
@@ -194,7 +264,8 @@ export default {
 		ConfirmDialog,
 		Toast,
 		TabView,
-		TabPanel
+		TabPanel,
+		vTable
 	},
 	watch: {
 		dilers: function (newVal, oldVal) {
