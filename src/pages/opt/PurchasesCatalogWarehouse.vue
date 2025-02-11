@@ -2,7 +2,7 @@
     <Loading v-if="loading"/>
     <div>
       <div class="dart-custom-grid purchases__wrapper" :class="{ loading: loading }">
-        <div v-if="opt_vendors.selected_count > 0" class="d-col-content purchases">
+        <div v-if="opt_vendors.selected_count > 0 || this.namePathIsNav == 'purchases_offer'" class="d-col-content purchases">
           <div class="dart-home dart-window">
               <div v-if="$route.params.warehouse_id && !$route.params.warehouse_cat_id">
                 <h1 class="h1-mini">Все товары</h1>
@@ -79,7 +79,8 @@ export default {
       order_id: 0,
       page: 1,
       perpage: 25,
-      vendorModal: false
+      vendorModal: false,
+      namePathIsNav: null
     }
   },
   components: {
@@ -119,8 +120,11 @@ export default {
         this.loadingCheack(3)
       })
     }
+    this.namePathIsNav = router?.currentRoute?._value.matched[4]?.name;
   },
-  updated () { },
+  updated(){
+    this.namePathIsNav = router?.currentRoute?._value.matched[4]?.name;
+  },
   unmounted () {
   },
   methods: {

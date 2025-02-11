@@ -9,7 +9,7 @@
 			:items="this.opt_vendors"
 		/>
 		<!-- {{ this.sales_banners }} -->
-		<div v-if="this.opt_vendors.selected_count > 0" class="dart-custom-grid purchases__wrapper">
+		<div v-if="this.opt_vendors.selected_count > 0 || this.namePathIsNav == 'purchases_offer'" class="dart-custom-grid purchases__wrapper">
 			<!-- <CatalogMenu :items="opt_catalog" /> -->
 			<div class="d-col-content purchases">
 				<div class="dart-home dart-window">
@@ -59,6 +59,7 @@ export default {
 			opt_vendors: {},
 			sales_banners: {},
 			vendorModal: false,
+			namePathIsNav: null
 		};
 	},
 	components: {
@@ -115,7 +116,11 @@ export default {
 			this.loading_elems.push("load");
 			this.loadingCheack(1);
 		});
+		this.namePathIsNav = router?.currentRoute?._value.matched[4]?.name;
 	},
+	updated(){
+        this.namePathIsNav = router?.currentRoute?._value.matched[4]?.name;
+    },
 	computed: {
 		...mapGetters(["optvendors", "salesbanners"]),
 	},

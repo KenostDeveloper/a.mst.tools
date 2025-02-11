@@ -1,17 +1,17 @@
 <template>
 	<Loading v-if="this.loading"/>
 	<div class="shipping std-shipping">
-		<Breadcrumbs />
+		<!-- <Breadcrumbs /> -->
 
-		<div class="std-shipping__title-container hidden-tablet-l">
+		<div class="std-shipping__title-container mt-5">
 			<h1 class="table-kenost__title std-shipping__title">Предложение № {{ this.offer?.id }}</h1>
 			<div class="flex gap-left-2">
 				<div v-if="this?.offer?.status == 1" class="dart-btn dart-btn-primary" @click="acceptOffer()">
 					<span>Принять предложение</span>	
 				</div>
-				<div v-if="this?.offer?.status == 4" class="dart-btn dart-btn-primary" @click="acceptOffer()">
-					<span>Добавить в корзину</span>	
-				</div>
+				<!-- <div v-if="this?.offer?.status == 4" class="dart-btn dart-btn-primary" @click="acceptOffer()">
+					<span>Повторить заказ</span>	
+				</div> -->
 				<div v-if="this?.offer?.status == 1" class="dart-btn dart-btn-secondary gap-left-2" @click="changeStatus(3)">
 					<span>Отклонить предложение</span>
 				</div>
@@ -59,7 +59,7 @@
 				
 				<div class="w-full kenost-table-elem">
 					<span>Статус</span>
-					<div class="kenost-table-elem__content">{{ this.offer.status_name }}</div>
+					<div class="kenost-table-elem__content">{{ this.offer?.status_name }}</div>
 				</div>
 			</div>
 			
@@ -117,7 +117,7 @@
 					</tr>
 				</tbody>
 			</table>
-			<div class="kenost-table-line right">
+			<div class="kenost-table-line right mb-5">
 				<b>Итого: {{ Number(this.offer?.cost).toLocaleString('ru') }} ₽</b>
 			</div>
 		</div>
@@ -127,8 +127,8 @@
 		<Basket ref="childComponent" @toOrder="toOrder" @catalogUpdate="catalogUpdate" />
 	</div>
 	<OrderModal
-		:show="show_order"
-		:order_id="order_id"
+		:show="this.show_order"
+		:order_id="this.order_id"
 		@fromOrder="fromOrder"
 		@orderSubmit="updatePage($event, num)"
 	/>
@@ -171,7 +171,6 @@ export default {
 			opt_vendors: {},
 			order_id: 0,
 			vendorModal: false,
-
 		};
 	},
 	methods: {
@@ -182,13 +181,13 @@ export default {
 		]),
 		changeStatus(id_status){
 			this.loading = true
-			this.get_offer_api({
+			this.offer_api({
 				action: 'change/status',
 				id: router.currentRoute._value.params.id,
 				offer_id: router.currentRoute._value.params.offer_id,
 				status: id_status
 			}).then(() => {
-				this.offer_api({
+				this.get_offer_api({
 					action: 'get/offers/my',
 					id: router.currentRoute._value.params.id,
 					offer_id: router.currentRoute._value.params.offer_id
@@ -208,6 +207,11 @@ export default {
 				id: router.currentRoute._value.params.id,
 				offer_id: router.currentRoute._value.params.offer_id
 			}).then((res) => {
+				this.get_offer_api({
+					action: 'get/offers/my',
+					id: router.currentRoute._value.params.id,
+					offer_id: router.currentRoute._value.params.offer_id
+				}).then(() => this.loading = false)
 				this.busket_from_api({
                     action: 'basket/get',
                     extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
@@ -217,8 +221,10 @@ export default {
                     if(!response?.data?.data?.success && response?.data?.data?.message){
                         this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
                     }
-					this.loading = false
                 });
+				let nums = res.data.data.nums;
+        		this.order_id = nums.join(', ')
+				this.show_order = true
 			})
 		}
 	},
@@ -254,7 +260,9 @@ export default {
 	},
 	watch: {
 		offers: function (newVal, oldVal) {
+			console.log(newVal)
 			this.offer = newVal
+			console.log(this.offer)
 		}
 	},
 };

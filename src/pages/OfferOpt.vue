@@ -9,7 +9,7 @@
 				<div v-if="this?.offer?.status == 2" class="dart-btn dart-btn-primary" @click="changeStatus(1)">
 					<span>Отправить</span>	
 				</div>
-				<div v-if="this?.offer?.status == 2" class="dart-btn dart-btn-secondary gap-left-2" @click="deleteOffer()">
+				<div v-if="this?.offer?.status == 2 || this?.offer?.status == 1" class="dart-btn dart-btn-secondary gap-left-2" @click="deleteOffer()">
 					<span>Удалить</span>	
 				</div>
 			</div>
@@ -156,7 +156,7 @@ export default {
 				status: id_status
 			}).then(() => {
 				this.get_offer_api({
-					action: 'get/offers/my',
+					action: 'get/offers/clients',
 					id: router.currentRoute._value.params.id,
 					offer_id: router.currentRoute._value.params.offer_id
 				}).then(() => this.loading = false)

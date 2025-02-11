@@ -547,7 +547,7 @@ const routes = [
 										],
 									},
 									{
-										path: "offer/:id_org_from",
+										path: "offer/:id_org_from?",
 										name: "purchases_offer",
 										props: true,
 										label: "Закупки",
@@ -936,14 +936,20 @@ const routes = [
 												component: ProfileCreateClient,
 											},
 											{
-												path: "offer/:offer_id",
-												name: "offer_view",
-												meta: {
-													breadcrumb: {
-														label: "",
-													},
-												},
-												component: OfferOpt,
+												path: "offer",
+												name: "clients_offer",
+												children: [
+													{
+														path: ":offer_id",
+														name: "offer_view",
+														meta: {
+															breadcrumb: {
+																label: "Предложение",
+															},
+														},
+														component: OfferOpt,
+													}
+												]
 											}
 										],
 									},

@@ -43,6 +43,10 @@
 					<span>Отсрочка</span>
 					<div class="kenost-table-elem__content">{{ this.order.delay }}</div>
 				</div>
+				<div class="w-full kenost-table-elem">
+					<span>Инициатор</span>
+					<div class="kenost-table-elem__content gap-2 flex-col"><div>{{ this.order?.initiator_org_name }}</div><div v-if="this.order?.initiator_user_name">{{ this.order?.initiator_user_name }}</div></div>
+				</div>
 				<!--
 				<div class="w-full kenost-table-elem">
 					<span>Статус</span>

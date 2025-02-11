@@ -20,7 +20,7 @@
                         <div class="std-tab-item__img-container">
                             <img src="../../assets/images/icons/category.svg" alt="" />
                         </div>
-                        <span class="std-tab-item__text">Категории</span>
+                        <span class="std-tab-item__text">Единый каталог</span>
                     </button>
                 </div>
 
@@ -252,7 +252,7 @@
             </div>
         </div>
 
-        <div v-if="opt_vendors.selected_count > 0"
+        <div v-if="opt_vendors.selected_count > 0 || this.namePathIsNav == 'purchases_offer'"
             class="navmain__search a-dart-input a-dart-input-search std-search-field__wrapper" @click.stop>
             <form action="#" method="post" @submit.prevent="toSearch()">
                 <div class="navmain__search_btn std-search-field">
@@ -304,7 +304,7 @@
         </button>
         
         <div class="std-nav__right">
-            <button class="a-dart-btn a-dart-btn-secondary kenost-vendors" @click="changeActive">
+            <button v-if="this.namePathIsNav != 'purchases_offer'" class="a-dart-btn a-dart-btn-secondary kenost-vendors" @click="changeActive">
                 <!-- <i class="mst-icon mst-icon-my_vendors kenost-vendors__icon"></i> -->
                 <span class="std-icon">
                     <svg width="24" height="21" viewBox="0 0 24 21" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -585,7 +585,11 @@ export default {
             }
 
             this.showSearchSuggestions = false;
-            router.push({ name: 'opt_search', params: { search: this.search } });
+            if(router?.currentRoute?._value.matched[4]?.name == 'purchases_offer'){
+                router.push({ name: 'opt_search_offer', params: { search: this.search, id_org_from: router.currentRoute._value.params.id_org_from } });
+            } else {
+                router.push({ name: 'opt_search', params: { search: this.search } });
+            }
         },
         viewReq(data){
             this.modal_requirements_view = true
@@ -838,7 +842,7 @@ export default {
             const response = await axios.post(
                 '/rest/front_opt',
                 {
-                    id: router.currentRoute._value.params.id,
+                    id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
                     type: router.currentRoute._value.params.type,
                     category_id: cat,
                     warehouse_id: router.currentRoute._value.params.warehouse_id,

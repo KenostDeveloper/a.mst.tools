@@ -363,7 +363,7 @@ export default {
     },
     async orderSubmit (orgId) {
       this.loading = true
-      const data = { action: 'order/opt/submit', id: router.currentRoute._value.params.id, org_id: $orgId }
+      const data = { action: 'order/opt/submit', id: router.currentRoute._value.params.id, org_id: orgId }
       let arr = [];
       await this.opt_order_api(data).then((response) => {
         console.log(response)
@@ -395,8 +395,8 @@ export default {
                 }
             }
         });
-        this.$emit('orderSubmit', nums)
-        this.order = nums
+        this.$emit('orderSubmit', nums.join(', '))
+        this.order = nums.join(', ')
         const data = {
             action: 'basket/get',
             extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
@@ -761,6 +761,9 @@ export default {
   watch: {
     optbasketall: function (newVal, oldVal) {
         this.basket = newVal
+    },
+    order_id(newValue) {
+        this.order = newValue; // Обновление локального состояния
     }
   }
 }

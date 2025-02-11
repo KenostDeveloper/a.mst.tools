@@ -144,7 +144,7 @@ export default {
 							},
 							delete: {
 								icon: 'pi pi-trash',
-								label: 'Копировать'
+								label: 'Удалить'
 							}
 						}
 					}

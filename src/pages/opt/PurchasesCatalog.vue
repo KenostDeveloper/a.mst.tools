@@ -2,7 +2,7 @@
 	<Loading v-if="this.loading" />
 	<div v-else class="std-display-contents">
 		<div
-			v-if="opt_vendors.selected_count > 0"
+			v-if="opt_vendors.selected_count > 0 || this.namePathIsNav == 'purchases_offer'"
 			class="dart-custom-grid purchases__wrapper"
 			:class="{ loading: loading }"
 		>
