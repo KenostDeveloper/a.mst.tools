@@ -1079,6 +1079,14 @@
                         <label for="negative" class="ml-2 mb-0"> Негативная акция </label>
                     </div>
                 </div>
+
+                <div class="dart-form-group">
+                    <div class="flex align-items-center gap-1">
+                        <Checkbox v-model="this.form.offer" :binary="true" inputId="offer"
+                            name="offer" />
+                        <label for="offer" class="ml-2 mb-0"> Акция доступна только в предложениях </label>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -1470,7 +1478,8 @@ export default {
                 bigDiscount: [],
                 not_sale_client: [],
                 negative: false,
-                hide_for_clients: false
+                hide_for_clients: false,
+                offer: false
             },
             listAction: {},
             kenostActivityAll: {
@@ -2060,6 +2069,7 @@ export default {
                         big_post_actions: this.form.bigPost,
                         not_sale_client: this.form.not_sale_client[0] === 'true',
                         negative: this.form.negative,
+                        offer: this.form.offer,
                         limit_sum: this.form.limitationValue,
                         limit_type: this.form.limitations,
                         actionLast: this.form.actionLast[0] === 'true',
@@ -2115,6 +2125,7 @@ export default {
                         available_stores: this.form.available_stores[0] === 'true',
                         available_vendors: this.form.available_vendors[0] === 'true',
                         negative: this.form.negative,
+                        offer: this.form.offer,
                         available_opt: this.form.available_opt[0] === 'true',
                         complects: this.selected_complects,
                         big_sale_actions: this.form.bigDiscount,
@@ -2922,6 +2933,11 @@ export default {
                 if (newVal.negative) {
                     this.form.negative = true;
                 }
+
+                if (newVal.offer) {
+                    this.form.offer = true;
+                }
+
                 if (newVal.available_opt) {
                     this.form.available_opt = ['true'];
                 }
