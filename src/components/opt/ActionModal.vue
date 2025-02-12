@@ -1,6 +1,6 @@
 <template>
     <div class="table-actions">
-        <div :data-test="action?.tags?.length != 0" class="table-actions__action" :class="{active: action.enabled}" v-for="(action, indexactions) in actions" v-bind:key="action.action_id" :data-id="action?.action_id">
+        <div :data-test="action?.tags?.length != 0" class="table-actions__action" :class="{active: action.enabled, hidden: action?.tags?.length == 0}" v-for="(action, indexactions) in actions" v-bind:key="action.action_id" :data-id="action?.action_id">
             <div v-if="action?.tags?.length != 0"  class="table-actions__container">
                 <div class="table-actions__el" v-for="(tag, indextag) in action.tags" v-bind:key="tag.id">
                     <!-- <img v-if="tag.type == 'multiplicity'" :src="action.enabled

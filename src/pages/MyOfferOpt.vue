@@ -48,14 +48,14 @@
 					<span>Покупатель</span>
 					<div class="kenost-table-elem__content gap-2"><img class="kenost-table-elem__logo" :src="this.offer?.from_org_image?.image" v-if="this.offer?.from_org_image?.image">{{ this.offer?.from_org_name }}</div>
 				</div> -->
-				<div class="w-full kenost-table-elem">
-					<span>Склад доставки</span>
-					<div class="kenost-table-elem__content gap-2">{{ this.offer?.store_name }}</div>
-				</div>
 				<!-- <div class="w-full kenost-table-elem">
 					<span>Отсрочка</span>
 					<div class="kenost-table-elem__content">{{ this.order?.delay }}</div>
 				</div> -->
+				<div class="w-full kenost-table-elem">
+					<span>Отсрочка</span>
+					<div class="kenost-table-elem__content">{{Number(this.offer?.delay) != 0 ? Number(this.offer?.delay).toFixed(1) + ' дн' : 'Предоплата'}}</div>
+				</div>
 				
 				<div class="w-full kenost-table-elem">
 					<span>Статус</span>
@@ -64,27 +64,28 @@
 			</div>
 			
 			
-			<!-- <div class="kenost-table-line">
+			<div class="kenost-table-line">
 				<div><img src="../assets/images/icons/delivery.svg" alt=""></div>
 				<span>Доставка</span>
 			</div>
 			<div class="w-full flex">
 				<div class="w-full kenost-table-elem">
 					<span>Оплата доставки</span>
-					<div class="kenost-table-elem__content">{{ this.order?.payer }}</div>
+					<div class="kenost-table-elem__content">{{ this.offer?.delivery_payer == 1 ? 'Поставщик' : 'Покупатель' }}</div>
 				</div>
 				<div class="w-full kenost-table-elem">
 					<span>Срок доставки</span>
-					<div class="kenost-table-elem__content">{{ this.order?.day_delivery }} дн. ({{ this.order?.delivery_date }})</div>
+					<div class="kenost-table-elem__content">{{ this.offer?.day_delivery }} дн. ({{ this.offer?.delivery_date }})</div>
 				</div>
 				<div class="w-full kenost-table-elem">
-					<span>Склад</span>
-					<div class="kenost-table-elem__content">{{ this.order?.seller_address }}</div>
+					<span>Склад доставки</span>
+					<div class="kenost-table-elem__content">{{ this.offer?.store_name }}</div>
 				</div>
+
 				<div class="w-full kenost-table-elem d-none"></div>
 				<div class="w-full kenost-table-elem d-none"></div>
 				<div class="w-full kenost-table-elem d-none"></div>
-			</div> -->
+			</div>
 			<div class="kenost-table-line">
 				<div><img src="../assets/images/icons/orders.svg" alt=""></div>
 				<span>Состав предложения</span>

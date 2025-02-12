@@ -233,13 +233,13 @@
                 <img src="/images/icons/menu.svg" alt="" class="hidden-tablet-l" />
                 <!-- <img src="/images/icons/arrow-rounded.svg" alt="" class="visible-tablet-l" /> -->
             </button>
-            <div class="std-nav__address-wrapper" v-if="opt_vendors.selected_count > 0">
+            <div class="std-nav__address-wrapper" v-if="opt_vendors.selected_count > 0 || this.namePathIsNav == 'purchases_offer'">
                 <button v-if="org_stores?.items?.find((el) => el.id == warehouse_basket)" class="std-nav__address" @click.stop="() => (this.showWarehouseList = !this.showWarehouseList)">
                     <img class="std-nav__address-icon" src="/images/icons/map_marker.svg" />
                     <span class="std-nav__address-text">
                         <span>Адрес доставки:</span><br />
-                        «{{ org_stores?.items?.find((el) => el.id == warehouse_basket)?.name_short }}»,
-                        {{ org_stores?.items?.find((el) => el.id == warehouse_basket)?.address_short }}
+                        «{{ org_stores?.items?.find((el) => el?.id == warehouse_basket)?.name_short }}»,
+                        {{ org_stores?.items?.find((el) => el?.id == warehouse_basket)?.address_short }}
                     </span>
                 </button>
                 <ul class="std-nav__warehouse-list" :class="{ ['std-nav__warehouse-list--active']: this.showWarehouseList }"
