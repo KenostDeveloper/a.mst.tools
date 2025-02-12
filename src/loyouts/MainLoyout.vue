@@ -6,17 +6,25 @@
                     <div class="std-notification__header">
                         <div class="std-notification__header-content">
                             <i class="std_icon std_icon-notification std-notification__icon"></i>
-                            <span class="std-notification__span">12.10.2024</span>
-                            <span class="std-notification__span">12:00</span>
+                            <span class="std-notification__span">
+                                {{ new Date(slotProps.message.info.date).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' }) }}
+                            </span>
+                            <span class="std-notification__span">
+                                {{ new Date(slotProps.message.info.date).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }) }}
+                            </span>
                         </div>
                     </div>
                     <div class="std-notification__main">
                         <h6 class="std-notification__title">{{ slotProps.message.summary }}</h6>
-                        <p class="std-notification__text">{{ slotProps.message.detail }}</p>
-                        <span class="std-notification__span">
+                        <p v-if="slotProps.message.info.namespace == 2" class="std-notification__text">{{ slotProps.message.detail }} <router-link class="std-notification__link" :to="{ name: 'my_orders_opt_id', params: { id: slotProps.message.info.org_id, order_id: slotProps.message.info.link_id } }" @click.stop>здесь</router-link></p>
+                        <p v-if="slotProps.message.info.namespace == 11" class="std-notification__text">{{ slotProps.message.detail }} <router-link class="std-notification__link" :to="{ name: 'my_offer_id', params: { id: slotProps.message.info.org_id, offer_id: slotProps.message.info.link_id } }" @click.stop>здесь</router-link></p>
+                        <p v-if="slotProps.message.info.namespace == 12" class="std-notification__text">{{ slotProps.message.detail }} <router-link class="std-notification__link" :to="{ name: 'offer_view', params: { id: slotProps.message.info.org_id, offer_id: slotProps.message.info.link_id } }" @click.stop>здесь</router-link></p>
+                        <p v-if="slotProps.message.info.namespace == 13" class="std-notification__text">{{ slotProps.message.detail }} <router-link class="std-notification__link" :to="{ name: 'offer_view', params: { id: slotProps.message.info.org_id, offer_id: slotProps.message.info.link_id } }" @click.stop>здесь</router-link></p>
+                        
+                        <!-- <span class="std-notification__span">
                             Просмотреть детали заказа, нажав
                             <router-link class="std-notification__link" to="/" @click.stop>здесь</router-link>
-                        </span>
+                        </span> -->
                     </div>
                 </div>
             </div>
@@ -25,7 +33,9 @@
                 <!-- <i class="pi pi-cloud-upload text-primary-500 text-2xl"></i> -->
                 <div class="p-toast-message-text" data-pc-section="text">
                     <span class="p-toast-summary" data-pc-section="summary">{{ slotProps.message.summary }}</span>
-                    <div class="p-toast-detail" data-pc-section="detail">{{ slotProps.message.detail }}</div>
+                    <div class="p-toast-detail" data-pc-section="detail">{{ slotProps.message.detail }} 
+                        <!-- <router-link class="std-notification__link" :to="{ name: 'my_orders_opt_id', params: { id: slotProps.message.info.id, order_id: slotProps.message.info.link_id } }" @click.stop>здесь</router-link> -->
+                    </div>
                 </div>
             </div>
         </template>
@@ -166,9 +176,18 @@ export default {
                             case '10':
                                 title = 'Ваш склад подключен';
                                 break;
+                            case '11':
+                                title = 'Вам отправлено предложение оформить заказ';
+                                break;
+                            case '12':
+                                title = 'Ваше предложение было отклонено';
+                                break;
+                            case '13':
+                                title = 'Ваше предложение было принято';
+                                break;
                         }
                         console.log(title);
-                        this.$toast.add({ severity: 'secondary', summary: title, detail: 'Нажмите, чтобы узнать подробнее', life: 5000 });
+                        this.$toast.add({ severity: 'secondary', summary: title, detail: 'Чтобы узнать подробнее, нажмите ', info: res.data.data.items[i], life: 5000 });
                     }, i * 500);
                 }
                 if (res.data.data.items.length > 0) {

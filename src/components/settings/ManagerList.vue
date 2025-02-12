@@ -1,6 +1,6 @@
 <template>
     <ul class="manager-list">
-        <li v-for="(manager, index) in items" v-bind:key="manager.id" class="manager-list__item">
+        <li v-for="(manager, indexi) in items" v-bind:key="manager.id" class="manager-list__item">
             <div class="manager-list__header">
                 <h2 class="manager-list__title">Менеджер {{ index + 1 }}</h2>
                 <button class="button-none manager-list__delete-button" @click="deleteItem(index)">
@@ -46,10 +46,10 @@
                     <div class="manager-list__notification-list">
                         <div v-for="(notification, notificationIndex) in form.notifications"
                             class="manager-list__checkbox-container">
-                            <Checkbox v-model="manager.notifications[notification.name]" :inputId="notification.name"
+                            <Checkbox v-model="manager.notifications[notification.name]" :inputId="notification.name+'-'+indexi"
                                 :binary="true" :value="!!manager.notifications[notification.name]"
                                 class="manager-list__checkbox" />
-                            <label class="manager-list__checkbox-label" :for="notification.name">{{
+                            <label class="manager-list__checkbox-label" :for="notification.name+'-'+indexi">{{
                                 notification.label }}</label>
                         </div>
                     </div>
@@ -145,6 +145,10 @@ export default {
                         name: "deleted_from_my_vendors",
                         label: "Вас удалили из моих поставщиков",
                     },
+                    {
+                        name: "info_offer",
+                        label: "Информация о предложениях",
+                    },
                 ],
             },
             mask: {
@@ -171,7 +175,8 @@ export default {
                     company_connected: true,
                     new_vendor: true,
                     added_to_my_vendors: true,
-                    deleted_from_my_vendors: true
+                    deleted_from_my_vendors: true,
+                    info_offer: true
                 },
             }]);
         },

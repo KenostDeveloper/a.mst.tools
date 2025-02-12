@@ -111,9 +111,20 @@ export default {
 		},
 		paginate(data) {
 			this.page = data.page;
+			this.get_group_api({
+				page: this.page,
+				perpage: this.perpage,
+				id: this.$route.params.id,
+				action: "get"
+			})
 		},
 		filter(){
-
+			this.get_group_api({
+				page: this.page,
+				perpage: this.perpage,
+				id: this.$route.params.id,
+				action: "get"
+			})
 		}
 	},
 	mounted() {
