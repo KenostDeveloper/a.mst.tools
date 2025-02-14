@@ -11,20 +11,13 @@
         </div>
         <div class="notifications__main">
             <div class="notifications__list">
-                <!-- <Notification
-                    v-for="(notification, index) in notifications"
-                    :key="notification.id"
-                    :data="notification"
-                    type="big"
-                    @delete="deleteNotification(index)" /> -->
-                    <div :data-id="item.id" :data-read="item.read" v-for="item in this.notifications_all.items" v-bind:key="item.id" class="std-notification std-notification--big" :class="{read: item.read == '1'}">
-                        <div v-html="item.chunk"></div>
-                        <button class="button-none std-notification__delete" @click="deleteNotificate(item.id)">
-                            <!-- <i class="std_icon std_icon-delete"></i> -->
-                            <i class="std_icon std_icon-trash"></i>
-                        </button>
-                    </div>
-
+                <div :data-id="item.id" :data-read="item.read" v-for="item in this.notifications_all.items" v-bind:key="item.id" class="std-notification std-notification--big" :class="{read: item.read == '1'}">
+                    <div v-html="item.chunk"></div>
+                    <button class="button-none std-notification__delete" @click="deleteNotificate(item.id)">
+                        <!-- <i class="std_icon std_icon-delete"></i> -->
+                        <i class="std_icon std_icon-trash"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </section>

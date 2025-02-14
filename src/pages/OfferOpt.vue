@@ -34,6 +34,14 @@
                         }) }}</div>
 				</div>
 				<div class="w-full kenost-table-elem">
+					<span>Дата окончания предложения</span>
+					<div class="kenost-table-elem__content">{{ new Date(this.offer?.date_end).toLocaleString('ru', {
+                            month: '2-digit',
+                            day: '2-digit',
+                            year: '2-digit'
+                        }) }}</div>
+				</div>
+				<div class="w-full kenost-table-elem">
 					<span>Сумма</span>
 					<div class="kenost-table-elem__content">{{ this.offer?.cost }}</div>
 				</div>

@@ -37,6 +37,14 @@
                         }) }}</div>
 				</div>
 				<div class="w-full kenost-table-elem">
+					<span>Дата окончания предложения</span>
+					<div class="kenost-table-elem__content">{{ new Date(this.offer?.date_end).toLocaleString('ru', {
+                            month: '2-digit',
+                            day: '2-digit',
+                            year: '2-digit'
+                        }) }}</div>
+				</div>
+				<div class="w-full kenost-table-elem">
 					<span>Инициатор</span>
 					<div class="kenost-table-elem__content gap-2 flex-col"><div>{{ this.offer?.initiator_org_name }}</div><div v-if="this.offer?.initiator_user_name">{{ this.offer?.initiator_user_name }}</div></div>
 				</div>

@@ -223,10 +223,23 @@
                                     this.showChangedCount = true;
                                     this.chowChangedId = 'all';
                                 } else {
-                                    offerSubmit('all');
+                                    this.showDataOffer = true
                                 }
                             }"><p>Отправить предложения</p> <p>{{ this.basket?.cart_data?.cost?.toLocaleString('ru') }} ₽</p></div>
                         </div>
+                        <Dialog v-model:visible="this.showDataOffer" header="Выберите дату окончания предложения" :style="{ width: '400px' }">
+                            <div class="kenost-calendar-min flex flex-col mt-3">
+                                <CalendarVue
+                                    v-model="this.date_end"
+                                    inline
+                                    id="calendar-24h"
+                                />
+                                <button class="dart-btn dart-btn-primary mt-2" @click="() => {
+                                    offerSubmit('all');
+                                    this.showDataOffer = false
+                                }">Отправить предложение</button>
+                            </div>
+                        </Dialog>
                     </div>
                 </div>
                 
@@ -312,6 +325,7 @@ import router from '../../router'
 import Counter from './Counter.vue'
 import Dialog from "primevue/dialog";
 import ActionModal from './ActionModal.vue'
+import CalendarVue from "primevue/calendar";
 
 export default {
   name: 'OrderForm',
@@ -346,7 +360,9 @@ export default {
       showClearBasketModal: false,
       chowChangedId: 'all',
       showChangedCount: false,
-      namePathIsNav: null
+      namePathIsNav: null,
+      showDataOffer: false,
+      date_end: null
     }
   },
   emits: ['fromOrder', 'orderSubmit'],
@@ -417,11 +433,16 @@ export default {
       })
     },
     async offerSubmit(){
+        if(this.date_end == null) {
+            this.$toast.add({ severity: 'error', summary: "Ошибка", detail: "Укажите дату окончания предложения", life: 3000 });
+            return null
+        }
         this.loading = true
         const data = {
             action: 'create/offer',
             id: router.currentRoute._value.params.id,
-            id_org_from: router.currentRoute._value.params.id_org_from
+            id_org_from: router.currentRoute._value.params.id_org_from,
+            date_end: this.date_end.toDateString()
         }
         // console.log(data)
         await this.offer_api(data).then((response) => {
@@ -752,7 +773,7 @@ export default {
   updated(){
     this.namePathIsNav = router?.currentRoute?._value.matched[4]?.name;
     },
-  components: { Counter, Dialog, ActionModal },
+  components: { Counter, Dialog, ActionModal, CalendarVue },
   computed: {
     ...mapGetters([
       'optbasketall'

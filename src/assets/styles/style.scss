@@ -9815,3 +9815,9 @@ button.std-icon__wrapper {
 	background: #FFF;
 	z-index: 100;
 }
+
+.kenost-calendar-min{
+	.p-datepicker table td{
+		padding: 0;
+	}
+}
