@@ -5,7 +5,6 @@
 				<div class="std-basket__header" @click.stop="this.isOpened = !this.isOpened">
 					<div class="std-basket__title-container">
 						<p class="d-col-basket__title std-basket__title"><span>{{namePathIsNav == 'purchases' ? "Корзина" : "Предложение"}}</span></p>
-						<!-- {{ this.basket }} -->
 						<div class="std-cart-icon__wrapper">
 							<span class="basket-count-all" v-if="this.basket?.cart_data?.sku_count">{{
 								this.basket?.cart_data?.sku_count
@@ -301,7 +300,7 @@
 					v-if="Object.prototype.hasOwnProperty.call(this.basket, 'data')"
 					class="a-dart-btn a-dart-btn-primary btn-arrange button-basket justify-content-space-between"
 					@click.prevent="toOrder"
-					>Перейти к предложению<span>{{ this.basket.data[warehouse_basket]?.cart_data?.cost?.toLocaleString("ru") }} ₽</span></a
+					>{{namePathIsNav == 'purchases' ? "Перейти к заказу" : "Перейти к предложению"}}<span>{{ this.basket.data[warehouse_basket]?.cart_data?.cost?.toLocaleString("ru") }} ₽</span></a
 				>
 			</div>
 			

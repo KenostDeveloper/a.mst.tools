@@ -304,7 +304,7 @@
         </button>
         
         <div class="std-nav__right">
-            <button v-if="this.namePathIsNav != 'purchases_offer'" class="a-dart-btn a-dart-btn-secondary kenost-vendors" @click="changeActive">
+            <button class="a-dart-btn a-dart-btn-secondary kenost-vendors" @click="changeActive">
                 <!-- <i class="mst-icon mst-icon-my_vendors kenost-vendors__icon"></i> -->
                 <span class="std-icon">
                     <svg width="24" height="21" viewBox="0 0 24 21" fill="none" xmlns="http://www.w3.org/2000/svg">

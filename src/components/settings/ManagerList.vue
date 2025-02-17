@@ -2,7 +2,7 @@
     <ul class="manager-list">
         <li v-for="(manager, indexi) in items" v-bind:key="manager.id" class="manager-list__item">
             <div class="manager-list__header">
-                <h2 class="manager-list__title">Менеджер {{ index + 1 }}</h2>
+                <h2 class="manager-list__title">Менеджер {{ indexi + 1 }}</h2>
                 <button class="button-none manager-list__delete-button" @click="deleteItem(index)">
                     <i class="std_icon-trash manager-list__delete-button-icon"></i>
                 </button>

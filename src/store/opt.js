@@ -260,7 +260,9 @@ export default {
       const data = {
         id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
         type: router.currentRoute._value.params.type,
-        action: 'get/vendors'
+        action: 'get/vendors',
+        id_org_from: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id : null,
+        extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
       }
       if (sendData) {
         if (Object.prototype.hasOwnProperty.call(sendData, 'filter')) {

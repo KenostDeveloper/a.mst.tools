@@ -215,6 +215,7 @@ export default {
       const data = {
         id: id,
         action: action,
+        extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
         store: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
       }
       this.toggle_opts_visible(data).then(() => {
@@ -256,6 +257,7 @@ export default {
             const data = {
               id: this.items.selected[i].id,
               action: 0,
+              extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
               store: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
             }
             this.toggle_opts_visible(data)
@@ -266,6 +268,7 @@ export default {
           await this.toggle_opts_visible({
             action: 1,
             store: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
+            extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
             id: this.vendorForm.selected
           })
             .then((result) => {
