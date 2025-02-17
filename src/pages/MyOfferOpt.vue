@@ -166,6 +166,7 @@ import Loading from "../components/Loading.vue";
 import Basket from "../components/opt/Basket.vue";
 import Vendors from "../components/opt/Vendors.vue";
 import OrderModal from "../components/opt/OrderModal.vue";
+import { join } from "lodash";
 
 
 export default {
@@ -210,7 +211,7 @@ export default {
 			this.show_order = false;
 		},
 		acceptOffer(){
-			this.loading = true
+			// this.loading = true
 			this.offer_api({
 				action: 'accept',
 				id: router.currentRoute._value.params.id,
