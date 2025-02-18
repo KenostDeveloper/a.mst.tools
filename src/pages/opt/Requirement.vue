@@ -119,6 +119,7 @@ export default {
               action: "cart/products",
               id: router.currentRoute._value.params.id,
               req: router.currentRoute._value.params.req,
+              extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
           }).then((response) => {
               this.loading = false;
               if(response.data.success){

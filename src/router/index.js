@@ -649,6 +649,27 @@ const routes = [
 													},
 												],
 											},
+											{
+												path: "req",
+												meta: {
+													breadcrumb: {
+														label: "Потребность",
+													},
+												},
+												children: [
+													{
+														path: ":req",
+														name: "offer_req",
+														props: true,
+														meta: {
+															breadcrumb: {
+																label: "Потребность"
+															}
+														},
+														component: Requirement,
+													},
+												],
+											}
 										],
 									},									
 									{

@@ -302,6 +302,10 @@
         <button v-if="this.namePathIsNav != 'purchases_offer'" @click="requirement()" class="navmain__dart_btn a-dart-btn a-dart-btn-primary requirement-btn" title="Загрузить Потребность">
             <i class="pi pi-upload"></i>
         </button>
+
+        <button v-else @click="matrix()" class="navmain__dart_btn a-dart-btn a-dart-btn-primary requirement-btn" title="Загрузить Потребность">
+            <i class="pi pi-th-large"></i>
+        </button>
         
         <div class="std-nav__right">
             <button class="a-dart-btn a-dart-btn-secondary kenost-vendors" @click="changeActive">
@@ -440,6 +444,101 @@
         </v-table>
     </Dialog>
 
+    <Dialog v-model:visible="this.modal_matrixs" header="Матрицы"
+        :style="{ width: '940px' }">
+        <div class="dart-alert dart-alert-info">Обратите внимание! Здесь отображаются только те матрицы, которые привязаны к складу доставки.</div>
+        <v-table
+            class="std-table__wrapper"
+            :filters="this.filters"
+            :items_data="requirements.items"
+            :total="requirements.total"
+            :pagination_items_per_page="this.pagination_items_per_page"
+            :pagination_offset="this.pagination_offset"
+            :page="this.requirements_page"
+            :table_data="this.table_data"
+            title="Матрицы организации"
+            @filter="filterRequirements"
+            @sort="filterRequirements"
+            @paginate="paginateRequirements"
+            @viewElem="viewMatrix"
+			@deleteElem="deleteMatrix"
+        >
+            <template v-slot:button>
+                <a href="#" class="dart-btn dart-btn-primary" @click.prevent="() => {this.modal_matrix = !this.modal_matrix}">Создать</a>
+            </template>
+        </v-table>
+    </Dialog>
+
+    <Dialog v-model:visible="this.modal_matrix" header="Загрузка матрицы"
+        :style="{ width: '640px' }">
+        <div class="kenost-list-error">
+            <form @submit.prevent="formMatrixSubmit" :class="{ loading: requirements_loading }">
+                <div class="dart-alert dart-alert-info">Обратите внимание! Данная матрица будет привязана к складу доставки.</div>
+                <div class="dart-form-group mb-4" :class="{
+                    error: v$.form_requirements.name.$errors.length
+                }">
+                    <span class="ktitle">Наименование Матрицы</span>
+                    <label for="name">Введите наименование, которое будет отражать смысл вашей Матрицы.</label>
+                    <input v-model="this.form_requirements.name" type="text" name="name" placeholder="Укажите наименование Матрицы"
+                        class="dart-form-control mt-2" />
+
+                    <span class="error_desc" v-for="error of v$.form_requirements.name.$errors" :key="error.$uid">
+                        {{ error.$message }}
+                    </span>
+                </div>
+                <div class="dart-form-group mb-4" :class="{
+                    error: v$.form_requirements.file.$errors.length
+                }">
+                    <DropZone v-if="!this.upload_product" class="kenost-dropzone" :maxFiles="Number(1)"
+                        url="/rest/file_upload.php?upload_products=xlsx" :uploadOnDrop="true" :multipleUpload="true"
+                        :acceptedFiles="['xlsx', 'xlsx']" :parallelUpload="1" @sending="parseFile" v-bind="args">
+                        <template v-slot:message>
+                            <div class="kenost-dropzone__custom">
+                                <i class="pi pi-cloud-upload"></i>
+                                <b>Перетащите файл в эту область</b>
+                                <p>Вы также можете загрузить файл, <span>нажав сюда</span></p>
+                            </div>
+                        </template>
+                    </DropZone>
+
+                    <!-- <div class="kenost-upload-xlsx" v-if="this.upload_product">
+                        <div class="kenost-upload-xlsx__file">
+                            <a targer="_blank" :href="files?.xlsx?.original_href">{{ files?.xlsx?.name }}</a>
+                        </div>
+                        <div class="kenost-upload-xlsx__info">
+                            <p>Загружено товаров: {{ Object.keys(this.selected).length }} шт</p>
+                            <p>Всего товаров: {{ Object.keys(this.selected).length + error_product.length }} шт</p>
+                            <div class="kenost-link-blue" @click="this.modals.error_product = true">Список незагруженных
+                                товаров</div>
+                        </div>
+                    </div> -->
+
+                    <a :href="site_url_prefix + '/assets/files/files/examples/ExampleLoadingRequirement.xlsx'"
+                        class="kenost-link-blue mt-2" target="_blank">Скачать шаблон файла</a>
+                    <span class="error_desc" v-for="error of v$.form_requirements.file.$errors" :key="error.$uid">
+                        {{ error.$message }}
+                    </span>
+                </div>
+                <button class="dart-btn dart-btn-primary dart-btn-block" type="submit">Создать матрицу</button>
+            </form>
+        </div>
+    </Dialog>
+
+    <Dialog v-model:visible="this.modal_matrixs_view" header="Выберите Поставщика" :style="{ width: '640px' }">
+        <form @submit.prevent="formRequirementsViewSubmit" :class="{ loading: requirements_loading }">
+            <div class="dart-alert dart-alert-info">Для того, чтобы посмотреть предложения согласно Вашей матрицы, необходимо выбрать Поставщика для просмотра.</div>
+            <div class="dart-form-group mb-4" :class="{
+                error: this.form_requirements_view.error
+            }">
+                <Dropdown v-model="this.form_requirements_view.warehouse" :options="this.available_sellers" optionLabel="name" placeholder="Выберите склад" class="w-full md:w-14rem" />
+                <span class="error_desc" v-if="this.form_requirements_view.error">
+                    Выберите поставщика
+                </span>
+            </div>
+            <button class="dart-btn dart-btn-primary dart-btn-block" type="submit">Просмотреть предложения</button>
+        </form>
+    </Dialog>
+
     <Toast />
 </template>
 <script>
@@ -494,9 +593,12 @@ export default {
             showWarehouseList: false,
             active_warehouse: [],
             requirements_loading: false,
+            modal_matrixs: false,
+            modal_matrix: false,
             modal_requirement: false,
             modal_requirements: false,
             modal_requirements_view: false,
+            modal_matrixs_view: false,
             requirements_page: 1,            
             form_requirements: {
                 name: "",
@@ -571,7 +673,8 @@ export default {
                 id: this.$route.params.id,
                 filter: data.filter,
                 page: 1,
-                perpage: this.pagination_items_per_page
+                perpage: this.pagination_items_per_page,
+                matrix: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? true : false
             }
 			this.get_requirements_api(senddata);
 		},
@@ -597,6 +700,71 @@ export default {
             if(data.warehouse){
                 this.form_requirements_view.warehouse = data.warehouse
             }
+        },
+        viewMatrix(data){
+            console.log(data.warehouse)
+            this.modal_matrixs_view = true
+            this.form_requirements_view.requirement = data
+            if(data.warehouse){
+                this.form_requirements_view.warehouse = data.warehouse
+            }
+        },
+        deleteMatrix(data){
+            this.$confirm.require({
+				message: "Вы уверены, что хотите удалить матрицу с ID " + data.id + "?",
+				header: "Подтверждение удаления",
+				icon: "pi pi-exclamation-triangle",
+				accept: () => {
+					this.requirements_loading = true;
+					this.unset_requirements();
+					this.$load(async () => {
+						await this.set_requirements_api({
+							action: "delete",
+							id: router.currentRoute._value.params.id,
+							requirements: data,
+						})
+							.then((response) => {
+                                if(response.data.success){
+                                    this.$toast.add({
+                                        severity: "success",
+                                        summary: "Матрица удалена",
+                                        detail:
+                                            "Удаление матрицы ID " + data.id + " произошло успешно!",
+                                        life: 3000,
+                                    });
+                                    this.unset_requirements()
+                                    this.get_requirements_api({
+                                        action: 'get',
+                                        id: this.$route.params.id,
+                                        page: 1,
+                                        perpage: this.pagination_items_per_page,
+                                        matrix: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? true : false
+                                    });
+                                }else{
+                                    this.$toast.add({
+                                        severity: "error",
+                                        summary: "Ошибка удаления Матрицы",
+                                        detail:
+                                            "При удаление Матрицы ID " + data.id + " произошла ошибка! " + response.data.message,
+                                        life: 3000,
+                                    });
+                                }
+							})
+							.catch((result) => {
+								console.log(result);
+							});
+					});
+					this.requirements_loading = false;
+				},
+				reject: () => {
+					this.$toast.add({
+						severity: "error",
+						summary: "Удаление Матрицы",
+						detail: "Удаление Матрицы отклонено",
+						life: 3000,
+					});
+				},
+			});
         },
         deleteReq(data){
             this.$confirm.require({
@@ -626,7 +794,8 @@ export default {
                                         action: 'get',
                                         id: this.$route.params.id,
                                         page: 1,
-                                        perpage: this.pagination_items_per_page
+                                        perpage: this.pagination_items_per_page,
+                                        matrix: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? true : false
                                     });
                                 }else{
                                     this.$toast.add({
@@ -654,6 +823,40 @@ export default {
 				},
 			});
         },
+        async formMatrixSubmit(event){
+            const validationResult = await this.v$.$validate();
+            if (!validationResult) {
+                console.log('validation failed');
+                return;
+            }
+            this.$load(async () => {
+                this.requirements_loading = true;
+                let data = this.form_requirements;
+                await this.set_requirements_api({
+                    action: "set",
+                    id: router.currentRoute._value.params.id,
+                    matrix: true,
+                    data: data,
+                }).then((response) => {
+                    if(response.data.success){
+                        this.$toast.add({ severity: 'success', summary: 'Матрица успешно создана!', detail: response.data.message, life: 3000 });
+                        this.modal_requirement = false
+                        this.requirements_loading = false;
+                        this.unset_requirements()
+                        this.get_requirements_api({
+                            action: 'get',
+                            id: this.$route.params.id,
+                            page: 1,
+                            perpage: this.pagination_items_per_page,
+                            matrix: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? true : false
+                        });
+                    }else{
+                        this.$toast.add({ severity: 'error', summary: 'Ошибка создания матрицы', detail: response.data.message, life: 3000 });
+                    }
+                })            
+            })
+            this.modal_matrix = false;
+        },
         formRequirementsViewSubmit(event){
             if(this.form_requirements_view.warehouse.length == 0){
                 this.form_requirements_view.error = true
@@ -672,7 +875,11 @@ export default {
                             this.modal_requirements_view = false
                             this.modal_requirements = false
                             
-                            this.$router.push({ name: 'opt_req', params: { req: this.form_requirements_view.requirement.id + '_req'}, query: { timestamp: Date.now() } });
+                            if(router?.currentRoute?._value.matched[4]?.name == 'purchases_offer'){
+                                this.$router.push({ name: 'offer_req', params: { req: this.form_requirements_view.requirement.id + '_req'}, query: { timestamp: Date.now() } });
+                            }else{
+                                this.$router.push({ name: 'opt_req', params: { req: this.form_requirements_view.requirement.id + '_req'}, query: { timestamp: Date.now() } });
+                            }
                         }else{
                             this.$toast.add({ severity: 'error', summary: 'Ошибка сохранения Поставщика', detail: response.data.message, life: 3000 });
                         }
@@ -703,13 +910,13 @@ export default {
                             action: 'get',
                             id: this.$route.params.id,
                             page: 1,
-                            perpage: this.pagination_items_per_page
+                            perpage: this.pagination_items_per_page,
+                            matrix: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? true : false
                         });
                     }else{
                         this.$toast.add({ severity: 'error', summary: 'Ошибка создания потребности', detail: response.data.message, life: 3000 });
                     }
-                })
-                                
+                })            
             })
         },
         parseFile(files, xhr, formData) {
@@ -727,6 +934,9 @@ export default {
         },
         requirement(){
             this.modal_requirements = true
+        },
+        matrix(){
+            this.modal_matrixs = true
         },
         changeActive() {
             this.vendorModal = !this.vendorModal;
@@ -874,7 +1084,8 @@ export default {
             action: 'get',
             id: this.$route.params.id,
 			page: this.requirements_page,
-			perpage: this.pagination_items_per_page
+			perpage: this.pagination_items_per_page,
+            matrix: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? true : false
         });
         this.get_available_sellers_from_api();
         const getOrganizationss = async () => {

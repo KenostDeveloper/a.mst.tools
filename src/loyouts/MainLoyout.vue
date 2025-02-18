@@ -212,7 +212,8 @@ export default {
                 routeName == 'purchases_notifications' || routeName == 'groups_edit' ||
                 routeName == 'groups_edit_id' || routeName == 'purchases_home_offer' ||
                 routeName == 'purchases_catalog_offer' || routeName == 'opt_search' ||
-                routeName == 'purchases_catalog_warehouse_offer' || routeName == 'opt_search_offer'
+                routeName == 'purchases_catalog_warehouse_offer' || routeName == 'opt_search_offer' ||
+                routeName == 'offer_req'
             ) {
                 return false;
             }

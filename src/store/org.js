@@ -17,8 +17,9 @@ export default {
       return Axios('/rest/front_org', {
         method: 'POST',
         data: {
-          org_id: router.currentRoute._value.params.id,
-          action: 'get/org/available_sellers'
+          org_id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
+          id_org_from: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id : null,
+          action: 'get/org/available_sellers',
         },
         headers: {
           'Access-Control-Allow-Origin': '*'
