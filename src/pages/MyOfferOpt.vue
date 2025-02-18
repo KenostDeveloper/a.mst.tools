@@ -187,7 +187,10 @@ export default {
 		...mapActions([
             'get_offer_api',
 			'offer_api',
-			'busket_from_api'
+			'busket_from_api',
+			"get_opt_catalog_from_api",
+			"get_opt_vendors_from_api",
+			"get_opt_products_from_api"
 		]),
 		changeStatus(id_status){
 			this.loading = true
@@ -202,6 +205,28 @@ export default {
 					id: router.currentRoute._value.params.id,
 					offer_id: router.currentRoute._value.params.offer_id
 				}).then(() => this.loading = false)
+			})
+		},
+		updatePage(order_id) {
+			this.order_id = order_id
+			this.page = 1
+			// this.loading = true;
+			// this.get_opt_catalog_from_api().then((this.opt_catalog = this.optcatalog));
+			// this.get_opt_vendors_from_api().then((this.opt_vendors = this.optvendors));
+			// this.get_opt_products_from_api({
+			// 	page: this.page,
+			// 	perpage: this.perpage,
+			// }).then(() => {
+			// 	this.opt_products = this.optproducts;
+			// 	this.loading = false;
+			// });
+			// if (this.$route.params.warehouse_id) {
+			// 	this.get_opt_warehouse().then((this.opt_warehouse = this.optwarehouse));
+			// }
+			this.get_offer_api({
+				action: 'get/offers/my',
+				id: router.currentRoute._value.params.id,
+				offer_id: router.currentRoute._value.params.offer_id
 			})
 		},
 		toOrder() {
@@ -265,7 +290,7 @@ export default {
 	},
 	computed: {
 		...mapGetters([
-            'offers'
+            'offers',
         ]),
 	},
 	watch: {
