@@ -73,15 +73,20 @@
               </div>
             </div>
             <div class="d-client-card__buttons d-client-card__buttons-flex" v-if="item.owner_id > 0">
-              <span class="status status-green">Созданный поставщиком</span>
-              <div class="d-client-card__actions">
-                <router-link :to="{ name: 'client_update', params: { id: $route.params.id, client_id: item.id } }" class="button-none std-icon__wrapper client-card__action-button">
-                  <i class="std_icon std_icon-pen"></i>
-                </router-link>
-                <button class="button-none std-icon__wrapper client-card__action-button" @click.prevent="deleteClient(item)">
-                  <i class="std_icon std_icon-trash"></i>
-                </button>
+              <div class="flex">
+                <span class="status status-green">Созданный поставщиком</span>
+                <div class="d-client-card__actions">
+                  <router-link :to="{ name: 'client_update', params: { id: $route.params.id, client_id: item.id } }" class="button-none std-icon__wrapper client-card__action-button">
+                    <i class="std_icon std_icon-pen"></i>
+                  </router-link>
+                  <button class="button-none std-icon__wrapper client-card__action-button" @click.prevent="deleteClient(item)">
+                    <i class="std_icon std_icon-trash"></i>
+                  </button>
+                </div>
               </div>
+              <router-link :to="{ name: 'purchases_catalog_offer', params: { id: $route.params.id, id_org_from: item.id, category_id: 4 } }" class="link-no-style w-full">
+                <button class="dart-btn dart-btn-primary">Создать предложение</button>
+              </router-link>
             </div>
             <div class="d-client-card__buttons flex" v-else>
               <router-link :to="{ name: 'client_id', params: { id: $route.params.id, client_id: item.id } }" class="link-no-style">
@@ -349,8 +354,8 @@ export default {
       &.d-client-card__buttons-flex{
         display: flex;
         align-items: center;
+        flex-direction: column;
         justify-content: space-between;
-        flex-direction: row;
         .d-client-card__actions{
           button{
             color: #666;

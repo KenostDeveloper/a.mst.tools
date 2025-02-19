@@ -7,7 +7,7 @@
 			<h1 class="table-kenost__title std-shipping__title">Предложение № {{ this.offer?.id }}</h1>
 			<div class="flex gap-left-2">
 				<div v-if="this?.offer?.status == 1" class="dart-btn dart-btn-primary" @click="acceptOffer()">
-					<span>Принять предложение</span>	
+					<span>Рассмотреть предложение</span>	
 				</div>
 				<!-- <div v-if="this?.offer?.status == 4" class="dart-btn dart-btn-primary" @click="acceptOffer()">
 					<span>Повторить заказ</span>	
