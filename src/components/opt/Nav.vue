@@ -871,15 +871,17 @@ export default {
                         data: this.form_requirements_view,
                     }).then((response) => {
                         if(response.data.success){
-                            this.$toast.add({ severity: 'success', summary: 'Поставщик установлен!', detail: response.data.message, life: 3000 });
-                            this.modal_requirements_view = false
-                            this.modal_requirements = false
+                            this.modal_matrixs_view = false
+                            this.modal_matrixs = false
                             
                             if(router?.currentRoute?._value.matched[4]?.name == 'purchases_offer'){
+                                this.$toast.add({ severity: 'success', summary: 'Поставщик установлен!', detail: "Поставщик успешно сохранен для данной матрицы!", life: 3000 });
                                 this.$router.push({ name: 'offer_req', params: { req: this.form_requirements_view.requirement.id + '_req'}, query: { timestamp: Date.now() } });
                             }else{
+                                this.$toast.add({ severity: 'success', summary: 'Поставщик установлен!', detail: response.data.message, life: 3000 });
                                 this.$router.push({ name: 'opt_req', params: { req: this.form_requirements_view.requirement.id + '_req'}, query: { timestamp: Date.now() } });
                             }
+
                         }else{
                             this.$toast.add({ severity: 'error', summary: 'Ошибка сохранения Поставщика', detail: response.data.message, life: 3000 });
                         }
