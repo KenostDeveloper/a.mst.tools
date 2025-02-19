@@ -530,7 +530,7 @@
             <div class="dart-form-group mb-4" :class="{
                 error: this.form_requirements_view.error
             }">
-                <Dropdown v-model="this.form_requirements_view.warehouse" :options="this.available_sellers" optionLabel="name" placeholder="Выберите склад" class="w-full md:w-14rem" />
+                <Dropdown v-model="this.form_requirements_view.warehouse" :options="this.available_sellers" optionLabel="name" placeholder="Выберите поставщика" class="w-full md:w-14rem" />
                 <span class="error_desc" v-if="this.form_requirements_view.error">
                     Выберите поставщика
                 </span>

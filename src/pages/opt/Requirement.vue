@@ -1,5 +1,5 @@
 <template>
-  <div v-if="opt_vendors.selected_count > 0" class="dart-custom-grid purchases__wrapper" :class="{ loading: loading }">
+  <div class="dart-custom-grid purchases__wrapper" :class="{ loading: loading }">
     <!-- <CatalogMenu :items="opt_catalog" /> -->
     <div class="d-col-content purchases">
       <div class="dart-home dart-window">
@@ -10,7 +10,8 @@
             <div class="buttons_container">
               <button class="dart-btn dart-btn-primary btn-padding" @click.prevent="addToCart()"> 
                 <i class="d_icon d_icon-busket"></i>
-                <span>В корзину</span> 
+                
+                <span>{{this.namePathIsNav == 'purchases_offer'? 'В предложение' : 'В корзину'}}</span> 
               </button>
             </div>
           </div>
@@ -39,11 +40,10 @@
       <Basket ref="childComponent" @toOrder="toOrder" @catalogUpdate="catalogUpdate"/>
     </div>
   </div>
-  <div class="not-vendors" v-else>
-    <!-- <img src="../../assets/img/not-vendors.png" alt=""> -->
+  <!-- <div class="not-vendors" v-else>
     <p>Для просмотра каталога необходимо выбрать поставщика!</p>
     <div class="a-dart-btn a-dart-btn-primary" @click="changeActive" >Выбрать</div>
-  </div>
+  </div> -->
   <OrderModal
     :show="show_order"
     :order_id="order_id"
@@ -81,7 +81,8 @@ export default {
       order_id: 0,
       page: 1,
       perpage: 25,
-      vendorModal: false
+      vendorModal: false,
+      namePathIsNav: null
     }
   },
   components: {
@@ -96,9 +97,10 @@ export default {
   },
   mounted () {
     this.updatePage();
+    this.namePathIsNav = router?.currentRoute?._value.matched[4]?.name;
   },
-  updated () {
-    
+  updated(){
+    this.namePathIsNav = router?.currentRoute?._value.matched[4]?.name;
   },
   unmounted () {
   },

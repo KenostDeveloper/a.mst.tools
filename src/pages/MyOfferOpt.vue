@@ -104,6 +104,7 @@
 						<th class="std-table__hcol">Артикул</th>
 						<th class="std-table__hcol">Фото</th>
 						<th class="std-table__hcol">Название</th>
+						<th class="std-table__hcol">Поставщик</th>
 						<th class="std-table__hcol">Стоимость за единицу</th>
 						<th class="std-table__hcol">Применённые акции</th>
 						<th class="std-table__hcol">Количество</th>
@@ -117,6 +118,7 @@
 							<img class="kenost-image-table" :src="item.image" alt="">
 						</td>
 						<td class="std-table__col std-table__col-name">{{ item.name }}</td>
+						<td class="std-table__col">{{ item.vendor_name }}</td>
 						<td class="std-table__col">{{ Number(item.price).toLocaleString('ru') }} ₽</td>
 						<td class="std-table__col table-actions">
 							<ActionModal :actions="item.actions"/>

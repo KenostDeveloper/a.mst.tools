@@ -110,10 +110,10 @@
                         <div v-if="item.requirement">
                             <div v-if="Number(item.requirement.count) > Number(item.available)" class="kenost-table-elem__adding_info">
                                 <span class="kenost-err-min">Не хватает {{ Number(item.requirement.count) - Number(item.available) }} шт.</span>
-                                <span>Потребность {{ Number(item.requirement.count) }} шт.</span>
+                                <span>{{this.namePathIsNav == 'purchases_offer'? 'Матрица' : 'Потребность'}} {{ Number(item.requirement.count) }} шт.</span>
                             </div>
                             <div v-else class="kenost-table-elem__adding_info">
-                                <span>Потребность {{ Number(item.requirement.count) }} шт.</span>
+                                <span>{{this.namePathIsNav == 'purchases_offer'? 'Матрица' : 'Потребность'}} {{ Number(item.requirement.count) }} шт.</span>
                             </div>
                         </div>
                     </div>
@@ -361,7 +361,8 @@ export default {
             modal_remain: false,
             timeOut: null,
             fetchIds: [],
-            add_basket: []
+            add_basket: [],
+            namePathIsNav: null
         };
     },
     methods: {
@@ -821,7 +822,12 @@ export default {
 			}
 		},
     },
-    mounted() { },
+    mounted() {
+        this.namePathIsNav = router?.currentRoute?._value.matched[4]?.name;
+    },
+    updated(){
+        this.namePathIsNav = router?.currentRoute?._value.matched[4]?.name;
+    },
     components: {
         Counter,
         Dialog,
