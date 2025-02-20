@@ -196,7 +196,8 @@ export default {
           id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
           //warehouse_id: router.currentRoute._value.params.warehouse_id,
           warehouse: true,
-          action: 'get/catalog'
+          action: 'get/catalog',
+          extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
         },
         headers: {
           'Access-Control-Allow-Origin': '*'
