@@ -1055,6 +1055,8 @@ export default {
                 '/rest/front_opt',
                 {
                     id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
+                    id_org_from: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id : null,
+                    extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
                     type: router.currentRoute._value.params.type,
                     category_id: cat,
                     warehouse_id: router.currentRoute._value.params.warehouse_id,

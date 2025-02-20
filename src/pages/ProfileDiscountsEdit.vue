@@ -777,10 +777,9 @@
                         :options="this.typePricingGroup" optionLabel="name"
                         class="w-full md:w-14rem" />
                 </div>
-                <div class="kenost-wiget" v-if="this.action_groups[this.modals.group_id]?.typePricing?.key != 2">
+                <div class="kenost-wiget">
                     <p>Тип цены</p>
-                    <Dropdown @change="setDiscountFormulGroup()"
-                        v-model="this.action_groups[this.modals.group_id].price"
+                    <Dropdown @change="setDiscountFormulGroup()" v-model="this.action_groups[this.modals.group_id].price"
                         :options="this.typePrice" optionLabel="name" optionValue="key"
                         class="w-full md:w-14rem" />
                 </div>
@@ -1100,6 +1099,9 @@ export default {
             this.add_group = {}
             this.modals.add_group = false
         },
+        setFilterGroup(id){
+            this.updateGroups(id)
+        },
         deleteGroup(id){
             this.action_groups = Object.fromEntries(
                 Object.entries(this.action_groups)  // Преобразуем объект в массив [ключ, значение]
@@ -1286,6 +1288,7 @@ export default {
             this.updateGroups(this.modals.group_id)
         },
         setDiscountFormulGroup(){
+            // console.log('setDiscountFormulGroup')
             if(this.action_groups[this.modals.group_id].typePricing){
                 // console.log(this.action_groups[this.modals.group_id].typePricing.key)
                 switch(this.action_groups[this.modals.group_id].typePricing.key){
@@ -1294,9 +1297,9 @@ export default {
                         this.action_groups[this.modals.group_id].typeFormul = { name: '%', key: 1 }
                         break;
                     case 2:
-                        if(this.action_groups[this.modals.group_id].saleValue && this.action_groups[this.modals.group_id].typeFormul){
-                            this.action_groups[this.modals.group_id].price = 'key'
-                        }
+                        // if(this.action_groups[this.modals.group_id].saleValue && this.action_groups[this.modals.group_id].typeFormul){
+                        //     this.action_groups[this.modals.group_id].price = 'key'
+                        // }
                         break;
                 }
             }
@@ -1313,6 +1316,10 @@ export default {
                         break;
                 }
             }
+        },
+        pagClickCallbackGroup(pageNum, id){
+            this.action_groups[id].page = pageNum
+            this.updateGroups(id)
         },
         delayUpdate() {
             this.delayPercentSum = 0

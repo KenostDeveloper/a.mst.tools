@@ -42,7 +42,7 @@
 						</template>
 					</div>
 					<TableCatalog
-						:is_warehouses="true"
+						:is_warehouses="false"
 						@updateBasket="updateBasket"
 						v-if="
 							opt_products.total !== 0 &&
@@ -52,7 +52,7 @@
 						:items="opt_products"
 					/>
 					<TableCatalog
-						:is_warehouses="this.$route.params.warehouse_id ? true : false"
+						:is_warehouses="false"
 						@updateBasket="updateBasket"
 						v-else-if="opt_products.total !== 0"
 						:items="opt_products"

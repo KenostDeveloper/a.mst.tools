@@ -197,6 +197,7 @@ export default {
           //warehouse_id: router.currentRoute._value.params.warehouse_id,
           warehouse: true,
           action: 'get/catalog',
+          id_org_from: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id : null,
           extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
         },
         headers: {
@@ -322,6 +323,7 @@ export default {
         }
       })
         .then((response) => {
+          console.log(router?.currentRoute?._value.matched[4]?.name)
           commit('SET_OPT_PRODUCTS_TO_VUEX', response.data)
         })
         .catch(error => {
