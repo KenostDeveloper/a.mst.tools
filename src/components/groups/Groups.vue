@@ -61,6 +61,10 @@ export default {
 					},
 					sort: true,
 				},
+				store_name: {
+					label: "Склад",
+					type: 'text'
+				},
 				description: {
 					label: "Описание",
 					type: 'text'

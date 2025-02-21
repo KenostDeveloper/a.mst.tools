@@ -1033,7 +1033,8 @@ export default {
         })
         this.get_group_api({
             id: this.$route.params.id,
-            action: "get"
+            action: "get",
+            store_id: router.currentRoute._value.params.store_id,
         })
     },
     updated() {
