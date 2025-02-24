@@ -319,10 +319,8 @@
                             <td>
                                 {{ (Number(item.price).toFixed(2)).toLocaleString('ru') }} ₽
                             </td>
-                            <td>
-                                {{ this.selected_data[item.id] ?
-                                    (Number(this.selected_data[item.id].discountInterest).toFixed(2)).toLocaleString('ru') :
-                                Number(0.00).toFixed(2) }}
+                            <td :data-info="JSON.stringify(this.selected_data[item.id])">
+                                {{ this.selected_data[item.id] && this.selected_data[item.id].price > 0  ? (((Number(this.selected_data[item.id].price) - Number(this.selected_data[item.id].finalPrice)) / (Number(this.selected_data[item.id].price) / 100)).toFixed(2)).toLocaleString('ru') :Number(0.00).toFixed(2) }}
                             </td>
                             <td>
                                 {{ this.selected_data[item.id] ?
@@ -401,8 +399,8 @@
                 </div>
 
                 <div class="kenost-wiget"
-                    v-if="(this.kenostActivityAll.type.key == 0 && this.kenostActivityAll?.typePricing?.key !=2) || this.kenostActivityAll.type.key == 1">
-                    <p>Тип цен</p>
+                    v-if="(this.kenostActivityAll.type.key == 0 && this.kenostActivityAll?.typePricing?.key !=3) || this.kenostActivityAll.type.key == 1">
+                    <p>От типа цены</p>
                     <Dropdown v-model="this.kenostActivityAll.typePrice" :options="this.typePrice"
                         optionLabel="name" placeholder="Тип цен" class="w-full md:w-14rem" />
                 </div>
@@ -641,8 +639,8 @@
                         :options="this.typePricing" optionLabel="name"
                         class="w-full md:w-14rem" />
                 </div>
-                <div class="kenost-wiget" v-if="this.selected_data[this.modals.product_id]?.typePricing?.key != 2">
-                    <p>Тип цены</p>
+                <div class="kenost-wiget" v-if="this.selected_data[this.modals.product_id]?.typePricing?.key != 3">
+                    <p>От типа цены</p>
                     <Dropdown @change="setDiscountFormul()"
                         v-model="this.selected_data[this.modals.product_id].typePrice"
                         :options="this.selected[this.modals.product_id].prices" optionLabel="name" 
@@ -778,7 +776,7 @@
                         class="w-full md:w-14rem" />
                 </div>
                 <div class="kenost-wiget">
-                    <p>Тип цены</p>
+                    <p>От типа цены</p>
                     <Dropdown @change="setDiscountFormulGroup()" v-model="this.action_groups[this.modals.group_id].price"
                         :options="this.typePrice" optionLabel="name" optionValue="key"
                         class="w-full md:w-14rem" />
@@ -1174,7 +1172,7 @@ export default {
 
                         const isTypePrice = this.selected[this.kenost_table[i]].prices.find((r) => r.guid === this.kenostActivityAll.typePrice.key);
                         if(isTypePrice){
-                            this.selected_data[this.kenost_table[i]].typePrice = this.kenostActivityAll.typePrice;
+                            this.selected_data[this.kenost_table[i]].typePrice = isTypePrice;
                             sale = Number(this.selected_data[this.kenost_table[i]].price) - Number(isTypePrice.price)
                         }
                         
@@ -1188,8 +1186,8 @@ export default {
                                 }
                                 break;
                             case 2:
-                                sale = 0;
-                                this.selected_data[this.kenost_table[i]].typePrice = ""
+                                // sale = 0;
+                                // this.selected_data[this.kenost_table[i]].typePrice = ""
                                 if(this.kenostActivityAll.value && this.kenostActivityAll.typeFormul){
                                     if(this.kenostActivityAll.value && this.kenostActivityAll?.typeFormul?.key == 1){
                                         let salePrice = (Number(this.selected_data[this.kenost_table[i]].price) - sale)*(1-this.kenostActivityAll.value/100)
@@ -1796,7 +1794,7 @@ export default {
         setDiscountFormul(type, value, typePrice) {
             let sale = 0;
             if(this.selected_data[this.modals.product_id].typePrice){
-                //Скидка от Типа цены
+                //Скидка От типа цены
                 sale = Number(this.selected_data[this.modals.product_id].price) - Number(this.selected_data[this.modals.product_id].typePrice.price)
             }
             if(this.selected_data[this.modals.product_id].typePricing){
@@ -1814,8 +1812,8 @@ export default {
                         }
                         break;
                     case 2:
-                        sale = 0;
-                        this.selected_data[this.modals.product_id].typePrice = ""
+                        // sale = 0;
+                        // this.selected_data[this.modals.product_id].typePrice = ""
 
                         if(this.saleValue && this.selected_data[this.modals.product_id].typeFormul){
                             if(this.saleValue && this.selected_data[this.modals.product_id]?.typeFormul?.key == 1){
