@@ -261,8 +261,8 @@ export default {
                 });
 				let nums = res.data.data.nums;
         		this.order_id = nums.join(', ')
-				this.show_order = true
 			})
+			this.show_order = true
 		}
 	},
 	mounted() {

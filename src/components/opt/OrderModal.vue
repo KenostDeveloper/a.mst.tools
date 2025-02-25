@@ -32,11 +32,11 @@
                                 </div>
                             </h3>
                             
-                            <div class="k-order__shop mb-1">
-                                <!-- <img src="../../assets/img/ava.png" alt=""> -->
-                                <p :style="{'background': org.org_data.color}">{{org.org_data.name}}</p>
-                            </div>
-                            <div v-for="store in org.data" v-bind:key="store.warehouse_data.id">
+                            <div v-for="(store, id_store) in org.data" v-bind:key="store.warehouse_data.id">
+                                <div class="k-order__shop mt-2 mb-1">
+                                    <!-- <img src="../../assets/img/ava.png" alt=""> -->
+                                    <p :style="{'background': org.org_data.color}">{{org.org_data.name}}: Склад #{{ id_store }}, {{ store.warehouse_data.address_short }}</p>
+                                </div>
                                 <div v-for="(item, p_key) in store.data" v-bind:key="p_key" class="k-order__product">
                                     <img class="k-order__product-img" :src="item.image" :alt="item.name">
                                     <div class="k-order__product-info">

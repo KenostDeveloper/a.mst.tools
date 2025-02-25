@@ -84,7 +84,7 @@
                         </div>
 
                         <router-link v-else :to="{
-                            name: 'org_opt_waregouse_category',
+                            name: namePathIsNav == 'purchases' ? 'org_opt_waregouse_category' : 'org_opt_warehouse_category_offer',
                             params: {
                                 id: this.$route.params.id,
                                 org_w_id: catItem.org_w_id,

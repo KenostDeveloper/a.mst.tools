@@ -10,6 +10,8 @@
 			<div class="d-col-content purchases">
 				<div class="dart-home dart-window">
 					<!-- <Breadcrumbs class="std-breadcrumbs--margin" /> -->
+					<!-- {{ opt_products?.breadcrumbs }} -->
+					<CatalogBreadcrumbs v-if="opt_products?.breadcrumbs" :name="!$route.params.warehouse_cat_id? 'purchases_catalog' : 'org_opt_waregouse_category'" :items="opt_products?.breadcrumbs" />
 					<div v-if="$route.params.warehouse_id && !$route.params.warehouse_cat_id">
 						<h1 class="h1-mini">Все товары</h1>
 						<div class="dart-alert dart-alert-info">
@@ -18,8 +20,8 @@
 						</div>
 					</div>
 					<h1 class="h1-mini" v-else>{{ opt_products?.page?.pagetitle }}</h1>
-					<div v-if="opt_products.categories.length" class="categories">
-						<template :key="cat.id" v-for="cat in opt_products.categories">
+					<div v-if="opt_products?.categories?.length" class="categories">
+						<template :key="cat.id" v-for="cat in opt_products?.categories">
 							<RouterLink
 								:to="{
 									name: namePathIsNav == 'purchases' ? 'org_opt_waregouse_category' : 'purchases_catalog_warehouse_offer',
@@ -108,6 +110,7 @@ import Loading from "../../components/Loading.vue";
 // import Breadcrumbs from "../../components/Breadcrumbs.vue";
 import router from "../../router";
 import Breadcrumbs from "../../components/Breadcrumbs.vue";
+import CatalogBreadcrumbs from '../../components/CatalogBreadcrumbs.vue'
 
 export default {
 	name: "OptsCatalog",
@@ -137,7 +140,8 @@ export default {
 		Paginate,
 		OrderModal,
 		Loading,
-		Breadcrumbs
+		Breadcrumbs,
+		CatalogBreadcrumbs
 	},
 	mounted() {
 		this.get_opt_catalog_from_api().then(() => {

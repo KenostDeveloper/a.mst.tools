@@ -60,6 +60,7 @@ import Paginate from 'vuejs-paginate-next'
 import TableCatalog from '../../components/opt/TableCatalog.vue'
 import OrderModal from '../../components/opt/OrderModal.vue'
 import Loading from '../../components/Loading.vue'
+import CatalogBreadcrumbs from '../../components/CatalogBreadcrumbs.vue'
 // import AmBreadcrumbs from 'vue-3-breadcrumbs'
 
 export default {
@@ -91,7 +92,8 @@ export default {
     TableCatalog,
     Paginate,
     OrderModal,
-    Loading
+    Loading,
+    CatalogBreadcrumbs
     // Breadcrumbs
   },
   mounted () {
