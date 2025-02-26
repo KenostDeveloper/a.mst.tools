@@ -2,40 +2,6 @@
 	<nav class="breadcrumbs" aria-label="breadcrumbs">
 		<ul class="breadcrumb">
 			<!-- {{ items }} -->
-			<!-- <li class="breadcrumb-item">
-				<span itemprop="name">МСТ</span>
-			</li>
-			<li
-				class="breadcrumb-item breacrumb-item--separator"
-			>
-				/
-			</li>
-			<li class="breadcrumb-item">
-				<span itemprop="name">Закупки</span>
-			</li>
-			<li
-				class="breadcrumb-item breacrumb-item--separator"
-			>
-				/
-			</li>
-			<li v-if="name == 'org_opt_waregouse_category'" class="breadcrumb-item">
-				<span itemprop="name">Каталог поставщиков</span>
-			</li>
-			<li
-				v-if="name == 'org_opt_waregouse_category'"
-				class="breadcrumb-item breacrumb-item--separator"
-			>
-				/
-			</li> -->
-			<!-- <li v-if="name == 'org_opt_waregouse_category'" class="breadcrumb-item">
-				<span itemprop="name">МСТ Склад #53</span>
-			</li>
-			<li
-				v-if="name == 'org_opt_waregouse_category'"
-				class="breadcrumb-item breacrumb-item--separator"
-			>
-				/
-			</li> -->
 			<template v-for="(crumb, index) in items">
 				<li
 					v-if="crumb"

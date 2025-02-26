@@ -9,9 +9,9 @@
 			<!-- <CatalogMenu :items="opt_catalog" /> -->
 			<div class="d-col-content purchases">
 				<div class="dart-home dart-window">
-					<!-- <Breadcrumbs class="std-breadcrumbs--margin" /> -->
+					<Breadcrumbs class="std-breadcrumbs--margin" :items="opt_products?.breadcrumbs" :name="!$route.params.warehouse_cat_id? 'purchases_catalog' : 'org_opt_waregouse_category'"/>
 					<!-- {{ opt_products?.breadcrumbs }} -->
-					<CatalogBreadcrumbs v-if="opt_products?.breadcrumbs" :name="!$route.params.warehouse_cat_id? 'purchases_catalog' : 'org_opt_waregouse_category'" :items="opt_products?.breadcrumbs" />
+					<!-- <CatalogBreadcrumbs v-if="opt_products?.breadcrumbs" :name="!$route.params.warehouse_cat_id? 'purchases_catalog' : 'org_opt_waregouse_category'" :items="opt_products?.breadcrumbs" /> -->
 					<div v-if="$route.params.warehouse_id && !$route.params.warehouse_cat_id">
 						<h1 class="h1-mini">Все товары</h1>
 						<div class="dart-alert dart-alert-info">
@@ -181,7 +181,7 @@ export default {
 			"get_opt_mainpage_from_api",
 			"get_opt_catalog_from_api",
 			"get_opt_vendors_from_api",
-			"get_opt_products_from_api",
+			"get_opt_products_from_api"
 		]),
 		pagClickCallback(pageNum) {
 			this.page = pageNum;
@@ -239,7 +239,7 @@ export default {
 		},
 		changeActive() {
 			this.vendorModal = !this.vendorModal;
-		},
+		}
 	},
 	computed: {
 		...mapGetters(["mainpage", "optcatalog", "optvendors", "optproducts", "optwarehouse"]),

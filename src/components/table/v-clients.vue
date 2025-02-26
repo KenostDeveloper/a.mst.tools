@@ -206,7 +206,7 @@ export default {
 	computed: {
 		...mapGetters(["getvendors"]),
 		pagesCount() {
-			let pages = Math.round(this.total / this.pagination_items_per_page);
+			let pages = Math.ceil(this.total / this.pagination_items_per_page);
 			if (pages === 0) {
 				pages = 1;
 			}

@@ -637,7 +637,7 @@ export default {
             'groups'
         ]),
         pagesCountSelect() {
-            let pages = Math.round(this.total / this.perpage);
+            let pages = Math.ceil(this.total / this.perpage);
             if (pages === 0) {
                 pages = 1;
             }

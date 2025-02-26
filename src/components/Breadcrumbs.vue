@@ -18,6 +18,27 @@
 					/
 				</li>
 			</template>
+			<template v-for="(crumb, index) in items" v-if="items && name == 'org_opt_waregouse_category'">
+				<li
+					v-if="crumb"
+					class="breadcrumb-item"
+					:class="{ active: index === items.length - 1 }"
+				>
+					<router-link v-if="name == 'purchases_catalog' && this.$route.params.category_id != crumb.id" itemprop="item" :to="{name: 'purchases_catalog', params: { id: this.$route.params.id, category_id: crumb.id } }"
+						><span itemprop="name">{{ crumb.pagetitle }}</span></router-link
+					>
+					<router-link v-else-if="name == 'org_opt_waregouse_category' && this.$route.params.warehouse_cat_id != crumb.id" itemprop="item" :to="{name: 'org_opt_waregouse_category', params: { id: this.$route.params.id, org_w_id: this.$route.params.org_w_id, warehouse_id: this.$route.params.warehouse_id, warehouse_cat_id: crumb.id } }"
+						><span itemprop="name">{{ crumb.pagetitle }}</span></router-link
+					>
+					<span v-else itemprop="name">{{ crumb.pagetitle }}</span>
+				</li>
+				<li
+					v-if="index !== items.length - 1 && crumb"
+					class="breadcrumb-item breacrumb-item--separator"
+				>
+					/
+				</li>
+			</template>
 		</ul>
 	</nav>
 </template>
@@ -28,10 +49,21 @@ import router from "../router";
 
 export default {
 	name: "Breadcrumbs",
+	props: {
+        items: {
+            type: Array,
+            default: []
+        },
+		name: {
+			type: String,
+			default: 'purchases_catalog'
+		}
+	},
 	data() {
 		return {
 			opt_catalog: {},
 			opt_vendors: {},
+			offer_org_info: {}
 		};
 	},
 	computed: {
@@ -45,6 +77,7 @@ export default {
 			"actions",
 			"org_profile",
 			"optcatalogwarehouse",
+			"org_info"
 		]),
 
 		breadcrumbs() {
@@ -57,7 +90,19 @@ export default {
 
 			const breadcrumbs = pathRoutes.map((route, index) => {
 				// console.log(route, index);
-
+				// console.log(route)
+				if (route == 'warehouses') {
+					return {
+						name: this.getRouteName(currentRoute, route),
+						path: pathRoutesWithId.slice(0, index + 1).join("/"),
+					};
+				}
+				if (route == 'offer') {
+					return {
+						name: this.getRouteName(currentRoute, route),
+						path: pathRoutesWithId.slice(0, 2).join("/") + "/clients",
+					};
+				}
 				if (
 					route == "/" ||
 					route == "" ||
@@ -70,6 +115,15 @@ export default {
 					return;
 				}
 				if (route.startsWith(":")) {
+					if(route == ":warehouse_id" && currentRoute.name == "org_opt_waregouse_category"){
+						// console.log(pathRoutesWithId.slice(0, index + 2).join("/"))
+						var arr = pathRoutesWithId.slice(0, index + 1);
+						arr.push('all')
+						return {
+							name: this.getRouteName(currentRoute, route),
+							path: arr.join("/"),
+						};
+					}
 					return {
 						name: this.getRouteName(currentRoute, route),
 						path: pathRoutesWithId.slice(0, index + 1).join("/"),
@@ -106,7 +160,6 @@ export default {
 			}
 			if(pathRoutes[pathRoutes.length - 1] == ":category_id") {
 				const parents = this.getCategoriesCatItemParents(4, currentRoute.params.category_id);
-				// console.log("Result parents", parents);
 
 				parents?.forEach(parent => {
 					const newPathRoutesWithId = pathRoutesWithId.map(path => path);
@@ -119,6 +172,8 @@ export default {
 				})
 			}
 
+
+
 			return breadcrumbs;
 		},
 	},
@@ -129,6 +184,7 @@ export default {
 			"get_org_store_from_api",
 			"get_product_from_api",
 			"org_profile_from_api",
+			"org_get_info_api"
 		]),
 		getRouteName(currentRoute, param) {
 			// console.log("Current route: ", currentRoute);
@@ -171,12 +227,25 @@ export default {
 					return this.org_profile?.name;
 				}
 				case ":warehouse_id": {
+					if(currentRoute.name == "org_opt_waregouse_category"){
+						return "Склад #" + currentRoute.params.warehouse_id;
+					}
 					return this.optcatalogwarehouse?.find(
 						(catItem) => catItem.id == currentRoute.params[param.slice(1)]
 					)?.name;
 				}
-				case ":warehouse_cat_id": {
+				case "warehouses": {
+					return "Каталоги поставщиков";
+				}
+				case ":org_w_id": {
 					return this.getCatItem(currentRoute.params[param.slice(1)])?.pagetitle;
+				}
+				case "offer": {
+					return "Предложение"
+				}
+				case ":id_org_from?":{
+					console.log(this.getOrgInfoName())
+					return this.getOrgInfoName();
 				}
 			}
 		},
@@ -236,14 +305,23 @@ export default {
                 this.getAllParents(stopId, currParent, parents, catalog);
             }
 			return parents;
+		},
+		getOrgInfoName() {
+			return this.offer_org_info?.name || "...";
 		}
 	},
 	mounted() {
-		// this.get_opt_catalog_from_api();
-		// this.org_get_from_api();
-		// this.get_org_store_from_api();
-		// this.get_product_from_api();
-		// this.org_profile_from_api();
+		if (this.$route.params.id_org_from) {
+			this.org_get_info_api({
+				action: "get/org/info",
+				org_id: this.$route.params.id_org_from
+			});
+		}
+	},
+	watch: {
+		org_info: function (newVal, oldVal) {
+			this.offer_org_info = newVal;
+		},
 	},
 };
 </script>
@@ -259,7 +337,7 @@ export default {
 	font-size: 14px;
 }
 
-.breadcrumb a {
+.breadcrumb span {
 	color: var(--text-color-dop) !important;
 	font-size: 14px;
 }

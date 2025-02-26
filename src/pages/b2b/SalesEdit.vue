@@ -685,7 +685,8 @@
                                     {{ Number(this.selected_data[item.id]?.finalPrice) > Number(item.price) ? 
                                         this.selected_data[item.id]? (Number(this.selected_data[item.id].discountInterest) * -1).toFixed(2).toLocaleString('ru') : Number(0.0).toFixed(2)
                                         :
-                                        this.selected_data[item.id]? Number(this.selected_data[item.id].discountInterest).toFixed(2).toLocaleString('ru') : Number(0.0).toFixed(2)
+                                        // this.selected_data[item.id]? Number(this.selected_data[item.id].discountInterest).toFixed(2).toLocaleString('ru') : Number(0.0).toFixed(2)
+                                        this.selected_data[item.id]? (((Number(this.selected_data[item.id].price) - Number(this.selected_data[item.id].finalPrice)) / (Number(this.selected_data[item.id].price) / 100)).toFixed(2)).toLocaleString('ru'): Number(0.0).toFixed(2)
                                     }}
                                 </td>
                                 <td>
@@ -774,7 +775,7 @@
 
                     <div class="kenost-wiget"
                         v-if="(this.kenostActivityAll.type.key == 0 && this.kenostActivityAll?.typePricing?.key !=3) || this.kenostActivityAll.type.key == 1">
-                        <p>От типа цены</p>
+                        <p>{{this.kenostActivityAll.type.key == '1' ? "Тип цены" : "От типа цены"}}</p>
                         <Dropdown v-model="this.kenostActivityAll.typePrice" :options="this.typePrice"
                             optionLabel="name" placeholder="Тип цен" class="w-full md:w-14rem" />
                     </div>
@@ -816,119 +817,121 @@
                         </button>
                     </div>
                 </div>
-                <TabView class="tab-custom hidden-mobile-l mt-3 kenost-tab-custom">
-                    <TabPanel v-for="el in this.action_groups">
-                        <template #header>
-                            {{ el.group.name }}
-                            <Badge class="ml-2" :value="el?.products?.total"></Badge>
-                        </template>
-                        <div class="table-kenost mt-4">
-                            <div class="flex align-items-center justify-between">
-                                <p class="table-kenost__title">Товары коллекции «{{ el.group.name }}»</p>
-                                <button @click="deleteGroup(el.group.id)" type="button" class="dart-btn dart-btn-secondary btn-padding flex gap-2 align-items-center">
-                                    <i class="pi pi-trash"></i><div>Удалить коллекцию</div>
-                                </button>
-                            </div>
-                            <div class="table-kenost__filters">
-                                <div class="table-kenost__filters-left">
-                                    <div class="form_input_group input_pl input-parent required">
-                                        <input type="text" id="filter_table" placeholder="Введите артикул или название"
-                                            class="dart-form-control" v-model="el.search"
-                                            @input="setFilterGroup(el.group.id)" />
-                                        <label for="product_filter_name" class="s-complex-input__label">Введите артикул или
-                                            название</label>
-                                        <div class="form_input_group__icon">
-                                            <i class="d_icon d_icon-search"></i>
+                <div class="kenost-tab-container">
+                    <TabView class="tab-custom hidden-mobile-l mt-3 kenost-tab-custom" :scrollable="true">
+                        <TabPanel v-for="el in this.action_groups" :header="el.group.name + ' (' + el?.products?.total + ')'">
+                            <!-- <template #header>
+                                {{ el.group.name }}
+                                <Badge class="ml-2" :value="el?.products?.total"></Badge>
+                            </template> -->
+                            <div class="table-kenost mt-4">
+                                <div class="flex align-items-center justify-between">
+                                    <p class="table-kenost__title">Товары коллекции «{{ el.group.name }}»</p>
+                                    <button @click="deleteGroup(el.group.id)" type="button" class="dart-btn dart-btn-secondary btn-padding flex gap-2 align-items-center">
+                                        <i class="pi pi-trash"></i><div>Удалить коллекцию</div>
+                                    </button>
+                                </div>
+                                <div class="table-kenost__filters">
+                                    <div class="table-kenost__filters-left">
+                                        <div class="form_input_group input_pl input-parent required">
+                                            <input type="text" id="filter_table" placeholder="Введите артикул или название"
+                                                class="dart-form-control" v-model="el.search"
+                                                @input="setFilterGroup(el.group.id)" />
+                                            <label for="product_filter_name" class="s-complex-input__label">Введите артикул или
+                                                название</label>
+                                            <div class="form_input_group__icon">
+                                                <i class="d_icon d_icon-search"></i>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                                <table class="table-kenost__table mt-0">
+                                    <thead>
+                                        <tr>
+                                            <th class="table-kenost__name table-kenost__name-checkbox hidden">
+                                                <Checkbox @update:modelValue="kenostTableCheckedAll" v-model="this.kenost_table_all"
+                                                    inputId="kenost_table_all" value="1" />
+                                            </th>
+                                            <th class="table-kenost__name table-kenost__name-product">Товар</th>
+                                            <th class="table-kenost__name">Тип добавления</th>
+                                            <th class="table-kenost__name">Бренд</th>
+                                            <th class="table-kenost__name">РРЦ</th>
+                                            <th class="table-kenost__name">
+                                                Скидка \ Наценка </br> <div class="text-primary cursor-pointer" @click="() => {
+                                                    this.modals.price_group = true
+                                                    this.modals.group_id = el.group.id
+                                                    
+                                                }">Настроить</div>
+                                            </th>
+                                            <th class="table-kenost__name">Тип ценообразования</th>
+                                            <th class="table-kenost__name">Цена со скидкой за шт.</th>
+                                        </tr>
+                                    </thead>
+                                    <!-- Вывод комплектов -->
+                                    <tbody v-for="item in el?.products?.items" :key="item.id">
+                                        <tr>
+                                            <td class="table-kenost__checkbox hidden">
+                                                <Checkbox @change="kenostTableCheckedAllCheck" v-model="this.kenost_table"
+                                                    inputId="kenost_table" :value="item.id" />
+                                            </td>
+                                            <td class="table-kenost__product">
+                                                <img :src="item.image" />
+                                                <div class="table-kenost__product-text">
+                                                    <p>{{ item.name }}</p>
+                                                    <span>{{ item.article }}
+                                                        <span class="store-name-b2b" :style="{ background: item.color }">{{item.store}}</span></span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                {{ item.type }}
+                                            </td>
+                                            <td>
+                                                {{ item.brand }}
+                                            </td>
+                                            <td>
+                                                {{ item.price }}
+                                            </td>
+                                            <td>
+                                                {{ item.price > 0 ? ((Math.round(((item.price - item.new_price) / item.price) * 10000) / 100) + '%') : '0' }}
+                                            </td>
+                                            <td>
+                                                {{ el.typePricing?.name }}
+                                            </td>
+                                            <td>
+                                                {{(Number(item.new_price)).toFixed(2)}}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <paginate
+                                    :page-count="(this.action_groups[el.group.id]?.products?.total / this.action_groups[el.group.id]?.perpage) > 0 ? Math.ceil(this.action_groups[el.group.id]?.products?.total / this.action_groups[el.group.id]?.perpage) : 1"
+                                    :click-handler="(page) => pagClickCallbackGroup(page, el.group.id)"
+                                    :prev-text="'Пред'"
+                                    :next-text="'След'"
+                                    :container-class="'pagination justify-content-center'"
+                                    :initialPage="this.page_selected"
+                                    :forcePage="el.page"
+                                >
+                                </paginate>
+                                <!-- <div class="table-kenost-help">
+                                    <div class="table-kenost-help__select">
+                                        <span>Отмечено:</span> {{ this.kenost_table.length }} / {{ Object.keys(this.selected).length}}
+                                    </div>
+                                    <div class="flex align-items-center gap-1">
+                                        <Checkbox @change="globalTable" v-model="this.form.global_kenost_table"
+                                            inputId="global_kenost_table-1" name="global_kenost_table-1" value="true" />
+                                        <label for="global_kenost_table-1" class="ml-1 mb-0">Все</label>
+                                    </div>
+                                    <div v-if="filter_table.name != ''" class="flex align-items-center gap-1">
+                                        <Checkbox @change="filterglobalTable" v-model="this.form.filter_kenost_table"
+                                            inputId="global_kenost_table-2" name="global_kenost_table-2" value="true" />
+                                        <label for="global_kenost_table-2" class="ml-1 mb-0">Отметить подходящие по фильтру</label>
+                                    </div>
+                                </div> -->
                             </div>
-                            <table class="table-kenost__table mt-0">
-                                <thead>
-                                    <tr>
-                                        <th class="table-kenost__name table-kenost__name-checkbox hidden">
-                                            <Checkbox @update:modelValue="kenostTableCheckedAll" v-model="this.kenost_table_all"
-                                                inputId="kenost_table_all" value="1" />
-                                        </th>
-                                        <th class="table-kenost__name table-kenost__name-product">Товар</th>
-                                        <th class="table-kenost__name">Тип добавления</th>
-                                        <th class="table-kenost__name">Бренд</th>
-                                        <th class="table-kenost__name">РРЦ</th>
-                                        <th class="table-kenost__name">
-                                            Скидка \ Наценка </br> <div class="text-primary cursor-pointer" @click="() => {
-                                                this.modals.price_group = true
-                                                this.modals.group_id = el.group.id
-                                                
-                                            }">Настроить</div>
-                                        </th>
-                                        <th class="table-kenost__name">Тип ценообразования</th>
-                                        <th class="table-kenost__name">Цена со скидкой за шт.</th>
-                                    </tr>
-                                </thead>
-                                <!-- Вывод комплектов -->
-                                <tbody v-for="item in el?.products?.items" :key="item.id">
-                                    <tr>
-                                        <td class="table-kenost__checkbox hidden">
-                                            <Checkbox @change="kenostTableCheckedAllCheck" v-model="this.kenost_table"
-                                                inputId="kenost_table" :value="item.id" />
-                                        </td>
-                                        <td class="table-kenost__product">
-                                            <img :src="item.image" />
-                                            <div class="table-kenost__product-text">
-                                                <p>{{ item.name }}</p>
-                                                <span>{{ item.article }}
-                                                    <span class="store-name-b2b" :style="{ background: item.color }">{{item.store}}</span></span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            {{ item.type }}
-                                        </td>
-                                        <td>
-                                            {{ item.brand }}
-                                        </td>
-                                        <td>
-                                            {{ item.price }}
-                                        </td>
-                                        <td>
-                                            {{ item.price > 0 ? ((Math.round(((item.price - item.new_price) / item.price) * 10000) / 100) + '%') : '0' }}
-                                        </td>
-                                        <td>
-                                            {{ el.typePricing?.name }}
-                                        </td>
-                                        <td>
-                                            {{(Number(item.new_price)).toFixed(2)}}
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <paginate
-                                :page-count="(this.action_groups[el.group.id]?.products?.total / this.action_groups[el.group.id]?.perpage) > 0 ? Math.ceil(this.action_groups[el.group.id]?.products?.total / this.action_groups[el.group.id]?.perpage) : 1"
-                                :click-handler="(page) => pagClickCallbackGroup(page, el.group.id)"
-                                :prev-text="'Пред'"
-                                :next-text="'След'"
-                                :container-class="'pagination justify-content-center'"
-                                :initialPage="this.page_selected"
-                                :forcePage="el.page"
-                            >
-                            </paginate>
-                            <!-- <div class="table-kenost-help">
-                                <div class="table-kenost-help__select">
-                                    <span>Отмечено:</span> {{ this.kenost_table.length }} / {{ Object.keys(this.selected).length}}
-                                </div>
-                                <div class="flex align-items-center gap-1">
-                                    <Checkbox @change="globalTable" v-model="this.form.global_kenost_table"
-                                        inputId="global_kenost_table-1" name="global_kenost_table-1" value="true" />
-                                    <label for="global_kenost_table-1" class="ml-1 mb-0">Все</label>
-                                </div>
-                                <div v-if="filter_table.name != ''" class="flex align-items-center gap-1">
-                                    <Checkbox @change="filterglobalTable" v-model="this.form.filter_kenost_table"
-                                        inputId="global_kenost_table-2" name="global_kenost_table-2" value="true" />
-                                    <label for="global_kenost_table-2" class="ml-1 mb-0">Отметить подходящие по фильтру</label>
-                                </div>
-                            </div> -->
-                        </div>
-                    </TabPanel>
-                </TabView>
+                        </TabPanel>
+                    </TabView>
+                </div>
                 
 
                 <div class="dart-form-group mt-4">
@@ -1251,11 +1254,7 @@
                 <p>
                     Скидка от РРЦ:
                     {{
-                        this.selected_data[this.modals.product_id]
-                        ? Number(this.selected_data[this.modals.product_id].discountInterest)
-                            .toFixed(2)
-                            .toLocaleString('ru')
-                        : '0'
+                        this.selected_data[this.modals.product_id]? (((Number(this.selected_data[this.modals.product_id].price) - Number(this.selected_data[this.modals.product_id].finalPrice)) / (Number(this.selected_data[this.modals.product_id].price) / 100)).toFixed(2)).toLocaleString('ru'): Number(0.0).toFixed(2)
                     }}
                     %
                 </p>
@@ -2504,6 +2503,12 @@ export default {
             const getPrice = this.selected[this.modals.product_id].prices.find(
                 (r) => r.guid === this.selected_data[this.modals.product_id].typePrice.guid
             ).price;
+            console.log(this.selected_data[this.modals.product_id])
+            this.selected_data[this.modals.product_id].typePricing = {}
+            this.selected_data[this.modals.product_id].typeFormul = {}
+            // this.selected_data[this.modals.product_id].pricing_formula = 2
+            this.selected_data[this.modals.product_id].type_price = this.selected_data[this.modals.product_id].typePrice.guid
+            this.selected_data[this.modals.product_id].percent = 0;
             this.selected_data[this.modals.product_id].finalPrice = Number(getPrice);
             this.selected_data[this.modals.product_id].discountInRubles = Number(this.selected_data[this.modals.product_id].price) - Number(getPrice);
             this.selected_data[this.modals.product_id].discountInterest =
@@ -2686,21 +2691,21 @@ export default {
             'group_build'
         ]),
         pagesCountSelect() {
-            let pages = Math.round(this.total_selected / this.per_page);
+            let pages = Math.ceil(this.total_selected / this.per_page);
             if (pages === 0) {
                 pages = 1;
             }
             return pages;
         },
         pagesCount() {
-            let pages = Math.round(this.total_products / this.per_page);
+            let pages = Math.ceil(this.total_products / this.per_page);
             if (pages === 0) {
                 pages = 1;
             }
             return pages;
         },
         pagesCountGift() {
-            let pages = Math.round(this.total_gift_products / this.per_page);
+            let pages = Math.ceil(this.total_gift_products / this.per_page);
             if (pages === 0) {
                 pages = 1;
             }

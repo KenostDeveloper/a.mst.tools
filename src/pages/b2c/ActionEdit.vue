@@ -1335,14 +1335,14 @@ export default {
       'org_stores'
     ]),
     pagesCountSelect () {
-      let pages = Math.round(this.total_selected / this.per_page)
+      let pages = Math.ceil(this.total_selected / this.per_page)
       if (pages === 0) {
         pages = 1
       }
       return pages
     },
     pagesCount () {
-      let pages = Math.round(this.total_products / this.per_page)
+      let pages = Math.ceil(this.total_products / this.per_page)
       if (pages === 0) {
         pages = 1
       }

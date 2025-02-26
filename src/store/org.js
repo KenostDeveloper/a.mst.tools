@@ -10,7 +10,8 @@ export default {
     individual_discount: [],
     available_warehouses: [],
     available_sellers: [],
-    org_managers: []
+    org_managers: [],
+    org_info: []
   },
   actions: {
     get_available_sellers_from_api ({ commit }) {
@@ -202,6 +203,26 @@ export default {
             router.push({ name: 'main' })
           }
       })
+    },
+    org_get_info_api ({ commit }, data) {
+      return Axios('/rest/front_org', {
+        method: 'POST',
+        data: data,
+        headers: {
+          'Access-Control-Allow-Origin': '*'
+        }
+      })
+        .then((response) => {
+          commit('SET_ORG_INFO_TO_VUEX', response.data)
+          // console.log(response)
+          return response
+        })
+        .catch(error => {
+          if (error.response.status === 403) {
+            localStorage.removeItem('user')
+            router.push({ name: 'main' })
+          }
+      })
     }
   },
   
@@ -230,6 +251,9 @@ export default {
     SET_MANAGERS_TO_VUEX: (state, data) => {
       state.org_managers = data.data
     },
+    SET_ORG_INFO_TO_VUEX: (state, data) => {
+      state.org_info = data.data
+    },
   },
   getters: {
     org_profile (state) {
@@ -255,6 +279,9 @@ export default {
     },
     org_managers (state) {
       return state.org_managers
+    },
+    org_info(state) {
+      return state.org_info
     },
   }
 }

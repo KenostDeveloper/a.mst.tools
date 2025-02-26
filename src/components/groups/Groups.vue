@@ -41,7 +41,7 @@ export default {
 	data() {
 		return {
 			page: 1,
-			perpage: 20,
+			perpage: 10,
 			filter: {
                 name: ""
             },

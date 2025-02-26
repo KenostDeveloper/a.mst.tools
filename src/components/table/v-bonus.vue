@@ -208,7 +208,7 @@ export default ({
       'getvendors'
     ]),
     pagesCount () {
-      let pages = Math.round(this.total / this.per_page)
+      let pages = Math.ceil(this.total / this.per_page)
       if (pages === 0) {
         pages = 1
       }
