@@ -31,6 +31,7 @@
                         " alt="" /> -->
                     <p v-if="tag.type == 'sale' && tag.value > 0">Скидка {{ Number(tag.value).toFixed(0) }}%</p>
                     <p v-if="tag.type == 'sale' && tag.value < 0">Наценка {{ (Number(tag.value) * -1).toFixed(0) }}%</p>
+                    <p v-if="tag.type == 'min' && tag.value > 0">от {{ Number(tag.value).toFixed(0) }} шт.</p>
 
 
                     <!-- <img v-if="tag.type == 'free_delivery'" :src="action.enabled

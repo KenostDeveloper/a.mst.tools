@@ -82,7 +82,12 @@ export default {
           type: 'text',
           sort: true
         },
-				seller_w_name: {
+		initiator: {
+			label: "Инициатор",
+			type: "text",
+			sort: true,
+		},
+		seller_w_name: {
           label: 'Магазин/Склад',
           type: 'text',
           sort: true

@@ -123,6 +123,11 @@ export default {
 					type: "text",
 					sort: true,
 				},
+				initiator: {
+					label: "Инициатор",
+					type: "text",
+					sort: true,
+				},
 				delay: {
 					label: "Отсрочка",
 					type: "text",
@@ -154,6 +159,11 @@ export default {
 					cost: {
 						label: 'Сумма',
 						type: 'text',
+					},
+					initiator: {
+						label: "Инициатор",
+						type: "text",
+						sort: true,
 					},
 					status_name: {
 						label: 'Статус',

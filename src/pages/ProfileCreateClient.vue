@@ -98,11 +98,7 @@
                     </div>
                 </div>
                 <div v-if="this.form.company.register">
-                    <div class="dart-form-group"
-                        :class="{
-                            error: v$.orgprofile.login.$errors.length,
-                        }"
-                    >
+                    <div class="dart-form-group">
                         <input
                             type="text"
                             v-model="this.orgprofile.login"
@@ -110,19 +106,15 @@
                             name="login"
                             placeholder="Логин" readonly
                             onfocus="this.removeAttribute('readonly')"/>
-                        <span
+                        <!-- <span
                             class="error_desc"
                             v-for="error of v$.orgprofile.login.$errors"
                             :key="error.$uid"
                         >
                             {{ error.$message }}
-                        </span>
+                        </span> -->
                     </div>
-                    <div class="dart-form-group"
-                        :class="{
-                            error: v$.orgprofile.password.$errors.length,
-                        }"
-                    >
+                    <div class="dart-form-group">
                         <input
                             type="password"
                             v-model="this.orgprofile.password"
@@ -130,19 +122,15 @@
                             name="password"
                             placeholder="Пароль" readonly
                             onfocus="this.removeAttribute('readonly')"/>
-                        <span
+                        <!-- <span
                             class="error_desc"
                             v-for="error of v$.orgprofile.password.$errors"
                             :key="error.$uid"
                         >
                             {{ error.$message }}
-                        </span>
+                        </span> -->
                     </div>
-                    <div class="dart-form-group"
-                        :class="{
-                            error: v$.orgprofile.passwordRepeat.$errors.length,
-                        }"
-                    >
+                    <div class="dart-form-group">
                         <input
                             type="password"
                             v-model="this.orgprofile.passwordRepeat"
@@ -150,13 +138,13 @@
                             name="passwordRepeat"
                             placeholder="Пароль" readonly
                             onfocus="this.removeAttribute('readonly')"/>
-                        <span
+                        <!-- <span
                             class="error_desc"
                             v-for="error of v$.orgprofile.passwordRepeat.$errors"
                             :key="error.$uid"
                         >
                             {{ error.$message }}
-                        </span>
+                        </span> -->
                     </div>
                 </div>
             </div>
@@ -460,20 +448,20 @@ export default {
                 phone: {
 					required,
 				},
-                login: {
-                    required: () => {
-                        return (this.form.company.register && this.orgprofile.login != '') || (!this.form.company.register)
-                    },
-                },
-                password: {
-					required: () => {
-                        return (this.form.company.register && this.orgprofile.password != '') || (!this.form.company.register)
-                    },
-                    minLength: minLength(6)
-				},
-                passwordRepeat: {
-                    sameAs: sameAs(this.orgprofile.password)
-                }
+                // login: {
+                //     required: () => {
+                //         return (this.form.company.register && this.orgprofile.login != '') || (!this.form.company.register)
+                //     },
+                // },
+                // password: {
+				// 	required: () => {
+                //         return (this.form.company.register && this.orgprofile.password != '') || (!this.form.company.register)
+                //     },
+                //     minLength: minLength(6)
+				// },
+                // passwordRepeat: {
+                //     sameAs: sameAs(this.orgprofile.password)
+                // }
 			},
             form: {
                 company: {

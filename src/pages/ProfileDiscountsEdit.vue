@@ -1950,7 +1950,6 @@ export default {
 
                 if(newVal.groups){
                     for(let i = 0; i < newVal.groups.length; i++){
-                        console.log(newVal.groups[i].pricing_type)
                         this.action_groups[newVal.groups[i].group.id] = {
                             group: newVal.groups[i].group,
                             page: 1,
