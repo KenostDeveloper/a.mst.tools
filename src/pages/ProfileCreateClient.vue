@@ -69,9 +69,6 @@
                 <span class="ktitle mb-3">Данные контактного лица</span>
                 <div class="kenost-form-grid">
                     <div class="dart-form-group w-50" 
-                    :class="{
-                        error: v$.orgprofile[field.name].$errors.length,
-                    }"
                     v-for="(field, index) in form.fields.contacts" :key="index">
                         <!-- <label for="">{{ field.label }}</label> -->
                         <input
@@ -80,13 +77,13 @@
                             class="dart-form-control std-create-clients__input"
                             :name="field.name"
                             :placeholder="field.placeholder" />
-                        <span
+                        <!-- <span
                             class="error_desc"
                             v-for="error of v$.orgprofile[field.name].$errors"
                             :key="error.$uid"
                         >
                             {{ error.$message }}
-                        </span>
+                        </span> -->
                     </div>                    
                 </div>
                 <div class="dart-form-group" v-if="!$route.params.client_id">
@@ -439,15 +436,15 @@ export default {
 	validations() {
 		return {
 			orgprofile: {
-				contact: {
-					required,
-				},
-				email: {
-					required,
-				},
-                phone: {
-					required,
-				},
+				// contact: {
+				// 	required,
+				// },
+				// email: {
+				// 	required,
+				// },
+                // phone: {
+				// 	required,
+				// },
                 // login: {
                 //     required: () => {
                 //         return (this.form.company.register && this.orgprofile.login != '') || (!this.form.company.register)

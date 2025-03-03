@@ -72,7 +72,7 @@
                 </div>
               </div>
             </div>
-            <div class="d-client-card__buttons d-client-card__buttons-flex" v-if="item.owner_id > 0">
+            <div class="d-client-card__buttons d-client-card__buttons-flex" v-if="item.owner_id > 0 && item.owner_id == this.$route.params.id">
               <div class="flex">
                 <span class="status status-green">Созданный поставщиком</span>
                 <div class="d-client-card__actions">

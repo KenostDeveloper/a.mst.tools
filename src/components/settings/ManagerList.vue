@@ -38,6 +38,22 @@
                     <MultiSelect v-if="!manager.unlimitied_clients" class="w-full md:w-20rem kenost-multiselect mt-2" filter v-model="manager.clients" display="chip"
                         :options="regions_and_stores" optionLabel="name" placeholder="Выберите клиентов" />
 
+                    <!-- <TreeSelect filter v-model="manager.clients" optionLabel="name" :options="regions_and_stores" selectionMode="checkbox" placeholder="Select Item" class="md:w-20rem w-full" /> -->
+                    <CustomTreeSelect :allSelectedKeys="allSelectedClients" v-model="manager.clients" :options="regions_and_stores" placeholder="Выберите клиентов" />
+                    <!-- {{ manager.clients }} -->
+                    <!-- {{ allSelectedClients }} -->
+                    <!-- <TreeTable 
+                        :paginator="true" 
+                        :rows="10" 
+                        v-model:selectionKeys="manager.clients" 
+                        :value="regions_and_stores" 
+                        selectionMode="checkbox"
+                        :rowStyleClass="rowClass"
+                    >
+                        <Column field="label" header="Name" expander></Column>
+                    </TreeTable> -->
+
+
 
                 </div>
 
@@ -71,6 +87,10 @@ import useVuelidate from '@vuelidate/core';
 import ClientList from './ClientList.vue';
 import { IMaskDirective } from 'vue-imask';
 import router from "../../router";
+import TreeSelect from 'primevue/treeselect';
+import TreeTable from 'primevue/treetable';
+import Column from 'primevue/column';
+import CustomTreeSelect from '../opt/CustomTreeSelect.vue'
 
 export default {
     name: 'ManagerList',
@@ -83,7 +103,11 @@ export default {
     components: {
         Checkbox,
         MultiSelect,
-        ClientList
+        TreeSelect,
+        ClientList,
+        TreeTable,
+        Column,
+        CustomTreeSelect
     },
     directives: {
         imask: IMaskDirective
@@ -95,6 +119,7 @@ export default {
     },
     data() {
         return {
+            selectedClients: [],
             form: {
                 info: [
                     {
@@ -164,10 +189,8 @@ export default {
                 name: '',
                 email: '',
                 phone: '',
-
                 unlimitied_clients: true,
                 clients: [],
-
                 notifications: {
                     order_status_changes: true,
                     new_opt_order: true,
@@ -186,6 +209,10 @@ export default {
     },
     computed: {
         ...mapGetters(["regions_and_stores"]),
+        allSelectedClients() {
+            console.log([...new Set(this.items.flatMap(manager => manager.clients))])
+            return [...new Set(this.items.flatMap(manager => manager.clients))]; // Собираем всех клиентов
+        }
     },
     mounted() {
         this.get_stores_and_regions({
@@ -196,4 +223,9 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.disabled-tree-table-checkbox {
+    opacity: 0.5;
+    pointer-events: none;
+}
+</style>
