@@ -105,7 +105,7 @@
                             <Counter
                                 @ElemCount="ElemCount"
                                 :min="product?.min_count ? product?.min_count : 1"
-                                :max="product.max"
+                                :max="item.available"
                                 :id="product.remain_id"
                                 :store_id="item.store_id"
                                 :index="{index}"
@@ -416,13 +416,14 @@ export default {
             } else {
                 this.items.products[object.item.index1].stores[object.item.index2].basket.count = object.value;
             }; 
+            console.log(object)
             const data = {
                 action: 'basket/update',
                 extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
                 id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
                 org_id: object.item.item.org_id,
                 store_id: object.item.item.store_id,
-                id_remain: object.id,
+                id_remain: object.item.item.remain_id,
                 count: object.value,
                 key: object.item.item.basket.key,
                 actions: object.item.item.basket.ids_actions

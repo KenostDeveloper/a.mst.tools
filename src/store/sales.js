@@ -42,7 +42,8 @@ export default {
         action: 'get',
         action_id: actionid,
         type: type,
-        is_action: isAction ? true : false
+        is_action: isAction ? true : false,
+        extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart'
       }
       return Axios('/rest/front_sales', {
         method: 'POST',
