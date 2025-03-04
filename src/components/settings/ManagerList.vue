@@ -3,7 +3,7 @@
         <li v-for="(manager, indexi) in items" v-bind:key="manager.id" class="manager-list__item">
             <div class="manager-list__header">
                 <h2 class="manager-list__title">Менеджер {{ indexi + 1 }}</h2>
-                <button class="button-none manager-list__delete-button" @click="deleteItem(index)">
+                <button class="button-none manager-list__delete-button" @click="deleteItem(indexi)">
                     <i class="std_icon-trash manager-list__delete-button-icon"></i>
                 </button>
             </div>
@@ -28,33 +28,14 @@
 
                 <div class="manager-list__block manager-list__clients">
                     <h3 class="manager-list__subtitle">Клиенты менеджера:</h3>
-                    <div class="manager-list__checkbox-container">
+                    <div v-if="canSelectUnlimited(manager)" class="manager-list__checkbox-container">
                         <Checkbox v-model="manager.unlimitied_clients" inputId="unlimitied-clients" :binary="true"
-                            class="manager-list__checkbox" />
+                            class="manager-list__checkbox" @change="toggleUnlimited(manager)" />
                         <label class="manager-list__checkbox-label" for="unlimitied-clients">Неограниченный круг
                             клиентов</label>
                     </div>
-                    <!-- <ClientList v-model:clients="manager.clients" /> -->
-                    <MultiSelect v-if="!manager.unlimitied_clients" class="w-full md:w-20rem kenost-multiselect mt-2" filter v-model="manager.clients" display="chip"
-                        :options="regions_and_stores" optionLabel="name" placeholder="Выберите клиентов" />
-
-                    <!-- <TreeSelect filter v-model="manager.clients" optionLabel="name" :options="regions_and_stores" selectionMode="checkbox" placeholder="Select Item" class="md:w-20rem w-full" /> -->
-                    <CustomTreeSelect :allSelectedKeys="allSelectedClients" v-model="manager.clients" :options="regions_and_stores" placeholder="Выберите клиентов" />
-                    <!-- {{ manager.clients }} -->
-                    <!-- {{ allSelectedClients }} -->
-                    <!-- <TreeTable 
-                        :paginator="true" 
-                        :rows="10" 
-                        v-model:selectionKeys="manager.clients" 
-                        :value="regions_and_stores" 
-                        selectionMode="checkbox"
-                        :rowStyleClass="rowClass"
-                    >
-                        <Column field="label" header="Name" expander></Column>
-                    </TreeTable> -->
-
-
-
+                    <CustomTreeSelect v-if="!manager.unlimitied_clients" :allSelectedKeys="allSelectedClients"
+                        v-model="manager.clients" :options="regions_and_stores" placeholder="Выберите клиентов" />
                 </div>
 
                 <div class="manager-list__block manager-list__notifications">
@@ -82,14 +63,9 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import Checkbox from 'primevue/checkbox'
-import MultiSelect from 'primevue/multiselect'
 import useVuelidate from '@vuelidate/core';
-import ClientList from './ClientList.vue';
 import { IMaskDirective } from 'vue-imask';
 import router from "../../router";
-import TreeSelect from 'primevue/treeselect';
-import TreeTable from 'primevue/treetable';
-import Column from 'primevue/column';
 import CustomTreeSelect from '../opt/CustomTreeSelect.vue'
 
 export default {
@@ -102,11 +78,6 @@ export default {
     },
     components: {
         Checkbox,
-        MultiSelect,
-        TreeSelect,
-        ClientList,
-        TreeTable,
-        Column,
         CustomTreeSelect
     },
     directives: {
@@ -119,77 +90,35 @@ export default {
     },
     data() {
         return {
-            selectedClients: [],
             form: {
                 info: [
-                    {
-                        label: "ФИО",
-                        name: "name",
-                        placeholder: "ФИО",
-                        type: "text",
-                    },
-                    {
-                        label: "Номер телефона",
-                        name: "phone",
-                        placeholder: "+7 (000) 000-00-00",
-                        type: "tel",
-                    },
-                    {
-                        label: "Почта",
-                        name: "email",
-                        placeholder: "example@example.com",
-                        type: "email",
-                    },
+                    { label: "ФИО", name: "name", placeholder: "ФИО", type: "text" },
+                    { label: "Номер телефона", name: "phone", placeholder: "+7 (000) 000-00-00", type: "tel" },
+                    { label: "Почта", name: "email", placeholder: "example@example.com", type: "email" },
                 ],
                 notifications: [
-                    {
-                        name: "order_status_changes",
-                        label: "Изменение статуса заказа в маркетплейсе",
-                    },
-                    {
-                        name: "new_opt_order",
-                        label: "Поступил новый оптовый заказ",
-                    },
-                    {
-                        name: "company_enabled",
-                        label: "Ваш компания отключена",
-                    },
-                    {
-                        name: "company_connected",
-                        label: "Ваша компания подключена",
-                    },
-                    {
-                        name: "new_vendor",
-                        label: "Появился новый поставщик",
-                    },
-                    {
-                        name: "added_to_my_vendors",
-                        label: "Вас добавили в мои поставщики",
-                    },
-                    {
-                        name: "deleted_from_my_vendors",
-                        label: "Вас удалили из моих поставщиков",
-                    },
-                    {
-                        name: "info_offer",
-                        label: "Информация о предложениях",
-                    },
+                    { name: "order_status_changes", label: "Изменение статуса заказа в маркетплейсе" },
+                    { name: "new_opt_order", label: "Поступил новый оптовый заказ" },
+                    { name: "company_enabled", label: "Ваша компания отключена" },
+                    { name: "company_connected", label: "Ваша компания подключена" },
+                    { name: "new_vendor", label: "Появился новый поставщик" },
+                    { name: "added_to_my_vendors", label: "Вас добавили в мои поставщики" },
+                    { name: "deleted_from_my_vendors", label: "Вас удалили из моих поставщиков" },
+                    { name: "info_offer", label: "Информация о предложениях" },
                 ],
             },
-            mask: {
-                mask: '+{7} (000) 000-00-00',
-            }
+            mask: { mask: '+{7} (000) 000-00-00' }
         }
     },
     methods: {
         ...mapActions(["get_stores_and_regions"]),
         addItem() {
             this.$emit('update:items', [...this.items, {
-                id: 1,
+                id: this.items.length + 1,
                 name: '',
                 email: '',
                 phone: '',
-                unlimitied_clients: true,
+                unlimitied_clients: false, // Новые менеджеры не могут выбрать "Неограниченный круг клиентов"
                 clients: [],
                 notifications: {
                     order_status_changes: true,
@@ -204,24 +133,44 @@ export default {
             }]);
         },
         deleteItem(index) {
+            const wasUnlimited = this.items[index].unlimitied_clients;
             this.$emit('update:items', [...this.items.slice(0, index), ...this.items.slice(index + 1)]);
+
+            // Если удалили менеджера с "Неограниченным кругом клиентов", сбрасываем блокировку
+            if (wasUnlimited) {
+                this.items.forEach(manager => (manager.unlimitied_clients = false));
+            }
+        },
+        toggleUnlimited(selectedManager) {
+            if (selectedManager.unlimitied_clients) {
+                // Если выбираем "Неограниченный круг клиентов", сбрасываем у всех остальных
+                this.items.forEach(manager => {
+                    if (manager !== selectedManager) manager.unlimitied_clients = false;
+                });
+            }
         }
     },
     computed: {
         ...mapGetters(["regions_and_stores"]),
         allSelectedClients() {
-            console.log([...new Set(this.items.flatMap(manager => manager.clients))])
-            return [...new Set(this.items.flatMap(manager => manager.clients))]; // Собираем всех клиентов
+            return [...new Set(this.items.flatMap(manager => manager.clients))];
+        },
+        hasUnlimitedClient() {
+            return this.items.some(manager => manager.unlimitied_clients);
+        },
+        canSelectUnlimited() {
+            return (manager) => !this.hasUnlimitedClient || manager.unlimitied_clients;
         }
     },
     mounted() {
         this.get_stores_and_regions({
             action: "get/regions/stores",
             id: router.currentRoute._value.params.id
-        })
+        });
     },
 }
 </script>
+
 
 <style lang="scss" scoped>
 .disabled-tree-table-checkbox {

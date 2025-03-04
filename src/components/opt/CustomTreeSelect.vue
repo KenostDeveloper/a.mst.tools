@@ -185,7 +185,13 @@
     color: var(--text-color);
     outline: none;
     transition: background-color 0.2s ease-in-out;
-  }
+    
+    /* Фиксация вверху */
+    position: sticky;
+    top: 0;
+    background: var(--surface-overlay);
+    z-index: 101;
+}
   
   .tree-select__search:focus {
     background-color: var(--surface-hover);

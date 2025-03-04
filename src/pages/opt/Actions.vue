@@ -47,6 +47,7 @@
     mounted () {
       this.get_actions_buyer_to_api({
         action: 'get/all/actions/buyer',
+        extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
         id: this.$route.params.id,
         page: this.page,
         perpage: this.perpage
@@ -64,6 +65,7 @@
         this.page = pageNum;
         this.get_actions_buyer_to_api({
           action: 'get/all/actions/buyer',
+          extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
           id: this.$route.params.id,
           page: this.page,
           perpage: this.perpage

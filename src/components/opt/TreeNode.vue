@@ -1,108 +1,113 @@
 <template>
-    <li class="tree-node">
+  <li class="tree-node">
       <div class="tree-node__label">
-        <input 
-          type="checkbox" 
-          :value="node.key" 
-          :checked="isChecked" 
-          :disabled="node.disabled || disabledKeys.includes(node.key)" 
-          @change="toggleSelection($event.target.checked)" 
-        />
-        <button 
-          v-if="node.children && node.children.length" 
-          @click.stop="toggleExpand"
-        >
-            <i :class="expanded ? 'pi pi-angle-up' : 'pi pi-angle-down'"></i>
-        </button>
-        <span :class="{ 'disabled-text': node.disabled || disabledKeys.includes(node.key) }">
-          {{ node.label }}
-          <span v-if="inactiveChildrenCount > 0" class="inactive-count">
-            (Занято: {{ inactiveChildrenCount }})
+          <Checkbox 
+            :inputId="'checkbox-' + node.key"
+            :modelValue="selectedKeys.includes(node.key)"
+            :binary="true"
+            :value="node.key"
+            :disabled="node.disabled || disabledKeys.includes(node.key)"
+            @update:modelValue="toggleSelection"
+          />
+          <button 
+              v-if="node.children && node.children.length" 
+              @click.stop="toggleExpand"
+          >
+              <i :class="expanded ? 'pi pi-angle-up' : 'pi pi-angle-down'"></i>
+          </button>
+          <span :class="{ 'disabled-text': node.disabled || disabledKeys.includes(node.key) }">
+              {{ node.label }}
+              <span v-if="inactiveChildrenCount > 0" class="inactive-count">
+                  (Занято: {{ inactiveChildrenCount }})
+              </span>
           </span>
-        </span>
       </div>
-  
+
       <ul v-if="expanded && node.children && node.children.length" class="tree-node__children">
-        <TreeNode 
-          v-for="child in node.children" 
-          :key="child.key" 
-          :node="child" 
-          v-model="selectedKeys"
-          :disabledKeys="disabledKeys"
-        />
+          <TreeNode 
+              v-for="child in node.children" 
+              :key="child.key" 
+              :node="child" 
+              v-model="selectedKeys"
+              :disabledKeys="disabledKeys"
+          />
       </ul>
-    </li>
-  </template>
-  
-  <script>
-  export default {
-    name: "TreeNode",
-    props: {
+  </li>
+</template>
+
+<script>
+import Checkbox from 'primevue/checkbox';
+
+export default {
+  name: "TreeNode",
+  components: { Checkbox },
+  props: {
       node: Object,
       modelValue: Array,
       disabledKeys: Array
-    },
-    data() {
+  },
+  data() {
       return {
-        expanded: false
+          expanded: false
       };
-    },
-    computed: {
+  },
+  computed: {
       selectedKeys: {
-        get() {
-          return this.modelValue;
-        },
-        set(value) {
-          this.$emit("update:modelValue", value);
-        }
+          get() {
+              return this.modelValue;
+          },
+          set(value) {
+              this.$emit("update:modelValue", value);
+          }
       },
       isChecked() {
-        return this.selectedKeys.includes(this.node.key);
+          return this.selectedKeys.includes(this.node.key);
       },
       inactiveChildrenCount() {
-        if (!this.node.children || this.node.children.length === 0) return 0;
-  
-        return this.node.children.filter(child => 
-          child.disabled || this.disabledKeys.includes(child.key)
-        ).length;
+          if (!this.node.children || this.node.children.length === 0) return 0;
+
+          return this.node.children.filter(child => 
+              child.disabled || this.disabledKeys.includes(child.key)
+          ).length;
       }
-    },
-    methods: {
+  },
+  methods: {
       toggleExpand() {
-        this.expanded = !this.expanded;
+          this.expanded = !this.expanded;
       },
-      toggleSelection(checked) {
-        if (this.node.disabled || this.disabledKeys.includes(this.node.key)) return;
-  
-        let newSelectedKeys = [...this.selectedKeys];
-  
-        const selectAllChildren = (node) => {
-          if (!node.disabled && !this.disabledKeys.includes(node.key)) {
-            newSelectedKeys.push(node.key);
+      toggleSelection() {
+          if (this.node.disabled || this.disabledKeys.includes(this.node.key)) return;
+
+          let newSelectedKeys = [...this.selectedKeys];
+
+          const selectAllChildren = (node) => {
+              if (!node.disabled && !this.disabledKeys.includes(node.key)) {
+                  newSelectedKeys.push(node.key);
+              }
+              if (node.children) {
+                  node.children.forEach(selectAllChildren);
+              }
+          };
+
+          const deselectAllChildren = (node) => {
+              newSelectedKeys = newSelectedKeys.filter(key => key !== node.key);
+              if (node.children) {
+                  node.children.forEach(deselectAllChildren);
+              }
+          };
+
+          if (!this.isChecked) {
+              selectAllChildren(this.node);
+          } else {
+              deselectAllChildren(this.node);
           }
-          if (node.children) {
-            node.children.forEach(selectAllChildren);
-          }
-        };
-  
-        const deselectAllChildren = (node) => {
-          newSelectedKeys = newSelectedKeys.filter(key => key !== node.key);
-          if (node.children) {
-            node.children.forEach(deselectAllChildren);
-          }
-        };
-  
-        if (checked) {
-          selectAllChildren(this.node);
-        } else {
-          deselectAllChildren(this.node);
-        }
-  
-        this.selectedKeys = [...new Set(newSelectedKeys)];
+
+          this.selectedKeys = [...new Set(newSelectedKeys)];
       }
-    }
-  };
-  </script>
+  }
+};
+</script>
+
   
   <style scoped>
   .tree-node {
