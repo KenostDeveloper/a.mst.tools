@@ -229,7 +229,7 @@ export default {
                         if (index !== -1) {
                             this.add_basket.splice(index, 1); // Удаляем один элемент по индексу
                         }
-                    }, 1000)
+                    }, 2000)
                 });
             })
 
