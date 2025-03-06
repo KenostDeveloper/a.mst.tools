@@ -255,26 +255,30 @@
   </form>
 
   <Dialog v-model:visible="this.modals.price" :header="this.modals.headers[this.modals.price_step]" :style="{ width: '700px' }">
-      <div class="kenost-modal-price">
-          <div class="product-kenost-card">
-            <img :src="this.selected[this.modals.product_id]?.image">
-            <div class="product-kenost-card__text">
-              <p>{{ this.selected[this.modals.product_id]?.name }}</p>
-              <span>{{this.selected[this.modals.product_id]?.article}}</span>
+    <div class="kenost-modal-price">
+            <div class="product-kenost-card">
+                <img :src="this.selected[this.modals.product_id]?.image" />
+                <div class="product-kenost-card__text">
+                    <p>{{ this.selected[this.modals.product_id]?.name }}</p>
+                    <span>{{ this.selected[this.modals.product_id]?.article }}</span>
+                </div>
             </div>
-          </div>
-          <div class="kenost-method-edit-flex" v-if="this.modals.price_step == 0">
-            <div class="flex align-items-center gap-1 mt-3">
-                <RadioButton v-model="this.modals.type_price" inputId="type_price-1" name="type_price" value="1" />
-                <label for="type_price-1" class="ml-2 radioLabel">Задать вручную</label>
+            <div class="kenost-method-edit-flex" v-if="this.modals.price_step == 0">
+                <div class="flex align-items-center gap-1 mt-3">
+                    <RadioButton v-model="this.modals.type_price" inputId="type_price-1" name="type_price" value="1" />
+                    <label for="type_price-1" class="ml-2 radioLabel">Задать вручную</label>
+                </div>
+                <div class="flex align-items-center gap-1 mt-3">
+                    <RadioButton v-model="this.modals.type_price" inputId="type_price-2" name="type_price" value="2" />
+                    <label for="type_price-2" class="ml-2 radioLabel">Тип цен</label>
+                </div>
+                <!-- <div class="flex align-items-center gap-1 mt-3">
+                    <RadioButton v-model="this.modals.type_price" inputId="type_price-3" name="type_price" value="3" />
+                    <label for="type_price-3" class="ml-2 radioLabel">Задать вручную</label>
+                </div> -->
             </div>
-            <div class="flex align-items-center gap-1 mt-3">
-                <RadioButton v-model="this.modals.type_price" inputId="type_price-2" name="type_price" value="2" />
-                <label for="type_price-2" class="ml-2 radioLabel">Тип цен</label>
-            </div>
-          </div>
 
-          <div v-if="this.modals.price_step == 1" class="two-colums mt-3">
+            <div v-if="this.modals.price_step == 1" class="two-colums mt-3">
                 <div class="kenost-wiget">
                     <p>Тип ценообразования</p>
                     <Dropdown
@@ -283,8 +287,8 @@
                         :options="this.typePricing" optionLabel="name"
                         class="w-full md:w-14rem" />
                 </div>
-                <div class="kenost-wiget" v-if="this.selected_data[this.modals.product_id]?.typePricing?.key != 2">
-                    <p>Тип цены</p>
+                <div class="kenost-wiget" v-if="this.selected_data[this.modals.product_id]?.typePricing?.key != 3">
+                    <p>От типа цены</p>
                     <Dropdown @change="setDiscountFormul()"
                         v-model="this.selected_data[this.modals.product_id].typePrice"
                         :options="this.selected[this.modals.product_id].prices" optionLabel="name" 
@@ -343,11 +347,7 @@
                 <p>
                     Скидка от РРЦ:
                     {{
-                        this.selected_data[this.modals.product_id]
-                        ? Number(this.selected_data[this.modals.product_id].discountInterest)
-                            .toFixed(2)
-                            .toLocaleString('ru')
-                        : '0'
+                        this.selected_data[this.modals.product_id]? (((Number(this.selected_data[this.modals.product_id].price) - Number(this.selected_data[this.modals.product_id].finalPrice)) / (Number(this.selected_data[this.modals.product_id].price) / 100)).toFixed(2)).toLocaleString('ru'): Number(0.0).toFixed(2)
                     }}
                     %
                 </p>
@@ -376,7 +376,7 @@
                     {{ this.modals.price_step == 0 ? 'Далее' : 'Готово' }}
                 </div>
             </div>
-      </div>
+        </div>
   </Dialog>
 </template>
 
@@ -642,58 +642,57 @@ export default {
     // }
     },
     setDiscountFormul() {
-        let sale = 0;
-        if(this.selected_data[this.modals.product_id].typePrice){
-            //Скидка от Типа цены
-            sale = Number(this.selected_data[this.modals.product_id].price) - Number(this.selected_data[this.modals.product_id].typePrice.price)
-        }
-        if(this.selected_data[this.modals.product_id].typePricing){
-            switch(this.selected_data[this.modals.product_id].typePricing.key){
-                case 1:
-                    this.selected_data[this.modals.product_id].typeFormul = { name: '%', key: 1 }
-                    if(this.saleValue){
-                        //ФОРМУЛА 100-1500*100/2000
-                        //Например: Товар с РРЦ 2000, Типом цен "Опт1", Цена "Опт1" = 1000, Значение наценки: 50 => Цена товара со скидкой: 1000*1,5 = 1500, Скидка = 100-1500*100/2000  = 25%
-                        //console.log(`100 - ${((Number(this.selected_data[this.modals.product_id].price) - sale) * (1.5 + (1.7 - 1.5) * (this.saleValue - 50) / (70 - 50)))} * 100 / ${Number(this.selected_data[this.modals.product_id].price)}`)
-                        //console.log((1.5 + (1.7 - 1.5) * (this.saleValue - 50) / (70 - 50)))
-                        let salePercent = (100 - ((Number(this.selected_data[this.modals.product_id].price) - sale) * (1.5 + (1.7 - 1.5) * (this.saleValue - 50) / (70 - 50))) * 100 / (Number(this.selected_data[this.modals.product_id].price)))
-                        sale = Number(this.selected_data[this.modals.product_id].price) - Number(this.selected_data[this.modals.product_id].price) * (1 - salePercent / 100)
-                        this.selected_data[this.modals.product_id].percent = this.saleValue
-                    }
-                    break;
-                case 2:
-                    sale = 0;
-                    this.selected_data[this.modals.product_id].typePrice = ""
-
-                    if(this.saleValue && this.selected_data[this.modals.product_id].typeFormul){
-                        if(this.saleValue && this.selected_data[this.modals.product_id]?.typeFormul?.key == 1){
-                            let salePrice = (Number(this.selected_data[this.modals.product_id].price) - sale)*(1-this.saleValue/100)
-                            sale = Number(this.selected_data[this.modals.product_id].price) - salePrice
-                            this.selected_data[this.modals.product_id].percent = this.saleValue
-                        } else {
-                            let salePrice = Number(this.selected_data[this.modals.product_id].price) - sale - this.saleValue
-                            sale = Number(this.selected_data[this.modals.product_id].price) - salePrice
-                            this.selected_data[this.modals.product_id].percent = 0;
-                        }
-                        
-                    }
-                    break;
-                case 3:
-                    // console.log(this.selected_data[this.modals.product_id])
-                    this.selected_data[this.modals.product_id].typeFormul = {key: 0, name: "₽"}
-                    if(this.saleValue){
-                        sale = Number(this.selected_data[this.modals.product_id].price) - this.saleValue
-                        this.selected_data[this.modals.product_id].percent = 0
-                    }
+            let sale = 0;
+            if(this.selected_data[this.modals.product_id].typePrice){
+                //Скидка От типа цены
+                sale = Number(this.selected_data[this.modals.product_id].price) - Number(this.selected_data[this.modals.product_id].typePrice.price)
             }
-        }
+            if(this.selected_data[this.modals.product_id].typePricing){
+                switch(this.selected_data[this.modals.product_id].typePricing.key){
+                    case 1:
+                        this.selected_data[this.modals.product_id].typeFormul = { name: '%', key: 1 }
+                        if(this.saleValue){
+                            //ФОРМУЛА 100-1500*100/2000
+                            //Например: Товар с РРЦ 2000, Типом цен "Опт1", Цена "Опт1" = 1000, Значение наценки: 50 => Цена товара со скидкой: 1000*1,5 = 1500, Скидка = 100-1500*100/2000  = 25%
+                            //console.log(`100 - ${((Number(this.selected_data[this.modals.product_id].price) - sale) * (1.5 + (1.7 - 1.5) * (this.saleValue - 50) / (70 - 50)))} * 100 / ${Number(this.selected_data[this.modals.product_id].price)}`)
+                            //console.log((1.5 + (1.7 - 1.5) * (this.saleValue - 50) / (70 - 50)))
+                            let salePercent = (100 - ((Number(this.selected_data[this.modals.product_id].price) - sale) * (1.5 + (1.7 - 1.5) * (this.saleValue - 50) / (70 - 50))) * 100 / (Number(this.selected_data[this.modals.product_id].price)))
+                            sale = Number(this.selected_data[this.modals.product_id].price) - Number(this.selected_data[this.modals.product_id].price) * (1 - salePercent / 100)
+                            this.selected_data[this.modals.product_id].percent = this.saleValue
+                        }
+                        break;
+                    case 2:
+                        sale = 0;
+                        // this.selected_data[this.modals.product_id].typePrice = ""
+                        if(this.saleValue && this.selected_data[this.modals.product_id].typeFormul){
+                            if(this.saleValue && this.selected_data[this.modals.product_id]?.typeFormul?.key == 1){
+                                let salePrice = (Number(this.selected_data[this.modals.product_id].price) - sale)*(1-this.saleValue/100)
+                                sale = Number(this.selected_data[this.modals.product_id].price) - salePrice
+                                this.selected_data[this.modals.product_id].percent = this.saleValue
+                            } else {
+                                let salePrice = Number(this.selected_data[this.modals.product_id].price) - sale - this.saleValue
+                                sale = Number(this.selected_data[this.modals.product_id].price) - salePrice
+                                this.selected_data[this.modals.product_id].percent = 0;
+                            }
+                            
+                        }
+                        break;
+                    case 3:
+                        // console.log(this.selected_data[this.modals.product_id])
+                        this.selected_data[this.modals.product_id].typeFormul = {key: 0, name: "₽"}
+                        if(this.saleValue){
+                            sale = Number(this.selected_data[this.modals.product_id].price) - this.saleValue
+                            this.selected_data[this.modals.product_id].percent = 0
+                        }
+                }
+            }
 
-        //Устанавливаем цену со скидкой
-        this.selected_data[this.modals.product_id].discountInRubles = sale
-        this.selected_data[this.modals.product_id].finalPrice = Number(this.selected_data[this.modals.product_id].price) - sale
-        //Расчет % скидки от РРЦ
-        this.selected_data[this.modals.product_id].discountInterest = Number(this.selected_data[this.modals.product_id].discountInRubles) / (Number(this.selected_data[this.modals.product_id].price) / 100)
-    },
+            //Устанавливаем цену со скидкой
+            this.selected_data[this.modals.product_id].discountInRubles = sale
+            this.selected_data[this.modals.product_id].finalPrice = Number(this.selected_data[this.modals.product_id].price) - sale
+            //Расчет % скидки от РРЦ
+            this.selected_data[this.modals.product_id].discountInterest = Number(this.selected_data[this.modals.product_id].discountInRubles) / (Number(this.selected_data[this.modals.product_id].price) / 100)
+        },
     deleteSelect (id) {
       this.products.push(this.selected[id])
 
