@@ -377,6 +377,11 @@ export default {
 			if (!this.fetchIds.includes(object.item.key)) {
                 this.fetchIds.push(object.item.key);
             }
+			console.log(object)
+			if (object.value == object.min) {
+                this.clearBasketProductComplect(object.item)
+                return;
+            }
 			if (object.value > Number(object.max)) {
 				this.modal_remain = true;
 			} else {
@@ -423,6 +428,38 @@ export default {
                 }, 1000);
 				
 			}
+		},
+		clearBasketProductComplect(product) {
+			this.$emit("catalogUpdate");
+			this.$emit("actionUpdate");
+			const data = {
+				action: "basket/remove",
+				extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
+				id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
+				key: product.key,
+				store_id: product.store_id,
+				org_id: product.org_id,
+				id_complect: product.complect_id
+			};
+			this.busket_from_api(data).then((response) => {
+				if(!response?.data?.data?.success && response?.data?.data?.message){
+					this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
+				}
+			});
+			this.busket_from_api({
+				action: 'basket/get',
+				extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
+				id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
+				warehouse: 'all'
+			}).then((response) => {
+				if(!response?.data?.data?.success && response?.data?.data?.message){
+					this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
+				}
+                const index = this.fetchIds.indexOf(product.key);
+                if (index !== -1) {
+                    this.fetchIds.splice(index, 1); // Удаляем один элемент по индексу
+                }
+			})
 		},
 		ElemCount(object) {
 			if (!this.fetchIds.includes(object.item.product.key)) {

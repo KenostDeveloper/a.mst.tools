@@ -89,9 +89,9 @@
               </router-link>
             </div>
             <div class="d-client-card__buttons flex" v-else>
-              <router-link :to="{ name: 'client_id', params: { id: $route.params.id, client_id: item.id } }" class="link-no-style">
+              <!-- <router-link :to="{ name: 'client_id', params: { id: $route.params.id, client_id: item.id } }" class="link-no-style">
                 <button class="dart-btn dart-btn-primary">Посмотреть остатки</button>
-              </router-link>
+              </router-link> -->
               <router-link :to="{ name: 'purchases_catalog_offer', params: { id: $route.params.id, id_org_from: item.id, category_id: 4 } }" class="link-no-style">
                 <button class="dart-btn dart-btn-primary">Создать предложение</button>
               </router-link>
