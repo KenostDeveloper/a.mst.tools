@@ -451,7 +451,10 @@
                 <TabPanel v-for="el in this.action_groups" :key="el.id" :header="el.group.name + ' (' + el?.products?.total + ')'">
                     <div class="table-kenost mt-4">
                         <div class="flex align-items-center justify-between">
-                            <p class="table-kenost__title">Товары коллекции «{{ el.group.name }}»</p>
+                            <div class="flex gap-2 align-items-center mb-3">
+                                <p class="table-kenost__title mb-0">Товары коллекции «{{ el.group.name }}»</p>
+                                <Badge v-if="el.priority" value="Приоритет" severity="danger"></Badge>
+                            </div>
                             <button @click="deleteGroup(el.group.id)" type="button" class="dart-btn dart-btn-secondary btn-padding flex gap-2 align-items-center">
                                 <i class="pi pi-trash"></i><div>Удалить коллекцию</div>
                             </button>
@@ -738,6 +741,19 @@
         <div>
             <!-- {{this.groups?.items}} -->
             <Dropdown option-label="name" v-model="this.add_group" :options="groups.items" optionLabel="name" class="w-full md:w-14rem mt-2" />
+            <div>
+                <div class="mt-4 font-bold">Приоритет</div>
+                <div class="flex align-items-center gap-1 mt-2">
+                    <RadioButton v-model="this.tempPriority" inputId="participantsType-2"
+                        name="participantsType" :value="false" />
+                    <label for="participantsType-2" class="ml-2 radioLabel">Приоритет ручного выбора</label>
+                </div>
+                <div class="flex align-items-center gap-1 mt-2">
+                    <RadioButton v-model="this.tempPriority" inputId="participantsType-1"
+                        name="participantsType" :value="true" />
+                    <label for="participantsType-1" class="ml-2 radioLabel">Приоритет коллекции</label>
+                </div>
+            </div>
             <div class="w-full mt-3 justify-content-end flex">
                 <button @click="addGroup()" type="button" class="dart-btn dart-btn-primary  flex gap-1 align-items-center">
                     <i class="pi pi-plus"></i><div>Добавить коллекцию</div>
@@ -841,6 +857,7 @@ export default {
         return {
             scrollableTabs: Array.from({ length: 50 }, (_, i) => ({ title: `Tab ${i + 1}`, content: `Tab ${i + 1} Content` })),
             loading: true,
+            tempPriority: false,
             form: {
                 store_id: [],
                 comment: "",
@@ -1082,20 +1099,27 @@ export default {
             })
         },
         addGroup(){
-            this.action_groups[this.add_group.id] = {
-                group: this.add_group,
-                page: 1,
-                perpage: 20,
-                search: "",
-                typePricing: null,
-                prices: null,
-                price: 'key',
-                saleValue: 0,
-                typeFormul: null
-            };
-            this.updateGroups(this.add_group.id)
-            this.add_group = {}
-            this.modals.add_group = false
+            if(Object.keys(this.add_group).length != 0){
+                this.action_groups[this.add_group.id] = {
+                    group: this.add_group,
+                    page: 1,
+                    perpage: 20,
+                    search: "",
+                    typePricing: null,
+                    prices: null,
+                    price: 'key',
+                    saleValue: 0,
+                    typeFormul: null,
+                    priority: this.tempPriority
+                };
+                this.updateGroups(this.add_group.id)
+                this.tempPriority = false
+                this.add_group = {}
+                this.modals.add_group = false
+            } else {
+                this.$toast.add({ severity: 'error', summary: "Ошибка", detail: "Выберите коллекцию", life: 3000 });
+            }
+            
         },
         setFilterGroup(id){
             this.updateGroups(id)
@@ -1959,7 +1983,8 @@ export default {
                             prices: null,
                             price: newVal.groups[i].type_price ? newVal.groups[i].type_price : 'key',
                             saleValue: Number(newVal.groups[i].percent),
-                            typeFormul: this.typeFormul[Number(newVal.groups[i].pricing_formula)]
+                            typeFormul: this.typeFormul[Number(newVal.groups[i].pricing_formula)],
+                            priority: newVal.groups[i].priority
                         };
                         this.updateGroups(newVal.groups[i].group.id)
                     }

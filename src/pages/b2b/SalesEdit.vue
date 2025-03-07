@@ -658,6 +658,10 @@
                                     Минимальное <br />
                                     количество
                                 </th>
+                                <th class="table-kenost__name">
+                                    Максимальное <br />
+                                    количество
+                                </th>
                                 <th class="table-kenost__name">Кратность</th>
                                 <th class="table-kenost__name">Сумма</th>
                                 <th class="table-kenost__name">Действие</th>
@@ -705,6 +709,15 @@
                                 </td>
                                 <td v-else>
                                     <Counter class="margin-auto" @ElemCount="ElemMinCount" :item="item" :id="item.id"
+                                        :min="1" :value="1" />
+                                </td>
+                                <td v-if="this.selected_data[item.id]">
+                                    <Counter class="margin-auto" @ElemCount="ElemMaxCount" :item="item" :id="item.id"
+                                        :min="0" :value="this.selected_data[item.id].max_count"
+                                        :key="new Date().getMilliseconds() + item.id" />
+                                </td>
+                                <td v-else>
+                                    <Counter class="margin-auto" @ElemCount="ElemMaxCount" :item="item" :id="item.id"
                                         :min="1" :value="1" />
                                 </td>
                                 <td v-if="this.selected_data[item.id]">
@@ -1724,6 +1737,7 @@ export default {
                     price: item.price,
                     multiplicity: 1,
                     min_count: 1,
+                    max_count: 999,
                     finalPrice: item.price,
                     discountInterest: 0,
                     discountInRubles: 0
@@ -1846,6 +1860,7 @@ export default {
                         price: this.selected[this.kenost_table[i]].price,
                         multiplicity: 1,
                         min_count: 1,
+                        max_count: 999,
                         finalPrice: this.selected[this.kenost_table[i]].price,
                         discountInterest: 0,
                         discountInRubles: 0
@@ -2202,6 +2217,7 @@ export default {
             product.discountInRubles = 0;
             product.multiplicity = 1;
             product.min_count = 1;
+            product.max_count = 999;
             product.finalPrice = Number(product.price);
             product.typeFormul = {};
             product.typePrice = '';
@@ -2456,6 +2472,7 @@ export default {
                 this.selected_data[obj.id].discountInterest = 0;
                 this.selected_data[obj.id].discountInRubles = 0;
                 this.selected_data[obj.id].min_count = 1;
+                this.selected_data[obj.id].max_count = 999;
                 this.selected_data[obj.id].typeFormul = null;
             }
             this.selected_data[obj.id].multiplicity = obj.value;
@@ -2469,9 +2486,24 @@ export default {
                 this.selected_data[obj.id].discountInterest = 0;
                 this.selected_data[obj.id].discountInRubles = 0;
                 this.selected_data[obj.id].min_count = 1;
+                this.selected_data[obj.id].max_count = 999;
                 this.selected_data[obj.id].typeFormul = null;
             }
             this.selected_data[obj.id].min_count = obj.value;
+        },
+        ElemMaxCount(obj) {
+            this.settings(obj.item, false);
+            if (!this.selected_data[obj.id]) {
+                this.selected_data[obj.id] = [];
+                this.selected_data[obj.id].multiplicity = 1;
+                this.selected_data[obj.id].finalPrice = this.selected[obj.id].price;
+                this.selected_data[obj.id].discountInterest = 0;
+                this.selected_data[obj.id].discountInRubles = 0;
+                this.selected_data[obj.id].min_count = 1;
+                this.selected_data[obj.id].max_count = 999;
+                this.selected_data[obj.id].typeFormul = null;
+            }
+            this.selected_data[obj.id].max_count = obj.value;
         },
         closeDialogPrice() {
             if (this.modals.price_step === 0) {
