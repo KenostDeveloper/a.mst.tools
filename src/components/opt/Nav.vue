@@ -238,7 +238,7 @@
                     <img class="std-nav__address-icon" src="/images/icons/map_marker.svg" />
                     <span class="std-nav__address-text">
                         <span>Адрес доставки:</span><br />
-                        «{{ org_stores?.items?.find((el) => el?.id == warehouse_basket)?.name_short }}»,
+                        <!-- «{{ org_stores?.items?.find((el) => el?.id == warehouse_basket)?.name_short }}», -->
                         {{ org_stores?.items?.find((el) => el?.id == warehouse_basket)?.address_short }}
                     </span>
                 </button>
@@ -246,7 +246,7 @@
                     @click.stop>
                     <li v-for="warehous in org_stores.items" v-bind:key="warehous.id" @click="setWarehouse(warehous.id)"
                         class="std-nav__warehouse-item">
-                        «{{ warehous.name_short }}», {{ warehous.address_short }}
+                        {{ warehous.address_short }}
                     </li>
                 </ul>
             </div>

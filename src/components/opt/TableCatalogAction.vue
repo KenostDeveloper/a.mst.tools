@@ -104,7 +104,7 @@
                         <form class="k-table__form" action="" :class="{ 'basket-true': item?.basket?.availability || this.add_basket.indexOf(item.key) != -1, 'loading-counter': this.fetchIds.indexOf(item.key) != -1 }">
                             <Counter
                                 @ElemCount="ElemCount"
-                                :min="product?.min_count ? product?.min_count : 1"
+                                :min="0"
                                 :max="item.available"
                                 :id="product.remain_id"
                                 :store_id="item.store_id"
@@ -409,6 +409,7 @@ export default {
             if (!this.fetchIds.includes(object.item.item.key)) {
                 this.fetchIds.push(object.item.item.key);
             }
+            console.log(object)
             if (object.value <= object.min) {
                 this.clearBasketProduct(object.item.item.org_id, object.item.item.store_id, object.item.item.key, object.item.item, object.item.index1, object.item.index2, object.item.item.multiplicity)
                 this.items.products[object.item.index1].stores[object.item.index2].basket.count = object.item.item.multiplicity;

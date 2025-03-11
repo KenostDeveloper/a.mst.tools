@@ -19,7 +19,10 @@
 							сопоставленные со справочником системы.
 						</div>
 					</div>
-					<h1 class="h1-mini" v-else>{{ opt_products?.page?.pagetitle }}</h1>
+					<div v-else class="flex justify-content-space-between align-items-center mb-4">
+						<h1 class="h1-mini mb-0">{{ opt_products?.page?.pagetitle }}</h1>
+						<div @click="this.show_filters = !this.show_filters" class="flex justify-content-space-between align-items-center gap-2 cursor-pointer"><i class="pi pi-sliders-h"></i><div>Фильтры</div></div>
+					</div>
 					<div v-if="opt_products?.categories?.length" class="categories">
 						<template :key="cat.id" v-for="cat in opt_products?.categories">
 							<RouterLink
@@ -94,6 +97,10 @@
 			:vendorModal="this.vendorModal"
 			:items="this.opt_vendors"
 		/>
+		<Filters
+			:show="show_filters"
+			@setShow="setShow"
+		/>
 	</div>
 </template>
 <script>
@@ -110,6 +117,7 @@ import Loading from "../../components/Loading.vue";
 // import Breadcrumbs from "../../components/Breadcrumbs.vue";
 import router from "../../router";
 import Breadcrumbs from "../../components/Breadcrumbs.vue";
+import Filters from "../../components/opt/Filters.vue";
 import CatalogBreadcrumbs from '../../components/CatalogBreadcrumbs.vue'
 
 export default {
@@ -118,6 +126,7 @@ export default {
 	data() {
 		return {
 			show_order: false,
+			show_filters: false,
 			loading: true,
 			loading_elems: [],
 			reloading: false,
@@ -141,7 +150,8 @@ export default {
 		OrderModal,
 		Loading,
 		Breadcrumbs,
-		CatalogBreadcrumbs
+		CatalogBreadcrumbs,
+		Filters
 	},
 	mounted() {
 		this.get_opt_catalog_from_api().then(() => {
@@ -236,6 +246,9 @@ export default {
 		},
 		fromOrder() {
 			this.show_order = false;
+		},
+		setShow(){
+			this.show_filters = false;
 		},
 		changeActive() {
 			this.vendorModal = !this.vendorModal;

@@ -589,10 +589,12 @@ export default {
                     id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
                     warehouse: 'all'
                 });
-                const index = this.add_basket.indexOf(item.key);
-                if (index !== -1) {
-                    this.add_basket.splice(index, 1); // Удаляем один элемент по индексу
-                }
+                setTimeout(() => {
+                    const index = this.add_basket.indexOf(item.key);
+                    if (index !== -1) {
+                        this.add_basket.splice(index, 1); // Удаляем один элемент по индексу
+                    }
+                }, 1000)
             });
             // eslint-disable-next-line vue/no-mutating-props
             // this.items.complects[index][0].basket.availability = true;

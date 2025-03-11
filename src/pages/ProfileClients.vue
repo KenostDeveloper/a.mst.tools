@@ -113,12 +113,20 @@ export default {
 						label: 'Дата создания',
 						type: 'text',
 					},
+					date_end: {
+						label: 'Дата окончания предложения',
+						type: 'text',
+					},
 					from_org_name: {
 						label: 'Клиент',
 						type: 'text',
 					},
 					store_name: {
 						label: 'Склад клиента',
+						type: 'text',
+					},
+					initiator: {
+						label: 'Инициатор',
 						type: 'text',
 					},
 					cost: {
