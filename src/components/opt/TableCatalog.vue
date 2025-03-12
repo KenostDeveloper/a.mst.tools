@@ -17,7 +17,7 @@
           <th class="k-table__name k-tablr-th-icon"></th>
           <th class="k-table__name k-tablr-th-title">Наименование / Артикул</th>
           <th class="k-table__name k-tablr-th-change-remain">Изменение остатков</th>
-          <th class="k-table__name k-tablr-th-remain-speed">Остаток / Скорость</th>
+          <th class="k-table__name k-tablr-th-remain-speed">Остаток<small>, шт</small> / Скорость продаж <small>за 30 дней, шт./день.</small></th>
           <th class="k-table__name k-tablr-th-prognoz">Прогноз остатков</th>
           <th class="k-table__name k-tablr-th-buttons"><i class="d_icon d_icon-busket"></i></th>
           <th class="k-table__name k-tablr-th-price">Цена /<br> отсрочка</th>
