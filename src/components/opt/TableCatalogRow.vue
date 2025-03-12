@@ -3,12 +3,18 @@
         <tr v-if="!this.is_warehouses && items?.total_stores > 1" @click="this.active = !this.active"
             :class="{ 'active-el': this.active, 'no-active-el': !this.active }">
             <td class="hidden-mobile-l"><i class="pi pi-angle-up"></i></td>
-            <td class="k-table__photo hidden-mobile-l">
-                <img class="k-table__image" :src="items.image" alt="" />
-            </td>
             <td class="k-table__title">
                 <p>{{ items.pagetitle }}</p>
                 <b>Арт: {{ items.article }}</b>
+            </td>
+            <td class="k-table__сhange-remain">
+
+            </td>
+            <td class="k-table__remain-speed">
+                10
+            </td>
+            <td class="k-table__prognoz">
+                50
             </td>
             <td class="k-table__busket hidden-mobile-l">
                 <form class="k-table__form event-none" action="">
@@ -38,7 +44,7 @@
                 </td>
             <td class="hidden-mobile-l"></td>
             <td>{{ items.total_stores }}</td>
-            <td class="hidden-mobile-l"></td>
+            <!-- <td class="hidden-mobile-l"></td> -->
         </tr>
         <tr :data-info="JSON.stringify({id: item.remain_id, name: item.name, price: item.price, category: item.catalog, list: 'Catalog'})" :data-product="item.remain_id" class="kenost-product-item kenost-table-background" v-for="(item, index) in items.stores"
             v-bind:key="item.id" :class="{
@@ -50,12 +56,24 @@
             <td class="hidden-mobile-l">
                 <i v-if="items.total_stores > 1" class="pi pi-minus"></i>
             </td>
-            <td class="k-table__photo hidden-mobile-l">
+            <!-- <td class="k-table__photo hidden-mobile-l">
                 <img class="k-table__image" :src="items.image" alt="" />
+            </td> -->
+            <td class="k-table__title" @click="() => {
+                this.modal_info = true
+                this.modal_info_data = items
+            }">
+                <p class="cursor-pointer">{{ item.name }}</p>
+                <b class="cursor-pointer">Арт: {{ item.article }}</b>
             </td>
-            <td class="k-table__title">
-                <p>{{ item.name }}</p>
-                <b>Арт: {{ item.article }}</b>
+            <td class="k-table__сhange-remain">
+
+            </td>
+            <td class="k-table__remain-speed">
+                10
+            </td>
+            <td class="k-table__prognoz">
+                50
             </td>
             <td class="k-table__busket">
                 <!-- {{ item.min }} -->
@@ -79,7 +97,12 @@
             </td>
             <td>
                 <div class="kenost-product-item__price-info">
-                    {{ Math.round(item.price).toLocaleString('ru') }} ₽ <br />
+                    <div :class="{'flex align-items-center gap-1': item.prices.min}">
+                        {{ Math.round(item.price).toLocaleString('ru') }} ₽ 
+                        <div v-if="item.prices.min" class="kenost-min-price" v-tooltip="{ value: 'Минимальная цена при выполнении условий акций', showDelay: 0, hideDelay: 0 }">
+                            {{ Math.round(item.prices.min).toLocaleString('ru') }} ₽
+                        </div>
+                    </div>
                     {{ item.delay ? Number(item.delay).toFixed(1) + ' дн' : 'Предоплата' }}
                 </div>
             </td>
@@ -128,7 +151,7 @@
                         class="kenost-table-elem__logo" alt="" /> {{ item.store_name }}</span>
                 {{ item.store_city }}
             </td>
-            <td>
+            <!-- <td>
                 <div class="kenost-product-item__profit_info" v-if="item.prices.rrc > 0 && item.prices.rrc != item.price">
                     {{ Math.round(item.prices.rrc).toLocaleString('ru') }} ₽ <br />
                     {{ (item.prices.rrc - item.price).toFixed(0).toLocaleString('ru') }}
@@ -137,11 +160,11 @@
                 <div class="kenost-product-item__profit_info" v-else>
                     {{ Math.round(item.price).toLocaleString('ru') }} ₽
                 </div>
-            </td>
+            </td> -->
         </tr>
     </tbody>
     <!-- Вывод комплектов -->
-    <tbody class="complect-button kenost-table-background kenost-table-background-complect active-catalog-group"
+    <!-- <tbody class="complect-button kenost-table-background kenost-table-background-complect active-catalog-group"
         v-for="complect in items.complects" v-bind:key="complect.id" :class="{
             active: this.active || this.is_warehouses || items.total_stores == 1,
             'no-active': !this.active && !this.is_warehouses && items.total_stores > 1,
@@ -159,9 +182,6 @@
             <td class="k-table__photo">
                 <img class="k-table__image" :src="item.image" alt="" />
                 <div class="kenost-complect-icon" v-if="index < complect.length - 1">
-                    <!-- <svg class="kenost-screp" width="12" height="18" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M0.665365 6.33398L0.665365 3.66732C0.665365 2.74509 0.990365 1.95898 1.64037 1.30898C2.29036 0.658984 3.07648 0.333984 3.9987 0.333984C4.92092 0.333984 5.70703 0.658984 6.35703 1.30898C7.00703 1.95898 7.33203 2.7451 7.33203 3.66732L7.33203 6.33398L5.9987 6.33398L5.9987 3.66732C5.9987 3.11176 5.80425 2.63954 5.41536 2.25065C5.02648 1.86176 4.55425 1.66732 3.9987 1.66732C3.44314 1.66732 2.97092 1.86176 2.58203 2.25065C2.19314 2.63954 1.9987 3.11176 1.9987 3.66732L1.9987 6.33398L0.665365 6.33398ZM3.33203 4.33398L4.66536 4.33398L4.66536 9.66732L3.33203 9.66732L3.33203 4.33398ZM0.665365 7.66732L1.9987 7.66732L1.9987 10.334C1.9987 10.8895 2.19314 11.3618 2.58203 11.7507C2.97092 12.1395 3.44314 12.334 3.9987 12.334C4.55425 12.334 5.02648 12.1395 5.41536 11.7507C5.80425 11.3618 5.9987 10.8895 5.9987 10.334L5.9987 7.66732L7.33203 7.66732L7.33203 10.334C7.33203 11.2562 7.00703 12.0423 6.35703 12.6923C5.70703 13.3423 4.92092 13.6673 3.9987 13.6673C3.07648 13.6673 2.29036 13.3423 1.64036 12.6923C0.990365 12.0423 0.665365 11.2562 0.665365 10.334L0.665365 7.66732Z" fill="#ADADAD" />
-                    </svg> -->
                 </div>
             </td>
             <td class="k-table__title">
@@ -305,24 +325,48 @@
                     class="flex align-items-center justify-content-center gap-1"><img :src="item.store_image"
                         class="kenost-table-elem__logo" alt="" /> {{ item.store_city }}</span>
             </td>
-            <!-- <td v-if="item.price.price && item.price.price > item.new_price">
-                {{ item }}
-                {{ item.price ? Math.round(item.price).toLocaleString('ru') :
-                    Math.round(item.new_price).toLocaleString('ru') }}
-                ₽ <br />
-                {{ (item.price - item.new_price).toFixed(0).toLocaleString('ru') }}
-                ₽
-            </td> -->
             <td>{{ Math.round(item.price.price).toLocaleString('ru') }} ₽ <br />
                 {{ (item.price.rrc - item.price.price).toLocaleString('ru') }} ₽</td>
         </tr>
-    </tbody>
+    </tbody> -->
     <Dialog v-model:visible="this.modal_remain" header=" " :style="{ width: '340px' }">
         <div class="kenost-not-produc">
             <img src="/images/icons_milen/outOfStock2.png" alt="">
             <b>У нас нет столько товаров :(</b>
             <p>Извините, но количество данного товара ограничено</p>
             <div class="a-dart-btn a-dart-btn-primary" @click="this.modal_remain = false">Понятно</div>
+        </div>
+    </Dialog>
+
+    <Dialog v-model:visible="this.modal_info" header=" " :style="{ width: '640px' }">
+        <!-- <div>{{ this.modal_info_data }}</div> -->
+        <div class="kenost-product-info">
+            <div class="kenost-product-info__product">
+                <div class="kenost-product-info__image">
+                    <img :src="this.modal_info_data.image" alt="">
+                </div>
+                <div class="kenost-product-info__name">
+                    <div class="kenost-product-info__pagetitle">{{ this.modal_info_data.name }}</div>
+                    <b class="kenost-product-info__article">{{ this.modal_info_data.article }}</b>
+                </div>
+            </div>
+            <div class="kenost-product-info__tabs mt-3">
+                <div class="kenost-product-info__tab">
+                    <p>Остаток</p>
+                    <b>100</b>
+                </div>
+                <div class="kenost-product-info__tab">
+                    <p>Скорость продаж</p>
+                    <b>100</b>
+                </div>
+                <div class="kenost-product-info__tab">
+                    <p>Прогноз остатков</p>
+                    <b>100</b>
+                </div>
+            </div>
+            <div class="kenost-product-info__chart">
+                
+            </div>
         </div>
     </Dialog>
 </template>
@@ -362,7 +406,9 @@ export default {
             timeOut: null,
             fetchIds: [],
             add_basket: [],
-            namePathIsNav: null
+            namePathIsNav: null,
+            modal_info: false,
+            modal_info_data: null
         };
     },
     methods: {

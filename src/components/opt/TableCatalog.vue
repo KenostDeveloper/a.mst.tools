@@ -3,7 +3,7 @@
     <table class="k-table" :style="{ marginLeft: this.marginValue + 'px' }">
       <thead>
         <tr>
-          <th class="k-table__name k-tablr-th-icon hidden-mobile-l"></th>
+          <!-- <th class="k-table__name k-tablr-th-icon hidden-mobile-l"></th>
           <th class="k-table__name k-tablr-th-photo hidden-mobile-l">Фото</th>
           <th class="k-table__name k-tablr-th-title">Наименование / Артикул</th>
           <th class="k-table__name k-tablr-th-buttons hidden-mobile-l"><i class="d_icon d_icon-busket"></i></th>
@@ -12,7 +12,19 @@
           <th class="k-table__name k-tablr-th-delivery">Оплата доставки /<br> срок доставки</th>
           <th class="k-table__name k-tablr-th-remain hidden-mobile-l">Остаток</th>
           <th class="k-table__name k-tablr-th-vendor">Поставщик / Склад</th>
-          <th class="k-table__name k-tablr-th-retail hidden-mobile-l">РЦ / Наценка</th>
+          <th class="k-table__name k-tablr-th-retail hidden-mobile-l">РЦ / Наценка</th> -->
+
+          <th class="k-table__name k-tablr-th-icon"></th>
+          <th class="k-table__name k-tablr-th-title">Наименование / Артикул</th>
+          <th class="k-table__name k-tablr-th-change-remain">Изменение остатков</th>
+          <th class="k-table__name k-tablr-th-remain-speed">Остаток / Скорость</th>
+          <th class="k-table__name k-tablr-th-prognoz">Прогноз остатков</th>
+          <th class="k-table__name k-tablr-th-buttons"><i class="d_icon d_icon-busket"></i></th>
+          <th class="k-table__name k-tablr-th-price">Цена /<br> отсрочка</th>
+          <th class="k-table__name k-tablr-th-action">Акции</th>
+          <th class="k-table__name k-tablr-th-delivery">Оплата доставки /<br> срок доставки</th>
+          <th class="k-table__name k-tablr-th-remain">Остаток поставщика</th>
+          <th class="k-table__name k-tablr-th-vendor">Поставщик / Склад</th>
         </tr>
       </thead>
       <!-- <tbody> -->

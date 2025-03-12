@@ -14,6 +14,7 @@ import { createYmaps } from 'vue-yandex-maps'
 import 'primevue/resources/themes/aura-light-green/theme.css'
 import 'v-calendar/style.css';
 import 'dropzone-vue/dist/dropzone-vue.common.css'
+import Tooltip from 'primevue/tooltip';
 
 //Тут все общие вещи
 import './assets/styles/style.scss'
@@ -181,6 +182,7 @@ app
   }
 })
 .use(ToastService)
+.directive('tooltip', Tooltip)
 .use(ConfirmationService)
 .use(vfm)
 .use(VueCookies, { expires: '7d' })
