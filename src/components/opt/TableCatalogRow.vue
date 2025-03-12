@@ -8,7 +8,7 @@
                 <b>Арт: {{ items.article }}</b>
             </td>
             <td class="k-table__сhange-remain">
-
+                <Chart type="line" :data="items.remains_history" :options="chart_options" style="width: 200px;" v-if="items.total_stores > 1 && items.remains_history"/>
             </td>
             <td class="k-table__remain-speed">
                 {{ items.our_available }} / {{ items.our_purchase_speed }}
@@ -67,7 +67,7 @@
                 <b class="cursor-pointer">Арт: {{ item.article }}</b>
             </td>
             <td class="k-table__сhange-remain">
-
+                <Chart type="line" :data="items.remains_history" :options="chart_options" style="width: 200px;" v-if="items.total_stores == 1 && items.remains_history"/>
             </td>
             <td class="k-table__remain-speed">
                 {{ items.our_available }} / {{ items.our_purchase_speed }}
@@ -352,20 +352,20 @@
             </div>
             <div class="kenost-product-info__tabs mt-3">
                 <div class="kenost-product-info__tab">
-                    <p>Остаток</p>
-                    <b>100</b>
+                    <p>Остаток, шт</p>
+                    <b>{{ this.modal_info_data.our_available }}</b>
                 </div>
                 <div class="kenost-product-info__tab">
-                    <p>Скорость продаж</p>
-                    <b>100</b>
+                    <p>Скорость продаж за 30 дней, шт/день</p>
+                    <b>{{ this.modal_info_data.our_purchase_speed }}</b>
                 </div>
                 <div class="kenost-product-info__tab">
-                    <p>Прогноз остатков</p>
-                    <b>100</b>
+                    <p>Прогноз остатков, шт</p>
+                    <b>{{ this.modal_info_data.our_forecast }}</b>
                 </div>
             </div>
-            <div class="kenost-product-info__chart">
-                
+            <div class="kenost-product-info__chart" v-if="items.remains_history">
+                <Chart type="line" :data="this.modal_info_data.remains_history" :options="chart_options" class="w-full"/>
             </div>
         </div>
     </Dialog>
@@ -376,7 +376,8 @@ import Counter from './Counter.vue';
 import router from '../../router';
 import Dialog from 'primevue/dialog';
 import debounce from '../../utils/debounce';
-import ActionModal from './ActionModal.vue'
+import ActionModal from './ActionModal.vue';
+import Chart from 'primevue/chart'
 
 export default {
     name: 'TableCatalogRow',
@@ -408,7 +409,20 @@ export default {
             add_basket: [],
             namePathIsNav: null,
             modal_info: false,
-            modal_info_data: null
+            modal_info_data: null,
+            chart_options: {
+                responsive: true,
+                plugins: {
+                legend: {
+                    position: 'top',
+                    display: false
+                },
+                title: {
+                    display: false,
+                    text: 'График'
+                }
+                }
+            }
         };
     },
     methods: {
@@ -921,7 +935,8 @@ export default {
     components: {
         Counter,
         Dialog,
-        ActionModal
+        ActionModal,
+        Chart
     },
     computed: {
         ...mapGetters(['basket'])
@@ -929,6 +944,9 @@ export default {
 };
 </script>
 <style lang="scss">
+.k-table__сhange-remain{
+    max-width: 200px;
+}
 .kenost-complect-icon {
     position: relative;
 
