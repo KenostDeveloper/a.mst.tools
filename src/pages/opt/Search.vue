@@ -5,7 +5,10 @@
       <div class="dart-home dart-window">
           <Breadcrumbs/>
           <div>
-            <h1 class="h1-mini">Поиск по запросу "{{ $route.params.search }}"</h1>
+            <div class="flex justify-content-space-between align-items-center mb-4">
+              <h1 class="h1-mini">Поиск по запросу "{{ $route.params.search }}"</h1>
+              <div @click="this.show_filters = !this.show_filters" class="flex justify-content-space-between align-items-center gap-2 cursor-pointer"><i class="pi pi-sliders-h"></i><div>Фильтры</div></div>
+            </div>
             <div class="dart-alert dart-alert-info">В данном разделе перечислены все товары поставщиков, в том числе и не сопоставленные со справочником системы.</div>
           </div>
           <TableCatalog @updateBasket="updateBasket" v-if="opt_products.total !== 0" :items="opt_products"/>
@@ -41,6 +44,12 @@
     @fromOrder="fromOrder"
     @orderSubmit="updatePage($event, num)"
   />
+  <Filters
+			:show="show_filters"
+			:filters="filter"
+			@setShow="setShow"
+			@setFilters="setFilters"
+		/>
   <Vendors @changeActive="changeActive" @vendorCheck="vendorCheck" :vendorModal="this.vendorModal" :items="this.opt_vendors" />
 </template>
 <script>
@@ -52,6 +61,7 @@ import Breadcrumbs from '../../components/Breadcrumbs.vue'
 import Paginate from 'vuejs-paginate-next'
 import TableCatalog from '../../components/opt/TableCatalog.vue'
 import OrderModal from '../../components/opt/OrderModal.vue'
+import Filters from "../../components/opt/Filters.vue";
 
 export default {
   name: 'OptsSearch',
@@ -60,6 +70,8 @@ export default {
   data () {
     return {
       show_order: false,
+      show_filters: false,
+      filters: {},
       loading: false,
       reloading: false,
       opt_mainpage: {},
@@ -69,7 +81,14 @@ export default {
       order_id: 0,
       page: 1,
       perpage: 25,
-      vendorModal: false
+      vendorModal: false,
+      filter: [
+				{ type: 'checkbox', key: 'negative', label: 'Отрицательный прогноз остатков', value: false },
+				{ type: 'number', key: 'days_forecast', label: 'Кол-во дней для прогноза остатков', value: 5, min: 1, max: 30 },
+				// { type: 'number', key: 'days', label: 'Кол-во дней для расчета', value: 30, min: 1, max: 90 },
+				{ type: 'checkbox', key: 'only_warehouse', label: 'Только товары склада покупателя', value: false },
+				{ type: 'checkbox', key: 'only_purchases', label: 'Только товары с продажами', value: false }
+			]
     }
   },
   components: {
@@ -79,7 +98,8 @@ export default {
     Breadcrumbs,
     TableCatalog,
     Paginate,
-    OrderModal
+    OrderModal,
+		Filters
   },
   mounted () {
     this.get_opt_catalog_from_api().then(
@@ -90,7 +110,8 @@ export default {
     )
     this.get_opt_products_from_api({
       page: this.page,
-      perpage: this.perpage
+      perpage: this.perpage,
+      filters: this.filters
     }).then(
       this.opt_products = this.optproducts
     )
@@ -110,7 +131,8 @@ export default {
       this.loading = true
       this.get_opt_products_from_api({
         page: this.page,
-        perpage: this.perpage
+        perpage: this.perpage,
+        filters: this.filters
       }).then(() => {
         this.loading = false
         this.opt_products = this.optproducts
@@ -128,7 +150,8 @@ export default {
       )
       this.get_opt_products_from_api({
         page: this.page,
-        perpage: this.perpage
+        perpage: this.perpage,
+        filters: this.filters
       }).then(() => {
         this.opt_products = this.optproducts
         this.loading = false
@@ -138,11 +161,26 @@ export default {
     updateBasket () {
       // this.$refs.childComponent.updateBasket()
     },
+    setFilters(filters){
+			this.filters = filters;
+			this.loading = true;
+			this.page = 1
+			this.get_opt_products_from_api({
+				page: 1,
+				perpage: this.perpage,
+				filters: filters
+			}).then(() => {
+				this.opt_products = this.optproducts;
+				this.loading = false;
+				this.show_filters = false;
+			});
+		},
     catalogUpdate () {
       console.log('cart update')
       this.get_opt_products_from_api({
         page: this.page,
-        perpage: this.perpage
+        perpage: this.perpage,
+        filters: this.filters
       }).then(() => {
         this.opt_products = this.optproducts
         this.loading = false
