@@ -16,7 +16,7 @@
             </div>
             <div class="kenost-filter__buttons">
                 <button type="reset" class="a-dart-btn a-dart-btn-secondary-outline" @click="resetFilters">Сбросить</button>
-                <button type="button" class="a-dart-btn a-dart-btn-primary showModalFiltrs">Показать товары</button>
+                <button type="button" class="a-dart-btn a-dart-btn-primary showModalFiltrs" @click="setFilters">Показать товары</button>
             </div>
         </div>
     </div>
@@ -39,17 +39,22 @@ export default {
         Checkbox,
         InputNumber
     },
+    emits: ['setShow', 'setFilter'],
     setup(props, { emit }) {
         const filters = ref([
-            { type: 'checkbox', label: 'Отрицательный прогноз остатков', value: false },
-            { type: 'number', label: 'Кол-во дней для прогноза остатков', value: 5, min: 1, max: 30 },
-            { type: 'number', label: 'Кол-во дней для расчета', value: 30, min: 1, max: 90 },
-            { type: 'checkbox', label: 'Только товары склада покупателя', value: false },
-            { type: 'checkbox', label: 'Только товары с продажами', value: false }
+            { type: 'checkbox', key: 'negative', label: 'Отрицательный прогноз остатков', value: false },
+            { type: 'number', key: 'days_forecast', label: 'Кол-во дней для прогноза остатков', value: 5, min: 1, max: 30 },
+            { type: 'number', key: 'days', label: 'Кол-во дней для расчета', value: 30, min: 1, max: 90 },
+            { type: 'checkbox', key: 'only_warehouse', label: 'Только товары склада покупателя', value: false },
+            { type: 'checkbox', key: 'only_purchases', label: 'Только товары с продажами', value: false }
         ]);
 
         const fromOrder = () => {
             emit('setShow');
+        };
+
+        const setFilters = () => {
+            emit('setFilters', filters.value);
         };
 
         const resetFilters = () => {
@@ -69,7 +74,8 @@ export default {
         return {
             filters,
             fromOrder,
-            resetFilters
+            resetFilters,
+            setFilters
         };
     }
 };

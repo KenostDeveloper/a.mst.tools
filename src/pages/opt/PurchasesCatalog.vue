@@ -100,6 +100,7 @@
 		<Filters
 			:show="show_filters"
 			@setShow="setShow"
+			@setFilters="setFilters"
 		/>
 	</div>
 </template>
@@ -125,6 +126,7 @@ export default {
 	props: {},
 	data() {
 		return {
+			filters: {},
 			show_order: false,
 			show_filters: false,
 			loading: true,
@@ -199,6 +201,7 @@ export default {
 			this.get_opt_products_from_api({
 				page: this.page,
 				perpage: this.perpage,
+				filters: this.filters
 			}).then(() => {
 				this.opt_products = this.optproducts
 				this.loading = false
@@ -218,6 +221,7 @@ export default {
 			this.get_opt_products_from_api({
 				page: this.page,
 				perpage: this.perpage,
+				filters: this.filters
 			}).then(() => {
 				this.opt_products = this.optproducts;
 				this.loading = false;
@@ -230,9 +234,24 @@ export default {
 			this.get_opt_products_from_api({
 				page: this.page,
 				perpage: this.perpage,
+				filters: this.filters
 			}).then(() => {
 				this.opt_products = this.optproducts;
 				this.loading = false;
+			});
+		},
+		setFilters(filters){
+			this.filters = filters;
+			this.loading = true;
+			this.page = 1
+			this.get_opt_products_from_api({
+				page: 1,
+				perpage: this.perpage,
+				filters: filters
+			}).then(() => {
+				this.opt_products = this.optproducts;
+				this.loading = false;
+				this.show_filters = false;
 			});
 		},
 		vendorCheck() {

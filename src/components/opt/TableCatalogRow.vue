@@ -11,10 +11,10 @@
 
             </td>
             <td class="k-table__remain-speed">
-                10
+                {{ items.our_available }} / {{ items.our_purchase_speed }}
             </td>
             <td class="k-table__prognoz">
-                50
+                {{ items.our_forecast }}
             </td>
             <td class="k-table__busket hidden-mobile-l">
                 <form class="k-table__form event-none" action="">
@@ -70,10 +70,10 @@
 
             </td>
             <td class="k-table__remain-speed">
-                10
+                {{ items.our_available }} / {{ items.our_purchase_speed }}
             </td>
             <td class="k-table__prognoz">
-                50
+                {{ items.our_forecast }}
             </td>
             <td class="k-table__busket">
                 <!-- {{ item.min }} -->
