@@ -559,9 +559,10 @@ export default {
 					name: '',
 					email: '',
 					phone: '',
-
 					unlimitied_clients: true,
+					unlimitied_responsible: false,
 					clients: [],
+					responsible: [],
 					notifications: {
 						order_status_changes: true,
 						new_opt_order: true,

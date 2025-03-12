@@ -27,15 +27,29 @@
                 </div>
 
                 <div class="manager-list__block manager-list__clients">
-                    <h3 class="manager-list__subtitle">Клиенты менеджера:</h3>
+                    <h3 class="manager-list__subtitle">Устанавливается ответственным за заказ \ потребность в 1с для клиентов:</h3>
                     <div v-if="canSelectUnlimited(manager)" class="manager-list__checkbox-container">
-                        <Checkbox v-model="manager.unlimitied_clients" inputId="unlimitied-clients" :binary="true"
+                        <Checkbox v-model="manager.unlimitied_responsible" :inputId="'responsible-clients-'+manager.id" :binary="true"
                             class="manager-list__checkbox" @change="toggleUnlimited(manager)" />
-                        <label class="manager-list__checkbox-label" for="unlimitied-clients">Неограниченный круг
+                        <label class="manager-list__checkbox-label" :for="'responsible-clients-'+manager.id">Неограниченный круг
                             клиентов</label>
                     </div>
-                    <CustomTreeSelect v-if="!manager.unlimitied_clients" :allSelectedKeys="allSelectedClients"
-                        v-model="manager.clients" :options="regions_and_stores" placeholder="Выберите клиентов" />
+                    <CustomTreeSelect v-if="!manager.unlimitied_responsible" :allSelectedKeys="allSelectedClients"
+                        v-model="manager.responsible" :options="regions_and_stores_tree" placeholder="Выберите клиентов" />
+                </div>
+
+                <div class="manager-list__block manager-list__clients">
+                    <h3 class="manager-list__subtitle">Клиенты менеджера:</h3>
+                    <div class="manager-list__checkbox-container">
+                        <Checkbox v-model="manager.unlimitied_clients" :inputId="'unlimitied-clients-'+manager.id" :binary="true"
+                            class="manager-list__checkbox"/>
+                        <label class="manager-list__checkbox-label" :for="'unlimitied-clients-'+manager.id">Неограниченный круг
+                            клиентов</label>
+                    </div>
+                    <MultiSelect v-if="!manager.unlimitied_clients" class="w-full md:w-20rem kenost-multiselect mt-2" filter v-model="manager.clients" display="chip"
+                        :options="regions_and_stores" optionValue="id" optionLabel="name" placeholder="Выберите клиентов" />
+                    <!-- <CustomTreeSelect v-if="!manager.unlimitied_clients" :allSelectedKeys="allSelectedClients"
+                        v-model="manager.clients" :options="regions_and_stores" placeholder="Выберите клиентов" /> -->
                 </div>
 
                 <div class="manager-list__block manager-list__notifications">
@@ -67,6 +81,7 @@ import useVuelidate from '@vuelidate/core';
 import { IMaskDirective } from 'vue-imask';
 import router from "../../router";
 import CustomTreeSelect from '../opt/CustomTreeSelect.vue'
+import MultiSelect from 'primevue/multiselect'
 
 export default {
     name: 'ManagerList',
@@ -78,6 +93,7 @@ export default {
     },
     components: {
         Checkbox,
+        MultiSelect,
         CustomTreeSelect
     },
     directives: {
@@ -111,7 +127,7 @@ export default {
         }
     },
     methods: {
-        ...mapActions(["get_stores_and_regions"]),
+        ...mapActions(["get_stores_and_regions", "get_stores_and_regions_tree"]),
         addItem() {
             this.$emit('update:items', [...this.items, {
                 id: this.items.length + 1,
@@ -133,39 +149,45 @@ export default {
             }]);
         },
         deleteItem(index) {
-            const wasUnlimited = this.items[index].unlimitied_clients;
+            const wasUnlimited = this.items[index].unlimitied_responsible;
             this.$emit('update:items', [...this.items.slice(0, index), ...this.items.slice(index + 1)]);
 
             // Если удалили менеджера с "Неограниченным кругом клиентов", сбрасываем блокировку
             if (wasUnlimited) {
-                this.items.forEach(manager => (manager.unlimitied_clients = false));
+                this.items.forEach(manager => (manager.unlimitied_responsible = false));
             }
         },
         toggleUnlimited(selectedManager) {
-            if (selectedManager.unlimitied_clients) {
+            if (selectedManager.unlimitied_responsible) {
                 // Если выбираем "Неограниченный круг клиентов", сбрасываем у всех остальных
                 this.items.forEach(manager => {
-                    if (manager !== selectedManager) manager.unlimitied_clients = false;
+                    if (manager !== selectedManager) manager.unlimitied_responsible = false;
                 });
             }
         }
     },
     computed: {
-        ...mapGetters(["regions_and_stores"]),
+        ...mapGetters(["regions_and_stores", "regions_and_stores_tree"]),
         allSelectedClients() {
-            return [...new Set(this.items.flatMap(manager => manager.clients))];
+            return [...new Set(this.items.flatMap(manager => manager.responsible))];
         },
         hasUnlimitedClient() {
-            return this.items.some(manager => manager.unlimitied_clients);
+            return this.items.some(manager => manager.unlimitied_responsible);
         },
         canSelectUnlimited() {
-            return (manager) => !this.hasUnlimitedClient || manager.unlimitied_clients;
+            return (manager) => !this.hasUnlimitedClient || manager.unlimitied_responsible;
         }
     },
     mounted() {
         this.get_stores_and_regions({
             action: "get/regions/stores",
             id: router.currentRoute._value.params.id
+        });
+
+        this.get_stores_and_regions_tree({
+            action: "get/regions/stores",
+            id: router.currentRoute._value.params.id,
+            tree: true
         });
     },
 }
