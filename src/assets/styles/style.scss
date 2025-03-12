@@ -9907,7 +9907,7 @@ button.std-icon__wrapper {
 	}
 
 	&__name{
-
+		width: calc(100% - 112px);
 	}
 
 	&__pagetitle{
@@ -9926,6 +9926,7 @@ button.std-icon__wrapper {
 	&__tabs{
 		display: grid;
 		grid-template-columns: repeat(3,1fr);
+		gap: 16px;
 	}
 
 	&__tab{
@@ -9941,6 +9942,19 @@ button.std-icon__wrapper {
 			line-height: 16px;
 			color: #171717;
 		}
+	}
+
+	&__chart{
+		margin-top: 20px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+
+		.p-chart{
+			display: flex;
+			justify-content: center;
+		}
+
 	}
 }
 

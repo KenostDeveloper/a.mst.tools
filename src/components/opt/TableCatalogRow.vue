@@ -60,8 +60,10 @@
                 <img class="k-table__image" :src="items.image" alt="" />
             </td> -->
             <td class="k-table__title" @click="() => {
-                this.modal_info = true
-                this.modal_info_data = items
+                if(items.our_id != 0){
+                    this.modal_info = true
+                    this.modal_info_data = items
+                }
             }">
                 <p class="cursor-pointer">{{ item.name }}</p>
                 <b class="cursor-pointer">Арт: {{ item.article }}</b>
@@ -365,6 +367,7 @@
                 </div>
             </div>
             <div class="kenost-product-info__chart" v-if="items.remains_history">
+                <div class="kenost-product-info__pagetitle mb-2" v-if="items.remains_history">История изменений остатков</div>
                 <Chart type="line" :data="this.modal_info_data.remains_history" :options="chart_options" class="w-full"/>
             </div>
         </div>
