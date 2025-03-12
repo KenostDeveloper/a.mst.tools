@@ -97,10 +97,10 @@
             </td>
             <td>
                 <div class="kenost-product-item__price-info">
-                    <div :class="{'flex align-items-center gap-1': item.prices.min}">
+                    <div :class="{'flex align-items-center justify-content-center gap-1': item.min_price.price && item.actions}">
                         {{ Math.round(item.price).toLocaleString('ru') }} ₽ 
-                        <div v-if="item.prices.min" class="kenost-min-price" v-tooltip="{ value: 'Минимальная цена при выполнении условий акций', showDelay: 0, hideDelay: 0 }">
-                            {{ Math.round(item.prices.min).toLocaleString('ru') }} ₽
+                        <div v-if="item.min_price.price && item.actions" class="kenost-min-price" v-tooltip="{ value: 'Минимальная цена при выполнении условий акций', showDelay: 0, hideDelay: 0 }">
+                            {{ Math.round(item.min_price.price).toLocaleString('ru') }} ₽
                         </div>
                     </div>
                     {{ item.delay ? Number(item.delay).toFixed(1) + ' дн' : 'Предоплата' }}
