@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { ref, watch } from 'vue';
+import { ref, watch, toRef } from 'vue';
 import Checkbox from 'primevue/checkbox';
 import InputNumber from 'primevue/inputnumber';
 
@@ -33,21 +33,19 @@ export default {
         show: {
             type: Boolean,
             default: false
+        },
+        filters: {
+            type: Array,
+            default: () => []
         }
     },
     components: {
         Checkbox,
         InputNumber
     },
-    emits: ['setShow', 'setFilter'],
+    emits: ['setShow', 'setFilters'],
     setup(props, { emit }) {
-        const filters = ref([
-            { type: 'checkbox', key: 'negative', label: 'Отрицательный прогноз остатков', value: false },
-            { type: 'number', key: 'days_forecast', label: 'Кол-во дней для прогноза остатков', value: 5, min: 1, max: 30 },
-            { type: 'number', key: 'days', label: 'Кол-во дней для расчета', value: 30, min: 1, max: 90 },
-            { type: 'checkbox', key: 'only_warehouse', label: 'Только товары склада покупателя', value: false },
-            { type: 'checkbox', key: 'only_purchases', label: 'Только товары с продажами', value: false }
-        ]);
+        const filters = ref([...props.filters]); // Создаем реактивную копию filters
 
         const fromOrder = () => {
             emit('setShow');
@@ -62,7 +60,7 @@ export default {
                 if (filter.type === 'checkbox') {
                     filter.value = false;
                 } else if (filter.type === 'number') {
-                    filter.value = filter.value;
+                    filter.value = null; // Сбрасываем значение числового фильтра
                 }
             });
         };
@@ -72,7 +70,7 @@ export default {
         });
 
         return {
-            filters,
+            filters,  // Теперь filters доступен в шаблоне
             fromOrder,
             resetFilters,
             setFilters
@@ -80,6 +78,7 @@ export default {
     }
 };
 </script>
+
 
 <style lang="scss">
 .kenost-filter{

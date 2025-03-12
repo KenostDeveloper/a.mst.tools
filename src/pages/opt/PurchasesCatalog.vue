@@ -12,16 +12,15 @@
 					<Breadcrumbs class="std-breadcrumbs--margin" :items="opt_products?.breadcrumbs" :name="!$route.params.warehouse_cat_id? 'purchases_catalog' : 'org_opt_waregouse_category'"/>
 					<!-- {{ opt_products?.breadcrumbs }} -->
 					<!-- <CatalogBreadcrumbs v-if="opt_products?.breadcrumbs" :name="!$route.params.warehouse_cat_id? 'purchases_catalog' : 'org_opt_waregouse_category'" :items="opt_products?.breadcrumbs" /> -->
-					<div v-if="$route.params.warehouse_id && !$route.params.warehouse_cat_id">
-						<h1 class="h1-mini">Все товары</h1>
-						<div class="dart-alert dart-alert-info">
-							В данном разделе перечислены все товары поставщика, в том числе и не
-							сопоставленные со справочником системы.
-						</div>
-					</div>
-					<div v-else class="flex justify-content-space-between align-items-center mb-4">
-						<h1 class="h1-mini mb-0">{{ opt_products?.page?.pagetitle }}</h1>
+					
+					<div class="flex justify-content-space-between align-items-center mb-4">
+						<h1 v-if="$route.params.warehouse_id && !$route.params.warehouse_cat_id" class="h1-mini">Все товары</h1>
+						<h1 v-else class="h1-mini mb-0">{{ opt_products?.page?.pagetitle }}</h1>
 						<div @click="this.show_filters = !this.show_filters" class="flex justify-content-space-between align-items-center gap-2 cursor-pointer"><i class="pi pi-sliders-h"></i><div>Фильтры</div></div>
+					</div>
+					<div v-if="$route.params.warehouse_id && !$route.params.warehouse_cat_id" class="dart-alert dart-alert-info">
+						В данном разделе перечислены все товары поставщика, в том числе и не
+						сопоставленные со справочником системы.
 					</div>
 					<div v-if="opt_products?.categories?.length" class="categories">
 						<template :key="cat.id" v-for="cat in opt_products?.categories">
@@ -99,6 +98,7 @@
 		/>
 		<Filters
 			:show="show_filters"
+			:filters="filter"
 			@setShow="setShow"
 			@setFilters="setFilters"
 		/>
@@ -140,7 +140,14 @@ export default {
 			page: 1,
 			perpage: 25,
 			vendorModal: false,
-			namePathIsNav: null
+			namePathIsNav: null,
+			filter: [
+				{ type: 'checkbox', key: 'negative', label: 'Отрицательный прогноз остатков', value: false },
+				{ type: 'number', key: 'days_forecast', label: 'Кол-во дней для прогноза остатков', value: 5, min: 1, max: 30 },
+				{ type: 'number', key: 'days', label: 'Кол-во дней для расчета', value: 30, min: 1, max: 90 },
+				{ type: 'checkbox', key: 'only_warehouse', label: 'Только товары склада покупателя', value: false },
+				{ type: 'checkbox', key: 'only_purchases', label: 'Только товары с продажами', value: false }
+			]
 		};
 	},
 	components: {
