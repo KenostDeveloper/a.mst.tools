@@ -123,7 +123,12 @@ import CatalogBreadcrumbs from '../../components/CatalogBreadcrumbs.vue'
 
 export default {
 	name: "OptsCatalog",
-	props: {},
+	props: {
+		basket: {
+			type: Boolean,
+			default: false
+		}
+	},
 	data() {
 		return {
 			filters: {},
@@ -163,6 +168,7 @@ export default {
 		Filters
 	},
 	mounted() {
+		console.log(this.basket);
 		this.get_opt_catalog_from_api().then(() => {
 			this.opt_catalog = this.optcatalog;
 			this.loading_elems.push("load");
@@ -176,6 +182,7 @@ export default {
 		this.get_opt_products_from_api({
 			page: this.page,
 			perpage: this.perpage,
+			basket: this.basket,
 		}).then(() => {
 			this.opt_products = this.optproducts;
 			this.loading_elems.push("load");
@@ -208,7 +215,8 @@ export default {
 			this.get_opt_products_from_api({
 				page: this.page,
 				perpage: this.perpage,
-				filters: this.filters
+				filters: this.filters,
+				basket: this.basket,
 			}).then(() => {
 				this.opt_products = this.optproducts
 				this.loading = false
@@ -228,7 +236,8 @@ export default {
 			this.get_opt_products_from_api({
 				page: this.page,
 				perpage: this.perpage,
-				filters: this.filters
+				filters: this.filters,
+				basket: this.basket,
 			}).then(() => {
 				this.opt_products = this.optproducts;
 				this.loading = false;
@@ -241,7 +250,8 @@ export default {
 			this.get_opt_products_from_api({
 				page: this.page,
 				perpage: this.perpage,
-				filters: this.filters
+				filters: this.filters,
+				basket: this.basket,
 			}).then(() => {
 				this.opt_products = this.optproducts;
 				this.loading = false;
@@ -254,7 +264,8 @@ export default {
 			this.get_opt_products_from_api({
 				page: 1,
 				perpage: this.perpage,
-				filters: filters
+				filters: filters,
+				basket: this.basket,
 			}).then(() => {
 				this.opt_products = this.optproducts;
 				this.loading = false;

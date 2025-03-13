@@ -288,7 +288,7 @@ export default {
           }
         })
     },
-    get_opt_products_from_api ({ commit }, { filters, page, perpage }) {
+    get_opt_products_from_api ({ commit }, { filters, page, perpage, basket }) {
       let cat = 0
       if (router.currentRoute._value.params.warehouse_id && !router.currentRoute._value.params.warehouse_cat_id) {
         cat = 'all'
@@ -317,7 +317,8 @@ export default {
           page: page,
           req: req,
           perpage: perpage,
-          action: 'get/products'
+          action: 'get/products',
+          basket: basket
         },
         headers: {
           'Access-Control-Allow-Origin': '*'

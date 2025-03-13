@@ -126,10 +126,9 @@
                         {{ Math.round((Number(item.prices.rrc) - (Number(item.prices.price))) / (Number(item.prices.rrc) / 100)).toLocaleString('ru') }} %
                     </td>
                     <td>
-                        
-                        <div :class="{'flex align-items-center justify-content-center gap-1': item.min_price.price && item.actions}">
+                        <div :class="{'flex align-items-center justify-content-center flex-direction-column': item.min_price.price && item.actions}">
                             {{ Math.round(item.prices.price).toLocaleString('ru') }} ₽
-                            <div v-if="item.min_price.price && item.actions && item.min_price.price != item.price.price" class="kenost-min-price" v-tooltip="{ value: 'Минимальная цена при выполнении условий акций', showDelay: 0, hideDelay: 0 }">
+                            <div v-if="item.min_price.price && item.actions && item.min_price.price != item.prices.price" class="kenost-min-price" v-tooltip="{ value: 'Минимальная цена при выполнении условий акций', showDelay: 0, hideDelay: 0 }">
                                 {{ Math.round(item.min_price.price).toLocaleString('ru') }} ₽
                             </div>
                         </div>

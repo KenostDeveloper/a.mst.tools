@@ -452,6 +452,9 @@ const routes = [
 														label: "",
 													},
 												},
+												props: (route) => ({
+													basket: route.query.basket === 'true' // Преобразуем query в boolean
+												})
 											},
 											{
 												path: "action",

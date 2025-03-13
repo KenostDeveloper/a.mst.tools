@@ -3740,7 +3740,16 @@ p {
 
 		& {
 			margin-block: 12px 10px;
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
 		}
+		
+	}
+
+	&__info-show-catalog{
+		font-size: 14px;
+		text-decoration: none;
 	}
 
 	&__clear-button {
@@ -8619,6 +8628,10 @@ button.std-icon__wrapper {
 	text-align: right;
 }
 
+.text-left{
+	text-align: left;
+}
+
 .items-end{
 	align-items: flex-end !important;
 }
@@ -9961,7 +9974,7 @@ button.std-icon__wrapper {
 .kenost-min-price{
 	background: #282828;
 	color: #FFFFFF;
-	font-size: 11px;
+	font-size: 12px;
 	font-weight: 400;
 	border-radius: 11px;
 	width: fit-content;
@@ -9973,4 +9986,12 @@ button.std-icon__wrapper {
 		justify-content: center;
 		display: flex;
 	}
+}
+
+.flex-direction-column{
+	flex-direction: column !important;
+}
+
+.text-bold{
+	font-weight: 700;
 }

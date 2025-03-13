@@ -8,7 +8,8 @@
                 <b>Арт: {{ items.article }}</b>
             </td>
             <td class="k-table__сhange-remain">
-                <Chart type="line" :data="items.remains_history" :options="chart_options" style="width: 200px;" v-if="items.total_stores > 1 && items.remains_history"/>
+                <div v-if="items.our_id == 0">Необходима интеграция для получения данных</div>
+                <Chart type="line" :data="items.remains_history" :options="chart_options" style="width: 200px;" v-else-if="items.total_stores > 1 && items.remains_history"/>
             </td>
             <td class="k-table__remain-speed">
                 {{ items.our_available }} / {{ items.our_purchase_speed }}
@@ -69,7 +70,8 @@
                 <b class="cursor-pointer">Арт: {{ item.article }}</b>
             </td>
             <td class="k-table__сhange-remain">
-                <Chart type="line" :data="items.remains_history" :options="chart_options" style="width: 200px;" v-if="items.total_stores == 1 && items.remains_history"/>
+                <div v-if="items.our_id == 0 && items.total_stores == 1">Необходима интеграция для получения данных</div>
+                <Chart type="line" :data="items.remains_history" :options="chart_options" style="width: 200px;" v-else-if="items.total_stores == 1 && items.remains_history"/>
             </td>
             <td class="k-table__remain-speed">
                 {{ items.our_available }} / {{ items.our_purchase_speed }}
@@ -99,7 +101,7 @@
             </td>
             <td>
                 <div class="kenost-product-item__price-info">
-                    <div :class="{'flex align-items-center justify-content-center gap-1': item.min_price.price && item.actions}">
+                    <div :class="{'flex align-items-center justify-content-center flex-direction-column': item.min_price.price && item.actions}">
                         {{ Math.round(item.price).toLocaleString('ru') }} ₽ 
                         <div v-if="item.min_price.price && item.actions && item.min_price.price != item.price" class="kenost-min-price" v-tooltip="{ value: 'Минимальная цена при выполнении условий акций', showDelay: 0, hideDelay: 0 }">
                             {{ Math.round(item.min_price.price).toLocaleString('ru') }} ₽
@@ -166,12 +168,76 @@
         </tr>
     </tbody>
     <!-- Вывод комплектов -->
-    <!-- <tbody class="complect-button kenost-table-background kenost-table-background-complect active-catalog-group"
+    <tbody class="complect-button kenost-table-background kenost-table-background-complect active-catalog-group"
         v-for="complect in items.complects" v-bind:key="complect.id" :class="{
             active: this.active || this.is_warehouses || items.total_stores == 1,
             'no-active': !this.active && !this.is_warehouses && items.total_stores > 1,
             'bg-white': items.total_stores == 1
         }">
+
+        <tr :class="{
+            active: this.active || this.is_warehouses || items.total_stores == 1,
+            'kenost-table-bg-complect': items.total_stores == 1,
+            'no-active': !this.active && !this.is_warehouses && items.total_stores > 1
+        }">
+            <td>
+                
+            </td>
+            <td class="k-table__title text-left">
+                <p>Комплект <span class="text-bold">«{{ complect.name }}»</span></p>
+            </td>
+            <td>
+
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+                <form class="k-table__form" :class="{ 'basket-true': complect?.basket?.availability || this.add_basket.indexOf(complect.products[0].key) != -1, 'loading-counter': this.fetchIds.indexOf(complect.products[0].key) != -1 }" action="">
+                    <Counter
+                        @ElemCount="ElemCountComplect"
+                        :step="1"
+                        :min="0"
+                        :item="{item: complect.products[0], basket: complect?.basket}"
+                        :max="complect.products[0].remain"
+                        :id="complect.products[0].complect_id"
+                        :store_id="complect.products[0].store_id"
+                        :index="index"
+                        :value="complect?.basket?.count"
+                    />
+                    <div @click="addBasketComplect(complect.products[0], index, complect.action_id)"
+                        class="dart-btn dart-btn-primary">
+                        <i class="d_icon d_icon-busket"></i>
+                    </div>
+                </form>
+            </td>
+            <td>
+                {{ Math.round(Number(complect.price.price)).toLocaleString('ru') }} ₽<br />
+                {{ complect.products[0].action?.delay ? Number(complect.products[0].action?.delay).toFixed(1) + ' дн' : 'Предоплата' }}
+            </td>
+            <td>
+            </td>
+            <td class="td-center">
+                {{ complect.products[0].action?.payer === '1' ? 'Поставщик' : 'Покупатель' }} / <br />~ {{ complect.products[0].delivery }} дней ({{
+                    new Date(complect.products[0].delivery_day).toLocaleString('ru', {
+                        month: '2-digit',
+                        day: '2-digit',
+                        year: '2-digit'
+                    })
+                }})
+            </td>
+            <td>
+                <span>{{ complect.products[0].remain }} шт.</span>
+            </td>
+            <td class="td-center">
+                <span style="position: relative; top: 0; transform: unset">{{ complect.products[0].org_name }}</span>
+                <br />
+                <span style="position: relative; top: 0; transform: unset"
+                    class="flex align-items-center justify-content-center gap-1"><img :src="complect.products[0].store_image"
+                        class="kenost-table-elem__logo" alt="" /> {{ complect.products[0].store_city }}</span>
+            </td>
+        </tr>
 
         <tr v-for="(item, index) in complect.products" v-bind:key="item.id" :class="{
             active: this.active || this.is_warehouses || items.total_stores == 1,
@@ -181,17 +247,17 @@
             <td class="td-center" :class="{ 'pointer-none': index !== 0 }">
                 <span :style="'top:' + (complect.length * 74) / 2 + 'px'" v-if="index === 0"><i class="pi pi-minus"></i></span>
             </td>
-            <td class="k-table__photo">
+            <!-- <td class="k-table__photo">
                 <img class="k-table__image" :src="item.image" alt="" />
                 <div class="kenost-complect-icon" v-if="index < complect.length - 1">
                 </div>
-            </td>
+            </td> -->
             <td class="k-table__title">
-                <span class="complect-icon" v-if="index == 0">Комплект</span>
+                <!-- <span class="complect-icon" v-if="index == 0">Комплект</span> -->
                 <p>{{ item.pagetitle }}</p>
                 <b>Арт: {{ item.article }}</b>
             </td>
-            <td class="k-table__busket complect-button__td">
+            <!-- <td class="k-table__busket complect-button__td">
                 <form class="k-table__form" :class="{ 'basket-true': complect?.basket?.availability || this.add_basket.indexOf(item.key) != -1, 'loading-counter': this.fetchIds.indexOf(item.key) != -1 }" action="">
                     <Counter
                         @ElemCount="ElemCountComplect"
@@ -209,12 +275,36 @@
                         <i class="d_icon d_icon-busket"></i>
                     </div>
                 </form>
+            </td> -->
+            <td>
+
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                {{ complect?.basket?.count? complect?.basket?.count * item.multiplicity: item.multiplicity }}
             </td>
             <td>
                 {{ Math.round(Number(item.price.price)).toLocaleString('ru') }} ₽<br />
-                {{ item.action?.delay ? Number(item.action?.delay).toFixed(1) + ' дн' : 'Предоплата' }}
+                <!-- {{ item.action?.delay ? Number(item.action?.delay).toFixed(1) + ' дн' : 'Предоплата' }} -->
             </td>
             <td>
+                
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                
+            </td>
+            <td>
+                
+            </td>
+            <!-- <td>
                 <div class="table-actions">
                     <div class="table-actions__action" :class="{
                         active: action.enabled,
@@ -306,8 +396,8 @@
                         </div>
                     </div>
                 </div>
-            </td>
-            <td class="td-center">
+            </td> -->
+            <!-- <td class="td-center">
                 {{ item.action?.payer === '1' ? 'Поставщик' : 'Покупатель' }} / <br />~ {{ item.delivery }} дней ({{
                     new Date(item.delivery_day).toLocaleString('ru', {
                         month: '2-digit',
@@ -328,9 +418,9 @@
                         class="kenost-table-elem__logo" alt="" /> {{ item.store_city }}</span>
             </td>
             <td>{{ Math.round(item.price.price).toLocaleString('ru') }} ₽ <br />
-                {{ (item.price.rrc - item.price.price).toLocaleString('ru') }} ₽</td>
+                {{ (item.price.rrc - item.price.price).toLocaleString('ru') }} ₽</td> -->
         </tr>
-    </tbody> -->
+    </tbody>
     <Dialog v-model:visible="this.modal_remain" header=" " :style="{ width: '340px' }">
         <div class="kenost-not-produc">
             <img src="/images/icons_milen/outOfStock2.png" alt="">
@@ -864,7 +954,7 @@ export default {
                         extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
 						id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
 						id_complect: object.item.item.complect_id,
-						count: object.value / object.item.item.multiplicity,
+						count: object.value,
 						store_id: object.store_id,
 						key: object.item.basket.key,
 						org_id: object.item.item.org_id,

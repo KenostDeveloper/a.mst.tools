@@ -27,6 +27,10 @@
 				</div>
 
 				<div v-if="this.cartLength" class="std-basket__info-container">
+					<router-link class="std-basket__info-show-catalog" itemprop="item" :to="{ name: 'purchases_catalog', params: { id: this.$route.params.id, category_id: 4 }, query: {basket: true} }">
+						Показать в каталоге
+					</router-link>
+					
 					<button @click="this.showClearBasketModal = true" class="basketClear std-basket__clear-button">
 						<span>Очистить корзину</span>
 						<i class="pi pi-times"></i>
