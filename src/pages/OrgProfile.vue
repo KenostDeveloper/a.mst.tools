@@ -24,6 +24,11 @@
           </div> -->
 		<form action="#" @submit.prevent="formChangeSimple">
 			<!-- <div class="dart-alert dart-alert-info">Вы можете изменить только данные контактного лица и логотип организации.</div> -->
+			<div class="dart-form-group mb-2">
+				<div class="dart-alert-primary dart-alert">
+					<span>Код поставщика: </span><b>{{ this.orgprofile.id }}</b>
+				</div>
+			</div>
 			<div class="dart-form-group mb-5">
 				<span class="ktitle">Логотип</span>
 				<DropZone v-if="!this.orgprofile.image" class="kenost-dropzone" :maxFiles="Number(1)"

@@ -1,8 +1,12 @@
 <template>
     <Breadcrumbs class="std-breadcrumbs--margin" />
+    
 
-    <div>
-        <div class="title-h1 mb-3">Доступные поставщики</div>
+    <div class="flex align-items-center justify-content-space-between">
+        <div class="title-h1 mb-3">Мои поставщики</div>
+        <button @click="this.modal_add = true" type="button" class="dart-btn dart-btn-primary  flex gap-2 align-items-center">
+            <i class="pi pi-plus"></i><div>Добавить поставщика</div>
+        </button>
     </div>
 	<v-opts
         :items_data="warehouses.items"
@@ -21,12 +25,30 @@
             <span class="desc">Отметьте организации, которые являются вашими поставщиками.</span>
         </template>
     </v-opts>
+
+    <Dialog v-model:visible="this.modal_add" header="Добавление поставщика" :style="{ width: '440px' }">
+		<div>
+            <div class="dart-form-group mt-4 mb-3">
+                <label for="name">Введите ИНН или Код поставщика</label>
+                <input :disabled="this.loading" v-model="this.code" type="text" name="name" placeholder="ИНН или Код поставщика"
+                    class="dart-form-control mt-2" />
+            </div>
+            <div class="flex justify-content-end">
+                <button :disabled="this.loading" @click="addVendor()" type="button" class="dart-btn dart-btn-primary  flex gap-2 align-items-center">
+                    <div>{{this.loading? "Загрузка" : "Добавить"}}</div>
+                </button>
+            </div>
+            
+        </div>
+	</Dialog>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import vOpts from '../components/table/v-opts.vue'
 import Breadcrumbs from '../components/Breadcrumbs.vue';
+import Dialog from 'primevue/dialog';
+import Toast from 'primevue/toast';
 
 
 export default {
@@ -45,12 +67,6 @@ export default {
                     placeholder: 'Введите наименование или адрес',
                     type: 'text'
                 },
-                // region: {
-                // name: 'Регион',
-                // placeholder: 'Выберите регион',
-                // type: 'tree',
-                // values: this.getregions
-                // },
                 our: {
                     name: 'Мои поставщики',
                     placeholder: 'Мои поставщики',
@@ -58,11 +74,15 @@ export default {
                     values: 1
                 }
             },
+            modal_add: false,
+            code: "",
+            loading: false
 		};
 	},
 	methods: {
 		...mapActions([
 			'get_opts_from_api',
+            'org_profile_set_from_api'
 		]),
         optfilter (data) {
             this.get_opts_from_api(data)
@@ -74,6 +94,36 @@ export default {
             this.get_opts_from_api({
                 page: this.optpage,
                 perpage: this.pagination_items_per_page_dilers_opts
+            })
+        },
+        addVendor(){
+            this.loading = true;
+            this.org_profile_set_from_api({
+                action: 'add/code/warehouse',
+                code: this.code,
+                id: this.$route.params.id
+            }).then((res) => {
+                if(res.data.data.success){
+                    this.$toast.add({
+                        severity: 'success',
+                        summary: 'Успех!',
+                        detail: res.data.data.message,
+                        life: 3000
+                    });
+                    this.get_opts_from_api({
+                        page: this.optpage,
+                        perpage: this.pagination_items_per_page_dilers_opts
+                    })
+                    this.modal_add = false;
+                } else{
+                    this.$toast.add({
+                        severity: 'error',
+                        summary: 'Ошибка',
+                        detail: res.data.data.message,
+                        life: 3000
+                    });
+                }
+                this.loading = false
             })
         }
 	},
@@ -88,7 +138,7 @@ export default {
 			'opts'
 		])
   	},
-    components: { vOpts, Breadcrumbs },
+    components: { vOpts, Breadcrumbs, Dialog, Toast},
 	watch: {
         opts: function (newVal, oldVal) {
             if (typeof newVal === 'object') {
