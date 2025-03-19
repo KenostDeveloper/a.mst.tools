@@ -149,7 +149,7 @@ export default {
 			filter: [
 				{ type: 'checkbox', key: 'negative', label: 'Отрицательный прогноз остатков', value: false },
 				{ type: 'number', key: 'days_forecast', label: 'Кол-во дней для прогноза остатков', value: 5, min: 1, max: 30 },
-				// { type: 'number', key: 'days', label: 'Кол-во дней для расчета', value: 30, min: 1, max: 90 },
+				{ type: 'number', key: 'months', label: 'Кол-во месяцев для расчета', value: 1, min: 1, max: 12 },
 				{ type: 'checkbox', key: 'only_warehouse', label: 'Только товары склада покупателя', value: false },
 				{ type: 'checkbox', key: 'only_purchases', label: 'Только товары с продажами', value: false }
 			]

@@ -8,7 +8,11 @@
                 <b>Арт: {{ items.article }}</b>
             </td>
             <td class="k-table__сhange-remain">
-                <div v-if="items.our_id == 0">Необходима интеграция для получения данных</div>
+                <div v-if="items.check_remains != 1">
+                    <span class="info-badge" v-tooltip="{ value: 'Необходима интеграция для получения данных', showDelay: 0, hideDelay: 0 }">
+                        <i class="pi pi-exclamation-circle"></i>
+                    </span>
+                </div>
                 <Chart type="line" :data="items.remains_history" :options="chart_options" style="width: 200px;" v-else-if="items.total_stores > 1 && items.remains_history"/>
             </td>
             <td class="k-table__remain-speed">
@@ -70,7 +74,11 @@
                 <b class="cursor-pointer">Арт: {{ item.article }}</b>
             </td>
             <td class="k-table__сhange-remain">
-                <div v-if="items.our_id == 0 && items.total_stores == 1">Необходима интеграция для получения данных</div>
+                <div v-if="items.check_remains != 1 && items.total_stores == 1">
+                    <span class="info-badge" v-tooltip="{ value: 'Необходима интеграция для получения данных', showDelay: 0, hideDelay: 0 }">
+                        <i class="pi pi-exclamation-circle"></i>
+                    </span>
+                </div>
                 <Chart type="line" :data="items.remains_history" :options="chart_options" style="width: 200px;" v-else-if="items.total_stores == 1 && items.remains_history"/>
             </td>
             <td class="k-table__remain-speed">
