@@ -257,7 +257,7 @@
             'no-active': !this.active && !this.is_warehouses && items.total_stores > 1
         }">
             <td class="td-center" :class="{ 'pointer-none': index !== 0 }">
-                <span :style="'top:' + (complect.length * 74) / 2 + 'px'" v-if="index === 0"><i class="pi pi-minus"></i></span>
+                <span :style="'top:' + (complect.length * 100) + 100 + '%'" v-if="index === 0"><i class="pi pi-minus"></i></span>
             </td>
             <!-- <td class="k-table__photo">
                 <img class="k-table__image" :src="item.image" alt="" />
@@ -729,7 +729,6 @@ export default {
             this.$emit('updateBasket');
         },
         addBasketForecast(item, index, count) {
-            console.log(count)
             if (!this.fetchIds.includes(item.key)) {
                 this.fetchIds.push(item.key);
             }
@@ -740,7 +739,7 @@ export default {
                 org_id: item.org_id,
                 store_id: item.store_id,
                 id_remain: item.id,
-                count: count <= Number(item.remains)? count : Number(item.remains),
+                count: count <= Number(item.available)? count : Number(item.available),
                 actions: item.actions
             };
             this.busket_from_api(data).then(() => {
