@@ -84,7 +84,7 @@
             <td class="k-table__remain-speed">
                 {{ items.our_available }} / {{ items.our_purchase_speed }}
             </td>
-            <td v-if="items.our_forecast" class="k-table__prognoz">
+            <td v-if="items.our_forecast && items.our_forecast < 0" class="k-table__prognoz cursor-pointer">
                 <span @click="addBasketForecast(item, index, Math.abs(items.our_forecast))">{{ items.our_forecast }}</span>
             </td>
             <td v-else class="k-table__prognoz">
