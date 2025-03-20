@@ -729,6 +729,7 @@ export default {
             this.$emit('updateBasket');
         },
         addBasketForecast(item, index, count) {
+            console.log(count)
             if (!this.fetchIds.includes(item.key)) {
                 this.fetchIds.push(item.key);
             }
@@ -739,7 +740,7 @@ export default {
                 org_id: item.org_id,
                 store_id: item.store_id,
                 id_remain: item.id,
-                count: count,
+                count: count <= Number(item.remains)? count : Number(item.remains),
                 actions: item.actions
             };
             this.busket_from_api(data).then(() => {
