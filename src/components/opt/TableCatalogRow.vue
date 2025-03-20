@@ -257,7 +257,8 @@
             'no-active': !this.active && !this.is_warehouses && items.total_stores > 1
         }">
             <td class="td-center" :class="{ 'pointer-none': index !== 0 }">
-                <span :style="'top:' + (complect.length * 100) + 100 + '%'" v-if="index === 0"><i class="pi pi-minus"></i></span>
+                <!-- {{ Object.keys(complect.products, 1).length }} -->
+                <span :style="'top:' + ((Object.keys(complect.products).length * 100) / 2 - 50).toString() + '%'" v-if="index === 0"><i class="pi pi-minus"></i></span>
             </td>
             <!-- <td class="k-table__photo">
                 <img class="k-table__image" :src="item.image" alt="" />
@@ -483,6 +484,7 @@ import Dialog from 'primevue/dialog';
 import debounce from '../../utils/debounce';
 import ActionModal from './ActionModal.vue';
 import Chart from 'primevue/chart'
+import { resolveObjectKey } from 'chart.js/helpers';
 
 export default {
     name: 'TableCatalogRow',
