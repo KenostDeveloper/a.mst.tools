@@ -39,7 +39,41 @@
                                 </div>
                             </div>
 
-                            <TableCatalogAction @updateBasket="updateBasket" v-if="actions" :items="actions" />
+                            <!-- <TableCatalog
+                                :is_warehouses="false"
+                                @updateBasket="updateBasket"
+                                :items="actions"
+                            /> -->
+                            <div class="k-container">
+                                <table class="k-table std-catalog-table__wrapper" :style="{ marginLeft: this.marginValue + 'px' }">
+                                    <thead>
+                                        <tr>
+                                            <!-- <th class="k-table__name k-tablr-th-photo hidden-mobile-l">Фото</th>
+                                            <th class="k-table__name k-tablr-th-title">Наименование / Артикул</th>
+                                            <th class="k-table__name k-tablr-th-buttons hidden-mobile-l"><i class="d_icon d_icon-busket"></i></th>
+                                            <th class="k-table__name k-tablr-th-price">РРЦ</th>
+                                            <th class="k-table__name k-tablr-th-delivery hidden-mobile-l">Скидка %</th>
+                                            <th class="k-table__name k-tablr-th-action">Цена со скидкой за шт. (₽)</th>
+                                            <th class="k-table__name k-tablr-th-actions">Акции</th>
+                                            <th class="k-table__name k-tablr-th-remain hidden-mobile-l">Сумма (₽)</th>
+                                            <th class="k-table__name k-tablr-th-vendor">Кратность</th>
+                                            <th class="k-table__name k-tablr-th-retail hidden-mobile-l">Остатки на складе</th> -->
+                                            <th class="k-table__name k-tablr-th-icon"></th>
+                                            <th class="k-table__name k-tablr-th-title">Наименование / Артикул</th>
+                                            <th class="k-table__name k-tablr-th-change-remain">Изменение остатков</th>
+                                            <th class="k-table__name k-tablr-th-remain-speed">Остаток<small>, шт</small> / Скорость продаж <small>, шт./день.</small></th>
+                                            <th class="k-table__name k-tablr-th-prognoz">Прогноз остатков</th>
+                                            <th class="k-table__name k-tablr-th-buttons"><i class="d_icon d_icon-busket"></i></th>
+                                            <th class="k-table__name k-tablr-th-price">Цена /<br> отсрочка</th>
+                                            <th class="k-table__name k-tablr-th-action">Акции</th>
+                                            <th class="k-table__name k-tablr-th-delivery">Оплата доставки /<br> срок доставки</th>
+                                            <th class="k-table__name k-tablr-th-remain">Остаток поставщика</th>
+                                            <th class="k-table__name k-tablr-th-vendor">Поставщик / Склад</th>
+                                        </tr>
+                                    </thead>
+                                    <TableCatalogAction v-for="(product, index1) in actions.products" @updateBasket="updateBasket" v-if="actions" :items="product" />
+                                </table>
+                            </div>
                         </main>
                         <paginate :page-count="pageCount" :click-handler="pagClickCallback"
                             :prev-text="'Пред'" :next-text="'След'"
@@ -68,6 +102,7 @@ import Toast from 'primevue/toast';
 import Loading from '../../../components/Loading.vue';
 import Breadcrumbs from '../../../components/Breadcrumbs.vue';
 import Paginate from 'vuejs-paginate-next';
+import TableCatalog from '../../../components/opt/TableCatalog.vue'
 
 export default {
     name: 'Promotion',
@@ -101,7 +136,8 @@ export default {
         Toast,
         Loading,
         Breadcrumbs,
-        Paginate
+        Paginate,
+        TableCatalog
     },
     mounted() {
         this.get_opt_catalog_from_api().then(() => {
