@@ -307,33 +307,54 @@
 
                 <div class="dart-form-group mb-4">
                     <span class="ktitle">Отсрочка</span>
-                    <div class="postponement">
-                        Срок отсрочки платежа: {{ this.postponement_period }} дней
-                        <div class="postponement__settings" @click="this.modals.delay = !this.modals.delay">Настроить
+                    <div class="flex align-items-center gap-1 mt-2">
+                        <RadioButton v-model="this.form.typeDelay" inputId="typeDelay-1" name="typeDelay"
+                            value="1" />
+                        <label for="typeDelay-1" class="ml-2 radioLabel">Отсрочка</label>
+                    </div>
+                    <div class="flex align-items-center gap-1 mt-2">
+                        <RadioButton v-model="this.form.typeDelay" inputId="typeDelay-2" name="typeDelay"
+                            value="2" />
+                        <label for="typeDelay-2" class="ml-2 radioLabel">Под реализацию</label>
+                    </div>
+                    <div class="mt-3" v-if="this.form.typeDelay == '1'">
+                        <div class="postponement">
+                            Срок отсрочки платежа: {{ this.postponement_period }} дней
+                            <div class="postponement__settings" @click="this.modals.delay = !this.modals.delay">Настроить
+                            </div>
+                        </div>
+                        
+                        <div class="postponement__graph">
+                            <b>График платежей</b>
+                            <p v-for="item in this.form.delay" :key="item.id">— {{ item.percent }}% через {{ item.day }}
+                                дней после отгрузки</p>
+                        </div>
+                        <div class="two-colums mt-2">
+                            <div class="kenost-wiget">
+                                <p>Выберите условие отсрочки</p>
+                                <Dropdown v-model="this.form.postponementConditions" :options="this.postponementConditions"
+                                    optionLabel="name" placeholder="Оплата доставки" class="w-full md:w-14rem" />
+                            </div>
+                            <div class="kenost-wiget">
+                                <p v-if="this.form.postponementConditions.key == 1">Минимальная общая сумма заказа в ₽</p>
+                                <p v-if="this.form.postponementConditions.key == 2">Минимальное количество товаров в шт</p>
+                                <!-- <input
+                                    v-if="this.form.postponementConditions.key == 1 || this.form.postponementConditions.key == 2"
+                                    v-model="this.form.postponementConditionsValue" type="text" name="description"
+                                    class="dart-form-control" /> -->
+                                <InputNumber 
+                                    v-if="this.form.postponementConditions.key == 1 || this.form.postponementConditions.key == 2"
+                                    v-model="this.form.postponementConditionsValue" inputId="horizontal-buttons" :step="0.1"
+                                    min="0" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" />
+                            </div>
                         </div>
                     </div>
-                    <div class="postponement__graph">
-                        <b>График платежей</b>
-                        <p v-for="item in this.form.delay" :key="item.id">— {{ item.percent }}% через {{ item.day }}
-                            дней после отгрузки</p>
-                    </div>
-                    <div class="two-colums mt-2">
-                        <div class="kenost-wiget">
-                            <p>Выберите условие отсрочки</p>
-                            <Dropdown v-model="this.form.postponementConditions" :options="this.postponementConditions"
-                                optionLabel="name" placeholder="Оплата доставки" class="w-full md:w-14rem" />
-                        </div>
-                        <div class="kenost-wiget">
-                            <p v-if="this.form.postponementConditions.key == 1">Минимальная общая сумма заказа в ₽</p>
-                            <p v-if="this.form.postponementConditions.key == 2">Минимальное количество товаров в шт</p>
-                            <!-- <input
-                                v-if="this.form.postponementConditions.key == 1 || this.form.postponementConditions.key == 2"
-                                v-model="this.form.postponementConditionsValue" type="text" name="description"
-                                class="dart-form-control" /> -->
-                            <InputNumber 
-                                v-if="this.form.postponementConditions.key == 1 || this.form.postponementConditions.key == 2"
-                                v-model="this.form.postponementConditionsValue" inputId="horizontal-buttons" :step="0.1"
-                                min="0" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" />
+                    <div v-else>
+                        <div class="kenost-wiget mt-3">
+                            <p>Количество дней реализации</p>
+                            <InputNumber v-model="this.form.delayfix" inputId="horizontal-buttons-sum"
+                                :step="1" min="1" incrementButtonIcon="pi pi-plus"
+                                decrementButtonIcon="pi pi-minus" />
                         </div>
                     </div>
                 </div>
@@ -1460,6 +1481,7 @@ export default {
                 compatibilityDiscount: '1',
                 compatibilityPost: '1',
                 typeShipment: '1',
+                typeDelay: '1',
                 dateShipment: '',
                 paymentDelivery: { name: 'Покупатель', key: 0 },
                 conditionPaymentDelivery: { name: 'Без условий', key: 0 },
@@ -1479,6 +1501,7 @@ export default {
                         day: 0
                     }
                 ],
+                delayfix: 1,
                 delayPercentSum: 0,
                 participantsType: '3',
                 available_stores: [],
@@ -2092,7 +2115,9 @@ export default {
                         page_place_position: this.position,
                         page_create: this.create_page_action[0] === 'true',
                         hide_for_clients: this.form.hide_for_clients,
-                        groups: groups_data
+                        groups: groups_data,
+                        delay_type: this.form.typeDelay,
+                        delayfix: this.form.delayfix
                     })
                         .then((result) => {
                             this.loading = false;
@@ -2153,7 +2178,9 @@ export default {
                         page_place_position: this.position,
                         page_create: this.create_page_action[0] === 'true',
                         hide_for_clients: this.form.hide_for_clients,
-                        groups: groups_data
+                        groups: groups_data,
+                        delay_type: this.form.typeDelay,
+                        delayfix: this.form.delayfix
                     })
                         .then((result) => {
                             this.loading = false;
@@ -2838,6 +2865,14 @@ export default {
 
                 if (newVal.big_post_actions) {
                     this.form.bigPost = newVal.big_post_actions
+                }
+
+                if (newVal.delay_type) {
+                    this.form.typeDelay = (newVal.delay_type).toString()
+
+                    if(newVal.delay_type == 2){
+                        this.form.delayfix = newVal.delay
+                    }
                 }
 
                 if (newVal.compatibility_discount_mode) {

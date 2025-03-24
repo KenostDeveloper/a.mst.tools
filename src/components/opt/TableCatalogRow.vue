@@ -91,7 +91,6 @@
                 {{ items.our_forecast }}
             </td>
             <td class="k-table__busket">
-                <!-- {{ item.min }} -->
                 {{ this.fetchIds.indexOf(item.remain_id) != -1 ? "Загрузка..." : "" }}
                 
                 <form class="k-table__form" action="" :class="{ 'basket-true': item?.basket?.availability || this.add_basket.indexOf(item.key) != -1, 'loading-counter': this.fetchIds.indexOf(item.key) != -1 }">
@@ -119,6 +118,7 @@
                             {{ Math.round(item.min_price.price).toLocaleString('ru') }} ₽
                         </div>
                     </div>
+                    {{ item.delay_type ? (item.delay_type == 2 ? 'Под реал.' : '') : '' }} <br v-if="item.delay_type == 2"></br>
                     {{ item.delay ? Number(item.delay).toFixed(1) + ' дн' : 'Предоплата' }}
                 </div>
             </td>
