@@ -383,6 +383,13 @@
                                 min="0" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" />
                         </div>
                     </div>
+                    <div class="dart-form-group mt-4">
+                        <div class="flex align-items-center gap-1">
+                            <Checkbox v-model="this.form.integration" :binary="true" inputId="integration"
+                                name="integration" />
+                            <label for="integration" class="ml-2 mb-0">Интеграция с MachineStore</label>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="dart-form-group" v-if="this.form.condition.key == 2 || this.form.condition.key == 5">
@@ -1471,6 +1478,7 @@ export default {
             complects_ids: [],
             ids_visible: [],
             form: {
+                integration: [],
                 actionLast: [],
                 global_kenost_table: [],
                 filter_kenost_table: [],
@@ -2117,7 +2125,8 @@ export default {
                         hide_for_clients: this.form.hide_for_clients,
                         groups: groups_data,
                         delay_type: this.form.typeDelay,
-                        delayfix: this.form.delayfix
+                        delayfix: this.form.delayfix,
+                        integration: this.form.integration,
                     })
                         .then((result) => {
                             this.loading = false;
@@ -2180,7 +2189,8 @@ export default {
                         hide_for_clients: this.form.hide_for_clients,
                         groups: groups_data,
                         delay_type: this.form.typeDelay,
-                        delayfix: this.form.delayfix
+                        delayfix: this.form.delayfix,
+                        integration: this.form.integration,
                     })
                         .then((result) => {
                             this.loading = false;
@@ -2997,6 +3007,9 @@ export default {
                 }
                 if (newVal.available_stores) {
                     this.form.available_stores = ['true'];
+                }
+                if (newVal.integration) {
+                    this.form.integration = newVal.integration;
                 }
                 if (newVal.available_vendors) {
                     this.form.available_vendors = ['true'];
