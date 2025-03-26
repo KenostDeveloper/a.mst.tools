@@ -48,13 +48,59 @@
 
             <div class="dart-form-group mb-4">
                 <span class="ktitle">Отсрочка</span>
-                <div class="postponement">Срок отсрочки платежа: {{ this.postponement_period }} дней <div
-                        class="postponement__settings" @click="this.modals.delay = !this.modals.delay">Настроить</div>
+                <div class="flex align-items-center gap-1 mt-2">
+                    <RadioButton v-model="this.form.typeDelay" inputId="typeDelay-1" name="typeDelay"
+                        value="1" />
+                    <label for="typeDelay-1" class="ml-2 radioLabel">Отсрочка</label>
                 </div>
-                <div class="postponement__graph">
-                    <b>График платежей</b>
-                    <p v-for="item in this.form.delay" :key="item.id">— {{ item.percent }}% через {{ item.day }} дней после
-                        отгрузки</p>
+                <div class="flex align-items-center gap-1 mt-2">
+                    <RadioButton v-model="this.form.typeDelay" inputId="typeDelay-2" name="typeDelay"
+                        value="2" />
+                    <label for="typeDelay-2" class="ml-2 radioLabel">Под реализацию</label>
+                </div>
+                <div class="mt-3" v-if="this.form.typeDelay == '1'">
+                    <!-- <div class="postponement">
+                        Срок отсрочки платежа: {{ this.postponement_period }} дней
+                        <div class="postponement__settings" @click="this.modals.delay = !this.modals.delay">Настроить
+                        </div>
+                    </div>
+                    
+                    <div class="postponement__graph">
+                        <b>График платежей</b>
+                        <p v-for="item in this.form.delay" :key="item.id">— {{ item.percent }}% через {{ item.day }}
+                            дней после отгрузки</p>
+                    </div>
+                    <div class="two-colums mt-2">
+                        <div class="kenost-wiget">
+                            <p>Выберите условие отсрочки</p>
+                            <Dropdown v-model="this.form.postponementConditions" :options="this.postponementConditions"
+                                optionLabel="name" placeholder="Оплата доставки" class="w-full md:w-14rem" />
+                        </div>
+                        <div class="kenost-wiget">
+                            <p v-if="this.form.postponementConditions.key == 1">Минимальная общая сумма заказа в ₽</p>
+                            <p v-if="this.form.postponementConditions.key == 2">Минимальное количество товаров в шт</p>
+                            <InputNumber 
+                                v-if="this.form.postponementConditions.key == 1 || this.form.postponementConditions.key == 2"
+                                v-model="this.form.postponementConditionsValue" inputId="horizontal-buttons" :step="0.1"
+                                min="0" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" />
+                        </div>
+                    </div> -->
+                    <div class="postponement">Срок отсрочки платежа: {{ this.postponement_period }} дней <div
+                        class="postponement__settings" @click="this.modals.delay = !this.modals.delay">Настроить</div>
+                    </div>
+                    <div class="postponement__graph">
+                        <b>График платежей</b>
+                        <p v-for="item in this.form.delay" :key="item.id">— {{ item.percent }}% через {{ item.day }} дней после
+                            отгрузки</p>
+                    </div>
+                </div>
+                <div v-else>
+                    <div class="kenost-wiget mt-3">
+                        <p>Количество дней реализации</p>
+                        <InputNumber v-model="this.form.delayfix" inputId="horizontal-buttons-sum"
+                            :step="1" min="1" incrementButtonIcon="pi pi-plus"
+                            decrementButtonIcon="pi pi-minus" />
+                    </div>
                 </div>
             </div>
 
@@ -860,6 +906,8 @@ export default {
             tempPriority: false,
             form: {
                 store_id: [],
+                delayfix: 1,
+                typeDelay: '1',
                 comment: "",
                 paymentDelivery: { name: 'Покупатель', key: 0 },
                 min_amount: 0,
@@ -1092,6 +1140,8 @@ export default {
                     method_adding_products: this.form.addProductType, //Метод добавления товаров
                     id: router.currentRoute._value.params.id,
                     id_client: router.currentRoute._value.params.client_id,
+                    delay_type: this.form.typeDelay,
+                    delayfix: this.form.delayfix,
                     groups: groups_data
                 }).then(() => {
                     router.push({ name: 'discounts', params: { id: router.currentRoute._value.params.id } })
@@ -1935,6 +1985,14 @@ export default {
                 this.selected = newVal.products
                 this.selected_data = newVal.products_data
                 this.total_selected = newVal.total_products
+
+                if (newVal.delay_type) {
+                    this.form.typeDelay = (newVal.delay_type).toString()
+
+                    if(newVal.delay_type == 2){
+                        this.form.delayfix = newVal.delay
+                    }
+                }
 
                 for (var key in this.selected_data) {
                     if(this.selected_data[key].pricing_type !== undefined && this.selected_data[key].pricing_type !== null ){

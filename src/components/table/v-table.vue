@@ -160,7 +160,10 @@
 					<tr>
 						<th v-for="(row, index) in table_data" :key="index">
 							<div v-if="row.type == 'editmode' && this.editMode">
-								<Checkbox v-model="all_check" :value="true" @input="setAllCheck" />
+								<!-- <Checkbox v-model="all_check" :binary="true" /> -->
+								<!-- <Checkbox :modelValue="all_check" @update:modelValue="all_check = $event" :binary="true" /> -->
+								<Checkbox :modelValue="all_check" @update:modelValue="val => all_check = val" :binary="true" />
+
 							</div>
 							<div v-else>
 								<a
@@ -180,8 +183,9 @@
 				</thead>
 
 				<tbody v-if="total != -1">
+					<!-- v-for="row in items_data" -->
 					<v-table-row
-						v-for="row in items_data"
+						v-for="row in localItems"
 						:key="row.id"
 						:row_data="row"
 						:keys="table_data"
@@ -275,9 +279,7 @@ export default {
 		},
 		items_data: {
 			type: Array,
-			default: () => {
-				return null;
-			},
+			default: () => [],
 		},
 		filters: {
 			type: Object,
@@ -322,6 +324,8 @@ export default {
 	},
 	data() {
 		return {
+			selectedItems: [],
+			localItems: [], // копия items_data
 			filter: "",
 			filtersdata: {},
 			sort: {},
@@ -331,7 +335,7 @@ export default {
 				maxDate: null,
 			},
 			filteredVendor: null,
-			all_check: 0,
+			all_check: false,
 		};
 	},
 	computed: {
@@ -343,17 +347,68 @@ export default {
 			}
 			return pages;
 		},
+		all_check: {
+			get() {
+			// Просто считаем, отмечены ли все
+			return this.localItems.length > 0 && this.localItems.every(item => item.checked === true);
+			},
+			set(val) {
+			// Чтобы не зациклить: если текущее значение уже равно — ничего не делаем
+			const alreadyAll = this.localItems.every(item => item.checked === val);
+			if (alreadyAll) return;
+
+			this.localItems = this.localItems.map(item => ({
+				...item,
+				checked: val
+			}));
+
+			this.selectedItems = val ? [...this.localItems] : [];
+			this.$emit("checkElem", this.selectedItems.map(item => item.id));
+			}
+		}
 	},
 	methods: {
 		...mapActions(["get_vendors_from_api", 'org_get_stores_from_api']),
 		checkElem(data) {
-			this.$emit("checkElem", data);
+		const exists = this.selectedItems.find(item => item.id === data.id)
+		if (data.checked && !exists) {
+			this.selectedItems.push(data)
+		} else if (!data.checked && exists) {
+			this.selectedItems = this.selectedItems.filter(item => item.id !== data.id)
+		}
+
+		// если нужно — эмитим наружу
+		this.$emit("checkElem", this.selectedItems.map(item => item.id))
+
+		// можно логировать для проверки
+		// console.log("✅ Selected IDs:", this.selectedItems.map(item => item.id))
 		},
 		viewElem (data) {
-      this.$emit('viewElem', data)
-    },
+			this.$emit('viewElem', data)
+		},
+		// setAllCheck(event) {
+		// 	this.$emit("setAllCheck", event);
+		// },
 		setAllCheck(event) {
-			this.$emit("setAllCheck", event);
+			// this.all_check = event;
+
+			if (!Array.isArray(this.items_data)) return;
+
+			this.items_data.forEach(item => {
+				item.checked = this.all_check;
+			});
+
+			this.selectedItems = this.all_check
+				? this.items_data.map(item => ({ ...item }))
+				: [];
+
+			this.$emit("checkElem", this.selectedItems.map(item => item.id));
+
+			// this.selectedItems = !this.all_check
+			// 	? this.items_data.map(item => ({ ...item }))
+			// 	: [];
+			// console.log(this.selectedItems)
+			// this.$emit("checkElem", this.selectedItems.map(item => item.id));
 		},
 		deleteElem(data) {
 			this.$emit("deleteElem", data);
@@ -375,6 +430,7 @@ export default {
 		},
 		editNumber(object) {
 			this.$emit("editNumber", object);
+			console.log('edit', object)
 		},
 		setFilter(type = "0") {
       	console.log(type);
@@ -457,6 +513,13 @@ export default {
 			search: "",
 		};
 		this.get_vendors_from_api(data).then((this.filteredVendor = this.getvendors));
+		if (Array.isArray(this.items_data)) {
+			this.items_data.forEach(item => {
+				if (typeof item.checked === 'undefined') {
+					item.checked = false;
+				}
+			});
+		}
 	},
 	created() {
 		// console.log(this.filters)
@@ -480,6 +543,22 @@ export default {
 				this.all_check = false;
 				this.$emit("setAllCheck", [this.all_check]);
 			}
+		},
+		items_data: {
+			handler(val) {
+				this.localItems = val.map(item => ({ ...item, checked: !!item.checked }));
+			},
+			immediate: true,
+		},
+		all_check(val) {
+			if (!Array.isArray(this.localItems)) return;
+
+			this.localItems.forEach(item => {
+				if (item.checked !== val) item.checked = val;
+			});
+
+			this.selectedItems = val ? [...this.localItems] : [];
+			this.$emit("checkElem", this.selectedItems.map(item => item.id));
 		},
 		filters: {
 			handler(newVal, oldVal) {

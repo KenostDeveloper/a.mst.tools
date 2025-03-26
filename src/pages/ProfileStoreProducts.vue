@@ -376,6 +376,7 @@
 							</v-table>
 						</TabPanel>
 						<TabPanel header="По товарам">
+							{{ this.selectedItems }}
 							<v-table
 								:items_data="products.products"
 								:total="products.total"
@@ -383,8 +384,10 @@
 								:pagination_offset="this.pagination_offset"
 								:page="this.page"
 								:table_data="this.table_data"
+								:editMode="true"
 								:filters="this.filters"
 								title="Сопоставление по товарам"
+								@checkElem="checkElem"
 								@filter="filter"
 								@sort="filter"
 								@paginate="paginate"
@@ -395,6 +398,59 @@
 									</button>
 								</template>
 							</v-table>
+
+							<div class="table-kenost-help">
+								<div class="table-kenost-help__select">
+									<span>Отмечено:</span> {{ this.selectedItems.length }} / {{ products.total }}
+								</div>
+								<!-- <div class="flex align-items-center gap-1">
+									<Checkbox @change="globalTable" v-model="this.form.global_kenost_table"
+										inputId="global_kenost_table-1" name="global_kenost_table-1" value="true" />
+									<label for="global_kenost_table-1" class="ml-1 mb-0">Все</label>
+								</div> -->
+								<div class="flex align-items-center gap-1">
+									<Checkbox @change="filterglobalTable" :binary="true" v-model="this.filter_kenost_table"
+										inputId="global_kenost_table-2" name="global_kenost_table-2" value="true" />
+									<label for="global_kenost_table-2" class="ml-1 mb-0">Отметить подходящие по фильтру</label>
+								</div>
+							</div>
+
+							<div class="kenost-all-table-activity mt-4">
+								<div class="kenost-wiget">
+									<p>Массовое действие</p>
+									<Dropdown v-model="this.kenostActivityAll.type" :options="this.massAction" optionLabel="name"
+										placeholder="Массовое действие" class="w-full md:w-14rem" />
+								</div>
+
+								<div class="kenost-wiget" v-if="this.kenostActivityAll.type.key == 0">
+									<p>Выберите категорию</p>
+									<TreeSelect
+										v-model="this.kenostActivityAll.category"
+										:options="this.getcatalog"
+										placeholder="Выберите категорию"
+										class="w-full"
+									/>
+								</div>
+
+								<div class="kenost-wiget" v-if="this.kenostActivityAll.type.key == 1">
+									<p>Выберите производителя</p>
+									<Dropdown
+										v-model="this.kenostActivityAll.vendor"
+										:options="this.getvendors"
+										filter
+										optionLabel="name"
+										optionValue="id"
+										placeholder="Выберите производителя"
+									></Dropdown>
+								</div>
+
+								<div v-if="
+									this.kenostActivityAll.type.key == 0 ||
+									this.kenostActivityAll.type.key == 1
+								" @click="massActionTable" class="dart-btn dart-btn-primary mt-3">
+									<i class="pi pi-check"></i>
+								</div>
+							</div>
 						</TabPanel>
 					</TabView>
 				</div>
@@ -1134,7 +1190,6 @@ import TabView from "primevue/tabview";
 import TabPanel from "primevue/tabpanel";
 import RadioButton from "primevue/radiobutton";
 import router from "../router";
-import Dropdown from "primevue/dropdown";
 import InputText from "primevue/inputtext";
 import InputNumber from "primevue/inputnumber";
 import Checkbox from "primevue/checkbox";
@@ -1145,6 +1200,8 @@ import primeCalendar from "primevue/calendar";
 import "v-calendar/dist/style.css";
 import customModal from "../components/CustomModal.vue";
 import Breadcrumbs from "../components/Breadcrumbs.vue";
+import TreeSelect from "primevue/treeselect";
+import Dropdown from "primevue/dropdown";
 
 export default {
 	name: "ProfileStoreProducts",
@@ -1170,12 +1227,23 @@ export default {
 	},
 	data() {
 		return {
+			massAction: [
+                { name: 'Задать категорию', key: 0 },
+                { name: 'Задать бренд', key: 1 }
+            ],
+			kenostActivityAll: {
+                type: {},
+				category: {},
+				vendor: {}
+            },
+			selectedItems: [],
 			showOperatingModeModal: false,
 			showOperatingModeCalendarModal: false,
 			regions_all: [],
 			work_loading: false,
 			work_calendar_loading: false,
 			work_date: new Date(),
+			filter_kenost_table: false,
 			work_dates_input: {
 				id: "",
 				type: "shortday",
@@ -1322,6 +1390,18 @@ export default {
 					type: "dropdown",
 					values: this.getcardstatus,
 				},
+				vendor: {
+					name: "Производитель",
+					placeholder: "Выберите производителя",
+					type: "dropdown",
+					values: this.getvendors,
+				},
+				catalog: {
+					name: "Категория товара",
+					placeholder: "Выберите категорию",
+					type: "tree",
+					values: this.getcatalog,
+				},
 			},
 			filters_modal: {
 				name: {
@@ -1420,6 +1500,10 @@ export default {
 				},
 			},
 			table_data: {
+				check: {
+					label: "",
+					type: 'editmode'
+				},
 				image: {
 					label: "Фото",
 					type: "image",
@@ -1469,18 +1553,6 @@ export default {
 					type: "text",
 					sort: true,
 				},
-				/*
-         price_rrc: {
-           label: 'Цена, РРЦ',
-           type: 'text',
-           sort: true
-         },
-         price_rrc_delta: {
-           label: 'РРЦ дельта',
-           type: 'text',
-           sort: true
-         },
-         */
 				summ: {
 					label: "Сумма товара, ₽",
 					type: "text",
@@ -1601,6 +1673,26 @@ export default {
 					},
 				],
 			};
+		},
+		filterglobalTable() {
+			let filteredIds = [];
+			if(this.filter_kenost_table){
+				filteredIds = this.products.ids || [];
+			}
+
+			// Записываем все ID, подходящие по фильтру
+			this.selectedItems = [...filteredIds];
+
+			// Проставляем checked на текущей странице
+			this.products.products = this.products.products.map(item => ({
+				...item,
+				checked: filteredIds.includes(item.id)
+			}));
+
+			if(this.filter_kenost_table){
+				this.selectedItems = this.products.ids;
+				console.log(this.products.ids)
+			}
 		},
 		setChartDataHelpFour() {
 			return {
@@ -1752,6 +1844,10 @@ export default {
 				date: new Date(),
 				timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
 			};
+		},
+		checkElem(object){
+			this.selectedItems = object;
+			// console.log(this.selectedItems)
 		},
 		// добавляем дату в листинг
 		addWorkDay() {
@@ -1944,6 +2040,8 @@ export default {
     },
 	},
 	mounted() {
+		this.get_vendors_from_api();
+		this.get_catalog_from_api();
 		this.get_data_from_api({
 			page: this.page,
 			page_brand: this.page_brand,
@@ -2009,7 +2107,8 @@ export default {
 		Calendar,
 		DatePicker,
 		Toast,
-		Breadcrumbs
+		Breadcrumbs,
+		TreeSelect,
 	},
 	computed: {
 		...mapGetters([
@@ -2022,7 +2121,9 @@ export default {
 			"getcatalog",
 			"getregions",
 			"oprprices",
-			"allorganizations"
+			"allorganizations",
+			"getvendors",
+			"getcatalog"
 		]),
 		date() {
 			const today = new Date();
@@ -2157,6 +2258,20 @@ export default {
 		getregions: function (newVal, oldVal) {
 			this.regions = this.getregions
 		},
+		getvendors(newVal, oldVal) {
+			this.filters.vendor.values = newVal;
+		},
+		getcatalog(newVal, oldVal) {
+			this.filters.catalog.values = newVal;
+		},
+		products(newVal) {
+			if (newVal?.products) {
+				this.products.products = newVal.products.map(item => ({
+					...item,
+					checked: false
+				}));
+			}
+		}
 	},
 };
 </script>

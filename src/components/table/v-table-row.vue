@@ -105,6 +105,7 @@ export default {
     },
     editNumber (object) {
       this.$emit('editNumber', object)
+      // console.log(object)
     },
     linkParams (row) {
       const linkparams = {}

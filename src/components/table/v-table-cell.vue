@@ -10,7 +10,12 @@
       </div>
     </div>
     <div class="cell_value" v-else-if="cell_data.type == 'editmode' && editMode">
-      <Checkbox v-model="check" :binary="true" @input="checkRow"/>
+      <!-- <Checkbox v-model="check" :binary="true" @input="checkRow"/> -->
+      <Checkbox
+        v-model="check"
+        :binary="true"
+        @input="checkRow"
+      />
     </div>
     <div class="cell_value" v-else-if="cell_data.type == 'text'">
       {{ value[cell_key] }}
@@ -182,7 +187,7 @@ export default {
   },
   data () {
     return {
-      check: false,
+      check: this.value.checked || false,
       blank: {},
       numbers: {},
       chart_options: {
@@ -247,9 +252,11 @@ export default {
       this.$emit('editNumber', { value: number, id: this.value.id, name: name })
     },
     checkRow (data) {
-      const val = this.value
-      val.checked = data
-      this.$emit('checkElem', val)
+      // const val = this.value
+      // val.checked = data
+      // this.$emit('checkElem', val)
+      this.$emit('checkElem', { ...this.value, checked: this.check });
+      // console.log(data)
     }
   },
   components: {
@@ -297,15 +304,16 @@ export default {
         }
       }
     },
-    value: function (newVal, oldVal) {
-      if (this.cell_data.type === 'editmode') {
+    value: {
+      handler(newVal) {
         this.check = newVal.checked
-      }
-      if (this.cell_data.type === 'number') {
-        this.numbers[this.cell_key] = this.value[this.cell_key]
-      }
-      // console.log('watch value')
-    }
+      },
+      deep: true,
+      immediate: true,
+    },
+    check(newVal) {
+      this.$emit('checkElem', { ...this.value, checked: newVal })
+    },
   }
 }
 </script>
