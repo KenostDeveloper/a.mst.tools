@@ -72,6 +72,7 @@
                                         </tr>
                                     </thead>
                                     <TableCatalogAction v-for="(product, index1) in actions.products" @updateBasket="updateBasket" v-if="actions" :items="product" />
+                                    <TableCatalogAction @updateBasket="updateBasket" v-if="filteredActions" :items="filteredActions" />
                                 </table>
                             </div>
                         </main>
@@ -245,6 +246,10 @@ export default {
         ...mapGetters(['mainpage', 'optcatalog', 'optvendors', 'actions']),
         pageCount() {
             return Math.ceil(this.actions?.total / this.perpage);
+        },
+        filteredActions() {
+            const { products, ...rest } = this.actions || {}; 
+            return rest; // Возвращаем объект без `products`
         }
     },
     watch: {

@@ -376,7 +376,7 @@
 							</v-table>
 						</TabPanel>
 						<TabPanel header="По товарам">
-							{{ this.selectedItems }}
+							<!-- {{ this.selectedItems }} -->
 							<v-table
 								:items_data="products.products"
 								:total="products.total"
@@ -386,6 +386,7 @@
 								:table_data="this.table_data"
 								:editMode="true"
 								:filters="this.filters"
+								:selectedItems="this.selectedItems"
 								title="Сопоставление по товарам"
 								@checkElem="checkElem"
 								@filter="filter"
@@ -399,7 +400,7 @@
 								</template>
 							</v-table>
 
-							<div class="table-kenost-help">
+							<div class="table-kenost-help mt-3">
 								<div class="table-kenost-help__select">
 									<span>Отмечено:</span> {{ this.selectedItems.length }} / {{ products.total }}
 								</div>
@@ -1237,6 +1238,7 @@ export default {
 				vendor: {}
             },
 			selectedItems: [],
+			filteredProductIds: [],
 			showOperatingModeModal: false,
 			showOperatingModeCalendarModal: false,
 			regions_all: [],
@@ -1576,6 +1578,7 @@ export default {
 			"set_organization_settings",
 			"set_work_to_api",
 			"delete_work_from_api",
+			"opt_api"
 		]),
 		setChartData() {
 			return {
@@ -1693,6 +1696,22 @@ export default {
 				this.selectedItems = this.products.ids;
 				console.log(this.products.ids)
 			}
+		},
+		massActionTable(){
+			// console.log(this.kenostActivityAll)
+			this.opt_api({
+				action: 'product/mass/actions',
+				ids: this.selectedItems,
+				type: this.kenostActivityAll.type.key,
+				category: this.kenostActivityAll.category,
+				vendor: this.kenostActivityAll.vendor
+			}).then((res) => {
+				if(res.data.data.success){
+					this.$toast.add({ severity: 'success', summary: 'Ошибка!', detail: res.data.data.message, life: 3000 });
+				} else {
+					this.$toast.add({ severity: 'error', summary: 'Успешно!', detail: res.data.data.message, life: 3000 });
+				}
+			})
 		},
 		setChartDataHelpFour() {
 			return {
@@ -1845,9 +1864,9 @@ export default {
 				timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
 			};
 		},
-		checkElem(object){
-			this.selectedItems = object;
-			// console.log(this.selectedItems)
+		checkElem(ids) {
+			// Сохраняем выбранные ID где-то (например, в хранилище Vuex)
+			this.selectedItems = ids;
 		},
 		// добавляем дату в листинг
 		addWorkDay() {

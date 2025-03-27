@@ -836,29 +836,28 @@ export default {
             return minPrice;
         },
         ElemCount(object) {
-            // console.log(object)
-            if (!this.fetchIds.includes(object.item.item.key)) {
-                this.fetchIds.push(object.item.item.key);
+            if (!this.fetchIds.includes(object.item.key)) {
+                this.fetchIds.push(object.item.key);
             }
             console.log(object)
             if (object.value <= object.min) {
-                this.clearBasketProduct(object.item.item.org_id, object.item.item.store_id, object.item.item.key, object.item.item, object.item.index1, object.item.index2, object.item.item.multiplicity)
-                this.items.products[object.item.index1].stores[object.item.index2].basket.count = object.item.item.multiplicity;
+                this.clearBasketProduct(object.item.org_id, object.item.store_id, object.item.key, object.item, object.item.index1, object.item.index2, object.item.multiplicity)
+                this.items.products[object.item.index1].stores[object.item.index2].basket.count = object.item.multiplicity;
                 return;
             } else {
-                this.items.products[object.item.index1].stores[object.item.index2].basket.count = object.value;
+                this.items.stores[object.index].basket.count = object.value;
             }; 
             console.log(object)
             const data = {
                 action: 'basket/update',
                 extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
                 id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
-                org_id: object.item.item.org_id,
-                store_id: object.item.item.store_id,
-                id_remain: object.item.item.remain_id,
+                org_id: object.item.org_id,
+                store_id: object.item.store_id,
+                id_remain: object.item.remain_id,
                 count: object.value,
-                key: object.item.item.basket.key,
-                actions: object.item.item.basket.ids_actions
+                key: object.item.basket.key,
+                actions: object.item.basket.ids_actions
             };
             this.busket_from_api(data).then(() => {
                 this.busket_from_api({
@@ -870,7 +869,7 @@ export default {
                     if(!response?.data?.data?.success && response?.data?.data?.message){
                         this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
                     }
-                    const index = this.fetchIds.indexOf(object.item.item.key);
+                    const index = this.fetchIds.indexOf(object.item.key);
                     if (index !== -1) {
                         this.fetchIds.splice(index, 1); // Удаляем один элемент по индексу
                     }
@@ -884,10 +883,10 @@ export default {
                         add: {
                         products: [
                             {
-                                id: object.item.item.id,
-                                name: object.item.item.name,
-                                price: object.item.item.price,
-                                category: object.item.item.catalog,
+                                id: object.item.id,
+                                name: object.item.name,
+                                price: object.item.price,
+                                category: object.item.catalog,
                                 quantity: object.value
                             }
                         ]
@@ -898,8 +897,9 @@ export default {
             this.$emit('updateBasket');
         },
         ElemCountComplect(object) {
-			if (!this.fetchIds.includes(object.item.key)) {
-                this.fetchIds.push(object.item.key);
+            console.log(object)
+			if (!this.fetchIds.includes(object.item.item.key)) {
+                this.fetchIds.push(object.item.item.key);
             }
 			if (object.value > Number(object.max)) {
 				this.modal_remain = true;
@@ -935,7 +935,7 @@ export default {
                         if(!response?.data?.data?.success && response?.data?.data?.message){
 							this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
 						}
-						const index = this.fetchIds.indexOf(object.item.key);
+						const index = this.fetchIds.indexOf(object.item.item.key);
 						if (index !== -1) {
 							this.fetchIds.splice(index, 1); // Удаляем один элемент по индексу
 						}

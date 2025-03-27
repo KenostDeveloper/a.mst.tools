@@ -160,10 +160,13 @@
 					<tr>
 						<th v-for="(row, index) in table_data" :key="index">
 							<div v-if="row.type == 'editmode' && this.editMode">
-								<!-- <Checkbox v-model="all_check" :binary="true" /> -->
-								<!-- <Checkbox :modelValue="all_check" @update:modelValue="all_check = $event" :binary="true" /> -->
-								<Checkbox :modelValue="all_check" @update:modelValue="val => all_check = val" :binary="true" />
-
+								<!-- <Checkbox :modelValue="all_check" @update:modelValue="val => all_check = val" :binary="true" /> -->
+								<!-- Удалить этот дублирующий Checkbox -->
+								<Checkbox
+									:modelValue="allChecked"
+									@update:modelValue="toggleAllChecked"
+									:binary="true"
+								/>
 							</div>
 							<div v-else>
 								<a
@@ -190,10 +193,10 @@
 						:row_data="row"
 						:keys="table_data"
 						:editMode="editMode"
+						:selectedItems="this.selectedItems"
 						@deleteElem="deleteElem"
 						@updateElem="updateElem"
 						@viewElem="viewElem"
-						@editElem="editElem"
 						@clickElem="clickElem"
 						@checkElem="checkElem"
 						@approveElem="approveElem"
@@ -321,10 +324,13 @@ export default {
 			type: Object,
 			default: {},
 		},
+		selectedItems: {
+			type: Array,
+			default: []
+		}
 	},
 	data() {
 		return {
-			selectedItems: [],
 			localItems: [], // копия items_data
 			filter: "",
 			filtersdata: {},
@@ -347,69 +353,97 @@ export default {
 			}
 			return pages;
 		},
-		all_check: {
-			get() {
-			// Просто считаем, отмечены ли все
-			return this.localItems.length > 0 && this.localItems.every(item => item.checked === true);
-			},
-			set(val) {
-			// Чтобы не зациклить: если текущее значение уже равно — ничего не делаем
-			const alreadyAll = this.localItems.every(item => item.checked === val);
-			if (alreadyAll) return;
-
-			this.localItems = this.localItems.map(item => ({
-				...item,
-				checked: val
-			}));
-
-			this.selectedItems = val ? [...this.localItems] : [];
-			this.$emit("checkElem", this.selectedItems.map(item => item.id));
-			}
+		// all_check: {
+		// 	get() {
+		// 	if (!this.localItems.length) return false;
+		// 	return this.localItems.every(item => this.selectedItems.includes(item.id));
+		// 	},
+		// 	set(val) {
+		// 	const currentPageIds = this.localItems.map(item => item.id);
+			
+		// 	if (val) {
+		// 		// Добавляем ID текущей страницы к выбранным
+		// 		const newSelected = [...new Set([...this.selectedItems, ...currentPageIds])];
+		// 		this.selectedItems = newSelected;
+		// 	} else {
+		// 		// Удаляем ID текущей страницы из выбранных
+		// 		this.selectedItems = this.selectedItems.filter(id => !currentPageIds.includes(id));
+		// 	}
+			
+		// 	this.$emit("checkElem", this.selectedItems);
+		// 	}
+		// },
+		allChecked() {
+			if (!this.localItems.length) return false;
+			return this.localItems.every(item => this.selectedItems.includes(item.id));
 		}
 	},
 	methods: {
 		...mapActions(["get_vendors_from_api", 'org_get_stores_from_api']),
 		checkElem(data) {
-		const exists = this.selectedItems.find(item => item.id === data.id)
-		if (data.checked && !exists) {
-			this.selectedItems.push(data)
-		} else if (!data.checked && exists) {
-			this.selectedItems = this.selectedItems.filter(item => item.id !== data.id)
-		}
-
-		// если нужно — эмитим наружу
-		this.$emit("checkElem", this.selectedItems.map(item => item.id))
-
-		// можно логировать для проверки
-		// console.log("✅ Selected IDs:", this.selectedItems.map(item => item.id))
+			this.$emit("checkElem", data);
 		},
 		viewElem (data) {
 			this.$emit('viewElem', data)
 		},
+		toggleAllChecked(checked) {
+			// console.log(this.items_data)
+			if(checked){
+				let newSelected = Object.values(this.selectedItems);
+				console.log(newSelected)
+				for(let i = 0; i < Object.keys(this.items_data).length; i++){
+					// console.log(this.items_data[Object.keys(this.items_data)[i]].id)
+					newSelected.push(this.items_data[Object.keys(this.items_data)[i]].id);
+				}
+				this.$emit("checkElem", newSelected);
+			} else{
+				let newSelected = this.selectedItems;
+				for(let i = 0; i < Object.keys(this.items_data).length; i++){
+					newSelected = newSelected.filter(item => item !== this.items_data[Object.keys(this.items_data)[i]].id);
+				}
+				this.$emit("checkElem", newSelected);
+			}
+		},
+		// 	const currentPageIds = this.localItems.map(item => item.id);
+			
+		// 	if (checked) {
+		// 	this.selectedItems = [...new Set([...this.selectedItems, ...currentPageIds])];
+		// 	} else {
+		// 	this.selectedItems = this.selectedItems.filter(id => !currentPageIds.includes(id));
+		// 	}
+			
+		// 	this.$emit("checkElem", this.selectedItems);
+			
+		// 	// Обновляем состояние чекбоксов на текущей странице
+		// 	this.localItems = this.localItems.map(item => ({
+		// 	...item,
+		// 	checked: checked
+		// 	}));
+		// },
 		// setAllCheck(event) {
 		// 	this.$emit("setAllCheck", event);
 		// },
-		setAllCheck(event) {
-			// this.all_check = event;
+		// setAllCheck(event) {
+		// 	// this.all_check = event;
 
-			if (!Array.isArray(this.items_data)) return;
+		// 	if (!Array.isArray(this.items_data)) return;
 
-			this.items_data.forEach(item => {
-				item.checked = this.all_check;
-			});
+		// 	this.items_data.forEach(item => {
+		// 		item.checked = this.all_check;
+		// 	});
 
-			this.selectedItems = this.all_check
-				? this.items_data.map(item => ({ ...item }))
-				: [];
+		// 	this.selectedItems = this.all_check
+		// 		? this.items_data.map(item => ({ ...item }))
+		// 		: [];
 
-			this.$emit("checkElem", this.selectedItems.map(item => item.id));
+		// 	this.$emit("checkElem", this.selectedItems.map(item => item.id));
 
-			// this.selectedItems = !this.all_check
-			// 	? this.items_data.map(item => ({ ...item }))
-			// 	: [];
-			// console.log(this.selectedItems)
-			// this.$emit("checkElem", this.selectedItems.map(item => item.id));
-		},
+		// 	// this.selectedItems = !this.all_check
+		// 	// 	? this.items_data.map(item => ({ ...item }))
+		// 	// 	: [];
+		// 	// console.log(this.selectedItems)
+		// 	// this.$emit("checkElem", this.selectedItems.map(item => item.id));
+		// },
 		deleteElem(data) {
 			this.$emit("deleteElem", data);
 		},
@@ -432,8 +466,26 @@ export default {
 			this.$emit("editNumber", object);
 			console.log('edit', object)
 		},
+		// filterglobalTable(checked) {
+		// 	if (checked) {
+		// 		this.selectedItems = [...new Set([...this.selectedItems, ...this.products.ids])];
+		// 	} else {
+		// 		const currentPageIds = this.localItems.map(item => item.id);
+		// 		this.selectedItems = this.selectedItems.filter(id => 
+		// 		!this.products.ids.includes(id) || currentPageIds.includes(id)
+		// 		);
+		// 	}
+			
+		// 	this.$emit("checkElem", [...this.selectedItems]);
+			
+		// 	// Обновляем чекбоксы на текущей странице
+		// 	this.localItems = this.localItems.map(item => ({
+		// 		...item,
+		// 		checked: checked || this.selectedItems.includes(item.id)
+		// 	}));
+		// },
 		setFilter(type = "0") {
-      	console.log(type);
+      		console.log(type);
 			if (type === "filter") {
 				if (this.filter.length >= 3 || this.filter.length === 0) {
 					setTimeout(() => {
@@ -545,21 +597,21 @@ export default {
 			}
 		},
 		items_data: {
-			handler(val) {
-				this.localItems = val.map(item => ({ ...item, checked: !!item.checked }));
+			handler(newVal) {
+			this.localItems = newVal
 			},
-			immediate: true,
+			immediate: true
 		},
-		all_check(val) {
-			if (!Array.isArray(this.localItems)) return;
+		// all_check(val) {
+		// 	if (!Array.isArray(this.localItems)) return;
 
-			this.localItems.forEach(item => {
-				if (item.checked !== val) item.checked = val;
-			});
+		// 	this.localItems.forEach(item => {
+		// 		if (item.checked !== val) item.checked = val;
+		// 	});
 
-			this.selectedItems = val ? [...this.localItems] : [];
-			this.$emit("checkElem", this.selectedItems.map(item => item.id));
-		},
+		// 	this.selectedItems = val ? [...this.localItems] : [];
+		// 	this.$emit("checkElem", this.selectedItems.map(item => item.id));
+		// },
 		filters: {
 			handler(newVal, oldVal) {
 				// console.log('Filters updated:', newVal, oldVal);
@@ -584,7 +636,16 @@ export default {
 			},
 			deep: true,
 			immediate: true, // Сразу выполнить при создании компонента
-		}
+		},
+		// allChecked(val) {
+		// 	if (!Array.isArray(this.localItems)) return;
+			
+		// 	this.localItems.forEach(item => {
+		// 	item.checked = val;
+		// 	});
+			
+		// 	this.$emit("checkElem", val ? this.localItems.map(item => item.id) : []);
+		// }
 	},
 };
 </script>

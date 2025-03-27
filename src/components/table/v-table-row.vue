@@ -6,6 +6,7 @@
       :cell_data="row"
       :cell_key="index"
       :value="row_data"
+      :selectedItems="this.selectedItems"
       :editMode="editMode"
       @deleteElem="deleteElem"
       @updateElem="updateElem"
@@ -25,6 +26,7 @@
       :cell_data="row"
       :cell_key="index"
       :value="row_data"
+      :selectedItems="this.selectedItems"
       :editMode="editMode"
       @deleteElem="deleteElem"
       @updateElem="updateElem"
@@ -68,7 +70,11 @@ export default {
     link_row: {
       type: Object,
       default: {}
-    }
+    },
+		selectedItems: {
+			type: Array,
+			default: []
+		}
   },
   data () {
     return {
