@@ -73,7 +73,6 @@
 					:pagination_offset="this.pagination_offset"
 					:page="this.page"
 					:table_data="this.table_data"
-					:editMode="this.editMode"
 					title="Отгрузки"
 					@filter="filter"
 					@setAllCheck="setAll"
@@ -186,7 +185,7 @@
 		</div> -->
 					<div class="shopping-kenost std-shipping-create">
 						<div class="std-display-contents">
-							<p class="shopping-kenost__b std-dropdown__title">Дата</p>
+							<!-- <p class="shopping-kenost__b std-dropdown__title">Дата</p> -->
 							<div class="dart-alert dart-alert-info">
 								Если Вы выберите повторение отгрузки, то смещение дат относительно
 								самой отгрузки и датой окончания приемки заказов будет выставлено
@@ -200,7 +199,7 @@
 											error: v$.form.dateStart.$errors.length,
 										}"
 									>
-										<p class="k-mini-text">Дата отгрузки</p>
+										<p class="k-mini-text">Дата отправления машины</p>
 										<CalendarVue
 											showIcon
 											id="calendar-24h"
@@ -647,8 +646,7 @@ export default {
 			calendarIsExpanded: false,
 			loading_page: true,
 			loading: false,
-			editWindow: false,
-			editMode: false,
+			editWindow: true,
 			showShipModal: false,
 			showShip: false,
 			stores: [],
@@ -971,29 +969,36 @@ export default {
 			this.showShipModal = true;
 		},
 		editShipping(data) {
-			this.editWindow = true;
-			const timing = JSON.parse(data.timing);
-			this.form.id = data.id;
-			this.form.timeSelected.repeater = timing.repeater;
-			this.form.timeSelected.weeks = timing.weeks;
-			this.form.timeSelected.days = timing.days;
-			this.form.timeSelected.range = timing.range;
-			this.form.selectedStores = null;
-			this.form.selectedCities = JSON.parse(data.properties);
-			for (let i = 0; i < this.form.selectedCities.length; i++) {
-				var sparts = this.form.selectedCities[i].date.date.split(" ");
-				var parts = sparts[0].split("-");
-				this.form.citiesDates[this.form.selectedCities[i].value] = new Date(
-					parts[0],
-					parts[1] - 1,
-					parts[2]
-				);
+			if (new Date(data.date_from) > new Date()) {
+				this.editWindow = true;
+				const timing = JSON.parse(data.timing);
+				this.form.id = data.id;
+				this.form.timeSelected.repeater = timing.repeater;
+				this.form.timeSelected.weeks = timing.weeks;
+				this.form.timeSelected.days = timing.days;
+				this.form.timeSelected.range = timing.range;
+				this.form.selectedStores = null;
+				this.form.selectedCities = JSON.parse(data.properties);
+				console.log(this.form.selectedCities)
+				if(this.form.selectedCities){
+					for (let i = 0; i < this.form.selectedCities.length; i++) {
+						var sparts = this.form.selectedCities[i].date.date.split(" ");
+						var parts = sparts[0].split("-");
+						this.form.citiesDates[this.form.selectedCities[i].value] = new Date(
+							parts[0],
+							parts[1] - 1,
+							parts[2]
+						);
+					}
+				}
+				this.form.store_id = data.warehouse_id;
+				this.form.dateStart = new Date(data.date_from);
+				var parts = data.date_order_end.split(".");
+				this.form.dateEnd = new Date(parts[2], parts[1] - 1, parts[0]);
+				this.showShip = true;
+			} else{
+				this.$toast.add({ severity: 'error', summary: "Ошибка", detail: "Эту отгрузку нельзя отредактировать!", life: 3000 });
 			}
-			this.form.store_id = data.warehouse_id;
-			this.form.dateStart = new Date(data.date_from);
-			var parts = data.date_order_end.split(".");
-			this.form.dateEnd = new Date(parts[2], parts[1] - 1, parts[0]);
-			this.showShip = true;
 		},
 		deleteShipping(data) {
 			this.$confirm.require({

@@ -199,6 +199,7 @@
 						@viewElem="viewElem"
 						@clickElem="clickElem"
 						@checkElem="checkElem"
+						@editElem="editElem"
 						@approveElem="approveElem"
 						@disapproveElem="disapproveElem"
 						@editNumber="editNumber"
@@ -464,7 +465,6 @@ export default {
 		},
 		editNumber(object) {
 			this.$emit("editNumber", object);
-			console.log('edit', object)
 		},
 		// filterglobalTable(checked) {
 		// 	if (checked) {
