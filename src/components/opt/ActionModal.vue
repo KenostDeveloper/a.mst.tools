@@ -113,6 +113,11 @@
                                         {{ tag.min_count.toLocaleString('ru') }}
                                         шт.</span>
                                 </p>
+                                <img v-if="tag.type == 'integration'"
+                                src="../../assets/images/icons/action/box.svg" alt="" />
+                                <p v-if="tag.type == 'integration'">
+                                    Необходима интеграция склада с порталом
+                                </p>
                             </div>
                         </div>
 

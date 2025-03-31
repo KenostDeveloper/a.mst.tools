@@ -72,7 +72,7 @@
                                         </div>
                                         <div class="k-order__product-data">
                                             <span class="k-order__article">{{item.article}}</span>
-                                            <p class="k-order__info">Отсрочка: <span>{{item.delay ? Number(item.delay).toFixed(1) + ' дн' : 'Предоплата'}}</span></p>
+                                            <p class="k-order__info">{{ item.delay_type? 'Под реализацию' : 'Отсрочка' }}: <span>{{item.delay ? Number(item.delay).toFixed(1) + ' дн' : 'Предоплата'}}</span></p>
                                             <p class="k-order__info">Оплата доставки: <span>{{item.payer === '1' ? 'Поставщик' : 'Покупатель'}}</span></p>
                                         </div>
                                     </div>
