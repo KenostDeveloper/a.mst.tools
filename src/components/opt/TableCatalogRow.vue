@@ -461,7 +461,7 @@
                     <b>{{ this.modal_info_data.our_available }}</b>
                 </div>
                 <div class="kenost-product-info__tab">
-                    <p>Скорость продаж за 30 дней, шт/день</p>
+                    <p>Скорость продаж, шт/день</p>
                     <b>{{ this.modal_info_data.our_purchase_speed }}</b>
                 </div>
                 <div class="kenost-product-info__tab">
