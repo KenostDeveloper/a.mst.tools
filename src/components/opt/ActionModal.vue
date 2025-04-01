@@ -23,7 +23,9 @@
                         ? '/images/icons/action/gray/time.svg'
                             : '/images/icons/action/black/time.svg'
                         " alt="" /> -->
-                    <p v-if="tag.type == 'delay'">Отсроч. {{ tag.value }} дн.</p>
+                    <!-- <p v-if="tag.type == 'delay'">{{tag.type_delay == 1? 'Отсроч.' : 'Под реал.'}} {{ tag.value }}  дн.</p> -->
+                    <p v-if="tag.type == 'delay'">{{ Number(tag.type_delay) === 2 ? 'Под реал.' : 'Отсроч.' }} {{ tag.value }}  дн.</p>
+                    
 
                     <!-- <img v-if="tag.type == 'sale' && tag.value > 0" :src="action.enabled
                         ? '/images/icons/action/gray/sale.svg'
@@ -110,6 +112,11 @@
                                         при покупке от
                                         {{ tag.min_count.toLocaleString('ru') }}
                                         шт.</span>
+                                </p>
+                                <img v-if="tag.type == 'integration'"
+                                src="../../assets/images/icons/action/box.svg" alt="" />
+                                <p v-if="tag.type == 'integration'">
+                                    Необходима интеграция склада с порталом
                                 </p>
                             </div>
                         </div>

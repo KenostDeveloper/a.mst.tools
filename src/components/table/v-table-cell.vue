@@ -10,7 +10,11 @@
       </div>
     </div>
     <div class="cell_value" v-else-if="cell_data.type == 'editmode' && editMode">
-      <Checkbox v-model="check" :binary="true" @input="checkRow"/>
+      <Checkbox
+        v-model="isChecked"
+        :binary="true"
+        @change="toggleSelection(value.id)"
+      />
     </div>
     <div class="cell_value" v-else-if="cell_data.type == 'text'">
       {{ value[cell_key] }}
@@ -88,58 +92,6 @@
         @update:modelValue="editValue(numbers[cell_key], cell_key)"
       />
     </div>
-
-    <!-- <div class="std-statistics__product-info table-product">
-      <div class="table-product__header">
-        <div class="table-product__img">
-          <img src="" alt="" />
-        </div>
-        <div class="table-product__title-container">
-          <h2 class="table-product__title">Раскладная светодиодная лампа RSV UFO-30W-6500K-E27</h2>
-          <span class="table-product__article">Арт:100618</span>
-        </div>
-      </div>
-      <div class="table-product__content">
-        <div class="table-product__row">
-          <span class="table-product__label">Цена товара</span>
-          <span class="table-product__value">122 214</span>
-        </div>
-        <div class="table-product__row">
-          <span class="table-product__label">Остаток сейчас</span>
-          <span class="table-product__value">0</span>
-        </div>
-        <div class="table-product__row">
-          <span class="table-product__label">Продажа за 30 дней</span>
-          <span class="table-product__value">0</span>
-        </div>
-        <div class="table-product__row">
-          <span class="table-product__label">Скорость продаж шт/день</span>
-          <span class="table-product__value">0</span>
-        </div>
-        <div class="table-product__row">
-          <span class="table-product__label">Скорость продажи шт/день</span>
-          <span class="table-product__value">0</span>
-        </div>
-        <div class="table-product__row">
-          <span class="table-product__label">Дней с Out Of Stok</span>
-          <span class="table-product__value">0</span>
-        </div>
-        <div class="table-product__row">
-          <span class="table-product__label">Упущенная выручка</span>
-          <span class="table-product__value">0</span>
-        </div>
-        <div class="table-product__row">
-          <span class="table-product__label">Прогноз остатков на завтра / 7 дней</span>
-          <span class="table-product__value">344412.56</span>
-        </div>
-        <div class="table-product__row">
-          <span class="table-product__label">Изменение остатков</span>
-          <div class="table-product__value">
-            <Chart type="line" :data="value[cell_key]" :options="chart_options" class="w-full md:w-5rem" />
-          </div>
-        </div>
-      </div>
-    </div> -->
   </td>
 </template>
 
@@ -151,7 +103,7 @@ import Chart from 'primevue/chart'
 
 export default {
   name: 'v-table-cell',
-  emits: ['deleteElem', 'updateElem', 'editElem', 'clickElem', 'viewElem', 'checkElem', 'approveElem', 'disapproveElem', 'editNumber'],
+  emits: ['deleteElem', 'updateElem', 'editElem', 'clickElem', 'viewElem', 'checkElem', 'approveElem', 'disapproveElem', 'editNumber', 'update:selectedItems'],
   props: {
     editMode: {
       type: Boolean,
@@ -178,11 +130,14 @@ export default {
       default: () => {
         return {}
       }
+    },
+    selectedItems: {
+      type: Array,
+      default: () => []
     }
   },
   data () {
     return {
-      check: false,
       blank: {},
       numbers: {},
       chart_options: {
@@ -201,6 +156,15 @@ export default {
     }
   },
   computed: {
+    isChecked: {
+      get() {
+        return this.selectedItems.includes(this.value.id)
+      },
+      set(value) {
+        console.log(value)
+        // Пустой сеттер, так как изменения обрабатываются в toggleSelection
+      }
+    },
     linkParams () {
       const linkparams = {}
       if (this.cell_data.type === 'link') {
@@ -212,15 +176,38 @@ export default {
             linkparams[key] = this.value[this.cell_data.link_params[key]]
           }
         }
-        // console.log(linkparams)
       }
       return linkparams
     }
   },
   methods: {
+    toggleSelection(id) {
+      console.log(id)
+      if(this.selectedItems.includes(id)){
+        // console.log('da')
+        // console.log(this.selectedItems.filter(item => item !== id))
+        this.$emit("checkElem", this.selectedItems.filter(item => item !== id));
+        // this.selectedItems = this.selectedItems.filter(item => item !== id);
+      } else{
+        // console.log('net')
+        this.selectedItems.push(id)
+      }
+      // const newSelectedItems = [...this.selectedItems]
+      // const itemId = this.value.id
+      // const index = newSelectedItems.indexOf(itemId)
+      
+      // if (index === -1) {
+      //   // Добавляем элемент
+      //   newSelectedItems.push(itemId)
+      // } else {
+      //   // Удаляем элемент
+      //   newSelectedItems.splice(index, 1)
+      // }
+      
+      // // Эмитим событие для обновления selectedItems в родительском компоненте
+      // this.$emit('update:selectedItems', newSelectedItems)
+    },
     actionElem (action) {
-      // console.log(action)
-      // console.log(this.value)
       if (action === 'delete') {
         this.$emit('deleteElem', this.value)
       }
@@ -245,11 +232,6 @@ export default {
     },
     editValue (number, name) {
       this.$emit('editNumber', { value: number, id: this.value.id, name: name })
-    },
-    checkRow (data) {
-      const val = this.value
-      val.checked = data
-      this.$emit('checkElem', val)
     }
   },
   components: {
@@ -260,13 +242,6 @@ export default {
   },
   mounted() {
     this.blank = this.cell_data
-    if (this.cell_data.type === 'editmode') {
-      if (this.value.checked) {
-        this.check = true
-      } else {
-        this.check = false
-      }
-    }
     if (this.blank.type === 'actions') {
       for (const key in this.blank.available) {
         if (Object.prototype.hasOwnProperty.call(this.blank.available[key], 'link') && Object.prototype.hasOwnProperty.call(this.blank.available[key], 'link_values')) {
@@ -286,26 +261,6 @@ export default {
   },
   unmounted() {
     this.numbers[this.cell_key] = this.value[this.cell_key]
-  },
-  watch: {
-    cell_data: function (newVal, oldVal) {
-      if (newVal.type === 'editmode') {
-        if (this.value.checked) {
-          this.check = true
-        } else {
-          this.check = false
-        }
-      }
-    },
-    value: function (newVal, oldVal) {
-      if (this.cell_data.type === 'editmode') {
-        this.check = newVal.checked
-      }
-      if (this.cell_data.type === 'number') {
-        this.numbers[this.cell_key] = this.value[this.cell_key]
-      }
-      // console.log('watch value')
-    }
   }
 }
 </script>
@@ -324,7 +279,6 @@ export default {
 }
 .img_abs{
   img{
-    // max-width: 100px;
     max-width: 75px;
     max-height: 70px;
     object-fit: contain;

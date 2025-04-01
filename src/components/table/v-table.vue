@@ -160,7 +160,13 @@
 					<tr>
 						<th v-for="(row, index) in table_data" :key="index">
 							<div v-if="row.type == 'editmode' && this.editMode">
-								<Checkbox v-model="all_check" :value="true" @input="setAllCheck" />
+								<!-- <Checkbox :modelValue="all_check" @update:modelValue="val => all_check = val" :binary="true" /> -->
+								<!-- Удалить этот дублирующий Checkbox -->
+								<Checkbox
+									:modelValue="allChecked"
+									@update:modelValue="toggleAllChecked"
+									:binary="true"
+								/>
 							</div>
 							<div v-else>
 								<a
@@ -180,18 +186,20 @@
 				</thead>
 
 				<tbody v-if="total != -1">
+					<!-- v-for="row in items_data" -->
 					<v-table-row
-						v-for="row in items_data"
+						v-for="row in localItems"
 						:key="row.id"
 						:row_data="row"
 						:keys="table_data"
 						:editMode="editMode"
+						:selectedItems="this.selectedItems"
 						@deleteElem="deleteElem"
 						@updateElem="updateElem"
 						@viewElem="viewElem"
-						@editElem="editElem"
 						@clickElem="clickElem"
 						@checkElem="checkElem"
+						@editElem="editElem"
 						@approveElem="approveElem"
 						@disapproveElem="disapproveElem"
 						@editNumber="editNumber"
@@ -275,9 +283,7 @@ export default {
 		},
 		items_data: {
 			type: Array,
-			default: () => {
-				return null;
-			},
+			default: () => [],
 		},
 		filters: {
 			type: Object,
@@ -319,9 +325,14 @@ export default {
 			type: Object,
 			default: {},
 		},
+		selectedItems: {
+			type: Array,
+			default: []
+		}
 	},
 	data() {
 		return {
+			localItems: [], // копия items_data
 			filter: "",
 			filtersdata: {},
 			sort: {},
@@ -331,7 +342,7 @@ export default {
 				maxDate: null,
 			},
 			filteredVendor: null,
-			all_check: 0,
+			all_check: false,
 		};
 	},
 	computed: {
@@ -343,6 +354,30 @@ export default {
 			}
 			return pages;
 		},
+		// all_check: {
+		// 	get() {
+		// 	if (!this.localItems.length) return false;
+		// 	return this.localItems.every(item => this.selectedItems.includes(item.id));
+		// 	},
+		// 	set(val) {
+		// 	const currentPageIds = this.localItems.map(item => item.id);
+			
+		// 	if (val) {
+		// 		// Добавляем ID текущей страницы к выбранным
+		// 		const newSelected = [...new Set([...this.selectedItems, ...currentPageIds])];
+		// 		this.selectedItems = newSelected;
+		// 	} else {
+		// 		// Удаляем ID текущей страницы из выбранных
+		// 		this.selectedItems = this.selectedItems.filter(id => !currentPageIds.includes(id));
+		// 	}
+			
+		// 	this.$emit("checkElem", this.selectedItems);
+		// 	}
+		// },
+		allChecked() {
+			if (!this.localItems.length) return false;
+			return this.localItems.every(item => this.selectedItems.includes(item.id));
+		}
 	},
 	methods: {
 		...mapActions(["get_vendors_from_api", 'org_get_stores_from_api']),
@@ -350,11 +385,66 @@ export default {
 			this.$emit("checkElem", data);
 		},
 		viewElem (data) {
-      this.$emit('viewElem', data)
-    },
-		setAllCheck(event) {
-			this.$emit("setAllCheck", event);
+			this.$emit('viewElem', data)
 		},
+		toggleAllChecked(checked) {
+			// console.log(this.items_data)
+			if(checked){
+				let newSelected = Object.values(this.selectedItems);
+				console.log(newSelected)
+				for(let i = 0; i < Object.keys(this.items_data).length; i++){
+					// console.log(this.items_data[Object.keys(this.items_data)[i]].id)
+					newSelected.push(this.items_data[Object.keys(this.items_data)[i]].id);
+				}
+				this.$emit("checkElem", newSelected);
+			} else{
+				let newSelected = this.selectedItems;
+				for(let i = 0; i < Object.keys(this.items_data).length; i++){
+					newSelected = newSelected.filter(item => item !== this.items_data[Object.keys(this.items_data)[i]].id);
+				}
+				this.$emit("checkElem", newSelected);
+			}
+		},
+		// 	const currentPageIds = this.localItems.map(item => item.id);
+			
+		// 	if (checked) {
+		// 	this.selectedItems = [...new Set([...this.selectedItems, ...currentPageIds])];
+		// 	} else {
+		// 	this.selectedItems = this.selectedItems.filter(id => !currentPageIds.includes(id));
+		// 	}
+			
+		// 	this.$emit("checkElem", this.selectedItems);
+			
+		// 	// Обновляем состояние чекбоксов на текущей странице
+		// 	this.localItems = this.localItems.map(item => ({
+		// 	...item,
+		// 	checked: checked
+		// 	}));
+		// },
+		// setAllCheck(event) {
+		// 	this.$emit("setAllCheck", event);
+		// },
+		// setAllCheck(event) {
+		// 	// this.all_check = event;
+
+		// 	if (!Array.isArray(this.items_data)) return;
+
+		// 	this.items_data.forEach(item => {
+		// 		item.checked = this.all_check;
+		// 	});
+
+		// 	this.selectedItems = this.all_check
+		// 		? this.items_data.map(item => ({ ...item }))
+		// 		: [];
+
+		// 	this.$emit("checkElem", this.selectedItems.map(item => item.id));
+
+		// 	// this.selectedItems = !this.all_check
+		// 	// 	? this.items_data.map(item => ({ ...item }))
+		// 	// 	: [];
+		// 	// console.log(this.selectedItems)
+		// 	// this.$emit("checkElem", this.selectedItems.map(item => item.id));
+		// },
 		deleteElem(data) {
 			this.$emit("deleteElem", data);
 		},
@@ -376,8 +466,26 @@ export default {
 		editNumber(object) {
 			this.$emit("editNumber", object);
 		},
+		// filterglobalTable(checked) {
+		// 	if (checked) {
+		// 		this.selectedItems = [...new Set([...this.selectedItems, ...this.products.ids])];
+		// 	} else {
+		// 		const currentPageIds = this.localItems.map(item => item.id);
+		// 		this.selectedItems = this.selectedItems.filter(id => 
+		// 		!this.products.ids.includes(id) || currentPageIds.includes(id)
+		// 		);
+		// 	}
+			
+		// 	this.$emit("checkElem", [...this.selectedItems]);
+			
+		// 	// Обновляем чекбоксы на текущей странице
+		// 	this.localItems = this.localItems.map(item => ({
+		// 		...item,
+		// 		checked: checked || this.selectedItems.includes(item.id)
+		// 	}));
+		// },
 		setFilter(type = "0") {
-      	console.log(type);
+      		console.log(type);
 			if (type === "filter") {
 				if (this.filter.length >= 3 || this.filter.length === 0) {
 					setTimeout(() => {
@@ -457,6 +565,13 @@ export default {
 			search: "",
 		};
 		this.get_vendors_from_api(data).then((this.filteredVendor = this.getvendors));
+		if (Array.isArray(this.items_data)) {
+			this.items_data.forEach(item => {
+				if (typeof item.checked === 'undefined') {
+					item.checked = false;
+				}
+			});
+		}
 	},
 	created() {
 		// console.log(this.filters)
@@ -481,6 +596,22 @@ export default {
 				this.$emit("setAllCheck", [this.all_check]);
 			}
 		},
+		items_data: {
+			handler(newVal) {
+			this.localItems = newVal
+			},
+			immediate: true
+		},
+		// all_check(val) {
+		// 	if (!Array.isArray(this.localItems)) return;
+
+		// 	this.localItems.forEach(item => {
+		// 		if (item.checked !== val) item.checked = val;
+		// 	});
+
+		// 	this.selectedItems = val ? [...this.localItems] : [];
+		// 	this.$emit("checkElem", this.selectedItems.map(item => item.id));
+		// },
 		filters: {
 			handler(newVal, oldVal) {
 				// console.log('Filters updated:', newVal, oldVal);
@@ -505,7 +636,16 @@ export default {
 			},
 			deep: true,
 			immediate: true, // Сразу выполнить при создании компонента
-		}
+		},
+		// allChecked(val) {
+		// 	if (!Array.isArray(this.localItems)) return;
+			
+		// 	this.localItems.forEach(item => {
+		// 	item.checked = val;
+		// 	});
+			
+		// 	this.$emit("checkElem", val ? this.localItems.map(item => item.id) : []);
+		// }
 	},
 };
 </script>

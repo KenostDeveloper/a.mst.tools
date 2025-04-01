@@ -5187,7 +5187,7 @@ button.std-icon__wrapper {
 		img {
 			width: 17px;
 			height: 17px !important;
-			object-fit: cover;
+			object-fit: contain;
 			border-radius: 50%;
 		}
 	}

@@ -84,12 +84,15 @@
             <td class="k-table__remain-speed">
                 {{ items.our_available }} / {{ items.our_purchase_speed }}
             </td>
-            <td class="k-table__prognoz">
+            <td v-if="items.our_forecast && items.our_forecast < 0" class="k-table__prognoz cursor-pointer">
+                <span @click="addBasketForecast(item, index, Math.abs(items.our_forecast))">{{ items.our_forecast }}</span>
+            </td>
+            <td v-else class="k-table__prognoz">
                 {{ items.our_forecast }}
             </td>
             <td class="k-table__busket">
-                <!-- {{ item.min }} -->
-                <!-- {{ this.fetchIds.indexOf(item.remain_id) != -1 ? "Загрузка..." : "" }} -->
+                {{ this.fetchIds.indexOf(item.remain_id) != -1 ? "Загрузка..." : "" }}
+                
                 <form class="k-table__form" action="" :class="{ 'basket-true': item?.basket?.availability || this.add_basket.indexOf(item.key) != -1, 'loading-counter': this.fetchIds.indexOf(item.key) != -1 }">
                     <Counter
                         @ElemCount="ElemCount"
@@ -115,6 +118,7 @@
                             {{ Math.round(item.min_price.price).toLocaleString('ru') }} ₽
                         </div>
                     </div>
+                    {{ item.delay_type ? (item.delay_type == 2 ? 'Под реал.' : '') : '' }} <br v-if="item.delay_type == 2"></br>
                     {{ item.delay ? Number(item.delay).toFixed(1) + ' дн' : 'Предоплата' }}
                 </div>
             </td>
@@ -253,7 +257,8 @@
             'no-active': !this.active && !this.is_warehouses && items.total_stores > 1
         }">
             <td class="td-center" :class="{ 'pointer-none': index !== 0 }">
-                <span :style="'top:' + (complect.length * 74) / 2 + 'px'" v-if="index === 0"><i class="pi pi-minus"></i></span>
+                <!-- {{ Object.keys(complect.products, 1).length }} -->
+                <span :style="'top:' + ((Object.keys(complect.products).length * 100) / 2 - 50).toString() + '%'" v-if="index === 0"><i class="pi pi-minus"></i></span>
             </td>
             <!-- <td class="k-table__photo">
                 <img class="k-table__image" :src="item.image" alt="" />
@@ -479,6 +484,7 @@ import Dialog from 'primevue/dialog';
 import debounce from '../../utils/debounce';
 import ActionModal from './ActionModal.vue';
 import Chart from 'primevue/chart'
+import { resolveObjectKey } from 'chart.js/helpers';
 
 export default {
     name: 'TableCatalogRow',
@@ -724,7 +730,64 @@ export default {
             this.items.stores[index].basket.availability = true;
             this.$emit('updateBasket');
         },
+        addBasketForecast(item, index, count) {
+            if (!this.fetchIds.includes(item.key)) {
+                this.fetchIds.push(item.key);
+            }
+            const data = {
+                action: 'basket/add',
+                extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
+                id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
+                org_id: item.org_id,
+                store_id: item.store_id,
+                id_remain: item.id,
+                count: count <= Number(item.available)? count : Number(item.available),
+                actions: item.actions
+            };
+            this.busket_from_api(data).then(() => {
+                this.busket_from_api({
+                    action: 'basket/get',
+                    extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
+                    id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
+                    warehouse: 'all'
+                }).then((response) => {
+                    if(!response?.data?.data?.success && response?.data?.data?.message){
+                        this.$toast.add({ severity: 'error', summary: "Ошибка", detail: response?.data?.data?.message, life: 3000 });
+                    }
+                    setTimeout(() => {
+                        const index = this.fetchIds.indexOf(item.key);
+                        if (index !== -1) {
+                            this.fetchIds.splice(index, 1); // Удаляем один элемент по индексу
+                        }
+                    }, 1000)
+                });
+            });
 
+            // Убедитесь, что dataLayer существует
+            window.dataLayer = window.dataLayer || [];
+
+            // Отправка данных в dataLayer
+            window.dataLayer.push({
+            ecommerce: {
+                currencyCode: "RUB",  // Валюта
+                add: {
+                products: [
+                    {
+                        id: item.id,  // ID товара
+                        name: item.name,  // Название товара
+                        price: item.price,  // Цена товара
+                        category: item.catalog,  // Категория товара
+                        quantity: item.basket.count,  // Количество товара
+                    }
+                ]
+                }
+            }
+            });
+
+            // eslint-disable-next-line vue/no-mutating-props
+            this.items.stores[index].basket.availability = true;
+            this.$emit('updateBasket');
+        },
         addBasketComplect(item, index, action_id) {
             if (!this.add_basket.includes(item.key)) {
                 this.add_basket.push(item.key);
@@ -1066,7 +1129,7 @@ export default {
 
     span {
         position: absolute;
-        top: 100%;
+        top: 50%;
         transform: translate(0, -50%);
         width: 100%;
         left: 0;
