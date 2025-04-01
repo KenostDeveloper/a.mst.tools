@@ -54,23 +54,32 @@
               <div class="vendors_selected">
                 <span class="vendors_selected__label">Выбранные поставщики</span>
                 <div class="vendors_selected__rows" v-if="items.selected_count">
-                  <div class="vendors_selected__row" v-for="(item) in items.selected" :key="item.id">
-                    <a href="#" class="btn btn-close" @click.prevent="changeOpts(item.id, 0)">
-                      <!-- <i class="d_icon d_icon-close"></i> -->
-                      <img src="../../assets/images/icons/close.svg" alt="">
-                    </a>
-                    <div class="vendors_selected__row-text">
-                      <span class="name">{{ item.name }}</span>
-                      <span class="desc">{{ item.address }}</span>
-                      <span class="changevendor__description">{{ item.description }}</span>
-                      <div class="changevendor__info">
-                        <a :href="'tel:' + item.phone" target="_blank">{{ item.phone }}</a>
-                        <a :href="'mailto:' + item.email" target="_blank">{{ item.email }}</a>
-                        <a :href="item.website" target="_blank">{{ item.website }}</a>
+                  <div v-for="(item) in items.selected" :key="item.id">
+                    <div class="vendors_selected__row">
+                      <a href="#" class="btn btn-close" @click.prevent="changeOpts(item.id, 0)">
+                        <!-- <i class="d_icon d_icon-close"></i> -->
+                        <img src="../../assets/images/icons/close.svg" alt="">
+                      </a>
+                      <div class="vendors_selected__row-text">
+                        <span class="name">{{ item.name }}</span>
+                        <span class="desc">{{ item.address }}</span>
+                        <span class="changevendor__description">{{ item.description }}</span>
+                        <div class="changevendor__info">
+                          <a :href="'tel:' + item.phone" target="_blank">{{ item.phone }}</a>
+                          <a :href="'mailto:' + item.email" target="_blank">{{ item.email }}</a>
+                          <a :href="item.website" target="_blank">{{ item.website }}</a>
+                        </div>
+                      </div>
+                      <div class="image">
+                        <img :src="item.image" :alt="item.name">
                       </div>
                     </div>
-                    <div class="image">
-                      <img :src="item.image" :alt="item.name">
+                    <div class="mt-2 mb-4">
+                      <div v-for="(store) in item.stores" :key="store.id" class="flex mb-2">
+                        <Checkbox @change="changeStores(item.id, store.id, store.active)" v-model="store.active" :binary="true" :inputId="'store-'+ store.id" :name="'store-'+ store.id"
+                            value="true" />
+                        <label :for="'store-'+ store.id" class="ml-2">{{ store.address }}</label>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -169,6 +178,7 @@ export default {
           zoom: 9
         }
       },
+      test: false,
       loading: false,
       vendorForm: {
         selected: []
@@ -182,7 +192,8 @@ export default {
       'get_opt_vendors_from_api',
 			'get_opt_warehouse_catalog_from_api',
       'toggle_opts_visible',
-      'get_opt_products_from_api'
+      'get_opt_products_from_api',
+      'opt_api'
     ]),
     toggleVendorModal () {
       this.$emit('changeActive')
@@ -243,6 +254,26 @@ export default {
           }, 400)
         }
       }
+    },
+    changeStores(org_id, store_id, active){
+      console.log(org_id, store_id, active)
+      this.opt_api({
+        action: 'toggle/vendors/stores',
+        active: active,
+        extended_name: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? 'offer' : 'cart',
+        id: router?.currentRoute?._value.matched[4]?.name == 'purchases_offer' ? router.currentRoute._value.params.id_org_from : router.currentRoute._value.params.id,
+        org_id: org_id,
+        store_id: store_id,
+      }).then((result) => {
+              this.loading = false
+              this.get_opt_vendors_from_api()
+              this.vendorForm.selected = []
+              this.$emit('vendorCheck')
+              this.get_opt_products_from_api({
+                page: 1,
+                perpage: 25
+              });
+            })
     },
     checkVendors () {
       let error = true

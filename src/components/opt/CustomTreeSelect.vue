@@ -16,6 +16,7 @@
             :node="node" 
             v-model="selectedKeys"
             :disabledKeys="disabledKeys"
+            :forceExpandKeys="expandKeys"
           />
         </ul>
       </div>
@@ -50,13 +51,20 @@
       return {
         dropdownVisible: false,
         filter: "",
-        selectedKeys: Array.isArray(this.modelValue) ? [...this.modelValue] : []
+        selectedKeys: Array.isArray(this.modelValue) ? [...this.modelValue] : [],
+        expandKeys: [],
       };
     },
     computed: {
       filteredTreeData() {
-        if (!this.filter) return this.options;
-        return this.filterTree(this.options, this.filter.toLowerCase());
+        if (!this.filter) {
+          this.expandKeys = [];
+          return this.options;
+        }
+        const expanded = [];
+        const filtered = this.filterTree(this.options, this.filter.toLowerCase(), expanded);
+        this.expandKeys = expanded;
+        return filtered;
       },
       selectedLabels() {
         return this.selectedKeys.map(key => this.findNodeLabel(this.options, key)).filter(Boolean);
@@ -75,17 +83,25 @@
       toggleDropdown() {
         this.dropdownVisible = !this.dropdownVisible;
       },
-      filterTree(nodes, filter) {
-        return nodes
-          .map(node => {
-            if (node.label.toLowerCase().includes(filter)) return node;
-            if (node.children) {
-              const filteredChildren = this.filterTree(node.children, filter);
-              if (filteredChildren.length) return { ...node, children: filteredChildren };
+      filterTree(nodes, filter, expandCollector = [], parentPath = []) {
+        return nodes.map(node => {
+          const currentPath = [...parentPath, node.key];
+
+          if (node.label.toLowerCase().includes(filter)) {
+            expandCollector.push(...parentPath);
+            return node;
+          }
+
+          if (node.children) {
+            const filteredChildren = this.filterTree(node.children, filter, expandCollector, currentPath);
+            if (filteredChildren.length) {
+              expandCollector.push(...parentPath);
+              return { ...node, children: filteredChildren };
             }
-            return null;
-          })
-          .filter(Boolean);
+          }
+
+          return null;
+        }).filter(Boolean);
       },
       findNodeLabel(nodes, key) {
         for (let node of nodes) {
@@ -99,7 +115,8 @@
       },
       // Закрыть dropdown, если клик был вне компонента
       closeDropdown(event) {
-        if (!this.$refs.treeSelectContainer.contains(event.target)) {
+        const container = this.$refs.treeSelectContainer;
+        if (container && !container.contains(event.target)) {
           this.dropdownVisible = false;
         }
       }
