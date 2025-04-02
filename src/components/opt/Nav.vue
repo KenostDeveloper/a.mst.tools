@@ -414,6 +414,15 @@
                 <span class="error_desc" v-if="this.form_requirements_view.error">
                     Выберите поставщика
                 </span>
+                <div v-if="this.form_requirements_view.warehouse" class="mt-4">
+
+                    <!-- {{ this.form_requirements_view.warehouse }} -->
+                    <div v-for="(store) in this.form_requirements_view.warehouse.stores" :key="store.id" class="flex mb-2">
+                        <Checkbox @change="changeStores(item.id, store.id, store.active)" v-model="store.active" :binary="true" :inputId="'store-'+ store.id" :name="'store-'+ store.id"
+                            value="true" />
+                        <label :for="'store-'+ store.id" class="ml-2 text-black">Склад #{{ store.id }}, {{ store.address }}</label>
+                    </div>
+                </div>
             </div>
             <button class="dart-btn dart-btn-primary dart-btn-block" type="submit">Просмотреть предложения</button>
         </form>
@@ -534,6 +543,14 @@
                 <span class="error_desc" v-if="this.form_requirements_view.error">
                     Выберите поставщика
                 </span>
+                <div v-if="this.form_requirements_view.warehouse" class="mt-4">
+                    <!-- {{ this.form_requirements_view.warehouse }} -->
+                    <div v-for="(store) in this.form_requirements_view.warehouse.stores" :key="store.id" class="flex mb-2">
+                        <Checkbox @change="changeStores(item.id, store.id, store.active)" v-model="store.active" :binary="true" :inputId="'store-'+ store.id" :name="'store-'+ store.id"
+                            value="true" />
+                        <label :for="'store-'+ store.id" class="ml-2 text-black">Склад #{{ store.id }}, {{ store.address }}</label>
+                    </div>
+                </div>
             </div>
             <button class="dart-btn dart-btn-primary dart-btn-block" type="submit">Просмотреть предложения</button>
         </form>
@@ -557,6 +574,7 @@ import Dialog from "primevue/dialog";
 import DropZone from 'dropzone-vue';
 import vTable from "../table/v-table.vue";
 import { helpers, required } from '@vuelidate/validators';
+import Checkbox from 'primevue/checkbox'
 
 
 export default {
@@ -1129,7 +1147,7 @@ export default {
     updated(){
         this.namePathIsNav = router?.currentRoute?._value.matched[4]?.name;
     },
-    components: { Vendors, Accordion, Notification, NotificationButton, Dialog, DropZone, vTable, ConfirmDialog, Dropdown },
+    components: { Vendors, Accordion, Notification, NotificationButton, Dialog, DropZone, vTable, ConfirmDialog, Dropdown, Checkbox },
     computed: {
         ...mapGetters([
             'optvendors', 

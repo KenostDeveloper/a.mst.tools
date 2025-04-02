@@ -533,7 +533,7 @@
                         <div class="PickList__select mt-2" @click="setAllProducts(false)"><i
                                 class="pi pi-angle-double-left"></i></div>
                     </div>
-
+                    
                     <div :style="{ width: '40%' }">
                         <div class="PickList__selected">
                             <div class="PickList__title mb-4">
@@ -2825,9 +2825,12 @@ export default {
                 } else {
                     this.products = newVal.products;
                     // this.selected = newVal.selected
-                    if (newVal.selected) {
+                    if (Array.isArray(newVal.selected) && newVal.selected.length == 0) {
+                        this.selected = {};
+                    } else if(newVal.selected){
                         this.selected = newVal.selected;
                     }
+
                     if (newVal.visible) {
                         this.selected_visible = newVal.visible;
                         // console.log(this.selected_visible)

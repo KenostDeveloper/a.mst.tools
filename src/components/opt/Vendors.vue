@@ -78,7 +78,7 @@
                       <div v-for="(store) in item.stores" :key="store.id" class="flex mb-2">
                         <Checkbox @change="changeStores(item.id, store.id, store.active)" v-model="store.active" :binary="true" :inputId="'store-'+ store.id" :name="'store-'+ store.id"
                             value="true" />
-                        <label :for="'store-'+ store.id" class="ml-2">{{ store.address }}</label>
+                        <label :for="'store-'+ store.id" class="ml-2">Склад #{{ store.id }}, {{ store.address }}</label>
                       </div>
                     </div>
                   </div>
