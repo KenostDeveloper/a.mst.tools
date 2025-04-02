@@ -42,7 +42,7 @@
     </Toast>
     <div class="kenost-small-window">
         <div class="kenost-small-window__logo">
-            <img src="../../public/images/logo_small.svg" alt="">
+            <img src="/images/logo_small.svg" alt="">
             <span>МСТ Закупки</span>
         </div>
         <div class="kenost-small-window__desc">Доступно только на ПК</div>
@@ -52,7 +52,7 @@
             <div class="kenost-small-window__role">Поставщик</div>
         </div>
         <div>
-            <img src="../../public/images/small-window.png" alt="">
+            <img src="/images/small-window.png" alt="">
         </div>
     </div>
     <Sitebar v-if="this.$route.params.id" :active="this.sitebar" />

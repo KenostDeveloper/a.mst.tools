@@ -113,7 +113,7 @@
                     <div class="dart-form-group mt-2 mb-4" v-if="this.type == '2'">
                         <div class="kenost-upload-xlsx" v-if="this.file">
                             <div class="kenost-upload-xlsx__file">
-                                <img src="../../../../public/images/xslx.svg" alt="">
+                                <img src="/images/xslx.svg" alt="">
                                 <a targer="_blank" :href="site_url_prefix + 'assets/content/groups/' + file">{{ this.file }}</a>
                             </div>
                             <div v-if="this.file" class="kenost-link-blue mt-2" @click="() => {

@@ -2673,13 +2673,10 @@ p {
 	display: flex;
 	flex-direction: column;
 	// gap: 50px !important;
-
+	margin-top: 0;
 	&>*+*{
 		margin-top: 50px !important;
 	}
-
-	margin-top: 0;
-
 	&__table {
 		width: 100% !important;
 
@@ -3509,15 +3506,13 @@ p {
 	margin-left: 14px
 }
 
-.promotion-card {
-	@include border;
+.promotion-card {	
 	display: flex;
 	flex-direction: column;
+	@include border;
 	&>*+*{
 		margin-top: 12px;
 	}
-
-
 	& {
 		background-color: #fcfcfc;
 		min-height: 0 !important;
@@ -3950,10 +3945,9 @@ p {
 		}
 	}
 	&__warehouse-list {
-		@include scrollbar;
 		display: flex;
 		flex-direction: column;
-		
+		@include scrollbar;
 		&>*+*{
 			margin-top: 14px;
 		}
@@ -4064,14 +4058,13 @@ p {
 }
 
 .std-search-field {
-	@include flex;
-
 	background-color: #f8f7f5 !important;
 	border-radius: 5px;
 	height: 48px;
 	width: 30vw !important;
-    max-width: 600px !important;
-    min-width: 400px !important;
+	max-width: 600px !important;
+	min-width: 400px !important;
+	@include flex;
 
 	&__wrapper {
 		&::before {
@@ -4442,7 +4435,6 @@ p {
 		max-width: 260px;
 
 		&--primary {
-			@include scrollbar(5px, auto, 5px, #2828287e, transparent);
 			display: flex;
 			flex-direction: column;
 
@@ -4458,6 +4450,7 @@ p {
 			min-width: 100%;
 			overflow-y: auto;
 			overflow-x: hidden;
+			@include scrollbar(5px, auto, 5px, #2828287e, transparent);
 			
 			&>* + * {
 				margin-top: 18px !important;
@@ -4473,14 +4466,9 @@ p {
 		}
 
 		&--secondary {
-			@include scrollbar;
-
 			display: flex;
 			flex-direction: column;
-			// &>* + *{
-			// 	margin-top: 20px;
-			// }
-
+			@include scrollbar;
 			& {
 				overflow-y: auto;
 				overflow-x: hidden;
@@ -4488,7 +4476,6 @@ p {
 				padding-bottom: 30px;
 			}
 		}
-
 		&--thirdy {
 		}
 	}

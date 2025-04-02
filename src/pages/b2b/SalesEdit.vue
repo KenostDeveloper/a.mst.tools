@@ -2036,6 +2036,9 @@ export default {
             };
             if (is) {
                 data.selected = Object.keys(this.selected);
+            }else{
+                data.selected = [];
+                this.selected = {};
             }
             this.get_available_products_from_api(data).then((res) => {
                 // for(let i = 0; i< Object.keys(res.data.data.selected).length; i++){
@@ -2478,15 +2481,17 @@ export default {
                 this.kenost_table_all = [];
                 // eslint-disable-next-line no-unused-vars
                 isPageSelect = true;
-            }
-            for (let i = 0; i < Object.keys(this.selected_visible).length; i++) {
-                if (this.kenost_table.indexOf(this.selected_visible[Object.keys(this.selected_visible)[i]].id) === -1) {
-                    this.kenost_table_all = [];
-                    // eslint-disable-next-line no-unused-vars
-                    isPageSelect = true;
-                    break;
+            }else{
+                for (let i = 0; i < Object.keys(this.selected_visible).length; i++) {
+                    if (this.kenost_table.indexOf(this.selected_visible[Object.keys(this.selected_visible)[i]].id) === -1) {
+                        this.kenost_table_all = [];
+                        // eslint-disable-next-line no-unused-vars
+                        isPageSelect = true;
+                        break;
+                    }
                 }
             }
+            
             if (!isPageSelect) {
                 this.kenost_table_all = ['1'];
             }
@@ -2497,11 +2502,12 @@ export default {
             }
 
             let isPageSelectFilter = false;
-
-            for (let i = 0; i < this.ids_visible.length; i++) {
-                if (this.kenost_table.indexOf(this.ids_visible[i]) == -1) {
-                    isPageSelectFilter = true;
-                    break
+            if (Object.keys(this.selected_visible).length > 0) {
+                for (let i = 0; i < this.ids_visible.length; i++) {
+                    if (this.kenost_table.indexOf(this.ids_visible[i]) == -1) {
+                        isPageSelectFilter = true;
+                        break
+                    }
                 }
             }
 

@@ -2,9 +2,14 @@
 	<!-- <Toast /> -->
 	<ConfirmDialog></ConfirmDialog>
 	<Breadcrumbs class="std-breadcrumbs--margin" />
-
-	<TabView class="tab-custom hidden-mobile-l">
-		<TabPanel header="Акции" v-if="organization.type != 1">
+	<TabView 
+		v-if="organization.type != 1"
+		v-model:activeIndex="tab"
+		:lazy="true"
+		:scrollable="true"
+		class="tab-custom"
+		@tab-change="updateTab">
+		<TabPanel header="Акции">
 			<div class="flex align-items-center justify-content-space-between mb-4">
 				<div class="title-h1">Оптовые акции</div>
 				<RouterLink
@@ -31,7 +36,10 @@
 			>
 			</v-table>
 		</TabPanel>
-		<TabPanel header="Комплекты товаров" v-if="organization.type != 1">
+		<TabPanel header="Индивидуальные скидки">
+			<profileDiscounts></profileDiscounts>
+		</TabPanel>
+		<TabPanel header="Комплекты товаров">
 			<div class="flex align-items-center justify-content-space-between mb-4">
 				<div class="title-h1">Мои комплекты</div>
 				<RouterLink
@@ -58,38 +66,12 @@
 			>
 			</v-table>
 		</TabPanel>
-		<TabPanel header="Коллекции товаров" v-if="organization.type != 1">
+		<TabPanel header="Коллекции товаров">
 			<div>
 				<Groups />
 			</div>
 		</TabPanel>
 	</TabView>
-
-	<div class="std-sales visible-mobile-l">
-
-		<div
-			class="flex align-items-center justify-content-space-between mb-4 std-sales__title-container"
-		>
-			<div class="title-h1 std-sales__title">Оптовые акции</div>
-		</div>
-		<v-table
-			:items_data="actions.items"
-			:total="actions.total"
-			:pagination_items_per_page="this.pagination_items_per_page"
-			:pagination_offset="this.pagination_offset"
-			:page="this.page"
-			:table_data="getTableData"
-			:filters="[]"
-			:title="''"
-			@filter="filter"
-			@sort="filter"
-			@paginate="paginate"
-			@editElem="editElem"
-			@approveElem="approveElem"
-			@deleteElem="deleteElem"
-		>
-		</v-table>
-	</div>
 
 	<Dialog
 		v-model:visible="this.modals.diler"
@@ -149,6 +131,7 @@ import Toast from "primevue/toast";
 import router from "../../router";
 import Breadcrumbs from "../../components/Breadcrumbs.vue";
 import Groups from '../../components/groups/Groups.vue'
+import ProfileDiscounts from "../../components/opt/ProfileDiscounts.vue";
 
 export default {
 	name: "ProfileSales",
@@ -189,7 +172,7 @@ export default {
 	data() {
 		return {
 			windowWidth: 1920,
-
+			tab: 0,
 			modals: {
 				diler: false,
 			},
@@ -387,6 +370,12 @@ export default {
 			"get_opts_from_api",
 			"unset_opts",
 		]),
+		updateTab(e){
+			const tab = localStorage.getItem('sales.tabs');
+			if(tab != e.index){
+				localStorage.setItem('sales.tabs', e.index);
+			}			
+		},
 		filter(data) {
 			data.type = "b2b";
 			this.get_sales_to_api(data);
@@ -556,7 +545,6 @@ export default {
 		window.addEventListener("resize", () => {
 			this.windowWidth = window.innerWidth;
 		});
-
 		this.get_organization_from_api().then(() => {
 			this.get_regions_from_api().then((this.optfilters.region.values = this.getregions));
 			this.get_opts_from_api({
@@ -593,6 +581,14 @@ export default {
 				}
 			}
 		});
+		setTimeout(() => {
+			const tab = localStorage.getItem('sales.tabs');
+			if(tab){
+				this.tab = Number(tab)
+			}else{
+				this.tab = 0
+			}
+		}, 500);
 	},
 	components: {
 		vTable,
@@ -604,7 +600,8 @@ export default {
 		Dialog,
 		InputNumber,
 		Breadcrumbs,
-		Groups
+		Groups,
+		ProfileDiscounts
 	},
 	computed: {
 		...mapGetters(["actions", "optcomplects", "dilers", "organization", "getregions", "opts"]),

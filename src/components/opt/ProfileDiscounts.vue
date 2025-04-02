@@ -1,66 +1,28 @@
 <template>
-    <!-- <Toast /> -->
-    <ConfirmDialog></ConfirmDialog>
-
-    <div class="std-discounts" :class="{loading: loading}">
-      <Breadcrumbs class="std-breadcrumbs--margin" />
-
-      <div class="title-h1 mb-4 std-discounts__title">Индивидуальные скидки</div>
-      <v-table
-        :items_data="individual_discount.items"
-        :total="individual_discount.total"
-        :pagination_items_per_page="this.pagination_items_per_page"
-        :pagination_offset="this.pagination_offset"
-        :page="this.page"
-        :table_data="this.table_data"
-        :filters="this.filters"
-        @filter="filter"
-        title=""
-        @paginate="paginate"
-        @editElem="editDiler"
-      />
-    </div>
-
-    <Dialog v-model:visible="this.modals.diler" header="Редактирование дилера" :style="{ width: '400px' }">
-      <div class="kenost-modal-price">
-          <span class="title">{{ form.diler.name }}</span>
-          <div class="mt-2">
-              <div class="kenost-wiget">
-                  <p>Базовая скидка на товар, %</p>
-                  <InputNumber
-                      v-model="this.form.diler.base_sale"
-                      inputId="horizontal-buttons"
-                      :step="0.1"
-                      min="0"
-                      max="100"
-                      suffix=" %"
-                      @update:modelValue="delayUpdate"
-                      incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"
-                  />
-              </div>
-          </div>
-          <div class="kenost-modal-price__button kenost-modal-price__flex">
-              <div class="dart-btn dart-btn-primary" @click.prevent="setSale" :class="{'dart-btn-loading': diler_loading}">
-                  Подтвердить
-              </div>
-          </div>
-      </div>
-    </Dialog>
-  </template>
+  <div class="std-discounts" :class="{loading: loading}">
+    <div class="title-h1 mb-4 std-discounts__title">Индивидуальные скидки</div>
+    <v-table
+      :items_data="individual_discount.items"
+      :total="individual_discount.total"
+      :pagination_items_per_page="this.pagination_items_per_page"
+      :pagination_offset="this.pagination_offset"
+      :page="this.page"
+      :table_data="this.table_data"
+      :filters="this.filters"
+      @filter="filter"
+      title=""
+      @paginate="paginate"
+      @editElem="editDiler"
+    />
+  </div>
+</template>
   
 <script>
   import { mapActions, mapGetters } from 'vuex'
-  import vTable from '../components/table/v-table.vue'
+  import vTable from '../table/v-table.vue'
   import { RouterLink } from 'vue-router'
-  import TabView from 'primevue/tabview'
-  import TabPanel from 'primevue/tabpanel'
-  import Dialog from 'primevue/dialog'
-  import InputNumber from 'primevue/inputnumber'
-  import ConfirmDialog from 'primevue/confirmdialog'
-  import Toast from 'primevue/toast'
-  import vOpts from '../components/table/v-opts.vue'
-  import router from '../router'
-  import Breadcrumbs from '../components/Breadcrumbs.vue'
+  import vOpts from '../table/v-opts.vue'
+  import router from '../../router'
   
   export default {
     name: 'ProfileSales',
@@ -244,7 +206,11 @@
         id: router.currentRoute._value.params.id,
       });
     },
-    components: { vTable, vOpts, Toast, ConfirmDialog, RouterLink, TabView, TabPanel, Dialog, InputNumber, Breadcrumbs },
+    components: { 
+      vTable, 
+      vOpts, 
+      RouterLink 
+    },
     computed: {
       ...mapGetters([
         'individual_discount',

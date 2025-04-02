@@ -260,10 +260,10 @@ export default {
 }
 .shipping {
 	display: flex;
-	&>*+*{
-		margin-top: 10px;
-	}
 	align-items: flex-start;
+	& > * + *{
+		margin-top: 10px;
+	}	
 }
 
 .calendar-associations {

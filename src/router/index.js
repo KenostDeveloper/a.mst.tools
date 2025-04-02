@@ -28,7 +28,7 @@ import MyOrders from "../pages/MyOrders.vue";
 import MyOrder from "../pages/MyOrder.vue";
 import ProfileStatistics from "../pages/ProfileStatistics.vue";
 import ProfileStoreStatistics from "../pages/ProfileStoreStatistics.vue";
-import ProfileDiscounts from "../pages/ProfileDiscounts.vue";
+import ProfileDiscounts from "../components/opt/ProfileDiscounts.vue";
 import ProfileDiscountsEdit from "../pages/ProfileDiscountsEdit.vue";
 import RetailOrders from "../pages/RetailOrders.vue";
 import Order from "../pages/Order.vue";

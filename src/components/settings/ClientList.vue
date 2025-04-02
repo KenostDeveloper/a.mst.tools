@@ -17,7 +17,7 @@
             <ClientSuggestions :suggestions="clients" @change="addClient" />
         </div>
         <button class="button-none client-list__add-button" @click.stop="setIsClientAdding(!isClientAdding)">
-            <span class="mst_icon-plus client-list__add-button-icon"></span>
+            <span class="pi pi-plus client-list__add-button-icon"></span>
         </button>
     </ul>
 </template>
