@@ -281,17 +281,14 @@
     }
   }
 
-  .order-info {
-    @include border;
+  .order-info {    
     display: flex;
     flex-direction: column;
-
-
+    @include border;
     & {
       border-color: #ADADAD;
       padding: 24px;
     }
-
     &__title {
     }
 

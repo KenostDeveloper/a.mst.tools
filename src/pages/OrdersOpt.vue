@@ -157,10 +157,10 @@ export default {
 }
 .shipping {
 	display: flex;
+	align-items: flex-start;
 	&>*+*{
 		margin-top: 10px;
-	}
-	align-items: flex-start;
+	}	
 }
 
 .calendar-associations {

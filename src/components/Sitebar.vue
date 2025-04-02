@@ -396,13 +396,13 @@ export default {
 						icon: "clients.svg",
 						to: { name: "clients", params: { id: this.$route.params.id } },
 					},
-					{
+					/* {
 						label: "Индивидуальные скидки",
 						icon: "star.svg",
 						to: { name: "discounts", params: { id: this.$route.params.id } },
-					},
+					}, */
 					{
-						label: "Мои оптовые акции",
+						label: "Оптовые цены",
 						icon: "my_opt_action.svg",
 						to: { name: "b2b", params: { id: this.$route.params.id } },
 					},
