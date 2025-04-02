@@ -471,7 +471,6 @@ export default {
           this.selected_data[obj.id].typeFormul = null;
       }
       this.selected_data[obj.id].multiplicity = obj.value;
-      // this.selected_data[obj.id].multiplicity = obj.value
     },
     closeDialogPrice () {
       if (this.modals.price_step === 0) {
@@ -588,6 +587,16 @@ export default {
       product.finalPrice = Number(product.price)
       product.typeFormul = {}
       product.typePrice = ''
+
+      const elem = {
+        price: product.price,
+        multiplicity: 1,
+        min_count: 1,
+        finalPrice: product.price,
+        discountInterest: 0,
+        discountInRubles: 0
+      };
+      this.selected_data[product.id] = elem;
 
       this.selected[product.id] = product
       this.products = this.products.filter((r) => r.id !== id)

@@ -882,6 +882,9 @@ export default {
                                 this.$router.push({ name: 'opt_req', params: { req: this.form_requirements_view.requirement.id + '_req'}, query: { timestamp: Date.now() } });
                             }
 
+                            this.modal_requirements = false
+                            this.modal_requirements_view = false
+
                         }else{
                             this.$toast.add({ severity: 'error', summary: 'Ошибка сохранения Поставщика', detail: response.data.message, life: 3000 });
                         }

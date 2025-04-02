@@ -507,7 +507,7 @@
                             </div>
                         </div>
                         <div class="PickList__products">
-                            <div class="PickList__el" v-for="item in this.products" :key="item.id">
+                            <div class="PickList__el" :data-id="item.id" v-for="item in this.products" :key="item.id">
                                 <img :src="item.image" alt="" />
                                 <div class="PickList__product-info">
                                     <div class="PickList__name">{{ item.name }}</div>
@@ -2041,6 +2041,19 @@ export default {
                 this.selected = {};
             }
             this.get_available_products_from_api(data).then((res) => {
+                // for(let i = 0; i< Object.keys(res.data.data.selected).length; i++){
+
+                //     const elem = {
+                //         price: res.data.data.selected[Object.keys(res.data.data.selected)[i]].price,
+                //         multiplicity: 1,
+                //         min_count: 1,
+                //         finalPrice: res.data.data.selected[Object.keys(res.data.data.selected)[i]].price,
+                //         discountInterest: 0,
+                //         discountInRubles: 0
+                //     };
+                //     console.log(elem)
+                //     this.selected_data[res.data.data.selected[Object.keys(res.data.data.selected)[i]].id] = elem;
+                // }
                 this.kenostTableCheckedAllCheck();
             });
         },
@@ -2262,7 +2275,16 @@ export default {
             product.typeFormul = {};
             product.typePrice = '';
 
-            // console.log(product);
+            // const elem = {
+            //     price: product.price,
+            //     multiplicity: 1,
+            //     min_count: 1,
+            //     finalPrice: product.price,
+            //     discountInterest: 0,
+            //     discountInRubles: 0
+            // };
+            // this.selected_data[product.id] = elem;
+            // console.log(elem)
 
             const dataProduct = {
                 action: 'get/product/prices',

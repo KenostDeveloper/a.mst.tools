@@ -227,6 +227,7 @@
 											showIcon
 											id="calendar-24h"
 											v-model="form.dateEnd"
+											:minDate="new Date()"
 										/>
 										<span
 											class="error_desc"

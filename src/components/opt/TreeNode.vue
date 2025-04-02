@@ -30,6 +30,7 @@
               :node="child" 
               v-model="selectedKeys"
               :disabledKeys="disabledKeys"
+              :forceExpandKeys="forceExpandKeys"
           />
       </ul>
   </li>
@@ -44,7 +45,8 @@ export default {
   props: {
       node: Object,
       modelValue: Array,
-      disabledKeys: Array
+      disabledKeys: Array,
+      forceExpandKeys: Array // 👈 новый проп
   },
   data() {
       return {
@@ -104,6 +106,14 @@ export default {
 
           this.selectedKeys = [...new Set(newSelectedKeys)];
       }
+  },
+  watch: {
+    forceExpandKeys: {
+      immediate: true,
+      handler(newVal) {
+        this.expanded = newVal.includes(this.node.key);
+      }
+    }
   }
 };
 </script>
