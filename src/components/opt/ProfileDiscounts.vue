@@ -1,6 +1,20 @@
 <template>
   <div class="std-discounts" :class="{loading: loading}">
-    <div class="title-h1 mb-4 std-discounts__title">Индивидуальные скидки</div>
+    <div class="flex justify-content-space-between align-items-center mb-4">
+      <div class="title-h1 mb-0 std-discounts__title">Индивидуальные скидки</div>
+      <div class="flex align-items-center gap-2">
+        <div
+          @click="this.modal_discounts = true"
+					class="dart-btn dart-btn-primary"
+					>Создать индивидуальную скидку
+        </div>
+        <div
+          @click="this.modal_discounts = true"
+					class="dart-btn dart-btn-primary"
+					>Добавить из 1с
+        </div>
+      </div>
+    </div>
     <v-table
       :items_data="individual_discount.items"
       :total="individual_discount.total"
@@ -15,6 +29,31 @@
       @editElem="editDiler"
     />
   </div>
+
+  <Dialog v-model:visible="this.modal_discounts" header="Выберите соглашение для создание из него индивидуальной скидки"
+    :style="{ width: '940px' }">
+    <!-- <div class="dart-alert dart-alert-info">Обратите внимание! Здесь отображаются только те потребности, которые привязаны к Складу доставки.</div> -->
+    <v-table
+      class="std-table__wrapper"
+      :filters="this.filters_agreement"
+      :items_data="agreement.items"
+      :total="agreement.total"
+      :pagination_items_per_page="this.pagination_items_per_page"
+      :pagination_offset="this.pagination_offset"
+      :page="this.requirements_page"
+      :table_data="this.table_data_agreement"
+      :title="''"
+      @filter="filterAgreement"
+      @sort="filterRequirements"
+      @paginate="paginateAgreement"
+      @viewElem="viewReq"
+      @deleteElem="deleteReq"
+    >
+      <template v-slot:button>
+        <a href="#" class="dart-btn dart-btn-primary" @click.prevent="() => {this.modal_requirement = !this.modal_requirement}">Создать</a>
+      </template>
+    </v-table>
+  </Dialog>
 </template>
   
 <script>
@@ -23,6 +62,7 @@
   import { RouterLink } from 'vue-router'
   import vOpts from '../table/v-opts.vue'
   import router from '../../router'
+  import Dialog from "primevue/dialog";
   
   export default {
     name: 'ProfileSales',
@@ -42,6 +82,7 @@
         modals: {
           diler: false
         },
+        modal_discounts: false,
         form: {
           diler: {
             name: '',
@@ -56,6 +97,7 @@
         },
         loading: true,
         page: 1,
+        page_agreement: 1,
         filters: {
           name: {
             name: "Наименование",
@@ -81,22 +123,18 @@
             type: "image",
             baseurl: false,
           },
-          warehouse: {
+          name: {
             label: 'Наименование',
             type: 'text',
-            link_to: 'org_diler',
-            link_params: {
-              diler_id: 'id'
-            }
           },
-          address: {
-            label: 'Адрес организации',
+          client_name: {
+            label: 'Организация',
             type: 'text',
           },
-          store_name: {
-            label: 'Склад',
-            type: 'text'
-          },
+          // store_name: {
+          //   label: 'Склад',
+          //   type: 'text'
+          // },
           payer: {
             label: 'Оплата доставки',
             type: 'text'
@@ -125,6 +163,50 @@
             }
           }
         },
+        table_data_agreement: {
+          name: {
+            label: 'Название соглашения',
+            type: 'text'
+          },
+          name_client: {
+            label: 'Название клиента',
+            type: 'text'
+          },
+          inn: {
+            label: 'ИНН',
+            type: 'text'
+          },
+          kpp: {
+            label: 'КПП',
+            type: 'text'
+          },
+          status: {
+            label: 'Статус',
+            type: 'status'
+          },
+          active: {
+            label: "Активно",
+            type: "boolean",
+          },
+          actions: {
+            label: 'Действия',
+            type: 'actions',
+            sort: false,
+            available: {
+              edit: {
+                icon: 'pi pi-caret-right',
+                label: 'Создать индивидуальную скидку'
+              }
+            }
+          }
+        },
+        filters_agreement: {
+          name: {
+            name: "Наименование",
+            placeholder: "Наименование",
+            type: "text",
+          },
+        },
       }
     },
     methods: {
@@ -132,7 +214,8 @@
         'get_dilers_from_api',
         'org_get_discount_individual_api',
         'org_get_stores_from_api',
-        'org_get_managers_from_api'
+        'org_get_managers_from_api',
+        'get_agreement_api'
       ]),
       filter(data) {
         this.loading = true
@@ -142,6 +225,32 @@
           id: router.currentRoute._value.params.id,
           perpage: this.pagination_items_per_page,
           action: 'get/individual/discount',
+          filter: data
+        }).then(() => {
+          this.loading = false
+        })
+      },
+      filterAgreement(data) {
+        this.loading = true
+        this.page = 1
+        this.get_agreement_api({
+          action: "get/agreement",
+          id: router.currentRoute._value.params.id,
+          page: this.page_agreement,
+          perpage: this.pagination_items_per_page,
+          filter: data
+        }).then(() => {
+          this.loading = false
+        })
+      },
+      paginateAgreement(data) {
+        this.loading = true
+        this.page = 1
+        this.get_agreement_api({
+          action: "get/agreement",
+          id: router.currentRoute._value.params.id,
+          page: this.page_agreement,
+          perpage: this.pagination_items_per_page,
           filter: data
         }).then(() => {
           this.loading = false
@@ -163,7 +272,7 @@
       editDiler (value) {
         router.push({
           name: "discounts_edit",
-          params: { id: this.$route.params.id, client_id: value.org_client, store_id: value.store_id },
+          params: { id: this.$route.params.id, action_id: value.id },
         });
       },
       setSale () {
@@ -205,17 +314,26 @@
         action: "get/org/managers",
         id: router.currentRoute._value.params.id,
       });
+
+      this.get_agreement_api({
+        action: "get/agreement",
+        id: router.currentRoute._value.params.id,
+        page: this.page_agreement,
+        perpage: this.pagination_items_per_page,
+      })
     },
     components: { 
       vTable, 
       vOpts, 
-      RouterLink 
+      RouterLink,
+      Dialog
     },
     computed: {
       ...mapGetters([
         'individual_discount',
         'org_stores',
-        'org_managers'
+        'org_managers',
+        'agreement'
       ])
     },
     watch: {
@@ -225,7 +343,6 @@
         for (let i = 0; i < newVal.items.length; i++) {
           this.storesall.push({ name: newVal.items[i].name, id: newVal.items[i].id })
         }
-        console.log(this.storesall)
       },
       org_managers: function (newVal, oldVal) {
         this.filters.manager.values = newVal

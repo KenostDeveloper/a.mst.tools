@@ -738,26 +738,14 @@ const routes = [
 														component: ProfileDiscounts,
 													},
 													{
-														path: ":client_id",
-														name: "discounts_client_id",
+														path: ":action_id",
+														name: "discounts_edit",
 														meta: {
 															breadcrumb: {
-																label: "Мои скидки",
+																label: "Редактиование скидки",
 															},
 														},
 														component: ProfileDiscountsEdit,
-														children: [
-															{
-																path: ":store_id",
-																name: "discounts_edit",
-																meta: {
-																	breadcrumb: {
-																		label: "Редактиование скидки",
-																	},
-																},
-																component: ProfileDiscountsEdit,
-															},
-														],
 													},
 												],
 											},

@@ -194,6 +194,7 @@ export default {
 			},
 			modal_approve: false,
 			diler_loading: false,
+			modal_discounts: false,
 			page: 1,
 			page_complects: 1,
 			page_dilers: 1,

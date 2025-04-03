@@ -21,9 +21,9 @@
         <div v-if="this.form.store_id.length > 0">
 
             <div class="dart-form-group mb-4">
-                <span class="ktitle">Комментарий</span>
+                <span class="ktitle">Наименование</span>
                 <!-- <label for="name">Введите наименование, которое будет отражать смысл вашей акции.</label> -->
-                <input v-model="this.form.comment" type="text" name="name" placeholder="Укажите комментарий"
+                <input v-model="this.form.name" type="text" name="name" placeholder="Укажите наименование"
                     class="dart-form-control">
             </div>
 
@@ -909,6 +909,7 @@ export default {
                 delayfix: 1,
                 typeDelay: '1',
                 comment: "",
+                name: "",
                 paymentDelivery: { name: 'Покупатель', key: 0 },
                 min_amount: 0,
                 postponement_period: 0,
@@ -1075,8 +1076,7 @@ export default {
             this.get_actions_discount_api({
                 action: 'get/individual',
                 id: router.currentRoute._value.params.id,
-                store_id: router.currentRoute._value.params.store_id,
-                client_id: router.currentRoute._value.params.client_id
+                action_id: router.currentRoute._value.params.action_id,
             }).then(() => {
                 const data = {
                     storeid: this.form.store_id,
@@ -1127,8 +1127,9 @@ export default {
                 await this.set_sales_to_api({
                     type: 'discounts',
                     action: 'set',
+                    action_id: router.currentRoute._value.params.action_id, //Склад
                     store_id: this.form.store_id, //Склад
-                    comment: this.form.comment, //Комментарий
+                    name: this.form.name, //Комментарий
                     payer: this.form.paymentDelivery.key, //Плательщик доставки
                     min_amount: this.form.min_amount, //Минимальная сумма заказа
                     delay: this.postponement_period, //Отсрочка
@@ -1976,7 +1977,7 @@ export default {
         },
         action_discount: function (newVal, oldVal) {
             if (newVal.exists) {
-                this.form.comment = newVal.comment
+                this.form.name = newVal.name
                 this.form.paymentDelivery = this.paymentDelivery[newVal.payer]
                 this.form.min_amount = newVal.condition_min_sum
                 this.form.delay = newVal.delay_graph
@@ -1985,6 +1986,10 @@ export default {
                 this.selected = newVal.products
                 this.selected_data = newVal.products_data
                 this.total_selected = newVal.total_products
+
+                if(newVal.store_id){
+                    this.form.store_id = [newVal.store_id]
+                }
 
                 if (newVal.delay_type) {
                     this.form.typeDelay = (newVal.delay_type).toString()
