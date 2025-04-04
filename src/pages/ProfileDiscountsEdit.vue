@@ -3,7 +3,8 @@
 
     <form @submit.prevent="formSubmit" class="kenost-discounts">
         <div class="profile-content__title sticky-element">
-            <span class="maintitle">Настройка индивидуальных условий для {{action_discount.client_name}}</span>
+            <span class="maintitle" v-if="action_discount.client_name">Настройка индивидуальных условий для {{action_discount.client_name}}</span>
+            <span class="maintitle" v-else>Создание индивидуальных условий</span>
             <div class="buttons_container">
                 <RouterLink :to="{ name: 'discounts', params: { id: $route.params.id } }"
                     class="dart-btn dart-btn-secondary btn-padding">Отменить</RouterLink>
@@ -13,10 +14,17 @@
         </div>
 
         <div class="dart-form-group mt-2 mb-4">
-            <span class="ktitle">Склад</span>
-            <MultiSelect @change="updateProducts" v-model="this.form.store_id" :options="this.stores"
-                optionLabel="label" optionValue="value" placeholder="Выберите склад" disabled />
+            <span class="ktitle">Ваш склад</span>
+            <Dropdown @change="updateProducts" v-model="this.form.store_id[0]" :options="this.stores"
+                optionLabel="label" optionValue="value" placeholder="Выберите склад" />
         </div>
+
+        <div class="dart-form-group mt-2 mb-4">
+            <span class="ktitle">Клиент</span>
+            <Dropdown filter v-model="this.form.client_id" :options="dilers.items" optionValue="id" optionLabel="name"
+                        placeholder="Выберите клиента" class="w-full md:w-14rem" />
+        </div>
+        
 
         <div v-if="this.form.store_id.length > 0">
 
@@ -484,7 +492,7 @@
 
         </div>
 
-        <div class="dart-form-group mt-4 flex">
+        <div v-if="this.form.store_id.length > 0" class="dart-form-group mt-4 flex">
             <span class="ktitle">Коллекции</span>
             <div>
                 <button @click="this.modals.add_group = true" type="button" class="dart-btn dart-btn-primary  flex gap-2 align-items-center">
@@ -492,7 +500,7 @@
                 </button>
             </div>
         </div>
-        <div class="kenost-tab-container">
+        <div v-if="this.form.store_id.length > 0" class="kenost-tab-container">
             <TabView class="tab-custom mt-3 kenost-tab-custom" :scrollable="true">
                 <TabPanel v-for="el in this.action_groups" :key="el.id" :header="el.group.name + ' (' + el?.products?.total + ')'">
                     <div class="table-kenost mt-4">
@@ -1036,7 +1044,8 @@ export default {
             'optcomplects',
             'action_discount',
             'groups',
-            'group_build'
+            'group_build',
+            'dilers'
         ]),
         pagesCountSelect() {
             let pages = Math.ceil(this.total_selected / this.per_page)
@@ -1054,6 +1063,43 @@ export default {
         },
     },
     async mounted() {
+        const agreementParam = this.$route.query.agreement
+        if(agreementParam){
+            this.get_agreement_api({
+                action: "get/agreement",
+                id: router.currentRoute._value.params.id,
+                id_agreement: agreementParam
+            }).then((res) => {
+                const agreement = res.data.data
+                console.log('agreementParam', agreement);
+                this.form.client_id = agreement.client_id
+                this.form.store_id = [agreement.warehouse_id]
+                this.form.name = agreement.name
+                if(agreement.conditions){
+                    this.form.paymentDelivery = this.paymentDelivery[agreement.conditions.payer];
+                    this.form.min_amount = agreement.conditions.min_amount || 0;
+                    this.form.typeDelay = agreement.conditions.delay_type.toString() || 1
+                    this.postponement_period = agreement.conditions.delay
+                    this.form.delay = agreement.conditions.delay_graph
+                }
+                // let data = {
+                //     payer: 1, // 0 - покупатель, 1 - поставщик
+                //     min_amount: 9999,
+                //     delay_type: 1, // 1 - Отсрочка, 2 - Под реализацию
+                //     delay: 60,
+                //     delay_graph: [
+                //         {
+                //             percent: 50,
+                //             day: 50
+                //         },
+                //         {
+                //             percent: 50,
+                //             day: 10
+                //         },
+                //     ]
+                // }
+            })
+        }
         this.org_get_stores_from_api({
             action: 'get/stores',
             id: this.$route.params.id
@@ -1098,6 +1144,11 @@ export default {
             action: "get",
             store_id: router.currentRoute._value.params.store_id,
         })
+        this.get_dilers_from_api({
+			type: 1,
+			page: 1,
+			perpage: 999
+		})
     },
     updated() {
 
@@ -1113,7 +1164,9 @@ export default {
             'get_actions_discount_api',
             'opt_upload_products_file',
             'get_group_api',
-            'build_group_api'
+            'build_group_api',
+            'get_dilers_from_api',
+            'get_agreement_api'
         ]),
         formSubmit(event) {
             let groups_data = this.action_groups
@@ -1140,7 +1193,7 @@ export default {
                     complects: this.selected_complects,
                     method_adding_products: this.form.addProductType, //Метод добавления товаров
                     id: router.currentRoute._value.params.id,
-                    id_client: router.currentRoute._value.params.client_id,
+                    id_client: this.form.client_id,
                     delay_type: this.form.typeDelay,
                     delayfix: this.form.delayfix,
                     groups: groups_data
@@ -1989,6 +2042,10 @@ export default {
 
                 if(newVal.store_id){
                     this.form.store_id = [newVal.store_id]
+                }
+
+                if(newVal.client_id){
+                    this.form.client_id = (newVal.client_id).toString()
                 }
 
                 if (newVal.delay_type) {

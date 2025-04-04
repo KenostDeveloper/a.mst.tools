@@ -27,7 +27,7 @@ export default {
             const routeName = this.$route.name;
             if (routeName == 'shipments' || routeName == 'org_settings' || 
                 routeName == 'org_action_add' || routeName == 'org_sales_add' ||
-                routeName == 'discounts_edit' || routeName == 'org_sales_edit' ||
+                routeName == 'discounts_edit' || routeName == 'org_sales_edit' || routeName == 'discounts_add' ||
                 routeName == 'org_action_edit' || routeName == 'complect_add' || routeName == 'complect_edit') {
                 return false;
             }

@@ -83,13 +83,23 @@ export default {
 			d_max: this.max,
 			d_value: this.value,
 			d_step: this.step,
-			modal_remain: false
+			modal_remain: false,
+			debouncedSend: null,
 		};
 	},
 	methods: {
 		...mapActions([]),
 		submit(){
 
+		},
+		debounce(func, wait) {
+			let timeout;
+			return (...args) => {
+				clearTimeout(timeout);
+				timeout = setTimeout(() => {
+					func.apply(this, args);
+				}, wait);
+			};
 		},
 		onMinus() {
 			// Уменьшаем на шаг
@@ -143,15 +153,14 @@ export default {
 			this.$emit("ElemCount", data);
 		}
 	},
-	mounted() {},
+	mounted() {
+		this.debouncedSend = this.debounce(this.send, 500);
+	},
 	components: {
 		Dialog
 	},
 	computed: {
 		...mapGetters([]),
-		debouncedSend: function () {
-			return _.debounce(this.send, 500)
-		}
 	},
 	watch: {
 		value(newValue) {

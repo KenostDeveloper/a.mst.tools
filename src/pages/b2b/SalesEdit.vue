@@ -731,9 +731,15 @@
                                     <p class="table-kenost__settings" @click="settings(item, true)">Настроить</p>
                                 </td>
                                 <td v-if="this.selected_data[item.id]">
-                                    <Counter class="margin-auto" @ElemCount="ElemMinCount" :item="item" :id="item.id"
-                                        :min="1" :value="this.selected_data[item.id].min_count"
-                                        :key="new Date().getMilliseconds() + item.id" />
+                                    <Counter
+                                        class="margin-auto"
+                                        @ElemCount="ElemMinCount"
+                                        :item="item"
+                                        :id="item.id"
+                                        :min="1"
+                                        :value="this.selected_data[item.id].min_count"
+                                        :key="new Date().getMilliseconds() + item.id"
+                                    />
                                 </td>
                                 <td v-else>
                                     <Counter class="margin-auto" @ElemCount="ElemMinCount" :item="item" :id="item.id"

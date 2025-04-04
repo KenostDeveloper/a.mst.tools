@@ -738,6 +738,21 @@ const routes = [
 														component: ProfileDiscounts,
 													},
 													{
+														path: "add",
+														name: "discounts_add",
+														props: true,
+														label: "Добавление скидки",
+														meta: {
+															breadcrumb: {
+																label: "Добавление скидки",
+															},
+														},
+														component: ProfileDiscountsEdit,
+														props: (route) => ({
+															agreement: route.query.agreement // Преобразуем query в boolean
+														})
+													},
+													{
 														path: ":action_id",
 														name: "discounts_edit",
 														meta: {

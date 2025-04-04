@@ -3,11 +3,11 @@
     <div class="flex justify-content-space-between align-items-center mb-4">
       <div class="title-h1 mb-0 std-discounts__title">Индивидуальные скидки</div>
       <div class="flex align-items-center gap-2">
-        <div
-          @click="this.modal_discounts = true"
-					class="dart-btn dart-btn-primary"
-					>Создать индивидуальную скидку
-        </div>
+        <RouterLink
+          :to="{ name: 'discounts_add', params: { id: $route.params.id } }"
+          class="dart-btn dart-btn-primary"
+          >Создать индивидуальную скидку</RouterLink
+        >
         <div
           @click="this.modal_discounts = true"
 					class="dart-btn dart-btn-primary"
@@ -48,6 +48,7 @@
       @paginate="paginateAgreement"
       @viewElem="viewReq"
       @deleteElem="deleteReq"
+      @editElem="createDiler"
     >
       <template v-slot:button>
         <a href="#" class="dart-btn dart-btn-primary" @click.prevent="() => {this.modal_requirement = !this.modal_requirement}">Создать</a>
@@ -104,15 +105,15 @@
             placeholder: "Наименование",
             type: "text",
           },
-          manager: {
-            name: "Менеджер",
-            placeholder: "Выберите менеджера",
-            type: "dropdown",
-            values: []
-          },
+          // manager: {
+          //   name: "Менеджер",
+          //   placeholder: "Выберите менеджера",
+          //   type: "dropdown",
+          //   values: []
+          // },
           store: {
-            name: 'Склады',
-            placeholder: 'Выберите склады',
+            name: 'Склад',
+            placeholder: 'Выберите склад',
             type: 'dropdown',
             values: this.storesall
           },
@@ -184,6 +185,14 @@
             label: 'Статус',
             type: 'status'
           },
+//           condition: {
+//             label: 'Условия',
+//             type: 'html',
+//             html: `
+// <span class="info-badge tooltip-el" data-tooltip="Необходима интеграция для получения данных">
+//   <i class="pi pi-exclamation-circle"></i>
+// </span>`
+//           },
           active: {
             label: "Активно",
             type: "boolean",
@@ -275,6 +284,13 @@
           params: { id: this.$route.params.id, action_id: value.id },
         });
       },
+      createDiler (value) {
+        router.push({
+          name: "discounts_add",
+          params: { id: this.$route.params.id },
+          query: {agreement: value.id}
+        });
+      },
       setSale () {
         this.diler_loading = true
         const data = this.form.diler
@@ -345,7 +361,7 @@
         }
       },
       org_managers: function (newVal, oldVal) {
-        this.filters.manager.values = newVal
+        // this.filters.manager.values = newVal
       }
     }
   }

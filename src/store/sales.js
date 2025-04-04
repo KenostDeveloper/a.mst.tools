@@ -92,6 +92,7 @@ export default {
       })
         .then((response) => {
           commit('SET_AGREEMENT_VUEX', response.data)
+          return response;
         })
         .catch(error => {
           if (error.response.status === 403) {
