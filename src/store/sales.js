@@ -9,7 +9,8 @@ export default {
     adv_pages: [],
     action_buyer: [],
     action_discount: [],
-    agreement: []
+    agreement: [],
+    actions_active: []
   },
   actions: {
     set_sales_to_api ({ commit }, data) {
@@ -74,6 +75,24 @@ export default {
       })
         .then((response) => {
           commit('SET_ACTION_DISCOUNT_VUEX', response.data)
+        })
+        .catch(error => {
+          if (error.response.status === 403) {
+            localStorage.removeItem('user')
+            router.push({ name: 'main' })
+          }
+        })
+    },
+    get_actions_active_api ({ commit }, data) {
+      return Axios('/rest/front_sales', {
+        method: 'POST',
+        data: data,
+        headers: {
+          'Access-Control-Allow-Origin': '*'
+        }
+      })
+        .then((response) => {
+          commit('SET_ACTION_ACTIVE_VUEX', response.data)
         })
         .catch(error => {
           if (error.response.status === 403) {
@@ -202,6 +221,9 @@ export default {
     SET_AGREEMENT_VUEX: (state, data) => {
       state.agreement = data.data
     },
+    SET_ACTION_ACTIVE_VUEX: (state, data) => {
+      state.actions_active = data.data
+    },
     SET_SALES_PRODUCTS_MUTATION_TO_VUEX: (state, data) => {
       if(state.actions.products){
         for(let i = 0; i < state.actions.products.length; i++){
@@ -265,6 +287,9 @@ export default {
     },
     agreement(state) {
       return state.agreement
+    },
+    actions_active(state) {
+      return state.actions_active
     },
   }
 }

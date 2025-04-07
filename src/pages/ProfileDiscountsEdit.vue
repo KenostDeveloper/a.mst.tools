@@ -1198,7 +1198,7 @@ export default {
                     delayfix: this.form.delayfix,
                     groups: groups_data
                 }).then(() => {
-                    router.push({ name: 'discounts', params: { id: router.currentRoute._value.params.id } })
+                    router.push({ name: 'b2b', params: { id: router.currentRoute._value.params.id } })
                 })
             })
         },

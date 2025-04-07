@@ -240,6 +240,7 @@
                     <Dropdown v-model="this.form.compabilityModePost" :options="this.compabilityModePost"
                         optionLabel="name" placeholder="Режим совместимости" class="w-full md:w-14rem" />
                 </div>
+                <div @click="this.modals.view_actions = true" class="router-link-active dart-btn dart-btn-secondary btn-padding mb-4">Совместимость акций</div>
 
                 <div class="dart-form-group mb-4" :class="{ error: v$.form.dates.$errors.length }">
                     <span class="ktitle">Даты проведения</span>
@@ -1402,6 +1403,71 @@
             </div>
         </div>
     </Dialog>
+
+    <div class="new-modal" :class="{'active': this.modals.view_actions}">
+        <div class="new-modal__content">
+            <div class="new-modal__title">
+                <div>
+                    <h2>Совместимость акций</h2>
+                    <p>Таблица, в которой указывается совместимость создаваемой \ редактируемой акции, индивидуальной скидки, сбытовой политики:</p>
+                </div>
+                <i @click="this.modals.view_actions = false" class="pi pi-times"></i>
+            </div>
+            <div>
+                <table class="new-modal__table">
+                    <thead>
+                        <tr>
+                            <th style="width: 36%;">Название</th>
+                            <th style="width: 32%;">Описание</th>
+                            <th style="width: 23%;">Статус совместимости</th>
+                            <th style="width: 9%;">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12.5 19H19M14.5312 7.57576L17.375 9.93939M7.21875 14.6667L15.2296 6.6273C16.0921 5.7909 17.4906 5.7909 18.3531 6.6273C19.2156 7.4637 19.2156 8.81977 18.3531 9.65617L10.0625 17.4242L6 18.6061L7.21875 14.6667Z" stroke="#EDEDED" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="item of actions_active" :key="item.id">
+                            <td>
+                                <div>
+                                    <p>
+                                        <span v-if="item.type == 3">Индивидуальна скидка:</span>
+                                        <span v-if="item.type == 1">Акция:</span>
+                                        {{item.name}}</p>
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    <p>
+                                        {{item.description}}
+                                    </p>
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    <p v-if="item.compatibility_discount == 1" class="mb-4"><b>Совместима</b> со всеми акциями</p>
+                                    <p v-if="item.compatibility_discount == 2" class="mb-4"><b>Не совместима</b> со всеми акциями</p>
+                                    <p v-if="item.compatibility_discount == 3" class="mb-4"><b>Не совместима</b> с выбранными акциями</p>
+                                    <p v-if="item.compatibility_discount == 4" class="mb-4"><b>Совместима</b> с выбранными акциями</p>
+
+                                    <p v-if="item.compatibility_discount_mode == 0"><b>Режим совместивости:</b> применяется бóльшая</p>
+                                    <p v-if="item.compatibility_discount_mode == 1"><b>Режим совместивости:</b> складываются</p>
+                                    <p v-if="item.compatibility_discount_mode == 2"><b>Режим совместивости:</b> назначаются последовательно</p>
+
+                                </div>
+                            </td>
+                            <td>
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12.5 19H19M14.5312 7.57576L17.375 9.93939M7.21875 14.6667L15.2296 6.6273C16.0921 5.7909 17.4906 5.7909 18.3531 6.6273C19.2156 7.4637 19.2156 8.81977 18.3531 9.65617L10.0625 17.4242L6 18.6061L7.21875 14.6667Z" stroke="#282828" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </template>
 <script>
 import { useVuelidate } from '@vuelidate/core';
@@ -1546,6 +1612,7 @@ export default {
                 error_product: false,
                 add_group: false,
                 price_group: false,
+                view_actions: false,
                 price_step: 0,
                 type_price: '1',
                 product_id: -1,
@@ -1645,7 +1712,8 @@ export default {
             'org_get_stores_from_api',
             'get_sales_adv_pages_to_api',
             'get_group_api',
-            'build_group_api'
+            'build_group_api',
+            'get_actions_active_api'
         ]),
         addGroup(){
             this.action_groups[this.add_group.id] = {
@@ -2757,6 +2825,10 @@ export default {
             id: this.$route.params.id,
             action: "get"
         })
+        this.get_actions_active_api({
+            id: this.$route.params.id,
+            action: "get/actions/active"
+        })
     },
     components: {
         FileUpload,
@@ -2791,7 +2863,8 @@ export default {
             'org_stores',
             'adv_pages',
             'groups',
-            'group_build'
+            'group_build',
+            'actions_active'
         ]),
         pagesCountSelect() {
             let pages = Math.ceil(this.total_selected / this.per_page);

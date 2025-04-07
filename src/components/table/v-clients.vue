@@ -69,6 +69,7 @@
                   <p class="d-client-card__item"><span class="d-client-card__data-label" v-if="item.req">ИНН:</span> {{ item.req?.inn }}</p>
                   <p class="d-client-card__item"><span class="d-client-card__data-label" v-if="item.phone">Телефон:</span> {{ item.phone }}</p>
                   <p class="d-client-card__item"><span class="d-client-card__data-label" v-if="item.email">Email:</span> {{ item.email }}</p>
+								<p class="client-card__address mt-2" v-if="item.credit.deb_summ > 0 || item.credit.deb_summ_expired > 0"><span class="d-client-card__data-label"><b class="text-black">ДЗ/ПДЗ</b></span> <span style="color: rgb(75, 75, 75);">{{ Number(item.credit.deb_summ).toLocaleString('ru') }} ₽</span> / <span style="color: rgb(217, 40, 40);">{{ Number(item.credit.deb_summ_expired).toLocaleString('ru') }} ₽</span></p>
                 </div>
               </div>
             </div>

@@ -185,14 +185,6 @@
             label: 'Статус',
             type: 'status'
           },
-//           condition: {
-//             label: 'Условия',
-//             type: 'html',
-//             html: `
-// <span class="info-badge tooltip-el" data-tooltip="Необходима интеграция для получения данных">
-//   <i class="pi pi-exclamation-circle"></i>
-// </span>`
-//           },
           active: {
             label: "Активно",
             type: "boolean",
