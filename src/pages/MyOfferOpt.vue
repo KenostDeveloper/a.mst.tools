@@ -52,6 +52,10 @@
 					<span>Сумма</span>
 					<div class="kenost-table-elem__content">{{ this.offer?.cost }}</div>
 				</div>
+				<div class="w-full kenost-table-elem" v-if="this.order?.ur_persone">
+					<span>Покупатель</span>
+					<div class="kenost-table-elem__content gap-2 flex-col"><div>{{ this.order?.ur_persone?.name }}, ИНН:{{ this.order?.ur_persone?.inn }}</div></div>
+				</div>
 				<!-- <div class="w-full kenost-table-elem">
 					<span>Покупатель</span>
 					<div class="kenost-table-elem__content gap-2"><img class="kenost-table-elem__logo" :src="this.offer?.from_org_image?.image" v-if="this.offer?.from_org_image?.image">{{ this.offer?.from_org_name }}</div>

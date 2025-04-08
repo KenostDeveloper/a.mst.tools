@@ -10105,3 +10105,46 @@ button.std-icon__wrapper {
 		}
 	}
 }
+
+.change-ur{
+	&__item + &__item{
+		margin-top: 14px;
+	}
+	&__item{
+		position: relative;
+		cursor: pointer;
+		font-size: 14px !important;
+    	line-height: 18px;
+
+		&::before {
+			content: "";
+
+			background: linear-gradient(
+				90deg,
+				rgba(255, 0, 0, 0.15) 0.06%,
+				rgba(255, 0, 0, 0) 99.95%
+			);
+			border-left: 5px solid #ff0000;
+
+			// position: absolute;
+			// top: 50%;
+			// left: 0;
+			// translate: -20px -50%;
+			position: absolute;
+			top: -8px;
+			left: -12px;
+			z-index: -1;
+			transition-duration: 0.3s;
+
+			height: calc(100% + 14px);
+			width: 100%;
+		}
+
+		&:hover{
+			&::before{
+				z-index: 1;
+
+			}
+		}
+	}
+}

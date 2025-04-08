@@ -8,10 +8,26 @@
                     <i class="pi pi-times"></i>
                 </div>
             </div>
-            <div class="k-order__title" v-else>
-                <span class="title">{{ this.namePathIsNav == 'purchases_offer' ? 'Оформление предложения' : 'Оформление заказа' }}</span>
-                <div class="k-order__close" @click.prevent="fromOrder">
-                    <i class="pi pi-times"></i>
+            
+            <div v-else>
+                <div class="k-order__title">
+                    <span class="title">{{ this.namePathIsNav == 'purchases_offer' ? 'Оформление предложения' : 'Оформление заказа' }}</span>
+                    <div class="k-order__close" @click.prevent="fromOrder">
+                        <i class="pi pi-times"></i>
+                    </div>
+                </div>
+                <div class="dart-alert dart-alert-error mt-3 flex justify-content-space-between align-items-center" v-if="this.namePathIsNav != 'purchases_offer'">
+                    <div>
+                        <p class="mb-0">Ваше юр. лицо для заказа: <b>{{ ur_person.name }}</b></p>
+                        <p class="mb-0">ИНН: <b>{{ ur_person.inn }}</b></p>
+                    </div>
+                    <div>
+                        <div @click="this.modal_ur_person = true" class="flex align-items-center gap-2 cursor-pointer">
+                            <b>Изменить</b>
+                            <i class="pi pi-user-edit"></i>
+                        </div>
+                    </div>
+                    <!-- {{ ur_persons }} -->
                 </div>
             </div>
             <div class="k-order__orders" v-if="order">
@@ -317,6 +333,15 @@
 			</div>
 		</div>
 	</Dialog>
+
+    <Dialog v-model:visible="this.modal_ur_person" header="Выбор юр. лица" :style="{ width: '540px' }">
+		<div class="mt-2 change-ur">
+            <div class="change-ur__item" @click="changeUrPersone(item.id)" v-for="item in this.ur_persons?.filter((org) => org.id !== ur_person.id)">
+                <div>{{ item.name }}</div>
+                <div>ИНН: {{ item.inn }}</div>
+            </div>
+        </div>
+	</Dialog>
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
@@ -362,7 +387,8 @@ export default {
       showChangedCount: false,
       namePathIsNav: null,
       showDataOffer: false,
-      date_end: null
+      date_end: null,
+      modal_ur_person: false
     }
   },
   emits: ['fromOrder', 'orderSubmit'],
@@ -371,7 +397,9 @@ export default {
       'busket_from_api',
       'opt_order_api',
       'opt_api',
-      'offer_api'
+      'offer_api',
+      'get_ur_persons_api',
+      'get_ur_person_api',
     ]),
     fromOrder () {
       this.order = false
@@ -452,6 +480,23 @@ export default {
 				params: { id: this.$route.params.id, offer_id: response.data.data.offer_id },
 			});
         })
+    },
+    changeUrPersone(id){
+      this.opt_api({
+        action: 'set/ur/persone',
+        id: router.currentRoute._value.params.id,
+        id_ur_person: id
+      }).then(() => {
+        this.modal_ur_person = false
+        this.get_ur_persons_api({
+            action: 'get/all/ur/persone',
+            id: router.currentRoute._value.params.id,
+        });
+        this.get_ur_person_api({
+            action: 'get/ur/persone',
+            id: router.currentRoute._value.params.id,
+        });
+      })
     },
     ElemCount(object) {
         if (!this.fetchIds.includes(object.item.item.key)) {
@@ -769,6 +814,14 @@ export default {
         }
     });
     this.namePathIsNav = router?.currentRoute?._value.matched[4]?.name;
+    this.get_ur_persons_api({
+        action: 'get/all/ur/persone',
+        id: router.currentRoute._value.params.id,
+    });
+    this.get_ur_person_api({
+        action: 'get/ur/persone',
+        id: router.currentRoute._value.params.id,
+    });
   },
   updated(){
     this.namePathIsNav = router?.currentRoute?._value.matched[4]?.name;
@@ -776,7 +829,9 @@ export default {
   components: { Counter, Dialog, ActionModal, CalendarVue },
   computed: {
     ...mapGetters([
-      'optbasketall'
+      'optbasketall',
+      'ur_persons',
+      'ur_person'
     ])
   },
   watch: {
@@ -874,7 +929,7 @@ export default {
         }
 
         &__orders{
-            height: calc(100% - 200px);
+            height: calc(100% - 285px);
             overflow-y: auto;
             overflow-x: hidden;
             margin: 20px 0;

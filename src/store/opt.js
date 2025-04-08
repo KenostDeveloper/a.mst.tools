@@ -23,6 +23,8 @@ export default {
     my_orders: [],
     optcatalogwarehouse: [],
     warehouse_basket: [],
+    ur_persons: [],
+    ur_person: []
   },
   actions: {
     set_vendors_to_api ({ commit }, data) {
@@ -96,6 +98,46 @@ export default {
           // commit('SET_MATRIX_TO_VUEX', response.data)
           // console.log(response)
           return response
+        })
+        .catch(error => {
+          if (error.response.status === 403) {
+            localStorage.removeItem('user')
+            router.push({ name: 'main' })
+          }
+        })
+    },
+    get_ur_persons_api ({ commit }, data) {
+      return Axios('/rest/front_opt', {
+        method: 'POST',
+        data: data,
+        headers: {
+          'Access-Control-Allow-Origin': '*'
+        }
+      })
+        .then((response) => {
+          commit('SET_UR_PERSONS_VUEX', response.data)
+          // console.log(response)
+          // return response
+        })
+        .catch(error => {
+          if (error.response.status === 403) {
+            localStorage.removeItem('user')
+            router.push({ name: 'main' })
+          }
+        })
+    },
+    get_ur_person_api ({ commit }, data) {
+      return Axios('/rest/front_opt', {
+        method: 'POST',
+        data: data,
+        headers: {
+          'Access-Control-Allow-Origin': '*'
+        }
+      })
+        .then((response) => {
+          commit('SET_UR_PERSON_VUEX', response.data)
+          // console.log(response)
+          // return response
         })
         .catch(error => {
           if (error.response.status === 403) {
@@ -481,6 +523,12 @@ export default {
     SET_OPT_PRICES: (state, data) => {
       state.oprprices = data
     },
+    SET_UR_PERSONS_VUEX: (state, data) => {
+      state.ur_persons = data.data
+    },
+    SET_UR_PERSON_VUEX: (state, data) => {
+      state.ur_person = data.data
+    },
     SET_OPT_REMAIN_PRICES: (state, data) => {
       state.oprpricesremain = data
     },
@@ -604,6 +652,12 @@ export default {
     },
     warehouse_basket (state) {
       return state.warehouse_basket
+    },
+    ur_persons (state) {
+      return state.ur_persons
+    },
+    ur_person (state) {
+      return state.ur_person
     },
   }
 }

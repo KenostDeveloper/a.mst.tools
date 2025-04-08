@@ -37,6 +37,10 @@
 					<span>Отсрочка</span>
 					<div class="kenost-table-elem__content">{{ this.order.delay }}</div>
 				</div>
+				<div class="w-full kenost-table-elem" v-if="this.order?.ur_persone">
+					<span>Покупатель</span>
+					<div class="kenost-table-elem__content gap-2 flex-col"><div>{{ this.order?.ur_persone?.name }}, ИНН:{{ this.order?.ur_persone?.inn }}</div></div>
+				</div>
 				<!--
 					<div class="w-full kenost-table-elem">
 						<span>Статус</span>

@@ -87,6 +87,11 @@ export default {
 			type: "text",
 			sort: true,
 		},
+		ur_persone_name: {
+			label: "Покупатель",
+			type: "text",
+			sort: true,
+		},
 		seller_w_name: {
           label: 'Магазин/Склад',
           type: 'text',
