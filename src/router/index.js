@@ -44,6 +44,7 @@ import Profile from '../pages/Profile.vue'
 import ProfileHash from '../pages/ProfileHash.vue'
 import OfferOpt from '../pages/OfferOpt.vue'
 import MyOffer from '../pages/MyOfferOpt.vue'
+import SalesAdd from '../pages/Sales.vue'
 
 const routes = [
 	{
@@ -337,6 +338,18 @@ const routes = [
 													},
 												},
 												component: SalesEdit,
+											},
+											{
+												path: "new",
+												name: "org_sales_new",
+												props: true,
+												label: "Добавление акции",
+												meta: {
+													breadcrumb: {
+														label: "Добавление оптовой акции",
+													},
+												},
+												component: SalesAdd,
 											},
 											{
 												path: ":sales_id",
