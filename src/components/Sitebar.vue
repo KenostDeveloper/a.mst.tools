@@ -103,9 +103,9 @@
 					<span class="std-money__label">Баланс</span>
 					<span class="std-money__balance">{{ this.organozation.balance }} ₽</span>
 				</div>
-				<button class="dart-btn dart-btn-secondary std-money__button">
+				<router-link :to="{name: 'org_balance', params: { id: this.$route.params.id }}" class="dart-btn dart-btn-secondary std-money__button">
 					Вывести средства
-				</button>
+				</router-link>
 			</div>
 			<hr class="sitebar-hr" />
 			<div class="sitebar-menu">

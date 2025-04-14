@@ -322,6 +322,14 @@ export default {
 			// const result = await this.v$.$validate();
 			const result = !isNaN(this.costEntered) && this.costEntered > 0;
 
+			console.log('this.costEntered > organization.balance', Number(this.costEntered) > Number(this.organization.balance))
+			console.log(Number(this.costEntered), Number(this.organization.balance))
+
+			if(Number(this.costEntered) > Number(this.organization.balance)){
+				this.$toast.add({ severity: 'error', summary: 'Ошибка', detail: "Вы ввели не корректную сумму для вывода!", life: 3000 });
+				return;
+			}
+
 			if (!result) {
 				console.log(result);
 				return;
