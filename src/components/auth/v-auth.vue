@@ -1,3 +1,93 @@
+<script>
+import { mapActions } from 'vuex';
+import customModal from '../CustomModal.vue';
+import vForgot from './v-forgot.vue';
+import Toast from 'primevue/toast';
+import { sendMetrik } from '../../utils/metrika';
+
+export default {
+    name: 'auth-form',
+    data() {
+        return {
+            mode: 'signIn',
+            loading: false,
+            showForgotModal: false,
+            form: {
+                email: '',
+                password: ''
+            },
+            errors: []
+        };
+    },
+    computed: {
+        getYear() {
+            return new Date().getFullYear();
+        }
+    },
+    methods: {
+        sendMetrik: sendMetrik,
+        ...mapActions({
+            org_get_from_api: 'org_get_from_api',
+            getSessionUser: 'user/getSessionUser',
+        }),
+        formSubmit() {
+            this.signIn();
+        },
+        signIn() {
+            this.loading = true;
+            this.$load(async () => {
+                const data = await this.$api.auth.signIn({
+                    username: this.form.email,
+                    password: this.form.password
+                });
+                if (data.data.success) {
+                    this.getSessionUser()
+                    localStorage.setItem('user', JSON.stringify(data.data.data));
+                    this.$store.dispatch('user/setUser', data.data);
+                    // this.$router.push({ name: 'home' })
+
+                    // this.$router.push({ name: 'org', params: { id: '48' } })
+
+                    const orgs = await this.org_get_from_api({
+                        action: 'get/orgs'
+                    });
+
+                    if (orgs != undefined) {
+                        // console.log(orgs.data.data)
+                        let role = localStorage.getItem('role');
+                        this.sendMetrik('auth');
+                        if (role == 1) {
+                            const res = await this.$router.push({ name: 'retail_orders', params: { id: orgs.data.data[0].id } });
+                        } else if (role == 2) {
+                            const res = await this.$router.push({ name: 'statistics', params: { id: orgs.data.data[0].id } });
+                        } else {
+                            const res = await this.$router.push({ name: 'purchases_home', params: { id: orgs.data.data[0].id } });
+                        }
+                    } else {
+                        this.deleteUser();
+                        this.$router.push({ name: 'home' })
+                    }
+                } else {
+                    this.$toast.add({ severity: 'error', summary: 'Вход запрещен', detail: data.data.message, life: 3000 });
+                    this.loading = false;
+                }
+            });
+        },
+        cancel(close) {
+            close();
+        },
+        setRegForm() {
+            this.$emit('setRegForm', true);
+        }
+    },
+    components: {
+        customModal,
+        vForgot,
+        Toast
+    }
+};
+</script>
+
 <template>
     <section class="dart_wrapper auth">
         <form class="auth__form" @submit.prevent="formSubmit">
@@ -28,12 +118,12 @@
                             <i class="d-icon-times d-close__icon"></i>
                         </button>
 
-                        <!-- Сообщение об ошибке -->
-                        <!-- <div class="d-input-error">
-                            <i class="d-icon-warning d-input-error__icon"></i>
-                            <span class="d-input-error__text">Пароль должен содержать не менее 8 символов</span>
-                        </div> -->
                     </div>
+                    <!-- Сообщение об ошибке -->
+                    <!-- <div class="d-input-error">
+                        <i class="d-icon-warning d-input-error__icon"></i>
+                        <span class="d-input-error__text">Пароль должен содержать не менее 8 символов</span>
+                    </div> -->
                 </div>
                 <div class="d-input__wrapper">
                     <div class="d-input"> <!-- При ошибке: d-input--error -->
@@ -145,95 +235,5 @@
         </custom-modal>
     </teleport>
 </template>
-
-<script>
-import { mapActions } from 'vuex';
-import customModal from '../CustomModal.vue';
-import vForgot from './v-forgot.vue';
-import Toast from 'primevue/toast';
-import { sendMetrik } from '../../utils/metrika';
-
-export default {
-    name: 'auth-form',
-    data() {
-        return {
-            mode: 'signIn',
-            loading: false,
-            showForgotModal: false,
-            form: {
-                email: '',
-                password: ''
-            },
-            errors: []
-        };
-    },
-    computed: {
-        getYear() {
-            return new Date().getFullYear();
-        }
-    },
-    methods: {
-        sendMetrik: sendMetrik,
-        ...mapActions({
-            org_get_from_api: 'org_get_from_api',
-            getSessionUser: 'user/getSessionUser',
-        }),
-        formSubmit() {
-            this.signIn();
-        },
-        signIn() {
-            this.loading = true;
-            this.$load(async () => {
-                const data = await this.$api.auth.signIn({
-                    username: this.form.email,
-                    password: this.form.password
-                });
-                if (data.data.success) {
-                    this.getSessionUser()
-                    localStorage.setItem('user', JSON.stringify(data.data.data));
-                    this.$store.dispatch('user/setUser', data.data);
-                    // this.$router.push({ name: 'home' })
-
-                    // this.$router.push({ name: 'org', params: { id: '48' } })
-
-                    const orgs = await this.org_get_from_api({
-                        action: 'get/orgs'
-                    });
-
-                    if (orgs != undefined) {
-                        // console.log(orgs.data.data)
-                        let role = localStorage.getItem('role');
-                        this.sendMetrik('auth');
-                        if (role == 1) {
-                            const res = await this.$router.push({ name: 'retail_orders', params: { id: orgs.data.data[0].id } });
-                        } else if (role == 2) {
-                            const res = await this.$router.push({ name: 'statistics', params: { id: orgs.data.data[0].id } });
-                        } else {
-                            const res = await this.$router.push({ name: 'purchases_home', params: { id: orgs.data.data[0].id } });
-                        }
-                    } else {
-                        this.deleteUser();
-                        this.$router.push({ name: 'home' })
-                    }
-                } else {
-                    this.$toast.add({ severity: 'error', summary: 'Вход запрещен', detail: data.data.message, life: 3000 });
-                    this.loading = false;
-                }
-            });
-        },
-        cancel(close) {
-            close();
-        },
-        setRegForm() {
-            this.$emit('setRegForm', true);
-        }
-    },
-    components: {
-        customModal,
-        vForgot,
-        Toast
-    }
-};
-</script>
 
 <style lang="scss"></style>

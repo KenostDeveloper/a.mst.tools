@@ -1,218 +1,3 @@
-<template>
-    <div>
-        <div class="analytics_reg">
-            <form class="form-signup" @submit.prevent="formSubmit" autocomplete="false">
-                <div class="logo text-center">
-                    <img src="../../assets/images/logo.svg" alt="" width="200" />
-                </div>
-
-                <div v-if="!this.regIsSuccess" class="std-auth__input-container">
-                    <div :class="{ 'has-error': v$.form.login.$error }">
-                        <FloatLabel>
-                            <input
-                                ref="loginInput"
-                                type="text"
-                                id="login"
-                                placeholder="Логин"
-                                class="dart-form-control std-auth__input"
-                                v-model="form.login"
-                                autocomplete="off" />
-                            <div v-if="v$.form.login.$error" class="error-message">
-                                <span v-if="!v$.form.login.required">Пожалуйста, введите логин.</span>
-                                <span v-else-if="v$.form.login.minLength">Логин должен содержать минимум 3 символа.</span>
-                                <span v-else-if="v$.form.login.maxLength">Логин должен содержать максимум 30 символов.</span>
-                            </div>
-                        </FloatLabel>
-                    </div>
-
-                    <div :class="{ 'has-error': v$.form.password.$error }">
-                        <FloatLabel>
-                            <div class="relative">
-                                <input
-                                    :type="showPassword1 ? 'text' : 'password'"
-                                    ref="passwordInput"
-                                    id="password"
-                                    placeholder="Пароль"
-                                    class="dart-form-control std-auth__input"
-                                    v-model="form.password"
-                                    autocomplete="new-password" />
-                                <button type="button" @click="togglePasswordVisibility1" class="password-toggle">
-                                    <i :class="showPassword1 ? 'pi pi-eye-slash' : 'pi pi-eye'"></i>
-                                </button>
-                            </div>
-                            <div v-if="v$.form.password.$error" class="error-message">
-                                <span v-if="!v$.form.password.required">Пожалуйста, введите пароль.</span>
-                                <span v-else-if="v$.form.password.minLength">Пароль должен содержать минимум 6 символов.</span>
-                            </div>
-                        </FloatLabel>
-                    </div>
-
-                    <div :class="{ 'has-error': v$.form.passwordConfirm.$error }">
-                        <FloatLabel>
-                            <div class="relative">
-                                <input
-                                    :type="showPassword2 ? 'text' : 'password'"
-                                    id="passwordConfirm"
-                                    placeholder="Подтверждение пароля"
-                                    class="dart-form-control std-auth__input"
-                                    v-model="form.passwordConfirm"
-                                    autocomplete="new-password" />
-                                <button type="button" @click="togglePasswordVisibility2" class="password-toggle">
-                                    <i :class="showPassword2 ? 'pi pi-eye-slash' : 'pi pi-eye'"></i>
-                                </button>
-                            </div>
-                            <div v-if="v$.form.passwordConfirm.$error" class="error-message">
-                                <span>Пожалуйста, подтвердите пароль. Пароли должны совпадать.</span>
-                            </div>
-                        </FloatLabel>
-                    </div>
-                </div>
-
-                <div v-if="!this.regIsSuccess" class="std-auth__input-container-wrapper">
-                    <span class="std-auth__input-label">Данные контактного лица</span>
-
-                    <div :class="{ 'has-error': v$.form.name.$error }">
-                        <Autocomplete
-                            ref="nameInput"
-                            name="name"
-                            id="name"
-                            placeholder="ФИО контактного лица"
-                            class="dart-form-control std-auth__input"
-                            type="fio"
-                            selectionType="single"
-                            v-model="form.name"
-                            @setSelection="setName"
-                            autocomplete="off" />
-                        <div v-if="v$.form.name.$error" class="error-message">
-                            <span v-if="!v$.form.name.required">Пожалуйста, введите ФИО.</span>
-                            <span v-else-if="v$.form.name.minLength">ФИО должно содержать минимум 3 символа.</span>
-                        </div>
-                    </div>
-
-                    <div :class="{ 'has-error': v$.form.telephone.$error }">
-                        <input
-                            v-imask="mask"
-                            type="tel"
-                            id="telephone"
-                            placeholder="Телефон"
-                            class="dart-form-control std-auth__input"
-                            v-model="form.telephone"
-                            @input="form.telephone = normalizePhone(form.telephone)"
-                            autocomplete="off" />
-                        <div v-if="v$.form.telephone.$error" class="error-message">
-                            <span v-if="!v$.form.telephone.required">Пожалуйста, введите номер телефона.</span>
-                            <span v-else-if="v$.form.telephone.minLength">Введите корректный номер телефона.</span>
-                        </div>
-                    </div>
-
-                    <div :class="{ 'has-error': v$.form.email.$error }">
-                        <input
-                            type="email"
-                            id="email"
-                            placeholder="Email"
-                            class="dart-form-control std-auth__input"
-                            v-model="form.email"
-                            autocomplete="off" />
-                        <div v-if="v$.form.email.$error" class="error-message">
-                            <span v-if="!v$.form.email.required">Пожалуйста, введите email.</span>
-                            <span v-else-if="v$.form.email.email">Введите корректный email.</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div v-if="!this.regIsSuccess" class="std-auth__input-container-wrapper">
-                    <span class="std-auth__input-label">Данные компании</span>
-
-                    <div :class="{ 'has-error': v$.form.org.inn.validInn.$response != true && v$.form.org.inn.$dirty }">
-                        <!-- <input
-                            maxlength="12"
-                            ref="innInput"
-                            name="inn"
-                            id="inn"
-                            placeholder="ИНН"
-                            class="dart-form-control std-auth__input"
-                            v-model="form.org.inn"
-                        /> -->
-                        <Autocomplete
-                            ref="innInput"
-                            name="inn"
-                            id="inn"
-                            placeholder="ИНН"
-                            class="dart-form-control std-auth__input"
-                            type="company"
-                            selectionType="single"
-                            v-model="form.org.inn"
-                            @setSelection="setCompany"
-                        />
-                        <!-- {{ v$.form.org.inn.validInn.$response }} -->
-                        <div v-if="v$.form.org.inn.validInn.$response != true && v$.form.org.inn.$dirty" class="error-message">
-                            <span>{{ v$.form.org.inn.validInn.$response || 'Некорректный ИНН' }}</span>
-                        </div>
-                    </div>
-
-                    <div :class="{ 'has-error': v$.form.org.name.$error }">
-                        <input
-                            type="text"
-                            id="org_name"
-                            placeholder="Наименование организации"
-                            class="dart-form-control std-auth__input"
-                            v-model="form.org.name"
-                            autocomplete="off"
-                        />
-                        <div v-if="v$.form.org.name.$error" class="error-message">
-                            <span v-if="!v$.form.org.name.required">Пожалуйста, введите наименование организации.</span>
-                            <span v-else-if="v$.form.org.name.minLength">Наименование должно содержать минимум 3 символа.</span>
-                        </div>
-                    </div>
-
-                    <div class="std-auth__input-container">
-                        <span class="std-auth__input-label">Адрес доставки</span>
-                        <AddAddress
-                            v-for="(address, index) in form.delivery_addresses"
-                            :key="index"
-                            :index="index"
-                            v-model="form.delivery_addresses[index]"
-                        />
-                        <div class="std-auth__actions-container">
-                            <button
-                                v-if="form.delivery_addresses.length > 1"
-                                class="dart-btn dart-btn-secondary dart-btn-block align-items-center flex justify-content-center std-auth__button std-auth__button--secondary"
-                                type="button"
-                                @click="() => this.form.delivery_addresses.pop()">
-                                <span>Удалить</span>
-                            </button>
-                            <button
-                                class="dart-btn dart-btn-secondary dart-btn-block align-items-center flex justify-content-center std-auth__button std-auth__button--secondary"
-                                type="button"
-                                @click="() => this.form.delivery_addresses.push({ value: '' })">
-                                <span>Добавить адрес</span>
-                                <i class="pi pi-plus"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="std-auth__button-container">
-                    <button v-if="!this.regIsSuccess" :disabled="this.loading" class="dart-btn dart-btn-primary dart-btn-block align-items-center flex justify-content-center std-auth__button" type="submit">
-                        <i v-if="this.loading" class="pi pi-spin pi-spinner" style="font-size: 14px"></i>
-                        <span>Зарегистрироваться</span>
-                    </button>
-                    
-                    <!-- {{ this.form.telephone }} -->
-
-                    <span v-if="this.regIsSuccess" class="std-auth__span">Регистрация прошла успешно!</span>
-                    <button @click="() => { this.setRegForm(); this.regIsSuccess = false; }" class="dart-btn dart-btn-secondary-outline dart-btn-block align-items-center flex justify-content-center std-auth__button std-auth__button--secondary" type="button">
-                        <span>Войти</span>
-                    </button>
-                    <p class="kenost-policy">Нажимая кнопку "Зарегистрироваться", Вы соглашаетесь с <a targer="_blank" href="https://mst.tools/politika-konfidenczialnosti.html">Политика конфиденциальности</a> и обработкой персональных данных</p>
-
-                </div>
-            </form>
-        </div>
-    </div>
-
-</template>
-
-
 <script>
 import Autocomplete from '../Autocomplete.vue';
 import InputText from 'primevue/inputtext';
@@ -351,7 +136,7 @@ export default {
                 },
                 delivery_addresses: {
                     $each: {
-                        value: { 
+                        value: {
                             required,
                             minLength: minLength(5) // Минимальная длина адреса (пример)
                         }
@@ -466,7 +251,7 @@ export default {
             this.form.org.ogrn = company.data.ogrn;
             this.form.org.opf = company.data.opf.short;
         },
-        setName(name){
+        setName(name) {
             this.form.name = name.value
             this.form.contact = name.data
         },
@@ -484,6 +269,9 @@ export default {
                 this.$refs.passwordInput.focus();
                 this.$refs.passwordInput.parentElement.classList.add('error');
             }
+        },
+        setLoginForm() {
+            this.$emit('setRegForm', false);
         }
     },
     computed: {
@@ -496,3 +284,344 @@ export default {
     }
 };
 </script>
+
+<template>
+    <section class="dart_wrapper auth registration">
+        <form class="auth__form registration__form" @submit.prevent="formSubmit">
+            <a class="d-back registration__back" @click.prevent="setLoginForm">
+                <i class="d-icon-arrow d-back__icon"></i>
+                <span class="d-back__text hidden-640">Назад</span>
+            </a>
+            <a href="/" class="auth__logo registration__logo">
+                <picture>
+                    <source media="(max-width: 1920px)" srcset="/icons/logo/logo-1920.svg" />
+                    <source media="(max-width: 800px)" srcset="/icons/logo/logo-800.svg" />
+                    <source media="(max-width: 640px)" srcset="/icons/logo/logo-640.svg" />
+                    <source media="(max-width: 400px)" srcset="/icons/logo/logo-400.svg" />
+                    <source media="(max-width: 320px)" srcset="/icons/logo/logo-320.svg" />
+                    <img src="/icons/logo/logo-1920.svg" loading="lazy" width="368" height="79" />
+                </picture>
+            </a>
+
+            <!-- <div class="auth__loading">
+					<canvas class="d-loader" style="width: 60px; height: 60px"></canvas>
+					<p class="text">Пожалуйста, подождите,<br>идет загрузка контента</p>
+				</div> -->
+
+            <div class="registration__fields">
+                <div class="d-input__group">
+                    <div class="d-input__wrapper">
+                        <div :class="`d-input ${v$.form.login.$error && 'd-input--error'}`">
+                            <input type="text" placeholder="Логин" name="login" class="d-input__field"
+                                data-input-id="login" required ref="loginInput" id="login" v-model="form.login"
+                                autocomplete="off" />
+                            <button type="button" class="d-close d-input__button" data-input="clear"
+                                data-for-input="login">
+                                <i class="d-icon-times d-close__icon"></i>
+                            </button>
+                        </div>
+
+                        <div v-if="v$.form.login.$error" class="d-input-error">
+                            <i class="d-icon-warning d-input-error__icon"></i>
+                            <span v-if="!v$.form.login.required" class="d-input-error__text">
+                                Пожалуйста, введите логин.
+                            </span>
+                            <span v-else-if="v$.form.login.minLength" class="d-input-error__text">
+                                Логин должен содержать минимум 3 символа.
+                            </span>
+                            <span v-else-if="v$.form.login.maxLength" class="d-input-error__text">
+                                Логин должен содержать максимум 30 символов.
+                            </span>
+                        </div>
+                    </div>
+                    <div class="d-input__wrapper">
+                        <div :class="`d-input ${v$.form.password.$error && 'd-input--error'}`">
+                            <input type="password" placeholder="Пароль" name="password" class="d-input__field"
+                                data-input-id="new-password" required ref="passwordInput" v-model="form.password"
+                                autocomplete="new-password" maxlength="128" />
+                            <button type="button" class="d-show-alt d-input__button" data-input="show"
+                                data-for-input="new-password">
+                                <i class="d-icon-eye d-show-alt__icon"></i>
+                            </button>
+                            <div class="d-show__wrapper d-input__button" data-input="hide"
+                                data-for-input="new-password">
+                                <button type="button" class="d-show d-input__show">
+                                    <i class="d-icon-eye d-show__icon"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div v-if="v$.form.password.$error" class="d-input-error">
+                            <i class="d-icon-warning d-input-error__icon"></i>
+                            <span v-if="!v$.form.password.required" class="d-input-error__text">
+                                Пожалуйста, введите пароль.
+                            </span>
+                            <span v-else-if="v$.form.password.minLength" class="d-input-error__text">
+                                Пароль должен содержать минимум 6 символов.
+                            </span>
+                        </div>
+                    </div>
+                    <div class="d-input__wrapper">
+                        <div :class="`d-input ${v$.form.passwordConfirm.$error && 'd-input--error'}`">
+                            <input type="password" placeholder="Повторите пароль" name="passwordConfirm"
+                                class="d-input__field" data-input-id="passwordConfirm" required ref="passwordInput"
+                                v-model="form.passwordConfirm" autocomplete="passwordConfirm" maxlength="128" />
+                            <button type="button" class="d-show-alt d-input__button" data-input="show"
+                                data-for-input="passwordConfirm">
+                                <i class="d-icon-eye d-show-alt__icon"></i>
+                            </button>
+                            <div class="d-show__wrapper d-input__button" data-input="hide"
+                                data-for-input="passwordConfirm">
+                                <button type="button" class="d-show d-input__show">
+                                    <i class="d-icon-eye d-show__icon"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div v-if="v$.form.passwordConfirm.$error" class="d-input-error">
+                            <i class="d-icon-warning d-input-error__icon"></i>
+                            <span class="d-input-error__text">
+                                Пожалуйста, подтвердите пароль. Пароли должны совпадать.
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <fieldset class="d-input__group">
+                    <legend class="d-input__label">Данные контактного лица:</legend>
+                    <div class="d-input__wrapper">
+                        <div :class="`d-input ${v$.form.name.$error && 'd-input--error'}`">
+
+                            <!-- TODO Переделать на Autocomplete -->
+                            <input placeholder="ФИО контактного лица" class="d-input__field" data-input-id="name"
+                                required ref="nameInput" name="name" id="name" type="fio" selectionType="single"
+                                v-model="form.name" @setSelection="setName" autocomplete="off" />
+                            <button type="button" class="d-close d-input__button" data-input="clear"
+                                data-for-input="name">
+                                <i class="d-icon-times d-close__icon"></i>
+                            </button>
+                        </div>
+
+                        <div v-if="v$.form.name.$error" class="d-input-error">
+                            <i class="d-icon-warning d-input-error__icon"></i>
+                            <span v-if="!v$.form.name.required" class="d-input-error__text">
+                                Пожалуйста, введите ФИО.
+                            </span>
+                            <span v-else-if="v$.form.name.minLength" class="d-input-error__text">
+                                ФИО должно содержать минимум 3 символа.
+                            </span>
+                        </div>
+                    </div>
+                    <div class="d-input__wrapper">
+                        <div :class="`d-input ${v$.form.telephone.$error && 'd-input--error'}`">
+                            <input type="tel" placeholder="Телефон" name="phone" class="d-input__field"
+                                data-input-id="phone" required v-imask="mask" id="telephone" v-model="form.telephone"
+                                @input="form.telephone = normalizePhone(form.telephone)" autocomplete="off" />
+                        </div>
+
+                        <div v-if="v$.form.telephone.$error" class="d-input-error">
+                            <i class="d-icon-warning d-input-error__icon"></i>
+                            <span v-if="!v$.form.telephone.required" class="d-input-error__text">Пожалуйста, введите
+                                номер телефона.</span>
+                            <span v-else-if="v$.form.telephone.minLength" class="d-input-error__text">Введите корректный
+                                номер телефона.</span>
+                        </div>
+                    </div>
+                    <div class="d-input__wrapper">
+                        <div :class="`d-input ${v$.form.email.$error && 'd-input--error'}`">
+                            <input type="email" placeholder="Email" name="email" class="d-input__field"
+                                data-input-id="email" required />
+                            <button type="button" class="d-close d-input__button" data-input="clear"
+                                data-for-input="email">
+                                <i class="d-icon-times d-close__icon"></i>
+                            </button>
+                        </div>
+
+                        <div v-if="v$.form.email.$error" class="d-input-error">
+                            <i class="d-icon-warning d-input-error__icon"></i>
+                            <span v-if="!v$.form.email.required" class="d-input-error__text">Пожалуйста, введите
+                                email.</span>
+                            <span v-else-if="v$.form.email.email" class="d-input-error__text">Введите корректный
+                                email.</span>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset class="d-input__group">
+                    <legend class="d-input__label">Данные компании:</legend>
+                    <div class="d-input__wrapper">
+                        <div :class="{ 'd-input': true, 'd-input--error': v$.form.org.name.$error }">
+                            <input type="text" placeholder="Наименование организации" name="org_name"
+                                class="d-input__field" data-input-id="org_name" required id="org_name"
+                                v-model="form.org.name" autocomplete="off" />
+                            <button type="button" class="d-close d-input__button" data-input="clear"
+                                data-for-input="org_name">
+                                <i class="d-icon-angle-rounded d-close__icon"></i>
+                            </button>
+
+                            <ul class="d-input__suggestions">
+                                <!-- <div class="d-input__suggestion d-input__suggestion--none">Нет данных результата</div> -->
+                                <!-- <li class="d-input__suggestion d-input__suggestion--disable">
+                                    ООО «МСТ» Технологический завод заводов
+                                </li>
+                                <li class="d-input__suggestion">
+                                    ООО «МСТ» Технологический завод заводов
+                                </li>
+                                <li class="d-input__suggestion">
+                                    ООО «МСТ» Технологический завод заводов
+                                </li>
+                                <li class="d-input__suggestion">
+                                    ООО «МСТ» Технологический завод заводов
+                                </li>
+                                <li class="d-input__suggestion">
+                                    ООО «МСТ» Технологический завод заводов
+                                </li>
+                                <li class="d-input__suggestion">
+                                    ООО «МСТ» Технологический завод заводов
+                                </li> -->
+                            </ul>
+                        </div>
+
+                        <div v-if="v$.form.org.name.$error" class="d-input-error">
+                            <i class="d-icon-warning d-input-error__icon"></i>
+                            <span v-if="!v$.form.org.name.required" class="d-input-error__text">Пожалуйста, введите
+                                наименование организации.</span>
+                            <span v-else-if="v$.form.org.name.minLength" class="d-input-error__text">Наименование должно
+                                содержать минимум 3 символа.</span>
+                        </div>
+                    </div>
+                    <div class="d-input__wrapper">
+                        <div
+                            :class="{ 'd-input': true, 'd-input--error': v$.form.org.inn.validInn.$response != true && v$.form.org.inn.$dirty }">
+                            <input placeholder="ИНН" class="d-input__field" data-input-id="inn" required ref="innInput"
+                                name="inn" id="inn" type="company" selectionType="single" v-model="form.org.inn"
+                                @setSelection="setCompany" />
+                        </div>
+
+                        <div v-if="v$.form.org.inn.validInn.$response != true && v$.form.org.inn.$dirty"
+                            class="d-input-error">
+                            <i class="d-icon-warning d-input-error__icon"></i>
+                            <span class="d-input-error__text">
+                                {{ v$.form.org.inn.validInn.$response || 'Некорректный ИНН' }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="address-map__wrapper">
+                        <div class="d-input__wrapper">
+                            <div class="d-input">
+                                <input type="text" placeholder="Адрес доставки" name="address" class="d-input__field"
+                                    data-input-id="address1" required />
+                            </div>
+                        </div>
+                        <div class="address-map">
+                            <div class="yandex-map" style="width: 100%; height: 100%" data-for-input="address1"></div>
+                            <button type="button" class="d-window-button address-map__button">
+                                <i class="d-icon-window d-window-button__icon"></i>
+                            </button>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <button class="d-button d-button-secondary registration__add-button">
+                    <i class="d-icon-plus"></i>
+                    Добавить адрес доставки
+                </button>
+            </div>
+            <button v-if="!this.regIsSuccess" :disabled="this.loading"
+                class="d-button d-button-primary box-shadow-none">
+                <i v-if="this.loading" class="pi pi-spin pi-spinner" style="font-size: 14px"></i>
+                Зарегистрироваться
+            </button>
+        </form>
+
+        <div class="auth__footer">
+            <div class="feedback visible-800">
+                <div class="feedback__content">
+                    <p class="feedback__title">Не получается войти в ЛК?</p>
+                    <p class="feedback__text">
+                        Свяжитесь с нами через почту
+                        <a href="mailto:client.ms@yandex.ru" class="inline-block link">client.ms@yandex.ru</a>
+                        или по номеру телефона
+                        <a href="tel:88003501519" class="inline-block link">+7 (800) 350-15-19</a>
+                    </p>
+                </div>
+            </div>
+            <div class="copyright visible-800">
+                <span class="copyright__text">© МСТ, 2024</span>
+            </div>
+        </div>
+
+        <div class="copyright hidden-800">
+            <span class="copyright__text">© МСТ, 2024</span>
+        </div>
+
+        <div class="feedback hidden-800">
+            <div class="feedback__content">
+                <p class="feedback__title">Не получается войти в ЛК?</p>
+                <p class="feedback__text">
+                    Свяжитесь с нами через обратную связь, кликнув на кнопку, расположенную
+                    справа.
+                </p>
+            </div>
+
+            <div class="feedback__button-wrapper">
+                <button type="button" class="d-button d-button-primary d-button-rounded">
+                    <i class="d-icon-messages d-button-rounded__icon"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <div class="d-modal__wrapper">
+        <div class="d-modal registration-address">
+            <button class="d-modal__close">
+                <i class="d-icon-times d-modal__icon"></i>
+            </button>
+            <div class="d-modal__content">
+                <div class="registration-address__header">
+                    <i class="d-icon-location registration-address__icon"></i>
+                    <p class="d-modal__title">Выберите адрес доставки</p>
+                </div>
+                <div class="registration-address__map">
+                    <div class="yandex-map" data-for-input="address1" style="width: 100%; height: 100%;"></div>
+                </div>
+                <form class="d-search registration-address__search">
+                    <i class="d-icon-search d-search__icon"></i>
+                    <input type="text" placeholder="Найти адрес доставки" class="d-search__field" />
+                    <button type="button"
+                        class="d-button d-button-primary d-button-primary-small box-shadow-none d-search__button">
+                        Найти
+                    </button>
+
+                    <ul class="d-search__suggestions">
+                        <li class="d-search__suggestion">
+                            Россия, Москва, Большой Предтеченский переулок, 13с4
+                        </li>
+                        <li class="d-search__suggestion">
+                            Россия, Москва, Большой Предтеченский переулок, 13с4
+                        </li>
+                        <li class="d-search__suggestion">
+                            Россия, Москва, Большой Предтеченский переулок, 13с4
+                        </li>
+                        <li class="d-search__suggestion">
+                            Россия, Москва, Большой Предтеченский переулок, 13с4
+                        </li>
+                    </ul>
+                </form>
+
+                <p class="registration-address__address">
+                    Россия, Москва, Большой Предтеченский переулок, 13с4
+                </p>
+
+                <div class="registration-address__buttons">
+                    <button type="button" class="d-button d-button-secondary d-button-secondary-small box-shadow-none">
+                        Отмена
+                    </button>
+                    <button type="button"
+                        class="d-button d-button-primary d-button-primary-small box-shadow-none">Выбрать</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

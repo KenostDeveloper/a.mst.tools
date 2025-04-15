@@ -119,7 +119,7 @@ try {
 		// Обратное геокодирование через Яндекс API
 
 		const response = await fetch(
-			`https://geocode-maps.yandex.ru/1.x/?apikey=9cc9371c-b0ef-422b-b0be-2b1d49e32386&geocode=${coordinates.join(",")}&format=json&results=1`
+			`https://geocode-maps.yandex.ru/1.x/?apikey=${process.env.YANDEX_API_KEY}&geocode=${coordinates.join(",")}&format=json&results=1`
 		).catch((err) => {
 			console.error("Ошибка получения адреса по координатам: " + err);
 		});
@@ -132,7 +132,7 @@ try {
 		// Обратное геокодирование через Яндекс API
 
 		const response = await fetch(
-			`https://geocode-maps.yandex.ru/1.x/?apikey=9cc9371c-b0ef-422b-b0be-2b1d49e32386&geocode=${address}&format=json&results=1`
+			`https://geocode-maps.yandex.ru/1.x/?apikey=${process.env.YANDEX_API_KEY}&geocode=${address}&format=json&results=1`
 		).catch((err) => {
 			console.error("Ошибка получения адреса по координатам: " + err);
 		});
@@ -350,7 +350,7 @@ try {
 	const header = document.querySelector(".header");
 	const main = document.querySelector(".main");
 
-	main.addEventListener("scroll", (e) => {
+	main?.addEventListener("scroll", (e) => {
 		const promotionsInfoTop = Math.floor(promotionsInfo.getClientRects()[0].top);
 		const headerHeight = Math.floor(header.getClientRects()[0].height);
 
