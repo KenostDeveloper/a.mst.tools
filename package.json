@@ -40,6 +40,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.1.2",
+    "@lottiefiles/dotlottie-web": "^0.40.1",
     "autoprefixer": "^10.4.20",
     "imask": "^7.6.1",
     "sass-embedded": "^1.77.8",
