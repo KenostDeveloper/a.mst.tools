@@ -1117,7 +1117,7 @@ export default {
         })
         this.opt_get_prices({
             action: 'get/type/prices',
-            store_id: [router.currentRoute._value.params.store_id]
+            store_id: this.form.store_id
         }).then(() => {
             this.get_actions_discount_api({
                 action: 'get/individual',
@@ -1142,7 +1142,7 @@ export default {
         this.get_group_api({
             id: this.$route.params.id,
             action: "get",
-            store_id: router.currentRoute._value.params.store_id,
+            store_id: this.form.store_id[0],
         })
         this.get_dilers_from_api({
 			type: 1,
@@ -2042,6 +2042,11 @@ export default {
 
                 if(newVal.store_id){
                     this.form.store_id = [newVal.store_id]
+
+                    this.opt_get_prices({
+                        action: 'get/type/prices',
+                        store_id: this.form.store_id
+                    })
                 }
 
                 if(newVal.client_id){
