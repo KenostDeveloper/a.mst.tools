@@ -393,7 +393,7 @@ export default {
                         <div :class="`d-input ${v$.form.name.$error && 'd-input--error'}`">
 
                             <!-- TODO Переделать на Autocomplete -->
-                            <Autocomplete placeholder="ФИО контактного лица" class="d-input__field" data-input-id="name"
+                            <Autocomplete placeholder="ФИО контактного лица" data-input-id="name"
                                 required ref="nameInput" name="name" id="name" type="fio" selectionType="single"
                                 v-model="form.name" @setSelection="setName" autocomplete="off" />
                             <button type="button" class="d-close d-input__button" data-input="clear"
