@@ -136,7 +136,7 @@ try {
 		// Обратное геокодирование через Яндекс API
 
 		const response = await fetch(
-			`https://geocode-maps.yandex.ru/1.x/?apikey=${process.env.YANDEX_API_KEY}&geocode=${coordinates.join(",")}&format=json&results=1`
+			`https://geocode-maps.yandex.ru/1.x/?apikey=${process.env.VITE_YANDEX_API_KEY}&geocode=${coordinates.join(",")}&format=json&results=1`
 		).catch((err) => {
 			console.error("Ошибка получения адреса по координатам: " + err);
 		});

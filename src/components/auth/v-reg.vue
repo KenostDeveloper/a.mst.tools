@@ -311,7 +311,7 @@ export default {
             <div class="registration__fields">
                 <div class="d-input__group">
                     <div class="d-input__wrapper">
-                        <div :class="`d-input ${v$.form.login.$error && 'd-input--error'}`">
+                        <div :class="{ 'd-input': true, 'd-input--error': v$.form.login.$error }">
                             <input type="text" placeholder="Логин" name="login" class="d-input__field"
                                 data-input-id="login" required ref="loginInput" id="login" v-model="form.login"
                                 autocomplete="off" />
@@ -335,7 +335,7 @@ export default {
                         </div>
                     </div>
                     <div class="d-input__wrapper">
-                        <div :class="`d-input ${v$.form.password.$error && 'd-input--error'}`">
+                        <div :class="{ 'd-input': true, 'd-input--error': v$.form.password.$error }">
                             <input type="password" placeholder="Пароль" name="password" class="d-input__field"
                                 data-input-id="new-password" required ref="passwordInput" v-model="form.password"
                                 autocomplete="new-password" maxlength="128" />
@@ -362,7 +362,7 @@ export default {
                         </div>
                     </div>
                     <div class="d-input__wrapper">
-                        <div :class="`d-input ${v$.form.passwordConfirm.$error && 'd-input--error'}`">
+                        <div :class="{ 'd-input': true, 'd-input--error': v$.form.passwordConfirm.$error }">
                             <input type="password" placeholder="Повторите пароль" name="passwordConfirm"
                                 class="d-input__field" data-input-id="passwordConfirm" required ref="passwordInput"
                                 v-model="form.passwordConfirm" autocomplete="passwordConfirm" maxlength="128" />
@@ -390,11 +390,11 @@ export default {
                 <fieldset class="d-input__group">
                     <legend class="d-input__label">Данные контактного лица:</legend>
                     <div class="d-input__wrapper">
-                        <div :class="`d-input ${v$.form.name.$error && 'd-input--error'}`">
+                        <div :class="{ 'd-input': true, 'd-input--error': v$.form.name.$error }">
 
                             <!-- TODO Переделать на Autocomplete -->
-                            <Autocomplete placeholder="ФИО контактного лица" data-input-id="name"
-                                required ref="nameInput" name="name" id="name" type="fio" selectionType="single"
+                            <Autocomplete placeholder="ФИО контактного лица" data-input-id="name" required
+                                ref="nameInput" name="name" id="name" type="fio" selectionType="single"
                                 v-model="form.name" @setSelection="setName" autocomplete="off" />
                             <button type="button" class="d-close d-input__button" data-input="clear"
                                 data-for-input="name">
@@ -413,7 +413,7 @@ export default {
                         </div>
                     </div>
                     <div class="d-input__wrapper">
-                        <div :class="`d-input ${v$.form.telephone.$error && 'd-input--error'}`">
+                        <div :class="{ 'd-input': true, 'd-input--error': v$.form.telephone.$error }">
                             <input type="tel" placeholder="Телефон" name="phone" class="d-input__field"
                                 data-input-id="phone" required v-imask="mask" id="telephone" v-model="form.telephone"
                                 @input="form.telephone = normalizePhone(form.telephone)" autocomplete="off" />
@@ -428,7 +428,7 @@ export default {
                         </div>
                     </div>
                     <div class="d-input__wrapper">
-                        <div :class="`d-input ${v$.form.email.$error && 'd-input--error'}`">
+                        <div :class="{ 'd-input': true, 'd-input--error': v$.form.email.$error }">
                             <input type="email" placeholder="Email" name="email" class="d-input__field"
                                 data-input-id="email" required />
                             <button type="button" class="d-close d-input__button" data-input="clear"

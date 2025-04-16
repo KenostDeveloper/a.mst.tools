@@ -509,6 +509,7 @@
         translate: -50% 0;
         z-index: 10;
         overflow-y: auto;
+        transition-duration: .3s;
 
         padding: 4px;
         width: calc(100% + 4px);
@@ -517,6 +518,13 @@
         &:not(:has(.d-input__suggestion)) {
             border: none;
             padding: 0;
+        }
+
+        &:not(&--active) {
+            bottom: 0;
+            translate: -50% 0;
+            opacity: 0;
+            visibility: hidden;
         }
     }
     &__suggestion {
@@ -535,7 +543,8 @@
 
         flex: 0 0 auto;
         padding: 4px;
-        height: 32px;
+        min-height: 32px;
+        height: auto;
         width: 100%;
 
         &--none {
