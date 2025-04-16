@@ -1,8 +1,10 @@
 <script>
 import axios from 'axios';
+import Input from './Input.vue';
 
 export default {
     name: 'Autocomplete',
+    inheritAttrs: false,
     props: {
         modelValue: {
             type: String,
@@ -10,14 +12,19 @@ export default {
         },
         type: {
             type: String,
-            default: 'city'
+            default: 'text'
         },
-        placeholder: {
-            type: String
+        classes: {
+            type: String,
+            default: ''
         },
-        required: {
-            type: Boolean,
-            default: false
+        iconType: {
+            type: String,
+            default: ''
+        },
+        errorText: {
+            type: String,
+            default: ""
         },
         selectionType: {
             type: String,
@@ -27,10 +34,9 @@ export default {
             type: Array,
             default: []
         },
-        autocomplete: {
-            type: String,
-            default: "off"
-        }
+    },
+    components: {
+        Input
     },
     data() {
         return {
@@ -43,7 +49,6 @@ export default {
     methods: {
         async getData() {
             let funcChanged = null;
-            console.log(this.value);
 
             switch (this.type) {
                 case 'city': {
@@ -204,23 +209,6 @@ export default {
             clearTimeout(this.inputTimer);
             this.inputTimer = setTimeout(func, delay);
         },
-        suggestionsListToInput() {
-            const suggestions = this.$refs.suggestions;
-            const autocomplete = this.$refs.autocomplete;
-
-            // Позиционирование списка относительно инпута
-            suggestions.style.width = autocomplete.clientWidth + 'px';
-            suggestions.style.top = autocomplete.offsetTop + autocomplete.clientHeight + 10 + 'px';
-            suggestions.style.left = autocomplete.offsetLeft + 'px';
-        },
-
-        focus() {
-            this.$refs.input.focus();
-        }
-    },
-    mounted() {
-        // this.getData();
-        // this.suggestionsListToInput();
     },
     watch: {
         modelValue: {
@@ -240,8 +228,7 @@ export default {
 </script>
 
 <template>
-    <input ref="input" @focus="getData" @blur="this.isActive = false" @input="getData" v-model="value" type="text"
-        class="d-input__field" :placeholder="placeholder" :required="required" :autocomplete="autocomplete" />
+    <Input v-bind="$attrs" ref="input" @focus="getData" @blur="this.isActive = false" @input="getData" v-model="value">
 
     <ul ref="suggestions" class="d-input__suggestions" :class="{ 'd-input__suggestions--active': isActive }">
         <!-- TODO Когда много букав, они улетают за границы видимого -->
@@ -249,6 +236,7 @@ export default {
             {{ suggestion.value }}
         </li>
     </ul>
+    </Input>
 </template>
 
 <style lang="scss" scoped></style>

@@ -4,6 +4,7 @@ import customModal from '../CustomModal.vue';
 import vForgot from './v-forgot.vue';
 import Toast from 'primevue/toast';
 import { sendMetrik } from '../../utils/metrika';
+import Input from '../Input.vue';
 
 export default {
     name: 'auth-form',
@@ -83,7 +84,8 @@ export default {
     components: {
         customModal,
         vForgot,
-        Toast
+        Toast,
+        Input
     }
 };
 </script>
@@ -108,44 +110,15 @@ export default {
                 <p class="text">Пожалуйста, подождите,<br>идет загрузка контента</p>
             </div> -->
 
+
             <div class="d-input__group auth__fields">
-                <div class="d-input__wrapper">
-                    <div class="d-input"> <!-- При ошибке: d-input--error -->
-                        <input type="text" placeholder="Введите логин" name="username" class="d-input__field"
-                            data-input-id="username" required v-model="form.email" />
-                        <button type="button" class="d-close d-input__button" data-input="clear"
-                            data-for-input="username">
-                            <i class="d-icon-times d-close__icon"></i>
-                        </button>
+                <!-- Login input -->
+                <Input v-model="form.email" iconType="close" type="text" placeholder="Введите логин" name="username"
+                    class="d-input__field" required />
 
-                    </div>
-                    <!-- Сообщение об ошибке -->
-                    <!-- <div class="d-input-error">
-                        <i class="d-icon-warning d-input-error__icon"></i>
-                        <span class="d-input-error__text">Пароль должен содержать не менее 8 символов</span>
-                    </div> -->
-                </div>
-                <div class="d-input__wrapper">
-                    <div class="d-input"> <!-- При ошибке: d-input--error -->
-                        <input type="password" placeholder="Введите пароль" name="password" class="d-input__field"
-                            data-input-id="password" required v-model="form.password" />
-                        <button type="button" class="d-show-alt d-input__button" data-input="show"
-                            data-for-input="password">
-                            <i class="d-icon-eye d-show-alt__icon"></i>
-                        </button>
-                        <div class="d-show__wrapper d-input__button" data-input="hide" data-for-input="password">
-                            <button type="button" class="d-show d-input__show">
-                                <i class="d-icon-eye d-show__icon"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Сообщение об ошибке -->
-                    <!-- <div class="d-input-error">
-                        <i class="d-icon-warning d-input-error__icon"></i>
-                        <span class="d-input-error__text">Пароль должен содержать не менее 8 символов</span>
-                    </div> -->
-                </div>
+                <!-- Password input -->
+                <Input v-model="form.password" iconType="password" type="password" placeholder="Введите пароль"
+                    name="password" class="d-input__field" required />
             </div>
 
             <div class="auth__buttons">

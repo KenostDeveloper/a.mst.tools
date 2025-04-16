@@ -8,10 +8,13 @@ import { sendMetrik } from '../../utils/metrika';
 import FloatLabel from '../FloatLabel.vue';
 import { required, minLength, maxLength, helpers, email } from '@vuelidate/validators';
 import useVuelidate from '@vuelidate/core';
+import Input from '../Input.vue';
 
 export default {
     name: 'reg-form',
     data() {
+
+
         return {
             showPassword1: false,
             showPassword2: false,
@@ -87,7 +90,7 @@ export default {
                         break;
                 }
             }
-            console.log({ valid: result, message: error.message })
+            // console.log({ valid: result, message: error.message })
             return { valid: result, message: error.message };
         }
 
@@ -150,7 +153,8 @@ export default {
         AddAddress,
         Toast,
         FloatLabel,
-        InputText
+        InputText,
+        Input,
     },
     methods: {
         sendMetrik: sendMetrik,
@@ -193,7 +197,7 @@ export default {
             }
         },
         normalizePhone(phone) {
-            return phone.replace(/[^0-9]/g, ''); // Удалить все, кроме цифр
+            return phone.replace(/[^0-9]/g, '');
         },
         getErrorMessages() {
             if (this.v$.form.login.$error) {
@@ -272,7 +276,7 @@ export default {
         },
         setLoginForm() {
             this.$emit('setRegForm', false);
-        }
+        },
     },
     computed: {
         getYear() {
@@ -310,123 +314,42 @@ export default {
 
             <div class="registration__fields">
                 <div class="d-input__group">
-                    <div class="d-input__wrapper">
-                        <div :class="{ 'd-input': true, 'd-input--error': v$.form.login.$error }">
-                            <input type="text" placeholder="Логин" name="login" class="d-input__field"
-                                data-input-id="login" required ref="loginInput" id="login" v-model="form.login"
-                                autocomplete="off" />
-                            <button type="button" class="d-close d-input__button" data-input="clear"
-                                data-for-input="login">
-                                <i class="d-icon-times d-close__icon"></i>
-                            </button>
-                        </div>
+                    <!-- Login input -->
+                    <Input ref="loginInput" v-model="form.login" iconType="close" :errorText="v$.form.login.$error && (!v$.form.login.required ?
+                        'Пожалуйста, введите логин.' : v$.form.login.minLength ?
+                            'Логин должен содержать минимум 3 символа.' : v$.form.login.maxLength ?
+                                'Логин должен содержать максимум 30 символов.' : '')" type="text" placeholder="Логин"
+                        name="login" id="login" autocomplete="login" required />
 
-                        <div v-if="v$.form.login.$error" class="d-input-error">
-                            <i class="d-icon-warning d-input-error__icon"></i>
-                            <span v-if="!v$.form.login.required" class="d-input-error__text">
-                                Пожалуйста, введите логин.
-                            </span>
-                            <span v-else-if="v$.form.login.minLength" class="d-input-error__text">
-                                Логин должен содержать минимум 3 символа.
-                            </span>
-                            <span v-else-if="v$.form.login.maxLength" class="d-input-error__text">
-                                Логин должен содержать максимум 30 символов.
-                            </span>
-                        </div>
-                    </div>
-                    <div class="d-input__wrapper">
-                        <div :class="{ 'd-input': true, 'd-input--error': v$.form.password.$error }">
-                            <input type="password" placeholder="Пароль" name="password" class="d-input__field"
-                                data-input-id="new-password" required ref="passwordInput" v-model="form.password"
-                                autocomplete="new-password" maxlength="128" />
-                            <button type="button" class="d-show-alt d-input__button" data-input="show"
-                                data-for-input="new-password">
-                                <i class="d-icon-eye d-show-alt__icon"></i>
-                            </button>
-                            <div class="d-show__wrapper d-input__button" data-input="hide"
-                                data-for-input="new-password">
-                                <button type="button" class="d-show d-input__show">
-                                    <i class="d-icon-eye d-show__icon"></i>
-                                </button>
-                            </div>
-                        </div>
+                    <!-- Password input -->
+                    <Input ref="passwordInput" v-model="form.password" iconType="password" :errorText="v$.form.password.$error && (!v$.form.password.required ?
+                        'Пожалуйста, введите пароль.' : v$.form.password.minLength ?
+                            'Пароль должен содержать минимум 6 символов.' : '')" type="password" placeholder="Пароль"
+                        name="password" autocomplete="new-password" maxlength="128" required />
 
-                        <div v-if="v$.form.password.$error" class="d-input-error">
-                            <i class="d-icon-warning d-input-error__icon"></i>
-                            <span v-if="!v$.form.password.required" class="d-input-error__text">
-                                Пожалуйста, введите пароль.
-                            </span>
-                            <span v-else-if="v$.form.password.minLength" class="d-input-error__text">
-                                Пароль должен содержать минимум 6 символов.
-                            </span>
-                        </div>
-                    </div>
-                    <div class="d-input__wrapper">
-                        <div :class="{ 'd-input': true, 'd-input--error': v$.form.passwordConfirm.$error }">
-                            <input type="password" placeholder="Повторите пароль" name="passwordConfirm"
-                                class="d-input__field" data-input-id="passwordConfirm" required ref="passwordInput"
-                                v-model="form.passwordConfirm" autocomplete="passwordConfirm" maxlength="128" />
-                            <button type="button" class="d-show-alt d-input__button" data-input="show"
-                                data-for-input="passwordConfirm">
-                                <i class="d-icon-eye d-show-alt__icon"></i>
-                            </button>
-                            <div class="d-show__wrapper d-input__button" data-input="hide"
-                                data-for-input="passwordConfirm">
-                                <button type="button" class="d-show d-input__show">
-                                    <i class="d-icon-eye d-show__icon"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div v-if="v$.form.passwordConfirm.$error" class="d-input-error">
-                            <i class="d-icon-warning d-input-error__icon"></i>
-                            <span class="d-input-error__text">
-                                Пожалуйста, подтвердите пароль. Пароли должны совпадать.
-                            </span>
-                        </div>
-                    </div>
+                    <!-- Password confirm input -->
+                    <Input ref="passwordInput" v-model="form.passwordConfirm" iconType="password"
+                        :errorText="v$.form.passwordConfirm.$error && 'Пожалуйста, подтвердите пароль. Пароли должны совпадать.'"
+                        type="password" placeholder="Повторите пароль" name="passwordConfirm"
+                        autocomplete="passwordConfirm" maxlength="128" required />
                 </div>
 
                 <fieldset class="d-input__group">
                     <legend class="d-input__label">Данные контактного лица:</legend>
-                    <div class="d-input__wrapper">
-                        <div :class="{ 'd-input': true, 'd-input--error': v$.form.name.$error }">
 
-                            <!-- TODO Переделать на Autocomplete -->
-                            <Autocomplete placeholder="ФИО контактного лица" data-input-id="name" required
-                                ref="nameInput" name="name" id="name" type="fio" selectionType="single"
-                                v-model="form.name" @setSelection="setName" autocomplete="off" />
-                            <button type="button" class="d-close d-input__button" data-input="clear"
-                                data-for-input="name">
-                                <i class="d-icon-times d-close__icon"></i>
-                            </button>
-                        </div>
+                    <!-- Full name input -->
+                    <Autocomplete ref="nameInput" v-model="form.name" selectionType="single" :errorText="v$.form.name.$error && (!v$.form.name.required ?
+                        'Пожалуйста, введите ФИО.' : v$.form.name.minLength ?
+                            'ФИО должно содержать минимум 3 символа.' : '')" placeholder="ФИО контактного лица"
+                        name="name" id="name" type="fio" autocomplete="off" @setSelection="setName" required />
 
-                        <div v-if="v$.form.name.$error" class="d-input-error">
-                            <i class="d-icon-warning d-input-error__icon"></i>
-                            <span v-if="!v$.form.name.required" class="d-input-error__text">
-                                Пожалуйста, введите ФИО.
-                            </span>
-                            <span v-else-if="v$.form.name.minLength" class="d-input-error__text">
-                                ФИО должно содержать минимум 3 символа.
-                            </span>
-                        </div>
-                    </div>
-                    <div class="d-input__wrapper">
-                        <div :class="{ 'd-input': true, 'd-input--error': v$.form.telephone.$error }">
-                            <input type="tel" placeholder="Телефон" name="phone" class="d-input__field"
-                                data-input-id="phone" required v-imask="mask" id="telephone" v-model="form.telephone"
-                                @input="form.telephone = normalizePhone(form.telephone)" autocomplete="off" />
-                        </div>
+                    <!-- Telephone input -->
+                    <Input v-model="form.telephone" :mask="mask" :errorText="v$.form.telephone.$error && (!v$.form.telephone.required ?
+                        'Пожалуйста, введите номер телефона.' : v$.form.telephone.minLength ?
+                            'Введите корректный номер телефона.' : '')" type="tel" placeholder="Телефон" name="phone"
+                        class="d-input__field" id="telephone" autocomplete="off" required
+                        @input="form.telephone = normalizePhone(form.telephone)" />
 
-                        <div v-if="v$.form.telephone.$error" class="d-input-error">
-                            <i class="d-icon-warning d-input-error__icon"></i>
-                            <span v-if="!v$.form.telephone.required" class="d-input-error__text">Пожалуйста, введите
-                                номер телефона.</span>
-                            <span v-else-if="v$.form.telephone.minLength" class="d-input-error__text">Введите корректный
-                                номер телефона.</span>
-                        </div>
-                    </div>
                     <div class="d-input__wrapper">
                         <div :class="{ 'd-input': true, 'd-input--error': v$.form.email.$error }">
                             <input type="email" placeholder="Email" name="email" class="d-input__field"
@@ -458,28 +381,6 @@ export default {
                                 data-for-input="org_name">
                                 <i class="d-icon-angle-rounded d-close__icon"></i>
                             </button>
-
-                            <ul class="d-input__suggestions">
-                                <!-- <div class="d-input__suggestion d-input__suggestion--none">Нет данных результата</div> -->
-                                <!-- <li class="d-input__suggestion d-input__suggestion--disable">
-                                    ООО «МСТ» Технологический завод заводов
-                                </li>
-                                <li class="d-input__suggestion">
-                                    ООО «МСТ» Технологический завод заводов
-                                </li>
-                                <li class="d-input__suggestion">
-                                    ООО «МСТ» Технологический завод заводов
-                                </li>
-                                <li class="d-input__suggestion">
-                                    ООО «МСТ» Технологический завод заводов
-                                </li>
-                                <li class="d-input__suggestion">
-                                    ООО «МСТ» Технологический завод заводов
-                                </li>
-                                <li class="d-input__suggestion">
-                                    ООО «МСТ» Технологический завод заводов
-                                </li> -->
-                            </ul>
                         </div>
 
                         <div v-if="v$.form.org.name.$error" class="d-input-error">
@@ -493,9 +394,9 @@ export default {
                     <div class="d-input__wrapper">
                         <div
                             :class="{ 'd-input': true, 'd-input--error': v$.form.org.inn.validInn.$response != true && v$.form.org.inn.$dirty }">
-                            <input placeholder="ИНН" class="d-input__field" data-input-id="inn" required ref="innInput"
-                                name="inn" id="inn" type="company" selectionType="single" v-model="form.org.inn"
-                                @setSelection="setCompany" />
+                            <Autocomplete placeholder="ИНН" class="d-input__field" data-input-id="inn" required
+                                ref="innInput" name="inn" id="inn" type="company" selectionType="single"
+                                v-model="form.org.inn" @setSelection="setCompany" />
                         </div>
 
                         <div v-if="v$.form.org.inn.validInn.$response != true && v$.form.org.inn.$dirty"
