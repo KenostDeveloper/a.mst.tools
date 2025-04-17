@@ -3,7 +3,6 @@
         'd-button',
         `d-button-${variant}`,
         size ? `d-button-${size}` : '',
-        classes
     ]" v-bind="$attrs" :disabled="disabled || isLoading">
         <i v-if="isLoading" class="pi pi-spin pi-spinner" style="font-size: 14px"></i>
         <slot />
@@ -35,10 +34,6 @@ export default {
         isLoading: {
             type: Boolean,
             default: false
-        },
-        classes: {
-            type: String,
-            default: ''
         }
     }
 }

@@ -341,7 +341,7 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 
   .changevendor__description{
     color: #979797;

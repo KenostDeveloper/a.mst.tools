@@ -1,6 +1,8 @@
 <template>
 	<div class="marker" @click="isClicked = !isClicked">
-		<div :class="`marker__content ${!isClicked && 'small-size'}`">
+		<img :src="isHovered ? '/images/icons/marker-active.svg' : '/images/icons/marker.svg'" class="marker__icon"
+			@mouseenter="isHovered = true" @mouseleave="isHovered = false">
+		<div :class="{ 'marker__content': true, 'marker__content--visible': !isClicked }">
 			<p class="marker__text">{{ address || "Ничего не найдено :(" }}</p>
 		</div>
 	</div>
@@ -12,9 +14,11 @@ import { Ref, defineComponent, ref } from "vue";
 export default defineComponent({
 	setup() {
 		let isClicked: Ref<boolean> = ref(false);
+		let isHovered: Ref<boolean> = ref(false);
 
 		return {
 			isClicked,
+			isHovered,
 		};
 	},
 	name: "MapMarker",
@@ -28,67 +32,52 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-
 .marker {
+	cursor: pointer;
+
 	background: none;
 	border: none;
 
 	position: relative;
-	height: 53px;
-	width: 42px;
-
 	translate: -50% -75%;
-    cursor: pointer;
+
+	height: 47.5px;
+	width: 38px;
 
 	&::after {
 		display: none;
 	}
 
-	&::before {
-		content: url("/images/icons/marker.svg");
-
+	&__icon {
 		position: absolute;
-		left: 0;
-	}
-
-	&:hover,
-	&:active,
-	&:focus {
-		&::before {
-			content: url("/images/icons/marker-active.svg");
-		}
+		top: 50%;
+		left: 50%;
+		translate: -50% -50%;
+		width: inherit;
+		height: inherit;
 	}
 
 	&__content {
-		position: absolute;
-		left: 110%;
-
 		background-color: var(--color-red);
-		border-radius: var(--border-radius-large);
+		border-radius: 16px;
+
+		position: absolute;
+		left: 100%;
+
+		transition-duration: var(--transition-duration);
+		overflow: hidden;
 
 		padding: 8px;
 		width: max-content;
 		max-width: 200px;
-
-		transition-duration: var(--transition-duration);
-		overflow: hidden;
 	}
 
 	&__text {
-		font-size: 12px;
 		color: var(--color-white);
+		font-size: 12px;
 		line-height: normal;
-		margin: 0;
 		text-align: left;
-	}
-}
-
-.small-size {
-	width: 0px;
-	padding: 0px;
-
-	& .marker__text {
-		text-wrap: nowrap;
+		margin: 0;
 	}
 }
 </style>

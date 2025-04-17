@@ -12,10 +12,6 @@ export default {
             type: String,
             default: 'text'
         },
-        classes: {
-            type: String,
-            default: ''
-        },
         iconType: {
             type: String,
             default: '',
@@ -69,7 +65,7 @@ export default {
         <div :class="{ 'd-input': true, 'd-input--active': value, 'd-input--error': errorText }">
             <!-- Input -->
             <input v-bind="$attrs" v-model="value" v-imask="mask" ref="input" :type="inputType"
-                :class="`d-input__field ${classes}`" />
+                class="d-input__field" />
 
             <!-- Reset value button -->
             <button v-if="iconType === 'close' && value" type="button" class="d-close d-input__button"

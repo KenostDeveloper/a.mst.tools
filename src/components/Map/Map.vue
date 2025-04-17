@@ -95,7 +95,7 @@ defineExpose({
 const refreshGeo = async () => {
 	const response = await axios.get("https://geocode-maps.yandex.ru/1.x/", {
 		params: {
-			apikey: "9cc9371c-b0ef-422b-b0be-2b1d49e32386",
+			apikey: import.meta.env.VITE_YANDEX_API_KEY,
 			geocode:
 				defaultMarker.value?.coordinates[0].toString() +
 				"," +

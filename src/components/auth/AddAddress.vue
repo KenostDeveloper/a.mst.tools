@@ -1,18 +1,19 @@
 <template>
-    <div class="std-auth__input-container" :class="{ 'has-error': $v.address.value.$error }">
-        <Autocomplete
-            v-model="address.value"
-            placeholder="Адрес доставки"
-            name="address"
-            class="dart-form-control std-auth__input"
-            type="address"
-            selectionType="single"
-            @setSelection="setSelection" />
+    <div class="address-map__wrapper" :class="{ 'has-error': $v.address.value.$error }">
+        <Autocomplete v-model="address.value" placeholder="Адрес доставки" name="address" type="address"
+            selectionType="single" @setSelection="setSelection" />
         <div v-if="$v.address.value.$error" class="error-message">
             <span v-if="!$v.address.value.required">Пожалуйста, введите адрес.</span>
             <span v-else-if="$v.address.value.minLength">Пожалуйста, введите адрес.</span>
         </div>
-        <Map ref="mapRef" class="std-auth__map" v-model="address.value" :coordinates="coordinates" @setMapAddress="mapAddress = $event" />
+        <div class="address-map">
+            <Map ref="mapRef" v-model="address.value" :coordinates="coordinates"
+                @setMapAddress="mapAddress = $event" />
+
+            <button type="button" class="d-window-button address-map__button">
+                <i class="d-icon-window d-window-button__icon"></i>
+            </button>
+        </div>
     </div>
 </template>
 
@@ -68,12 +69,19 @@ export default {
             this.setCoordinates();
         },
         async setCoordinates() {
-            if(!this.address?.value) return;
+            if (!this.address?.value) return;
 
             const addressForSearch = this.address?.value?.split(' ').join('+');
 
             const response = await axios.get(
-                `https://geocode-maps.yandex.ru/1.x/?apikey=9cc9371c-b0ef-422b-b0be-2b1d49e32386&geocode=${addressForSearch}&format=json`
+                `https://geocode-maps.yandex.ru/1.x/`,
+                {
+                    params: {
+                        apikey: import.meta.env.VITE_YANDEX_API_KEY,
+                        geocode: addressForSearch,
+                        format: 'json'
+                    }
+                }
             );
 
             if (response.status !== 200) return;
@@ -102,7 +110,7 @@ export default {
         }
     },
     mounted() {
-        setTimeout(() => this.setCoordinates(), 500)        
+        setTimeout(() => this.setCoordinates(), 500)
     },
     watch: {
         mapAddress: {

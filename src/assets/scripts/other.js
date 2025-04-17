@@ -1,110 +1,5 @@
 import { DotLottie } from "@lottiefiles/dotlottie-web";
 
-// try {
-// 	// Статус active для полей ввода
-
-// 	const inputs = document.querySelectorAll(".d-input");
-// 	inputs.forEach((input) => {
-// 		const inputField = input.querySelector(".d-input__field");
-// 		inputField.addEventListener("input", (e) => {
-// 			console.log(inputField.value);
-// 			if (inputField.value) input.classList.add("d-input--active");
-// 			else input.classList.remove("d-input--active");
-// 		});
-// 	});
-// } catch (e) {
-// 	console.error("Ошибка работы кнопок показать/скрыть пароль: " + e);
-// }
-
-// try {
-// 	// Очистка поля ввода
-
-// 	const clearInputButtons = document.querySelectorAll("[data-input='clear']");
-// 	console.log(clearInputButtons) 
-// 	clearInputButtons?.forEach((clearButton) => {
-// 		const inputId = clearButton.getAttribute("data-for-input");
-// 		const inputs = document.querySelectorAll(`[data-input-id='${inputId}']`);
-
-// 		inputs.forEach((input) => {
-// 			clearButton.style.display = input.value ? "flex" : "none";
-
-// 			input.addEventListener("input", (e) => {
-// 				clearButton.style.display = input.value ? "flex" : "none";
-// 			});
-// 			clearButton.addEventListener("click", (e) => {
-// 				input.value = "";
-// 				input.parentElement.classList.remove("d-input--active");
-// 				clearButton.style.display = "none";
-// 			});
-// 		});
-// 	});
-// } catch (e) {
-// 	console.error("Ошибка работы кнопки очистки поля: " + e);
-// }
-
-// try {
-// 	// Показать/скрыть пароль
-
-// 	const showPasswordButtons = document.querySelectorAll("[data-input='show']");
-// 	const hidePasswordButtons = document.querySelectorAll("[data-input='hide']");
-
-// 	showPasswordButtons?.forEach((showButton) => {
-// 		const inputId = showButton.getAttribute("data-for-input");
-// 		const inputs = document.querySelectorAll(`[data-input-id='${inputId}']`);
-// 		const hideButtons = document.querySelectorAll(`[data-input='hide'][data-for-input='${inputId}']`);
-
-// 		inputs.forEach((input) => {
-// 			const inputType = input.getAttribute("type");
-// 			showButton.style.display = input.value && inputType === "password" ? "flex" : "none";
-
-// 			input.addEventListener("input", (e) => {
-// 				const inputType = input.getAttribute("type");
-// 				showButton.style.display = input.value && inputType === "password" ? "flex" : "none";
-// 			});
-// 		});
-
-// 		showButton.addEventListener("click", (e) => {
-// 			inputs.forEach((input) => {
-// 				input.setAttribute("type", "text");
-// 			});
-
-// 			showButton.style.display = "none";
-// 			hideButtons.forEach((hideButton) => {
-// 				hideButton.style.display = "flex";
-// 			});
-// 		});
-// 	});
-
-// 	hidePasswordButtons?.forEach((hideButton) => {
-// 		const inputId = hideButton.getAttribute("data-for-input");
-// 		const inputs = document.querySelectorAll(`[data-input-id='${inputId}']`);
-// 		const showButtons = document.querySelectorAll(`[data-input='show'][data-for-input='${inputId}']`);
-
-// 		inputs?.forEach((input) => {
-// 			const inputType = input.getAttribute("type");
-// 			hideButton.style.display = input.value && inputType === "password" ? "flex" : "none";
-
-// 			input.addEventListener("input", (e) => {
-// 				const inputType = input.getAttribute("type");
-// 				hideButton.style.display = input.value && inputType === "text" ? "flex" : "none";
-// 			});
-// 		});
-
-// 		hideButton.addEventListener("click", (e) => {
-// 			inputs?.forEach((input) => {
-// 				input.setAttribute("type", "password");
-// 			});
-
-// 			hideButton.style.display = "none";
-// 			showButtons?.forEach((showButton) => {
-// 				showButton.style.display = "flex";
-// 			});
-// 		});
-// 	});
-// } catch (e) {
-// 	console.error("Ошибка работы кнопок показать/скрыть пароль: " + e);
-// }
-
 try {
 	// Lottie анимации
 
@@ -122,147 +17,18 @@ try {
 }
 
 // try {
-// 	// Яндекс карты
+// 	// Маска на все поля ввода телефона
 
-// 	async function refreshAddress(addressInput, markerELement, coordinates, refreshInput = true) {
-// 		const address = await getAddress(coordinates);
-
-// 		if (refreshInput) addressInput.value = address;
-
-// 		markerELement.querySelector(".marker__text").textContent = address;
-// 	}
-
-// 	async function getAddress(coordinates) {
-// 		// Обратное геокодирование через Яндекс API
-
-// 		const response = await fetch(
-// 			`https://geocode-maps.yandex.ru/1.x/?apikey=${process.env.VITE_YANDEX_API_KEY}&geocode=${coordinates.join(",")}&format=json&results=1`
-// 		).catch((err) => {
-// 			console.error("Ошибка получения адреса по координатам: " + err);
-// 		});
-
-// 		const data = await response.json();
-// 		return data?.response?.GeoObjectCollection?.featureMember[0]?.GeoObject?.metaDataProperty?.GeocoderMetaData?.text;
-// 	}
-
-// 	async function getCoordinates(address) {
-// 		// Обратное геокодирование через Яндекс API
-
-// 		const response = await fetch(
-// 			`https://geocode-maps.yandex.ru/1.x/?apikey=${process.env.YANDEX_API_KEY}&geocode=${address}&format=json&results=1`
-// 		).catch((err) => {
-// 			console.error("Ошибка получения адреса по координатам: " + err);
-// 		});
-
-// 		const data = await response.json();
-// 		return data?.response?.GeoObjectCollection?.featureMember[0]?.GeoObject?.Point?.pos?.split(" ");
-// 	}
-
-// 	async function initMap() {
-// 		await ymaps3.ready;
-// 		const { YMap, YMapListener, YMapMarker, YMapDefaultSchemeLayer, YMapDefaultFeaturesLayer } = ymaps3;
-
-// 		// Creating maps
-// 		const yandexMapContainers = document.querySelectorAll(".yandex-map");
-// 		yandexMapContainers?.forEach((yandexMapContainer) => {
-// 			const addressInput = document.querySelector(`[data-input-id='${yandexMapContainer.getAttribute("data-for-input")}']`);
-
-// 			// Create marker element
-// 			const markerHtml = `
-// 				<img src="/icons/marker.svg" class="marker__icon" />
-// 				<img src="/icons/marker-active.svg" class="marker__icon--active" />
-// 				<div class="marker__content">
-// 					<p class="marker__text"></p>
-// 				</div>
-// 			`;
-// 			const markerElement = document.createElement("div");
-// 			markerElement.classList.add("marker");
-// 			markerElement.innerHTML = markerHtml;
-
-// 			markerElement.addEventListener("click", (e) => {
-// 				e.stopPropagation();
-// 				const markerContent = markerElement.querySelector(".marker__content");
-// 				const markerText = markerElement.querySelector(".marker__text");
-// 				markerContent.classList.contains("marker__content--visible")
-// 					? markerContent.classList.remove("marker__content--visible")
-// 					: markerText.textContent && markerContent.classList.add("marker__content--visible");
-// 			});
-
-// 			// Create marker
-// 			const marker = new YMapMarker(
-// 				{
-// 					coordinates: [37.588144, 55.733842],
-// 					draggable: true,
-// 					onDragEnd: async (coordinates) => refreshAddress(addressInput, markerElement, coordinates),
-// 				},
-// 				markerElement
-// 			);
-
-// 			const mapListener = new YMapListener({
-// 				layer: "any",
-// 				onClick: (object, event) => {
-// 					const coordinates = event.coordinates;
-// 					marker?.update({
-// 						coordinates,
-// 					});
-// 					refreshAddress(addressInput, markerElement, coordinates);
-// 				},
-// 			});
-
-// 			// Create map
-// 			const map = new YMap(yandexMapContainer, {
-// 				location: {
-// 					center: [37.588144, 55.733842],
-// 					zoom: 10,
-// 				},
-// 				theme: "dark",
-// 				showScaleInCopyrights: true,
-// 			});
-
-// 			// map.behaviors.disable("scrollZoom");
-
-// 			map.addChild(new YMapDefaultSchemeLayer({}));
-// 			map.addChild(new YMapDefaultFeaturesLayer({}));
-// 			map.addChild(mapListener);
-// 			map.addChild(marker);
-
-// 			// Link map and input field
-// 			addressInput.addEventListener("input", (e) => {
-// 				debounce(async () => {
-// 					const address = addressInput.value;
-// 					if (!address) return;
-
-// 					const coordinates = await getCoordinates(address);
-// 					marker.update({ coordinates });
-// 					map.update({
-// 						location: {
-// 							center: coordinates,
-// 						},
-// 					});
-// 					refreshAddress(addressInput, markerElement, coordinates, false);
-// 				}, 300);
-// 			});
-// 		});
-// 	}
-
-// 	initMap();
+// 	const phoneInputs = document.querySelectorAll("input[type=tel]");
+// 	phoneInputs?.forEach((phoneInput) => {
+// 		const maskOptions = {
+// 			mask: "+{7} (000) 000-00-00",
+// 		};
+// 		IMask(phoneInput, maskOptions);
+// 	});
 // } catch (e) {
-// 	console.error("Ошибка работы Яндекс карт: " + e);
+// 	console.error("Ошибка работы IMask: " + e);
 // }
-
-try {
-	// Маска на все поля ввода телефона
-
-	const phoneInputs = document.querySelectorAll("input[type=tel]");
-	phoneInputs?.forEach((phoneInput) => {
-		const maskOptions = {
-			mask: "+{7} (000) 000-00-00",
-		};
-		IMask(phoneInput, maskOptions);
-	});
-} catch (e) {
-	console.error("Ошибка работы IMask: " + e);
-}
 
 try {
 	// Функционал модальных окон
@@ -363,11 +129,15 @@ try {
 }
 
 try {
+	// Липкая шапка на странице акции
+
 	const promotionsInfo = document.querySelector(".promotions__info");
 	const header = document.querySelector(".header");
 	const main = document.querySelector(".main");
 
-	main?.addEventListener("scroll", (e) => {
+	if(!main) return;
+
+	main.addEventListener("scroll", (e) => {
 		const promotionsInfoTop = Math.floor(promotionsInfo.getClientRects()[0].top);
 		const headerHeight = Math.floor(header.getClientRects()[0].height);
 

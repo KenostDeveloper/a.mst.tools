@@ -366,9 +366,9 @@ export default {
                     <!-- Org name input -->
                     <Input v-model="form.org.name" :errorText="v$.form.org.name.$error && (!v$.form.org.name.required ?
                         'Пожалуйста, введите наименование организации.' : v$.form.org.name.minLength ?
-                            'Наименование организации должно содержать минимум 3 символа.' : '')" iconType="close"
-                        type="text" placeholder="Наименование организации" name="org_name" class="d-input__field"
-                        id="org_name" autocomplete="off" required />
+                            'Наименование организации должно содержать минимум 3 символа.' : '')" type="text"
+                        placeholder="Наименование организации" name="org_name" class="d-input__field" id="org_name"
+                        autocomplete="off" required />
 
                     <!-- INN input -->
                     <Autocomplete v-model="form.org.inn" selectionType="single" :errorText="v$.form.org.inn.$error && (!v$.form.org.inn.required ?
@@ -376,28 +376,19 @@ export default {
                             'Некорректный ИНН' : '')" placeholder="ИНН" name="inn" id="inn" type="company"
                         autocomplete="off" @setSelection="setCompany" required />
 
-                    <div class="address-map__wrapper">
-                        <div class="d-input__wrapper">
-                            <div class="d-input">
-                                <input type="text" placeholder="Адрес доставки" name="address" class="d-input__field"
-                                    data-input-id="address1" required />
-                            </div>
-                        </div>
-                        <div class="address-map">
-                            <div class="yandex-map" style="width: 100%; height: 100%" data-for-input="address1"></div>
-                            <button type="button" class="d-window-button address-map__button">
-                                <i class="d-icon-window d-window-button__icon"></i>
-                            </button>
-                        </div>
-                    </div>
+                    <!-- <div class="address-map__wrapper"> -->
+                    <AddAddress v-for="(address, index) in form.delivery_addresses" :key="index" :index="index"
+                        v-model="form.delivery_addresses[index]" />
+                    <!-- </div> -->
                 </fieldset>
 
-                <Button variant="secondary" classes="registration__add-button" type="button">
+                <Button variant="secondary" class="registration__add-button" type="button"
+                    @click="() => this.form.delivery_addresses.push({ value: '' })">
                     <i class="d-icon-plus"></i>
                     Добавить адрес доставки
                 </Button>
             </div>
-            <Button v-if="!regIsSuccess" variant="primary" classes="box-shadow-none" :isLoading="loading">
+            <Button v-if="!regIsSuccess" variant="primary" class="box-shadow-none" :isLoading="loading">
                 Зарегистрироваться
             </Button>
         </form>
