@@ -8,7 +8,8 @@ import { sendMetrik } from '../../utils/metrika';
 import FloatLabel from '../FloatLabel.vue';
 import { required, minLength, maxLength, helpers, email } from '@vuelidate/validators';
 import useVuelidate from '@vuelidate/core';
-import Input from '../Input.vue';
+import Input from '../ui/Input.vue';
+import Button from '../ui/Button.vue';
 
 export default {
     name: 'reg-form',
@@ -155,6 +156,7 @@ export default {
         FloatLabel,
         InputText,
         Input,
+        Button,
     },
     methods: {
         sendMetrik: sendMetrik,
@@ -350,63 +352,29 @@ export default {
                         class="d-input__field" id="telephone" autocomplete="off" required
                         @input="form.telephone = normalizePhone(form.telephone)" />
 
-                    <div class="d-input__wrapper">
-                        <div :class="{ 'd-input': true, 'd-input--error': v$.form.email.$error }">
-                            <input type="email" placeholder="Email" name="email" class="d-input__field"
-                                data-input-id="email" required />
-                            <button type="button" class="d-close d-input__button" data-input="clear"
-                                data-for-input="email">
-                                <i class="d-icon-times d-close__icon"></i>
-                            </button>
-                        </div>
 
-                        <div v-if="v$.form.email.$error" class="d-input-error">
-                            <i class="d-icon-warning d-input-error__icon"></i>
-                            <span v-if="!v$.form.email.required" class="d-input-error__text">Пожалуйста, введите
-                                email.</span>
-                            <span v-else-if="v$.form.email.email" class="d-input-error__text">Введите корректный
-                                email.</span>
-                        </div>
-                    </div>
+                    <!-- Email input -->
+                    <Input v-model="form.email" :errorText="v$.form.telephone.$error && (!v$.form.email.required ?
+                        'Пожалуйста, введите email.' : v$.form.email.email ?
+                            'Введите корректный email.' : '')" iconType="close" type="email" placeholder="Email"
+                        name="email" class="d-input__field" required />
                 </fieldset>
 
                 <fieldset class="d-input__group">
                     <legend class="d-input__label">Данные компании:</legend>
-                    <div class="d-input__wrapper">
-                        <div :class="{ 'd-input': true, 'd-input--error': v$.form.org.name.$error }">
-                            <input type="text" placeholder="Наименование организации" name="org_name"
-                                class="d-input__field" data-input-id="org_name" required id="org_name"
-                                v-model="form.org.name" autocomplete="off" />
-                            <button type="button" class="d-close d-input__button" data-input="clear"
-                                data-for-input="org_name">
-                                <i class="d-icon-angle-rounded d-close__icon"></i>
-                            </button>
-                        </div>
 
-                        <div v-if="v$.form.org.name.$error" class="d-input-error">
-                            <i class="d-icon-warning d-input-error__icon"></i>
-                            <span v-if="!v$.form.org.name.required" class="d-input-error__text">Пожалуйста, введите
-                                наименование организации.</span>
-                            <span v-else-if="v$.form.org.name.minLength" class="d-input-error__text">Наименование должно
-                                содержать минимум 3 символа.</span>
-                        </div>
-                    </div>
-                    <div class="d-input__wrapper">
-                        <div
-                            :class="{ 'd-input': true, 'd-input--error': v$.form.org.inn.validInn.$response != true && v$.form.org.inn.$dirty }">
-                            <Autocomplete placeholder="ИНН" class="d-input__field" data-input-id="inn" required
-                                ref="innInput" name="inn" id="inn" type="company" selectionType="single"
-                                v-model="form.org.inn" @setSelection="setCompany" />
-                        </div>
+                    <!-- Org name input -->
+                    <Input v-model="form.org.name" :errorText="v$.form.org.name.$error && (!v$.form.org.name.required ?
+                        'Пожалуйста, введите наименование организации.' : v$.form.org.name.minLength ?
+                            'Наименование организации должно содержать минимум 3 символа.' : '')" iconType="close"
+                        type="text" placeholder="Наименование организации" name="org_name" class="d-input__field"
+                        id="org_name" autocomplete="off" required />
 
-                        <div v-if="v$.form.org.inn.validInn.$response != true && v$.form.org.inn.$dirty"
-                            class="d-input-error">
-                            <i class="d-icon-warning d-input-error__icon"></i>
-                            <span class="d-input-error__text">
-                                {{ v$.form.org.inn.validInn.$response || 'Некорректный ИНН' }}
-                            </span>
-                        </div>
-                    </div>
+                    <!-- INN input -->
+                    <Autocomplete v-model="form.org.inn" selectionType="single" :errorText="v$.form.org.inn.$error && (!v$.form.org.inn.required ?
+                        'Пожалуйста, введите ИНН.' : v$.form.org.inn.validInn.$response != true ?
+                            'Некорректный ИНН' : '')" placeholder="ИНН" name="inn" id="inn" type="company"
+                        autocomplete="off" @setSelection="setCompany" required />
 
                     <div class="address-map__wrapper">
                         <div class="d-input__wrapper">
@@ -424,16 +392,14 @@ export default {
                     </div>
                 </fieldset>
 
-                <button class="d-button d-button-secondary registration__add-button">
+                <Button variant="secondary" classes="registration__add-button" type="button">
                     <i class="d-icon-plus"></i>
                     Добавить адрес доставки
-                </button>
+                </Button>
             </div>
-            <button v-if="!this.regIsSuccess" :disabled="this.loading"
-                class="d-button d-button-primary box-shadow-none">
-                <i v-if="this.loading" class="pi pi-spin pi-spinner" style="font-size: 14px"></i>
+            <Button v-if="!regIsSuccess" variant="primary" classes="box-shadow-none" :isLoading="loading">
                 Зарегистрироваться
-            </button>
+            </Button>
         </form>
 
         <div class="auth__footer">

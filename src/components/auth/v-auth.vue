@@ -4,7 +4,8 @@ import customModal from '../CustomModal.vue';
 import vForgot from './v-forgot.vue';
 import Toast from 'primevue/toast';
 import { sendMetrik } from '../../utils/metrika';
-import Input from '../Input.vue';
+import Input from '../ui/Input.vue';
+import Button from '../ui/Button.vue';
 
 export default {
     name: 'auth-form',
@@ -85,7 +86,8 @@ export default {
         customModal,
         vForgot,
         Toast,
-        Input
+        Input,
+        Button,
     }
 };
 </script>
@@ -122,15 +124,9 @@ export default {
             </div>
 
             <div class="auth__buttons">
-                <button class="d-button d-button-primary" :disabled="this.loading">
-                    <i v-if="this.loading" class="pi pi-spin pi-spinner" style="font-size: 14px"></i>
-                    Войти
-                </button>
-                <button type="button" class="d-button d-button-secondary"
-                    @click="this.setRegForm">Зарегистрироваться</button>
-                <button type="button" class="d-button d-button-link" @click.prevent="showForgotModal = true">
-                    Забыли пароль?
-                </button>
+                <Button type="submit" variant="primary" :isLoading="loading">Войти</Button>
+                <Button type="button" variant="secondary" @click="setRegForm">Зарегистрироваться</Button>
+                <Button type="button" variant="link" @click.prevent="showForgotModal = true">Забыли пароль?</Button>
             </div>
         </form>
 
