@@ -1,6 +1,7 @@
 <script>
 import axios from 'axios';
 import Input from './ui/Input.vue';
+import SearchInput from './ui/SearchInput.vue';
 
 export default {
     name: 'Autocomplete',
@@ -34,9 +35,17 @@ export default {
             type: Array,
             default: []
         },
+        inputType: {
+            type: String,
+            default: 'input',
+            validator(value) {
+                return ['input', 'search'].includes(value);
+            }
+        }
     },
     components: {
-        Input
+        Input,
+        SearchInput
     },
     data() {
         return {
@@ -173,7 +182,6 @@ export default {
                 return filteredCities;
             }, []);
         },
-
         getAvailableCity(filteredCities, city) {
             return city;
         },
@@ -223,16 +231,32 @@ export default {
 </script>
 
 <template>
-    <Input v-bind="$attrs" ref="input" @focus="getData" @blur="debounce(() => this.isActive = false, 100)"
-        @input="getData" v-model="value">
+    <template v-if="inputType === 'input'">
+        <Input v-bind="$attrs" ref="input" @focus="getData" @blur="debounce(() => isActive = false, 100)"
+            @input="getData" v-model="value">
+        <ul ref="suggestions" class="d-input__suggestions" :class="{ 'd-input__suggestions--active': isActive }">
+            <!-- TODO Когда много букав, они улетают за границы видимого (по настроению) -->
+            <li v-for="suggestion in suggestions" @click.stop="addSelection(suggestion)" class="d-input__suggestion">
+                {{ suggestion.value }}
+            </li>
+        </ul>
+        </Input>
+    </template>
 
-    <ul ref="suggestions" class="d-input__suggestions" :class="{ 'd-input__suggestions--active': isActive }">
-        <!-- TODO Когда много букав, они улетают за границы видимого -->
-        <li v-for="suggestion in suggestions" @click.stop="addSelection(suggestion)" class="d-input__suggestion">
-            {{ suggestion.value }}
-        </li>
-    </ul>
-    </Input>
+    <template v-if="inputType === 'search'">
+        <SearchInput v-bind="$attrs" ref="input" @blur="debounce(() => isActive = false, 100)"
+            v-model="value" :onSubmit="getData">
+
+            <ul ref="suggestions" class="d-search__suggestions" :class="{ 'd-search__suggestions--active': isActive }">
+                <li v-for="suggestion in suggestions" @click.stop="addSelection(suggestion)"
+                    class="d-search__suggestion">
+                    {{ suggestion.value }}
+                </li>
+            </ul>
+        </SearchInput>
+    </template>
+
+
 </template>
 
 <style lang="scss" scoped></style>

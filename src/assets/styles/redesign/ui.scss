@@ -388,7 +388,7 @@
         opacity: 0;
         top: 50%;
         visibility: hidden;
-		
+
         padding: 4px;
         width: calc(100% + 4px);
         max-height: 0;
@@ -1136,13 +1136,22 @@
 }
 
 .d-modal {
+    @include scrollbar;
+
     background-color: #ffffff;
     border-radius: 8px;
 
     position: relative;
+    transition-duration: 0.3s;
+
+    scale: 1.2;
+    opacity: 0;
+    visibility: hidden;
+    // overflow-y: auto;
 
     padding: 20px 24px 16px 24px;
     width: 850px;
+    max-height: 90%;
 
     &__title {
         color: #282828;
@@ -1169,8 +1178,14 @@
         inset: 0;
         visibility: hidden;
         opacity: 0;
+        transition: 0.3s;
 
         z-index: 100;
+
+        &:has(.d-modal--active) {
+            visibility: visible;
+            opacity: 1;
+        }
     }
 
     &__close {
@@ -1205,6 +1220,12 @@
 
     &__icon {
         font-size: 12px;
+    }
+
+    &--active {
+        scale: 1;
+        opacity: 1;
+        visibility: visible;
     }
 
     @media (width <= 800px) {
@@ -1279,7 +1300,7 @@
         }
     }
 
-    &__suggestions[class] {
+    &__suggestions {
         @include scrollbar;
 
         box-shadow: 0px 0px 2px 0px #0000001f, 0px 8px 16px 0px #00000024;
@@ -1291,8 +1312,12 @@
         gap: 4px;
 
         position: absolute;
-        top: calc(100% + 1px);
         left: 0;
+
+        scale: 0.75;
+        opacity: 0;
+        top: 50%;
+        visibility: hidden;
 
         overflow-y: auto;
         z-index: 10;
@@ -1302,6 +1327,19 @@
 
         &:has(.d-search__suggestion) {
             padding: 4px;
+        }
+
+        &:not(:has(.d-search__suggestion)) {
+            border: none;
+            padding: 0;
+        }
+
+        &--active {
+            scale: 1;
+            opacity: 1;
+            top: calc(100% + 2px);
+            visibility: visible;
+            max-height: 142px;
         }
     }
 

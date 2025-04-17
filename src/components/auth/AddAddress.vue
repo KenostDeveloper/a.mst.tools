@@ -1,28 +1,10 @@
-<template>
-    <div class="address-map__wrapper" :class="{ 'has-error': $v.address.value.$error }">
-        <Autocomplete v-model="address.value" placeholder="Адрес доставки" name="address" type="address"
-            selectionType="single" @setSelection="setSelection" />
-        <div v-if="$v.address.value.$error" class="error-message">
-            <span v-if="!$v.address.value.required">Пожалуйста, введите адрес.</span>
-            <span v-else-if="$v.address.value.minLength">Пожалуйста, введите адрес.</span>
-        </div>
-        <div class="address-map">
-            <Map ref="mapRef" v-model="address.value" :coordinates="coordinates"
-                @setMapAddress="mapAddress = $event" />
-
-            <button type="button" class="d-window-button address-map__button">
-                <i class="d-icon-window d-window-button__icon"></i>
-            </button>
-        </div>
-    </div>
-</template>
-
 <script>
 import axios from 'axios';
 import Autocomplete from '../Autocomplete.vue';
 import Map from '../Map/Map.vue';
 import { required, minLength } from '@vuelidate/validators';
 import useVuelidate from '@vuelidate/core';
+import Modal from '../ui/Modal.vue';
 
 export default {
     name: 'AddAddress',
@@ -36,14 +18,17 @@ export default {
             default: ''
         },
         value: {
-
+            type: String,
+            default: ''
         }
     },
     data() {
         return {
             address: this.modelValue || { value: '' }, // Инициализация, если modelValue отсутствует
             mapAddress: this.modelValue || { value: '' },
-            coordinates: ''
+            coordinates: '',
+            showModal: false,
+            preSelection: '',
         };
     },
     setup() {
@@ -61,11 +46,16 @@ export default {
     },
     components: {
         Autocomplete,
-        Map
+        Map,
+        Modal,
     },
     methods: {
         setSelection(address) {
             this.$emit('update:modelValue', address);
+            this.setCoordinates();
+        },
+        setPreSelection(address) {
+            this.preSelection = address.value;
             this.setCoordinates();
         },
         async setCoordinates() {
@@ -121,5 +111,48 @@ export default {
     }
 };
 </script>
+
+<template>
+    <div class="address-map__wrapper" :class="{ 'has-error': $v.address.value.$error }">
+        <Autocomplete v-model="address.value" placeholder="Адрес доставки" name="address" type="address"
+            selectionType="single" @setSelection="setSelection" />
+        <div v-if="$v.address.value.$error" class="error-message">
+            <span v-if="!$v.address.value.required">Пожалуйста, введите адрес.</span>
+            <span v-else-if="$v.address.value.minLength">Пожалуйста, введите адрес.</span>
+        </div>
+        <div class="address-map">
+            <Map ref="mapRef" v-model="address.value" :coordinates="coordinates" @setMapAddress="mapAddress = $event" />
+
+            <button type="button" class="d-window-button address-map__button" @click="showModal = true">
+                <i class="d-icon-window d-window-button__icon"></i>
+            </button>
+        </div>
+    </div>
+
+    <teleport to='body'>
+        <Modal class="registration-address" :isActive="showModal" @close="showModal = false">
+            <div class="registration-address__header">
+                <i class="d-icon-location registration-address__icon"></i>
+                <p class="d-modal__title">Выберите адрес доставки</p>
+            </div>
+            <div class="registration-address__map">
+                <!-- <div class="yandex-map" data-for-input="address1" style="width: 100%; height: 100%"></div> -->
+                <Map ref="mapRef" v-model="address.value" :coordinates="coordinates"
+                    @setMapAddress="mapAddress = $event" />
+            </div>
+            <Autocomplete v-model="mapAddress" type="address" inputType="search" selectionType="single"
+                placeholder="Адрес доставки" name="address" @setSelection="setPreSelection" />
+
+            <p class="registration-address__address">{{ preSelection }}</p>
+
+            <div class="registration-address__buttons">
+                <button type="button"
+                    class="d-button d-button-secondary d-button-secondary-small box-shadow-none">Отмена</button>
+                <button type="button"
+                    class="d-button d-button-primary d-button-primary-small box-shadow-none">Выбрать</button>
+            </div>
+        </Modal>
+    </teleport>
+</template>
 
 <style lang="scss" scoped></style>
