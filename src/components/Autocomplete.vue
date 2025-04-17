@@ -28,7 +28,7 @@ export default {
         },
         selectionType: {
             type: String,
-            default: 'multiple'
+            default: 'single'
         },
         selections: {
             type: Array,
@@ -186,21 +186,16 @@ export default {
         },
         addSelection(selection) {
             if (this.selectionType == 'multiple') {
-                const tempSelections = this.selections;
-
-                tempSelections.push(selection);
-
-                this.isActive = false;
-
+                this.debounce(() => this.isActive = false, 100);
                 this.value = '';
-                this.$emit('setSelections', tempSelections);
+                this.$emit('setSelections', [this.selections, selection]);
 
                 return;
             }
 
             if (this.selectionType == 'single') {
+                this.debounce(() => this.isActive = false, 100);
                 this.$emit('setSelection', selection);
-                this.isActive = false;
 
                 return;
             }
@@ -228,11 +223,12 @@ export default {
 </script>
 
 <template>
-    <Input v-bind="$attrs" ref="input" @focus="getData" @blur="this.isActive = false" @input="getData" v-model="value">
+    <Input v-bind="$attrs" ref="input" @focus="getData" @blur="debounce(() => this.isActive = false, 100)"
+        @input="getData" v-model="value">
 
     <ul ref="suggestions" class="d-input__suggestions" :class="{ 'd-input__suggestions--active': isActive }">
         <!-- TODO Когда много букав, они улетают за границы видимого -->
-        <li v-for="suggestion in suggestions" @click="addSelection(suggestion)" class="d-input__suggestion">
+        <li v-for="suggestion in suggestions" @click.stop="addSelection(suggestion)" class="d-input__suggestion">
             {{ suggestion.value }}
         </li>
     </ul>

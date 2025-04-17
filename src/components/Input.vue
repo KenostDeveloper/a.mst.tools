@@ -18,7 +18,8 @@ export default {
         },
         iconType: {
             type: String,
-            default: ''
+            default: '',
+            validator: (value) => ['', 'password', 'close'].includes(value)
         },
         errorText: {
             type: String,
@@ -47,6 +48,12 @@ export default {
         }
     },
     watch: {
+        modelValue: {
+            handler(newVal) {
+                this.value = newVal;
+            },
+            deep: true
+        },
         value: {
             handler(newVal) {
                 this.$emit('update:modelValue', newVal);
@@ -61,7 +68,8 @@ export default {
     <div class="d-input__wrapper">
         <div :class="{ 'd-input': true, 'd-input--active': value, 'd-input--error': errorText }">
             <!-- Input -->
-            <input v-bind="$attrs" v-model="value" v-imask="mask" ref="input" :type="inputType" :class="`d-input__field ${classes}`" />
+            <input v-bind="$attrs" v-model="value" v-imask="mask" ref="input" :type="inputType"
+                :class="`d-input__field ${classes}`" />
 
             <!-- Reset value button -->
             <button v-if="iconType === 'close' && value" type="button" class="d-close d-input__button"
