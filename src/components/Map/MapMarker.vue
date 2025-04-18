@@ -32,52 +32,52 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.marker {
-	cursor: pointer;
+// .marker {
+// 	cursor: pointer;
 
-	background: none;
-	border: none;
+// 	background: none;
+// 	border: none;
 
-	position: relative;
-	translate: -50% -75%;
+// 	position: relative;
+// 	translate: -50% -75%;
 
-	height: 47.5px;
-	width: 38px;
+// 	height: 47.5px;
+// 	width: 38px;
 
-	&::after {
-		display: none;
-	}
+// 	&::after {
+// 		display: none;
+// 	}
 
-	&__icon {
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		translate: -50% -50%;
-		width: inherit;
-		height: inherit;
-	}
+// 	&__icon {
+// 		position: absolute;
+// 		top: 50%;
+// 		left: 50%;
+// 		translate: -50% -50%;
+// 		width: inherit;
+// 		height: inherit;
+// 	}
 
-	&__content {
-		background-color: var(--color-red);
-		border-radius: 16px;
+// 	&__content {
+// 		background-color: var(--color-red);
+// 		border-radius: 16px;
 
-		position: absolute;
-		left: 100%;
+// 		position: absolute;
+// 		left: 100%;
 
-		transition-duration: var(--transition-duration);
-		overflow: hidden;
+// 		transition-duration: var(--transition-duration);
+// 		overflow: hidden;
 
-		padding: 8px;
-		width: max-content;
-		max-width: 200px;
-	}
+// 		padding: 8px;
+// 		width: max-content;
+// 		max-width: 200px;
+// 	}
 
-	&__text {
-		color: var(--color-white);
-		font-size: 12px;
-		line-height: normal;
-		text-align: left;
-		margin: 0;
-	}
-}
+// 	&__text {
+// 		color: var(--color-white);
+// 		font-size: 12px;
+// 		line-height: normal;
+// 		text-align: left;
+// 		margin: 0;
+// 	}
+// }
 </style>
