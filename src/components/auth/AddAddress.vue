@@ -24,7 +24,7 @@ export default {
     },
     data() {
         return {
-            address: this.modelValue || { value: '' },
+            address: '',
             mapAddress: this.modelValue || { value: '' },
             coordinates: '',
             showModal: false,
@@ -52,6 +52,9 @@ export default {
     },
     methods: {
         setSelection(address) {
+            console.log("Selected address: ", address);
+            this.mapAddress = address;
+            this.address = address?.value || '';
             this.$emit('update:modelValue', address);
             this.setCoordinates();
         },
@@ -61,16 +64,17 @@ export default {
             this.setCoordinates(true);
         },
         acceptAddress() {
-            this.address = this.preMapAddress;
+            this.address = this.preMapAddress?.value;
+            this.mapAddress = this.preMapAddress;
             this.$emit('update:modelValue', this.preMapAddress);
             this.setCoordinates();
             this.showModal = false;
         },
         async setCoordinates(isPre = false) {
-            if (!isPre && !this.address?.value) return;
+            if (!isPre && !this.mapAddress?.value) return;
             if (isPre && !this.preMapAddress?.value) return;
 
-            const addressForSearch = isPre ? this.preMapAddress?.value?.split(' ').join('+') : this.address?.value?.split(' ').join('+');
+            const addressForSearch = isPre ? this.preMapAddress?.value?.split(' ').join('+') : this.mapAddress?.value?.split(' ').join('+');
 
             const response = await axios.get(
                 `https://geocode-maps.yandex.ru/1.x/`,
@@ -103,7 +107,7 @@ export default {
                 },
                 {
                     headers: {
-                        Authorization: `Token ${import.meta.env.DADATA_API_KEY}`
+                        Authorization: `Token ${import.meta.env.VITE_DADATA_API_KEY}`
                     }
                 }
             );
@@ -115,12 +119,13 @@ export default {
     watch: {
         mapAddress: {
             handler(newVal) {
-                if (newVal) this.getAddress(newVal);
-            }
+                this.address = newVal?.value;
+            },
+            deep: true
         },
         modelValue: {
             handler(newVal) {
-                this.address = newVal;
+                this.address = newVal?.value;
                 this.setCoordinates();
 
                 this.preMapAddress = newVal;
@@ -134,14 +139,12 @@ export default {
 
 <template>
     <div class="address-map__wrapper" :class="{ 'has-error': $v.address.value.$error }">
-        <Autocomplete v-model="address.value" placeholder="Адрес доставки" name="address" type="address"
-            selectionType="single" @setSelection="setSelection" />
-        <div v-if="$v.address.value.$error" class="error-message">
-            <span v-if="!$v.address.value.required">Пожалуйста, введите адрес.</span>
-            <span v-else-if="$v.address.value.minLength">Пожалуйста, введите адрес.</span>
-        </div>
+        <Autocomplete v-model="address"
+            :errorText="$v.address.value.$error && (!$v.address.value.required ? 'Пожалуйста, введите адрес.' : $v.address.value.minLength ? 'Пожалуйста, введите адрес.' : '')"
+            placeholder="Адрес доставки" name="address" type="address" selectionType="single"
+            @setSelection="setSelection" />
         <div class="address-map">
-            <Map ref="mapRef" v-model="address" :coordinates="coordinates" @setMapAddress="mapAddress = $event" />
+            <Map ref="mapRef" v-model="mapAddress" :coordinates="coordinates" />
 
             <button type="button" class="d-window-button address-map__button" @click="showModal = true">
                 <i class="d-icon-window d-window-button__icon"></i>
@@ -156,8 +159,7 @@ export default {
                 <p class="d-modal__title">Выберите адрес доставки</p>
             </div>
             <div class="registration-address__map">
-                <Map ref="preMapRef" v-model="preMapAddress" :coordinates="coordinates"
-                    @setMapAddress="preMapAddress = $event" />
+                <Map ref="preMapRef" v-model="preMapAddress" :coordinates="coordinates" />
             </div>
             <Autocomplete v-model="preAddress" type="address" inputType="search" selectionType="single"
                 placeholder="Адрес доставки" name="address" @setSelection="setPreSelection" />

@@ -48,11 +48,9 @@ const yandexMapCoords = ref([37.617644, 55.755819]);
 const defaultMarker = shallowRef(null);
 
 let address = ref(props.modelValue);
-let timer = ref({});
 
 watch(() => props.modelValue,
 	async (newValue) => {
-		// console.log("Map address: ", newValue)
 		address.value = newValue;
 	},
 	{
@@ -73,6 +71,8 @@ const onClick = (object, event) => {
 };
 
 const updateCoordinates = (coordinates) => {
+	// TODO: убрать обновление координат маркера при его перетаскивании или при клике на карту
+	// TODO: Значение зума не сохраняется
 	defaultMarker.value?.update({
 		coordinates: coordinates
 			? [
@@ -87,7 +87,6 @@ const updateCoordinates = (coordinates) => {
 	});
 
 	yandexMapCoords.value = defaultMarker.value?.coordinates;
-	// refreshGeo();
 };
 
 defineExpose({
@@ -111,13 +110,7 @@ const refreshGeo = async () => {
 
 	address.value.value =
 		response.data.response.GeoObjectCollection.featureMember[0].GeoObject.metaDataProperty.GeocoderMetaData.text;
-	// console.log("Map data: ", address.value);
 	emit('update:modelValue', address.value);
-};
-
-const debounce = (func, delay) => {
-	clearTimeout(timer.value);
-	timer.value = setTimeout(func, delay);
 };
 </script>
 

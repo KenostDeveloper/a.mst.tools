@@ -342,7 +342,7 @@ export default {
                     <!-- Full name input -->
                     <Autocomplete ref="nameInput" v-model="form.name" selectionType="single" :errorText="v$.form.name.$error && (!v$.form.name.required ?
                         'Пожалуйста, введите ФИО.' : v$.form.name.minLength ?
-                            'ФИО должно содержать минимум 3 символа.' : '')" placeholder="ФИО контактного лица"
+                            'ФИО должно содержать минимум 3 символа.' : '')" iconType="close" placeholder="ФИО контактного лица"
                         name="name" id="name" type="fio" autocomplete="off" @setSelection="setName" required />
 
                     <!-- Telephone input -->

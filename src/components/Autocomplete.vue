@@ -15,18 +15,6 @@ export default {
             type: String,
             default: 'text'
         },
-        classes: {
-            type: String,
-            default: ''
-        },
-        iconType: {
-            type: String,
-            default: ''
-        },
-        errorText: {
-            type: String,
-            default: ""
-        },
         selectionType: {
             type: String,
             default: 'single'
@@ -224,7 +212,7 @@ export default {
         },
         value: {
             handler(newVal) {
-                if(this.inputType === 'input') this.$emit('update:modelValue', newVal);
+                if (this.inputType === 'input') this.$emit('update:modelValue', newVal);
             },
             deep: true
         }
@@ -246,8 +234,8 @@ export default {
     </template>
 
     <template v-if="inputType === 'search'">
-        <SearchInput v-bind="$attrs" ref="input" @blur="debounce(() => isActive = false, 100)"
-            v-model="value" :onSubmit="getData">
+        <SearchInput v-bind="$attrs" ref="input" @blur="debounce(() => isActive = false, 100)" v-model="value"
+            :onSubmit="getData">
 
             <ul ref="suggestions" class="d-search__suggestions" :class="{ 'd-search__suggestions--active': isActive }">
                 <li v-for="suggestion in suggestions" @click.stop="addSelection(suggestion)"
