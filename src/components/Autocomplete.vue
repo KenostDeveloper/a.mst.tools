@@ -193,6 +193,8 @@ export default {
             this.$emit('setSelections', tempSelections);
         },
         addSelection(selection) {
+            // console.log("Selection: ", selection);
+
             if (this.selectionType == 'multiple') {
                 this.debounce(() => this.isActive = false, 100);
                 this.value = '';
@@ -222,7 +224,7 @@ export default {
         },
         value: {
             handler(newVal) {
-                this.$emit('update:modelValue', newVal);
+                if(this.inputType === 'input') this.$emit('update:modelValue', newVal);
             },
             deep: true
         }

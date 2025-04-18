@@ -1,35 +1,27 @@
 <template>
-    <YandexMap
-        ref="yandexMap"
-        :settings="{
-            location: {
-                center: yandexMapCoords,
-                zoom: 10
-            },
-            theme: 'dark',
-            showScaleInCopyrights: true
-        }"
-        width="100%"
-        height="100%">
-        <YandexMapDefaultSchemeLayer />
-        <YandexMapDefaultFeaturesLayer />
+	<YandexMap ref="yandexMap" :settings="{
+		location: {
+			center: yandexMapCoords,
+			zoom: 12
+		},
+		theme: 'dark',
+		showScaleInCopyrights: true
+	}" width="100%" height="100%">
+		<YandexMapDefaultSchemeLayer />
+		<YandexMapDefaultFeaturesLayer />
 
-        <YandexMapMarker
-            @click.stop
-            v-model="defaultMarker"
-            :settings="{
-                draggable: true,
-                coordinates: defaultMarker ? defaultMarker.coordinates : [37.617644, 55.755819],
-                onDragMove
-            }">
-            <MapMarker :address="address" />
-        </YandexMapMarker>
+		<YandexMapMarker @click.stop v-model="defaultMarker" :settings="{
+			draggable: true,
+			coordinates: defaultMarker ? defaultMarker.coordinates : [37.617644, 55.755819],
+			onDragEnd
+		}">
+			<MapMarker :text="address?.value" />
+		</YandexMapMarker>
 
-        <YandexMapListener
-            :settings="{
-                onClick
-            }" />
-    </YandexMap>
+		<YandexMapListener :settings="{
+			onClick
+		}" />
+	</YandexMap>
 </template>
 
 <script lang="js" setup>
@@ -40,7 +32,7 @@ import {
 	YandexMapListener,
 	YandexMapMarker,
 } from "vue-yandex-maps";
-import { ref, shallowRef, triggerRef } from "vue";
+import { ref, shallowRef, triggerRef, watch } from "vue";
 import axios from "axios";
 import MapMarker from './MapMarker.vue';
 
@@ -58,9 +50,19 @@ const defaultMarker = shallowRef(null);
 let address = ref(props.modelValue);
 let timer = ref({});
 
-const onDragMove = () => {
+watch(() => props.modelValue,
+	async (newValue) => {
+		// console.log("Map address: ", newValue)
+		address.value = newValue;
+	},
+	{
+		deep: true
+	}
+);
+
+const onDragEnd = () => {
 	triggerRef(defaultMarker);
-	debounce(refreshGeo, 300);
+	refreshGeo();
 };
 
 const onClick = (object, event) => {
@@ -74,13 +76,13 @@ const updateCoordinates = (coordinates) => {
 	defaultMarker.value?.update({
 		coordinates: coordinates
 			? [
-					+coordinates.response?.GeoObjectCollection?.featureMember[0]?.GeoObject?.Point?.pos.split(
-						" "
-					)[0],
-					+coordinates.response?.GeoObjectCollection?.featureMember[0]?.GeoObject?.Point?.pos.split(
-						" "
-					)[1],
-			  ]
+				+coordinates.response?.GeoObjectCollection?.featureMember?.[0]?.GeoObject?.Point?.pos?.split(
+					" "
+				)[0],
+				+coordinates.response?.GeoObjectCollection?.featureMember?.[0]?.GeoObject?.Point?.pos?.split(
+					" "
+				)[1],
+			]
 			: [37.617644, 55.755819],
 	});
 
@@ -107,8 +109,9 @@ const refreshGeo = async () => {
 
 	if (response.status !== 200) return;
 
-	address.value =
+	address.value.value =
 		response.data.response.GeoObjectCollection.featureMember[0].GeoObject.metaDataProperty.GeocoderMetaData.text;
+	// console.log("Map data: ", address.value);
 	emit('update:modelValue', address.value);
 };
 

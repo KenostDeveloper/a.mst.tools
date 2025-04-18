@@ -3,7 +3,7 @@
 		<img :src="isHovered ? '/images/icons/marker-active.svg' : '/images/icons/marker.svg'" class="marker__icon"
 			@mouseenter="isHovered = true" @mouseleave="isHovered = false">
 		<div :class="{ 'marker__content': true, 'marker__content--visible': !isClicked }">
-			<p class="marker__text">{{ address || "Ничего не найдено :(" }}</p>
+			<p class="marker__text">{{ text || "Ничего не найдено :(" }}</p>
 		</div>
 	</div>
 </template>
@@ -23,11 +23,11 @@ export default defineComponent({
 	},
 	name: "MapMarker",
 	props: {
-		address: {
+		text: {
 			type: String,
 			default: "",
 		},
-	},
+	}
 });
 </script>
 
@@ -79,5 +79,4 @@ export default defineComponent({
 // 		text-align: left;
 // 		margin: 0;
 // 	}
-// }
-</style>
+// }</style>
