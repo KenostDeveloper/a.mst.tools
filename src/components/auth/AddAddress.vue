@@ -30,6 +30,7 @@ export default {
             showModal: false,
             preAddress: '',
             preMapAddress: this.modelValue || { value: '' },
+            preCoordinates: '',
         };
     },
     setup() {
@@ -89,14 +90,16 @@ export default {
 
             if (response.status !== 200) return;
 
-            this.coordinates = response.data?.response?.GeoObjectCollection?.featureMember[0]?.GeoObject?.Point?.pos?.split(' ');
-            this.updateCoordinates(response.data, isPre);
+            if (!isPre) this.coordinates = response.data?.response?.GeoObjectCollection?.featureMember[0]?.GeoObject?.Point?.pos?.split(' ');
+            else this.preCoordinates = response.data?.response?.GeoObjectCollection?.featureMember[0]?.GeoObject?.Point?.pos?.split(' ');
+
+            this.updateCoordinates(isPre);
         },
-        updateCoordinates(coordinates, isPre = false) {
+        updateCoordinates(isPre = false) {
             if (!isPre) {
-                this.$refs.mapRef?.updateCoordinates(coordinates);
+                this.$refs.mapRef?.updateCoordinates(this.coordinates);
             } else {
-                this.$refs.preMapRef?.updateCoordinates(coordinates);
+                this.$refs.preMapRef?.updateCoordinates(this.preCoordinates);
             }
         },
         async getAddress(address) {
@@ -159,7 +162,7 @@ export default {
                 <p class="d-modal__title">Выберите адрес доставки</p>
             </div>
             <div class="registration-address__map">
-                <Map ref="preMapRef" v-model="preMapAddress" :coordinates="coordinates" />
+                <Map ref="preMapRef" v-model="preMapAddress" :coordinates="preCoordinates" />
             </div>
             <Autocomplete v-model="preAddress" type="address" inputType="search" selectionType="single"
                 placeholder="Адрес доставки" name="address" @setSelection="setPreSelection" />
