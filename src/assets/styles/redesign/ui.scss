@@ -426,6 +426,10 @@
         height: auto;
         width: 100%;
 
+        &-text {
+            word-break: break-all;
+        }
+
         &--none {
             cursor: default;
         }
@@ -1377,6 +1381,10 @@
 
             width: 3px;
             height: 16px;
+        }
+
+        &-text {
+            word-break: break-all;
         }
 
         &:hover {

@@ -74,8 +74,6 @@ const onClick = async (object, event) => {
 };
 
 const updateMarkerCoordinates = (coordinates) => {
-	// TODO: убрать обновление координат маркера при его перетаскивании или при клике на карту
-	// TODO: Значение зума не сохраняется
 	defaultMarker.value?.update({
 		coordinates: coordinates ?? defaultMarker.value?.coordinates ?? [37.617644, 55.755819],
 	});

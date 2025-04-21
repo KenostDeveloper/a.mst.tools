@@ -225,9 +225,8 @@ export default {
         <Input v-bind="$attrs" ref="input" @focus="getData" @blur="debounce(() => isActive = false, 100)"
             @input="getData" v-model="value">
         <ul ref="suggestions" class="d-input__suggestions" :class="{ 'd-input__suggestions--active': isActive }">
-            <!-- TODO Когда много букав, они улетают за границы видимого (по настроению) -->
             <li v-for="suggestion in suggestions" @click.stop="addSelection(suggestion)" class="d-input__suggestion">
-                {{ suggestion.value }}
+                <span class="d-input__suggestion-text">{{ suggestion.value }}</span>
             </li>
         </ul>
         </Input>
@@ -240,7 +239,7 @@ export default {
             <ul ref="suggestions" class="d-search__suggestions" :class="{ 'd-search__suggestions--active': isActive }">
                 <li v-for="suggestion in suggestions" @click.stop="addSelection(suggestion)"
                     class="d-search__suggestion">
-                    {{ suggestion.value }}
+                    <span class="d-search__suggestion-text">{{ suggestion.value }}</span>
                 </li>
             </ul>
         </SearchInput>
