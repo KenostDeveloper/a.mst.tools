@@ -29,7 +29,8 @@ export default {
             coordinates: '',
             showModal: false,
             preAddress: '',
-            preMapAddress: this.modelValue || { value: '' },
+            // preMapAddress: this.modelValue || { value: '' },
+            preMapAddress: { value: '' },
             preCoordinates: '',
         };
     },
@@ -53,12 +54,16 @@ export default {
     },
     methods: {
         async setSelection(address) {
-            console.log("Selected address: ", address);
             this.mapAddress = address;
             this.address = address?.value || '';
             this.$emit('update:modelValue', address);
             await this.setCoordinates();
             this.$refs.mapRef?.refreshMapCenter();
+
+            this.preMapAddress = address;
+            this.preAddress = address?.value || '';
+            await this.setCoordinates(true);
+            this.$refs.preMapRef?.refreshMapCenter();
         },
         async setPreSelection(address) {
             this.preMapAddress = address;
@@ -66,11 +71,11 @@ export default {
             await this.setCoordinates(true);
             this.$refs.preMapRef?.refreshMapCenter();
         },
-        acceptAddress() {
+        async acceptAddress() {
             this.address = this.preMapAddress?.value;
             this.mapAddress = this.preMapAddress;
             this.$emit('update:modelValue', this.preMapAddress);
-            this.setCoordinates();
+            await this.setCoordinates();
             this.$refs.mapRef?.refreshMapCenter();
             this.showModal = false;
         },
@@ -94,14 +99,15 @@ export default {
             if (response.status !== 200) return;
 
             if (!isPre) this.coordinates = response.data?.response?.GeoObjectCollection?.featureMember[0]?.GeoObject?.Point?.pos?.split(' ');
-            else this.preCoordinates = response.data?.response?.GeoObjectCollection?.featureMember[0]?.GeoObject?.Point?.pos?.split(' ');
+            if (isPre) this.preCoordinates = response.data?.response?.GeoObjectCollection?.featureMember[0]?.GeoObject?.Point?.pos?.split(' ');
 
             this.updateCoordinates(isPre);
         },
         updateCoordinates(isPre = false) {
             if (!isPre) {
                 this.$refs.mapRef?.updateMarkerCoordinates(this.coordinates);
-            } else {
+            }
+            if (isPre) {
                 this.$refs.preMapRef?.updateMarkerCoordinates(this.preCoordinates);
             }
         },
@@ -129,16 +135,6 @@ export default {
             },
             deep: true
         },
-        modelValue: {
-            handler(newVal) {
-                this.address = newVal?.value;
-                this.setCoordinates();
-
-                this.preMapAddress = newVal;
-                this.setCoordinates(true);
-            },
-            deep: true,
-        }
     }
 };
 </script>

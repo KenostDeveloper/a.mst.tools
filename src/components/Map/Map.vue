@@ -25,7 +25,7 @@ import {
 	YandexMapListener,
 	YandexMapMarker,
 } from "vue-yandex-maps";
-import { ref, shallowRef, computed } from "vue";
+import { ref, shallowRef, computed, watch } from "vue";
 import axios from "axios";
 import MapMarker from './MapMarker.vue';
 
@@ -54,16 +54,9 @@ const mapSettings = computed(() => ({
 	showScaleInCopyrights: true
 }));
 
-// onMounted(async () => {
-// 	map.value?.events.add("boundschange", (e) => {
-// 		console.log(e);
-// 		const oldZoom = e.get("oldZoom");
-// 		const newZoom = e.get("newZoom");
-// 		if (oldZoom !== newZoom) {
-// 			currentZoom.value = newZoom;
-// 		}
-// 	});
-// });
+watch(() => props.modelValue, (newValue) => {
+	address.value = newValue;
+}, { deep: true });
 
 const onDragEnd = async (e) => {
 	defaultMarker.value?.update({
