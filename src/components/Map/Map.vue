@@ -1,12 +1,5 @@
 <template>
-	<YandexMap ref="yandexMap" v-model="map" :settings="{
-		location: {
-			center: yandexMapCoords,
-			zoom: 14
-		},
-		theme: 'dark',
-		showScaleInCopyrights: true
-	}" width="100%" height="100%">
+	<YandexMap ref="yandexMap" v-model="map" :settings="mapSettings" width="100%" height="100%">
 		<YandexMapDefaultSchemeLayer />
 		<YandexMapDefaultFeaturesLayer />
 
@@ -19,8 +12,6 @@
 		</YandexMapMarker>
 
 		<YandexMapListener :settings="{
-			onActionStart: createEvent('behavior', true),
-			onActionEnd: createEvent('behavior', false),
 			onClick
 		}" />
 	</YandexMap>
@@ -34,57 +25,62 @@ import {
 	YandexMapListener,
 	YandexMapMarker,
 } from "vue-yandex-maps";
-import { ref, shallowRef, triggerRef, watch, reactive } from "vue";
+import { ref, shallowRef, computed } from "vue";
 import axios from "axios";
 import MapMarker from './MapMarker.vue';
 
 const props = defineProps({
 	modelValue: Object,
-	companyIndex: Number,
-	coordinates: Object,
 });
 
 const emit = defineEmits(["updateStoreData", "refreshStoreData", 'update:modelValue']);
 
-const BEHAVIOR = ['scrollZoom'];
-const events = reactive({
-	behavior: {
-		scrollZoom: false,
-	},
-})
+const INITIAL_COORDS = [37.617644, 55.755819];
+const INITIAL_ZOOM = 12;
 
-const yandexMapCoords = ref([37.617644, 55.755819]);
-const currentZoom = ref(12);
-const defaultMarker = shallowRef(null);
+const defaultMarker = shallowRef({
+	coordinates: props.modelValue?.coords ?? INITIAL_COORDS
+});
 const map = shallowRef(null);
+const address = ref(props.modelValue);
+const currentZoom = ref(INITIAL_ZOOM);
 
-let address = ref(props.modelValue);
-
-watch(() => props.modelValue,
-	async (newValue) => {
-		address.value = newValue;
-		yandexMapCoords.value = defaultMarker.value?.coordinates;
-		refreshCenter();
-		// await refreshGeo();
+const mapSettings = computed(() => ({
+	location: {
+		center: defaultMarker.value.coordinates,
+		zoom: INITIAL_ZOOM
 	},
-	{
-		deep: true
-	}
-);
+	theme: "dark",
+	showScaleInCopyrights: true
+}));
 
-const onDragEnd = () => {
-	triggerRef(defaultMarker);
-	refreshGeo();
-};
+// onMounted(async () => {
+// 	map.value?.events.add("boundschange", (e) => {
+// 		console.log(e);
+// 		const oldZoom = e.get("oldZoom");
+// 		const newZoom = e.get("newZoom");
+// 		if (oldZoom !== newZoom) {
+// 			currentZoom.value = newZoom;
+// 		}
+// 	});
+// });
 
-const onClick = (object, event) => {
+const onDragEnd = async (e) => {
 	defaultMarker.value?.update({
-		coordinates: event.coordinates,
-	});
-	refreshGeo();
+		coordinates: e
+	})
+	await refreshGeo(e);
 };
 
-const updateCoordinates = (coordinates) => {
+const onClick = async (object, event) => {
+	const coords = event.coordinates;
+	defaultMarker.value?.update({
+		coordinates: coords,
+	});
+	await refreshGeo(coords);
+};
+
+const updateMarkerCoordinates = (coordinates) => {
 	// TODO: убрать обновление координат маркера при его перетаскивании или при клике на карту
 	// TODO: Значение зума не сохраняется
 	defaultMarker.value?.update({
@@ -92,23 +88,25 @@ const updateCoordinates = (coordinates) => {
 	});
 };
 
-const refreshCenter = () => {
-	yandexMapCoords.value = defaultMarker.value?.coordinates;
+const refreshMapCenter = () => {
+	const coords = defaultMarker.value?.coordinates ?? [37.617644, 55.755819];
+	map.value?.update({
+		location: {
+			center: coords,
+		}
+	});
 }
 
 defineExpose({
-	updateCoordinates,
-	refreshCenter
+	updateMarkerCoordinates,
+	refreshMapCenter
 });
 
-const refreshGeo = async () => {
+const refreshGeo = async (coordinates) => {
 	const response = await axios.get("https://geocode-maps.yandex.ru/1.x/", {
 		params: {
 			apikey: import.meta.env.VITE_YANDEX_API_KEY,
-			geocode:
-				defaultMarker.value?.coordinates[0].toString() +
-				"," +
-				defaultMarker.value?.coordinates[1].toString(),
+			geocode: coordinates.join(","),
 			format: "json",
 			results: 1,
 		},
@@ -119,37 +117,6 @@ const refreshGeo = async () => {
 	address.value.value =
 		response.data.response.GeoObjectCollection.featureMember[0].GeoObject.metaDataProperty.GeocoderMetaData.text;
 	emit('update:modelValue', address.value);
-
-	if (map.value) {
-		map.value.setLocation({
-			zoom: currentZoom.value,
-			// center: defaultMarker.value?.coordinates
-		})
-	}
-};
-
-const createEvent = (category, type) => {
-	const eventState = events[category];
-
-	if (typeof type !== 'boolean') {
-		const endEvent = debounce(() => {
-			eventState[type] = false;
-		}, 250);
-
-		return (object, event) => {
-			console.log(`${type} Object: `, object, `\n`, `${type} Event: `, event);
-
-			eventState[type] = true;
-			endEvent();
-		};
-	}
-	return (object) => {
-		// console.log(`${type ? 'actionStart' : 'actionEnd'} Object:`, object);
-		if (!(object.type in events.behavior)) return;
-		eventState[object.type] = type;
-
-		currentZoom.value = object?.location?.zoom;
-	};
 };
 </script>
 

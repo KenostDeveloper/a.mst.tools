@@ -52,23 +52,26 @@ export default {
         Modal,
     },
     methods: {
-        setSelection(address) {
+        async setSelection(address) {
             console.log("Selected address: ", address);
             this.mapAddress = address;
             this.address = address?.value || '';
             this.$emit('update:modelValue', address);
-            this.setCoordinates();
+            await this.setCoordinates();
+            this.$refs.mapRef?.refreshMapCenter();
         },
-        setPreSelection(address) {
+        async setPreSelection(address) {
             this.preMapAddress = address;
             this.preAddress = address?.value || '';
-            this.setCoordinates(true);
+            await this.setCoordinates(true);
+            this.$refs.preMapRef?.refreshMapCenter();
         },
         acceptAddress() {
             this.address = this.preMapAddress?.value;
             this.mapAddress = this.preMapAddress;
             this.$emit('update:modelValue', this.preMapAddress);
             this.setCoordinates();
+            this.$refs.mapRef?.refreshMapCenter();
             this.showModal = false;
         },
         async setCoordinates(isPre = false) {
@@ -97,9 +100,9 @@ export default {
         },
         updateCoordinates(isPre = false) {
             if (!isPre) {
-                this.$refs.mapRef?.updateCoordinates(this.coordinates);
+                this.$refs.mapRef?.updateMarkerCoordinates(this.coordinates);
             } else {
-                this.$refs.preMapRef?.updateCoordinates(this.preCoordinates);
+                this.$refs.preMapRef?.updateMarkerCoordinates(this.preCoordinates);
             }
         },
         async getAddress(address) {
