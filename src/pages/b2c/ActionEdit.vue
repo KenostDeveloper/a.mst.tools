@@ -1902,6 +1902,13 @@ export default {
         align-items: center;
         gap: 8px;
 
+        .choice_filter{
+          width: 50%;
+          .dart-form-group{
+            width: 100%;
+          }
+        }
+
         .dart-form-group{
           width: 50%;
         }

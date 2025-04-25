@@ -9174,12 +9174,8 @@ button.std-icon__wrapper {
             width: 60%;
             gap: 12px;
 
-            .input_pl {
+            & > div {
                 width: 50%;
-            }
-
-            .dart-form-group {
-                width: 40%;
             }
         }
     }

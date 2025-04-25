@@ -2141,8 +2141,7 @@ export default {
 			"getregions",
 			"oprprices",
 			"allorganizations",
-			"getvendors",
-			"getcatalog"
+			"getvendors"
 		]),
 		date() {
 			const today = new Date();

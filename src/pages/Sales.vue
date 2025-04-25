@@ -27,7 +27,7 @@
 
       <div class="dart-form-group mt-2 mb-4" :class="{ error: v$.form.store_id.$errors.length }">
           <span class="ktitle">Склад</span>
-          <MultiSelect @change="updateStoreData" v-model="this.form.store_id" :options="this.stores"
+          <MultiSelect @change="this.set_deselected_products();this.updateStoreData()" v-model="this.form.store_id" :options="this.stores"
               optionLabel="label" optionValue="value" placeholder="Выберите склад" />
           <span class="error_desc" v-for="error of v$.form.store_id.$errors" :key="error.$uid">
               {{ error.$message }}
@@ -175,7 +175,7 @@
           <span class="ktitle">Условие акции</span>
           <div class="kenost-wiget">
               <Dropdown v-model="this.form.condition" :options="this.condition" optionLabel="name"
-                  placeholder="Оплата доставки" class="w-full md:w-14rem" />
+                  placeholder="Условие акции" class="w-full md:w-14rem" />
           </div>
           <div class="two-colums mt-2" v-if="this.form.condition.key != 0">
               <div class="kenost-wiget">
@@ -223,6 +223,228 @@
             </div>
           </div>
         </div>
+        <div class="dart-form-group">
+          <span class="ktitle">Товары</span>
+          <div class="dart-form-group mb-4" :class="{ loading: profuct_upload_loading }">
+            <span class="field-desc">Вы можете загрузить список номенклатуры файлом XLSX. Настроить скидки Вы сможете с помощью таблицы, расположенной ниже.</span>
+            <DropZone  v-if="!this.upload_product" class="kenost-dropzone" :maxFiles="Number(1)"
+                url="/rest/file_upload.php?upload_products=xlsx" :uploadOnDrop="true" :multipleUpload="true"
+                :acceptedFiles="['xlsx', 'xlsx']" :parallelUpload="1" @sending="parseFile" @removedFile="deselectProductAll" v-bind="args">
+                <template v-slot:message>
+                    <div class="kenost-dropzone__custom">
+                        <i class="pi pi-cloud-upload"></i>
+                        <b>Перетащите файл в эту область</b>
+                        <p>Вы также можете загрузить файл, <span>нажав сюда</span></p>
+                    </div>
+                </template>
+            </DropZone>
+            <div class="kenost-upload-xlsx" v-if="this.upload_product">
+              <div class="kenost-upload-xlsx__file">
+                  <!-- <img src="../../../public/img/files/xls.png" alt=""> -->
+                  <a targer="_blank" :href="files?.xlsx?.original_href">{{ files?.xlsx?.name }}</a>
+              </div>
+              <div class="kenost-upload-xlsx__info">
+                  <p>Загружено товаров: {{ Object.keys(this.upload_selected).length }} шт</p>
+                  <p>Всего товаров: {{ Object.keys(this.upload_selected).length + upload_error.length }} шт</p>
+                  <div class="kenost-link-blue" v-if="upload_error.length" @click="this.modals.error_product = true">Список незагруженных
+                      товаров</div>
+              </div>
+            </div>
+            <a :href="site_url_prefix + '/assets/files/files/examples/ExampleLoadingProducts.xlsx'"
+                class="kenost-link-blue mt-2" target="_blank">Скачать шаблон файла</a>
+          </div>
+        </div>
+        <div class="mb-4">
+          <span class="field-desc">Вы можете выбрать номенклатуру вручную. Здесь будут отражены в том числе товары добавленные файлом. Настроить скидки Вы сможете с помощью таблицы, расположенной ниже.</span>
+          <Choicer
+            :class="{ loading: product_loading }"
+            title_available="Доступные товары"
+            title_selected="Выбранные товары"
+            :items_available="this.available_products.products"
+            :total_available="this.available_products.total"
+            :items_selected="this.selected_products.products"
+            :total_selected="this.selected_products.total"
+            :items_per_page="this.per_page"
+            :page_available="this.product_available_page"
+            :page_selected="this.product_selected_page"
+            :filters="this.filters_available"
+            :show_filter="true"
+            @select="selectProduct"
+            @deSelect="deselectProduct"
+            @selectAll="selectProductAll"
+            @deselectAll="deselectProductAll"
+            @paginateAvailable="paginateAvailableProduct"
+            @paginateSelected="paginateSelectedProduct"
+            @filter="filterProduct"
+          >
+          <template #elem="{ image, name, article, color, store, price }">
+            <img :src="image" alt="" />
+            <div class="PickList__product-info">
+                <div class="PickList__name">{{ name }}</div>
+                <div class="PickList__article">
+                    {{ article }} <span class="store-name-b2b"
+                        :style="{ background: color }">{{ store }}</span>
+                </div>
+                <div class="PickList__price">{{ Number(price).toFixed(0) }} ₽</div>
+            </div>
+          </template>
+        </Choicer>
+        </div>
+
+        <productTable
+          :class="{ loading: product_loading }"
+          title_available="Настройка выбранных товаров"
+          :filters="this.filters_available"
+          :show_filter="true"
+          :page="this.product_selected_page"
+          :items="this.selected_products.products"
+          :total="this.selected_products.total"
+          :items_per_page="this.per_page"
+          @settings="settings"
+          @paginate="paginateSelectedProduct"
+          @filter="filterProductSelected"
+          @changeMultiplicity="changeMultiplicity"
+          @changeMinCount="changeMinCount"
+          @deSelect="deselectProduct"
+        ></productTable>
+        <div class="dart-form-group mt-4 flex">
+          <span class="ktitle">Коллекции</span>
+          <span class="field-desc">Вы можете добавить в Акцию коллекцию товаров и задать на нее глобально настройки ценообразования.</span>
+          <div>
+            <button @click="this.modals.add_group = true" type="button" class="dart-btn dart-btn-primary  flex gap-2 align-items-center">
+              <i class="pi pi-upload"></i><div>Добавить коллекцию</div>
+            </button>
+          </div>
+          <div class="kenost-tab-container">
+            <TabView class="tab-custom hidden-mobile-l mt-3 kenost-tab-custom" :scrollable="true">
+                <TabPanel v-for="el in this.form.product_groups" :header="el.group.name + ' (' + el?.products?.total + ')'">
+                    <div class="table-kenost mt-4">
+                        <div class="flex align-items-center justify-between">
+                            <p class="table-kenost__title">Товары коллекции «{{ el.group.name }}»</p>
+                            <button @click="deleteGroup(el.group.id)" type="button" class="dart-btn dart-btn-secondary btn-padding flex gap-2 align-items-center">
+                                <i class="pi pi-trash"></i><div>Удалить коллекцию</div>
+                            </button>
+                        </div>
+                        <div class="table-kenost__filters">
+                            <div class="table-kenost__filters-left">
+                                <div class="form_input_group input_pl input-parent required">
+                                    <input type="text" id="filter_table" placeholder="Введите артикул или название"
+                                        class="dart-form-control" v-model="el.search"
+                                        @input="setFilterGroup(el.group.id)" />
+                                    <label for="product_filter_name" class="s-complex-input__label">Введите артикул или
+                                        название</label>
+                                    <div class="form_input_group__icon">
+                                        <i class="d_icon d_icon-search"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <table class="table-kenost__table mt-0">
+                            <thead>
+                                <tr>
+                                    <th class="table-kenost__name table-kenost__name-checkbox hidden">
+                                        <Checkbox @update:modelValue="kenostTableCheckedAll" v-model="this.kenost_table_all"
+                                            inputId="kenost_table_all" value="1" />
+                                    </th>
+                                    <th class="table-kenost__name table-kenost__name-product">Товар</th>
+                                    <th class="table-kenost__name">Тип добавления</th>
+                                    <th class="table-kenost__name">Бренд</th>
+                                    <th class="table-kenost__name">РРЦ</th>
+                                    <th class="table-kenost__name">
+                                        Скидка \ Наценка </br> <div class="text-primary cursor-pointer" @click="() => {
+                                            this.modals.price = true
+                                            this.modals.price_type = 'group'
+                                            this.modals.price_group = el.group.id                                            
+                                        }">Настроить</div>
+                                    </th>
+                                    <th class="table-kenost__name">Тип ценообразования</th>
+                                    <th class="table-kenost__name">Цена со скидкой за шт.</th>
+                                </tr>
+                            </thead>
+                            <!-- Вывод комплектов -->
+                            <tbody v-for="item in el?.products?.items" :key="item.id">
+                                <tr>
+                                    <td class="table-kenost__checkbox hidden">
+                                        <Checkbox @change="kenostTableCheckedAllCheck" v-model="this.kenost_table"
+                                            inputId="kenost_table" :value="item.id" />
+                                    </td>
+                                    <td class="table-kenost__product">
+                                        <img :src="item.image" />
+                                        <div class="table-kenost__product-text">
+                                            <p>{{ item.name }}</p>
+                                            <span>{{ item.article }}
+                                                <span class="store-name-b2b" :style="{ background: item.color }">{{item.store}}</span></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {{ item.type }}
+                                    </td>
+                                    <td>
+                                        {{ item.brand }}
+                                    </td>
+                                    <td>
+                                        {{ item.price }}
+                                    </td>
+                                    <td>
+                                        {{ item.price > 0 ? ((Math.round(((item.price - item.new_price) / item.price) * 10000) / 100) + '%') : '0' }}
+                                    </td>
+                                    <td>
+                                        {{ el.typePricing?.name }}
+                                    </td>
+                                    <td>
+                                        {{(Number(item.new_price)).toFixed(2)}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <paginate
+                            :page-count="(this.form.product_groups[el.group.id]?.products?.total / this.form.product_groups[el.group.id]?.perpage) > 0 ? Math.ceil(this.form.product_groups[el.group.id]?.products?.total / this.form.product_groups[el.group.id]?.perpage) : 1"
+                            :click-handler="(page) => pagClickCallbackGroup(page, el.group.id)"
+                            :prev-text="'Пред'"
+                            :next-text="'След'"
+                            :container-class="'pagination justify-content-center'"
+                            :initialPage="this.page_selected"
+                            :forcePage="el.page"
+                        >
+                        </paginate>
+                    </div>
+                </TabPanel>
+            </TabView>
+        </div>
+        </div>
+        <div class="mb-4">
+          <span class="field-desc">Вы можете выбрать комплекты, участвующие в Акции.</span>
+          <Choicer
+            :class="{ loading: complect_loading }"
+            title_available="Доступные комплекты"
+            title_selected="Выбранные комплекты"
+            :items_available="this.available_complects.complects"
+            :total_available="this.available_complects.total"
+            :items_selected="this.selected_complects.complects"
+            :total_selected="this.selected_complects.total"
+            :items_per_page="this.per_page"
+            :page_available="this.complect_available_page"
+            :page_selected="this.complect_selected_page"
+            :filters="this.filters_available_complects"
+            :show_filter="true"
+            @select="selectComplect"
+            @deSelect="deselectComplect"
+            @selectAll="selectComplectAll"
+            @deselectAll="deselectComplectAll"
+            @paginateAvailable="paginateAvailableComplect"
+            @paginateSelected="paginateSelectedComplect"
+            @filter="filterComplect"
+          >
+            <template #elem="{ image, name, articles, cost }">
+              <img :src="image" alt="" />
+              <div class="PickList__product-info">
+                  <div class="PickList__name">{{ name }}</div>
+                  <div class="PickList__article">{{ articles }}</div>
+                  <div class="PickList__price">{{ Number(cost).toFixed(0) }} ₽</div>
+              </div>
+            </template>
+          </Choicer>
+        </div>    
         <div class="dart-form-group mt-4">
           <span class="ktitle">Участники</span>
           <span class="field-desc">Вы можете задать как исключающие условия, так и настроить точечный показ Акции по географии.</span>
@@ -319,6 +541,38 @@
       </div>
     </div>
   </form>
+  <Dialog v-model:visible="this.modal_checking" header=" " :style="{ width: '380px' }">
+    <div class="kenost-not-produc">
+        <img src="/images/icons_milen/action-status.png" alt="">
+        <b class="text-center">Вы уверены, что хотите сохранить изменения?</b>
+        <p>Обратите внимание, что <b>акция в настоящее время активна</b>, и после сохранения она вступит в силу, применив изменения ко всем добавленным товарам.</p>
+        <div class="a-dart-btn a-dart-btn-primary" @click="formSubmit(event)">Сохранить</div>
+    </div>
+  </Dialog>
+  <Dialog v-model:visible="this.modals.add_group" header="Добавить коллекцию" :style="{ width: '640px' }">
+      <div>
+          <Dropdown option-label="name" v-model="this.selected_group" :options="groups.items" optionLabel="long_name" class="w-full md:w-14rem mt-2" />
+          <div class="w-full mt-3 justify-content-end flex">
+              <button @click="addGroup()" type="button" class="dart-btn dart-btn-primary  flex gap-1 align-items-center">
+                  <i class="pi pi-plus"></i><div>Добавить коллекцию</div>
+              </button>
+          </div>
+      </div>
+  </Dialog>
+  <Dialog v-model:visible="this.modals.error_product" header="Список незагруженных товаров" :style="{ width: '640px' }">
+    <div class="kenost-list-error">
+      <table>
+        <tr>
+          <th class="text-left">№</th>
+          <th class="text-left">Артикул</th>
+        </tr>
+        <tr v-for="(item, index) in this.upload_error" :key="item.id">
+          <td>{{ index + 1 }}</td>
+          <td>{{ item }}</td>
+        </tr>
+      </table>
+    </div>
+  </Dialog>
   <Dialog v-model:visible="this.modals.delay" header="Настройка отсрочки платежа" :style="{ width: '800px' }" :closable="false">
     <div class="kenost-modal-price">
         <div class="two-colums mt-2" v-for="(item, index) in this.form.delay" :key="item.id">
@@ -349,6 +603,125 @@
         </div>
     </div>
   </Dialog>
+  <Dialog v-model:visible="this.modals.price" :header="this.products_selected.length > 1 ? 'Массовые действия' : 'Настройка цены'" :style="{ width: '700px' }" @hide="resetDiscountFormula">
+      <div class="kenost-modal-price">
+          <div class="dart-alert dart-alert-info" v-if="this.modals.type_price != 3 && this.modals.price_step == 1">Если у товара не будет задан выбранный тип цен, скидка будет рассчитана от розничной цены.</div>
+          <div class="product-kenost-card" v-if="this.products_selected.length == 1">
+              <img :src="this.products_selected[0].image" />
+              <div class="product-kenost-card__text">
+                  <p>{{ this.products_selected[0].name }}</p>
+                  <span>{{ this.products_selected[0].article }}</span>
+              </div>
+          </div>
+          <div class="kenost-method-edit-flex" v-if="this.modals.price_step == 0">
+            <div class="flex align-items-center gap-1 mt-3">
+              <RadioButton v-model="this.modals.type_price" inputId="type_price-1" name="type_pricing" value="1" />
+              <label for="type_price-1" class="ml-2 radioLabel">Задать вручную</label>
+            </div>
+            <div class="flex align-items-center gap-1 mt-3">
+              <RadioButton v-model="this.modals.type_price" inputId="type_price-2" name="type_pricing" value="2" />
+              <label for="type_price-2" class="ml-2 radioLabel">Тип цен</label>
+            </div>
+            <div class="flex align-items-center gap-1 mt-3" v-if="this.products_selected.length > 1">
+              <RadioButton v-model="this.modals.type_price" inputId="type_price-3" name="type_pricing" value="3" />
+              <label for="type_price-3" class="ml-2 radioLabel">Кратность</label>
+            </div>
+          </div>
+          <div v-if="this.modals.price_step == 1 && this.modals.type_price == 1" class="two-colums mt-3">
+              <div class="kenost-wiget">
+                <p>Тип ценообразования</p>
+                <Dropdown
+                    @change="resetDiscount()"
+                    v-model="this.products_selected_data.type_pricing"
+                    :options="this.type_pricing" 
+                    optionLabel="name"
+                    class="w-full md:w-14rem" />
+              </div>
+              <div class="kenost-wiget" v-if="this.products_selected_data.type_pricing?.key != 3">
+                <p>От типа цены</p>
+                <Dropdown @change="updateFormula()"
+                  v-model="this.products_selected_data.type_price"
+                  :options="this.prices" 
+                  optionLabel="name" 
+                  class="w-full md:w-14rem" 
+                />
+              </div>
+              <div class="kenost-wiget-two">
+                  <div class="kenost-wiget">
+                      <p>Значение</p>
+                      <InputNumber v-model="this.products_selected_data.sale_value" inputId="horizontal-buttons" :step="0.1" min="0"
+                          @update:modelValue="updateFormula()" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" />
+                  </div>
+                  <div class="kenost-wiget">
+                      <p>&nbsp;</p>
+                      <Dropdown 
+                        @change="updateFormula()" 
+                        :disabled="this.products_selected_data.type_pricing?.key == 3" 
+                        v-model="this.products_selected_data.type_formula"
+                        :options="this.type_formula" 
+                        optionLabel="name" 
+                        class="w-full md:w-14rem" 
+                      />
+                  </div>
+              </div>
+          </div>
+
+          <div v-if="this.modals.price_step == 1 && this.modals.type_price == 2" class="two-colums mt-3">
+            <div class="kenost-wiget">
+              <p>Тип цены</p>
+              <Dropdown @change="updateFormula()" 
+                v-model="this.products_selected_data.type_price"
+                :options="this.prices" 
+                optionLabel="name"
+                class="w-full md:w-14rem" 
+              />
+            </div>
+          </div>
+
+          <div v-if="this.modals.price_step == 1 && this.modals.type_price == 3" class="two-colums mt-3">
+            <div class="kenost-wiget">
+              <p>Кратность</p>
+              <InputNumber 
+                v-model="this.products_selected_data.multiplicity" 
+                inputId="horizontal-buttons" 
+                :step="1" 
+                min="1" 
+                incrementButtonIcon="pi pi-plus" 
+                decrementButtonIcon="pi pi-minus" 
+              />
+            </div>
+          </div>
+
+          <div class="kenost-info-line" v-if="this.modals.price_step != 0 && this.products_selected.length == 1">
+              <p>РРЦ: {{ this.products_selected[0].price ?? '—' }} ₽</p>
+              <p>
+                  Скидка от РРЦ:
+                  {{ this.products_selected[0]?.save_data.sale }} %
+              </p>
+              <p>
+                  Цена со скидой:
+                  {{ this.products_selected[0]?.save_data.new_price ? this.products_selected[0]?.save_data.new_price : this.products_selected[0]?.price }} ₽
+              </p>
+          </div>
+
+          <div v-if="this.products_selected_data.type_pricing?.key == 3 && this.modals.price_step != 0 && this.products_selected.length == 1">
+              <div class="dart-alert dart-alert-info mt-2">
+                  Цена будет всегда оставаться неизменной, даже при изменении типов цен, РРЦ и любых других параметров товара.
+              </div>
+          </div>
+
+          <div class="kenost-modal-price__button kenost-modal-price__flex">
+              <span v-if="this.modals.price_step == 0"></span>
+              <div v-if="this.modals.price_step != 0" class="dart-btn dart-btn-secondary btn-padding"
+                  @click="this.modals.price_step = 0">
+                  Назад
+              </div>
+              <div class="dart-btn dart-btn-primary btn-padding" @click="closeDialogPrice">
+                  {{ this.modals.price_step == 0 ? 'Далее' : 'Готово' }}
+              </div>
+          </div>
+      </div>
+    </Dialog>
 </div>
 </template>
 <script>
@@ -372,6 +745,8 @@ import { helpers, required } from '@vuelidate/validators';
 import TabView from "primevue/tabview";
 import TabPanel from "primevue/tabpanel";
 import Badge from 'primevue/badge';
+import Choicer from '../components/Choicer.vue';
+import productTable from '../components/table/product-table.vue';
 
 export default {
     name: 'ProfileSalesAdd',
@@ -379,10 +754,52 @@ export default {
     data() {
       return {
         loading: false,
+        product_loading: false,
+        product_upload_loading: false,
+        product_available_page: 1,
+        product_selected_page: 1,
+        complect_loading: false,
+        complect_available_page: 1,
+        complect_selected_page: 1,
+        selected_group: {},
+        // Фильтр по товарам
+        filters_available: {
+          name: {
+            name: "Наименование, артикул",
+            placeholder: "Наименование, артикул",
+            type: "text",
+          },
+          catalog: {
+            name: "Категория товара",
+            placeholder: "Выберите категорию",
+            type: "tree",
+            values: this.getcatalog,
+          }
+        },
+        // Фильтр по комплектам
+        filters_available_complects: {
+          name: {
+            name: "Наименование, артикул",
+            placeholder: "Наименование, артикул",
+            type: "text",
+          }
+        },
+        // Доступные товары
+        products: [],
+        products_selected: [],
+        products_selected_data: {},
+        total_products: 0,
+        per_page: 24,
         // Флаги окон
         modals: {
+          modal_checking: false,
+          add_group: false,
+          error_product: false,
           view_actions: false,
-          delay: false
+          delay: false,
+          price: false,
+          price_step: 0,
+          price_type: ''
         },
         // Склады Организации
         stores: [],
@@ -424,14 +841,47 @@ export default {
           delayPercentSum: 100,
           postponementPeriod: 0
         },
+        type_formula: [
+          { name: '₽', key: 0 },
+          { name: '%', key: 1 }
+        ],
+        type_pricing: [
+          {name: 'Наценка', key: 1},
+          {name: 'Скидка', key: 2},
+          {name: 'Фиксированая цена', key: 3}
+        ],
+        type_pricing_group: [
+          {name: 'Наценка', key: 1},
+          {name: 'Скидка', key: 2},
+        ],
+        prices: {},
         // Акции для выбора совместимости
         allAction: {},
+        // Файлы
+        upload_product: false,
+        upload_selected: [],
+        upload_error: [],
+        files: {
+          max: {
+            original_href: ''
+          },
+          min: {
+            original_href: ''
+          },
+          icon: {
+            original_href: ''
+          },
+          small: {
+            original_href: ''
+          }
+        },
         // Форма с Данными
         form: {
           name: '',
           description: '',
           compatibilityDiscount: '1',
           actions: [],
+          product_groups: {},
           compabilityMode: { name: 'Применяется бóльшая', key: 0 },
           paymentDelivery: { name: 'Покупатель', key: 0 },
           typeDelay: '1',
@@ -473,10 +923,17 @@ export default {
         'org_stores',
         'actions',
         'adv_pages',
+        'oprprices',
         'getregions',
         'allactions',
-        'allorganizations'
-      ]),
+        'allorganizations',
+        'available_products',
+        'selected_products',
+        'available_complects',
+        'selected_complects',
+        'getcatalog',
+        'groups'
+      ])
     },
     watch: {
       // Склады Организации
@@ -507,6 +964,43 @@ export default {
             return { name: el.name, code: el.id };
         });
       },
+      available_products: function (newVal, oldVal) {
+          if (newVal) {
+              if (newVal.type === 'gift') {
+                  this.productsGift = newVal.products;
+                  // this.selected = newVal.selected
+                  if (newVal.selected) {
+                      this.selectedGift = newVal.selected;
+                  }
+                  this.total_gift_products = newVal.total;
+              } else {
+                  this.products = newVal.products;
+                  // this.selected = newVal.selected
+                  if (Array.isArray(newVal.selected) && newVal.selected.length == 0) {
+                      this.selected = {};
+                  } else if(newVal.selected){
+                      this.selected = newVal.selected;
+                  }
+
+                  if (newVal.visible) {
+                      this.selected_visible = newVal.visible;
+                      // console.log(this.selected_visible)
+                      this.ids_visible = newVal.ids_selected;
+                  }
+                  this.total_products = newVal.total;
+                  this.total_selected = newVal.total_selected;
+              }
+          }
+      },
+      getcatalog(newVal, oldVal) {
+        this.filters_available.catalog.values = newVal;
+      },
+      oprprices: function (newVal, oldVal) {
+          this.prices = [];
+          for (let i = 0; i < newVal.length; i++) {
+              this.prices.push({ key: newVal[i].guid, name: newVal[i].name });
+          }
+      }
     },
     components: {
       Dropdown,
@@ -517,17 +1011,77 @@ export default {
       RadioButton,
       Calendar,
       InputNumber,
-      Dialog
+      Dialog,
+      DropZone,
+      Counter,
+      Badge,
+      TabPanel,
+      TabView,
+      TreeSelect,
+      Paginate,
+      Choicer,
+      productTable
     },
     methods: {
       ...mapActions([
+        'get_available_products_from_api',
+        'set_selected_product_data',
+        'set_selected_product',
+        'set_deselected_product',
+        'set_deselected_products',
+        'set_selected_products',
+        'get_available_complects_from_api',
+        'set_selected_complect',
+        'set_deselected_complect',
+        'set_deselected_complects',
+        'set_selected_complects',
         'org_get_stores_from_api',
+        'upload_products_file',
         'get_sales_to_api',
         'get_regions_from_api',
         'get_sales_adv_pages_to_api',
         'get_all_sales_to_api',
-        'get_all_organizations_from_api'
+        'get_all_organizations_from_api',
+        'get_catalog_from_api',
+        'opt_get_prices',
+        'get_group_products',
+        'get_group_api'
       ]),
+      addGroup(){
+        this.form.product_groups[this.selected_group.id] = {
+          group: this.selected_group,
+          page: 1,
+          perpage: 20,
+          search: "",
+          typePricing: null,
+          prices: null,
+          price: 'key',
+          saleValue: 0,
+          typeFormul: null
+        };
+        this.updateGroups(this.selected_group.id)
+        this.selected_group = {}
+        this.modals.add_group = false
+      },
+      updateGroups(id){
+        console.log('updateGroups', this.form.product_groups[id])          
+        this.get_group_products({
+          action: 'get/products',
+          id: this.$route.params.id,
+          group_id: id,
+          page: this.form.product_groups[id].page,
+          perpage: this.form.product_groups[id].perpage
+        }).then((res) => {
+          this.form.product_groups[id].products = res.data
+        })
+        // console.log(this.action_groups)
+      },
+      deleteGroup(id){
+          this.form.groups = Object.fromEntries(
+              Object.entries(this.product_groups)
+                  .filter(([key]) => key !== id.toString())
+          );
+      },
       async formSubmit(event) {
         console.log('create')
         const validationResult = await this.v$.$validate();
@@ -535,6 +1089,78 @@ export default {
         if (!validationResult) {
             // console.log('validation failed');
             return;
+        }
+      },
+      settings(items, type){
+        // console.log(items)
+        this.modals.price_type = type
+        this.products_selected = items
+        this.modals.price_step = 0        
+        this.modals.price = true
+        if(items.length == 1){
+          // Если источник = Файл, устанавливаем фиксированную цену
+          if(items[0].save_data.source == 2){
+            this.modals.type_price = "1"
+            this.modals.price_step = 1
+            Object.entries(this.type_pricing).forEach((entry) => {
+              const [key, value] = entry;
+              if(value.key == 3){
+                this.products_selected_data.type_pricing = value
+              }
+            });
+            Object.entries(this.type_formula).forEach((entry) => {
+              const [key, value] = entry;
+              if(value.key == 0){
+                this.products_selected_data.type_formula = value
+              }
+            });
+            this.products_selected_data.sale_value = Number(items[0].save_data.new_price)
+          }
+        }
+      },
+      changeMultiplicity(item) {
+        console.log(item)
+        this.products_selected_data.multiplicity = item.value
+        this.products_selected = []
+        this.products_selected.push(item.item)
+        const data = {
+          type: "items",
+          products: this.products_selected,
+          data: this.products_selected_data
+        }
+        this.set_selected_product_data(data).then(() => {
+          this.resetDiscountFormula()
+        })
+      },
+      changeMinCount(item){
+        console.log(item)
+        this.products_selected_data.min_count = item.value
+        this.products_selected = []
+        this.products_selected.push(item.item)
+        const data = {
+          type: "items",
+          products: this.products_selected,
+          data: this.products_selected_data
+        }
+        this.set_selected_product_data(data).then(() => {
+          this.resetDiscountFormula()
+        })
+      },
+      closeDialogPrice(){
+        if (this.modals.price_step === 0) {
+          this.modals.price_step = 1;
+        } else {
+          this.modals.price_step = 0;
+          this.modals.price = false;
+          const data = {
+            type: this.modals.price_type,
+            products: this.products_selected,
+            data: this.products_selected_data
+          }
+          this.set_selected_product_data(data).then(() => {
+            this.resetDiscountFormula()
+            this.updateStoreData()
+          })
         }
       },
       onUpload(data) {
@@ -549,13 +1175,99 @@ export default {
         }
         this.$toast.add({ severity: 'info', summary: 'Файлы загружены', detail: 'Файл был успешно загружен', life: 3000 });
       },
+      parseFile(files, xhr, formData) {
+        this.product_upload_loading = true        
+        const callback = (e) => {
+          const res = JSON.parse(e);
+          this.files.xlsx = res.data.files[0];
+          const data = {
+            id: router.currentRoute._value.params.id,
+            action: 'upload/products/file',
+            store_id: this.form.store_id,
+            file: res.data.files[0].original,
+            type: 'b2b'
+          };
+          this.upload_products_file(data).then((response) => {
+            this.product_upload_loading = false
+            this.upload_product = true
+            this.upload_selected = []
+            this.upload_error = []
+            const productsList = response.data.data;
+            for (let i = 1; i < Object.keys(productsList).length; i++) {
+              const tempProduct = productsList[Object.keys(productsList)[i]];
+              if (!tempProduct.error) {
+                this.upload_selected.push(tempProduct.A);
+              }else {
+                this.upload_error.push(tempProduct.A);
+              }
+            }
+            this.updateStoreData()
+          });
+        };
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState === 4) {
+                callback(xhr.response);
+            }else{
+              // alert("Произошла ошибка")
+            }
+        };
+      },
       updateStoreData() {
         if(this.form.store_id){
+          this.product_loading = true
+          this.complect_loading = true
+          this.product_available_page = 1
+          this.product_selected_page = 1
+          this.complect_available_page = 1
+          this.complect_selected_page = 1
+          this.opt_get_prices({
+            action: 'get/type/prices',
+            store_id: this.form.store_id
+          });
           this.get_all_sales_to_api({
             id: router.currentRoute._value.params.id,
             action: 'get/all',
             store_id: this.form.store_id
           });
+          this.get_available_products_from_api({ 
+            store_id: this.form.store_id, 
+            filter: '',
+            page: this.product_available_page,
+            perpage: this.per_page,
+            type: 1
+          }).then((res) => {
+            this.get_available_products_from_api({ 
+              store_id: this.form.store_id, 
+              filter: '',
+              page: this.product_selected_page,
+              perpage: this.per_page,
+              type: 2
+            }).then((res) => {
+              this.product_loading = false
+            });
+          });          
+          this.get_available_complects_from_api({ 
+            store_id: this.form.store_id, 
+            filter: '',
+            page: this.complect_available_page,
+            perpage: this.per_page,
+            type: 1
+          }).then((res) => {
+            this.get_available_complects_from_api({ 
+              store_id: this.form.store_id, 
+              filter: '',
+              page: this.complect_selected_page,
+              perpage: this.per_page,
+              type: 2
+            }).then((res) => {
+              this.complect_loading = false
+            });
+          });   
+          this.get_group_api({
+            id: this.$route.params.id,
+            store_id: this.form.store_id,
+            action: "get"
+          })       
         }
       },
       delayUpdate() {
@@ -596,8 +1308,238 @@ export default {
         // eslint-disable-next-line camelcase
         this.form.all_organizations_selected = new_all_organizations_selected;
       },
+      selectProduct(id){
+        this.product_loading = true
+        this.set_selected_product(id).then((res) => {
+          this.updateStoreData();
+        });        
+      },
+      selectComplect(id){
+        this.complect_loading = true
+        this.set_selected_complect(id).then((res) => {
+          this.updateStoreData();
+        });        
+      },
+      deselectProduct(id){
+        this.product_loading = true
+        this.set_deselected_product(id).then((res) => {
+          this.updateStoreData();
+        });
+      },
+      deselectComplect(id){
+        this.complect_loading = true
+        this.set_deselected_complect(id).then((res) => {
+          this.updateStoreData();
+        });
+      },
+      selectProductAll(data){
+        this.product_loading = true
+        this.set_selected_products({ 
+          store_id: this.form.store_id, 
+          filter: data.filter,
+          filtersdata: data.filtersdata
+        }).then((res) => {
+          this.updateStoreData();
+        });
+      },
+      selectComplectAll(data){
+        this.product_loading = true
+        this.set_selected_complects({ 
+          store_id: this.form.store_id, 
+          filter: data.filter
+        }).then((res) => {
+          this.updateStoreData();
+        });
+      },
+      deselectProductAll(){
+        this.product_loading = true
+        this.set_deselected_products().then((res) => {
+          this.updateStoreData();
+        });
+      },
+      deselectComplectAll(){
+        this.product_loading = true
+        this.set_deselected_complects().then((res) => {
+          this.updateStoreData();
+        });
+      },
+      paginateAvailableProduct(data){
+        this.product_loading = true
+        this.product_available_page = data.page
+        this.get_available_products_from_api({ 
+          store_id: this.form.store_id, 
+          filter: data.filter,
+          filtersdata: data.filtersdata,
+          page: data.page,
+          perpage: this.per_page,
+          type: 1
+        }).then((res) => {
+          this.product_loading = false
+        });
+      },
+      paginateAvailableComplect(data){
+        this.complect_loading = true
+        this.complect_available_page = data.page
+        this.get_available_complects_from_api({ 
+          store_id: this.form.store_id, 
+          filter: data.filter,
+          page: data.page,
+          perpage: this.per_page,
+          type: 1
+        }).then((res) => {
+          this.complect_loading = false
+        });
+      },
+      paginateSelectedProduct(data){
+        this.product_selected_page = data.page
+        this.get_available_products_from_api({ 
+          store_id: this.form.store_id,
+          page: data.page,
+          perpage: this.per_page,
+          type: 2
+        }).then((res) => {
+          this.product_loading = false
+        });
+      },
+      paginateSelectedComplect(data){
+        this.complect_loading = true
+        this.complect_selected_page = data.page
+        this.get_available_complects_from_api({ 
+          store_id: this.form.store_id,
+          page: data.page,
+          perpage: this.per_page,
+          type: 2
+        }).then((res) => {
+          this.complect_loading = false
+        });
+      },
+      filterProduct(data){
+        this.product_loading = true
+        this.product_available_page = data.page
+        this.get_available_products_from_api({ 
+          store_id: this.form.store_id, 
+          filter: data.filter,
+          filtersdata: data.filtersdata,
+          page: data.page,
+          perpage: this.per_page,
+          type: 1
+        }).then((res) => {
+          this.product_loading = false
+        });
+      },
+      filterProductSelected(data){
+        this.product_loading = true
+        this.product_selected_page = data.page
+        this.get_available_products_from_api({ 
+          store_id: this.form.store_id, 
+          filter: data.filter,
+          filtersdata: data.filtersdata,
+          page: data.page,
+          perpage: this.per_page,
+          type: 2
+        }).then((res) => {
+          this.product_loading = false
+        });
+      },
+      filterComplect(data){
+        this.complect_loading = true
+        this.complect_available_page = data.page
+        this.get_available_complects_from_api({ 
+          store_id: this.form.store_id, 
+          filter: data.filter,
+          page: data.page,
+          perpage: this.per_page,
+          type: 1
+        }).then((res) => {
+          this.complect_loading = false
+        });
+      },
+      resetDiscount(){
+        // if(this.selected_products.length == 1){
+          // Обнуляем на дефолтные значения
+          this.products_selected_data.type_price = {}
+          this.products_selected_data.type_formula = {}
+          this.products_selected_data.sale_value = null
+        // }
+      },
+      resetDiscountFormula(){
+        // if(this.selected_products.length == 1){
+          // Обнуляем на дефолтные значения
+          this.modals.type_price == 1
+          this.products_selected_data = {}
+        // }
+      },
+      updateFormula(){
+        if(this.products_selected.length == 1){
+          var base_price = this.products_selected[0].price
+          var rrc_price = this.products_selected[0].price
+          // Если указан тип цены меняем базовую стоимость
+          if(this.products_selected_data.type_price?.key){
+            Object.entries(this.products_selected[0].save_data.prices).forEach((entry) => {
+              const [key, value] = entry;
+              if(value.guid == this.products_selected_data.type_price?.key){
+                base_price = value.price
+              }
+            });
+          }
+          if(this.modals.type_price == 2){
+            this.products_selected[0].save_data.new_price = base_price;
+            if(base_price < rrc_price){
+              this.products_selected[0].save_data.sale = ((rrc_price - this.products_selected[0].save_data.new_price) / rrc_price) * 100;
+            }else{
+              this.products_selected[0].save_data.sale = 0
+            }            
+          }
+          if(this.modals.type_price == 1){
+            if(this.products_selected_data.type_pricing && this.products_selected_data.sale_value && this.products_selected_data.type_formula){              
+              // Наценка
+              if(this.products_selected_data.type_pricing?.key == 1){
+                // Рубли
+                if(this.products_selected_data.type_formula?.key == 0){
+                  this.products_selected[0].save_data.new_price = base_price + this.products_selected_data.sale_value;
+                  this.products_selected[0].save_data.sale = ((rrc_price - this.products_selected[0].save_data.new_price) / rrc_price) * 100;
+                }
+                // Проценты
+                if(this.products_selected_data.type_formula?.key == 1){
+                  const koeff = (100 + Number(this.products_selected_data.sale_value)) * 0.01;
+                  this.products_selected[0].save_data.new_price = Number(base_price * koeff).toFixed(2);
+                  this.products_selected[0].save_data.sale = ((rrc_price - this.products_selected[0].save_data.new_price) / rrc_price) * 100;
+                }
+              }
+              // Скидка
+              if(this.products_selected_data.type_pricing?.key == 2){
+                // Рубли
+                if(this.products_selected_data.type_formula?.key == 0){
+                  this.products_selected[0].save_data.new_price = base_price - this.products_selected_data.sale_value;
+                  this.products_selected[0].save_data.sale = ((rrc_price - this.products_selected[0].save_data.new_price) / rrc_price) * 100;
+                }
+                // Проценты
+                if(this.products_selected_data.type_formula?.key == 1){
+                  const koeff = (100 - Number(this.products_selected_data.sale_value)) * 0.01;
+                  this.products_selected[0].save_data.new_price = Number(base_price * koeff).toFixed(2);
+                  this.products_selected[0].save_data.sale = ((rrc_price - this.products_selected[0].save_data.new_price) / rrc_price) * 100;
+                }
+              }
+              // Фиксированная
+              if(this.products_selected_data.type_pricing?.key == 3){
+                this.products_selected[0].save_data.new_price = this.products_selected_data.sale_value;
+                this.products_selected[0].save_data.sale = ((rrc_price - this.products_selected[0].save_data.new_price) / rrc_price) * 100;
+              }
+            }else{
+              this.products_selected[0].save_data.new_price = base_price;
+              this.products_selected[0].save_data.sale = 0;
+            }
+            this.products_selected[0].save_data.sale = Number(this.products_selected[0].save_data.sale).toFixed(2);
+          }          
+        }
+      }
     },
     mounted() {
+      // Убираем то, что было выбрано до этого
+      this.set_deselected_products();
+      this.set_deselected_complects();
+      // Берем дерево Категорий
+      this.get_catalog_from_api();
       // Берем Склады Организации
       this.org_get_stores_from_api({
         action: 'get/stores',
@@ -634,6 +1576,43 @@ export default {
           action: 'get/all',
           store_id: this.form.store_id
         });
+        this.get_available_products_from_api({ 
+          store_id: this.form.store_id, 
+          filter: '',
+          page: this.product_available_page,
+          perpage: this.per_page,
+          type: 1
+        }).then((res) => {
+        });
+        this.get_available_products_from_api({ 
+          store_id: this.form.store_id, 
+          filter: '',
+          page: this.product_selected_page,
+          perpage: this.per_page,
+          type: 2
+        }).then((res) => {
+        });
+        this.get_available_complects_from_api({ 
+          store_id: this.form.store_id, 
+          filter: '',
+          page: this.complect_available_page,
+          perpage: this.per_page,
+          type: 1
+        }).then((res) => {
+        });
+        this.get_available_complects_from_api({ 
+          store_id: this.form.store_id, 
+          filter: '',
+          page: this.complect_selected_page,
+          perpage: this.per_page,
+          type: 2
+        }).then((res) => {
+        });
+        this.get_group_api({
+          id: this.$route.params.id,
+          store_id: this.form.store_id,
+          action: "get"
+        })
       }
     },
     setup() {
@@ -657,5 +1636,7 @@ export default {
 }
 </script>
 <style lang="scss">
-
+  .dropzone__box{
+    z-index: 1;
+  }
 </style>

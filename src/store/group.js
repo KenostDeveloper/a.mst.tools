@@ -12,7 +12,8 @@ export default {
     group_tags: [],
     group_vendors: [],
     group_catalog: [],
-    group_build: []
+    group_build: [],
+    group_products: []
   },
   actions: {
     set_group_api({ commit }, data) {
@@ -123,6 +124,25 @@ export default {
               router.push({ name: 'main' })
             }
         })
+    },
+    get_group_products({ commit }, data) {
+        return Axios('/rest/front_group', {
+          method: 'POST',
+          data: data,
+          headers: {
+            'Access-Control-Allow-Origin': '*'
+          }
+        })
+          .then((response) => {
+            commit('GROUP_PRODUCTS_TO_VUEX', response.data)
+            return response.data
+          })
+          .catch(error => {
+            if (error.response.status === 403) {
+              localStorage.removeItem('user')
+              router.push({ name: 'main' })
+            }
+        })
     }
   },  
   mutations: {
@@ -137,6 +157,9 @@ export default {
     },
     BUILD_GROUP_TO_VUEX: (state, data) => {
       state.group_build = data.data
+    },
+    GROUP_PRODUCTS_TO_VUEX: (state, data) => {
+      state.group_products = data.data
     },
     SET_GROUPS_TO_VUEX: (state, data) => {
       state.groups = data.data
@@ -158,5 +181,8 @@ export default {
     groups (state) {
       return state.groups
     },
+    group_products (state) {
+      return state.group_products
+    }
   }
 }
