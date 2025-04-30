@@ -117,7 +117,9 @@
           <Dropdown v-model="this.form.compabilityMode" :options="this.compabilityMode" optionLabel="name"
               placeholder="Режим совместимости" class="w-full md:w-14rem" />
         </div>
+        <!--
         <div @click="this.modals.view_actions = true" class="router-link-active dart-btn dart-btn-secondary btn-padding mb-4">Совместимость акций</div>
+        -->
         <div class="dart-form-group mb-4" :class="{ error: v$.form.dates.$errors.length }">
           <span class="ktitle">Даты проведения</span>
           <span class="field-desc">Выберите период активности Акции.</span>
@@ -295,7 +297,9 @@
           :class="{ loading: product_loading }"
           title_available="Настройка выбранных товаров"
           :filters="this.filters_available"
+          :cols="this.products_cols"
           :show_filter="true"
+          :selectable="true"
           :page="this.product_selected_page"
           :items="this.selected_products.products"
           :total="this.selected_products.total"
@@ -307,109 +311,49 @@
           @changeMinCount="changeMinCount"
           @deSelect="deselectProduct"
         ></productTable>
-        <div class="dart-form-group mt-4 flex">
-          <span class="ktitle">Коллекции</span>
-          <span class="field-desc">Вы можете добавить в Акцию коллекцию товаров и задать на нее глобально настройки ценообразования.</span>
-          <div>
-            <button @click="this.modals.add_group = true" type="button" class="dart-btn dart-btn-primary  flex gap-2 align-items-center">
-              <i class="pi pi-upload"></i><div>Добавить коллекцию</div>
-            </button>
+        <div class="mt-4">
+          <div class="dart-row">
+            <div class="d-col-md-8">
+              <span class="ktitle">Коллекции</span>
+              <span class="field-desc">Вы можете добавить в Акцию коллекцию товаров и задать на нее глобально настройки ценообразования.</span>
+            </div>
+            <div class="d-col-md-4 text-right">
+              <button @click="this.modals.add_group = true" type="button" class="dart-btn dart-btn-primary">
+                <i class="pi pi-upload"></i>
+                <span>Добавить коллекцию</span>
+              </button>
+            </div>
           </div>
+          
+          
           <div class="kenost-tab-container">
             <TabView class="tab-custom hidden-mobile-l mt-3 kenost-tab-custom" :scrollable="true">
-                <TabPanel v-for="el in this.form.product_groups" :header="el.group.name + ' (' + el?.products?.total + ')'">
-                    <div class="table-kenost mt-4">
-                        <div class="flex align-items-center justify-between">
-                            <p class="table-kenost__title">Товары коллекции «{{ el.group.name }}»</p>
-                            <button @click="deleteGroup(el.group.id)" type="button" class="dart-btn dart-btn-secondary btn-padding flex gap-2 align-items-center">
-                                <i class="pi pi-trash"></i><div>Удалить коллекцию</div>
-                            </button>
-                        </div>
-                        <div class="table-kenost__filters">
-                            <div class="table-kenost__filters-left">
-                                <div class="form_input_group input_pl input-parent required">
-                                    <input type="text" id="filter_table" placeholder="Введите артикул или название"
-                                        class="dart-form-control" v-model="el.search"
-                                        @input="setFilterGroup(el.group.id)" />
-                                    <label for="product_filter_name" class="s-complex-input__label">Введите артикул или
-                                        название</label>
-                                    <div class="form_input_group__icon">
-                                        <i class="d_icon d_icon-search"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <table class="table-kenost__table mt-0">
-                            <thead>
-                                <tr>
-                                    <th class="table-kenost__name table-kenost__name-checkbox hidden">
-                                        <Checkbox @update:modelValue="kenostTableCheckedAll" v-model="this.kenost_table_all"
-                                            inputId="kenost_table_all" value="1" />
-                                    </th>
-                                    <th class="table-kenost__name table-kenost__name-product">Товар</th>
-                                    <th class="table-kenost__name">Тип добавления</th>
-                                    <th class="table-kenost__name">Бренд</th>
-                                    <th class="table-kenost__name">РРЦ</th>
-                                    <th class="table-kenost__name">
-                                        Скидка \ Наценка </br> <div class="text-primary cursor-pointer" @click="() => {
-                                            this.modals.price = true
-                                            this.modals.price_type = 'group'
-                                            this.modals.price_group = el.group.id                                            
-                                        }">Настроить</div>
-                                    </th>
-                                    <th class="table-kenost__name">Тип ценообразования</th>
-                                    <th class="table-kenost__name">Цена со скидкой за шт.</th>
-                                </tr>
-                            </thead>
-                            <!-- Вывод комплектов -->
-                            <tbody v-for="item in el?.products?.items" :key="item.id">
-                                <tr>
-                                    <td class="table-kenost__checkbox hidden">
-                                        <Checkbox @change="kenostTableCheckedAllCheck" v-model="this.kenost_table"
-                                            inputId="kenost_table" :value="item.id" />
-                                    </td>
-                                    <td class="table-kenost__product">
-                                        <img :src="item.image" />
-                                        <div class="table-kenost__product-text">
-                                            <p>{{ item.name }}</p>
-                                            <span>{{ item.article }}
-                                                <span class="store-name-b2b" :style="{ background: item.color }">{{item.store}}</span></span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        {{ item.type }}
-                                    </td>
-                                    <td>
-                                        {{ item.brand }}
-                                    </td>
-                                    <td>
-                                        {{ item.price }}
-                                    </td>
-                                    <td>
-                                        {{ item.price > 0 ? ((Math.round(((item.price - item.new_price) / item.price) * 10000) / 100) + '%') : '0' }}
-                                    </td>
-                                    <td>
-                                        {{ el.typePricing?.name }}
-                                    </td>
-                                    <td>
-                                        {{(Number(item.new_price)).toFixed(2)}}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <paginate
-                            :page-count="(this.form.product_groups[el.group.id]?.products?.total / this.form.product_groups[el.group.id]?.perpage) > 0 ? Math.ceil(this.form.product_groups[el.group.id]?.products?.total / this.form.product_groups[el.group.id]?.perpage) : 1"
-                            :click-handler="(page) => pagClickCallbackGroup(page, el.group.id)"
-                            :prev-text="'Пред'"
-                            :next-text="'След'"
-                            :container-class="'pagination justify-content-center'"
-                            :initialPage="this.page_selected"
-                            :forcePage="el.page"
-                        >
-                        </paginate>
-                    </div>
-                </TabPanel>
-            </TabView>
+              <TabPanel v-for="el in this.form.product_groups" :header="el.group.name + ' (' + el?.products?.total + ')'">
+                <productTable
+                  :class="{ loading: product_loading }"
+                  title="Товары коллекции"
+                  :filters="this.filters_available_collections"
+                  :cols="this.products_cols_collections"
+                  :show_filter="true"
+                  :selectable="false"
+                  :object_id="el.group.id"
+                  :filter_value="el.filter"
+                  :page="el.page"
+                  :items="el?.products?.items"
+                  :total="el?.products?.total"
+                  :items_per_page="this.per_page"
+                  @settings="settings"
+                  @paginate="paginateGroupProduct"
+                  @filter="filterGroupProductSelected"
+                >
+                  <template v-slot:button>
+                    <button @click="deleteGroup(el.group.id)" type="button" class="dart-btn dart-btn-secondary btn-padding flex gap-2 align-items-center">
+                      <i class="pi pi-trash"></i><div>Удалить коллекцию</div>
+                    </button>
+                  </template>
+                </productTable>
+              </TabPanel>
+          </TabView>
         </div>
         </div>
         <div class="mb-4">
@@ -606,7 +550,7 @@
   <Dialog v-model:visible="this.modals.price" :header="this.products_selected.length > 1 ? 'Массовые действия' : 'Настройка цены'" :style="{ width: '700px' }" @hide="resetDiscountFormula">
       <div class="kenost-modal-price">
           <div class="dart-alert dart-alert-info" v-if="this.modals.type_price != 3 && this.modals.price_step == 1">Если у товара не будет задан выбранный тип цен, скидка будет рассчитана от розничной цены.</div>
-          <div class="product-kenost-card" v-if="this.products_selected.length == 1">
+          <div class="product-kenost-card" v-if="this.products_selected.length == 1 && this.modals.price_type != 'group'">
               <img :src="this.products_selected[0].image" />
               <div class="product-kenost-card__text">
                   <p>{{ this.products_selected[0].name }}</p>
@@ -634,6 +578,7 @@
                     @change="resetDiscount()"
                     v-model="this.products_selected_data.type_pricing"
                     :options="this.type_pricing" 
+                    optionDisabled="disabledkey"
                     optionLabel="name"
                     class="w-full md:w-14rem" />
               </div>
@@ -692,7 +637,7 @@
             </div>
           </div>
 
-          <div class="kenost-info-line" v-if="this.modals.price_step != 0 && this.products_selected.length == 1">
+          <div class="kenost-info-line" v-if="this.modals.price_step != 0 && this.products_selected.length == 1 && this.modals.price_type != 'group'">
               <p>РРЦ: {{ this.products_selected[0].price ?? '—' }} ₽</p>
               <p>
                   Скидка от РРЦ:
@@ -722,6 +667,70 @@
           </div>
       </div>
     </Dialog>
+    <div class="new-modal" :class="{'active': this.modals.view_actions}">
+      <div class="new-modal__content">
+          <div class="new-modal__title">
+              <div>
+                  <h2>Совместимость акций</h2>
+                  <p>Таблица, в которой указывается совместимость создаваемой \ редактируемой акции, индивидуальной скидки, сбытовой политики:</p>
+              </div>
+              <i @click="this.modals.view_actions = false" class="pi pi-times"></i>
+          </div>
+          <div>
+              <table class="new-modal__table">
+                  <thead>
+                      <tr>
+                          <th style="width: 36%;">Название</th>
+                          <th style="width: 32%;">Описание</th>
+                          <th style="width: 23%;">Статус совместимости</th>
+                          <th style="width: 9%;">
+                              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                  <path d="M12.5 19H19M14.5312 7.57576L17.375 9.93939M7.21875 14.6667L15.2296 6.6273C16.0921 5.7909 17.4906 5.7909 18.3531 6.6273C19.2156 7.4637 19.2156 8.81977 18.3531 9.65617L10.0625 17.4242L6 18.6061L7.21875 14.6667Z" stroke="#EDEDED" stroke-linecap="round" stroke-linejoin="round"/>
+                              </svg>
+                          </th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr v-for="item of actions_active" :key="item.id">
+                          <td>
+                              <div>
+                                  <p>
+                                      <span v-if="item.type == 3">Индивидуальна скидка:</span>
+                                      <span v-if="item.type == 1">Акция:</span>
+                                      {{item.name}}</p>
+                              </div>
+                          </td>
+                          <td>
+                              <div>
+                                  <p>
+                                      {{item.description}}
+                                  </p>
+                              </div>
+                          </td>
+                          <td>
+                              <div>
+                                  <p v-if="item.compatibility_discount == 1" class="mb-4"><b>Совместима</b> со всеми акциями</p>
+                                  <p v-if="item.compatibility_discount == 2" class="mb-4"><b>Не совместима</b> со всеми акциями</p>
+                                  <p v-if="item.compatibility_discount == 3" class="mb-4"><b>Не совместима</b> с выбранными акциями</p>
+                                  <p v-if="item.compatibility_discount == 4" class="mb-4"><b>Совместима</b> с выбранными акциями</p>
+
+                                  <p v-if="item.compatibility_discount_mode == 0"><b>Режим совместивости:</b> применяется бóльшая</p>
+                                  <p v-if="item.compatibility_discount_mode == 1"><b>Режим совместивости:</b> складываются</p>
+                                  <p v-if="item.compatibility_discount_mode == 2"><b>Режим совместивости:</b> назначаются последовательно</p>
+
+                              </div>
+                          </td>
+                          <td>
+                              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                  <path d="M12.5 19H19M14.5312 7.57576L17.375 9.93939M7.21875 14.6667L15.2296 6.6273C16.0921 5.7909 17.4906 5.7909 18.3531 6.6273C19.2156 7.4637 19.2156 8.81977 18.3531 9.65617L10.0625 17.4242L6 18.6061L7.21875 14.6667Z" stroke="#282828" stroke-linecap="round" stroke-linejoin="round"/>
+                              </svg>
+                          </td>
+                      </tr>
+                  </tbody>
+              </table>
+          </div>
+      </div>
+  </div>
 </div>
 </template>
 <script>
@@ -776,6 +785,14 @@ export default {
             values: this.getcatalog,
           }
         },
+        // Фильтр по товарам Коллекции
+        filters_available_collections: {
+          name: {
+            name: "Наименование, артикул",
+            placeholder: "Наименование, артикул",
+            type: "text",
+          }
+        },
         // Фильтр по комплектам
         filters_available_complects: {
           name: {
@@ -788,6 +805,103 @@ export default {
         products: [],
         products_selected: [],
         products_selected_data: {},
+        products_cols: {
+          product: {
+						label: "Товар",
+						type: "product",
+            class: "table-kenost__name-product"
+					},
+          source_name: {
+						label: "Источник",
+						type: "text",
+            properties: {
+              save: true
+            }
+					},
+          price: {
+						label: "РРЦ, ₽",
+						type: "number",
+					},
+          sale: {
+						label: "Скидка, %",
+						type: "number",
+            properties: {
+              save: true
+            }
+					},
+          new_price: {
+						label: "Цена со скидкой за шт.",
+						type: "number",
+            properties: {
+              setting: true,
+              save: true
+            }
+					},
+          min_count: {
+						label: "Минимальное количество, шт",
+						type: "counter",
+            properties: {
+              save: true
+            }
+					},
+          multiplicity: {
+						label: "Кратность, шт",
+						type: "counter",
+            properties: {
+              save: true
+            }
+					},
+          summ: {
+						label: "Сумма, ₽",
+						type: "number",
+            properties: {
+              save: true
+            }
+					},
+					actions: {
+						label: 'Действия',
+						type: 'actions',
+						sort: false,
+						available: {
+							delete: {
+								icon: 'pi pi-trash',
+								label: 'Удалить'
+							}
+						}
+					}
+        },
+        // Столбцы таблицы Коллекций
+        products_cols_collections: {
+          product: {
+						label: "Товар",
+						type: "product",
+            class: "table-kenost__name-product"
+					},
+          brand: {
+						label: "Бренд",
+						type: "text"
+					},
+          price: {
+						label: "РРЦ, ₽",
+						type: "number",
+					},
+          sale: {
+						label: "Скидка, %",
+						type: "number",
+            properties: {
+              setting_global: true,
+              save: true
+            }
+					},
+          new_price: {
+						label: "Цена со скидкой за шт.",
+						type: "number",
+            properties: {
+              setting: false,
+              save: true
+            }
+					}
+        },
         total_products: 0,
         per_page: 24,
         // Флаги окон
@@ -846,9 +960,9 @@ export default {
           { name: '%', key: 1 }
         ],
         type_pricing: [
-          {name: 'Наценка', key: 1},
-          {name: 'Скидка', key: 2},
-          {name: 'Фиксированая цена', key: 3}
+          {name: 'Наценка', key: 1, disabledkey: false},
+          {name: 'Скидка', key: 2, disabledkey: false},
+          {name: 'Фиксированая цена', key: 3, disabledkey: false}
         ],
         type_pricing_group: [
           {name: 'Наценка', key: 1},
@@ -932,7 +1046,8 @@ export default {
         'available_complects',
         'selected_complects',
         'getcatalog',
-        'groups'
+        'groups',
+        'actions_active'
       ])
     },
     watch: {
@@ -1045,23 +1160,25 @@ export default {
         'get_catalog_from_api',
         'opt_get_prices',
         'get_group_products',
-        'get_group_api'
+        'get_group_api',
+        'get_actions_active_api'
       ]),
       addGroup(){
-        this.form.product_groups[this.selected_group.id] = {
-          group: this.selected_group,
-          page: 1,
-          perpage: 20,
-          search: "",
-          typePricing: null,
-          prices: null,
-          price: 'key',
-          saleValue: 0,
-          typeFormul: null
-        };
-        this.updateGroups(this.selected_group.id)
-        this.selected_group = {}
-        this.modals.add_group = false
+        if(this.selected_group.id){
+          this.form.product_groups[this.selected_group.id] = {
+            group: this.selected_group,
+            page: 1,
+            search: "",
+            typePricing: null,
+            prices: null,
+            price: 'key',
+            saleValue: 0,
+            typeFormul: null
+          };
+          this.updateGroups(this.selected_group.id)
+          this.selected_group = {}
+          this.modals.add_group = false
+        }
       },
       updateGroups(id){
         console.log('updateGroups', this.form.product_groups[id])          
@@ -1069,18 +1186,33 @@ export default {
           action: 'get/products',
           id: this.$route.params.id,
           group_id: id,
+          filter: this.form.product_groups[id].filter,
           page: this.form.product_groups[id].page,
-          perpage: this.form.product_groups[id].perpage
+          perpage: this.per_page
         }).then((res) => {
           this.form.product_groups[id].products = res.data
         })
         // console.log(this.action_groups)
       },
+      paginateGroupProduct(data){
+        if(data.object_id){
+          this.form.product_groups[data.object_id].page = data.page
+          this.updateGroups(data.object_id)
+        }
+      },
+      filterGroupProductSelected(data){
+        console.log(data)
+        if(data.object_id){
+          this.form.product_groups[data.object_id].filter = data.filter
+          this.form.product_groups[data.object_id].page = data.page
+          this.updateGroups(data.object_id)
+        }
+      },
       deleteGroup(id){
-          this.form.groups = Object.fromEntries(
-              Object.entries(this.product_groups)
-                  .filter(([key]) => key !== id.toString())
-          );
+        this.form.product_groups = Object.fromEntries(
+          Object.entries(this.form.product_groups)
+            .filter(([key]) => key !== id.toString())
+        );
       },
       async formSubmit(event) {
         console.log('create')
@@ -1095,9 +1227,17 @@ export default {
         // console.log(items)
         this.modals.price_type = type
         this.products_selected = items
-        this.modals.price_step = 0        
+        this.modals.price_step = 0      
+        if(type == 'group'){
+          Object.entries(this.type_pricing).forEach((entry) => {
+            const [key, value] = entry;
+            if(value.key == 3){
+              this.type_pricing[key].disabledkey = true
+            }
+          });
+        }  
         this.modals.price = true
-        if(items.length == 1){
+        if(items.length == 1 && type != 'group'){
           // Если источник = Файл, устанавливаем фиксированную цену
           if(items[0].save_data.source == 2){
             this.modals.type_price = "1"
@@ -1152,6 +1292,12 @@ export default {
         } else {
           this.modals.price_step = 0;
           this.modals.price = false;
+          Object.entries(this.type_pricing).forEach((entry) => {
+            const [key, value] = entry;
+            if(value.key == 3){
+              this.type_pricing[key].disabledkey = false
+            }
+          });
           const data = {
             type: this.modals.price_type,
             products: this.products_selected,
@@ -1160,6 +1306,9 @@ export default {
           this.set_selected_product_data(data).then(() => {
             this.resetDiscountFormula()
             this.updateStoreData()
+            if(this.modals.price_type == 'group'){
+              this.updateGroups(this.products_selected[0])
+            }            
           })
         }
       },
@@ -1467,6 +1616,12 @@ export default {
           // Обнуляем на дефолтные значения
           this.modals.type_price == 1
           this.products_selected_data = {}
+          Object.entries(this.type_pricing).forEach((entry) => {
+            const [key, value] = entry;
+            if(value.key == 3){
+              this.type_pricing[key].disabledkey = false
+            }
+          });
         // }
       },
       updateFormula(){
@@ -1612,6 +1767,10 @@ export default {
           id: this.$route.params.id,
           store_id: this.form.store_id,
           action: "get"
+        })
+        this.get_actions_active_api({
+          id: this.$route.params.id,
+          action: "get/actions/active"
         })
       }
     },

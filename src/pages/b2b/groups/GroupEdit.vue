@@ -15,12 +15,13 @@
             <div class="dart-form-group mb-4">
                 <span class="ktitle">Наименование коллекции</span>
                 <label for="name">Введите наименование, которое будет отражать смысл вашей коллекции.</label>
-                <input v-model="this.name" type="text" name="name" placeholder="Укажите название коллекции" class="dart-form-control mt-2" />
+                <input v-model="this.name" type="text" name="name" placeholder="Укажите название коллекции" class="dart-form-control mt-2"/>
             </div>
 
             <div class="dart-form-group mb-4">
                 <span class="ktitle">Описание коллекции</span>
-                <input v-model="this.description" type="text" name="name" placeholder="Укажите название коллекции" class="dart-form-control" />
+                <label for="text">Введите описание. Заполняйте его для себя, если необходимо.</label>
+                <textarea v-model="this.description" type="text" name="text" placeholder="Укажите описание коллекции" class="dart-form-control"></textarea>
             </div>
 
             <div class="dart-form-group mt-2 mb-4">
@@ -440,7 +441,7 @@ export default {
         },
         deleteTerms(index){
             this.terms.splice(index, 1);
-            updateBuild()
+            this.updateBuild()
         },
         updateStore(){
             this.get_tags_group_api({

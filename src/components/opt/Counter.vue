@@ -59,6 +59,10 @@ export default {
 			type: Number,
 			default: 0,
 		},
+		field: {
+			type: Text,
+			default: '',
+		},
 		index: {
 			type: Number,
 			default: 0,
@@ -145,6 +149,7 @@ export default {
 				old_value: this.value,
 				id: this.id,
 				store_id: this.store_id,
+				field: this.field,
 				max: this.d_max,
 				min: this.d_min,
 				index: this.index,

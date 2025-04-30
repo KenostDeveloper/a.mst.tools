@@ -1,7 +1,17 @@
 <template>
   <div>
     <div class="table-kenost mt-4 mb-4">
-      <p class="table-kenost__title">{{ title }}</p>
+      <div class="dart-row align-items-center">
+        <div class="d-col-md-6">
+          <p class="table-kenost__title">{{ title }}</p>
+        </div>
+        <div class="d-col-md-6">
+          <div class="flex justify-content-end">
+            <slot name="button"></slot>
+          </div>          
+        </div>
+      </div>  
+      
       <div class="table-kenost__filters">
           <div class="table-kenost__filters-left">
               <div v-for="(ffilter, i) in filters" :key="i">
@@ -35,98 +45,70 @@
       <table class="table-kenost__table">
         <thead>
           <tr>
-            <th class="table-kenost__name table-kenost__name-checkbox">
+            <th class="table-kenost__name table-kenost__name-checkbox" v-if="this.selectable">
               <Checkbox @update:modelValue="checkAll" v-model="this.checked_all" :binary="true" inputId="checked_all" value="1" />
             </th>
-            <th class="table-kenost__name table-kenost__name-product">Товар</th>
-            <th class="table-kenost__name">Источник</th>
-            <th class="table-kenost__name">РРЦ, ₽</th>
-            <th class="table-kenost__name">Скидка, %</th>
-            <th class="table-kenost__name">Цена со скидкой за шт.</th>
-            <th class="table-kenost__name">
-                Минимальное <br />
-                количество, шт
+            <th v-for="(col, index) in this.cols" :key="index" class="table-kenost__name" :class="col.class">
+              {{ col.label }}
+              <div v-if="col.properties?.setting_global" class="text-primary cursor-pointer" @click="settings(this.object_id, 'group')">Настроить</div>
             </th>
-            <!-- <th class="table-kenost__name">
-                Максимальное <br />
-                количество
-            </th> -->
-            <th class="table-kenost__name">Кратность, шт</th>
-            <th class="table-kenost__name">Сумма, ₽</th>
-            <th class="table-kenost__name">Действие</th>
           </tr>
         </thead>
           <tbody v-for="item in this.items" :key="item.id">
               <tr>
-                <td class="table-kenost__checkbox">
+                <td class="table-kenost__checkbox" v-if="this.selectable">
                   <Checkbox  
                     v-model="this.table"
                     :value="item.id" />
                 </td>
-                <td class="table-kenost__product">
-                  <img :src="item.image" />
-                  <div class="table-kenost__product-text">
-                      <p>{{ item.name }}</p>
-                      <span>
-                        {{ item.article }}
-                        <span class="store-name-b2b" :style="{ background: item.color }">
-                          {{ item.store }}
+                <td v-for="(col, index) in this.cols">
+                  <div v-if="col.type == 'product'" class="table-kenost__product">
+                    <img :src="item.image" />
+                    <div class="table-kenost__product-text">
+                        <p>{{ item.name }}</p>
+                        <span>
+                          {{ item.article }}
+                          <span class="store-name-b2b" :style="{ background: item.color }">
+                            {{ item.store }}
+                          </span>
                         </span>
-                      </span>
+                    </div>
                   </div>
-                </td>
-                <td>
-                  <span v-if="item.save_data.source == 1">Добавлен вручную</span>
-                  <span v-else-if="item.save_data.source == 2">Файл</span>
-                </td>
-                <td>{{ Number(item.price).toFixed(2).toLocaleString('ru') }}</td>
-                <td>
-                    {{ item.save_data.sale }} %
-                </td>
-                <td>
-                    {{ item.save_data.new_price }} ₽
-                    <p class="table-kenost__settings" @click="settings(item, 'items')">Настроить</p>
-                </td>
-                <td>
-                  <Counter
-                    class="margin-auto"
-                    @ElemCount="ElemMinCount"
-                    :item="item"
-                    :id="item.id"
-                    :min="1"
-                    :value="item.save_data.min_count"
-                    :key="new Date().getMilliseconds() + item.id"
-                  />
-                </td>
-                <!-- <td>
-                  <Counter 
-                    class="margin-auto" 
-                    @ElemCount="ElemMaxCount" 
-                    :item="item" 
-                    :id="item.id"                        
-                    :min="0" 
-                    :value="item.max_count"
-                    :key="new Date().getMilliseconds() + item.id" 
-                  />
-                </td> -->
-                <td>
-                  <Counter class="margin-auto" 
-                    @ElemCount="ElemCount" 
-                    :item="item" 
-                    :id="item.id"
-                    :min="1" 
-                    :value="item.save_data.multiplicity"
-                    :key="new Date().getMilliseconds() + item.id" 
-                  />
-                </td>                
-                <td>
-                  {{ Number(item.save_data.new_price * item.save_data.multiplicity).toFixed(2) }}
-                </td>
-                <td>
-                  <div class="kenost-basker-delete">
-                      <div class="kenost-basker-delete__button" @click="deleteSelect(item.id)">
+                  <div v-if="col.type == 'text'">
+                    <div v-if="col.properties?.save">
+                      {{ item.save_data[index] }}
+                    </div>
+                    <div v-else>
+                      {{ item[index] }}
+                    </div>    
+                  </div>
+                  <div v-if="col.type == 'number'">
+                    <div v-if="col.properties?.save">
+                      {{ Number(item.save_data[index]).toFixed(2).toLocaleString('ru') }}
+                    </div>
+                    <div v-else>
+                      {{ Number(item[index]).toFixed(2).toLocaleString('ru') }}
+                    </div>                    
+                    <p v-if="col.properties?.setting" class="table-kenost__settings" @click="settings(item, 'items')">Настроить</p>
+                  </div>
+                  <div v-if="col.type == 'counter'" class="text-center">
+                    <Counter
+                      class="margin-auto"
+                      @ElemCount="ElemCount"
+                      :item="item"
+                      :id="item.id"
+                      :field="index"
+                      :min="1"
+                      :value="item.save_data[index]"
+                      :key="new Date().getMilliseconds() + item.id"
+                    />
+                  </div>
+                  <div v-if="col.type == 'actions'">
+                    <div class="kenost-basker-delete" v-for="(action, ai) in col.available">
+                      <div class="kenost-basker-delete__button" @click="deleteSelect(item.id)" v-if="ai == 'delete'">
                           <i class="pi pi-trash"></i>
                       </div>
+                    </div>
                   </div>
                 </td>
               </tr>
@@ -141,7 +123,7 @@
         :initialPage="this.page" 
         :forcePage="this.page">
       </paginate>
-      <div class="table-kenost-help">
+      <div class="table-kenost-help" v-if="this.selectable">
           <div class="table-kenost-help__select">
             <span>Всего / Отмечено:</span> {{ this.total }} / {{this.filter_table_global ? this.total : Object.keys(this.table).length}}
           </div>
@@ -186,10 +168,22 @@ export default {
       type: String,
 			default: "Таблица добавленных товаров",
     },
+    filter_value: {
+      type: String,
+			default: "",
+    },
+    cols: {
+      type: Array,
+      default: []
+    },
     items: {
       type: Array,
       default: []
     },
+    object_id: {
+			type: Number,
+			default: 0,
+		},
 		items_per_page: {
 			type: Number,
 			default: 25,
@@ -205,6 +199,10 @@ export default {
 		show_filter: {
 			type: Boolean,
 			default: false,
+		},
+		selectable: {
+			type: Boolean,
+			default: true,
 		},
 		filters: {
 			type: Object,
@@ -232,6 +230,7 @@ export default {
 				filtersdata: toRaw(this.filtersdata),
 				page: pageNum,
 				perpage: this.items_per_page,
+        object_id: this.object_id
 			});
     },
     setFilter(type){
@@ -240,13 +239,16 @@ export default {
       if (type === "filter") {
 				if (this.filter.length >= 3 || this.filter.length === 0) {
 					setTimeout(() => {
+            console.log(this.filter)
 						this.$emit("filter", {
 							filter: this.filter,
 							filtersdata: toRaw(this.filtersdata),
 							page: 1,
 							perpage: this.items_per_page,
+              object_id: this.object_id
 						});
-					});
+            console.log(this.filter)
+					}, 500);
 				}
 			} else {
 				this.$emit("filter", {
@@ -254,6 +256,7 @@ export default {
 					filtersdata: toRaw(this.filtersdata),
 					page: 1,
 					perpage: this.items_per_page,
+          object_id: this.object_id
 				});
 			}
     },
@@ -282,10 +285,12 @@ export default {
       this.$emit("settings", this.selected, type);
     },
     ElemCount(data){
-      this.$emit("changeMultiplicity", data);
-    },
-    ElemMinCount(data){
-      this.$emit("changeMinCount", data);
+      if(data.field == "min_count"){
+        this.$emit("changeMinCount", data);
+      }
+      if(data.field == "multiplicity"){
+        this.$emit("changeMultiplicity", data);
+      }
     },
     deleteSelect(data){
       this.$emit("deSelect", data);
@@ -313,7 +318,9 @@ export default {
 		}
   },
   mounted () {
-
+    if(this.filter_value){
+      this.filter = this.filter_value
+    }
   },
   components: {
       Dropdown,
@@ -341,4 +348,7 @@ export default {
 }
 </script>
 <style>
+.text-center .k-quantity{
+  margin: 0 auto;
+}
 </style>
