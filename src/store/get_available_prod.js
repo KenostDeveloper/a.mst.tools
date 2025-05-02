@@ -287,6 +287,28 @@ export default {
           }
         })
     },
+    unset_action_data({ commit }){
+      const data = {
+        id: router.currentRoute._value.params.id,
+        action: "unset/data"
+      }
+      return Axios('/rest/front_getavproducts', {
+        method: 'POST',
+        data: data,
+        headers: {
+          'Access-Control-Allow-Origin': '*'
+        }
+      })
+        .then((response) => {
+          return response
+        })
+        .catch(error => {
+          if (error.response.status === 403) {
+            localStorage.removeItem('user')
+            router.push({ name: 'main' })
+          }
+        })
+    },
     upload_products_file({ commit }, data) {
       return Axios('/rest/front_getavproducts', {
         method: 'POST',

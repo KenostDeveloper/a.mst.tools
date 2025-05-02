@@ -337,18 +337,6 @@ const routes = [
 														label: "Добавление оптовой акции",
 													},
 												},
-												component: SalesEdit,
-											},
-											{
-												path: "new",
-												name: "org_sales_new",
-												props: true,
-												label: "Добавление акции",
-												meta: {
-													breadcrumb: {
-														label: "Добавление оптовой акции",
-													},
-												},
 												component: SalesAdd,
 											},
 											{
@@ -361,7 +349,7 @@ const routes = [
 														label: "Редактирование оптовой акции",
 													},
 												},
-												component: SalesEdit,
+												component: SalesAdd,
 											},
 										],
 									},
