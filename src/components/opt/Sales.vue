@@ -6,7 +6,7 @@
         <div class="buttons_container">
             <RouterLink :to="{ name: 'b2b', params: { id: $route.params.id } }"
                 class="dart-btn dart-btn-secondary btn-padding">Отменить</RouterLink>
-            <button @click="actions.active ? this.modal_checking = true : formSubmit(event)" type="button" class="dart-btn dart-btn-primary btn-padding"
+            <button @click="actions.active ? this.modals.modal_checking = true : formSubmit(event)" type="button" class="dart-btn dart-btn-primary btn-padding"
                 :class="{ 'dart-btn-loading': loading }" :disabled="loading">
                 Сохранить изменения
             </button>
@@ -75,7 +75,39 @@
           </div>
           <div class="dart-form-group mb-4">
             <span class="ktitle">Описание</span>
-            <Editor ref="editor" v-model="this.form.description" editorStyle="height: 320px" />
+            <Editor
+              api-key="ctqgmxpl4dimvsnrt6lnhbyk2xb7eyrhvbbh9lch2kltngkh"
+              language_url='../../../src/locales/tiny/ru.js'
+              :language_load=true
+              v-model="this.form.description"
+              initial-value="<b>Подзаголовок акции</b>
+              <br>
+              <p><span style='text-decoration: underline'>Перечислить все выгодные условия:</span> скидки, подарки, бонусы, возможность выиграть приз и т.д.</p>
+              <p><span style='text-decoration: underline'>Выделить ключевые преимущества:</span> чем ваша акция лучше, чем у конкурентов?</p>
+              <p><span style='text-decoration: underline'>Указать, для кого она предназначена:</span> для всех, для определенной возрастной группы, для постоянных клиентов и т.д.</p>"
+              :init="{
+                plugins: [
+                  'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                  'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                  'insertdatetime', 'media', 'table', 'help', 'wordcount'
+                ],
+                toolbar: 'undo redo | ' +
+                'bold italic underline backcolor | alignleft aligncenter ' +
+                'alignright alignjustify | bullist numlist outdent indent | ' +
+                'removeformat | help',
+                content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }',
+                menu: {
+                  file: { title: 'Файл', items: 'newdocument restoredraft | preview | importword exportpdf exportword | deleteallconversations' },
+                  edit: { title: 'Редактировать', items: 'undo redo | cut copy paste pastetext | selectall | searchreplace' },
+                  view: { title: 'View', items: '' },
+                  insert: { title: 'Вставить', items: 'image link media addcomment pageembed codesample inserttable | math | charmap emoticons hr | pagebreak nonbreaking anchor tableofcontents | insertdatetime' },
+                  format: { title: 'Форматирование', items: 'bold italic underline strikethrough superscript subscript | align lineheight | forecolor | language | removeformat' },
+                  tools: { title: 'Tools', items: '' },
+                  table: { title: 'Таблица', items: 'inserttable | cell row column | advtablesort | tableprops deletetable' },
+                  help: { title: 'Help', items: '' }
+                }
+              }"
+            />
           </div>
           <div class="dart-form-group mb-3">
             <span class="ktitle">Совместимость скидок</span>
@@ -485,7 +517,7 @@
         </div>
       </div>
     </form>
-    <Dialog v-model:visible="this.modal_checking" header=" " :style="{ width: '380px' }">
+    <Dialog v-model:visible="this.modals.modal_checking" header=" " :style="{ width: '380px' }">
       <div class="kenost-not-produc">
           <img src="/images/icons_milen/action-status.png" alt="">
           <b class="text-center">Вы уверены, что хотите сохранить изменения?</b>
@@ -737,7 +769,7 @@
   import { useVuelidate } from '@vuelidate/core';
   import { mapActions, mapGetters } from 'vuex';
   import FileUpload from 'primevue/fileupload';
-  import Editor from 'primevue/editor';
+  import Editor from '@tinymce/tinymce-vue'
   import Calendar from 'primevue/calendar';
   import RadioButton from 'primevue/radiobutton';
   import Dropdown from 'primevue/dropdown';
@@ -1067,6 +1099,7 @@
         actions: async function (newVal, oldVal) {
           if (router.currentRoute._value.params.sales_id) {
             console.log(newVal)
+            this.form.action_id = newVal.id
             this.form.name = newVal.name
             this.form.description = newVal.description
             this.form.store_id = newVal.store_ids
@@ -1128,13 +1161,13 @@
                 this.form.paymentDelivery = value
               }
             });
-            this.form.compatibilityDiscount = String(newVal.compatibility_discount)
-            Object.entries(this.condition).forEach((entry) => {
+            Object.entries(this.compabilityMode).forEach((entry) => {
               const [key, value] = entry;
               if(value.key == newVal.compatibility_discount_mode){
                 this.form.compabilityMode = value
               }
             });
+            this.form.compatibilityDiscount = String(newVal.compatibility_discount)
             this.form.conditionMinSum = newVal.condition_min_sum;
             this.form.conditionMinCount = newVal.condition_SKU;
             this.form.conditionMinGeneralCount = newVal.condition_min_count;
