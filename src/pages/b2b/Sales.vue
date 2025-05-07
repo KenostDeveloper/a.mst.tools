@@ -378,7 +378,7 @@ export default {
 			}			
 		},
 		filter(data) {
-			data.type = "b2b";
+			data.type = 1;
 			this.get_sales_to_api(data);
 		},
 		filterComplects(data) {
@@ -394,7 +394,7 @@ export default {
 		},
 		paginate(data) {
 			this.page = data.page;
-			data.type = "b2b";
+			data.type = 1;
 			this.get_sales_to_api(data);
 		},
 		paginateComplects(data) {
@@ -455,7 +455,7 @@ export default {
 							this.get_sales_to_api({
 								page: this.page,
 								perpage: this.pagination_items_per_page,
-								type: "b2b",
+								type: 1,
 							});
 						} else {
 							this.modal_approve = true
@@ -499,7 +499,7 @@ export default {
 						this.get_sales_to_api({
 							page: this.page,
 							perpage: this.pagination_items_per_page,
-							type: "b2b",
+							type: 1,
 						});
 					})
 					.catch((result) => {
@@ -556,7 +556,7 @@ export default {
 		this.get_sales_to_api({
 			page: this.page,
 			perpage: this.pagination_items_per_page,
-			type: "b2b",
+			type: 1,
 		});
 		this.opt_get_complects({
 			action: "complects/get",

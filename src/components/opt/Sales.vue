@@ -2,7 +2,13 @@
   <div>
     <form @submit.prevent="formSubmit" :class="{ loading: loading }">
       <div class="profile-content__title sticky-element">
-        <span class="maintitle">Настройка акции</span>
+        <div v-if="this.type == 3">
+          <span class="maintitle" v-if="actions.client_name">Настройка индивидуальных условий для {{actions.client_name}}</span>
+          <span class="maintitle" v-else>Создание индивидуальных условий</span>
+        </div>
+        <div v-else>
+          <span class="maintitle">Настройка акции</span>
+        </div>        
         <div class="buttons_container">
             <RouterLink :to="{ name: 'b2b', params: { id: $route.params.id } }"
                 class="dart-btn dart-btn-secondary btn-padding">Отменить</RouterLink>
@@ -33,9 +39,13 @@
                 {{ error.$message }}
             </span>
         </div>
-  
+        <div class="dart-form-group mt-2 mb-4" v-if="this.type == 3">
+            <span class="ktitle">Клиент</span>
+            <Dropdown filter v-model="this.form.client_id" :options="dilers.items" optionValue="id" optionLabel="name"
+                        placeholder="Выберите клиента" class="w-full md:w-14rem" />
+        </div>
         <div v-if="this.form.store_id?.length">
-          <div class="dart-form-group mb-4">
+          <div class="dart-form-group mb-4" v-if="this.type != 3">
             <div class="dart-form-group mb-0">
               <span class="ktitle">Реклама</span>
               <div class="flex align-items-center gap-1">
@@ -67,12 +77,65 @@
                   <img :src="this.files?.max?.original_href" v-if="this.files?.max?.original_href" />
               </div>
             </div>
-            <div class="dart-form-group kenost-action-page pt-3" v-if="this.form.adv.active.length">
-                <span class="ktitle">География показа</span>
-                <Dropdown v-model="this.form.adv.geo" :options="this.geo" optionLabel="name"
-                    placeholder="География показа" class="w-full md:w-14rem" />
+
+            <div class="dart-form-group kenost-action-page pt-3" v-if="this.form.adv.active && this.type == 2">
+              <div class="upload-banner">
+                <div class="upload-banner__text">
+                  <span class="ktitle">Малый баннер</span>
+                  <span>Загрузить изображение нужно размером не менее 324х161, соблюдая пропорции. Чтобы не потерялось качество, желательно загружать изображение в три раза больше указанного размера.</span>
+                </div>
+                <FileUpload class="kenost-upload-button" mode="basic" name="banner_small[]" :url="'/rest/file_upload.php?banner=min'" accept="image/*" :maxFileSize="2000000" @upload="onUpload" :auto="true" chooseLabel="Загрузить" />
+              </div>
+              <div class="upload-banner__image">
+                <img :src="files?.min?.original_href" v-if="files?.min?.original_href">
+              </div>
             </div>
-          </div>
+
+            <div class="dart-form-group kenost-action-page pt-3" v-if="this.form.adv.active && this.type == 2">
+              <div class="upload-banner">
+                <div class="upload-banner__text">
+                  <span class="ktitle">Квадратный баннер</span>
+                  <span>Загрузить изображение нужно размером не менее 459х459, соблюдая пропорции. Чтобы не потерялось качество, желательно загружать изображение в три раза больше указанного размера.</span>
+                </div>
+                <FileUpload class="kenost-upload-button" mode="basic" name="small[]" :url="'/rest/file_upload.php?banner=small'" accept="image/*" :maxFileSize="2000000" @upload="onUpload" :auto="true" chooseLabel="Загрузить" />
+              </div>
+              <div class="upload-banner__image">
+                <img :src="files?.small?.original_href" v-if="files?.small?.original_href">
+              </div>
+            </div>
+
+            <div class="dart-form-group kenost-action-page pt-3" v-if="this.form.adv.active && this.type == 2">
+                <div class="rules-container">
+                    <div class="rules-container__text">
+                        <span class="ktitle">Правила акции</span>
+                        <p class="kgraytext">Загрузите файл с подробными правилами акции</p>
+                        <a target="_blank" :href="files?.file?.original_href" class="kenost-add-file" v-if="files?.file?.original_href">
+                            <!-- <img src="../../../public/img/files/pdf.png" alt=""> -->
+                            <p>{{files?.file?.name? files?.file?.name : "Файл загружен!"}}</p>
+                        </a>
+                    </div>
+                    <FileUpload class="kenost-upload-button" mode="basic" name="icon[]" :url="'/rest/file_upload.php?banner=file'" accept="application/pdf" :maxFileSize="20000000" @upload="onUpload" :auto="true" chooseLabel="Загрузить" />
+                </div>
+            </div>
+            <!--
+            <div class="dart-form-group kenost-action-page pt-3" v-if="this.form.adv.active && this.type == 2">
+              <span class="ktitle">Позиция в карусели</span>
+              <InputNumber
+                v-model="this.form.adv.place_position"
+                inputId="horizontal-buttons"
+                :step="1"
+                min="0"
+                max="100"
+                incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"
+              />
+            </div>
+            -->
+              <div class="dart-form-group kenost-action-page pt-3" v-if="this.form.adv.active">
+                  <span class="ktitle">География показа</span>
+                  <Dropdown v-model="this.form.adv.geo" :options="this.geo" optionLabel="name"
+                      placeholder="География показа" class="w-full md:w-14rem" />
+              </div>
+            </div>
           <div class="dart-form-group mb-4">
             <span class="ktitle">Описание</span>
             <Editor
@@ -109,7 +172,7 @@
               }"
             />
           </div>
-          <div class="dart-form-group mb-3">
+          <div class="dart-form-group mb-3" v-if="this.type != 2">
             <span class="ktitle">Совместимость скидок</span>
             <span class="field-desc">Выберите совместимость скидок. При выборе совместимости, Вам будет предложено выбрать режим совместимости.</span>
             <div class="flex align-items-center gap-1 mt-3">
@@ -137,14 +200,14 @@
             </div>
           </div>
           <div class="dart-form-group mt-4"
-            v-if="this.form.compatibilityDiscount == 3 || this.form.compatibilityDiscount == 4">
+            v-if="(this.form.compatibilityDiscount == 3 || this.form.compatibilityDiscount == 4) && this.type != 2">
             <label>Выберите акции из списка</label>
             <MultiSelect :key="new Date().getMilliseconds()" filter v-model="this.form.actions"
                 display="chip" :options="this.allAction" optionLabel="name" placeholder="Выберите из списка"
                 class="w-full md:w-20rem" />
           </div>
           <div class="dart-form-group mt-4"
-            v-if="this.form.compatibilityDiscount == 1 || this.form.compatibilityDiscount == 3 || this.form.compatibilityDiscount == 4">
+            v-if="(this.form.compatibilityDiscount == 1 || this.form.compatibilityDiscount == 3 || this.form.compatibilityDiscount == 4) && this.type != 2">
             <label>Выберите режим совместимости</label>
             <Dropdown v-model="this.form.compabilityMode" :options="this.compabilityMode" optionLabel="name"
                 placeholder="Режим совместимости" class="w-full md:w-14rem" />
@@ -152,7 +215,7 @@
           <!--
           <div @click="this.modals.view_actions = true" class="router-link-active dart-btn dart-btn-secondary btn-padding mb-4">Совместимость акций</div>
           -->
-          <div class="dart-form-group mb-4" :class="{ error: v$.form.dates.$errors.length }">
+          <div class="dart-form-group mb-4" :class="{ error: v$.form.dates.$errors.length }" v-if="this.type != 3">
             <span class="ktitle">Даты проведения</span>
             <span class="field-desc">Выберите период активности Акции.</span>
             <Calendar v-model="this.form.dates" selectionMode="range" placeholder="Выберите даты"
@@ -162,7 +225,7 @@
                 {{ error.$message }}
             </span>
           </div>
-          <div class="dart-form-group mb-4">
+          <div class="dart-form-group mb-4" v-if="this.type != 2">
             <span class="ktitle">Оплата доставки</span>
             <span class="field-desc">Выберите того, кто будет оплачивать доставку до Склада Покупателя.</span>
             <div class="kenost-wiget">
@@ -170,7 +233,7 @@
                     placeholder="Оплата доставки" class="w-full md:w-14rem" />
             </div>
           </div>
-          <div class="dart-form-group mb-4">
+          <div class="dart-form-group mb-4" v-if="this.type != 2">
             <span class="ktitle">Отсрочка платежа</span>
             <span class="field-desc">Если отсрочка будет равна 0 дней, то для Пользователя выведется "Предоплата".</span>
             <div class="flex align-items-center gap-1 mt-2">
@@ -205,7 +268,7 @@
                 </div>
             </div>
           </div>
-          <div class="dart-form-group mb-4">
+          <div class="dart-form-group mb-4" v-if="this.type != 2">
             <span class="ktitle">Условие акции</span>
             <div class="kenost-wiget">
                 <Dropdown v-model="this.form.condition" :options="this.condition" optionLabel="name"
@@ -229,28 +292,28 @@
                         min="0" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" />
                 </div>
             </div>
-            <div class="dart-form-group mt-4">
+            <div class="dart-form-group mt-4" v-if="this.type != 2 && this.type != 3">
               <div class="flex align-items-center gap-1">
                 <Checkbox v-model="this.form.integration" :binary="true" inputId="integration"
                     name="integration" />
                 <label for="integration" class="ml-2 mb-0">Интеграция с MachineStore</label>
               </div>
             </div>
-            <div class="dart-form-group">
+            <div class="dart-form-group" v-if="this.type != 2 && this.type != 3">
               <div class="flex align-items-center gap-1">
                 <Checkbox v-model="this.form.hide_for_clients" :binary="true" inputId="hide_for_clients" name="hide_for_clients" />
                 <label for="hide_for_clients" class="ml-2 mb-0"> Скрыть акцию у клиентов с Индивидуальными условиями </label>
               </div>
             </div>
   
-            <div class="dart-form-group">
+            <div class="dart-form-group" v-if="this.type != 2 && this.type != 3">
               <div class="flex align-items-center gap-1">
                 <Checkbox v-model="this.form.negative" :binary="true" inputId="negative" name="negative" />
                 <label for="negative" class="ml-2 mb-0"> Негативная акция </label>
               </div>
             </div>
   
-            <div class="dart-form-group">
+            <div class="dart-form-group" v-if="this.type != 2 && this.type != 3">
               <div class="flex align-items-center gap-1">
                 <Checkbox v-model="this.form.offer" :binary="true" inputId="offer" name="offer" />
                 <label for="offer" class="ml-2 mb-0"> Акция доступна только в предложениях</label>
@@ -388,7 +451,7 @@
             </TabView>
           </div>
           </div>
-          <div class="mb-4">
+          <div class="mb-4" v-if="this.type != 2 && this.type != 3">
             <span class="field-desc">Вы можете выбрать комплекты, участвующие в Акции.</span>
             <Choicer
               :class="{ loading: complect_loading }"
@@ -421,7 +484,7 @@
               </template>
             </Choicer>
           </div>    
-          <div class="dart-form-group mt-4">
+          <div class="dart-form-group mt-4" v-if="this.type != 3">
             <span class="ktitle">Участники</span>
             <span class="field-desc">Вы можете задать как исключающие условия, так и настроить точечный показ Акции по географии.</span>
             <div class="flex align-items-center gap-1 mt-2">
@@ -443,7 +506,7 @@
         <div class="dart-form-group" v-if="this.form.participantsType == '1' || this.form.participantsType == '2'" >
             <div class="kenost-select-reginos">
                 <p class="kenost-select-reginos__title">Выбор участников по регионам</p>
-                <div class="kenost-select-reginos__checkboxs">
+                <div class="kenost-select-reginos__checkboxs" v-if="this.type != 2">
                     <div class="flex align-items-center gap-1">
                         <Checkbox v-model="this.form.stores" inputId="access-1" name="access-1"
                             value="true" :binary="true"/>
@@ -466,7 +529,7 @@
             </div>
         </div>
   
-        <div class="PickList" v-if="this.form.participantsType == '1' || this.form.participantsType == '2'">
+        <div class="PickList" v-if="(this.form.participantsType == '1' || this.form.participantsType == '2') && this.type != 2">
             <div class="PickList__product" :style="{ width: '40%' }">
                 <b class="PickList__title">Доступные Организации</b>
                 <div class="PickList__filters">
@@ -1016,13 +1079,16 @@
             max: {
               original_href: ''
             },
+            small: {
+              original_href: ''
+            },
             min: {
               original_href: ''
             },
             icon: {
               original_href: ''
             },
-            small: {
+            file: {
               original_href: ''
             }
           },
@@ -1030,6 +1096,7 @@
           form: {
             name: '',
             description: '',
+            client_id: 0,
             compatibilityDiscount: '1',
             actions: [],
             product_groups: {},
@@ -1062,7 +1129,7 @@
             dates: [],
             adv: {
               active: false,
-              place: '',
+              place_position: '',
               geo: '',
               files: {}
             }
@@ -1084,6 +1151,7 @@
           'selected_complects',
           'getcatalog',
           'groups',
+          'dilers',
           'actions_active'
         ])
       },
@@ -1103,9 +1171,11 @@
             this.form.name = newVal.name
             this.form.description = newVal.description
             this.form.store_id = newVal.store_ids
+            this.form.client_id = String(newVal.client_id)
             if (newVal.image) {              
               this.files.max.original_href = newVal.image.image;
             }
+            // TODO: добавить
             if (newVal.page_create) {
               this.form.adv.active = true           
             }
@@ -1277,6 +1347,7 @@
           'get_group_api',
           'get_actions_active_api',
           'set_sales_to_api',
+          'get_dilers_from_api',
           'unset_action_data'
         ]),
         addGroup(){
@@ -1348,8 +1419,11 @@
               .then((result) => {
                   this.loading = false;
                   // Чекнуть тип Акции и редиректнуть куда нужно
-                  if(this.type == 2){
+                  if(this.type == 1){
                     router.push({ name: 'b2b', params: { id: router.currentRoute._value.params.id } });
+                  } 
+                  if(this.type == 2){
+                    router.push({ name: 'b2c', params: { id: router.currentRoute._value.params.id } });
                   }                  
               })
               .catch((result) => {
@@ -1453,7 +1527,19 @@
             if (Object.prototype.hasOwnProperty.call(response.data, 'files')) {
               // перечень загруженных файлов
               if (response.data.files[0].type_banner === 'max') {
-                  this.form.adv.files.max = response.data.files[0];
+                this.form.adv.files.max = response.data.files[0];
+              }
+              if (response.data.files[0].type_banner === 'min') {
+                this.form.adv.files.min = response.data.files[0]
+              }
+              if (response.data.files[0].type_banner === 'icon') {
+                this.form.adv.files.icon = response.data.files[0]
+              } 
+              if (response.data.files[0].type_banner === 'small') {
+                this.form.adv.files.small = response.data.files[0]
+              }
+              if (response.data.files[0].type_banner === 'file') {
+                this.form.adv.files.file = response.data.files[0]
               }
             }
           }
@@ -1834,6 +1920,14 @@
             action: 'get/stores',
             id: this.$route.params.id
           });
+          // Если условия индивидуальны
+          if(this.type == 3){
+            this.get_dilers_from_api({
+              type: 1,
+              page: 1,
+              perpage: 999
+            })
+          }
           // Берем Акцию, если редактируем
           if(router.currentRoute._value.params.sales_id){
             // TODO: Оптимизировать
@@ -1843,6 +1937,8 @@
             }).then(() => {
               this.loading = false;
             });
+          }else{
+            this.loading = false;
           }
           // Берем географию
           this.get_regions_from_api().then(() => {
@@ -1855,7 +1951,7 @@
           this.get_sales_adv_pages_to_api({
             action: 'get/adv/pages',
             store_id: router.currentRoute._value.params.id,
-            type: 1
+            type: this.type
           });
           const data = { filter: this.filter_organizations };
           this.get_all_organizations_from_api(data).then((this.all_organizations = this.allorganizations));

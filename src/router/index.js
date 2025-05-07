@@ -15,6 +15,7 @@ import ProfileShipping from "../pages/ProfileShipping.vue";
 import Actions from "../pages/b2c/Actions.vue";
 import ActionEdit from "../pages/b2c/ActionEdit.vue";
 import Sales from "../pages/b2b/Sales.vue";
+import ActionB2C from "../pages/b2c/Sales.vue";
 import SalesEdit from "../pages/b2b/SalesEdit.vue";
 import ComplectEdit from "../pages/b2b/complects/ComplectEdit.vue";
 import ProfilePurchases from "../pages/opt/ProfilePurchases.vue";
@@ -291,7 +292,7 @@ const routes = [
 														label: "Добавление розничной акции",
 													},
 												},
-												component: ActionEdit,
+												component: ActionB2C,
 											},
 											{
 												path: ":action_id",
@@ -303,7 +304,7 @@ const routes = [
 														label: "Редактирование розничной акции",
 													},
 												},
-												component: ActionEdit,
+												component: ActionB2C,
 											},
 										],
 									},
@@ -754,7 +755,7 @@ const routes = [
 														})
 													},
 													{
-														path: ":action_id",
+														path: ":sales_id",
 														name: "discounts_edit",
 														meta: {
 															breadcrumb: {

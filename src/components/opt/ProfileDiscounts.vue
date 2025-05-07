@@ -8,11 +8,14 @@
           class="dart-btn dart-btn-primary"
           >Создать индивидуальную скидку</RouterLink
         >
+        <!-- TODO: восстановить работу предложений -->
+        <!--
         <div
           @click="this.modal_discounts = true"
 					class="dart-btn dart-btn-primary"
 					>Добавить из 1с
         </div>
+        -->
       </div>
     </div>
     <v-table

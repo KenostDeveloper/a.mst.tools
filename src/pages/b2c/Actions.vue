@@ -163,11 +163,11 @@ export default {
       'set_sales_to_api'
     ]),
     filter (data) {
-      data.type = 'b2c'
+      data.type = 2
       this.get_sales_to_api(data)
     },
     paginate (data) {
-      data.type = 'b2c'
+      data.type = 2
       this.get_sales_to_api(data)
     },
     editElem (value) {
@@ -186,7 +186,7 @@ export default {
 							this.get_sales_to_api({
                 page: this.page,
                 perpage: this.pagination_items_per_page,
-                type: 'b2c'
+                type: 2
               })
 						} else {
 							this.modal_approve = true
@@ -208,7 +208,7 @@ export default {
             this.get_sales_to_api({
               page: this.page,
               perpage: this.pagination_items_per_page,
-              type: 'b2c'
+              type: 2
             })
           })
           .catch((result) => {
@@ -221,7 +221,7 @@ export default {
     this.get_sales_to_api({
       page: this.page,
       perpage: this.pagination_items_per_page,
-      type: 'b2c'
+      type: 2
     })
   },
   components: { vTable, RouterLink, TabView, TabPanel, Breadcrumbs, Dialog },

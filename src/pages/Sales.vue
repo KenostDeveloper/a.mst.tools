@@ -1,7 +1,7 @@
 <template>
 <div>
   <Sales 
-    type="2"
+    type="1"
   ></Sales>
 </div>
 </template>
