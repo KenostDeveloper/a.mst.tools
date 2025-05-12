@@ -121,7 +121,7 @@ export default {
                 },
                 {
                     headers: {
-                        Authorization: 'Token 34e9caeb5d40781585d9b5cb3b156199fbaca4e2'
+                        Authorization: 'Token 57e34da6a00a320cbf9cb7b3f9fe2d51bdcbf9e5'
                     }
                 }
             );
@@ -142,7 +142,7 @@ export default {
                 },
                 {
                     headers: {
-                        Authorization: 'Token 34e9caeb5d40781585d9b5cb3b156199fbaca4e2'
+                        Authorization: 'Token 57e34da6a00a320cbf9cb7b3f9fe2d51bdcbf9e5'
                     }
                 }
             );
@@ -163,7 +163,7 @@ export default {
                 },
                 {
                     headers: {
-                        Authorization: 'Token 34e9caeb5d40781585d9b5cb3b156199fbaca4e2'
+                        Authorization: 'Token 57e34da6a00a320cbf9cb7b3f9fe2d51bdcbf9e5'
                     }
                 }
             );
@@ -184,7 +184,7 @@ export default {
                 },
                 {
                     headers: {
-                        Authorization: 'Token 34e9caeb5d40781585d9b5cb3b156199fbaca4e2'
+                        Authorization: 'Token 57e34da6a00a320cbf9cb7b3f9fe2d51bdcbf9e5'
                     }
                 }
             );
