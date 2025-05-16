@@ -10,8 +10,9 @@
           <span class="maintitle">Настройка акции</span>
         </div>        
         <div class="buttons_container">
-            <RouterLink :to="{ name: 'b2b', params: { id: $route.params.id } }"
-                class="dart-btn dart-btn-secondary btn-padding">Отменить</RouterLink>
+            <RouterLink :to="{ name: 'b2b', params: { id: $route.params.id } }" class="dart-btn dart-btn-secondary btn-padding" v-if="this.type == 1">Отменить</RouterLink>
+            <RouterLink :to="{ name: 'b2c', params: { id: $route.params.id } }" class="dart-btn dart-btn-secondary btn-padding" v-if="this.type == 2">Отменить</RouterLink>
+            <RouterLink :to="{ name: 'discounts', params: { id: $route.params.id } }" class="dart-btn dart-btn-secondary btn-padding" v-if="this.type == 3">Отменить</RouterLink>
             <button @click="actions.active ? this.modals.modal_checking = true : formSubmit(event)" type="button" class="dart-btn dart-btn-primary btn-padding"
                 :class="{ 'dart-btn-loading': loading }" :disabled="loading">
                 Сохранить изменения
@@ -1424,7 +1425,10 @@
                   } 
                   if(this.type == 2){
                     router.push({ name: 'b2c', params: { id: router.currentRoute._value.params.id } });
-                  }                  
+                  }  
+                  if(this.type == 3){
+                    router.push({ name: 'discounts', params: { id: router.currentRoute._value.params.id } });
+                  }                 
               })
               .catch((result) => {
                   // console.log(result)
