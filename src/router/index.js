@@ -295,7 +295,7 @@ const routes = [
 												component: ActionB2C,
 											},
 											{
-												path: ":action_id",
+												path: ":sales_id",
 												name: "org_action_edit",
 												props: true,
 												label: "Редактирование акции",

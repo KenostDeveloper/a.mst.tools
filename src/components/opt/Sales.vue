@@ -226,6 +226,46 @@
                 {{ error.$message }}
             </span>
           </div>
+          <div class="dart-form-group mb-4" v-if="this.type == 2">
+            <span class="ktitle">Условия оплаты</span>
+            <span class="field-desc">Вы можете предложить покупателям возможность оплачивать товары в рассрочку, предоставляя дополнительную скидку для компенсации банковского процента.</span>
+            <div class="flex align-items-center gap-1 mt-2">
+                <RadioButton v-model="this.form.typePay" inputId="typePay-1" name="typePay"
+                    value="1" />
+                <label for="typePay-1" class="ml-2 radioLabel">Покупатель оплачивает товар при заказе</label>
+            </div>
+            <div class="flex align-items-center gap-1 mt-2">
+                <RadioButton v-model="this.form.typePay" inputId="typePay-2" name="typePay"
+                    value="2" />
+                <label for="typePay-2" class="ml-2 radioLabel">Предоставление рассрочки на 6 месяцев покупателю, за счет поставщика</label>
+            </div>
+            <div class="mt-4" v-if="this.form.typePay == '2'">
+              <label for="typeDelayPercent">Процент скидки от стоимости товара, который поставщик выделяет для компенсации рассрочки:</label>
+              <InputNumber v-model="this.form.typePayPercent" id="typeDelayPercent" inputId="horizontal-buttons" :step="0.1"
+                min="0" max="100" disabled suffix=" %" incrementButtonIcon="pi pi-plus"
+                decrementButtonIcon="pi pi-minus" />
+            </div>
+          </div>
+          <div class="dart-form-group mb-4" v-if="this.type == 2">
+            <span class="ktitle">Условия доставки</span>
+            <span class="field-desc">Вы можете предложить покупателям возможность получить бесплатную доставку или компенсировать часть её стоимости, предоставляя дополнительную скидку.</span>
+            <div class="flex align-items-center gap-1 mt-2">
+                <RadioButton v-model="this.form.typeDelivery" inputId="typeDelivery-1" name="typeDelivery"
+                    value="1" />
+                <label for="typeDelivery-1" class="ml-2 radioLabel">Покупатель оплачивает доставку</label>
+            </div>
+            <div class="flex align-items-center gap-1 mt-2">
+                <RadioButton v-model="this.form.typeDelivery" inputId="typeDelivery-2" name="typeDelivery"
+                    value="2" />
+                <label for="typeDelivery-2" class="ml-2 radioLabel">Поставщик компенсирует доставку</label>
+            </div>
+            <div class="mt-4" v-if="this.form.typeDelivery == '2'">
+              <label for="typeDelayPercent">Процент скидки от стоимости товара, который поставщик выделяет для компенсации рассрочки:</label>
+              <InputNumber v-model="this.form.typeDeliveryPercent" id="typeDelayPercent" inputId="horizontal-buttons" :step="0.1"
+                min="0" max="100" suffix=" %" incrementButtonIcon="pi pi-plus"
+                decrementButtonIcon="pi pi-minus" />
+            </div>
+          </div>
           <div class="dart-form-group mb-4" v-if="this.type != 2">
             <span class="ktitle">Оплата доставки</span>
             <span class="field-desc">Выберите того, кто будет оплачивать доставку до Склада Покупателя.</span>
@@ -1103,6 +1143,10 @@
             product_groups: {},
             compabilityMode: { name: 'Применяется бóльшая', key: 0 },
             paymentDelivery: { name: 'Покупатель', key: 0 },
+            typePay: '1',
+            typePayPercent: 10,
+            typeDelivery: '1',
+            typeDeliveryPercent: 5,
             typeDelay: '1',
             delay: [
               {
@@ -1210,6 +1254,10 @@
             this.form.warehouses = Boolean(newVal.available_vendors)
             this.form.vendors = Boolean(newVal.integration)
             this.form.typeDelay = String(newVal.delay_type)
+            this.form.typePay = String(newVal.pay_type)
+            this.form.typePayPercent = String(newVal.pay_type_percent)
+            this.form.typeDelivery = String(newVal.delivery_type)
+            this.form.typeDeliveryPercent = String(newVal.delivery_type_percent)
             this.form.delay = newVal.delay_graph
             this.form.conditionMinSum = newVal.condition_min_sum;
             this.form.regions = newVal.regions

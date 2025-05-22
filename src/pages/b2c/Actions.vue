@@ -112,7 +112,7 @@ export default {
           link_to: 'org_action_edit',
           link_params: {
             id: this.$route.params.id,
-            action_id: 'id'
+            sales_id: 'id'
           },
           sort: true
         },
@@ -171,7 +171,7 @@ export default {
       this.get_sales_to_api(data)
     },
     editElem (value) {
-      router.push({ name: 'org_action_edit', params: { id: this.$route.params.id, action_id: value.id } })
+      router.push({ name: 'org_action_edit', params: { id: this.$route.params.id, sales_id: value.id } })
     },
     approveElem (value) {
       this.$load(async () => {
