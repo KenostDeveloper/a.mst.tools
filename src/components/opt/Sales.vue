@@ -58,7 +58,7 @@
             <div class="dart-form-group kenost-action-page pt-3"
                 v-if="this.form.adv.active">
                 <span class="ktitle">Место размещения баннера/товара</span>
-                <MultiSelect v-model="this.form.adv.place" :options="this.place" optionLabel="name"
+                <MultiSelect v-model="this.form.adv.place" :options="this.adv_pages" optionLabel="name"
                     placeholder="Выберите один или несколько вариантов" class="w-full" />
             </div>
             <div class="dart-form-group kenost-action-page pt-3" v-if="this.form.adv.active">
@@ -75,7 +75,7 @@
                     @upload="onUpload" :auto="true" chooseLabel="Загрузить" />
               </div>
               <div class="upload-banner__image">
-                  <img :src="this.files?.max?.original_href" v-if="this.files?.max?.original_href" />
+                  <img :src="this.form.adv.files?.max?.original_href" v-if="this.form.adv.files?.max?.original_href" />
               </div>
             </div>
 
@@ -88,7 +88,7 @@
                 <FileUpload class="kenost-upload-button" mode="basic" name="banner_small[]" :url="'/rest/file_upload.php?banner=min'" accept="image/*" :maxFileSize="2000000" @upload="onUpload" :auto="true" chooseLabel="Загрузить" />
               </div>
               <div class="upload-banner__image">
-                <img :src="files?.min?.original_href" v-if="files?.min?.original_href">
+                <img :src="this.form.adv.files?.min?.original_href" v-if="this.form.adv.files?.min?.original_href">
               </div>
             </div>
 
@@ -101,7 +101,7 @@
                 <FileUpload class="kenost-upload-button" mode="basic" name="small[]" :url="'/rest/file_upload.php?banner=small'" accept="image/*" :maxFileSize="2000000" @upload="onUpload" :auto="true" chooseLabel="Загрузить" />
               </div>
               <div class="upload-banner__image">
-                <img :src="files?.small?.original_href" v-if="files?.small?.original_href">
+                <img :src="this.form.adv.files?.small?.original_href" v-if="this.form.adv.files?.small?.original_href">
               </div>
             </div>
 
@@ -110,9 +110,9 @@
                     <div class="rules-container__text">
                         <span class="ktitle">Правила акции</span>
                         <p class="kgraytext">Загрузите файл с подробными правилами акции</p>
-                        <a target="_blank" :href="files?.file?.original_href" class="kenost-add-file" v-if="files?.file?.original_href">
+                        <a target="_blank" :href="this.form.adv.files?.file?.original_href" class="kenost-add-file" v-if="this.form.adv.files?.file?.original_href">
                             <!-- <img src="../../../public/img/files/pdf.png" alt=""> -->
-                            <p>{{files?.file?.name? files?.file?.name : "Файл загружен!"}}</p>
+                            <p>{{this.form.adv.files?.file?.name? this.form.adv.files?.file?.name : "Файл загружен!"}}</p>
                         </a>
                     </div>
                     <FileUpload class="kenost-upload-button" mode="basic" name="icon[]" :url="'/rest/file_upload.php?banner=file'" accept="application/pdf" :maxFileSize="20000000" @upload="onUpload" :auto="true" chooseLabel="Загрузить" />
@@ -131,11 +131,13 @@
               />
             </div>
             -->
+            <!--
               <div class="dart-form-group kenost-action-page pt-3" v-if="this.form.adv.active">
                   <span class="ktitle">География показа</span>
                   <Dropdown v-model="this.form.adv.geo" :options="this.geo" optionLabel="name"
                       placeholder="География показа" class="w-full md:w-14rem" />
               </div>
+            -->
             </div>
           <div class="dart-form-group mb-4">
             <span class="ktitle">Описание</span>
@@ -1176,7 +1178,23 @@
               active: false,
               place_position: '',
               geo: '',
-              files: {}
+              files: {
+                max: {
+                  original_href: ''
+                },
+                small: {
+                  original_href: ''
+                },
+                min: {
+                  original_href: ''
+                },
+                icon: {
+                  original_href: ''
+                },
+                file: {
+                  original_href: ''
+                }
+              }
             }
           }
         }
@@ -1218,7 +1236,16 @@
             this.form.store_id = newVal.store_ids
             this.form.client_id = String(newVal.client_id)
             if (newVal.image) {              
-              this.files.max.original_href = newVal.image.image;
+              this.form.adv.files.max.original_href = newVal.image.image;
+            }
+            if (newVal.image_inner) {              
+              this.form.adv.files.min.original_href = newVal.image_inner.image;
+            }
+            if (newVal.image_small) {              
+              this.form.adv.files.small.original_href = newVal.image_small.image;
+            }
+            if (newVal.file) {              
+              this.form.adv.files.file.original_href = newVal.file.image;
             }
             // TODO: добавить
             if (newVal.page_create) {
@@ -1227,15 +1254,17 @@
             this.get_sales_adv_pages_to_api({
               action: 'get/adv/pages',
               store_id: router.currentRoute._value.params.id,
-              type: 1
+              type: this.type
             }).then(() => {
               this.form.adv.place = []
+              console.log(this.place)
+              console.log(newVal.page_places.split(','))
               const places = newVal.page_places.split(',');
               Object.entries(this.place).forEach((entry) => {
                 const [key, value] = entry;
                 places.forEach((pentry) => {
-                  const [pkey, pvalue] = pentry;
-                  if(value.key == pvalue){
+                  console.log(value.code +"=="+ pentry)
+                  if(value.code == pentry){
                     this.form.adv.place.push(value)
                   }
                 })                
