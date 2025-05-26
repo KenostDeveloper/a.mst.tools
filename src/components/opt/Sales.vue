@@ -1319,7 +1319,9 @@
             this.form.conditionMinSum = newVal.condition_min_sum;
             this.form.conditionMinCount = newVal.condition_SKU;
             this.form.conditionMinGeneralCount = newVal.condition_min_count;
-            this.form.product_groups = newVal.product_groups
+            if(newVal.product_groups){
+              this.form.product_groups = newVal.product_groups
+            }            
             this.updateStoreData()
             if(newVal.pg){
               this.updateGroups(newVal.pg)
@@ -1430,6 +1432,7 @@
         ]),
         addGroup(){
           if(this.selected_group.id){
+            console.log(this.selected_group.id)
             this.form.product_groups[this.selected_group.id] = {
               group: this.selected_group,
               page: 1,
