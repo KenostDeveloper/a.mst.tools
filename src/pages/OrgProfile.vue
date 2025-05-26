@@ -1010,6 +1010,10 @@ export default {
 	width: 100%;
 }
 
+.max-w-full{
+	max-width: 100%;
+}
+
 .justify-between {
 	justify-content: space-between;
 }

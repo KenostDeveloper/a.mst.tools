@@ -82,6 +82,7 @@
 					@checkElem="checkElem"
 					@editElem="editShipping"
 					@deleteElem="deleteShipping"
+					@viewElem="viewShipping"
 				>
 					<template v-slot:button>
 						<div></div>
@@ -186,11 +187,11 @@
 					<div class="shopping-kenost std-shipping-create">
 						<div class="std-display-contents">
 							<!-- <p class="shopping-kenost__b std-dropdown__title">Дата</p> -->
-							<div class="dart-alert dart-alert-info">
+							<!-- <div class="dart-alert dart-alert-info">
 								Если Вы выберите повторение отгрузки, то смещение дат относительно
 								самой отгрузки и датой окончания приемки заказов будет выставлено
 								аналогичное тому, что вы укажете ниже.
-							</div>
+							</div>-->
 							<div class="shopping-kenost__dates">
 								<div class="shopping-kenost__row">
 									<div
@@ -199,9 +200,11 @@
 											error: v$.form.dateStart.$errors.length,
 										}"
 									>
-										<p class="k-mini-text">Дата отправления машины</p>
+										<p class="k-mini-text">Дата и время отгрузки</p>
 										<CalendarVue
 											showIcon
+											showTime
+      										hourFormat="24"
 											id="calendar-24h"
 											v-model="form.dateStart"
 											:minDate="this.form.dateEnd"
@@ -222,9 +225,11 @@
 											error: v$.form.dateEnd.$errors.length,
 										}"
 									>
-										<p class="k-mini-text">Дата окончания приема заказов</p>
+										<p class="k-mini-text">Дата и время окончания приема заказов</p>
 										<CalendarVue
 											showIcon
+											showTime
+      										hourFormat="24"
 											id="calendar-24h"
 											v-model="form.dateEnd"
 											:minDate="new Date()"
@@ -365,22 +370,39 @@
 
 						<div class="std-display-contents">
 							<p class="shopping-kenost__b mt-2 mb-1 std-dropdown__title">Маршрут</p>
-							<div class="dart-alert dart-alert-info">
+							<!-- <div class="dart-alert dart-alert-info">
 								Выберите города маршрута и проставьте даты, когда транспорт будет
 								разгружен (по умолчанию, дата будет совпадать с выбранной датой
 								начала отгрузки). Если Вы выбрали повторение, то при генерации
 								дальнейших отгрузок будет выбрано аналогичное смещение дат.
-							</div>
+							</div> -->
 							<div
 								class="dart-form-group mt-1 mb-2"
 								:class="{ error: v$.form.selectedCities.$errors.length }"
 							>
-								<Autocomplete
-									@setSelections="(cities) => setSelectedCities(cities)"
-									:selections="form.selectedCities"
-									type="city"
-									placeholder="Начните вводить наименование города"
-								/>
+
+								<div class="relative">
+									<input
+										ref="input"
+										@focus="getData"
+										@input="getData"
+										v-model="this.searchAddress"
+										@blur="this.isActive = false"
+										type="text"
+										class="dart-form-control"
+										:placeholder="'Город, адрес или название магазина'"
+										:required="false"
+									/>
+									<ul class="autocomplete__suggestions" :class="{ active: this.isActive }">
+										<li v-for="suggestion in shipping_address_and_stores.stores" @click="this.addSelection(suggestion)" class="autocomplete__suggestion">
+											{{ suggestion.org_name }}, {{ suggestion.address_short? suggestion.address_short : suggestion.address }}
+										</li>
+										<li v-for="suggestion in shipping_address_and_stores.dadata" @click="this.addSelection(suggestion)" class="autocomplete__suggestion">
+											{{ suggestion.value }}
+										</li>
+									</ul>
+								</div>
+
 								<span
 									class="error_desc"
 									v-for="error of v$.form.selectedCities.$errors"
@@ -390,11 +412,11 @@
 								</span>
 							</div>
 							<ShoppingCities
-								v-model:modelCities="this.form.selectedCities"
-								v-model:modelCitiesDates="this.form.citiesDates"
-								@removeSelectedCity="this.removeSelectedCity"
-								:minDate="this.form.dateStart"
-								:vDatesErrors="this.v$.form.citiesDates"
+								v-model:modelCities="form.selectedCities"
+								v-model:modelCitiesDates="form.citiesDates"
+								@removeSelectedCity="removeSelectedCity"
+								:minDate="form.dateStart"
+								:vDatesErrors="v$.form.citiesDates"
 							/>
 						</div>
 
@@ -599,6 +621,15 @@
         </div>
       </custom-modal>
     </teleport> -->
+	<Dialog
+		v-model:visible="this.showShip"
+		:header="this.dialogHeader"
+		class="std-dialog"
+		:style="{ width: '800px' }"
+		@hide="formReset()"
+	>
+
+	</Dialog>
 </template>
 
 <script>
@@ -647,11 +678,15 @@ export default {
 			calendarIsExpanded: false,
 			loading_page: true,
 			loading: false,
-			editWindow: true,
+			editWindow: false,
 			showShipModal: false,
 			showShip: false,
 			stores: [],
+			isActive: false,
 			organozation: [],
+			inputTimer: null,
+			searchAddress: "",
+			locations: [],
 			shipModa: {
 				city: "",
 				shops: {
@@ -700,6 +735,7 @@ export default {
 				filteredStores: null,
 				selectedCities: [],
 				citiesDates: {},
+				citiesRadii: {},
 				// filteredCities: null,
 				dateStart: new Date(),
 				dateEnd: new Date(),
@@ -808,7 +844,7 @@ export default {
 					type: "text",
 					sort: true,
 				},
-				date: {
+				date_from: {
 					label: "Дата",
 					type: "text",
 					sort: true,
@@ -818,26 +854,39 @@ export default {
 					type: "clickevent",
 					sort: true,
 				},
-				city: {
-					label: "Город",
+				route: {
+					label: "Маршрут",
 					type: "text",
 					sort: true,
 				},
-				weight: {
-					label: "Объем товаров, кг",
+				orders_count: {
+					label: "Заказы с маркетплейса",
 					type: "text",
-					sort: false,
+					sort: true,
 				},
-				count: {
-					label: "Кол-во товаров, шт",
-					type: "text",
-					sort: false,
+				status: {
+					label: 'Статус',
+					type: 'status'
 				},
+				// weight: {
+				// 	label: "Объем товаров, кг",
+				// 	type: "text",
+				// 	sort: false,
+				// },
+				// count: {
+				// 	label: "Кол-во товаров, шт",
+				// 	type: "text",
+				// 	sort: false,
+				// },
 				actions: {
 					label: "Действия",
 					type: "actions",
 					sort: false,
 					available: {
+						view: {
+							icon: "pi pi-eye",
+							label: "Просмотреть",
+						},
 						edit: {
 							icon: "pi pi-pencil",
 							label: "Редактировать",
@@ -879,6 +928,7 @@ export default {
 			"org_get_stores_from_api",
 			"org_get_from_api",
 			"unset_shipping",
+			"get_address_and_stores_shipping_to_api"
 		]),
 		...mapMutations(["SET_SHIPPING_CHECK", "SET_SHIPPING_CHECK_ONE"]),
 		// deletePunkt(index) {
@@ -914,9 +964,9 @@ export default {
 				this.form.filteredStores = data.data.data.stores;
 			});
 		},
-		setSelectedCities(cities) {
-			this.form.selectedCities = Array.from(cities);
-		},
+		// setSelectedCities(cities) {
+		// 	this.form.selectedCities = Array.from(cities);
+		// },
 		removeSelectedCity(index) {
 			delete this.form.citiesDates[this.form.selectedCities[index].value];
 			this.form.selectedCities.splice(index, 1);
@@ -944,6 +994,7 @@ export default {
 					Object.keys(data.citiesDates).forEach((key) => {
 						data.citiesDates[key] = data.citiesDates[key].toLocaleDateString();
 					});
+					console.log(data)
 					await this.set_shipping_to_api({
 						action: "set",
 						id: router.currentRoute._value.params.id,
@@ -968,6 +1019,14 @@ export default {
 			this.modal.store_name = data.dilers;
 			this.modal.store_date = data.date;
 			this.showShipModal = true;
+		},
+		addSelection(selection) {
+			this.form.selectedCities.push(selection);
+			this.isActive = false;
+			this.searchAddress = '';
+        },
+		viewShipping(data){
+			console.log(data);
 		},
 		editShipping(data) {
 			if (new Date(data.date_from) > new Date()) {
@@ -1066,6 +1125,21 @@ export default {
 			};
 			this.showShippingModal = true;
 		},
+		async getData(){
+			this.debounce(await this.getAdress, 500);
+		},
+		getAdress(){
+			console.log('Отправка')
+			this.get_address_and_stores_shipping_to_api({
+				action: 'get/address/stores',
+				search: this.searchAddress,
+				id: this.$route.params.id,
+			})
+		},
+		debounce(func, delay) {
+            clearTimeout(this.inputTimer);
+            this.inputTimer = setTimeout(func, delay);
+        },
 		filter(data) {
 			// console.log(data)
 			if (typeof data.filtersdata !== "undefined") {
@@ -1175,7 +1249,7 @@ export default {
 		ShoppingCities,
 	},
 	computed: {
-		...mapGetters(["shipping", "shipping_statuses", "getshipdata", "org_stores", "orgs"]),
+		...mapGetters(["shipping", "shipping_statuses", "getshipdata", "org_stores", "orgs", "shipping_address_and_stores"]),
 		dialogHeader() {
 			if (this.editWindow) {
 				return "Редактирование отгрузки";
@@ -1207,21 +1281,21 @@ export default {
 					),
 				},
 				citiesDates: {
-					required: helpers.withMessage(
-						"Заполните все даты отгрузок",
-						() => {
-							if(Object.keys(this.form.citiesDates).length !== this.form.selectedCities.length) return false
+					// required: helpers.withMessage(
+					// 	"Заполните все даты отгрузок",
+					// 	() => {
+					// 		if(Object.keys(this.form.citiesDates).length !== this.form.selectedCities.length) return false
 
-							let result = true;
-							Object.keys(this.form.citiesDates).forEach(key => {
-								if(!this.form.citiesDates[key]) {
-									result = false;
-									return;
-								}
-							});
-							return result;
-						}
-					)
+					// 		let result = true;
+					// 		Object.keys(this.form.citiesDates).forEach(key => {
+					// 			if(!this.form.citiesDates[key]) {
+					// 				result = false;
+					// 				return;
+					// 			}
+					// 		});
+					// 		return result;
+					// 	}
+					// )
 				},
 			},
 		};
@@ -1234,6 +1308,17 @@ export default {
 			this.stores = [];
 			for (let i = 0; i < newVal.items.length; i++) {
 				this.stores.push({ label: newVal.items[i].name, value: newVal.items[i].id });
+			}
+		},
+		shipping_address_and_stores: function (newVal, oldVal) {
+			if(newVal){
+				if(newVal.dadata && newVal.stores){
+					if (Object.keys(newVal.dadata).length || Object.keys(newVal.stores).length) {
+						this.isActive = true;
+						console.log(this.isActive)
+					}
+				}
+				
 			}
 		},
 		"form.citiesDates": {
@@ -1268,6 +1353,7 @@ export default {
 </script>
 
 <style lang="scss">
+@import '../assets/styles/mixins.scss';
 .p-autocomplete .p-autocomplete-multiple-container {
 	border-radius: 6px 0 0 6px;
 	margin-bottom: 0;
@@ -1641,5 +1727,117 @@ export default {
 }
 .profile-content {
 	margin-bottom: 30px;
+}
+
+.autocomplete {
+    @include flex($align: center, $gap: 15px);
+
+    & {
+        flex-wrap: wrap;
+        max-width: 100%;
+
+        background-color: #fff;
+        border: 1px solid #e2e2e2;
+        border-radius: 5px;
+
+        color: #282828;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 1.06;
+        letter-spacing: 0.25px;
+        width: 100%;
+        padding: 10px 15px;
+
+        position: relative;
+    }
+
+    &__selections,
+    &__suggestions {
+        margin: 0;
+        padding: 0;
+    }
+
+    &__selections {
+        @include flex($align: center, $gap: 8px);
+
+        & {
+            flex-wrap: wrap;
+        }
+    }
+
+    &__selection {
+        @include flex($justify: center, $align: center, $gap: 8px);
+
+        & {
+            background-color: #dee2e6;
+            border-radius: 16px;
+            color: #495057;
+
+            padding: 6px 12px;
+        }
+
+        svg {
+            cursor: pointer;
+        }
+    }
+
+    &__input {
+        flex-basis: 0;
+        flex-grow: 1;
+
+        border: none;
+        outline: none;
+        color: #495057;
+        font-size: 16px;
+
+        margin: 0;
+        padding: 0;
+
+        &::placeholder {
+            color: #6c757d;
+        }
+    }
+
+    &__suggestions {
+        @include scrollbar;
+        @include flex($direction: column);
+
+        & {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.3);
+
+            width: 100%;
+            max-height: 0px;
+
+            overflow-y: auto;
+
+            position: absolute;
+            top: calc(100% + 2px);
+            left: 0;
+            transition-duration: 0.5s;
+            z-index: 1110;
+        }
+
+        &.active {
+            max-height: 200px;
+            padding-top: 0;
+        }
+    }
+
+    &__suggestion {
+        @include flex($align: center);
+
+        & {
+            cursor: pointer;
+            width: 100%;
+            padding: 15px 20px;
+            transition-duration: 0.3s;
+        }
+
+        &:hover {
+            background-color: #e9ecef;
+        }
+    }
 }
 </style>
