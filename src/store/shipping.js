@@ -3,7 +3,8 @@ import router from '../router'
 
 export default {
   state: {
-    shipping: []
+    shipping: [],
+    shipping_address_and_stores: []
   },
   actions: {
     get_shipping_from_api ({ commit }, { filter, filtersdata, page, sort, perpage }) {
@@ -48,6 +49,24 @@ export default {
             router.push({ name: 'main' })
           }
         })
+    },
+    async get_address_and_stores_shipping_to_api ({ commit }, data) {
+      return Axios('/rest/front_getshipping', {
+        method: 'POST',
+        data: data,
+        headers: {
+          'Access-Control-Allow-Origin': '*'
+        }
+      })
+        .then((response) => {
+          commit('SET_SHIPPING_ADDRESS_AND_STORES_TO_VUEX', response.data)
+        })
+        .catch(error => {
+          if (error.response.status === 403) {
+            localStorage.removeItem('user')
+            router.push({ name: 'main' })
+          }
+        })
     }
   },
   mutations: {
@@ -69,6 +88,9 @@ export default {
         data.data.shipment[i].checked = false
       }
       state.shipping = data.data
+    },
+    SET_SHIPPING_ADDRESS_AND_STORES_TO_VUEX: (state, data) => {
+      state.shipping_address_and_stores = data.data
     },
     SET_SHIPPING_CHECK: (state, data) => {
       // console.log(data)
@@ -98,6 +120,9 @@ export default {
   getters: {
     shipping (state) {
       return state.shipping
-    }
+    },
+    shipping_address_and_stores(state) {
+      return state.shipping_address_and_stores
+    },
   }
 }
