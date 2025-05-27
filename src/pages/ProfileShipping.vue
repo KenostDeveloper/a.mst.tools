@@ -622,13 +622,80 @@
       </custom-modal>
     </teleport> -->
 	<Dialog
-		v-model:visible="this.showShip"
-		:header="this.dialogHeader"
-		class="std-dialog"
+		v-model:visible="this.viewShipModal"
+		:header="'Отгрузка №' + viewShipData?.id"
 		:style="{ width: '800px' }"
-		@hide="formReset()"
+		class="kenost-shipping-modal"
 	>
-
+		<div class="kenost-shipping mt-3">
+			<div class="kenost-shipping__title">Дата и время</div>
+			<div class="kenost-shipping__cols-2">
+				<div class="w-full">
+					<div class="kenost-shipping__text-gray">Дата и время отгрузки</div>
+					<div class="kenost-shipping__text-info">
+						{{ new Date(viewShipData?.date_from).toLocaleString('ru-RU', {
+							day: '2-digit',
+							month: '2-digit',
+							hour: '2-digit',
+							minute: '2-digit',
+							hour12: false
+						}).replace(',', '') }}
+					</div>
+				</div>
+				<div class="w-full">
+					<div class="kenost-shipping__text-gray">Дата и время окончания приема заказов</div>
+					<div class="kenost-shipping__text-info">
+						{{ new Date(viewShipData?.date_to).toLocaleString('ru-RU', {
+							day: '2-digit',
+							month: '2-digit',
+							hour: '2-digit',
+							minute: '2-digit',
+							hour12: false
+						}).replace(',', '') }}
+					</div>
+				</div>
+			</div>
+			<div class="kenost-shipping__title mt-3">Маршрут</div>
+			<div class="kenost-shipp" v-for="item in this.viewShipData?.ships" v-bind:key="item.id">
+				<div class="kenost-shipp__city">
+					<i class="std_icon std_icon-location"></i>
+					<div class="" v-if="item.is_store == '1'">
+						{{ item.org_name }}, {{ item.address_short || item.address }}
+					</div>
+					<div class="" v-else>{{ item.city }}</div>
+				</div>
+				<div class="kenost-shipp__content">
+					<div class="kenost-shipping__text-gray mt-1">Дата отгрузки</div>
+					<div class="kenost-shipping__text-info">
+						{{ new Date(item?.date).toLocaleString('ru-RU', {
+							day: '2-digit',
+							month: '2-digit',
+							year: '2-digit'
+						}).replace(',', '') }}
+					</div>
+					<div class="kenost-shipping__text-gray mt-3">Доставки</div>
+					<div class="kenost-shipp_deliverys">
+						<div class="kenost-shipp_delivery">
+							220v, Челябинск, Ленина 23
+						</div>
+						<div class="kenost-shipp_delivery">
+							220v, Челябинск, Ленина 23
+						</div>
+						<div class="kenost-shipp_delivery">
+							ИП Деревянченко Борис Вячеславович, Кудиново, ул Центральная, д 15А стр 1
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="flex align-items-center mt-3 gap-2 justify-content-end">
+				<div v-if="viewShipData.status != '5' && viewShipData.status != '4'" @click="this.deleteShipping(viewShipData, 5)" class="dart-btn dart-btn-secondary">
+					Отменить отгрузку
+				</div>
+				<div v-if="viewShipData.status == '3'" @click="this.deleteShipping(viewShipData, 4)" class="dart-btn dart-btn-primary">
+					Отгрузка выполнена
+				</div>
+			</div>
+		</div>
 	</Dialog>
 </template>
 
@@ -681,6 +748,8 @@ export default {
 			editWindow: false,
 			showShipModal: false,
 			showShip: false,
+			viewShipModal: false,
+			viewShipData: null,
 			stores: [],
 			isActive: false,
 			organozation: [],
@@ -887,13 +956,13 @@ export default {
 							icon: "pi pi-eye",
 							label: "Просмотреть",
 						},
-						edit: {
-							icon: "pi pi-pencil",
-							label: "Редактировать",
-						},
+						// edit: {
+						// 	icon: "pi pi-pencil",
+						// 	label: "Редактировать",
+						// },
 						delete: {
-							icon: "pi pi-trash",
-							label: "Удалить",
+							icon: "pi pi-times",
+							label: "Отменить",
 						},
 					},
 				},
@@ -1026,7 +1095,8 @@ export default {
 			this.searchAddress = '';
         },
 		viewShipping(data){
-			console.log(data);
+			this.viewShipData = data
+			this.viewShipModal = true
 		},
 		editShipping(data) {
 			if (new Date(data.date_from) > new Date()) {
@@ -1060,26 +1130,27 @@ export default {
 				this.$toast.add({ severity: 'error', summary: "Ошибка", detail: "Эту отгрузку нельзя отредактировать!", life: 3000 });
 			}
 		},
-		deleteShipping(data) {
+		deleteShipping(data, status) {
 			this.$confirm.require({
-				message: "Вы уверены, что хотите удалить отгрузку ID " + data.id + "?",
-				header: "Подтверждение удаления",
+				message: "Вы уверены, что хотите изменить статус отгрузки №" + data.id + "?",
+				header: "Подтверждение изменения статуса",
 				icon: "pi pi-exclamation-triangle",
 				accept: () => {
 					this.loading = true;
 					this.unset_shipping();
 					this.$load(async () => {
 						await this.set_shipping_to_api({
-							action: "delete",
+							action: "change/status",
 							id: router.currentRoute._value.params.id,
 							shipping: data,
+							status: status || 5
 						})
 							.then((result) => {
 								this.$toast.add({
 									severity: "success",
-									summary: "Отгрузка удалена",
+									summary: "Статус изменен!",
 									detail:
-										"Удаление отгрузки ID " + data.id + " произошло успешно!",
+										"Изменение статуса у отгрузки №" + data.id + " произошло успешно!",
 									life: 3000,
 								});
 								this.get_shipping_from_api(data).then((result) => {});
@@ -1099,6 +1170,7 @@ export default {
 					});
 				},
 			});
+			this.viewShipModal = false
 		},
 		closeShipModal() {
 			this.modal.store_name = "";

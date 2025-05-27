@@ -10156,3 +10156,66 @@ button.std-icon__wrapper {
 		}
 	}
 }
+
+.kenost-shipping-modal .p-dialog-title{
+	font-size: 20px !important;
+}
+
+.kenost-shipping{
+	&__title{
+		color: #282828;
+		font-size: 14px;
+		font-weight: 500;
+		margin-bottom: 8px;
+	}
+
+	&__cols-2{
+		display: flex;
+		justify-content: space-between;
+		width: 100%;
+	}
+
+	&__text-info{
+		color: #282828;
+		font-size: 14px;
+	}
+
+	&__text-gray{
+		color: #A0A0A0;
+		margin-bottom: 4px;
+	}
+}
+
+.kenost-shipp{
+	&__city{
+		color: #282828;
+		font-weight: 500;
+		font-size: 14px;
+		margin-top: 20px;
+		display: flex;
+		align-items: center;
+		gap: 4px;
+	}
+
+	&__content{
+		padding-left: 15px;
+	}
+
+	&_deliverys{
+		display: flex;
+		gap: 8px;
+		flex-wrap: wrap;
+	}
+
+	&_delivery{
+		color: #282828;
+		font-size: 14px !important;
+		font-weight: 500;
+		line-height: 100%;
+		padding: 6px 10px;
+		border: 1px solid #282828;
+		width: fit-content;
+		border-radius: 24px;
+		text-wrap: nowrap;
+	}
+}
