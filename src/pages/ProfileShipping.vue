@@ -673,16 +673,12 @@
 							year: '2-digit'
 						}).replace(',', '') }}
 					</div>
-					<div class="kenost-shipping__text-gray mt-3">Доставки</div>
-					<div class="kenost-shipp_deliverys">
-						<div class="kenost-shipp_delivery">
-							220v, Челябинск, Ленина 23
-						</div>
-						<div class="kenost-shipp_delivery">
-							220v, Челябинск, Ленина 23
-						</div>
-						<div class="kenost-shipp_delivery">
-							ИП Деревянченко Борис Вячеславович, Кудиново, ул Центральная, д 15А стр 1
+					<div v-if="item?.orders?.length">
+						<div class="kenost-shipping__text-gray mt-3">Доставки</div>
+						<div class="kenost-shipp_deliverys">
+							<div v-for="order in item?.orders" v-bind:key="order.id" class="kenost-shipp_delivery">
+								{{order?.properties?.sl?.point?.address}}
+							</div>
 						</div>
 					</div>
 				</div>
@@ -1058,12 +1054,16 @@ export default {
 					this.form.loading = true;
 					this.unset_shipping();
 					let data = cloneDeep(this.form);
-					data.dateStart = data.dateStart.toLocaleDateString();
-					data.dateEnd = data.dateEnd.toLocaleDateString();
-					Object.keys(data.citiesDates).forEach((key) => {
-						data.citiesDates[key] = data.citiesDates[key].toLocaleDateString();
-					});
-					console.log(data)
+					data.dateStart = data.dateStart.toDateString();
+					data.dateEnd = data.dateEnd.toDateString();
+
+					for(let i = 0; i < data.selectedCities.length; i++){
+						data.selectedCities[i].date = (data.selectedCities[i].date).toDateString()
+					}
+					//Object.keys(data.citiesDates).forEach((key) => {
+						//data.citiesDates[key] = data.citiesDates[key].toLocaleDateString();
+					//});
+					// console.log(data)
 					await this.set_shipping_to_api({
 						action: "set",
 						id: router.currentRoute._value.params.id,
