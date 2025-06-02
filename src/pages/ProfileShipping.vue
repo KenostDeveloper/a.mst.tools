@@ -645,7 +645,7 @@
 				<div class="w-full">
 					<div class="kenost-shipping__text-gray">Дата и время окончания приема заказов</div>
 					<div class="kenost-shipping__text-info">
-						{{ new Date(viewShipData?.date_to).toLocaleString('ru-RU', {
+						{{ new Date(viewShipData?.date_order_end).toLocaleString('ru-RU', {
 							day: '2-digit',
 							month: '2-digit',
 							hour: '2-digit',
@@ -1043,6 +1043,10 @@ export default {
 				return citiesDates[city1.value] - citiesDates[city2.value];
 			});
 		},
+		formatDateWithoutTimezone(date) {
+			const pad = (num) => num.toString().padStart(2, '0');
+			return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+		},
 		async formSubmit(event) {
 			// TODO Лоадер шестеренок при отправке формы
 			const result = await this.v$.$validate();
@@ -1054,12 +1058,15 @@ export default {
 					this.form.loading = true;
 					this.unset_shipping();
 					let data = cloneDeep(this.form);
-					data.dateStart = data.dateStart.toDateString();
-					data.dateEnd = data.dateEnd.toDateString();
+					data.dateStart = this.formatDateWithoutTimezone(new Date(data.dateStart))
+					data.dateEnd = this.formatDateWithoutTimezone(new Date(data.dateEnd));
 
 					for(let i = 0; i < data.selectedCities.length; i++){
-						data.selectedCities[i].date = (data.selectedCities[i].date).toDateString()
+						data.selectedCities[i].date = this.formatDateWithoutTimezone(new Date(data.selectedCities[i].date))
 					}
+
+					console.log(data)
+					
 					//Object.keys(data.citiesDates).forEach((key) => {
 						//data.citiesDates[key] = data.citiesDates[key].toLocaleDateString();
 					//});
