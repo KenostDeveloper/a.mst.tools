@@ -411,6 +411,7 @@
 									{{ error.$message }}
 								</span>
 							</div>
+
 							<ShoppingCities
 								v-model:modelCities="form.selectedCities"
 								v-model:modelCitiesDates="form.citiesDates"
@@ -952,10 +953,10 @@ export default {
 							icon: "pi pi-eye",
 							label: "Просмотреть",
 						},
-						// edit: {
-						// 	icon: "pi pi-pencil",
-						// 	label: "Редактировать",
-						// },
+						edit: {
+						 	icon: "pi pi-pencil",
+						 	label: "Редактировать",
+						},
 						delete: {
 							icon: "pi pi-times",
 							label: "Отменить",
@@ -1106,7 +1107,7 @@ export default {
 			this.viewShipModal = true
 		},
 		editShipping(data) {
-			if (new Date(data.date_from) > new Date()) {
+			if (data.orders_count == 0) {
 				this.editWindow = true;
 				const timing = JSON.parse(data.timing);
 				this.form.id = data.id;
@@ -1114,30 +1115,39 @@ export default {
 				this.form.timeSelected.weeks = timing.weeks;
 				this.form.timeSelected.days = timing.days;
 				this.form.timeSelected.range = timing.range;
-				this.form.selectedStores = null;
-				this.form.selectedCities = JSON.parse(data.properties);
-				console.log(this.form.selectedCities)
-				if(this.form.selectedCities){
-					for (let i = 0; i < this.form.selectedCities.length; i++) {
-						var sparts = this.form.selectedCities[i].date.date.split(" ");
-						var parts = sparts[0].split("-");
-						this.form.citiesDates[this.form.selectedCities[i].value] = new Date(
-							parts[0],
-							parts[1] - 1,
-							parts[2]
-						);
-					}
+				// this.form.selectedStores = null;
+				
+				console.log(data)
+				// this.form.ships
+
+				for (let i = 0; i < data.ships.length; i++) {
+					this.form.selectedCities = JSON.parse(data.ships[i].properties);
 				}
+				// console.log(this.form.selectedCities)
+				// if(this.form.selectedCities){
+				// 	for (let i = 0; i < this.form.selectedCities.length; i++) {
+				// 		var sparts = this.form.selectedCities[i].date.date.split(" ");
+				// 		var parts = sparts[0].split("-");
+				// 		this.form.citiesDates[this.form.selectedCities[i].value] = new Date(
+				// 			parts[0],
+				// 			parts[1] - 1,
+				// 			parts[2]
+				// 		);
+				// 	}
+				// }
 				this.form.store_id = data.warehouse_id;
 				this.form.dateStart = new Date(data.date_from);
-				var parts = data.date_order_end.split(".");
-				this.form.dateEnd = new Date(parts[2], parts[1] - 1, parts[0]);
+				this.form.dateEnd = new Date(data.date_order_end);
 				this.showShip = true;
 			} else{
 				this.$toast.add({ severity: 'error', summary: "Ошибка", detail: "Эту отгрузку нельзя отредактировать!", life: 3000 });
 			}
 		},
 		deleteShipping(data, status) {
+			if(data.orders_count > 0 && status == 5){
+				this.$toast.add({ severity: 'error', summary: "Ошибка", detail: "Эту отгрузку нельзя отменить, т.к уже оформлен заказ!", life: 3000 });
+				return;
+			}
 			this.$confirm.require({
 				message: "Вы уверены, что хотите изменить статус отгрузки №" + data.id + "?",
 				header: "Подтверждение изменения статуса",
