@@ -112,19 +112,23 @@ export default {
             }
         },
         async getAddress(address) {
-            const response = await axios.post(
-                'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address',
-                {
-                    query: address?.value
-                },
-                {
-                    headers: {
-                        Authorization: `Token ${import.meta.env.VITE_DADATA_API_KEY}`
-                    }
-                }
-            );
+            // const response = await axios.post(
+            //     'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address',
+            //     {
+            //         query: address?.value
+            //     },
+            //     {
+            //         headers: {
+            //             Authorization: `Token ${import.meta.env.VITE_DADATA_API_KEY}`
+            //         }
+            //     }
+            // );
+            const response = await this.suggest({
+                type: 'address',
+                query: this.value
+            })
 
-            const firstAddress = await response?.data?.suggestions[0];
+            const firstAddress = await response?.data?.data?.suggestions[0];
             this.$emit('update:modelValue', firstAddress);
         }
     },
