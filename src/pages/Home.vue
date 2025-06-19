@@ -25,10 +25,13 @@ export default {
         })
     },
     async mounted() {
+        const regForm = localStorage.getItem("regForm");
+        this.setRegForm(regForm);
+
         // console.log(localStorage.getItem("user"))
         if (localStorage.getItem("user") !== null && localStorage.getItem("user") != 0) {
             this.setUser(JSON.parse(localStorage.getItem('user')));
-        }else{
+        } else {
             // TODO: сделать запрос на проверку сессии
             const user = await this.getSessionUser();
             localStorage.setItem('user', JSON.stringify(user));
@@ -53,7 +56,7 @@ export default {
                 }
 
                 // location.reload();
-            }else{
+            } else {
                 this.deleteUser();
             }
         }
@@ -72,6 +75,7 @@ export default {
         }),
 
         setRegForm(state) {
+            localStorage.setItem("regForm", state);
             this.isRegForm = state;
         }
     },
