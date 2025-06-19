@@ -94,7 +94,7 @@ export default {
 
             this.suggestions = this.filterCities(citiesSuggestions?.data?.data?.suggestions);
 
-            if (this.suggestions.length) {
+            if (this.suggestions?.length) {
                 this.isActive = true;
             } else {
                 this.isActive = false;
@@ -113,7 +113,7 @@ export default {
 
             this.suggestions = companiesResponse?.data?.data?.suggestions;
 
-            if (this.suggestions.length) {
+            if (this.suggestions?.length) {
 
                 this.isActive = true;
             } else {
@@ -139,7 +139,7 @@ export default {
 
             this.suggestions = response?.data?.data?.suggestions;
 
-            if (this.suggestions.length) {
+            if (this.suggestions?.length) {
                 this.isActive = true;
             } else {
                 this.isActive = false;
@@ -164,7 +164,7 @@ export default {
 
             this.suggestions = response?.data?.data?.suggestions;
 
-            if (this.suggestions.length) {
+            if (this.suggestions?.length) {
                 this.isActive = true;
             } else {
                 this.isActive = false;

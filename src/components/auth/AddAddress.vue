@@ -40,10 +40,8 @@ export default {
     validations() {
         return {
             address: {
-                value: {
-                    required,
-                    minLength: minLength(5)
-                }
+                required,
+                minLength: minLength(5)
             }
         };
     },
@@ -125,7 +123,7 @@ export default {
             // );
             const response = await this.suggest({
                 type: 'address',
-                query: this.value
+                query: address
             })
 
             const firstAddress = await response?.data?.data?.suggestions[0];
@@ -144,9 +142,9 @@ export default {
 </script>
 
 <template>
-    <div class="address-map__wrapper" :class="{ 'has-error': $v.address.value.$error }">
+    <div class="address-map__wrapper" :class="{ 'has-error': $v.address.$error }">
         <Autocomplete v-model="address"
-            :errorText="$v.address.value.$error && (!$v.address.value.required ? 'Пожалуйста, введите адрес.' : $v.address.value.minLength ? 'Пожалуйста, введите адрес.' : '')"
+            :errorText="$v.address.$error && (!$v.address.required ? 'Пожалуйста, введите адрес.' : $v.address.minLength ? 'Пожалуйста, введите адрес.' : '')"
             placeholder="Адрес доставки" name="address" type="address" selectionType="single"
             @setSelection="setSelection" />
         <div class="address-map">
