@@ -2,6 +2,7 @@
 import axios from 'axios';
 import Input from './ui/Input.vue';
 import SearchInput from './ui/SearchInput.vue';
+import { mapActions } from 'vuex';
 
 export default {
     name: 'Autocomplete',
@@ -44,6 +45,10 @@ export default {
         };
     },
     methods: {
+        ...mapActions({
+            get_organization_by_inn: 'get_organization_by_inn',
+            suggest: 'suggest'
+        }),
         async getData() {
             let funcChanged = null;
 
@@ -69,21 +74,25 @@ export default {
             this.debounce(await funcChanged, 300);
         },
         async getCities() {
-            const citiesSuggestions = await axios.post(
-                'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address',
-                {
-                    query: this.value,
-                    from_bound: { value: 'city' },
-                    to_bound: { value: 'settlement' }
-                },
-                {
-                    headers: {
-                        Authorization: `Token ${import.meta.env.VITE_DADATA_API_KEY}`
-                    }
-                }
-            );
+            // const citiesSuggestions = await axios.post(
+            //     'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address',
+            //     {
+            //         query: this.value,
+            //         from_bound: { value: 'city' },
+            //         to_bound: { value: 'settlement' }
+            //     },
+            //     {
+            //         headers: {
+            //             Authorization: `Token ${import.meta.env.VITE_DADATA_API_KEY}`
+            //         }
+            //     }
+            // );
+            const citiesSuggestions = await this.suggest({
+                type: 'address',
+                query: this.value
+            })
 
-            this.suggestions = this.filterCities(citiesSuggestions.data?.suggestions);
+            this.suggestions = this.filterCities(citiesSuggestions?.data?.data?.suggestions);
 
             if (this.suggestions.length) {
                 this.isActive = true;
@@ -92,19 +101,17 @@ export default {
             }
         },
         async getCompanies() {
-            const companiesResponse = await axios.post(
-                'https://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/party',
-                {
-                    query: this.value
-                },
-                {
-                    headers: {
-                        Authorization: `Token ${import.meta.env.VITE_DADATA_API_KEY}`
-                    }
-                }
-            );
+            // const companiesResponse = await axios.post(
+            //     'https://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/party',
+            //     {
+            //         query: this.value
+            //     },   
+            // );
+            const companiesResponse = await this.get_organization_by_inn({
+                inn: this.value
+            })
 
-            this.suggestions = companiesResponse.data?.suggestions;
+            this.suggestions = companiesResponse?.data?.data?.suggestions;
 
             if (this.suggestions.length) {
 
@@ -114,19 +121,23 @@ export default {
             }
         },
         async getAddress() {
-            const response = await axios.post(
-                'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address',
-                {
-                    query: this.value
-                },
-                {
-                    headers: {
-                        Authorization: `Token ${import.meta.env.VITE_DADATA_API_KEY}`
-                    }
-                }
-            );
+            // const response = await axios.post(
+            //     'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address',
+            //     {
+            //         query: this.value
+            //     },
+            //     {
+            //         headers: {
+            //             Authorization: `Token ${import.meta.env.VITE_DADATA_API_KEY}`
+            //         }
+            //     }
+            // );
+            const response = await this.suggest({
+                type: 'address',
+                query: this.value
+            })
 
-            this.suggestions = response.data?.suggestions;
+            this.suggestions = response?.data?.data?.suggestions;
 
             if (this.suggestions.length) {
                 this.isActive = true;
@@ -135,19 +146,23 @@ export default {
             }
         },
         async getFio() {
-            const response = await axios.post(
-                'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/fio',
-                {
-                    query: this.value
-                },
-                {
-                    headers: {
-                        Authorization: `Token ${import.meta.env.VITE_DADATA_API_KEY}`
-                    }
-                }
-            );
+            // const response = await axios.post(
+            //     'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/fio',
+            //     {
+            //         query: this.value
+            //     },
+            //     {
+            //         headers: {
+            //             Authorization: `Token ${import.meta.env.VITE_DADATA_API_KEY}`
+            //         }
+            //     }
+            // );
+            const response = await this.suggest({
+                type: 'fio',
+                query: this.value
+            })
 
-            this.suggestions = response.data?.suggestions;
+            this.suggestions = response?.data?.data?.suggestions;
 
             if (this.suggestions.length) {
                 this.isActive = true;

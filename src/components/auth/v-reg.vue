@@ -342,8 +342,9 @@ export default {
                     <!-- Full name input -->
                     <Autocomplete ref="nameInput" v-model="form.name" selectionType="single" :errorText="v$.form.name.$error && (!v$.form.name.required ?
                         'Пожалуйста, введите ФИО.' : v$.form.name.minLength ?
-                            'ФИО должно содержать минимум 3 символа.' : '')" iconType="close" placeholder="ФИО контактного лица"
-                        name="name" id="name" type="fio" autocomplete="off" @setSelection="setName" required />
+                            'ФИО должно содержать минимум 3 символа.' : '')" iconType="close"
+                        placeholder="ФИО контактного лица" name="name" id="name" type="fio" autocomplete="off"
+                        @setSelection="setName" required />
 
                     <!-- Telephone input -->
                     <Input v-model="form.telephone" :mask="mask" :errorText="v$.form.telephone.$error && (!v$.form.telephone.required ?
@@ -363,18 +364,18 @@ export default {
                 <fieldset class="d-input__group">
                     <legend class="d-input__label">Данные компании:</legend>
 
+                    <!-- INN input -->
+                    <Autocomplete v-model="form.org.inn" selectionType="single" :errorText="v$.form.org.inn.$error && (!v$.form.org.inn.required ?
+                        'Пожалуйста, введите ИНН.' : v$.form.org.inn.validInn.$response != true ?
+                            'Некорректный ИНН' : '')" placeholder="ИНН" name="inn" id="inn" type="company"
+                        autocomplete="off" @setSelection="setCompany" required />
+
                     <!-- Org name input -->
                     <Input v-model="form.org.name" :errorText="v$.form.org.name.$error && (!v$.form.org.name.required ?
                         'Пожалуйста, введите наименование организации.' : v$.form.org.name.minLength ?
                             'Наименование организации должно содержать минимум 3 символа.' : '')" type="text"
                         placeholder="Наименование организации" name="org_name" class="d-input__field" id="org_name"
                         autocomplete="off" required />
-
-                    <!-- INN input -->
-                    <Autocomplete v-model="form.org.inn" selectionType="single" :errorText="v$.form.org.inn.$error && (!v$.form.org.inn.required ?
-                        'Пожалуйста, введите ИНН.' : v$.form.org.inn.validInn.$response != true ?
-                            'Некорректный ИНН' : '')" placeholder="ИНН" name="inn" id="inn" type="company"
-                        autocomplete="off" @setSelection="setCompany" required />
 
                     <!-- <div class="address-map__wrapper"> -->
                     <AddAddress v-for="(address, index) in form.delivery_addresses" :key="index" :index="index"
