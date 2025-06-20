@@ -8,6 +8,7 @@ import Input from '../ui/Input.vue';
 import Button from '../ui/Button.vue';
 import { required } from '@vuelidate/validators';
 import useVuelidate from '@vuelidate/core';
+import { DotLottie } from '@lottiefiles/dotlottie-web';
 
 export default {
     name: 'auth-form',
@@ -96,6 +97,17 @@ export default {
             this.$emit('setRegForm', true);
         }
     },
+    mounted() {
+        const dLoaders = document.querySelectorAll('.d-loader');
+        dLoaders?.forEach((dLoader) => {
+            new DotLottie({
+                autoplay: true,
+                loop: true,
+                canvas: dLoader,
+                src: 'https://lottie.host/b816b1ca-73aa-452d-b295-bf8cb9b3b3b1/fqUmFIbkpf.lottie'
+            });
+        });
+    },
     setup() {
         return { v$: useVuelidate() };
     },
@@ -132,12 +144,13 @@ export default {
 
             <div class="d-input__group auth__fields">
                 <!-- Login input -->
-                <Input v-model="form.login" :errorText="v$?.form?.login?.$error && 'Заполните поле'" iconType="close" type="text"
-                    placeholder="Введите логин" name="username" class="d-input__field" />
+                <Input v-model="form.login" :errorText="v$?.form?.login?.$error && 'Заполните поле'" iconType="close"
+                    type="text" placeholder="Введите логин" name="username" class="d-input__field" />
 
                 <!-- Password input -->
-                <Input v-model="form.password" :errorText="v$?.form?.password?.$error && 'Заполните поле'" iconType="password"
-                    type="password" placeholder="Введите пароль" name="password" class="d-input__field" />
+                <Input v-model="form.password" :errorText="v$?.form?.password?.$error && 'Заполните поле'"
+                    iconType="password" type="password" placeholder="Введите пароль" name="password"
+                    class="d-input__field" />
             </div>
 
             <div class="auth__buttons">

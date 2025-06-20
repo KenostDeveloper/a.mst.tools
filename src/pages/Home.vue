@@ -26,7 +26,7 @@ export default {
     },
     async mounted() {
         const regForm = localStorage.getItem("regForm");
-        this.setRegForm(regForm);
+        this.setRegForm(Boolean(+regForm));
 
         // console.log(localStorage.getItem("user"))
         if (localStorage.getItem("user") !== null && localStorage.getItem("user") != 0) {
@@ -75,7 +75,7 @@ export default {
         }),
 
         setRegForm(state) {
-            localStorage.setItem("regForm", state);
+            localStorage.setItem("regForm", Number(state));
             this.isRegForm = state;
         }
     },
