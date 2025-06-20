@@ -321,19 +321,19 @@ export default {
                         'Пожалуйста, введите логин.' : v$.form.login.minLength ?
                             'Логин должен содержать минимум 3 символа.' : v$.form.login.maxLength ?
                                 'Логин должен содержать максимум 30 символов.' : '')" type="text" placeholder="Логин"
-                        name="login" id="login" autocomplete="login" required />
+                        name="login" id="login" autocomplete="login" />
 
                     <!-- Password input -->
                     <Input ref="passwordInput" v-model="form.password" iconType="password" :errorText="v$.form.password.$error && (!v$.form.password.required ?
                         'Пожалуйста, введите пароль.' : v$.form.password.minLength ?
                             'Пароль должен содержать минимум 6 символов.' : '')" type="password" placeholder="Пароль"
-                        name="password" autocomplete="new-password" maxlength="128" required />
+                        name="password" autocomplete="new-password" maxlength="128" />
 
                     <!-- Password confirm input -->
                     <Input ref="passwordInput" v-model="form.passwordConfirm" iconType="password"
                         :errorText="v$.form.passwordConfirm.$error && 'Пожалуйста, подтвердите пароль. Пароли должны совпадать.'"
                         type="password" placeholder="Повторите пароль" name="passwordConfirm"
-                        autocomplete="passwordConfirm" maxlength="128" required />
+                        autocomplete="passwordConfirm" maxlength="128" />
                 </div>
 
                 <fieldset class="d-input__group">
@@ -344,13 +344,13 @@ export default {
                         'Пожалуйста, введите ФИО.' : v$.form.name.minLength ?
                             'ФИО должно содержать минимум 3 символа.' : '')" iconType="close"
                         placeholder="ФИО контактного лица" name="name" id="name" type="fio" autocomplete="off"
-                        @setSelection="setName" required />
+                        @setSelection="setName" />
 
                     <!-- Telephone input -->
                     <Input v-model="form.telephone" :mask="mask" :errorText="v$.form.telephone.$error && (!v$.form.telephone.required ?
                         'Пожалуйста, введите номер телефона.' : v$.form.telephone.minLength ?
                             'Введите корректный номер телефона.' : '')" type="tel" placeholder="Телефон" name="phone"
-                        class="d-input__field" id="telephone" autocomplete="off" required
+                        class="d-input__field" id="telephone" autocomplete="off"
                         @input="form.telephone = normalizePhone(form.telephone)" />
 
 
@@ -358,7 +358,7 @@ export default {
                     <Input v-model="form.email" :errorText="v$.form.telephone.$error && (!v$.form.email.required ?
                         'Пожалуйста, введите email.' : v$.form.email.email ?
                             'Введите корректный email.' : '')" iconType="close" type="email" placeholder="Email"
-                        name="email" class="d-input__field" required />
+                        name="email" class="d-input__field" />
                 </fieldset>
 
                 <fieldset class="d-input__group">
@@ -368,14 +368,14 @@ export default {
                     <Autocomplete v-model="form.org.inn" selectionType="single" :errorText="v$.form.org.inn.$error && (!v$.form.org.inn.required ?
                         'Пожалуйста, введите ИНН.' : v$.form.org.inn.validInn.$response != true ?
                             'Некорректный ИНН' : '')" placeholder="ИНН" name="inn" id="inn" type="company"
-                        autocomplete="off" @setSelection="setCompany" required />
+                        autocomplete="off" @setSelection="setCompany" />
 
                     <!-- Org name input -->
                     <Input v-model="form.org.name" :errorText="v$.form.org.name.$error && (!v$.form.org.name.required ?
                         'Пожалуйста, введите наименование организации.' : v$.form.org.name.minLength ?
                             'Наименование организации должно содержать минимум 3 символа.' : '')" type="text"
                         placeholder="Наименование организации" name="org_name" class="d-input__field" id="org_name"
-                        autocomplete="off" required />
+                        autocomplete="off" />
 
                     <!-- <div class="address-map__wrapper"> -->
                     <AddAddress v-for="(address, index) in form.delivery_addresses" :key="index" :index="index"

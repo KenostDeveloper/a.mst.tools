@@ -6,16 +6,25 @@ import Toast from 'primevue/toast';
 import { sendMetrik } from '../../utils/metrika';
 import Input from '../ui/Input.vue';
 import Button from '../ui/Button.vue';
+import { required } from '@vuelidate/validators';
+import useVuelidate from '@vuelidate/core';
 
 export default {
     name: 'auth-form',
+    components: {
+        customModal,
+        vForgot,
+        Toast,
+        Input,
+        Button,
+    },
     data() {
         return {
             mode: 'signIn',
             loading: false,
             showForgotModal: false,
             form: {
-                email: '',
+                login: '',
                 password: ''
             },
             errors: []
@@ -31,15 +40,20 @@ export default {
         ...mapActions({
             org_get_from_api: 'org_get_from_api',
             getSessionUser: 'user/getSessionUser',
+            deleteUser: 'deleteUser'
         }),
         formSubmit() {
             this.signIn();
         },
         signIn() {
+            this.v$.$touch(); // Отмечаем все поля как проверенные
+            if (this.v$.$invalid) {
+                return;
+            }
             this.loading = true;
             this.$load(async () => {
                 const data = await this.$api.auth.signIn({
-                    username: this.form.email,
+                    username: this.form.login,
                     password: this.form.password
                 });
                 if (data.data.success) {
@@ -82,14 +96,18 @@ export default {
             this.$emit('setRegForm', true);
         }
     },
-    components: {
-        customModal,
-        vForgot,
-        Toast,
-        Input,
-        Button,
-    }
-};
+    setup() {
+        return { v$: useVuelidate() };
+    },
+    validations() {
+        return {
+            form: {
+                login: { required },
+                password: { required },
+            }
+        }
+    },
+}
 </script>
 
 <template>
@@ -112,15 +130,14 @@ export default {
                 <p class="text">Пожалуйста, подождите,<br>идет загрузка контента</p>
             </div> -->
 
-
             <div class="d-input__group auth__fields">
                 <!-- Login input -->
-                <Input v-model="form.email" iconType="close" type="text" placeholder="Введите логин" name="username"
-                    class="d-input__field" required />
+                <Input v-model="form.login" :errorText="v$?.form?.login?.$error && 'Заполните поле'" iconType="close" type="text"
+                    placeholder="Введите логин" name="username" class="d-input__field" />
 
                 <!-- Password input -->
-                <Input v-model="form.password" iconType="password" type="password" placeholder="Введите пароль"
-                    name="password" class="d-input__field" required />
+                <Input v-model="form.password" :errorText="v$?.form?.password?.$error && 'Заполните поле'" iconType="password"
+                    type="password" placeholder="Введите пароль" name="password" class="d-input__field" />
             </div>
 
             <div class="auth__buttons">
